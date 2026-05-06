@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L'Électricité · CM2</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Nunito:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#F7F5EE;--white:#FFFFFF;--text:#1A1200;--muted:#7A6845;--border:#E2D9C8;
+  --green:#2ECC71;--green2:#27AE60;--red:#E74C3C;--blue:#3498DB;
+  --orange:#E67E22;--yellow:#F1C40F;--elec:#F39C12;--elec2:#E67E22;
+  --step1:#4DABF7;--step2:#69DB7C;--step3:#FF6B6B;
+  --radius:18px;--shadow:0 4px 24px rgba(0,0,0,0.09);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.65;}
+
+.topbar{background:var(--white);border-bottom:2px solid var(--border);padding:0 24px;position:sticky;top:0;z-index:200;box-shadow:0 2px 12px rgba(0,0,0,.06);}
+.topbar-inner{max-width:860px;margin:0 auto;display:flex;align-items:center;gap:16px;padding:14px 0;}
+.back-btn{font-size:12px;font-weight:700;color:var(--muted);background:var(--bg);border:none;border-radius:8px;padding:5px 12px;cursor:pointer;font-family:'Nunito',sans-serif;transition:all .2s;}
+.back-btn:hover{background:var(--border);}
+.topic-info{flex:1;min-width:0;}
+.topic-class{font-size:11px;font-weight:700;color:var(--elec);text-transform:uppercase;letter-spacing:.8px;}
+.topic-title{font-family:'Baloo 2',sans-serif;font-size:16px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.print-btn{background:none;border:2px solid var(--border);border-radius:10px;padding:7px 14px;font-size:13px;font-weight:700;font-family:'Nunito',sans-serif;color:var(--muted);cursor:pointer;display:flex;align-items:center;gap:6px;transition:all .2s;white-space:nowrap;}
+.print-btn:hover{background:var(--border);color:var(--text);}
+
+.stepper{max-width:860px;margin:0 auto;padding:18px 24px 0;display:flex;align-items:center;}
+.step-item{display:flex;align-items:center;gap:8px;flex:1;cursor:pointer;padding:10px 12px;border-radius:12px;transition:background .2s;}
+.step-item:hover{background:rgba(0,0,0,.04);}
+.step-dot{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;font-family:'Baloo 2',sans-serif;flex-shrink:0;transition:all .3s;}
+.step-dot.inactive{background:#E8E0D0;color:var(--muted);}
+.step-dot.active{color:white;transform:scale(1.1);}
+.step-dot.done{color:white;}
+.step-dot[data-step="0"].active,.step-dot[data-step="0"].done{background:var(--step1);}
+.step-dot[data-step="1"].active,.step-dot[data-step="1"].done{background:var(--step2);}
+.step-dot[data-step="2"].active,.step-dot[data-step="2"].done{background:var(--step3);}
+.step-label{line-height:1.2;}
+.step-label .s-name{font-weight:800;font-size:14px;display:block;transition:color .2s;}
+.step-label .s-sub{font-size:11px;color:var(--muted);display:block;}
+.step-item[data-step="0"].active .s-name{color:var(--step1);}
+.step-item[data-step="1"].active .s-name{color:var(--step2);}
+.step-item[data-step="2"].active .s-name{color:var(--step3);}
+.step-line{height:3px;width:24px;background:var(--border);border-radius:2px;flex-shrink:0;transition:background .4s;}
+.step-line.done{background:var(--green);}
+.progress-bar-wrap{max-width:860px;margin:8px auto 0;padding:0 24px;}
+.progress-bar{height:4px;background:var(--border);border-radius:4px;overflow:hidden;}
+.progress-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--elec),var(--step3));transition:width .5s ease;}
+
+.main{max-width:860px;margin:0 auto;padding:24px 24px 80px;}
+.section{display:none;animation:fadeIn .35s ease;}
+.section.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+.lesson-card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;margin-bottom:18px;}
+.lesson-card-header{padding:16px 22px 14px;display:flex;align-items:center;gap:12px;}
+.lesson-card-header .icon{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.lesson-card-header h3{font-family:'Baloo 2',sans-serif;font-size:16px;font-weight:800;}
+.lesson-card-body{padding:0 22px 20px;}
+.rule-box{background:#FFFCE8;border-left:5px solid var(--yellow);border-radius:0 12px 12px 0;padding:13px 16px;margin:10px 0;font-size:15px;}
+.rule-box strong{color:var(--orange);}
+.tip-box{background:#EAF5FF;border-left:5px solid var(--blue);border-radius:0 12px 12px 0;padding:11px 16px;margin:10px 0;font-size:14px;color:#1a4a7a;}
+.tip-box::before{content:"💡 ";}
+.warn-box{background:#FFF3E0;border-left:5px solid var(--elec);border-radius:0 12px 12px 0;padding:11px 16px;margin:10px 0;font-size:14px;color:#7d4800;}
+.warn-box::before{content:"⚡ ";}
+
+.composants-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0;}
+.composant-item{background:var(--white);border:2px solid var(--border);border-radius:12px;padding:10px 14px;display:flex;align-items:center;gap:10px;}
+.composant-icon{font-size:22px;width:36px;text-align:center;}
+.composant-info .name{font-weight:800;font-size:14px;}
+.composant-info .desc{font-size:12px;color:var(--muted);}
+
+.schema-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:14px 0;}
+.schema-box{background:#F8F8F8;border:2px solid var(--border);border-radius:14px;padding:14px;text-align:center;}
+.schema-box .schema-title{font-family:'Baloo 2',sans-serif;font-size:13px;font-weight:800;margin-bottom:10px;}
+.schema-box svg{width:100%;max-width:220px;height:auto;}
+
+.ampoule-parts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0;}
+.ampoule-part{background:#F0F8FF;border:2px solid #BDE0FF;border-radius:10px;padding:8px 12px;font-size:13px;display:flex;align-items:center;gap:8px;}
+.ampoule-part .dot{width:12px;height:12px;border-radius:50%;flex-shrink:0;}
+
+.exo-card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:20px;overflow:hidden;border:2px solid transparent;transition:border-color .3s;}
+.exo-header{padding:14px 20px 0;display:flex;align-items:center;gap:10px;}
+.exo-num{width:30px;height:30px;background:var(--step2);color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;flex-shrink:0;}
+.exo-title-text{font-family:'Baloo 2',sans-serif;font-size:15px;font-weight:800;flex:1;}
+.exo-pts{background:#FFF9E0;border:2px solid var(--yellow);border-radius:50px;padding:2px 12px;font-size:12px;font-weight:700;color:#8a6d00;}
+.consigne-txt{font-size:13px;color:var(--muted);font-style:italic;padding:6px 20px 0 60px;}
+.exo-body{padding:14px 20px 20px;}
+
+.qcm-q{margin-bottom:18px;}
+.qcm-question{font-size:15px;font-weight:600;margin-bottom:8px;}
+.qcm-options{display:flex;flex-wrap:wrap;gap:8px;}
+.qcm-opt{border:2px solid var(--border);border-radius:10px;padding:8px 16px;font-size:14px;font-family:'Nunito',sans-serif;cursor:pointer;transition:all .18s;background:var(--bg);font-weight:600;}
+.qcm-opt:hover:not(.answered){background:#FFF3E0;border-color:var(--elec);transform:translateY(-1px);}
+.qcm-opt.correct{background:#D5F5E3;border-color:var(--green);color:var(--green2);}
+.qcm-opt.wrong{background:#FADBD8;border-color:var(--red);color:var(--red);}
+.qcm-opt.reveal{background:#D5F5E3;border-color:var(--green);color:var(--green2);}
+.feedback-txt{font-size:13px;margin-top:6px;font-weight:700;}
+.feedback-txt.ok{color:var(--green2);}
+.feedback-txt.ko{color:var(--red);}
+
+.vf-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);}
+.vf-row:last-child{border-bottom:none;}
+.vf-num{width:24px;height:24px;background:var(--bg);border-radius:50%;font-size:12px;font-weight:800;color:var(--muted);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.vf-text{flex:1;font-size:14px;}
+.vf-btns{display:flex;gap:6px;flex-shrink:0;}
+.vf-btn{border:2px solid var(--border);border-radius:8px;padding:5px 14px;font-size:13px;font-weight:700;font-family:'Nunito',sans-serif;cursor:pointer;transition:all .18s;background:var(--bg);}
+.vf-btn.v-btn:hover:not(.answered){background:#D5F5E3;border-color:var(--green);}
+.vf-btn.f-btn:hover:not(.answered){background:#FADBD8;border-color:var(--red);}
+.vf-btn.correct{background:#D5F5E3;border-color:var(--green);color:var(--green2);}
+.vf-btn.wrong{background:#FADBD8;border-color:var(--red);color:var(--red);}
+.vf-btn.reveal{background:#D5F5E3;border-color:var(--green);color:var(--green2);}
+
+.fill-row{display:flex;align-items:center;gap:8px;margin:10px 0;flex-wrap:wrap;}
+.fill-num{width:22px;height:22px;background:#FFF3E0;border-radius:50%;font-size:11px;font-weight:800;color:var(--elec2);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.fill-input{border:2px solid var(--border);border-radius:8px;padding:6px 12px;font-size:14px;font-family:'Nunito',sans-serif;min-width:110px;background:var(--bg);color:var(--text);outline:none;transition:border-color .2s;font-weight:700;}
+.fill-input:focus{border-color:var(--elec);}
+.fill-input.correct{border-color:var(--green);background:#D5F5E3;color:var(--green2);}
+.fill-input.wrong{border-color:var(--red);background:#FADBD8;color:var(--red);}
+.fill-input:disabled{cursor:default;}
+.correct-answer{font-size:12px;color:var(--green2);font-weight:700;margin-left:4px;}
+.banque{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;}
+.mot-banque{background:#FFF3E0;border:2px solid var(--elec);border-radius:8px;padding:4px 12px;font-weight:700;font-size:13px;color:var(--elec2);}
+.check-btn{background:var(--step2);color:white;border:none;border-radius:12px;padding:10px 24px;font-size:14px;font-weight:700;font-family:'Nunito',sans-serif;cursor:pointer;margin-top:12px;transition:all .2s;display:flex;align-items:center;gap:6px;}
+.check-btn:hover{background:var(--green2);transform:translateY(-2px);}
+.mini-score{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--muted);padding:8px 0 0;}
+.mini-score .ok{color:var(--green2);}
+.mini-score .ko{color:var(--red);}
+
+.eval-header-bar{background:linear-gradient(135deg,#F39C12,#E74C3C);border-radius:var(--radius);padding:18px 22px;color:white;margin-bottom:20px;display:flex;align-items:center;gap:16px;}
+.eval-header-bar .icon{font-size:32px;}
+.eval-header-bar h2{font-family:'Baloo 2',sans-serif;font-size:20px;font-weight:800;}
+.eval-header-bar p{font-size:13px;opacity:.85;margin-top:3px;}
+
+.results-screen{display:none;text-align:center;padding:40px 20px;animation:fadeIn .4s ease;}
+.results-screen.show{display:block;}
+.score-circle{width:140px;height:140px;border-radius:50%;margin:0 auto 20px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:8px solid var(--green);background:white;box-shadow:0 8px 32px rgba(46,204,113,.25);}
+.score-circle.medium{border-color:var(--orange);box-shadow:0 8px 32px rgba(230,126,34,.25);}
+.score-circle.low{border-color:var(--red);box-shadow:0 8px 32px rgba(231,76,60,.25);}
+.score-num{font-family:'Baloo 2',sans-serif;font-size:40px;font-weight:800;line-height:1;color:var(--green2);}
+.score-circle.medium .score-num{color:var(--orange);}
+.score-circle.low .score-num{color:var(--red);}
+.score-label{font-size:13px;color:var(--muted);font-weight:600;}
+.result-emoji{font-size:48px;margin-bottom:10px;}
+.result-title{font-family:'Baloo 2',sans-serif;font-size:24px;font-weight:800;margin-bottom:8px;}
+.result-msg{font-size:15px;color:var(--muted);margin-bottom:28px;}
+.result-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.result-btn{border-radius:14px;padding:12px 24px;font-size:15px;font-weight:700;font-family:'Nunito',sans-serif;cursor:pointer;transition:all .2s;border:none;}
+.result-btn.primary{background:var(--step3);color:white;}
+.result-btn.secondary{background:var(--bg);border:2px solid var(--border);color:var(--text);}
+.result-btn:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.15);}
+
+.nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:28px;gap:12px;}
+.nav-btn{border-radius:14px;padding:13px 28px;font-size:15px;font-weight:700;font-family:'Nunito',sans-serif;cursor:pointer;transition:all .2s;border:none;display:flex;align-items:center;gap:8px;}
+.nav-btn.primary{background:linear-gradient(135deg,#2ECC71,#27AE60);color:white;box-shadow:0 4px 16px rgba(46,204,113,.3);}
+.nav-btn.primary:hover{transform:translateY(-2px);}
+.nav-btn.secondary{background:var(--white);color:var(--muted);border:2px solid var(--border);}
+.nav-btn.secondary:hover{background:var(--border);color:var(--text);}
+.nav-btn.eval-start{background:linear-gradient(135deg,#F39C12,#E74C3C);color:white;box-shadow:0 4px 16px rgba(243,156,18,.3);}
+.nav-btn.eval-start:hover{transform:translateY(-2px);}
+
+@media print{
+  .topbar,.stepper,.progress-bar-wrap,.nav-row,.print-btn,.check-btn,.qcm-opt,.vf-btn,.results-screen{display:none!important;}
+  body{background:white;font-size:12px;}
+  .section{display:block!important;page-break-after:always;}
+  .lesson-card,.exo-card{box-shadow:none;border:1px solid #ddd;margin-bottom:12px;}
+  .fill-input{border:none;border-bottom:1.5px solid #999;border-radius:0;background:white;min-width:80px;}
+}
+@media(max-width:600px){
+  .schema-grid,.composants-grid,.ampoule-parts{grid-template-columns:1fr;}
+  .stepper{overflow-x:auto;}
+  .step-label .s-sub{display:none;}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <button class="back-btn" onclick="history.back()">← Retour</button>
+    <div class="topic-info">
+      <div class="topic-class">CM2 · Sciences · Électricité</div>
+      <div class="topic-title">L'Électricité — Circuits et Composants</div>
+    </div>
+    <button class="print-btn" onclick="window.print()">🖨️ Imprimer</button>
+  </div>
+</div>
+
+<div class="stepper">
+  <div class="step-item" data-step="0" onclick="goStep(0)"><div class="step-dot" data-step="0">⚡</div><div class="step-label"><span class="s-name">Leçon</span><span class="s-sub">Lis et comprends</span></div></div>
+  <div class="step-line" id="line-0"></div>
+  <div class="step-item" data-step="1" onclick="goStep(1)"><div class="step-dot" data-step="1">✏️</div><div class="step-label"><span class="s-name">Exercices</span><span class="s-sub">Entraîne-toi</span></div></div>
+  <div class="step-line" id="line-1"></div>
+  <div class="step-item" data-step="2" onclick="goStep(2)"><div class="step-dot" data-step="2">⭐</div><div class="step-label"><span class="s-name">Évaluation</span><span class="s-sub">Montre ce que tu sais !</span></div></div>
+</div>
+<div class="progress-bar-wrap"><div class="progress-bar"><div class="progress-fill" id="progress" style="width:10%"></div></div></div>
+
+<div class="main">
+
+<!-- ══════ LEÇON ══════ -->
+<div class="section active" id="section-0">
+
+  <div class="lesson-card">
+    <div class="lesson-card-header"><div class="icon" style="background:#FFF3E0">⚡</div><h3>C'est quoi l'électricité ?</h3></div>
+    <div class="lesson-card-body">
+      <div class="rule-box">L'électricité est une forme d'<strong>énergie</strong> qui fait fonctionner les lampes, les ordinateurs et les téléphones.</div>
+      <div class="warn-box">L'électricité des prises murales est <strong>très dangereuse</strong> — on ne joue jamais avec ! Dans nos expériences, on utilise uniquement des <strong>piles</strong>, sans danger.</div>
+      <div style="background:#F5F5F5;border-radius:8px;padding:8px 14px;margin:6px 0;font-size:14px;">→ La <em style="color:var(--green2);font-style:normal;font-weight:700;">pile</em> transforme l'énergie chimique en électricité.</div>
+      <div style="background:#F5F5F5;border-radius:8px;padding:8px 14px;margin:6px 0;font-size:14px;">→ Le <em style="color:var(--green2);font-style:normal;font-weight:700;">courant électrique</em> circule dans les fils conducteurs.</div>
+    </div>
+  </div>
+
+  <div class="lesson-card">
+    <div class="lesson-card-header"><div class="icon" style="background:#FFF9E0">🔧</div><h3>Les composants d'un circuit électrique</h3></div>
+    <div class="lesson-card-body">
+      <div class="rule-box">Un circuit électrique relie plusieurs <strong>composants</strong> avec des <strong>fils conducteurs</strong>.</div>
+      <div class="composants-grid">
+        <div class="composant-item"><div class="composant-icon">🔋</div><div class="composant-info"><div class="name">La pile</div><div class="desc">Source d'énergie. Borne + et borne −</div></div></div>
+        <div class="composant-item"><div class="composant-icon">💡</div><div class="composant-info"><div class="name">L'ampoule</div><div class="desc">Produit de la lumière quand le courant passe</div></div></div>
+        <div class="composant-item"><div class="composant-icon">🔌</div><div class="composant-info"><div class="name">Les fils</div><div class="desc">Conducteurs qui relient les composants</div></div></div>
+        <div class="composant-item"><div class="composant-icon">🔘</div><div class="composant-info"><div class="name">L'interrupteur</div><div class="desc">Ouvre ou ferme le circuit</div></div></div>
+      </div>
+      <div class="tip-box">Les fils sont en <strong>métal</strong> (conducteur) entourés de <strong>plastique</strong> (isolant) pour la sécurité.</div>
+    </div>
+  </div>
+
+  <div class="lesson-card">
+    <div class="lesson-card-header"><div class="icon" style="background:#FFFDE0">💡</div><h3>Les parties de l'ampoule</h3></div>
+    <div class="lesson-card-body">
+      <div class="rule-box">L'ampoule contient un <strong>filament</strong> en métal très fin. Quand le courant passe, il chauffe et produit de la <strong>lumière</strong>.</div>
+      <div style="text-align:center;margin:14px 0;">
+        <svg viewBox="0 0 200 250" width="170" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="100" cy="90" rx="55" ry="58" fill="#FFF9C4" stroke="#E0C000" stroke-width="2"/>
+          <rect x="72" y="141" width="56" height="28" rx="4" fill="#C0C0C0" stroke="#888" stroke-width="1.5"/>
+          <rect x="76" y="169" width="48" height="12" rx="3" fill="#A0A0A0" stroke="#888" stroke-width="1.5"/>
+          <rect x="88" y="181" width="24" height="13" rx="3" fill="#888" stroke="#666" stroke-width="1.5"/>
+          <polyline points="88,95 93,76 98,95 103,76 108,95" fill="none" stroke="#FF8C00" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="88" y1="95" x2="83" y2="139" stroke="#999" stroke-width="1.5"/>
+          <line x1="108" y1="95" x2="113" y2="139" stroke="#999" stroke-width="1.5"/>
+          <text x="14" y="78" font-size="11" fill="#E67E22" font-weight="bold">Filament</text>
+          <line x1="62" y1="80" x2="86" y2="88" stroke="#E67E22" stroke-width="1"/>
+          <text x="128" y="54" font-size="11" fill="#2980B9" font-weight="bold">Verre</text>
+          <line x1="148" y1="57" x2="146" y2="70" stroke="#2980B9" stroke-width="1"/>
+          <text x="130" y="158" font-size="11" fill="#555" font-weight="bold">Culot</text>
+          <line x1="130" y1="161" x2="126" y2="155" stroke="#555" stroke-width="1"/>
+          <text x="130" y="192" font-size="11" fill="#27AE60" font-weight="bold">Plot</text>
+          <line x1="130" y1="195" x2="116" y2="188" stroke="#27AE60" stroke-width="1"/>
+        </svg>
+      </div>
+      <div class="ampoule-parts">
+        <div class="ampoule-part"><div class="dot" style="background:#FF8C00"></div><strong>Filament</strong> — fil qui brille</div>
+        <div class="ampoule-part"><div class="dot" style="background:#2980B9"></div><strong>Verre</strong> — bulle protectrice</div>
+        <div class="ampoule-part"><div class="dot" style="background:#555"></div><strong>Culot</strong> — fixation métallique</div>
+        <div class="ampoule-part"><div class="dot" style="background:#27AE60"></div><strong>Plot</strong> — contact électrique</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="lesson-card">
+    <div class="lesson-card-header"><div class="icon" style="background:#E8F8E8">🔄</div><h3>Circuit fermé et circuit ouvert</h3></div>
+    <div class="lesson-card-body">
+      <div class="rule-box">Le courant a besoin d'une <strong>boucle complète</strong> pour circuler. Si la boucle est interrompue, il ne passe plus.</div>
+      <div class="schema-grid">
+        <div class="schema-box">
+          <div class="schema-title" style="color:var(--green2)">✅ Circuit FERMÉ → lampe allumée</div>
+          <svg viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg">
+            <rect x="15" y="65" width="30" height="22" rx="4" fill="#FFD700" stroke="#B8860B" stroke-width="2"/>
+            <text x="21" y="80" font-size="11" font-weight="bold" fill="#333">🔋</text>
+            <line x1="45" y1="70" x2="80" y2="40" stroke="#E74C3C" stroke-width="2.5"/>
+            <line x1="80" y1="40" x2="148" y2="40" stroke="#E74C3C" stroke-width="2.5"/>
+            <line x1="148" y1="40" x2="172" y2="68" stroke="#E74C3C" stroke-width="2.5"/>
+            <line x1="45" y1="78" x2="80" y2="118" stroke="#2980B9" stroke-width="2.5"/>
+            <line x1="80" y1="118" x2="148" y2="118" stroke="#2980B9" stroke-width="2.5"/>
+            <line x1="148" y1="118" x2="172" y2="82" stroke="#2980B9" stroke-width="2.5"/>
+            <ellipse cx="172" cy="76" rx="16" ry="18" fill="#FFE066" stroke="#E0C000" stroke-width="2"/>
+            <polyline points="167,78 170,70 173,78 176,70 179,78" fill="none" stroke="#FF8C00" stroke-width="1.5"/>
+            <text x="155" y="108" font-size="10" fill="#27AE60" font-weight="bold">Allumée!</text>
+            <text x="16" y="62" font-size="9" fill="#E74C3C">+</text><text x="37" y="62" font-size="9" fill="#2980B9">−</text>
+          </svg>
+        </div>
+        <div class="schema-box">
+          <div class="schema-title" style="color:var(--red)">❌ Circuit OUVERT → lampe éteinte</div>
+          <svg viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg">
+            <rect x="15" y="65" width="30" height="22" rx="4" fill="#FFD700" stroke="#B8860B" stroke-width="2"/>
+            <text x="21" y="80" font-size="11" font-weight="bold" fill="#333">🔋</text>
+            <line x1="45" y1="70" x2="80" y2="40" stroke="#E74C3C" stroke-width="2.5"/>
+            <line x1="80" y1="40" x2="108" y2="40" stroke="#E74C3C" stroke-width="2.5"/>
+            <text x="106" y="32" font-size="9" fill="#E74C3C">✂ coupure</text>
+            <line x1="130" y1="40" x2="148" y2="40" stroke="#E74C3C" stroke-width="2" stroke-dasharray="4"/>
+            <line x1="148" y1="40" x2="172" y2="68" stroke="#E74C3C" stroke-width="2" stroke-dasharray="4"/>
+            <line x1="45" y1="78" x2="80" y2="118" stroke="#2980B9" stroke-width="2.5"/>
+            <line x1="80" y1="118" x2="148" y2="118" stroke="#2980B9" stroke-width="2.5"/>
+            <line x1="148" y1="118" x2="172" y2="82" stroke="#2980B9" stroke-width="2.5"/>
+            <ellipse cx="172" cy="76" rx="16" ry="18" fill="#F0F0F0" stroke="#ccc" stroke-width="2"/>
+            <polyline points="167,78 170,70 173,78 176,70 179,78" fill="none" stroke="#ccc" stroke-width="1.5"/>
+            <text x="159" y="108" font-size="10" fill="#E74C3C" font-weight="bold">Éteinte</text>
+            <text x="16" y="62" font-size="9" fill="#E74C3C">+</text><text x="37" y="62" font-size="9" fill="#2980B9">−</text>
+          </svg>
+        </div>
+      </div>
+      <div class="tip-box">Un <strong>interrupteur ouvert</strong> crée une coupure → lampe éteinte. Un <strong>interrupteur fermé</strong> complète la boucle → lampe allumée.</div>
+    </div>
+  </div>
+
+  <div class="lesson-card">
+    <div class="lesson-card-header"><div class="icon" style="background:#EAF5FF">🔬</div><h3>Conducteurs et isolants</h3></div>
+    <div class="lesson-card-body">
+      <div class="rule-box"><strong>Conducteurs</strong> → laissent passer le courant.<br><strong>Isolants</strong> → ne laissent pas passer le courant.</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;">
+        <div style="background:#D5F5E3;border-radius:12px;padding:12px 14px;">
+          <div style="font-family:'Baloo 2',sans-serif;font-weight:800;color:var(--green2);margin-bottom:8px;">⚡ Conducteurs</div>
+          <div style="font-size:13px;line-height:2.0;">🔩 Les métaux (fer, cuivre…)<br>💧 L'eau salée<br>🖊️ La mine de crayon</div>
+        </div>
+        <div style="background:#FADBD8;border-radius:12px;padding:12px 14px;">
+          <div style="font-family:'Baloo 2',sans-serif;font-weight:800;color:var(--red);margin-bottom:8px;">🚫 Isolants</div>
+          <div style="font-size:13px;line-height:2.0;">🪵 Le bois<br>🧴 Le plastique<br>🏺 Le verre<br>🧶 Le caoutchouc</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav-row"><div></div><button class="nav-btn primary" onclick="goStep(1)">Passer aux exercices ✏️ →</button></div>
+</div>
+
+<!-- ══════ EXERCICES ══════ -->
+<div class="section" id="section-1">
+
+  <div class="exo-card">
+    <div class="exo-header"><div class="exo-num" style="background:#F39C12">1</div><div class="exo-title-text">Choisis la bonne réponse</div><div class="exo-pts">6 pts</div></div>
+    <p class="consigne-txt">Clique sur la réponse correcte.</p>
+    <div class="exo-body" id="qcm1-body"></div>
+  </div>
+
+  <div class="exo-card">
+    <div class="exo-header"><div class="exo-num">2</div><div class="exo-title-text">Vrai ou Faux ?</div><div class="exo-pts">6 pts</div></div>
+    <p class="consigne-txt">Clique sur Vrai ✅ ou Faux ❌.</p>
+    <div class="exo-body" id="vf1-body"></div>
+  </div>
+
+  <div class="exo-card">
+    <div class="exo-header"><div class="exo-num">3</div><div class="exo-title-text">Complète avec les mots de la liste</div><div class="exo-pts">6 pts</div></div>
+    <p class="consigne-txt">Écris le bon mot, puis clique sur Corriger.</p>
+    <div class="exo-body" id="fill1-body"></div>
+  </div>
+
+  <div class="exo-card">
+    <div class="exo-header"><div class="exo-num">4</div><div class="exo-title-text">Conducteur ou Isolant ?</div><div class="exo-pts">6 pts</div></div>
+    <p class="consigne-txt">Pour chaque matériau, clique sur la bonne réponse.</p>
+    <div class="exo-body" id="ci-body"></div>
+  </div>
+
+  <div class="nav-row">
+    <button class="nav-btn secondary" onclick="goStep(0)">← Revoir la leçon</button>
+    <button class="nav-btn eval-start" onclick="goStep(2)">Passer à l'évaluation ⭐ →</button>
+  </div>
+</div>
+
+<!-- ══════ ÉVALUATION ══════ -->
+<div class="section" id="section-2">
+  <div class="eval-header-bar"><div class="icon">⭐</div><div><h2>Évaluation — L'Électricité</h2><p>Réponds seul(e). Tes réponses seront notées à la fin !</p></div></div>
+
+  <div class="results-screen" id="results">
+    <div class="score-circle" id="score-circle"><div class="score-num" id="score-num">–</div><div class="score-label">/ 20</div></div>
+    <div class="result-emoji" id="result-emoji">🎉</div>
+    <div class="result-title" id="result-title">Bravo !</div>
+    <div class="result-msg" id="result-msg"></div>
+    <div class="result-actions">
+      <button class="result-btn secondary" onclick="goStep(1)">← Revoir les exercices</button>
+      <button class="result-btn secondary" onclick="goStep(0)">⚡ Revoir la leçon</button>
+      <button class="result-btn primary" onclick="window.print()">🖨️ Imprimer</button>
+    </div>
+  </div>
+
+  <div class="exo-card"><div class="exo-header"><div class="exo-num" style="background:#FF6B6B">1</div><div class="exo-title-text">Choisis la bonne réponse</div><div class="exo-pts">8 pts</div></div><p class="consigne-txt">Clique sur la bonne réponse.</p><div class="exo-body" id="eval-qcm-body"></div></div>
+  <div class="exo-card"><div class="exo-header"><div class="exo-num" style="background:#FF6B6B">2</div><div class="exo-title-text">Vrai ou Faux ?</div><div class="exo-pts">6 pts</div></div><p class="consigne-txt">Clique sur Vrai ou Faux.</p><div class="exo-body" id="eval-vf-body"></div></div>
+  <div class="exo-card"><div class="exo-header"><div class="exo-num" style="background:#FF6B6B">3</div><div class="exo-title-text">Complète les phrases</div><div class="exo-pts">6 pts</div></div><p class="consigne-txt">Écris le bon mot dans chaque case.</p><div class="exo-body" id="eval-fill-body"></div></div>
+
+  <div class="nav-row" id="eval-nav">
+    <button class="nav-btn secondary" onclick="goStep(1)">← Retour aux exercices</button>
+    <button class="nav-btn primary" onclick="submitEval()">✅ Terminer et voir mon score →</button>
+  </div>
+</div>
+</div>
+
+<script>
+function goStep(n){
+  document.querySelectorAll('.section').forEach((s,i)=>s.classList.toggle('active',i===n));
+  document.querySelectorAll('.step-item').forEach((el,i)=>el.classList.toggle('active',i===n));
+  document.querySelectorAll('.step-dot').forEach((el,i)=>{el.className='step-dot '+(i===n?'active':i<n?'done':'inactive');});
+  document.querySelectorAll('.step-line').forEach((el,i)=>el.classList.toggle('done',i<n));
+  document.getElementById('progress').style.width=(n===0?10:n===1?45:85)+'%';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+const QCM1=[
+  {q:"Qu'est-ce qu'un circuit fermé ?",opts:["Un circuit avec une coupure","Une boucle complète sans interruption","Un circuit sans pile","Un circuit avec deux ampoules"],ans:"Une boucle complète sans interruption"},
+  {q:"Quel composant produit de l'énergie électrique ?",opts:["L'ampoule","L'interrupteur","La pile","Le fil"],ans:"La pile"},
+  {q:"Que se passe-t-il si on ouvre l'interrupteur ?",opts:["La lampe brille plus fort","La pile se recharge","La lampe s'éteint","Rien ne change"],ans:"La lampe s'éteint"},
+  {q:"Quel matériau est conducteur ?",opts:["Le bois","Le plastique","Le cuivre","Le verre"],ans:"Le cuivre"},
+  {q:"Quelle partie de l'ampoule produit de la lumière ?",opts:["Le verre","Le culot","Le plot","Le filament"],ans:"Le filament"},
+  {q:"Pourquoi les fils sont entourés de plastique ?",opts:["Pour être plus jolis","Pour isoler et protéger","Pour mieux conduire","Pour tenir ensemble"],ans:"Pour isoler et protéger"},
+];
+const VF1=[
+  {txt:"Le courant peut circuler dans le bois.",ans:false},
+  {txt:"Une pile a une borne + et une borne −.",ans:true},
+  {txt:"Dans un circuit ouvert, la lampe brille.",ans:false},
+  {txt:"Le plastique est un isolant.",ans:true},
+  {txt:"Le filament brille quand le courant passe.",ans:true},
+  {txt:"L'eau pure (distillée) est un bon conducteur.",ans:false},
+];
+const FILL1=[
+  {pre:"Pour qu'une lampe brille, le circuit doit être",blank:"fermé",post:".",hint:"(fermé/ouvert)"},
+  {pre:"La pile est la source d'",blank:"énergie",post:"du circuit.",hint:"(énergie)"},
+  {pre:"Le filament de l'ampoule est en",blank:"métal",post:"très fin.",hint:"(métal/plastique)"},
+  {pre:"Un matériau qui laisse passer le courant est un",blank:"conducteur",post:".",hint:"(conducteur/isolant)"},
+  {pre:"L'interrupteur permet d'",blank:"ouvrir",post:"ou de fermer le circuit.",hint:"(ouvrir)"},
+  {pre:"Le plastique autour des fils est un",blank:"isolant",post:".",hint:"(isolant)"},
+];
+const CI=[
+  {mat:"Le fer",ans:"conducteur"},{mat:"Le bois",ans:"isolant"},
+  {mat:"Le cuivre",ans:"conducteur"},{mat:"Le verre",ans:"isolant"},
+  {mat:"L'aluminium",ans:"conducteur"},{mat:"Le caoutchouc",ans:"isolant"},
+];
+const EVAL_QCM=[
+  {q:"Pour que la lampe s'allume, que faut-il ?",opts:["Un circuit ouvert","Une boucle complète","Deux piles","Un fil coupé"],ans:"Une boucle complète"},
+  {q:"Qu'est-ce qu'un isolant ?",opts:["Un matériau conducteur","Un matériau qui ne conduit pas","Une source d'énergie","Un type de fil"],ans:"Un matériau qui ne conduit pas"},
+  {q:"Quelle partie de l'ampoule est dans le verre ?",opts:["Le culot","Le plot","Le filament","Les bornes"],ans:"Le filament"},
+  {q:"Que se passe-t-il si on coupe un fil ?",opts:["La lampe brille plus","La lampe s'éteint","La pile se recharge","Rien"],ans:"La lampe s'éteint"},
+  {q:"La pile transforme quelle énergie ?",opts:["Solaire","Chimique","Thermique","Mécanique"],ans:"Chimique"},
+  {q:"Lequel est isolant ?",opts:["Le fer","Le cuivre","L'aluminium","Le plastique"],ans:"Le plastique"},
+  {q:"L'interrupteur permet de :",opts:["Produire de l'énergie","Conduire plus vite","Ouvrir ou fermer le circuit","Alimenter la pile"],ans:"Ouvrir ou fermer le circuit"},
+  {q:"Les bornes d'une pile sont notées :",opts:["A et B","+ et −","1 et 2","R et S"],ans:"+ et −"},
+];
+const EVAL_VF=[
+  {txt:"Un circuit fermé permet au courant de circuler.",ans:true},
+  {txt:"Le verre est un conducteur électrique.",ans:false},
+  {txt:"L'interrupteur ouvert coupe le circuit.",ans:true},
+  {txt:"Le filament brille quand il n'y a pas de courant.",ans:false},
+  {txt:"L'eau salée conduit l'électricité.",ans:true},
+  {txt:"Le plastique autour des fils protège des chocs électriques.",ans:true},
+];
+const EVAL_FILL=[
+  {pre:"Le courant circule dans les fils car ils sont en",blank:"métal",post:", un conducteur.",hint:"(métal)"},
+  {pre:"Si l'interrupteur est ouvert, le circuit est",blank:"ouvert",post:"et la lampe s'éteint.",hint:"(ouvert/fermé)"},
+  {pre:"La partie métallique en bas de l'ampoule s'appelle le",blank:"culot",post:".",hint:"(culot)"},
+  {pre:"Pour allumer une lampe, il faut une boucle",blank:"fermée",post:"sans interruption.",hint:"(fermée)"},
+  {pre:"Le bois, le plastique et le verre sont des",blank:"isolants",post:".",hint:"(isolants)"},
+  {pre:"La pile fournit l'",blank:"énergie",post:"au circuit.",hint:"(énergie)"},
+];
+
+function renderQCM(data,id,prefix){
+  let h='';
+  data.forEach((item,i)=>{
+    h+=`<div class="qcm-q" id="${prefix}-q${i}"><div class="qcm-question"><span style="color:var(--muted);font-size:12px">${i+1}.</span> ${item.q}</div><div class="qcm-options">`;
+    item.opts.forEach(o=>{h+=`<button class="qcm-opt" onclick="checkQCM(this,${JSON.stringify(o)},${JSON.stringify(item.ans)},'${prefix}-q${i}')">${o}</button>`;});
+    h+=`</div><div class="feedback-txt" id="${prefix}-fb${i}"></div></div>`;
+  });
+  document.getElementById(id).innerHTML=h;
+}
+function checkQCM(btn,chosen,correct,qId){
+  const q=document.getElementById(qId);if(q.dataset.answered)return;q.dataset.answered='1';
+  q.querySelectorAll('.qcm-opt').forEach(o=>{o.classList.add('answered');o.style.pointerEvents='none';if(o.textContent===correct)o.classList.add(chosen===correct?'correct':'reveal');});
+  if(chosen===correct){btn.classList.add('correct');document.getElementById(qId.replace('-q','-fb')).innerHTML='<span class="ok">✅ Bravo !</span>';}
+  else{btn.classList.add('wrong');document.getElementById(qId.replace('-q','-fb')).innerHTML=`<span class="ko">❌ Bonne réponse : <strong>${correct}</strong></span>`;}
+}
+function renderVF(data,id,prefix){
+  let h='';
+  data.forEach((item,i)=>{h+=`<div class="vf-row" id="${prefix}-vf${i}"><div class="vf-num">${i+1}</div><div class="vf-text">${item.txt}</div><div class="vf-btns"><button class="vf-btn v-btn" onclick="checkVF(this,true,${item.ans},'${prefix}-vf${i}')">✅ Vrai</button><button class="vf-btn f-btn" onclick="checkVF(this,false,${item.ans},'${prefix}-vf${i}')">❌ Faux</button></div></div>`;});
+  document.getElementById(id).innerHTML=h;
+}
+function checkVF(btn,chosen,correct,rowId){
+  const row=document.getElementById(rowId);if(row.dataset.answered)return;row.dataset.answered='1';
+  row.querySelectorAll('.vf-btn').forEach(b=>{b.style.pointerEvents='none';b.classList.add('answered');});
+  if(chosen===correct){btn.classList.add('correct');}
+  else{btn.classList.add('wrong');row.querySelectorAll('.vf-btn').forEach(b=>{if((b.classList.contains('v-btn')&&correct)||(b.classList.contains('f-btn')&&!correct))b.classList.add('reveal');});}
+}
+function renderFill(data,id,prefix){
+  const banque=[...new Set(data.map(d=>d.blank))];
+  let h=`<div class="banque">${banque.map(m=>`<span class="mot-banque">${m}</span>`).join('')}</div>`;
+  data.forEach((item,i)=>{h+=`<div class="fill-row"><div class="fill-num">${i+1}</div><div class="fill-label">${item.pre} <input class="fill-input" id="${prefix}-f${i}" data-correct="${item.blank}" placeholder="…"> ${item.post} <em style="color:#bbb;font-size:11px">${item.hint}</em></div></div>`;});
+  h+=`<button class="check-btn" onclick="checkFill('${prefix}',${data.length},'${prefix}-sc')">✅ Corriger</button><div class="mini-score" id="${prefix}-sc"></div>`;
+  document.getElementById(id).innerHTML=h;
+}
+function checkFill(prefix,total,scoreId){
+  let ok=0;
+  for(let i=0;i<total;i++){
+    const inp=document.getElementById(`${prefix}-f${i}`);if(!inp)continue;inp.disabled=true;
+    if(inp.value.trim().toLowerCase()===inp.dataset.correct.toLowerCase()){inp.classList.add('correct');ok++;}
+    else{inp.classList.add('wrong');const sp=document.createElement('span');sp.className='correct-answer';sp.textContent=`→ ${inp.dataset.correct}`;inp.insertAdjacentElement('afterend',sp);}
+  }
+  document.getElementById(scoreId).innerHTML=`Score : <span class="ok">✅ ${ok}</span> / <span class="ko">❌ ${total-ok}</span>`;
+}
+function renderCI(data,id){
+  let h='';
+  data.forEach((item,i)=>{h+=`<div class="vf-row" id="ci${i}"><div class="vf-num">${i+1}</div><div class="vf-text"><strong>${item.mat}</strong></div><div class="vf-btns"><button class="vf-btn" style="color:#E67E22;border-color:#E67E22" onclick="checkCI(this,'conducteur','${item.ans}','ci${i}')">⚡ Conducteur</button><button class="vf-btn" style="color:#8E44AD;border-color:#8E44AD" onclick="checkCI(this,'isolant','${item.ans}','ci${i}')">🚫 Isolant</button></div></div>`;});
+  document.getElementById(id).innerHTML=h;
+}
+function checkCI(btn,chosen,correct,rowId){
+  const row=document.getElementById(rowId);if(row.dataset.answered)return;row.dataset.answered='1';
+  row.querySelectorAll('.vf-btn').forEach(b=>{b.style.pointerEvents='none';b.classList.add('answered');});
+  if(chosen===correct)btn.classList.add('correct');
+  else{btn.classList.add('wrong');row.querySelectorAll('.vf-btn').forEach(b=>{if(b.textContent.toLowerCase().includes(correct))b.classList.add('reveal');});}
+}
+function submitEval(){
+  let qcmOk=0;document.querySelectorAll('#eval-qcm-body .qcm-q').forEach(q=>{if(q.querySelector('.correct'))qcmOk++;});
+  let fillOk=0;document.querySelectorAll('#eval-fill-body .fill-input').forEach(inp=>{inp.disabled=true;if(inp.value.trim().toLowerCase()===inp.dataset.correct.toLowerCase()){inp.classList.add('correct');fillOk++;}else{inp.classList.add('wrong');const sp=document.createElement('span');sp.className='correct-answer';sp.textContent=`→ ${inp.dataset.correct}`;inp.insertAdjacentElement('afterend',sp);}});
+  let vfOk=0;document.querySelectorAll('#eval-vf-body .vf-row').forEach(r=>{if(r.querySelector('.correct'))vfOk++;});
+  const total=qcmOk+fillOk+vfOk;
+  document.getElementById('eval-nav').style.display='none';
+  document.getElementById('results').classList.add('show');
+  document.getElementById('score-num').textContent=total;
+  const circle=document.getElementById('score-circle');
+  if(total>=16){circle.classList.remove('medium','low');document.getElementById('result-emoji').textContent='🎉';document.getElementById('result-title').textContent='Excellent !';document.getElementById('result-msg').textContent="Tu maîtrises très bien l'électricité. Bravo !";}
+  else if(total>=12){circle.classList.add('medium');document.getElementById('result-emoji').textContent='👍';document.getElementById('result-title').textContent='Bon travail !';document.getElementById('result-msg').textContent='Tu progresses bien ! Relis les points sur les conducteurs et isolants.';}
+  else{circle.classList.add('low');document.getElementById('result-emoji').textContent='💪';document.getElementById('result-title').textContent="Continue d'entraîner !";document.getElementById('result-msg').textContent='Relis la leçon sur les circuits fermés/ouverts et réessaie !';}
+  document.getElementById('progress').style.width='100%';
+  document.getElementById('results').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+renderQCM(QCM1,'qcm1-body','ex1');
+renderVF(VF1,'vf1-body','vf1');
+renderFill(FILL1,'fill1-body','fl1');
+renderCI(CI,'ci-body');
+renderQCM(EVAL_QCM,'eval-qcm-body','ev1');
+renderVF(EVAL_VF,'eval-vf-body','ev3');
+renderFill(EVAL_FILL,'eval-fill-body','evfl');
+goStep(0);
+</script>
+</body>
+</html>
