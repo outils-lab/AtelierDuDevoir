@@ -409,163 +409,39 @@ body {
      ============================================================ -->
 <script>
 // ═══════════════════════════════════════════════════════════════
-//  📚 CATALOGUE DES FICHES
-//  Pour ajouter une nouvelle fiche, copie un bloc { ... },
-//  modifie les champs et ajoute-le à la fin du tableau.
-//  Laisse lien: "#" si tu n'as pas encore l'URL du fichier.
+//  CATALOGUE DES FICHES
 // ═══════════════════════════════════════════════════════════════
 const FICHES = [
 
-  // ── CE2 · FRANÇAIS ──────────────────────────────────────────
-  {
-    id: 1,
-    classe: "CE2",
-    matiere: "Français",
-    theme: "Conjugaison",
-    type: "Leçon",
-    titre: "Le Présent de l'Indicatif",
-    lien: "fiche_interactive_present_CE2.html",
-    date: "2026-05"
-  },
-  {
-    id: 2,
-    classe: "CE2",
-    matiere: "Français",
-    theme: "Conjugaison",
-    type: "Exercices",
-    titre: "Le Présent de l'Indicatif – Exercices",
-    lien: "fiche_interactive_present_CE2.html",
-    date: "2026-05"
-  },
-  {
-    id: 3,
-    classe: "CE2",
-    matiere: "Français",
-    theme: "Conjugaison",
-    type: "Évaluation",
-    titre: "Le Présent de l'Indicatif – Évaluation",
-    lien: "fiche_interactive_present_CE2.html",
-    date: "2026-05"
-  },
-  {
-    id: 4,
-    classe: "CE2",
-    matiere: "Français",
-    theme: "Orthographe",
-    type: "Leçon",
-    titre: "Les Homophones a / à",
-    lien: "#",
-    date: "2026-05"
-  },
+  // CE2 - FRANCAIS
+  {id:1, classe:"CE2", matiere:"Français", theme:"Conjugaison", type:"Leçon", titre:"Le Présent de l'Indicatif", lien:"fiche_interactive_present_CE2.html", date:"2026-05"},
+  {id:2, classe:"CE2", matiere:"Français", theme:"Conjugaison", type:"Exercices", titre:"Le Présent de l'Indicatif - Exercices", lien:"fiche_interactive_present_CE2.html", date:"2026-05"},
+  {id:3, classe:"CE2", matiere:"Français", theme:"Conjugaison", type:"Évaluation", titre:"Le Présent de l'Indicatif - Evaluation", lien:"fiche_interactive_present_CE2.html", date:"2026-05"},
+  {id:4, classe:"CE2", matiere:"Français", theme:"Orthographe", type:"Leçon", titre:"Les Homophones a et à", lien:"#", date:"2026-05"},
 
-  // ── CE2 · SCIENCES ──────────────────────────────────────────
-  {
-    id: 5,
-    classe: "CE2",
-    matiere: "Sciences",
-    theme: "Électricité",
-    type: "Évaluation",
-    titre: "Les Circuits Électriques",
-    lien: "#",
-    date: "2026-04"
-  },
+  // CE2 - SCIENCES
+  {id:5, classe:"CE2", matiere:"Sciences", theme:"Electricite", type:"Évaluation", titre:"Les Circuits Electriques", lien:"#", date:"2026-04"},
 
-  // ── CM1 · FRANÇAIS ──────────────────────────────────────────
-  {
-    id: 6,
-    classe: "CM1",
-    matiere: "Français",
-    theme: "Conjugaison",
-    type: "Leçon",
-    titre: "L'Imparfait de l'Indicatif",
-    lien: "#",
-    date: "2026-05"
-  },
-  {
-    id: 7,
-    classe: "CM1",
-    matiere: "Français",
-    theme: "Grammaire",
-    type: "Leçon",
-    titre: "Le COD et le COI",
-    lien: "#",
-    date: "2026-05"
-  },
-  {
-    id: 8,
-    classe: "CM1",
-    matiere: "Mathématiques",
-    theme: "Numération",
-    type: "Exercices",
-    titre: "Les Fractions Simples",
-    lien: "#",
-    date: "2026-05"
-  },
+  // CM1 - FRANCAIS
+  {id:6, classe:"CM1", matiere:"Français", theme:"Conjugaison", type:"Leçon", titre:"L'Imparfait de l'Indicatif", lien:"#", date:"2026-05"},
+  {id:7, classe:"CM1", matiere:"Français", theme:"Grammaire", type:"Leçon", titre:"Le COD et le COI", lien:"#", date:"2026-05"},
 
-  // ── CM2 · FRANÇAIS ──────────────────────────────────────────
-  {
-    id: 9,
-    classe: "CM2",
-    matiere: "Français",
-    theme: "Conjugaison",
-    type: "Leçon",
-    titre: "Le Passé Simple – 1er et 2e groupes",
-    lien: "#",
-    date: "2026-04"
-  },
-  {
-    id: 10,
-    classe: "CM2",
-    matiere: "Français",
-    theme: "Conjugaison",
-    type: "Exercices",
-    titre: "Le Passé Simple – Exercices",
-    lien: "#",
-    date: "2026-04"
-  },
-  {
-    id: 11,
-    classe: "CM2",
-    matiere: "Mathématiques",
-    theme: "Géométrie",
-    type: "Leçon",
-    titre: "Aires et Périmètres",
-    lien: "#",
-    date: "2026-05"
-  },
-  {
-    id: 12,
-    classe: "CM2",
-    matiere: "Histoire-Géo",
-    theme: "Histoire",
-    type: "Leçon",
-    titre: "La Révolution Française",
-    lien: "#",
-    date: "2026-05"
-  },
-  {
-    id: 13,
-    classe: "CM2",
-    matiere: "Sciences",
-    theme: "Électricité",
-    type: "Leçon",
-    titre: "L'Électricité — Circuits et Composants",
-    lien: "fiche_interactive_electricite_CM2.html",
-    date: "2026-05"
-  }
+  // CM1 - MATHS
+  {id:8, classe:"CM1", matiere:"Mathématiques", theme:"Numeration", type:"Exercices", titre:"Les Fractions Simples", lien:"#", date:"2026-05"},
 
-  // ── AJOUTE TES NOUVELLES FICHES ICI ──────────────────────────
-  // Exemple :
-  // {
-  //   id: 13,                       ← numéro suivant
-  //   classe: "CM1",                ← CE2 | CM1 | CM2
-  //   matiere: "Français",          ← Français | Mathématiques | Sciences | Histoire-Géo
-  //   theme: "Orthographe",         ← thème libre
-  //   type: "Leçon",               ← Leçon | Exercices | Évaluation
-  //   titre: "Les Accords du GN",   ← titre affiché
-  //   lien: "mon_fichier.html",     ← nom du fichier ou URL complète
-  //   date: "2026-06"              ← année-mois
-  // },
+  // CM2 - FRANCAIS
+  {id:9, classe:"CM2", matiere:"Français", theme:"Conjugaison", type:"Leçon", titre:"Le Passe Simple - 1er et 2e groupes", lien:"#", date:"2026-04"},
+  {id:10, classe:"CM2", matiere:"Français", theme:"Conjugaison", type:"Exercices", titre:"Le Passe Simple - Exercices", lien:"#", date:"2026-04"},
+
+  // CM2 - MATHS
+  {id:11, classe:"CM2", matiere:"Mathématiques", theme:"Geometrie", type:"Leçon", titre:"Aires et Perimetres", lien:"#", date:"2026-05"},
+
+  // CM2 - HISTOIRE
+  {id:12, classe:"CM2", matiere:"Histoire-Géo", theme:"Histoire", type:"Leçon", titre:"La Revolution Francaise", lien:"#", date:"2026-05"},
+
+  // CM2 - SCIENCES
+  {id:13, classe:"CM2", matiere:"Sciences", theme:"Electricite", type:"Leçon", titre:"L'Electricite - Circuits et Composants", lien:"fiche_interactive_electricite_CM2.html", date:"2026-05"}
+
 ];
 
 // ─── Config matières ────────────────────────────────────────
