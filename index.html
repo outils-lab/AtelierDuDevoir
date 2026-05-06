@@ -458,11 +458,92 @@ const TYPES = ["Leçon", "Exercices", "Évaluation"];
 
 <!-- ===================== HTML ===================== -->
 
-<header class="site-header">
-  <div class="emoji-row">📚 ✏️ 🎯 📐 🔬</div>
-  <h1>Mes Fiches École</h1>
-  <p>Aide aux devoirs · CE2 · CM1 · CM2</p>
-  <div class="stats-bar">
+<header class="site-header" style="padding:0;background:transparent;">
+<div style="padding: 20px 0 10px;">
+<svg width="100%" viewBox="0 0 680 320" role="img" xmlns="http://www.w3.org/2000/svg">
+<title>Logo Atelier Du Devoir</title>
+<desc>Logo animé avec un livre, un crayon et le texte Atelier Du Devoir</desc>
+<defs>
+  <style>
+    .ring{fill:none;stroke:#F39C12;stroke-width:1.5;opacity:0.25;}
+    .book-cover{fill:#E67E22;}.book-page{fill:#FFF8E1;}.book-spine{fill:#B7580A;}
+    .pencil-body{fill:#F1C40F;}.pencil-tip{fill:#FDEBD0;}.pencil-top{fill:#E74C3C;}.pencil-band{fill:#999;}
+    .star{fill:#F1C40F;}.star-sm{fill:#FFD43B;}
+    .tl-main{font-family:'Baloo 2',Georgia,serif;font-size:52px;font-weight:800;fill:#FFF8E1;letter-spacing:-1px;}
+    .tl-or{font-family:'Baloo 2',Georgia,serif;font-size:52px;font-weight:800;fill:#F39C12;letter-spacing:-1px;}
+    .tl-sub{font-family:'Nunito',Arial,sans-serif;font-size:17px;font-weight:600;fill:#F39C12;letter-spacing:3px;}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+    @keyframes popIn{0%{transform:scale(0) rotate(-20deg);opacity:0;}70%{transform:scale(1.2) rotate(4deg);}100%{transform:scale(1) rotate(0deg);opacity:1;}}
+    @keyframes twinkle{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.3;transform:scale(0.6);}}
+    @keyframes writeLine{from{stroke-dashoffset:120;}to{stroke-dashoffset:0;}}
+    @keyframes slideIn{from{opacity:0;transform:translateX(-20px);}to{opacity:1;transform:translateX(0);}}
+    @keyframes pulseRing{0%{r:48;opacity:0.25;}100%{r:80;opacity:0;}}
+    @keyframes bounceBook{0%,100%{transform:translateY(0) rotate(-4deg);}50%{transform:translateY(-6px) rotate(-4deg);}}
+    .an-title{animation:fadeUp 0.7s 0.2s both ease-out;}
+    .an-title2{animation:fadeUp 0.7s 0.35s both ease-out;}
+    .an-sub{animation:fadeUp 0.7s 0.6s both ease-out;}
+    .an-book{animation:popIn 0.7s 0.1s both,bounceBook 3s 1.5s ease-in-out infinite;transform-origin:130px 155px;}
+    .an-pencil{animation:popIn 0.6s 0.4s both;transform-origin:175px 100px;}
+    .an-line{stroke-dasharray:120;animation:writeLine 0.8s 1.0s both ease-out;}
+    .an-s1{animation:popIn 0.5s 0.8s both,twinkle 2.5s 2s ease-in-out infinite;transform-origin:220px 62px;}
+    .an-s2{animation:popIn 0.5s 1.1s both,twinkle 2.0s 2.5s ease-in-out infinite;transform-origin:80px 80px;}
+    .an-s3{animation:popIn 0.5s 1.4s both,twinkle 3.0s 3.0s ease-in-out infinite;transform-origin:195px 218px;}
+    .an-s4{animation:popIn 0.5s 0.9s both,twinkle 2.2s 2.2s ease-in-out infinite;transform-origin:58px 200px;}
+    .an-r1{animation:pulseRing 2.2s 0.5s ease-out infinite;transform-origin:130px 155px;}
+    .an-r2{animation:pulseRing 2.2s 1.3s ease-out infinite;transform-origin:130px 155px;}
+    .an-deco{animation:slideIn 0.6s 1.3s both;}
+  </style>
+  <polygon id="st5" points="0,-10 2.4,-3.3 9.5,-3.1 4,1.2 5.9,8.1 0,4 -5.9,8.1 -4,1.2 -9.5,-3.1 -2.4,-3.3"/>
+  <polygon id="st5s" points="0,-6 1.4,-2 5.7,-1.9 2.4,0.7 3.5,4.9 0,2.4 -3.5,4.9 -2.4,0.7 -5.7,-1.9 -1.4,-2"/>
+</defs>
+<rect width="680" height="320" rx="20" fill="#1a1200"/>
+<g opacity="0.07">
+  <circle cx="60" cy="40" r="1.5" fill="#F39C12"/><circle cx="120" cy="40" r="1.5" fill="#F39C12"/>
+  <circle cx="580" cy="40" r="1.5" fill="#F39C12"/><circle cx="620" cy="40" r="1.5" fill="#F39C12"/>
+  <circle cx="60" cy="280" r="1.5" fill="#F39C12"/><circle cx="620" cy="280" r="1.5" fill="#F39C12"/>
+  <circle cx="340" cy="30" r="1.5" fill="#F39C12"/><circle cx="340" cy="290" r="1.5" fill="#F39C12"/>
+</g>
+<circle class="ring an-r1" cx="130" cy="155" r="48"/>
+<circle class="ring an-r2" cx="130" cy="155" r="48"/>
+<g class="an-book">
+  <rect x="104" y="110" width="14" height="90" rx="3" class="book-spine"/>
+  <rect x="116" y="108" width="52" height="94" rx="4" class="book-cover"/>
+  <rect x="119" y="112" width="45" height="86" rx="2" class="book-page"/>
+  <line x1="124" y1="128" x2="159" y2="128" stroke="#E0D0A0" stroke-width="1.5"/>
+  <line x1="124" y1="138" x2="155" y2="138" stroke="#E0D0A0" stroke-width="1.5"/>
+  <line x1="124" y1="148" x2="159" y2="148" stroke="#E0D0A0" stroke-width="1.5"/>
+  <line x1="124" y1="158" x2="150" y2="158" stroke="#E0D0A0" stroke-width="1.5"/>
+  <line x1="124" y1="168" x2="159" y2="168" stroke="#E0D0A0" stroke-width="1.5"/>
+  <line x1="124" y1="178" x2="153" y2="178" stroke="#E0D0A0" stroke-width="1.5"/>
+  <polygon points="154,108 162,108 162,126 158,121 154,126" fill="#E74C3C"/>
+</g>
+<g class="an-pencil" transform="translate(155,65) rotate(35)">
+  <rect x="-7" y="0" width="14" height="75" rx="2" class="pencil-body"/>
+  <rect x="-7" y="0" width="14" height="8" rx="2" class="pencil-top"/>
+  <rect x="-7" y="7" width="14" height="5" class="pencil-band"/>
+  <polygon points="-7,75 7,75 0,92" class="pencil-tip"/>
+  <polygon points="-2,86 2,86 0,92" fill="#C0392B"/>
+  <line x1="0" y1="92" x2="48" y2="85" stroke="#F1C40F" stroke-width="2" stroke-linecap="round" class="an-line"/>
+</g>
+<g class="an-s1"><use href="#st5" transform="translate(220,62)" class="star"/></g>
+<g class="an-s2"><use href="#st5s" transform="translate(80,80)" class="star-sm"/></g>
+<g class="an-s3"><use href="#st5s" transform="translate(195,218)" class="star-sm"/></g>
+<g class="an-s4"><use href="#st5" transform="translate(58,200)" style="fill:#FF6B6B"/></g>
+<g class="an-deco">
+  <circle cx="246" cy="120" r="3" fill="#2ECC71" opacity="0.8"/>
+  <circle cx="258" cy="108" r="2" fill="#3498DB" opacity="0.7"/>
+  <circle cx="52" cy="150" r="2.5" fill="#9B59B6" opacity="0.7"/>
+</g>
+<g class="an-title"><text x="268" y="170" class="tl-main">Atelier</text></g>
+<g class="an-title2"><text x="268" y="228" class="tl-or">Du Devoir</text></g>
+<g class="an-deco">
+  <rect x="268" y="240" width="340" height="3" rx="1.5" fill="#F39C12" opacity="0.6"/>
+  <rect x="268" y="240" width="80" height="3" rx="1.5" fill="#F39C12"/>
+</g>
+<g class="an-sub"><text x="268" y="275" class="tl-sub">AIDE AUX DEVOIRS</text></g>
+</svg>
+</div>
+  <div class="stats-bar" style="padding:12px 0 18px;">
     <div class="stat-pill" id="stat-total">– fiches</div>
     <div class="stat-pill" id="stat-classes">– niveaux</div>
     <div class="stat-pill" id="stat-matieres">– matières</div>
