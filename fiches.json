@@ -1,0 +1,33 @@
+{
+  "6-9ans": [
+    {
+      "id": "ce2-francais-present-indicatif",
+      "titre": "Le présent de l'indicatif",
+      "sous_titre": "1er, 2e et 3e groupes de verbes",
+      "matiere": "Français",
+      "niveau": "CE2",
+      "emoji": "📝",
+      "description": "Maîtrise les terminaisons du présent pour tous les groupes de verbes avec des exercices interactifs.",
+      "fichier": "fiches/fiche_interactive_present_CE2.html",
+      "nouveau": false,
+      "difficulte": 2,
+      "duree": "20 min"
+    }
+  ],
+  "9-12ans": [
+    {
+      "id": "cm2-sciences-electricite",
+      "titre": "L'électricité",
+      "sous_titre": "Circuits simples et composants",
+      "matiere": "Sciences",
+      "niveau": "CM2",
+      "emoji": "⚡",
+      "description": "Découvre les circuits électriques, les conducteurs, les isolants et construis tes propres schémas.",
+      "fichier": "fiches/fiche_interactive_electricite_CM2.html",
+      "nouveau": false,
+      "difficulte": 2,
+      "duree": "25 min"
+    }
+  ],
+  "12-15ans": []
+}

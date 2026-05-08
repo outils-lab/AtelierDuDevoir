@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>12–15 ans – L'Atelier du Devoir</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+:root{--sky:#4FBDDF;--sky-pale:#E8F7FC;--yellow:#FFD93D;--yellow-deep:#F7B731;--mint:#6BCFB0;--coral:#FF8A65;--violet:#9B8AFF;--text:#2C3E50;--text-light:#7F8C8D;--radius:20px;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Nunito',sans-serif;background:#f0fbff;color:var(--text);overflow-x:hidden;}
+/* NAV */
+.nav{background:white;border-bottom:2px solid var(--sky-pale);position:sticky;top:0;z-index:100;box-shadow:0 4px 20px rgba(79,189,223,.12);}
+.nav-inner{max-width:1200px;margin:auto;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;}
+.logo{font-family:'Fredoka One',cursive;font-size:1.5rem;color:var(--sky);display:flex;align-items:center;gap:8px;text-decoration:none;}
+.logo-dot{width:10px;height:10px;border-radius:50%;background:var(--yellow);display:inline-block;}
+.nav-back{padding:8px 18px;border-radius:50px;font-weight:700;font-size:.88rem;cursor:pointer;border:2px solid var(--sky-pale);background:white;color:var(--sky);text-decoration:none;transition:all .2s;display:inline-flex;align-items:center;gap:6px;}
+.nav-back:hover{background:var(--sky-pale);}
+/* HERO AGE */
+.hero-age{padding:48px 24px 56px;text-align:center;position:relative;overflow:hidden;}
+.hero-age-inner{max-width:700px;margin:auto;position:relative;z-index:1;}
+.hero-age h1{font-family:'Fredoka One',cursive;font-size:clamp(2rem,5vw,3rem);margin-bottom:12px;}
+.hero-age p{font-size:1.05rem;color:var(--text-light);line-height:1.7;}
+.hero-deco{position:absolute;border-radius:50%;opacity:.12;pointer-events:none;}
+.breadcrumb{display:flex;align-items:center;justify-content:center;gap:8px;font-size:.85rem;color:var(--text-light);margin-bottom:20px;}
+.breadcrumb a{color:var(--sky);text-decoration:none;font-weight:700;}
+.breadcrumb a:hover{text-decoration:underline;}
+/* FILTERS */
+.filter-section{background:white;padding:20px 24px;border-bottom:2px solid var(--sky-pale);}
+.filter-inner{max-width:1200px;margin:auto;display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+.filter-label{font-weight:800;font-size:.82rem;color:var(--text-light);margin-right:4px;}
+.filter-btn{padding:8px 18px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.85rem;border:2px solid var(--sky-pale);background:white;color:var(--text-light);cursor:pointer;transition:all .2s;}
+.filter-btn:hover{border-color:var(--sky);color:var(--sky);}
+.filter-btn.active{background:var(--sky);border-color:var(--sky);color:white;}
+/* GRID */
+.fiches-section{padding:40px 24px 64px;}
+.fiches-inner{max-width:1200px;margin:auto;}
+.fiches-count{font-size:.88rem;color:var(--text-light);font-weight:700;margin-bottom:20px;}
+.fiches-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px;}
+/* CARD */
+.fiche-card{background:white;border-radius:var(--radius);padding:28px;cursor:pointer;transition:all .3s;border:2px solid transparent;box-shadow:0 4px 16px rgba(0,0,0,.06);position:relative;overflow:hidden;}
+.fiche-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;border-radius:20px 20px 0 0;}
+.fiche-card:hover{transform:translateY(-6px);box-shadow:0 16px 40px rgba(0,0,0,.12);}
+.fiche-card[data-matiere="Français"]::before{background:var(--sky);}
+.fiche-card[data-matiere="Mathématiques"]::before{background:var(--yellow-deep);}
+.fiche-card[data-matiere="Sciences"]::before{background:var(--mint);}
+.fiche-card[data-matiere="Histoire-Géo"]::before{background:var(--coral);}
+.fiche-card[data-matiere="Anglais"]::before{background:var(--violet);}
+.fiche-card[data-matiere="Découverte"]::before{background:linear-gradient(90deg,var(--sky),var(--mint));}
+.fiche-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px;}
+.fiche-emoji{font-size:2.2rem;line-height:1;}
+.fiche-badges{display:flex;flex-direction:column;align-items:flex-end;gap:6px;}
+.badge-niveau{padding:3px 12px;border-radius:50px;font-size:.72rem;font-weight:800;background:var(--sky-pale);color:var(--sky);}
+.badge-new{padding:3px 10px;border-radius:50px;font-size:.7rem;font-weight:800;background:var(--yellow);color:#333;}
+.fiche-titre{font-family:'Fredoka One',cursive;font-size:1.3rem;margin-bottom:4px;}
+.fiche-sous-titre{font-size:.88rem;color:var(--text-light);margin-bottom:10px;font-weight:600;}
+.fiche-desc{font-size:.85rem;color:var(--text-light);line-height:1.6;margin-bottom:16px;}
+.fiche-meta{display:flex;align-items:center;justify-content:space-between;font-size:.82rem;color:var(--text-light);margin-bottom:16px;}
+.fiche-stars{letter-spacing:2px;}
+.btn-start{width:100%;padding:12px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.9rem;background:linear-gradient(135deg,var(--sky),var(--mint));color:white;border:none;cursor:pointer;transition:all .2s;}
+.btn-start:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(79,189,223,.4);}
+/* EMPTY STATE */
+.empty-state{text-align:center;padding:64px 24px;color:var(--text-light);}
+.empty-state-icon{font-size:4rem;display:block;margin-bottom:16px;}
+.empty-state h3{font-family:'Fredoka One',cursive;font-size:1.6rem;margin-bottom:8px;color:var(--sky);}
+/* FOOTER */
+.footer{background:#2C3E50;color:rgba(255,255,255,.6);padding:28px 24px;text-align:center;font-size:.82rem;}
+.footer-logo{font-family:'Fredoka One',cursive;font-size:1.3rem;color:var(--sky);margin-bottom:6px;}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="logo"><span class="logo-dot"></span>L'Atelier du Devoir</a>
+    <a href="index.html" class="nav-back">← Accueil</a>
+  </div>
+</nav>
+
+<section class="hero-age" style="background:radial-gradient(ellipse at 50% 30%,#f0eeff 0%,#f0fbff 70%);">
+  <div class="hero-deco" style="width:350px;height:350px;background:#9B8AFF;top:-120px;right:-80px;"></div>
+  <div class="hero-deco" style="width:200px;height:200px;background:#6BCFB0;bottom:-60px;left:-40px;"></div>
+  <div class="hero-age-inner">
+    <div class="breadcrumb">
+      <a href="index.html">Accueil</a>
+      <span>›</span>
+      <span>12–15 ans</span>
+    </div>
+    <h1 style="color:var(--violet)">🎯 Espace 12–15 ans</h1>
+    <p>5ème, 4ème et 3ème — Méthodo, révisions, fiches synthèse et préparation au Brevet.</p>
+  </div>
+</section>
+
+<div class="filter-section">
+  <div class="filter-inner">
+    <span class="filter-label">Filtrer :</span>
+    <button class="filter-btn active" onclick="setFilter('all')">Tout voir</button>
+    <div id="filter-bar" style="display:contents;"></div>
+  </div>
+</div>
+
+<section class="fiches-section">
+  <div class="fiches-inner">
+    <p class="fiches-count" id="fiches-count">Chargement...</p>
+    <div class="fiches-grid" id="fiches-grid">
+      <div class="empty-state">
+        <span class="empty-state-icon">⏳</span>
+        <h3>Chargement des fiches...</h3>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-logo">L'Atelier du Devoir</div>
+  <p>© 2025 L'Atelier du Devoir · <a href="index.html" style="color:var(--sky);text-decoration:none;">Accueil</a></p>
+</footer>
+
+<script>
+
+const AGE_KEY = '12-15ans';
+let allFiches = [];
+let currentFilter = 'all';
+
+async function loadFiches() {
+  try {
+    const r = await fetch('fiches.json');
+    const data = await r.json();
+    allFiches = data[AGE_KEY] || [];
+    buildFilters(allFiches);
+    renderFiches(allFiches);
+  } catch(e) {
+    document.getElementById('fiches-grid').innerHTML =
+      '<div class="empty-state"><span class="empty-state-icon">⚠️</span><h3>Impossible de charger les fiches</h3><p>Vérifiez votre connexion ou que le fichier fiches.json est bien présent.</p></div>';
+  }
+}
+
+function buildFilters(fiches) {
+  const matieres = [...new Set(fiches.map(f => f.matiere))];
+  const bar = document.getElementById('filter-bar');
+  bar.innerHTML = matieres.map(m =>
+    `<button class="filter-btn" onclick="setFilter('${m}')">${m}</button>`
+  ).join('');
+  updateCount(fiches.length);
+}
+
+function setFilter(matiere) {
+  currentFilter = matiere === currentFilter ? 'all' : matiere;
+  document.querySelectorAll('.filter-btn').forEach(b => {
+    b.classList.toggle('active', b.textContent === matiere && currentFilter === matiere);
+  });
+  const filtered = currentFilter === 'all' ? allFiches : allFiches.filter(f => f.matiere === currentFilter);
+  renderFiches(filtered);
+  updateCount(filtered.length);
+}
+
+function updateCount(n) {
+  const el = document.getElementById('fiches-count');
+  if(el) el.textContent = n === 0 ? 'Aucune fiche' : n === 1 ? '1 fiche' : n + ' fiches';
+}
+
+function stars(n) {
+  return '⭐'.repeat(n) + '☆'.repeat(3 - n);
+}
+
+function renderFiches(fiches) {
+  const grid = document.getElementById('fiches-grid');
+  if (!fiches || fiches.length === 0) {
+    grid.innerHTML = `<div class="empty-state">
+      <span class="empty-state-icon">🎯</span>
+      <h3>Bientôt disponible !</h3>
+      <p>Les fiches pour cette tranche d'âge arrivent très bientôt. Revenez nous voir !</p>
+    </div>`;
+    return;
+  }
+  grid.innerHTML = fiches.map(f => `
+    <div class="fiche-card" data-matiere="${f.matiere}" onclick="location.href='${f.fichier}'">
+      <div class="fiche-top">
+        <span class="fiche-emoji">${f.emoji}</span>
+        <div class="fiche-badges">
+          <span class="badge-niveau">${f.niveau}</span>
+          ${f.nouveau ? '<span class="badge-new">✨ Nouveau</span>' : ''}
+        </div>
+      </div>
+      <h3 class="fiche-titre">${f.titre}</h3>
+      <p class="fiche-sous-titre">${f.sous_titre}</p>
+      <p class="fiche-desc">${f.description}</p>
+      <div class="fiche-meta">
+        <span>⏱ ${f.duree}</span>
+        <span class="fiche-stars">${stars(f.difficulte)}</span>
+      </div>
+      <button class="btn-start">Ouvrir la fiche →</button>
+    </div>
+  `).join('');
+}
+
+loadFiches();
+
+</script>
+</body>
+</html>
