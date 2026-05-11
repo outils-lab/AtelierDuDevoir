@@ -620,10 +620,30 @@ let defiScore = 0;
 
 function revealBloc(n) {
   const bloc = document.getElementById('bloc-' + n);
-  if(bloc) {
-    bloc.classList.add('revealed');
-    bloc.scrollIntoView({behavior:'smooth', block:'start'});
+  if(!bloc) return;
+
+  // Cache le bouton cliqué pour que ce soit clair qu'il a été pris en compte
+  const prevBloc = document.getElementById('bloc-' + (n-1));
+  if(prevBloc) {
+    const btn = prevBloc.querySelector('.btn-compris');
+    if(btn) { btn.textContent = '✅ Compris !'; btn.disabled = true; btn.style.opacity = '.5'; }
   }
+
+  bloc.classList.add('revealed');
+
+  // Scroll en tenant compte de la hauteur du header sticky
+  setTimeout(() => {
+    const header = document.querySelector('.header');
+    const headerH = header ? header.offsetHeight : 0;
+    const rect = bloc.getBoundingClientRect();
+    const scrollTop = window.pageYOffset + rect.top - headerH - 20;
+    window.scrollTo({ top: scrollTop, behavior: 'smooth' });
+
+    // Flash de mise en évidence
+    bloc.style.transition = 'background .3s';
+    bloc.style.background = '#daf6ff';
+    setTimeout(() => { bloc.style.background = ''; }, 800);
+  }, 50);
 }
 
 // ═══════════════════════════════════════════════════
