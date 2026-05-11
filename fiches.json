@@ -1,18 +1,18 @@
 {
   "6-9ans": [
     {
-      "id": "ce2-francais-present-indicatif",
-      "titre": "Le présent de l'indicatif",
-      "sous_titre": "1er, 2e et 3e groupes de verbes",
-      "matiere": "Français",
-      "niveau": "CE2",
-      "emoji": "📝",
-      "description": "Maîtrise les terminaisons du présent pour tous les groupes de verbes avec des exercices interactifs.",
-      "fichier": "fiches/fiche_interactive_present_CE2.html",
-      "nouveau": false,
-      "difficulte": 2,
-      "duree": "20 min"
-    }
+  "id": "ce2-francais-present-indicatif",
+  "titre": "Le présent de l'indicatif",
+  "sous_titre": "1er groupe + être, avoir, aller, faire",
+  "matiere": "Français",
+  "niveau": "CE2",
+  "emoji": "📝",
+  "description": "Apprends à conjuguer les verbes du 1er groupe et les verbes irréguliers au présent avec des exercices interactifs et un bilan gamifié.",
+  "fichier": "fiches/fiche_present_CE2_v2.html",
+  "nouveau": true,
+  "difficulte": 2,
+  "duree": "20 min"
+}
   ],
   "9-12ans": [
     {
