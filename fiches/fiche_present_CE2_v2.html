@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Le présent de l'indicatif – CE2 | L'Atelier du Devoir</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sky:#4FBDDF;--sky-pale:#E8F7FC;--sky-deep:#2fa8cc;
+  --yellow:#FFD93D;--yellow-deep:#F7B731;--yellow-pale:#FFF8E1;
+  --mint:#6BCFB0;--mint-pale:#E8FFF7;--mint-deep:#4db896;
+  --coral:#FF8A65;--coral-pale:#FFF0EB;
+  --violet:#9B8AFF;--violet-pale:#F0EEFF;
+  --text:#2C3E50;--text-light:#7F8C8D;--white:#fff;
+  --radius:16px;--radius-lg:24px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Nunito',sans-serif;background:#f0fbff;color:var(--text);font-size:17px;line-height:1.6;}
+
+/* ── HEADER ── */
+.header{background:white;border-bottom:3px solid var(--sky-pale);padding:0;position:sticky;top:0;z-index:100;box-shadow:0 4px 20px rgba(79,189,223,.12);}
+.header-top{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;}
+.logo{font-family:'Fredoka One',cursive;font-size:1.2rem;color:var(--sky);text-decoration:none;display:flex;align-items:center;gap:6px;}
+.score-badge{background:var(--yellow);color:var(--text);font-weight:900;font-size:.9rem;padding:6px 14px;border-radius:50px;display:flex;align-items:center;gap:6px;}
+.progress-bar-wrap{padding:0 20px 10px;}
+.steps{display:flex;gap:6px;align-items:center;}
+.step{flex:1;height:8px;border-radius:50px;background:var(--sky-pale);transition:background .5s,transform .3s;}
+.step.done{background:var(--mint);}
+.step.active{background:var(--sky);transform:scaleY(1.3);}
+.step-label{font-size:.7rem;font-weight:800;color:var(--text-light);text-align:center;margin-top:4px;letter-spacing:.04em;}
+.steps-labels{display:flex;gap:6px;}
+.step-lbl{flex:1;font-size:.65rem;font-weight:800;color:var(--text-light);text-align:center;padding-top:2px;}
+
+/* ── MAIN ── */
+.main{max-width:760px;margin:0 auto;padding:24px 16px 80px;}
+
+/* ── ACCROCHE ── */
+.accroche{background:linear-gradient(135deg,#daf6ff,#e8fff7);border-radius:var(--radius-lg);padding:24px 28px;margin-bottom:28px;display:flex;gap:20px;align-items:center;}
+.accroche-mascot{font-size:3.5rem;flex-shrink:0;animation:float 3s ease-in-out infinite;}
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+.accroche-text h1{font-family:'Fredoka One',cursive;font-size:1.6rem;color:var(--sky);margin-bottom:6px;}
+.accroche-text p{color:var(--text-light);font-size:.95rem;}
+.fiche-meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;}
+.meta-tag{background:white;border-radius:50px;padding:4px 12px;font-size:.75rem;font-weight:800;color:var(--text-light);display:inline-flex;align-items:center;gap:4px;}
+
+/* ── PHASES ── */
+.phase{display:none;}
+.phase.active{display:block;}
+
+/* ── LECON ── */
+.lecon-card{background:white;border-radius:var(--radius-lg);padding:24px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);}
+.lecon-card h2{font-family:'Fredoka One',cursive;font-size:1.3rem;color:var(--sky);margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+.lecon-block{display:none;}
+.lecon-block.revealed{display:block;}
+.usage-list{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:16px;}
+.usage-item{background:var(--sky-pale);border-radius:12px;padding:12px 16px;display:flex;align-items:flex-start;gap:12px;}
+.usage-icon{font-size:1.4rem;flex-shrink:0;}
+.usage-text strong{color:var(--sky-deep);}
+
+.conj-section{margin-bottom:20px;}
+.conj-section h3{font-family:'Fredoka One',cursive;font-size:1.1rem;margin-bottom:12px;}
+.conj-table{width:100%;border-collapse:separate;border-spacing:0 6px;}
+.conj-table tr td{padding:8px 14px;background:var(--sky-pale);font-size:.9rem;}
+.conj-table tr td:first-child{border-radius:10px 0 0 10px;font-weight:700;color:var(--text-light);width:40%;}
+.conj-table tr td:last-child{border-radius:0 10px 10px 0;}
+.conj-table tr td span.ending{font-weight:900;color:var(--sky-deep);background:white;padding:1px 4px;border-radius:4px;}
+.conj-table.green tr td{background:var(--mint-pale);}
+.conj-table.green tr td span.ending{color:var(--mint-deep);}
+.conj-table.yellow tr td{background:var(--yellow-pale);}
+.conj-table.yellow tr td span.ending{color:var(--yellow-deep);}
+.conj-table.coral tr td{background:var(--coral-pale);}
+.conj-table.coral tr td span.ending{color:var(--coral);}
+.conj-table.violet tr td{background:var(--violet-pale);}
+.conj-table.violet tr td span.ending{color:var(--violet);}
+
+.irr-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+@media(max-width:500px){.irr-grid{grid-template-columns:1fr;}}
+.irr-card{border-radius:var(--radius);padding:14px;}
+.irr-card h4{font-family:'Fredoka One',cursive;font-size:1rem;margin-bottom:8px;}
+.irr-card.blue{background:var(--sky-pale);}
+.irr-card.blue h4{color:var(--sky-deep);}
+.irr-card.green{background:var(--mint-pale);}
+.irr-card.green h4{color:var(--mint-deep);}
+.irr-card.yellow{background:var(--yellow-pale);}
+.irr-card.yellow h4{color:var(--yellow-deep);}
+.irr-card.coral{background:var(--coral-pale);}
+.irr-card.coral h4{color:var(--coral);}
+.irr-table{width:100%;font-size:.82rem;}
+.irr-table td{padding:3px 6px;}
+.irr-table td:first-child{color:var(--text-light);font-weight:700;width:45%;}
+.irr-table td:last-child{font-weight:800;}
+
+.astuce{background:var(--yellow-pale);border-left:4px solid var(--yellow-deep);border-radius:0 12px 12px 0;padding:12px 16px;margin-top:12px;font-size:.88rem;}
+.astuce strong{color:var(--yellow-deep);}
+
+.btn-compris{margin-top:20px;padding:13px 28px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.95rem;background:linear-gradient(135deg,var(--sky),var(--mint));color:white;border:none;cursor:pointer;box-shadow:0 4px 16px rgba(79,189,223,.35);transition:all .2s;display:inline-flex;align-items:center;gap:8px;}
+.btn-compris:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(79,189,223,.45);}
+
+/* ── MASCOT MESSAGE ── */
+.mascot-msg{background:white;border-radius:var(--radius-lg);padding:16px 20px;margin:16px 0;display:flex;align-items:flex-start;gap:14px;box-shadow:0 4px 16px rgba(0,0,0,.06);}
+.mascot-msg .emo{font-size:2.2rem;flex-shrink:0;}
+.mascot-msg p{font-size:.92rem;color:var(--text-light);}
+.mascot-msg p strong{color:var(--text);}
+
+/* ── EX HEADER ── */
+.ex-header{margin-bottom:20px;}
+.ex-header h2{font-family:'Fredoka One',cursive;font-size:1.4rem;color:var(--text);margin-bottom:4px;}
+.ex-header p{color:var(--text-light);font-size:.9rem;}
+.ex-num{display:inline-block;background:var(--sky);color:white;font-weight:900;font-size:.75rem;padding:3px 10px;border-radius:50px;margin-bottom:8px;letter-spacing:.06em;}
+
+/* ── QCM ── */
+.qcm-question{background:white;border-radius:var(--radius-lg);padding:24px;box-shadow:0 4px 20px rgba(0,0,0,.06);margin-bottom:16px;}
+.qcm-question.answered{pointer-events:none;}
+.qcm-sentence{font-size:1.1rem;font-weight:700;margin-bottom:18px;line-height:1.6;}
+.qcm-sentence .blank{display:inline-block;min-width:80px;border-bottom:3px solid var(--sky);padding:0 6px;text-align:center;color:var(--sky);font-weight:900;}
+.qcm-options{display:flex;flex-direction:column;gap:10px;}
+.qcm-opt{padding:12px 20px;border-radius:12px;border:2.5px solid var(--sky-pale);background:white;font-family:'Nunito',sans-serif;font-weight:700;font-size:.95rem;cursor:pointer;text-align:left;transition:all .2s;display:flex;align-items:center;gap:10px;}
+.qcm-opt:hover{border-color:var(--sky);background:var(--sky-pale);}
+.qcm-opt.correct{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.qcm-opt.wrong{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
+.qcm-opt.reveal{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.qcm-feedback{margin-top:14px;padding:12px 16px;border-radius:12px;font-size:.9rem;font-weight:700;display:none;}
+.qcm-feedback.show{display:flex;align-items:flex-start;gap:10px;}
+.qcm-feedback.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.qcm-feedback.ko{background:var(--coral-pale);color:#c0392b;}
+
+.btn-suivant{margin-top:16px;padding:12px 24px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.9rem;background:var(--sky);color:white;border:none;cursor:pointer;transition:all .2s;display:none;align-items:center;gap:8px;}
+.btn-suivant.show{display:inline-flex;}
+.btn-suivant:hover{background:var(--sky-deep);}
+
+/* ── WORD BANK ── */
+.banque-intro{background:white;border-radius:var(--radius-lg);padding:20px 24px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);}
+.bank-words{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0;}
+.word-chip{padding:10px 18px;border-radius:50px;border:2.5px solid var(--sky);background:white;font-weight:800;font-size:.9rem;cursor:pointer;transition:all .2s;color:var(--sky-deep);}
+.word-chip:hover{background:var(--sky-pale);transform:translateY(-2px);}
+.word-chip.used{opacity:.3;pointer-events:none;text-decoration:line-through;}
+.word-chip.selected{background:var(--sky);color:white;transform:scale(1.05);}
+
+.blank-sentences{display:flex;flex-direction:column;gap:12px;margin-top:16px;}
+.blank-row{background:var(--sky-pale);border-radius:14px;padding:14px 18px;display:flex;align-items:center;flex-wrap:wrap;gap:6px;font-size:1rem;font-weight:600;}
+.blank-box{display:inline-flex;align-items:center;justify-content:center;min-width:100px;height:36px;border:2.5px dashed var(--sky);border-radius:8px;background:white;color:var(--sky-deep);font-weight:900;font-size:.95rem;padding:0 10px;cursor:pointer;transition:all .2s;}
+.blank-box:hover{border-color:var(--sky-deep);background:var(--sky-pale);}
+.blank-box.filled{border-style:solid;border-color:var(--sky-deep);background:var(--sky-pale);}
+.blank-box.correct{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);cursor:default;}
+.blank-box.wrong{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
+
+.btn-verifier{margin-top:20px;padding:13px 28px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.95rem;background:linear-gradient(135deg,var(--sky),var(--mint));color:white;border:none;cursor:pointer;box-shadow:0 4px 16px rgba(79,189,223,.35);transition:all .2s;}
+.btn-verifier:hover{transform:translateY(-2px);}
+.btn-verifier:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+
+.banque-feedback{margin-top:16px;padding:14px 18px;border-radius:14px;font-size:.9rem;display:none;}
+.banque-feedback.show{display:block;}
+.banque-feedback.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.banque-feedback.ko{background:var(--coral-pale);color:#c0392b;}
+
+/* ── DÉFI ── */
+.defi-card{background:white;border-radius:var(--radius-lg);padding:24px;box-shadow:0 4px 20px rgba(0,0,0,.06);margin-bottom:16px;}
+.defi-sentence{font-size:1rem;font-weight:600;margin-bottom:12px;color:var(--text-light);}
+.defi-opts{display:flex;gap:10px;flex-wrap:wrap;}
+.defi-opt{padding:9px 20px;border-radius:50px;border:2.5px solid var(--sky-pale);background:white;font-family:'Nunito',sans-serif;font-weight:700;font-size:.9rem;cursor:pointer;transition:all .2s;}
+.defi-opt:hover{border-color:var(--sky);background:var(--sky-pale);}
+.defi-opt.correct{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.defi-opt.wrong{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
+
+/* ── BILAN ── */
+.bilan-card{background:white;border-radius:var(--radius-lg);padding:32px 28px;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,.08);}
+.bilan-mascot{font-size:4rem;margin-bottom:12px;display:block;animation:bigFloat 2s ease-in-out infinite;}
+@keyframes bigFloat{0%,100%{transform:translateY(0) scale(1);}50%{transform:translateY(-12px) scale(1.05);}}
+.bilan-title{font-family:'Fredoka One',cursive;font-size:2rem;margin-bottom:8px;}
+.bilan-msg{color:var(--text-light);font-size:1rem;margin-bottom:24px;}
+.stars-row{display:flex;justify-content:center;gap:12px;margin-bottom:24px;}
+.star-big{font-size:3rem;filter:grayscale(1);transition:filter .5s,transform .5s;}
+.star-big.earned{filter:none;animation:starPop .5s ease both;}
+@keyframes starPop{0%{transform:scale(0);}60%{transform:scale(1.3);}100%{transform:scale(1);}}
+.score-circle{width:110px;height:110px;border-radius:50%;background:linear-gradient(135deg,var(--sky),var(--mint));display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 24px;color:white;}
+.score-num{font-family:'Fredoka One',cursive;font-size:2rem;line-height:1;}
+.score-max{font-size:.75rem;opacity:.85;}
+
+.memo-card{background:linear-gradient(135deg,var(--sky-pale),var(--mint-pale));border-radius:var(--radius-lg);padding:20px 24px;margin:24px 0;text-align:left;border:2px solid rgba(79,189,223,.2);}
+.memo-card h3{font-family:'Fredoka One',cursive;font-size:1.1rem;color:var(--sky-deep);margin-bottom:12px;text-align:center;}
+.memo-rules{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media(max-width:480px){.memo-rules{grid-template-columns:1fr;}}
+.memo-rule{background:white;border-radius:10px;padding:10px 12px;font-size:.82rem;}
+.memo-rule strong{color:var(--sky-deep);display:block;margin-bottom:4px;}
+.memo-conj{font-size:.78rem;color:var(--text-light);}
+.memo-conj b{color:var(--text);}
+
+.bilan-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:20px;}
+.btn-retry{padding:12px 24px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.9rem;background:var(--sky-pale);color:var(--sky-deep);border:2px solid var(--sky);cursor:pointer;transition:all .2s;}
+.btn-retry:hover{background:var(--sky);color:white;}
+.btn-print{padding:12px 24px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.9rem;background:var(--mint);color:white;border:none;cursor:pointer;box-shadow:0 4px 12px rgba(107,207,176,.4);transition:all .2s;}
+.btn-print:hover{background:var(--mint-deep);}
+.btn-home{padding:12px 24px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.9rem;background:var(--sky);color:white;border:none;cursor:pointer;box-shadow:0 4px 12px rgba(79,189,223,.4);transition:all .2s;}
+.btn-home:hover{background:var(--sky-deep);}
+
+/* ── CONFETTI ── */
+.confetti-piece{position:fixed;width:10px;height:10px;border-radius:2px;top:-20px;animation:confettiFall linear both;pointer-events:none;z-index:9999;}
+@keyframes confettiFall{0%{transform:translateY(0) rotate(0deg);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
+
+/* ── PRINT ── */
+@media print{
+  .header,.accroche,.phase:not(#phase-bilan),.btn-print,.btn-retry,.btn-home,.bilan-btns{display:none!important;}
+  #phase-bilan{display:block!important;}
+  body{background:white;}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-top">
+    <a href="index.html" class="logo">🦉 L'Atelier du Devoir</a>
+    <div class="score-badge">⭐ <span id="score-display">0</span> pts</div>
+  </div>
+  <div class="progress-bar-wrap">
+    <div class="steps">
+      <div class="step active" id="step-0"></div>
+      <div class="step" id="step-1"></div>
+      <div class="step" id="step-2"></div>
+      <div class="step" id="step-3"></div>
+      <div class="step" id="step-4"></div>
+      <div class="step" id="step-5"></div>
+    </div>
+    <div class="steps-labels">
+      <div class="step-lbl">📖 Leçon</div>
+      <div class="step-lbl">✏️ Entr. 1</div>
+      <div class="step-lbl">✏️ Entr. 2</div>
+      <div class="step-lbl">🖊️ Exerc. 1</div>
+      <div class="step-lbl">🖊️ Exerc. 2</div>
+      <div class="step-lbl">⭐ Bilan</div>
+    </div>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- ACCROCHE -->
+  <div class="accroche">
+    <div class="accroche-mascot">🦉</div>
+    <div class="accroche-text">
+      <h1>Le présent de l'indicatif</h1>
+      <p>Imagine que tu es journaliste pour un jour ! Pour écrire ton article sur la vie d'aujourd'hui, tu as besoin du <strong>présent de l'indicatif</strong>. C'est le temps qui parle de <em>maintenant</em> !</p>
+      <div class="fiche-meta">
+        <span class="meta-tag">📚 CE2</span>
+        <span class="meta-tag">⏱️ ~20 minutes</span>
+        <span class="meta-tag">⭐ 14 points</span>
+        <span class="meta-tag">🎯 Français</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════ PHASE : LEÇON ══════════ -->
+  <div class="phase active" id="phase-lecon">
+
+    <div class="lecon-card">
+      <h2>📖 La leçon</h2>
+
+      <!-- BLOC 1 -->
+      <div class="lecon-block revealed" id="bloc-0">
+        <h3 style="color:var(--sky-deep);font-family:'Fredoka One',cursive;margin-bottom:12px;">① À quoi sert le présent ?</h3>
+        <ul class="usage-list">
+          <li class="usage-item">
+            <span class="usage-icon">⏰</span>
+            <span><strong>Ce qui se passe maintenant :</strong><br>"Je <strong style='color:var(--sky-deep)'>mange</strong> une pomme 🍎"</span>
+          </li>
+          <li class="usage-item">
+            <span class="usage-icon">🔄</span>
+            <span><strong>Ce qui se répète :</strong><br>"Chaque matin, je <strong style='color:var(--sky-deep)'>me brosse</strong> les dents 🦷"</span>
+          </li>
+          <li class="usage-item">
+            <span class="usage-icon">✅</span>
+            <span><strong>Ce qui est toujours vrai :</strong><br>"Le Soleil <strong style='color:var(--sky-deep)'>brille</strong> ☀️"</span>
+          </li>
+        </ul>
+        <button class="btn-compris" onclick="revealBloc(1)">J'ai compris ! → Voir les terminaisons 📋</button>
+      </div>
+
+      <!-- BLOC 2 -->
+      <div class="lecon-block" id="bloc-1">
+        <hr style="margin:20px 0;border:none;border-top:2px solid var(--sky-pale);">
+        <h3 style="color:var(--sky-deep);font-family:'Fredoka One',cursive;margin-bottom:12px;">② Les verbes du 1<sup>er</sup> groupe (en <em>-er</em>)</h3>
+        <div class="conj-section">
+          <table class="conj-table">
+            <tr><td>je</td><td>chant<span class="ending">e</span></td></tr>
+            <tr><td>tu</td><td>chant<span class="ending">es</span></td></tr>
+            <tr><td>il / elle</td><td>chant<span class="ending">e</span></td></tr>
+            <tr><td>nous</td><td>chant<span class="ending">ons</span></td></tr>
+            <tr><td>vous</td><td>chant<span class="ending">ez</span></td></tr>
+            <tr><td>ils / elles</td><td>chant<span class="ending">ent</span></td></tr>
+          </table>
+          <div class="astuce">💡 <strong>Astuce :</strong> Retire <em>-er</em> et ajoute les terminaisons : <strong>-e · -es · -e · -ons · -ez · -ent</strong></div>
+        </div>
+        <button class="btn-compris" onclick="revealBloc(2)">Suivant → Les verbes irréguliers 🔀</button>
+      </div>
+
+      <!-- BLOC 3 -->
+      <div class="lecon-block" id="bloc-2">
+        <hr style="margin:20px 0;border:none;border-top:2px solid var(--sky-pale);">
+        <h3 style="color:var(--sky-deep);font-family:'Fredoka One',cursive;margin-bottom:12px;">③ Les verbes irréguliers (à apprendre par cœur !)</h3>
+        <div class="irr-grid">
+          <div class="irr-card blue">
+            <h4>ÊTRE</h4>
+            <table class="irr-table">
+              <tr><td>je</td><td>suis</td></tr>
+              <tr><td>tu</td><td>es</td></tr>
+              <tr><td>il/elle</td><td>est</td></tr>
+              <tr><td>nous</td><td>sommes</td></tr>
+              <tr><td>vous</td><td>êtes</td></tr>
+              <tr><td>ils/elles</td><td>sont</td></tr>
+            </table>
+          </div>
+          <div class="irr-card green">
+            <h4>AVOIR</h4>
+            <table class="irr-table">
+              <tr><td>j'</td><td>ai</td></tr>
+              <tr><td>tu</td><td>as</td></tr>
+              <tr><td>il/elle</td><td>a</td></tr>
+              <tr><td>nous</td><td>avons</td></tr>
+              <tr><td>vous</td><td>avez</td></tr>
+              <tr><td>ils/elles</td><td>ont</td></tr>
+            </table>
+          </div>
+          <div class="irr-card yellow">
+            <h4>ALLER</h4>
+            <table class="irr-table">
+              <tr><td>je</td><td>vais</td></tr>
+              <tr><td>tu</td><td>vas</td></tr>
+              <tr><td>il/elle</td><td>va</td></tr>
+              <tr><td>nous</td><td>allons</td></tr>
+              <tr><td>vous</td><td>allez</td></tr>
+              <tr><td>ils/elles</td><td>vont</td></tr>
+            </table>
+          </div>
+          <div class="irr-card coral">
+            <h4>FAIRE</h4>
+            <table class="irr-table">
+              <tr><td>je</td><td>fais</td></tr>
+              <tr><td>tu</td><td>fais</td></tr>
+              <tr><td>il/elle</td><td>fait</td></tr>
+              <tr><td>nous</td><td>faisons</td></tr>
+              <tr><td>vous</td><td>faites</td></tr>
+              <tr><td>ils/elles</td><td>font</td></tr>
+            </table>
+          </div>
+        </div>
+        <div class="astuce" style="margin-top:14px;">🦉 <strong>Ugo te dit :</strong> Ces 4 verbes sont très utilisés en français. Entraîne-toi à les réciter tous les jours !</div>
+        <button class="btn-compris" onclick="startExercises()" style="background:linear-gradient(135deg,var(--yellow-deep),var(--coral));">
+          ✅ Leçon apprise ! → Je commence les exercices 🚀
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════ PHASE : ENTRAÎNEMENT 1 ══════════ -->
+  <div class="phase" id="phase-ex1">
+    <div class="mascot-msg">
+      <span class="emo">🦉</span>
+      <p><strong>Super, la leçon est terminée !</strong> Maintenant, mettons tout ça en pratique. Pour chaque phrase, clique sur la <strong>bonne conjugaison</strong>. Tu peux relire la leçon si tu veux !</p>
+    </div>
+    <div class="ex-num">ENTRAÎNEMENT 1 / 2</div>
+    <div class="ex-header">
+      <h2>Choisis la bonne conjugaison</h2>
+      <p>Clique sur la bonne réponse pour chaque phrase.</p>
+    </div>
+    <div id="qcm1-container"></div>
+    <button class="btn-suivant" id="btn-to-ex2" onclick="goToPhase('ex2',2)">Suite → Entraînement 2 ✏️</button>
+  </div>
+
+  <!-- ══════════ PHASE : ENTRAÎNEMENT 2 ══════════ -->
+  <div class="phase" id="phase-ex2">
+    <div class="mascot-msg">
+      <span class="emo">🦉</span>
+      <p><strong>Excellent !</strong> Maintenant les verbes <strong>être et avoir</strong>. Ce sont des verbes irréguliers très importants !</p>
+    </div>
+    <div class="ex-num">ENTRAÎNEMENT 2 / 2</div>
+    <div class="ex-header">
+      <h2>Être ou Avoir ?</h2>
+      <p>Choisis la bonne forme du verbe.</p>
+    </div>
+    <div id="qcm2-container"></div>
+    <button class="btn-suivant" id="btn-to-banque1" onclick="goToPhase('banque1',3)">Suite → Exercice 1 🖊️</button>
+  </div>
+
+  <!-- ══════════ PHASE : BANQUE DE MOTS 1 ══════════ -->
+  <div class="phase" id="phase-banque1">
+    <div class="mascot-msg">
+      <span class="emo">🦉</span>
+      <p><strong>Très bien !</strong> Maintenant, complète les phrases avec les mots de la banque. <strong>Clique d'abord sur un mot</strong>, puis clique sur le blanc où tu veux le mettre !</p>
+    </div>
+    <div class="ex-num">EXERCICE 1 / 2</div>
+    <div class="ex-header">
+      <h2>Complète avec les bons mots</h2>
+      <p>Verbes du 1er groupe (-er) — utilise chaque mot une seule fois.</p>
+    </div>
+    <div class="banque-intro">
+      <strong>🎒 Banque de mots :</strong>
+      <div class="bank-words" id="bank1-words">
+        <button class="word-chip" onclick="selectWord(this,'regardes')">regardes</button>
+        <button class="word-chip" onclick="selectWord(this,'jouons')">jouons</button>
+        <button class="word-chip" onclick="selectWord(this,'chantent')">chantent</button>
+        <button class="word-chip" onclick="selectWord(this,'mangez')">mangez</button>
+      </div>
+      <div class="blank-sentences" id="banque1-sentences">
+        <div class="blank-row">Tu <span class="blank-box" id="b1-0" onclick="fillBlank('b1-0',1)"></span> la télé le soir.</div>
+        <div class="blank-row">Nous <span class="blank-box" id="b1-1" onclick="fillBlank('b1-1',1)"></span> ensemble au foot.</div>
+        <div class="blank-row">Ils <span class="blank-box" id="b1-2" onclick="fillBlank('b1-2',1)"></span> une chanson.</div>
+        <div class="blank-row">Vous <span class="blank-box" id="b1-3" onclick="fillBlank('b1-3',1)"></span> des pâtes ce soir ?</div>
+      </div>
+      <button class="btn-verifier" id="btn-verif1" onclick="verifyBanque(1)" disabled>✅ Vérifier mes réponses</button>
+      <div class="banque-feedback" id="banque1-feedback"></div>
+    </div>
+    <button class="btn-suivant" id="btn-to-banque2" onclick="goToPhase('banque2',4)">Suite → Exercice 2 🖊️</button>
+  </div>
+
+  <!-- ══════════ PHASE : BANQUE DE MOTS 2 ══════════ -->
+  <div class="phase" id="phase-banque2">
+    <div class="mascot-msg">
+      <span class="emo">🦉</span>
+      <p>Dernière ligne droite ! Cette fois, les verbes sont <strong>irréguliers</strong>. Tu te souviens de tes tables ? 💪</p>
+    </div>
+    <div class="ex-num">EXERCICE 2 / 2</div>
+    <div class="ex-header">
+      <h2>Verbes irréguliers</h2>
+      <p>Être, Avoir, Aller, Faire — à toi de jouer !</p>
+    </div>
+    <div class="banque-intro">
+      <strong>🎒 Banque de mots :</strong>
+      <div class="bank-words" id="bank2-words">
+        <button class="word-chip" onclick="selectWord(this,'fait')">fait</button>
+        <button class="word-chip" onclick="selectWord(this,'allons')">allons</button>
+        <button class="word-chip" onclick="selectWord(this,'as')">as</button>
+        <button class="word-chip" onclick="selectWord(this,'sont')">sont</button>
+      </div>
+      <div class="blank-sentences" id="banque2-sentences">
+        <div class="blank-row">Mon petit frère <span class="blank-box" id="b2-0" onclick="fillBlank('b2-0',2)"></span> ses devoirs.</div>
+        <div class="blank-row">Nous <span class="blank-box" id="b2-1" onclick="fillBlank('b2-1',2)"></span> au parc ce weekend.</div>
+        <div class="blank-row">Tu <span class="blank-box" id="b2-2" onclick="fillBlank('b2-2',2)"></span> un super dessin !</div>
+        <div class="blank-row">Les fleurs <span class="blank-box" id="b2-3" onclick="fillBlank('b2-3',2)"></span> très belles.</div>
+      </div>
+      <button class="btn-verifier" id="btn-verif2" onclick="verifyBanque(2)" disabled>✅ Vérifier mes réponses</button>
+      <div class="banque-feedback" id="banque2-feedback"></div>
+    </div>
+    <button class="btn-suivant" id="btn-to-defi" onclick="goToPhase('defi',5)">🌟 Voir mon bilan</button>
+  </div>
+
+  <!-- ══════════ PHASE : DÉFI OPTIONNEL ══════════ -->
+  <div class="phase" id="phase-defi">
+    <div class="mascot-msg">
+      <span class="emo">🦉</span>
+      <p>🏆 <strong>Défi bonus !</strong> Ce n'est pas obligatoire, mais tu peux gagner des points supplémentaires ! Choisis la bonne forme pour chaque phrase.</p>
+    </div>
+    <div class="ex-num">⭐ DÉFI BONUS</div>
+    <div class="ex-header">
+      <h2>Trouve la bonne forme !</h2>
+      <p>Clique sur le mot qui convient dans chaque phrase.</p>
+    </div>
+    <div id="defi-container"></div>
+    <button class="btn-compris" id="btn-to-bilan" onclick="goToPhase('bilan',5)" style="background:linear-gradient(135deg,var(--yellow-deep),var(--coral));margin-top:8px;">
+      🏁 Voir mon bilan final !
+    </button>
+  </div>
+
+  <!-- ══════════ PHASE : BILAN ══════════ -->
+  <div class="phase" id="phase-bilan">
+    <div class="bilan-card" id="bilan-card">
+      <span class="bilan-mascot" id="bilan-mascot">🦉</span>
+      <h2 class="bilan-title" id="bilan-title">Super travail !</h2>
+      <p class="bilan-msg" id="bilan-msg">Tu as terminé la fiche !</p>
+      <div class="stars-row">
+        <span class="star-big" id="star1">⭐</span>
+        <span class="star-big" id="star2">⭐</span>
+        <span class="star-big" id="star3">⭐</span>
+      </div>
+      <div class="score-circle">
+        <span class="score-num" id="bilan-score">0</span>
+        <span class="score-max" id="bilan-max">/ 14 pts</span>
+      </div>
+
+      <!-- MÉMO CARTE -->
+      <div class="memo-card">
+        <h3>🗒️ Mon mémo — Le présent de l'indicatif</h3>
+        <div class="memo-rules">
+          <div class="memo-rule">
+            <strong>Verbes en -er (1er gr.)</strong>
+            <div class="memo-conj">je <b>-e</b> · tu <b>-es</b> · il <b>-e</b><br>nous <b>-ons</b> · vous <b>-ez</b> · ils <b>-ent</b></div>
+          </div>
+          <div class="memo-rule">
+            <strong>ÊTRE</strong>
+            <div class="memo-conj">je <b>suis</b> · tu <b>es</b> · il <b>est</b><br>nous <b>sommes</b> · vous <b>êtes</b> · ils <b>sont</b></div>
+          </div>
+          <div class="memo-rule">
+            <strong>AVOIR</strong>
+            <div class="memo-conj">j' <b>ai</b> · tu <b>as</b> · il <b>a</b><br>nous <b>avons</b> · vous <b>avez</b> · ils <b>ont</b></div>
+          </div>
+          <div class="memo-rule">
+            <strong>ALLER · FAIRE</strong>
+            <div class="memo-conj">je <b>vais</b> / je <b>fais</b><br>tu <b>vas</b> / tu <b>fais</b><br>ils <b>vont</b> / ils <b>font</b></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bilan-btns">
+        <button class="btn-retry" onclick="restartFiche()">🔄 Recommencer</button>
+        <button class="btn-print" onclick="window.print()">🖨️ Imprimer le mémo</button>
+        <button class="btn-home" onclick="location.href='../6-9ans.html'">🏠 Retour aux fiches</button>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+// ═══════════════════════════════════════════════════
+// DONNÉES DES EXERCICES
+// ═══════════════════════════════════════════════════
+
+const qcm1 = [
+  {
+    sentence: 'Hugo ___ à la piscine.',
+    verb: 'aller',
+    options: ['a', 'va', 'allons'],
+    answer: 'va',
+    explanation: '"Hugo" = il → <strong>il va</strong> (verbe ALLER)'
+  },
+  {
+    sentence: 'Les oiseaux ___ dans les arbres.',
+    verb: 'chanter',
+    options: ['chantez', 'chantons', 'chantent'],
+    answer: 'chantent',
+    explanation: '"Les oiseaux" = ils → <strong>ils chantent</strong> (verbe CHANTER, 1er groupe)'
+  },
+  {
+    sentence: 'Vous ___ du football après l'école ?',
+    verb: 'jouer',
+    options: ['jouent', 'jouons', 'jouez'],
+    answer: 'jouez',
+    explanation: '"Vous" → <strong>vous jouez</strong> (verbe JOUER, terminaison -ez)'
+  }
+];
+
+const qcm2 = [
+  {
+    sentence: 'Je ___ prêt(e) pour l'aventure !',
+    verb: 'être',
+    options: ['est', 'suis', 'sommes'],
+    answer: 'suis',
+    explanation: '"Je" + ÊTRE → <strong>je suis</strong>'
+  },
+  {
+    sentence: 'Nous ___ un beau jardin.',
+    verb: 'avoir',
+    options: ['ont', 'avons', 'avez'],
+    answer: 'avons',
+    explanation: '"Nous" + AVOIR → <strong>nous avons</strong>'
+  },
+  {
+    sentence: 'Tu ___ fatigué(e) aujourd'hui ?',
+    verb: 'être',
+    options: ['est', 'êtes', 'es'],
+    answer: 'es',
+    explanation: '"Tu" + ÊTRE → <strong>tu es</strong>'
+  }
+];
+
+const banque1Answers = ['regardes', 'jouons', 'chantent', 'mangez'];
+const banque2Answers = ['fait', 'allons', 'as', 'sont'];
+
+const defi = [
+  {
+    before: 'Léa et Tom',
+    options: ['joue', 'jouent'],
+    after: 'dans le jardin.',
+    answer: 'jouent',
+    explanation: '"Léa et Tom" = ils/elles → <strong>jouent</strong>'
+  },
+  {
+    before: 'Je',
+    options: ['chante', 'chantez'],
+    after: 'sous la pluie.',
+    answer: 'chante',
+    explanation: '"Je" → <strong>chante</strong> (terminaison -e)'
+  },
+  {
+    before: 'Vous',
+    options: ['allons', 'allez'],
+    after: 'au cinéma ce soir ?',
+    answer: 'allez',
+    explanation: '"Vous" + ALLER → <strong>allez</strong>'
+  },
+  {
+    before: 'Ma mère',
+    options: ['fait', 'faites'],
+    after: 'un gâteau au chocolat.',
+    answer: 'fait',
+    explanation: '"Ma mère" = elle → <strong>fait</strong> (verbe FAIRE)'
+  }
+];
+
+// ═══════════════════════════════════════════════════
+// ÉTAT
+// ═══════════════════════════════════════════════════
+
+let score = 0;
+let maxScore = 14;
+let selectedWord = null;
+let selectedWordEl = null;
+let bank1Filled = [null, null, null, null];
+let bank2Filled = [null, null, null, null];
+let qcm1Done = 0, qcm2Done = 0;
+let defiScore = 0;
+
+// ═══════════════════════════════════════════════════
+// LEÇON
+// ═══════════════════════════════════════════════════
+
+function revealBloc(n) {
+  const bloc = document.getElementById('bloc-' + n);
+  if(bloc) {
+    bloc.classList.add('revealed');
+    bloc.scrollIntoView({behavior:'smooth', block:'start'});
+  }
+}
+
+// ═══════════════════════════════════════════════════
+// NAVIGATION PHASES
+// ═══════════════════════════════════════════════════
+
+function startExercises() {
+  goToPhase('ex1', 1);
+  buildQCM('qcm1-container', qcm1, 1, 'btn-to-ex2');
+}
+
+function goToPhase(phase, stepIdx) {
+  document.querySelectorAll('.phase').forEach(p => p.classList.remove('active'));
+  document.getElementById('phase-' + phase).classList.add('active');
+  updateSteps(stepIdx);
+  window.scrollTo({top:0, behavior:'smooth'});
+  if(phase === 'ex2') buildQCM('qcm2-container', qcm2, 2, 'btn-to-banque1');
+  if(phase === 'defi') buildDefi();
+  if(phase === 'bilan') showBilan();
+}
+
+function updateSteps(active) {
+  for(let i = 0; i < 6; i++) {
+    const s = document.getElementById('step-' + i);
+    s.classList.remove('active','done');
+    if(i < active) s.classList.add('done');
+    else if(i === active) s.classList.add('active');
+  }
+}
+
+// ═══════════════════════════════════════════════════
+// QCM
+// ═══════════════════════════════════════════════════
+
+function buildQCM(containerId, data, exNum, nextBtnId) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = '';
+  data.forEach((q, qi) => {
+    const div = document.createElement('div');
+    div.className = 'qcm-question';
+    div.id = 'qcm-q-' + exNum + '-' + qi;
+    div.innerHTML = `
+      <div class="qcm-sentence">${q.sentence.replace('___','<span class="blank">___</span>')} <em style="color:var(--text-light);font-size:.8rem;">(${q.verb})</em></div>
+      <div class="qcm-options">
+        ${q.options.map((opt,oi) => `<button class="qcm-opt" onclick="answerQCM(${exNum},${qi},${oi},'${opt}','${q.answer}',this)">${opt}</button>`).join('')}
+      </div>
+      <div class="qcm-feedback" id="qcm-fb-${exNum}-${qi}"></div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function answerQCM(exNum, qi, optIdx, chosen, correct, btn) {
+  const qDiv = document.getElementById('qcm-q-' + exNum + '-' + qi);
+  if(qDiv.classList.contains('answered')) return;
+  qDiv.classList.add('answered');
+
+  const opts = qDiv.querySelectorAll('.qcm-opt');
+  const fb = document.getElementById('qcm-fb-' + exNum + '-' + qi);
+  const data = exNum === 1 ? qcm1 : qcm2;
+
+  if(chosen === correct) {
+    btn.classList.add('correct');
+    btn.innerHTML = '✅ ' + btn.textContent;
+    fb.className = 'qcm-feedback show ok';
+    fb.innerHTML = '✅ <span>Bravo ! ' + data[qi].explanation + '</span>';
+    score++;
+    document.getElementById('score-display').textContent = score;
+    if(exNum === 1) qcm1Done++;
+    else qcm2Done++;
+  } else {
+    btn.classList.add('wrong');
+    btn.innerHTML = '❌ ' + btn.textContent;
+    // Reveal correct
+    opts.forEach(o => {
+      if(o.textContent.trim() === correct || o.textContent.includes(correct)) {
+        o.classList.add('reveal');
+        o.innerHTML = '✅ ' + correct;
+      }
+    });
+    fb.className = 'qcm-feedback show ko';
+    fb.innerHTML = '💡 <span>Pas encore ! ' + data[qi].explanation + '</span>';
+    if(exNum === 1) qcm1Done++;
+    else qcm2Done++;
+  }
+
+  const total = exNum === 1 ? qcm1.length : qcm2.length;
+  const done = exNum === 1 ? qcm1Done : qcm2Done;
+  const nextBtn = exNum === 1 ? 'btn-to-ex2' : 'btn-to-banque1';
+  if(done >= total) {
+    setTimeout(() => {
+      document.getElementById(nextBtn).classList.add('show');
+      document.getElementById(nextBtn).scrollIntoView({behavior:'smooth',block:'nearest'});
+    }, 600);
+  }
+}
+
+// ═══════════════════════════════════════════════════
+// BANQUE DE MOTS
+// ═══════════════════════════════════════════════════
+
+function selectWord(el, word) {
+  if(selectedWordEl) selectedWordEl.classList.remove('selected');
+  if(selectedWordEl === el) { selectedWord = null; selectedWordEl = null; return; }
+  selectedWord = word;
+  selectedWordEl = el;
+  el.classList.add('selected');
+}
+
+function fillBlank(blankId, bankNum) {
+  const box = document.getElementById(blankId);
+  const idx = parseInt(blankId.split('-')[2]);
+  const filled = bankNum === 1 ? bank1Filled : bank2Filled;
+
+  // If blank already filled → return word to bank
+  if(filled[idx]) {
+    const returnWord = filled[idx];
+    filled[idx] = null;
+    box.textContent = '';
+    box.classList.remove('filled');
+    // Re-enable word chip
+    const bankId = 'bank' + bankNum + '-words';
+    const chips = document.getElementById(bankId).querySelectorAll('.word-chip');
+    chips.forEach(c => { if(c.textContent === returnWord || c.textContent === returnWord) { c.classList.remove('used'); }});
+    checkVerifyBtn(bankNum);
+    return;
+  }
+
+  if(!selectedWord) return;
+  filled[idx] = selectedWord;
+  box.textContent = selectedWord;
+  box.classList.add('filled');
+  if(selectedWordEl) selectedWordEl.classList.add('used');
+  selectedWordEl.classList.remove('selected');
+  selectedWord = null;
+  selectedWordEl = null;
+  checkVerifyBtn(bankNum);
+}
+
+function checkVerifyBtn(bankNum) {
+  const filled = bankNum === 1 ? bank1Filled : bank2Filled;
+  const allFilled = filled.every(f => f !== null);
+  document.getElementById('btn-verif' + bankNum).disabled = !allFilled;
+}
+
+function verifyBanque(bankNum) {
+  const filled = bankNum === 1 ? bank1Filled : bank2Filled;
+  const answers = bankNum === 1 ? banque1Answers : banque2Answers;
+  const fb = document.getElementById('banque' + bankNum + '-feedback');
+  let correct = 0;
+
+  for(let i = 0; i < 4; i++) {
+    const box = document.getElementById('b' + bankNum + '-' + i);
+    box.classList.remove('filled');
+    if(filled[i] === answers[i]) {
+      box.classList.add('correct');
+      correct++;
+      score++;
+    } else {
+      box.classList.add('wrong');
+      box.textContent = filled[i] + ' ✗ → ' + answers[i];
+    }
+  }
+
+  document.getElementById('score-display').textContent = score;
+  document.getElementById('btn-verif' + bankNum).disabled = true;
+
+  if(correct === 4) {
+    fb.className = 'banque-feedback show ok';
+    fb.innerHTML = '✅ Parfait ! Les 4 mots sont au bon endroit. Bravo ! 🎉';
+  } else {
+    fb.className = 'banque-feedback show ko';
+    fb.innerHTML = `💡 ${correct}/4 bons mots. Les corrections sont affichées en rouge. Regarde bien les pronoms pour trouver la bonne terminaison !`;
+  }
+
+  const nextBtn = bankNum === 1 ? 'btn-to-banque2' : 'btn-to-defi';
+  setTimeout(() => {
+    document.getElementById(nextBtn).classList.add('show');
+  }, 800);
+}
+
+// ═══════════════════════════════════════════════════
+// DÉFI
+// ═══════════════════════════════════════════════════
+
+function buildDefi() {
+  const container = document.getElementById('defi-container');
+  container.innerHTML = '';
+  defi.forEach((q, qi) => {
+    const div = document.createElement('div');
+    div.className = 'defi-card';
+    div.id = 'defi-' + qi;
+    div.innerHTML = `
+      <div class="defi-sentence">${q.before} [ ? ] ${q.after}</div>
+      <div class="defi-opts">
+        ${q.options.map(opt => `<button class="defi-opt" onclick="answerDefi(${qi},'${opt}','${q.answer}','${q.explanation}',this)">${opt}</button>`).join('')}
+      </div>
+      <div class="qcm-feedback" id="defi-fb-${qi}"></div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+let defiDone = 0;
+function answerDefi(qi, chosen, correct, explanation, btn) {
+  const card = document.getElementById('defi-' + qi);
+  if(card.classList.contains('answered')) return;
+  card.classList.add('answered');
+  const fb = document.getElementById('defi-fb-' + qi);
+
+  if(chosen === correct) {
+    btn.classList.add('correct');
+    btn.textContent = '✅ ' + btn.textContent;
+    fb.className = 'qcm-feedback show ok';
+    fb.innerHTML = '✅ <span>' + explanation + '</span>';
+    defiScore++;
+    score++;
+    document.getElementById('score-display').textContent = score;
+  } else {
+    btn.classList.add('wrong');
+    btn.textContent = '❌ ' + btn.textContent;
+    card.querySelectorAll('.defi-opt').forEach(o => {
+      if(o.textContent.trim() === correct) { o.classList.add('reveal'); o.textContent = '✅ ' + correct; }
+    });
+    fb.className = 'qcm-feedback show ko';
+    fb.innerHTML = '💡 <span>' + explanation + '</span>';
+  }
+  defiDone++;
+  maxScore = 14 + defiDone; // update max as questions answered
+}
+
+// ═══════════════════════════════════════════════════
+// BILAN
+// ═══════════════════════════════════════════════════
+
+function showBilan() {
+  const baseMax = 14;
+  const pct = Math.round((score / Math.max(baseMax, score)) * 100);
+  document.getElementById('bilan-score').textContent = score;
+  document.getElementById('bilan-max').textContent = '/ ' + (defiScore > 0 ? (baseMax + defi.length) : baseMax) + ' pts';
+
+  let mascot = '🦉', title = '', msg = '';
+  if(score >= 12) {
+    mascot='🦉🌟'; title='Excellent travail !'; msg='Tu maîtrises très bien le présent de l'indicatif. Continue comme ça !';
+  } else if(score >= 9) {
+    mascot='🦉'; title='Très bien !'; msg='Tu as bien compris les bases. Relis la leçon sur les verbes irréguliers pour être au top !';
+  } else if(score >= 6) {
+    mascot='🦉'; title='Bonne tentative !'; msg='Tu as des bonnes bases. Relis la leçon et réessaie — tu peux faire encore mieux !';
+  } else {
+    mascot='🦉'; title='Continue à t'entraîner !'; msg='C'est difficile, mais ne lâche pas ! Relis bien la leçon et recommence. Tu vas y arriver !';
+  }
+
+  document.getElementById('bilan-mascot').textContent = mascot;
+  document.getElementById('bilan-title').textContent = title;
+  document.getElementById('bilan-msg').textContent = msg;
+
+  // Stars animation
+  const stars = [
+    {id:'star1', threshold:6},
+    {id:'star2', threshold:9},
+    {id:'star3', threshold:12}
+  ];
+  stars.forEach((s, i) => {
+    const el = document.getElementById(s.id);
+    if(score >= s.threshold) {
+      setTimeout(() => el.classList.add('earned'), 300 + i * 400);
+    } else {
+      el.style.filter = 'grayscale(1)';
+    }
+  });
+
+  if(score >= 9) launchConfetti();
+}
+
+function launchConfetti() {
+  const colors = ['#4FBDDF','#FFD93D','#6BCFB0','#FF8A65','#9B8AFF'];
+  for(let i = 0; i < 60; i++) {
+    const el = document.createElement('div');
+    el.className = 'confetti-piece';
+    el.style.left = Math.random()*100 + 'vw';
+    el.style.background = colors[Math.floor(Math.random()*colors.length)];
+    el.style.animationDuration = (1.5 + Math.random()*2) + 's';
+    el.style.animationDelay = Math.random()*1.5 + 's';
+    el.style.width = el.style.height = (8+Math.random()*8)+'px';
+    el.style.borderRadius = Math.random()>0.5 ? '50%' : '2px';
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 4000);
+  }
+}
+
+function restartFiche() {
+  score = 0; qcm1Done = 0; qcm2Done = 0; defiDone = 0; defiScore = 0;
+  bank1Filled = [null,null,null,null]; bank2Filled = [null,null,null,null];
+  selectedWord = null; selectedWordEl = null;
+  document.getElementById('score-display').textContent = '0';
+  // Reset lecon blocks
+  document.querySelectorAll('.lecon-block').forEach((b,i) => {
+    if(i>0) b.classList.remove('revealed');
+  });
+  // Reset btn-suivants
+  document.querySelectorAll('.btn-suivant').forEach(b => b.classList.remove('show'));
+  // Reset word chips
+  document.querySelectorAll('.word-chip').forEach(c => { c.classList.remove('used','selected'); });
+  // Reset blanks
+  document.querySelectorAll('.blank-box').forEach(b => {
+    b.textContent=''; b.className='blank-box';
+  });
+  document.querySelectorAll('.btn-verifier').forEach(b => b.disabled=true);
+  document.querySelectorAll('.banque-feedback').forEach(f => { f.className='banque-feedback'; f.innerHTML=''; });
+  document.querySelectorAll('.star-big').forEach(s => s.classList.remove('earned'));
+  goToPhase('lecon', 0);
+}
+</script>
+</body>
+</html>
