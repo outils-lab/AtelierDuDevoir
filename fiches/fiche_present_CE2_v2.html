@@ -535,7 +535,7 @@ const qcm1 = [
     explanation: '"Les oiseaux" = ils → <strong>ils chantent</strong> (verbe CHANTER, 1er groupe)'
   },
   {
-    sentence: 'Vous ___ du football après l'école ?',
+    sentence: "Vous ___ du football après l'école ?",
     verb: 'jouer',
     options: ['jouent', 'jouons', 'jouez'],
     answer: 'jouez',
@@ -545,7 +545,7 @@ const qcm1 = [
 
 const qcm2 = [
   {
-    sentence: 'Je ___ prêt(e) pour l'aventure !',
+    sentence: "Je ___ prêt(e) pour l'aventure !",
     verb: 'être',
     options: ['est', 'suis', 'sommes'],
     answer: 'suis',
@@ -559,7 +559,7 @@ const qcm2 = [
     explanation: '"Nous" + AVOIR → <strong>nous avons</strong>'
   },
   {
-    sentence: 'Tu ___ fatigué(e) aujourd'hui ?',
+    sentence: "Tu ___ fatigué(e) aujourd'hui ?",
     verb: 'être',
     options: ['est', 'êtes', 'es'],
     answer: 'es',
@@ -887,13 +887,13 @@ function showBilan() {
 
   let mascot = '🦉', title = '', msg = '';
   if(score >= 12) {
-    mascot='🦉🌟'; title='Excellent travail !'; msg='Tu maîtrises très bien le présent de l'indicatif. Continue comme ça !';
+    mascot='🦉🌟'; title='Excellent travail !'; msg="Tu maîtrises très bien le présent de l'indicatif. Continue comme ça !";
   } else if(score >= 9) {
     mascot='🦉'; title='Très bien !'; msg='Tu as bien compris les bases. Relis la leçon sur les verbes irréguliers pour être au top !';
   } else if(score >= 6) {
     mascot='🦉'; title='Bonne tentative !'; msg='Tu as des bonnes bases. Relis la leçon et réessaie — tu peux faire encore mieux !';
   } else {
-    mascot='🦉'; title='Continue à t'entraîner !'; msg='C'est difficile, mais ne lâche pas ! Relis bien la leçon et recommence. Tu vas y arriver !';
+    mascot="🦉"; title="Continue à t'entraîner !"; msg="C'est difficile, mais ne lâche pas ! Relis bien la leçon et recommence. Tu vas y arriver !";
   }
 
   document.getElementById('bilan-mascot').textContent = mascot;
