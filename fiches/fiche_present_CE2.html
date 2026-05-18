@@ -140,11 +140,17 @@ body{font-family:'Nunito',sans-serif;background:#f0fbff;color:var(--text);font-s
 
 .blank-sentences{display:flex;flex-direction:column;gap:12px;margin-top:16px;}
 .blank-row{background:var(--sky-pale);border-radius:14px;padding:14px 18px;display:flex;align-items:center;flex-wrap:wrap;gap:6px;font-size:1rem;font-weight:600;}
-.blank-box{display:inline-flex;align-items:center;justify-content:center;min-width:100px;height:36px;border:2.5px dashed var(--sky);border-radius:8px;background:white;color:var(--sky-deep);font-weight:900;font-size:.95rem;padding:0 10px;cursor:pointer;transition:all .2s;}
-.blank-box:hover{border-color:var(--sky-deep);background:var(--sky-pale);}
-.blank-box.filled{border-style:solid;border-color:var(--sky-deep);background:var(--sky-pale);}
-.blank-box.correct{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);cursor:default;}
-.blank-box.wrong{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
+.word-chips{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0;min-height:50px;padding:10px;background:var(--sky-pale);border-radius:12px;}
+.word-chip{padding:10px 18px;border-radius:50px;border:2.5px solid var(--sky);background:white;font-weight:800;font-size:.92rem;cursor:grab;color:var(--sky-deep);transition:all .2s;user-select:none;-webkit-user-select:none;}
+.word-chip:active{cursor:grabbing;}
+.word-chip.used{opacity:.22;pointer-events:none;}
+.drop-sentences{display:flex;flex-direction:column;gap:12px;}
+.drop-row{background:var(--sky-pale);border-radius:14px;padding:14px 18px;display:flex;align-items:center;flex-wrap:wrap;gap:8px;font-size:1rem;font-weight:600;}
+.drop-zone{display:inline-flex;align-items:center;justify-content:center;min-width:110px;height:36px;border:2.5px dashed var(--sky);border-radius:8px;background:white;color:var(--sky-deep);font-weight:900;font-size:.92rem;padding:0 10px;transition:all .25s;cursor:pointer;}
+.drop-zone.drag-over{border-color:var(--sky-deep);background:var(--sky-pale);transform:scale(1.05);border-style:solid;}
+.drop-zone.filled{border-style:solid;border-color:var(--sky-deep);}
+.drop-zone.correct{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);cursor:default;border-style:solid;}
+.drop-zone.wrong{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);border-style:solid;font-size:.78rem;}
 
 .btn-verifier{margin-top:20px;padding:13px 28px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.95rem;background:linear-gradient(135deg,var(--sky),var(--mint));color:white;border:none;cursor:pointer;box-shadow:0 4px 16px rgba(79,189,223,.35);transition:all .2s;}
 .btn-verifier:hover{transform:translateY(-2px);}
@@ -399,17 +405,17 @@ body{font-family:'Nunito',sans-serif;background:#f0fbff;color:var(--text);font-s
     </div>
     <div class="banque-intro">
       <strong>🎒 Banque de mots :</strong>
-      <div class="bank-words" id="bank1-words">
-        <button class="word-chip" onclick="selectWord(this,'regardes')">regardes</button>
-        <button class="word-chip" onclick="selectWord(this,'jouons')">jouons</button>
-        <button class="word-chip" onclick="selectWord(this,'chantent')">chantent</button>
-        <button class="word-chip" onclick="selectWord(this,'mangez')">mangez</button>
+      <div class="word-chips" id="pool1">
+        <div class="word-chip" draggable="true" data-word="chantent" ondragstart="onDS(event,1)" ontouchstart="onTS(event)" ontouchmove="onTM(event)" ontouchend="onTE(event,1)">chantent</div>
+        <div class="word-chip" draggable="true" data-word="mangez"   ondragstart="onDS(event,1)" ontouchstart="onTS(event)" ontouchmove="onTM(event)" ontouchend="onTE(event,1)">mangez</div>
+        <div class="word-chip" draggable="true" data-word="regardes" ondragstart="onDS(event,1)" ontouchstart="onTS(event)" ontouchmove="onTM(event)" ontouchend="onTE(event,1)">regardes</div>
+        <div class="word-chip" draggable="true" data-word="jouons"   ondragstart="onDS(event,1)" ontouchstart="onTS(event)" ontouchmove="onTM(event)" ontouchend="onTE(event,1)">jouons</div>
       </div>
-      <div class="blank-sentences" id="banque1-sentences">
-        <div class="blank-row">Tu <span class="blank-box" id="b1-0" onclick="fillBlank('b1-0',1)"></span> la télé le soir.</div>
-        <div class="blank-row">Nous <span class="blank-box" id="b1-1" onclick="fillBlank('b1-1',1)"></span> ensemble au foot.</div>
-        <div class="blank-row">Ils <span class="blank-box" id="b1-2" onclick="fillBlank('b1-2',1)"></span> une chanson.</div>
-        <div class="blank-row">Vous <span class="blank-box" id="b1-3" onclick="fillBlank('b1-3',1)"></span> des pâtes ce soir ?</div>
+      <div class="drop-sentences" id="banque1-sentences">
+        <div class="drop-row">Tu <span class="drop-zone" data-bank="1" data-idx="0" ondragover="onDO(event)" ondragleave="onDL(event)" ondrop="onDP(event,1)"></span> la télé le soir.</div>
+        <div class="drop-row">Nous <span class="drop-zone" data-bank="1" data-idx="1" ondragover="onDO(event)" ondragleave="onDL(event)" ondrop="onDP(event,1)"></span> ensemble au foot.</div>
+        <div class="drop-row">Ils <span class="drop-zone" data-bank="1" data-idx="2" ondragover="onDO(event)" ondragleave="onDL(event)" ondrop="onDP(event,1)"></span> une chanson.</div>
+        <div class="drop-row">Vous <span class="drop-zone" data-bank="1" data-idx="3" ondragover="onDO(event)" ondragleave="onDL(event)" ondrop="onDP(event,1)"></span> des pâtes ce soir ?</div>
       </div>
       <button class="btn-verifier" id="btn-verif1" onclick="verifyBanque(1)" disabled>✅ Vérifier mes réponses</button>
       <div class="banque-feedback" id="banque1-feedback"></div>
@@ -430,17 +436,17 @@ body{font-family:'Nunito',sans-serif;background:#f0fbff;color:var(--text);font-s
     </div>
     <div class="banque-intro">
       <strong>🎒 Banque de mots :</strong>
-      <div class="bank-words" id="bank2-words">
-        <button class="word-chip" onclick="selectWord(this,'fait')">fait</button>
-        <button class="word-chip" onclick="selectWord(this,'allons')">allons</button>
-        <button class="word-chip" onclick="selectWord(this,'as')">as</button>
-        <button class="word-chip" onclick="selectWord(this,'sont')">sont</button>
+      <div class="word-chips" id="pool2">
+        <div class="word-chip" draggable="true" data-word="allons" ondragstart="onDS(event,2)" ontouchstart="onTS(event)" ontouchmove="onTM(event)" ontouchend="onTE(event,2)">allons</div>
+        <div class="word-chip" draggable="true" data-word="sont"   ondragstart="onDS(event,2)" ontouchstart="onTS(event)" ontouchmove="onTM(event)" ontouchend="onTE(event,2)">sont</div>
+        <div class="word-chip" draggable="true" data-word="fait"   ondragstart="onDS(event,2)" ontouchstart="onTS(event)" ontouchmove="onTM(event)" ontouchend="onTE(event,2)">fait</div>
+        <div class="word-chip" draggable="true" data-word="as"     ondragstart="onDS(event,2)" ontouchstart="onTS(event)" ontouchmove="onTM(event)" ontouchend="onTE(event,2)">as</div>
       </div>
-      <div class="blank-sentences" id="banque2-sentences">
-        <div class="blank-row">Mon petit frère <span class="blank-box" id="b2-0" onclick="fillBlank('b2-0',2)"></span> ses devoirs.</div>
-        <div class="blank-row">Nous <span class="blank-box" id="b2-1" onclick="fillBlank('b2-1',2)"></span> au parc ce weekend.</div>
-        <div class="blank-row">Tu <span class="blank-box" id="b2-2" onclick="fillBlank('b2-2',2)"></span> un super dessin !</div>
-        <div class="blank-row">Les fleurs <span class="blank-box" id="b2-3" onclick="fillBlank('b2-3',2)"></span> très belles.</div>
+      <div class="drop-sentences" id="banque2-sentences">
+        <div class="drop-row">Mon petit frère <span class="drop-zone" data-bank="2" data-idx="0" ondragover="onDO(event)" ondragleave="onDL(event)" ondrop="onDP(event,2)"></span> ses devoirs.</div>
+        <div class="drop-row">Nous <span class="drop-zone" data-bank="2" data-idx="1" ondragover="onDO(event)" ondragleave="onDL(event)" ondrop="onDP(event,2)"></span> au parc ce weekend.</div>
+        <div class="drop-row">Tu <span class="drop-zone" data-bank="2" data-idx="2" ondragover="onDO(event)" ondragleave="onDL(event)" ondrop="onDP(event,2)"></span> un super dessin !</div>
+        <div class="drop-row">Les fleurs <span class="drop-zone" data-bank="2" data-idx="3" ondragover="onDO(event)" ondragleave="onDL(event)" ondrop="onDP(event,2)"></span> très belles.</div>
       </div>
       <button class="btn-verifier" id="btn-verif2" onclick="verifyBanque(2)" disabled>✅ Vérifier mes réponses</button>
       <div class="banque-feedback" id="banque2-feedback"></div>
@@ -607,10 +613,10 @@ const defi = [
 
 let score = 0;
 let maxScore = 14;
-let selectedWord = null;
-let selectedWordEl = null;
-let bank1Filled = [null, null, null, null];
-let bank2Filled = [null, null, null, null];
+var drag1Filled = [null, null, null, null];
+var drag2Filled = [null, null, null, null];
+var draggedChip = null;
+var touchChip = null, touchClone = null;
 let qcm1Done = 0, qcm2Done = 0;
 let defiScore = 0;
 
@@ -745,68 +751,86 @@ function answerQCM(exNum, qi, optIdx, chosen, correct, btn) {
 // BANQUE DE MOTS
 // ═══════════════════════════════════════════════════
 
-function selectWord(el, word) {
-  if(selectedWordEl) selectedWordEl.classList.remove('selected');
-  if(selectedWordEl === el) { selectedWord = null; selectedWordEl = null; return; }
-  selectedWord = word;
-  selectedWordEl = el;
-  el.classList.add('selected');
+// ── DRAG MOUSE ─────────────────────────────────
+function onDS(e, bank) {
+  draggedChip = e.currentTarget;
+  e.dataTransfer.setData('text/plain', draggedChip.dataset.word);
+  draggedChip.classList.add('dragging');
 }
-
-function fillBlank(blankId, bankNum) {
-  const box = document.getElementById(blankId);
-  const idx = parseInt(blankId.split('-')[2]);
-  const filled = bankNum === 1 ? bank1Filled : bank2Filled;
-
-  // If blank already filled → return word to bank
-  if(filled[idx]) {
-    const returnWord = filled[idx];
-    filled[idx] = null;
-    box.textContent = '';
-    box.classList.remove('filled');
-    // Re-enable word chip
-    const bankId = 'bank' + bankNum + '-words';
-    const chips = document.getElementById(bankId).querySelectorAll('.word-chip');
-    chips.forEach(c => { if(c.textContent === returnWord || c.textContent === returnWord) { c.classList.remove('used'); }});
-    checkVerifyBtn(bankNum);
-    return;
+function onDO(e) { e.preventDefault(); e.currentTarget.classList.add('drag-over'); }
+function onDL(e) { e.currentTarget.classList.remove('drag-over'); }
+function onDP(e, bank) {
+  e.preventDefault();
+  var zone = e.currentTarget; zone.classList.remove('drag-over');
+  if (!draggedChip) return;
+  var word = draggedChip.dataset.word;
+  var idx = parseInt(zone.dataset.idx);
+  var filled = bank === 1 ? drag1Filled : drag2Filled;
+  if (filled[idx]) returnToPool(filled[idx], bank);
+  filled[idx] = word; zone.textContent = word; zone.classList.add('filled');
+  draggedChip.classList.add('used'); draggedChip.classList.remove('dragging');
+  draggedChip = null;
+  checkDragBtn(bank);
+}
+// ── DRAG TOUCH ─────────────────────────────────
+function onTS(e) {
+  touchChip = e.currentTarget;
+  var t = e.touches[0];
+  touchClone = touchChip.cloneNode(true);
+  touchClone.style.cssText = 'position:fixed;z-index:9999;pointer-events:none;opacity:.8;padding:10px 18px;border-radius:50px;border:2.5px solid var(--sky);background:white;font-weight:800;font-size:.92rem;color:var(--sky-deep);';
+  setCP(t.clientX, t.clientY); document.body.appendChild(touchClone);
+}
+function onTM(e) {
+  e.preventDefault(); if (!touchClone) return;
+  var t = e.touches[0]; setCP(t.clientX, t.clientY);
+  document.querySelectorAll('.drop-zone').forEach(function(z) { z.classList.remove('drag-over'); });
+  var el = document.elementFromPoint(t.clientX, t.clientY);
+  if (el && el.classList.contains('drop-zone')) el.classList.add('drag-over');
+}
+function onTE(e, bank) {
+  if (touchClone) { touchClone.remove(); touchClone = null; }
+  if (!touchChip) return;
+  var t = e.changedTouches[0];
+  var el = document.elementFromPoint(t.clientX, t.clientY);
+  if (el && el.classList.contains('drop-zone')) {
+    var idx = parseInt(el.dataset.idx);
+    var word = touchChip.dataset.word;
+    var filled = bank === 1 ? drag1Filled : drag2Filled;
+    if (filled[idx]) returnToPool(filled[idx], bank);
+    filled[idx] = word; el.textContent = word; el.classList.add('filled'); el.classList.remove('drag-over');
+    touchChip.classList.add('used'); checkDragBtn(bank);
   }
-
-  if(!selectedWord) return;
-  filled[idx] = selectedWord;
-  box.textContent = selectedWord;
-  box.classList.add('filled');
-  if(selectedWordEl) selectedWordEl.classList.add('used');
-  selectedWordEl.classList.remove('selected');
-  selectedWord = null;
-  selectedWordEl = null;
-  checkVerifyBtn(bankNum);
+  touchChip = null;
 }
-
-function checkVerifyBtn(bankNum) {
-  const filled = bankNum === 1 ? bank1Filled : bank2Filled;
-  const allFilled = filled.every(f => f !== null);
-  document.getElementById('btn-verif' + bankNum).disabled = !allFilled;
+function setCP(x, y) { if (touchClone) { touchClone.style.left=(x-60)+'px'; touchClone.style.top=(y-20)+'px'; } }
+function returnToPool(word, bank) {
+  document.getElementById('pool'+bank).querySelectorAll('.word-chip').forEach(function(c) {
+    if (c.dataset.word === word) c.classList.remove('used');
+  });
+}
+function checkDragBtn(bank) {
+  var filled = bank === 1 ? drag1Filled : drag2Filled;
+  document.getElementById('btn-verif' + bank).disabled = !filled.every(function(f) { return f !== null; });
 }
 
 function verifyBanque(bankNum) {
-  const filled = bankNum === 1 ? bank1Filled : bank2Filled;
-  const answers = bankNum === 1 ? banque1Answers : banque2Answers;
-  const fb = document.getElementById('banque' + bankNum + '-feedback');
-  let correct = 0;
+  var filled = bankNum === 1 ? drag1Filled : drag2Filled;
+  var answers = bankNum === 1 ? banque1Answers : banque2Answers;
+  var fb = document.getElementById('banque' + bankNum + '-feedback');
+  var correct = 0;
 
-  for(let i = 0; i < 4; i++) {
-    const box = document.getElementById('b' + bankNum + '-' + i);
-    box.classList.remove('filled');
-    if(filled[i] === answers[i]) {
-      box.classList.add('correct');
+  document.querySelectorAll('[data-bank="' + bankNum + '"].drop-zone').forEach(function(zone) {
+    var i = parseInt(zone.dataset.idx);
+    zone.classList.remove('filled', 'drag-over');
+    if (filled[i] === answers[i]) {
+      zone.classList.add('correct');
       correct++;
       score++;
     } else {
-      box.classList.add('wrong');
-      box.textContent = filled[i] + ' ✗ → ' + answers[i];
+      zone.classList.add('wrong');
+      zone.textContent = (filled[i] || '?') + ' ✗ → ' + answers[i];
     }
-  }
+  });
 
   document.getElementById('score-display').textContent = score;
   document.getElementById('btn-verif' + bankNum).disabled = true;
@@ -936,7 +960,7 @@ function launchConfetti() {
 
 function restartFiche() {
   score = 0; qcm1Done = 0; qcm2Done = 0; defiDone = 0; defiScore = 0;
-  bank1Filled = [null,null,null,null]; bank2Filled = [null,null,null,null];
+  drag1Filled = [null,null,null,null]; drag2Filled = [null,null,null,null];
   selectedWord = null; selectedWordEl = null;
   document.getElementById('score-display').textContent = '0';
   // Reset lecon blocks
@@ -946,7 +970,9 @@ function restartFiche() {
   // Reset btn-suivants
   document.querySelectorAll('.btn-suivant').forEach(b => b.classList.remove('show'));
   // Reset word chips
-  document.querySelectorAll('.word-chip').forEach(c => { c.classList.remove('used','selected'); });
+  document.querySelectorAll('.word-chip').forEach(function(c) { c.classList.remove('used'); });
+  document.querySelectorAll('.drop-zone').forEach(function(z) { z.textContent=''; z.className='drop-zone'; });
+  ['pool1','pool2'].forEach(function(id){ var p=document.getElementById(id); if(p) p.style.pointerEvents=''; });
   // Reset blanks
   document.querySelectorAll('.blank-box').forEach(b => {
     b.textContent=''; b.className='blank-box';
