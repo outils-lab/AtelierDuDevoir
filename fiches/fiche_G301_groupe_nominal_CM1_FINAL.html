@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Le groupe nominal : noyau et expansions – CM1 | L'Atelier du Devoir</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sky:#4FBDDF;--sky-pale:#E8F7FC;--sky-deep:#2fa8cc;
+  --yellow:#FFD93D;--yellow-deep:#F7B731;--yellow-pale:#FFF8E1;
+  --mint:#6BCFB0;--mint-pale:#E8FFF7;--mint-deep:#4db896;
+  --coral:#FF8A65;--coral-pale:#FFF0EB;
+  --violet:#9B8AFF;--violet-pale:#F0EEFF;
+  --text:#2C3E50;--text-light:#7F8C8D;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Nunito',sans-serif;background:#f0fbff;color:var(--text);font-size:16px;line-height:1.6;}
+.print-bar{position:fixed;right:16px;top:50%;transform:translateY(-50%);z-index:200;display:flex;flex-direction:column;gap:8px;}
+.print-btn{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.78rem;border:none;cursor:pointer;transition:all .25s;box-shadow:0 4px 16px rgba(0,0,0,.18);white-space:nowrap;}
+.print-btn-lecon{background:var(--sky);color:white;}.print-btn-lecon:hover{background:var(--sky-deep);transform:scale(1.05);}
+.print-btn-eval{background:var(--coral);color:white;}.print-btn-eval:hover{background:#e8704a;transform:scale(1.05);}
+@media(max-width:600px){.print-bar{right:6px;}.print-btn{font-size:0;width:40px;height:40px;padding:0;justify-content:center;}.print-btn .lbl{display:none;}.print-btn .ico{font-size:1.2rem;}}
+.header{background:white;border-bottom:3px solid var(--sky-pale);position:sticky;top:0;z-index:100;box-shadow:0 4px 20px rgba(79,189,223,.12);}
+.header-top{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;}
+.logo{font-family:'Fredoka One',cursive;font-size:1.2rem;color:var(--sky);text-decoration:none;}
+.score-badge{background:var(--yellow);font-weight:900;font-size:.9rem;padding:6px 14px;border-radius:50px;display:flex;align-items:center;gap:4px;}
+.steps-wrap{padding:0 20px 8px;}
+.steps{display:flex;gap:4px;}
+.step{flex:1;height:7px;border-radius:50px;background:var(--sky-pale);transition:all .4s;}
+.step.done{background:var(--mint);}.step.active{background:var(--sky);transform:scaleY(1.3);}
+.steps-labels{display:flex;gap:4px;padding-top:3px;}
+.step-lbl{flex:1;font-size:.52rem;font-weight:800;color:var(--text-light);text-align:center;line-height:1.2;}
+.main{max-width:760px;margin:0 auto;padding:24px 16px 100px;}
+.accroche{background:linear-gradient(135deg,#daf6ff,#e8fff7);border-radius:24px;padding:22px 26px;margin-bottom:20px;display:flex;gap:18px;align-items:center;}
+.accroche-mascot{font-size:3rem;flex-shrink:0;animation:float 3s ease-in-out infinite;}
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+.accroche-text h1{font-family:'Fredoka One',cursive;font-size:1.4rem;color:var(--sky);margin-bottom:5px;}
+.accroche-text p{color:var(--text-light);font-size:.9rem;}
+.fiche-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;}
+.meta-tag{background:white;border-radius:50px;padding:4px 12px;font-size:.74rem;font-weight:800;color:var(--text-light);}
+.phase{display:none;}.phase.active{display:block;}
+.lecon-card{background:white;border-radius:24px;padding:22px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);}
+.lecon-card h2{font-family:'Fredoka One',cursive;font-size:1.3rem;color:var(--sky);margin-bottom:14px;}
+.lecon-block{display:none;}.lecon-block.revealed{display:block;}
+.lecon-subtitle{font-family:'Fredoka One',cursive;font-size:1.1rem;color:var(--sky-deep);margin-bottom:12px;}
+.mascot-msg{background:white;border-radius:24px;padding:14px 18px;margin:14px 0;display:flex;align-items:flex-start;gap:12px;box-shadow:0 4px 16px rgba(0,0,0,.06);}
+.mascot-msg .emo{font-size:2rem;flex-shrink:0;}
+.mascot-msg p{font-size:.9rem;color:var(--text-light);}
+.ex-num{display:inline-block;background:var(--sky);color:white;font-weight:900;font-size:.74rem;padding:3px 10px;border-radius:50px;margin-bottom:8px;}
+.ex-header h2{font-family:'Fredoka One',cursive;font-size:1.25rem;margin-bottom:4px;}
+.ex-header p{color:var(--text-light);font-size:.86rem;margin-bottom:14px;}
+.qcm-question{background:white;border-radius:24px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);margin-bottom:14px;}
+.qcm-question.answered{pointer-events:none;}
+.qcm-sentence{font-size:.95rem;font-weight:700;margin-bottom:14px;line-height:1.7;background:var(--sky-pale);border-radius:12px;padding:11px 14px;}
+.qhl{color:#c47a00;font-weight:900;background:var(--yellow-pale);border-radius:6px;padding:1px 6px;}
+.qhl-coral{color:var(--coral);font-weight:900;background:var(--coral-pale);border-radius:6px;padding:1px 6px;}
+.qcm-options{display:flex;flex-direction:column;gap:9px;}
+.qcm-opt{padding:11px 16px;border-radius:12px;border:2.5px solid var(--sky-pale);background:white;font-family:'Nunito',sans-serif;font-weight:700;font-size:.9rem;cursor:pointer;text-align:left;transition:all .2s;}
+.qcm-opt:hover{border-color:var(--sky);background:var(--sky-pale);}
+.qcm-opt.correct{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.qcm-opt.wrong{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
+.qcm-opt.reveal{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.qcm-feedback{margin-top:12px;padding:11px 14px;border-radius:12px;font-size:.86rem;font-weight:700;display:none;}
+.qcm-feedback.show{display:flex;align-items:flex-start;gap:10px;}
+.qcm-feedback.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.qcm-feedback.ko{background:var(--coral-pale);color:#c0392b;}
+.btn-suivant{margin-top:14px;padding:11px 22px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.88rem;background:var(--sky);color:white;border:none;cursor:pointer;transition:all .2s;display:none;align-items:center;gap:8px;}
+.btn-suivant.show{display:inline-flex;}
+.bank-area{background:white;border-radius:24px;padding:18px 22px;margin-bottom:18px;box-shadow:0 4px 20px rgba(0,0,0,.06);}
+.bank-label{font-weight:800;margin-bottom:10px;font-size:.9rem;}
+.word-chips{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:16px;min-height:50px;padding:10px;background:var(--sky-pale);border-radius:12px;}
+.word-chip{padding:10px 18px;border-radius:50px;border:2.5px solid var(--sky);background:white;font-weight:800;font-size:.88rem;cursor:grab;color:var(--sky-deep);transition:all .2s;user-select:none;-webkit-user-select:none;}
+.word-chip.used{opacity:.22;pointer-events:none;}
+.drop-sentences{display:flex;flex-direction:column;gap:11px;}
+.drop-row{background:var(--sky-pale);border-radius:14px;padding:12px 15px;display:flex;align-items:center;flex-wrap:wrap;gap:8px;font-size:.95rem;font-weight:600;}
+.drop-zone{display:inline-flex;align-items:center;justify-content:center;min-width:110px;height:36px;border:2.5px dashed var(--sky);border-radius:10px;background:white;color:var(--sky-deep);font-weight:900;font-size:.88rem;padding:0 10px;transition:all .25s;cursor:pointer;}
+.drop-zone.drag-over{border-color:var(--sky-deep);background:var(--sky-pale);transform:scale(1.05);border-style:solid;}
+.drop-zone.filled{border-style:solid;border-color:var(--sky-deep);}
+.drop-zone.correct{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);cursor:default;border-style:solid;}
+.drop-zone.wrong{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);border-style:solid;font-size:.75rem;}
+.btn-verifier{margin-top:16px;padding:11px 24px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.9rem;background:linear-gradient(135deg,var(--sky),var(--mint));color:white;border:none;cursor:pointer;transition:all .2s;}
+.btn-verifier:disabled{opacity:.45;cursor:not-allowed;}
+.ex-feedback{margin-top:12px;padding:12px 15px;border-radius:14px;font-size:.86rem;font-weight:700;display:none;}
+.ex-feedback.show{display:block;}.ex-feedback.ok{background:var(--mint-pale);color:var(--mint-deep);}.ex-feedback.ko{background:var(--coral-pale);color:#c0392b;}
+.typing-block{background:white;border-radius:24px;padding:22px;box-shadow:0 4px 20px rgba(0,0,0,.06);margin-bottom:14px;}
+.typing-rows{display:flex;flex-direction:column;gap:12px;}
+.typing-row{background:var(--sky-pale);border-radius:14px;padding:12px 15px;display:flex;align-items:center;flex-wrap:wrap;gap:10px;font-size:.95rem;font-weight:600;}
+.typing-row .hint{font-size:.8rem;color:var(--text-light);font-style:italic;}
+.typing-input{border:2.5px solid var(--sky);border-radius:10px;background:white;padding:6px 12px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.92rem;color:var(--sky-deep);width:120px;outline:none;transition:border-color .2s;}
+.typing-input:focus{border-color:var(--sky-deep);}
+.typing-input.correct{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.typing-input.wrong{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
+.bilan-card{background:white;border-radius:24px;padding:30px 26px;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,.08);}
+.bilan-mascot{font-size:4rem;margin-bottom:12px;display:block;animation:bigFloat 2s ease-in-out infinite;}
+@keyframes bigFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-12px);}}
+.bilan-title{font-family:'Fredoka One',cursive;font-size:2rem;margin-bottom:8px;}
+.bilan-msg{color:var(--text-light);font-size:1rem;margin-bottom:22px;}
+.stars-row{display:flex;justify-content:center;gap:12px;margin-bottom:22px;}
+.star-big{font-size:3rem;filter:grayscale(1);transition:all .5s;}
+.star-big.earned{filter:none;animation:starPop .5s ease both;}
+@keyframes starPop{0%{transform:scale(0);}60%{transform:scale(1.3);}100%{transform:scale(1);}}
+.score-circle{width:110px;height:110px;border-radius:50%;background:linear-gradient(135deg,var(--sky),var(--mint));display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 22px;color:white;}
+.score-num{font-family:'Fredoka One',cursive;font-size:2rem;line-height:1;}
+.memo-card{background:linear-gradient(135deg,var(--sky-pale),var(--mint-pale));border-radius:24px;padding:18px 22px;margin:22px 0;text-align:left;border:2px solid rgba(79,189,223,.2);}
+.memo-card h3{font-family:'Fredoka One',cursive;font-size:1.05rem;color:var(--sky-deep);margin-bottom:11px;text-align:center;}
+.memo-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media(max-width:480px){.memo-grid{grid-template-columns:1fr;}}
+.memo-item{background:white;border-radius:10px;padding:9px 12px;font-size:.8rem;}
+.memo-item strong{display:block;margin-bottom:3px;font-size:.84rem;}
+.memo-item.gold strong{color:#c47a00;}.memo-item.blue strong{color:var(--sky-deep);}.memo-item.green strong{color:var(--mint-deep);}.memo-item.orange strong{color:var(--coral);}.memo-item.purple strong{color:var(--violet);}
+.bilan-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:18px;}
+.btn-act{padding:12px 22px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.88rem;cursor:pointer;transition:all .2s;border:none;}
+.btn-act.sky{background:var(--sky);color:white;}.btn-act.sky-pale{background:var(--sky-pale);color:var(--sky-deep);border:2px solid var(--sky);}
+.confetti-piece{position:fixed;border-radius:2px;top:-20px;animation:fall linear both;pointer-events:none;z-index:9999;}
+@keyframes fall{0%{transform:translateY(0) rotate(0deg);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
+.print-lecon-content,.print-eval-content{display:none;}
+@media print{
+  .header,.print-bar,.accroche,.phase,.confetti-piece,.rappel-btn,.rappel-box{display:none!important;}
+  body{background:white;font-size:11pt;}@page{margin:14mm;}
+  body.print-mode-lecon .print-lecon-content{display:block!important;}
+  body.print-mode-eval .print-eval-content{display:block!important;}
+  .ph{display:flex;align-items:center;justify-content:space-between;border-bottom:2pt solid #4FBDDF;padding-bottom:7pt;margin-bottom:14pt;}
+  .pt{font-family:'Fredoka One',cursive;font-size:16pt;color:#4FBDDF;}.pm{font-size:8pt;color:#7F8C8D;}
+  .ps{margin-bottom:12pt;page-break-inside:avoid;}
+  .pst{font-size:11pt;font-weight:900;color:#2C3E50;border-left:4pt solid #4FBDDF;padding-left:8pt;margin-bottom:7pt;}
+  .pu{background:#E8F7FC;border-radius:5pt;padding:6pt 9pt;margin-bottom:5pt;font-size:9.5pt;}
+  .pe{font-size:.84rem;font-weight:600;background:white;border-radius:6pt;padding:4pt 8pt;display:inline-block;margin-top:3pt;}
+  .pgn{background:#E8F7FC;border-radius:6pt;padding:10pt;text-align:center;margin-bottom:8pt;font-size:12pt;font-weight:900;}
+  .pex-num{background:#4FBDDF;color:white;font-weight:900;font-size:7pt;padding:2pt 8pt;border-radius:20pt;display:inline-block;margin-bottom:4pt;}
+  .pex-q{font-size:10pt;font-weight:700;margin-bottom:5pt;}
+  .pphrase{font-size:10pt;margin-bottom:6pt;display:flex;align-items:center;flex-wrap:wrap;gap:5pt;}
+  .pblank{display:inline-block;min-width:65pt;border-bottom:1.5pt solid #2C3E50;height:12pt;margin:0 3pt;}
+  .popts{display:flex;gap:8pt;flex-wrap:wrap;margin:2pt 0 7pt;}
+  .popt{display:flex;align-items:center;gap:3pt;font-size:9.5pt;}
+  .pcb{width:10pt;height:10pt;border:1.5pt solid #2C3E50;border-radius:2pt;display:inline-block;}
+  .pmemo{background:linear-gradient(135deg,#E8F7FC,#E8FFF7);border-radius:7pt;padding:10pt;margin-top:10pt;border:1pt solid #4FBDDF;}
+  .pmemo-t{font-weight:900;font-size:10pt;color:#2fa8cc;text-align:center;margin-bottom:7pt;}
+  .pmemo-g{display:grid;grid-template-columns:1fr 1fr;gap:6pt;}
+  .pmemo-i{background:white;border-radius:4pt;padding:6pt 8pt;font-size:8pt;}
+  .pmemo-i strong{color:#2fa8cc;display:block;margin-bottom:3pt;font-size:8.5pt;}
+  .pscore{border:1pt solid #DDD;border-radius:5pt;margin-top:9pt;padding:7pt;}
+  .pscore-t{font-weight:900;font-size:9pt;margin-bottom:5pt;}
+  .pscore-r{display:flex;justify-content:space-between;padding:2pt 0;border-bottom:.5pt solid #EEE;font-size:8.5pt;}
+  .pscore-r.tot{font-weight:900;font-size:10pt;color:#4FBDDF;border:none;}
+  .pcorr{background:#FFF8E1;border-radius:5pt;padding:7pt;margin-top:7pt;font-size:8pt;}
+  .pcorr strong{color:#F7B731;display:block;margin-bottom:3pt;}
+}
+
+/* RAPPEL */
+.rappel-btn{display:flex;align-items:center;gap:10px;width:100%;padding:13px 18px;border-radius:16px;background:var(--violet-pale);border:2px solid var(--violet);font-family:'Nunito',sans-serif;font-weight:800;font-size:.88rem;color:var(--violet);cursor:pointer;transition:all .2s;margin-bottom:12px;text-align:left;}
+.rappel-btn:hover{background:var(--violet);color:white;}
+.rappel-box{display:none;background:var(--violet-pale);border:2px solid var(--violet);border-radius:16px;padding:18px 20px;margin-bottom:20px;}
+.rappel-box.open{display:block;}
+.rappel-box h4{font-family:'Fredoka One',cursive;color:var(--violet);margin-bottom:12px;font-size:1.05rem;}
+.rappel-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px;font-size:.9rem;}
+.rappel-row .ico{font-size:1.1rem;flex-shrink:0;margin-top:1px;}
+.rappel-exemple{background:white;border-radius:10px;padding:8px 14px;font-size:.88rem;font-weight:600;margin-top:8px;}
+.gn-hl{color:var(--violet);font-weight:900;text-decoration:underline wavy;}
+.rappel-astuce{background:var(--yellow-pale);border-left:4px solid var(--yellow-deep);border-radius:0 10px 10px 0;padding:9px 14px;font-size:.84rem;margin-top:10px;}
+.rappel-astuce strong{color:var(--yellow-deep);}
+/* TEAM */
+.team-box{background:white;border:2px solid var(--sky);border-radius:16px;padding:16px 18px;margin-bottom:16px;}
+.team-title{font-family:'Fredoka One',cursive;font-size:1rem;color:var(--sky-deep);margin-bottom:12px;}
+.team-players{display:flex;gap:10px;flex-wrap:wrap;}
+.player{border-radius:14px;padding:10px 12px;text-align:center;min-width:80px;}
+.player-cap{background:var(--yellow-pale);border:2px solid var(--yellow-deep);}
+.player-det{background:var(--sky-pale);border:2px solid var(--sky);}
+.player-adj{background:var(--mint-pale);border:2px solid var(--mint);}
+.player-cdn{background:var(--coral-pale);border:2px solid var(--coral);}
+.player-rel{background:var(--violet-pale);border:2px solid var(--violet);}
+.player-emoji{font-size:1.5rem;display:block;margin-bottom:3px;}
+.player-role{font-size:.68rem;font-weight:900;text-transform:uppercase;letter-spacing:.04em;margin-bottom:2px;}
+.player-role.gold{color:#c47a00;}.player-role.blue{color:var(--sky-deep);}.player-role.green{color:var(--mint-deep);}.player-role.orange{color:var(--coral);}.player-role.purple{color:var(--violet);}
+.player-name{font-size:.73rem;font-weight:700;color:var(--text-light);}
+.badge-oblig{font-size:.65rem;font-weight:800;color:white;background:var(--coral);border-radius:50px;padding:1px 7px;margin-top:5px;display:inline-block;}
+.badge-fac{font-size:.65rem;font-weight:800;color:white;background:var(--mint-deep);border-radius:50px;padding:1px 7px;margin-top:5px;display:inline-block;}
+/* GN VISUEL */
+.gn-visual{background:var(--sky-pale);border-radius:16px;padding:16px 18px;margin-bottom:14px;}
+.gn-exemple-title{font-size:.78rem;font-weight:800;color:var(--text-light);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;}
+.gn-exemple-text{font-size:1.15rem;font-weight:800;margin-bottom:12px;text-align:center;line-height:2;}
+.gn-legend{display:flex;justify-content:center;gap:6px;flex-wrap:wrap;}
+.gn-chip{padding:4px 12px;border-radius:50px;font-size:.76rem;font-weight:800;}
+.chip-det{background:#E8F7FC;color:var(--sky-deep);border:2px solid var(--sky);}
+.chip-noyau{background:var(--yellow-pale);color:#c47a00;border:2px solid var(--yellow-deep);}
+.chip-adj{background:var(--mint-pale);color:var(--mint-deep);border:2px solid var(--mint);}
+.chip-cdn{background:var(--coral-pale);color:var(--coral);border:2px solid var(--coral);}
+.chip-rel{background:var(--violet-pale);color:var(--violet);border:2px solid var(--violet);}
+/* HOW TO FIND */
+.how-find{background:var(--sky-pale);border-radius:14px;padding:14px 16px;margin-bottom:14px;}
+.how-title{font-weight:900;margin-bottom:10px;font-size:.92rem;}
+.how-step{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px;font-size:.88rem;}
+.how-num{background:var(--sky);color:white;border-radius:50%;width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;font-weight:900;font-size:.78rem;flex-shrink:0;margin-top:1px;}
+/* EX NOYAUX */
+.ex-noyaux{display:flex;flex-direction:column;gap:8px;margin-bottom:14px;}
+.ex-noyau-row{background:var(--sky-pale);border-radius:12px;padding:10px 14px;display:flex;align-items:center;flex-wrap:wrap;gap:10px;}
+.ex-noyau-gn{font-size:.95rem;font-weight:700;}
+.noyau-hl{color:#c47a00;font-weight:900;text-decoration:underline;}
+.ex-noyau-expl{font-size:.84rem;color:var(--text-light);}
+/* EXP LIST */
+.exp-list{display:flex;flex-direction:column;gap:12px;margin-bottom:14px;}
+.exp-item{border-radius:14px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start;}
+.exp-item.sky{background:var(--sky-pale);border:2px solid var(--sky);}
+.exp-item.mint{background:var(--mint-pale);border:2px solid var(--mint);}
+.exp-item.coral{background:var(--coral-pale);border:2px solid var(--coral);}
+.exp-item.violet{background:var(--violet-pale);border:2px solid var(--violet);}
+.exp-icon{font-size:1.5rem;flex-shrink:0;}
+.exp-body h4{font-weight:900;font-size:.92rem;margin-bottom:4px;}
+.exp-body h4.sky{color:var(--sky-deep);}.exp-body h4.mint{color:var(--mint-deep);}.exp-body h4.coral{color:var(--coral);}.exp-body h4.purple{color:var(--violet);}
+.exp-body p{font-size:.84rem;color:var(--text-light);margin-bottom:6px;}
+.exp-ex{font-size:.84rem;font-weight:600;background:white;border-radius:8px;padding:5px 10px;display:inline-block;margin-top:2px;}
+/* GN ANNOTE */
+.gn-annote{background:var(--sky-pale);border-radius:16px;padding:16px 18px;margin-bottom:14px;}
+.gn-phrase-box{text-align:center;margin-bottom:14px;}
+.gn-annote-phrase{font-size:1.1rem;font-weight:800;line-height:2.2;}
+.ga-det{background:#E8F7FC;color:var(--sky-deep);border-radius:6px;padding:2px 8px;margin:0 2px;border-bottom:3px solid var(--sky);}
+.ga-noyau{background:var(--yellow-pale);color:#c47a00;border-radius:6px;padding:2px 10px;margin:0 2px;border-bottom:3px solid var(--yellow-deep);font-weight:900;font-size:1.15rem;}
+.ga-adj{background:var(--mint-pale);color:var(--mint-deep);border-radius:6px;padding:2px 8px;margin:0 2px;border-bottom:3px solid var(--mint);}
+.ga-cdn{background:var(--coral-pale);color:var(--coral);border-radius:6px;padding:2px 8px;margin:0 2px;border-bottom:3px solid var(--coral);}
+.ga-rel{background:var(--violet-pale);color:var(--violet);border-radius:6px;padding:2px 8px;margin:0 2px;border-bottom:3px solid var(--violet);}
+.gn-annote-legend{display:flex;flex-direction:column;gap:8px;}
+.ga-leg-row{display:flex;align-items:center;gap:10px;font-size:.86rem;}
+.ga-pill{border-radius:50px;padding:2px 10px;font-size:.8rem;font-weight:800;}
+/* SEP */
+.sep{margin:20px 0;border:none;border-top:2px solid var(--sky-pale);}
+/* EXP BODY */
+.astuce{background:var(--yellow-pale);border-left:4px solid var(--yellow-deep);border-radius:0 12px 12px 0;padding:12px 16px;margin-top:12px;font-size:.88rem;}
+.astuce strong{color:var(--yellow-deep);}
+
+</style>
+</head>
+<body>
+
+<!-- BARRE IMPRESSION -->
+<div class="print-bar">
+  <button class="print-btn print-btn-lecon" onclick="printLecon()"><span class="ico">📖</span><span class="lbl"> Imprimer la leçon</span></button>
+  <button class="print-btn print-btn-eval" onclick="printEval()"><span class="ico">📝</span><span class="lbl"> Imprimer les exercices</span></button>
+</div>
+
+<!-- PRINT LEÇON -->
+<div class="print-lecon-content">
+  <div class="ph"><div class="pt">🦉 Le groupe nominal : noyau et expansions</div><div class="pm">CM1 · Français · Grammaire · L'Atelier du Devoir</div></div>
+  <div class="ps"><div class="pst">① Le groupe nominal (GN) — l'équipe avec un capitaine</div>
+    <div class="pgn">le <u>grand</u> <strong>chien</strong> <u>blanc</u> <em>de mon voisin</em> <span style="color:#9B8AFF;">qui aboie fort</span></div>
+    <div class="pu">Le <strong>noyau</strong> = le NOM principal (ici : <strong>chien</strong>). Tout le reste = les <strong>expansions</strong>.</div>
+  </div>
+  <div class="ps"><div class="pst">② Le NOYAU — trouver le chef du groupe</div>
+    <div class="pu">Pose la question "Qui ?" ou "Quoi ?" — le mot qui répond est le noyau.<br>Astuce : remplace le GN par <strong>il / elle / ils / elles</strong> — le pronom correspond au noyau.</div>
+    <div class="pu">• le petit <strong>chat</strong> noir → noyau : chat ("il")<br>• une belle <strong>maison</strong> de campagne → noyau : maison ("elle")<br>• mes <strong>amis</strong> qui rigolent → noyau : amis ("ils")</div>
+  </div>
+  <div class="ps"><div class="pst">③ Les EXPANSIONS — les membres de l'équipe</div>
+    <div class="pu">🔑 <strong>Déterminant</strong> (OBLIGATOIRE) : le, la, les, un, une, mon, ma, mes, ce, cette…</div>
+    <div class="pu">🎨 <strong>Adjectif qualificatif</strong> (facultatif) : décrit le noyau. Ex : un <em>grand</em> chien, une voiture <em>rouge</em></div>
+    <div class="pu">📦 <strong>Complément du nom</strong> (facultatif) : introduit par de/à/en. Ex : une maison <em>de campagne</em></div>
+    <div class="pu">🔗 <strong>Proposition relative</strong> (facultatif) : commence par qui/que/dont/où. Ex : le chien <em>qui aboie</em></div>
+  </div>
+  <div class="ps"><div class="pst">✏️ Entraînement 1 — Trouve le noyau (entoure la bonne réponse)</div>
+    <div class="pphrase">Dans "le petit chien noir" le noyau est :</div>
+    <div class="popts"><div class="popt"><span class="pcb"></span> petit</div><div class="popt"><span class="pcb"></span> chien</div><div class="popt"><span class="pcb"></span> noir</div></div>
+    <div class="pphrase">Dans "une belle maison de campagne" le noyau est :</div>
+    <div class="popts"><div class="popt"><span class="pcb"></span> belle</div><div class="popt"><span class="pcb"></span> maison</div><div class="popt"><span class="pcb"></span> campagne</div></div>
+    <div class="pphrase">Dans "mes amis qui rigolent" le noyau est :</div>
+    <div class="popts"><div class="popt"><span class="pcb"></span> mes</div><div class="popt"><span class="pcb"></span> amis</div><div class="popt"><span class="pcb"></span> rigolent</div></div>
+  </div>
+  <div class="ps"><div class="pst">✏️ Entraînement 2 — Identifie le type d'expansion</div>
+    <div class="pphrase">Dans "le vélo rouge", "rouge" est :</div>
+    <div class="popts"><div class="popt"><span class="pcb"></span> un déterminant</div><div class="popt"><span class="pcb"></span> un adjectif qualificatif</div><div class="popt"><span class="pcb"></span> un CDN</div></div>
+    <div class="pphrase">Dans "la table de bois", "de bois" est :</div>
+    <div class="popts"><div class="popt"><span class="pcb"></span> un adjectif</div><div class="popt"><span class="pcb"></span> un complément du nom</div><div class="popt"><span class="pcb"></span> une proposition relative</div></div>
+    <div class="pphrase">Dans "le chat qui miaule", "qui miaule" est :</div>
+    <div class="popts"><div class="popt"><span class="pcb"></span> un adjectif</div><div class="popt"><span class="pcb"></span> un complément du nom</div><div class="popt"><span class="pcb"></span> une proposition relative</div></div>
+  </div>
+  <div class="pmemo"><div class="pmemo-t">🗒️ Mon mémo — Groupe nominal : noyau et expansions</div>
+    <div class="pmemo-g">
+      <div class="pmemo-i"><strong>👑 Le NOYAU</strong>C'est le NOM principal. On peut remplacer tout le GN par il/elle/ils/elles.</div>
+      <div class="pmemo-i"><strong>🔑 Déterminant (OBLIGATOIRE)</strong>le, la, les, un, une, mon, ma, mes, ce, cette…</div>
+      <div class="pmemo-i"><strong>🎨 Adjectif qualificatif</strong>Décrit le noyau. Avant ou après. Ex : grand chien, voiture rouge</div>
+      <div class="pmemo-i"><strong>📦 Complément du nom</strong>Précise le noyau. Introduit par de/à/en. Ex : maison de campagne</div>
+    </div>
+  </div>
+</div>
+
+<!-- PRINT EXERCICES -->
+<div class="print-eval-content">
+  <div class="ph"><div class="pt">📝 Exercices — Le groupe nominal</div><div class="pm">CM1 · Français · L'Atelier du Devoir | Nom : _________________________ | Date : ___________</div></div>
+  <div class="ps"><div class="pex-num">EXERCICE 1 — Complète le GN</div>
+    <div class="pex-q">Recopie le bon mot pour compléter chaque groupe nominal.</div>
+    <div class="pu" style="font-size:9pt;margin-bottom:8pt;">🎒 Banque de mots : <strong>délicieux · campagne · rapide · laine</strong></div>
+    <div class="pphrase">un gâteau <span class="pblank"></span></div>
+    <div class="pphrase">une maison de <span class="pblank"></span></div>
+    <div class="pphrase">un coureur très <span class="pblank"></span></div>
+    <div class="pphrase">une écharpe en <span class="pblank"></span></div>
+  </div>
+  <div class="ps"><div class="pex-num">EXERCICE 2 — Trouve le noyau</div>
+    <div class="pex-q">Écris le noyau manquant dans chaque groupe nominal.</div>
+    <div class="pu" style="font-size:9pt;margin-bottom:8pt;">🎒 Banque de mots : <strong>chat · livre · copine · jardin</strong></div>
+    <div class="pphrase">le grand <span class="pblank"></span> blanc</div>
+    <div class="pphrase">un <span class="pblank"></span> passionnant</div>
+    <div class="pphrase">ma meilleure <span class="pblank"></span> de classe</div>
+    <div class="pphrase">le beau <span class="pblank"></span> de mes parents</div>
+  </div>
+  <div class="ps"><div class="pex-num">EXERCICE 3 — Écris le noyau</div>
+    <div class="pex-q">Lis le groupe nominal et écris seulement son noyau.</div>
+    <div class="pphrase">la grande école bleue → noyau : <span class="pblank"></span></div>
+    <div class="pphrase">un chien de berger → noyau : <span class="pblank"></span></div>
+    <div class="pphrase">mes amis qui rigolent → noyau : <span class="pblank"></span></div>
+    <div class="pphrase">le beau livre de contes → noyau : <span class="pblank"></span></div>
+  </div>
+  <div class="pscore"><div class="pscore-t">📊 Évaluation</div>
+    <div class="pscore-r"><span>Exercice 1 — Compléter le GN</span><span>.... / 4</span></div>
+    <div class="pscore-r"><span>Exercice 2 — Noyau manquant</span><span>.... / 4</span></div>
+    <div class="pscore-r"><span>Exercice 3 — Identifier le noyau</span><span>.... / 4</span></div>
+    <div class="pscore-r tot"><span>TOTAL</span><span>.... / 12</span></div>
+  </div>
+  <div class="pcorr"><strong>✅ Corrigé :</strong>Ex.1 : délicieux · campagne · rapide · laine | Ex.2 : chat · livre · copine · jardin | Ex.3 : école · chien · amis · livre</div>
+</div>
+
+<!-- PAGE INTERACTIVE -->
+<header class="header">
+  <div class="header-top">
+    <a href="index.html" class="logo">🦉 L'Atelier du Devoir</a>
+    <div class="score-badge">⭐ <span id="score-display">0</span> pts</div>
+  </div>
+  <div class="steps-wrap">
+    <div class="steps">
+      <div class="step active" id="step-0"></div>
+      <div class="step" id="step-1"></div>
+      <div class="step" id="step-2"></div>
+      <div class="step" id="step-3"></div>
+      <div class="step" id="step-4"></div>
+      <div class="step" id="step-5"></div>
+      <div class="step" id="step-6"></div>
+    </div>
+    <div class="steps-labels">
+      <div class="step-lbl">📖 Leçon</div>
+      <div class="step-lbl">✏️ Entraînement 1</div>
+      <div class="step-lbl">✏️ Entraînement 2</div>
+      <div class="step-lbl">🖊️ Exercice 1</div>
+      <div class="step-lbl">🖊️ Exercice 2</div>
+      <div class="step-lbl">⌨️ Exercice 3</div>
+      <div class="step-lbl">⭐ Bilan</div>
+    </div>
+  </div>
+</header>
+
+<main class="main">
+  <div class="accroche">
+    <div class="accroche-mascot">🦉</div>
+    <div class="accroche-text">
+      <h1>Le groupe nominal : noyau et expansions</h1>
+      <p>Tu connais déjà le groupe nominal. Aujourd'hui, tu vas apprendre à repérer <strong>le chef du groupe</strong> (le noyau) et <strong>ses coéquipiers</strong> (les expansions). C'est comme une équipe — chacun a son rôle !</p>
+      <div class="fiche-meta">
+        <span class="meta-tag">📚 CM1</span>
+        <span class="meta-tag">⏱️ ~25 min</span>
+        <span class="meta-tag">⭐ 18 pts</span>
+        <span class="meta-tag">🎯 Français — Grammaire</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- LEÇON -->
+  <div class="phase active" id="phase-lecon">
+    
+<div class="lecon-card">
+  <h2>📖 La leçon</h2>
+
+  <!-- RAPPEL -->
+  <button class="rappel-btn" onclick="toggleRappel()">
+    <span class="icon">💡</span>
+    <span>Tu as oublié ce qu'est un groupe nominal ? Clique ici pour un rappel rapide !</span>
+    <span style="margin-left:auto;font-size:1.1rem" id="rappel-arrow">▼</span>
+  </button>
+  <div class="rappel-box" id="rappel-box">
+    <h4>🔖 Rappel — Le groupe nominal</h4>
+    <div class="rappel-row">
+      <span class="ico">📌</span>
+      <span>Un <strong>groupe nominal (GN)</strong> est un groupe de mots construit autour d'un <strong>nom</strong>.</span>
+    </div>
+    <div class="rappel-row">
+      <span class="ico">🔁</span>
+      <span>On peut remplacer tout le GN par un <strong>pronom</strong> : il, elle, ils, elles, le, la, les…</span>
+    </div>
+    <div class="rappel-exemple">
+      Exemple : <span class="gn-hl">le grand chien de mon voisin</span>
+      &nbsp;→&nbsp; on peut dire <strong>"il"</strong> à la place → c'est bien un GN !
+    </div>
+    <div class="rappel-exemple" style="margin-top:8px;">
+      Les GN peuvent être <strong>sujet</strong> (<em>Le chien</em> aboie.) ou <strong>complément</strong> (Je caresse <em>le chien</em>.)
+    </div>
+    <div class="rappel-astuce">
+      🦉 <strong>Ugo te dit :</strong> Si tu veux revoir la leçon complète sur le groupe nominal, demande à ton professeur !
+    </div>
+  </div>
+
+  <!-- BLOC 0 -->
+  <div class="lecon-block revealed" id="bloc-0">
+    <div class="lecon-subtitle">① Le groupe nominal, c'est quoi ?</div>
+    <p style="margin-bottom:14px;font-size:.95rem;color:var(--text-light);">
+      Un groupe nominal, c'est un groupe de mots qui tourne autour d'<strong>un nom</strong>.
+      Pense à une équipe de sport : il y a <strong>un capitaine</strong> (le nom principal)
+      et des <strong>coéquipiers</strong> qui lui donnent des infos supplémentaires.
+    </p>
+    <div class="team-box">
+      <div class="team-title">⚽ L'équipe du groupe nominal</div>
+      <div class="team-players">
+        <div class="player player-cap">
+          <span class="player-emoji">👑</span>
+          <div class="player-role gold">Le NOYAU</div>
+          <div class="player-name">le nom principal</div>
+          <span class="badge-oblig">OBLIGATOIRE</span>
+        </div>
+        <div class="player player-det">
+          <span class="player-emoji">🔑</span>
+          <div class="player-role blue">Déterminant</div>
+          <div class="player-name">le, la, un, mon…</div>
+          <span class="badge-oblig">OBLIGATOIRE</span>
+        </div>
+        <div class="player player-adj">
+          <span class="player-emoji">🎨</span>
+          <div class="player-role green">Adjectif</div>
+          <div class="player-name">grand, rouge…</div>
+          <span class="badge-fac">facultatif</span>
+        </div>
+        <div class="player player-cdn">
+          <span class="player-emoji">📦</span>
+          <div class="player-role orange">Compl. du nom</div>
+          <div class="player-name">de bois, en laine…</div>
+          <span class="badge-fac">facultatif</span>
+        </div>
+        <div class="player player-rel">
+          <span class="player-emoji">🔗</span>
+          <div class="player-role purple">Prop. relative</div>
+          <div class="player-name">qui court, que…</div>
+          <span class="badge-fac">facultatif</span>
+        </div>
+      </div>
+    </div>
+    <div class="gn-visual">
+      <div class="gn-exemple-title">Exemple complet :</div>
+      <div class="gn-exemple-text">
+        <span class="chip-det" style="border-radius:8px;padding:2px 8px;">le</span>
+        <span class="chip-adj" style="border-radius:8px;padding:2px 8px;margin:0 2px;">grand</span>
+        <span class="chip-noyau" style="border-radius:8px;padding:2px 10px;font-weight:900;">chien</span>
+        <span class="chip-adj" style="border-radius:8px;padding:2px 8px;margin:0 2px;">blanc</span>
+        <span class="chip-cdn" style="border-radius:8px;padding:2px 8px;">de mon voisin</span>
+        <span class="chip-rel" style="border-radius:8px;padding:2px 8px;margin-left:2px;">qui aboie fort</span>
+      </div>
+      <div class="gn-legend">
+        <span class="gn-chip chip-det">🔑 déterminant</span>
+        <span class="gn-chip chip-noyau">👑 noyau (le chef !)</span>
+        <span class="gn-chip chip-adj">🎨 adjectifs</span>
+        <span class="gn-chip chip-cdn">📦 CDN</span>
+        <span class="gn-chip chip-rel">🔗 relative</span>
+      </div>
+    </div>
+    <button class="btn-compris" onclick="revealBloc(1)">J'ai compris ! → Le noyau 👑</button>
+  </div>
+
+  <!-- BLOC 1 -->
+  <div class="lecon-block" id="bloc-1">
+    <hr class="sep">
+    <div class="lecon-subtitle">② Le NOYAU — le capitaine du groupe 👑</div>
+    <p style="margin-bottom:14px;font-size:.95rem;color:var(--text-light);">
+      Le <strong>noyau</strong>, c'est le <strong>nom principal</strong> du groupe.
+      Tout le reste du groupe parle de lui.
+    </p>
+    <div class="how-find">
+      <div class="how-title">🔍 Comment trouver le noyau ?</div>
+      <div class="how-step">
+        <span class="how-num">1</span>
+        <span>Pose la question <strong>"Qui ?"</strong> ou <strong>"Quoi ?"</strong> au début du groupe.</span>
+      </div>
+      <div class="how-step">
+        <span class="how-num">2</span>
+        <span>Le mot qui répond, c'est le noyau !</span>
+      </div>
+      <div class="how-step">
+        <span class="how-num">3</span>
+        <span>Astuce : essaie de remplacer le GN par <strong>il</strong>, <strong>elle</strong>, <strong>ils</strong> ou <strong>elles</strong>. Ce pronom correspond au noyau !</span>
+      </div>
+    </div>
+    <div class="ex-noyaux">
+      <div class="ex-noyau-row">
+        <div class="ex-noyau-gn">le petit <span class="noyau-hl">chat</span> noir</div>
+        <div class="ex-noyau-expl">→ noyau : <strong>chat</strong> (on peut dire <em>"il"</em>)</div>
+      </div>
+      <div class="ex-noyau-row">
+        <div class="ex-noyau-gn">une belle <span class="noyau-hl">maison</span> de campagne</div>
+        <div class="ex-noyau-expl">→ noyau : <strong>maison</strong> (on peut dire <em>"elle"</em>)</div>
+      </div>
+      <div class="ex-noyau-row">
+        <div class="ex-noyau-gn">mes <span class="noyau-hl">amis</span> qui rigolent</div>
+        <div class="ex-noyau-expl">→ noyau : <strong>amis</strong> (on peut dire <em>"ils"</em>)</div>
+      </div>
+    </div>
+    <button class="btn-compris" onclick="revealBloc(2)">Suivant → Les expansions 📦</button>
+  </div>
+
+  <!-- BLOC 2 -->
+  <div class="lecon-block" id="bloc-2">
+    <hr class="sep">
+    <div class="lecon-subtitle">③ Les EXPANSIONS — les coéquipiers du noyau</div>
+    <p style="margin-bottom:14px;font-size:.95rem;color:var(--text-light);">
+      Les expansions sont des mots (ou groupes de mots) qui <strong>donnent des infos sur le noyau</strong>.
+      On peut en supprimer la plupart sans que la phrase devienne fausse !
+    </p>
+    <div class="exp-list">
+      <div class="exp-item sky">
+        <span class="exp-icon">🔑</span>
+        <div class="exp-body">
+          <span class="badge-oblig">OBLIGATOIRE</span>
+          <h4 class="sky">Le déterminant</h4>
+          <p>Il se place <strong>toujours avant le noyau</strong>. Sans lui, le GN (groupe nominal) n'est pas complet.</p>
+          <div class="exp-ex">le, la, les, un, une, des, mon, ma, mes, ce, cette, ces…</div>
+          <div class="exp-ex" style="margin-top:6px;"><em>le</em> chien &nbsp;|&nbsp; <em>ma</em> maison &nbsp;|&nbsp; <em>une</em> voiture</div>
+        </div>
+      </div>
+      <div class="exp-item mint">
+        <span class="exp-icon">🎨</span>
+        <div class="exp-body">
+          <span class="badge-fac">facultatif</span>
+          <h4 class="mint">L'adjectif qualificatif</h4>
+          <p>Il <strong>décrit le noyau</strong>. Il peut se placer avant ou après le nom.</p>
+          <div class="exp-ex">un <em>grand</em> chien &nbsp;|&nbsp; une voiture <em>rouge</em> &nbsp;|&nbsp; un <em>joli</em> jardin <em>fleuri</em></div>
+        </div>
+      </div>
+      <div class="exp-item coral">
+        <span class="exp-icon">📦</span>
+        <div class="exp-body">
+          <span class="badge-fac">facultatif</span>
+          <h4 class="coral">Le complément du nom (CDN)</h4>
+          <p>Il <strong>précise le noyau</strong>. Il est introduit par une petite préposition : <strong>de, à, en, avec…</strong></p>
+          <div class="exp-ex">une maison <em>de campagne</em> &nbsp;|&nbsp; une écharpe <em>en laine</em> &nbsp;|&nbsp; un sac <em>à dos</em></div>
+        </div>
+      </div>
+      <div class="exp-item violet">
+        <span class="exp-icon">🔗</span>
+        <div class="exp-body">
+          <span class="badge-fac">facultatif</span>
+          <h4 class="purple">La proposition relative</h4>
+          <p>C'est une mini-phrase qui <strong>donne plus de détails</strong> sur le noyau. Elle commence par <strong>qui, que, dont, où</strong>.</p>
+          <div class="exp-ex">le chien <em>qui aboie</em> &nbsp;|&nbsp; la pizza <em>que je préfère</em> &nbsp;|&nbsp; l'endroit <em>où je vis</em></div>
+        </div>
+      </div>
+    </div>
+    <button class="btn-compris" onclick="revealBloc(3)">Suivant → Un exemple complet 🔍</button>
+  </div>
+
+  <!-- BLOC 3 -->
+  <div class="lecon-block" id="bloc-3">
+    <hr class="sep">
+    <div class="lecon-subtitle">④ Tout ensemble — un GN bien riche !</div>
+    <p style="margin-bottom:14px;font-size:.95rem;color:var(--text-light);">
+      Voici un groupe nominal avec <strong>toutes les expansions</strong> en même temps.
+      Repère chaque membre de l'équipe !
+    </p>
+    <div class="gn-annote">
+      <div class="gn-phrase-box">
+        <div class="gn-annote-phrase">
+          <span class="ga-det">le</span>
+          <span class="ga-adj">grand</span>
+          <span class="ga-noyau">chien</span>
+          <span class="ga-adj">blanc</span>
+          <span class="ga-cdn">de mon voisin</span>
+          <span class="ga-rel">qui aboie fort</span>
+        </div>
+      </div>
+      <div class="gn-annote-legend">
+        <div class="ga-leg-row"><span class="ga-det ga-pill">le</span><span>→ déterminant 🔑</span></div>
+        <div class="ga-leg-row"><span class="ga-noyau ga-pill">chien</span><span>→ <strong>noyau</strong> (le chef !) 👑</span></div>
+        <div class="ga-leg-row"><span class="ga-adj ga-pill">grand / blanc</span><span>→ adjectifs qualificatifs 🎨</span></div>
+        <div class="ga-leg-row"><span class="ga-cdn ga-pill">de mon voisin</span><span>→ complément du nom 📦</span></div>
+        <div class="ga-leg-row"><span class="ga-rel ga-pill">qui aboie fort</span><span>→ proposition relative 🔗</span></div>
+      </div>
+    </div>
+    <div class="astuce" style="margin-top:12px;">
+      🦉 <strong>Ugo te dit :</strong> Le seul mot qu'on ne peut pas supprimer, c'est <strong>chien</strong> (le noyau) !
+      Essaie : "le grand blanc de mon voisin qui aboie fort" → sans le noyau, ça ne veut plus rien dire !
+    </div>
+    <button class="btn-compris" onclick="startExercises()" style="background:linear-gradient(135deg,var(--yellow-deep),var(--coral));">
+      ✅ Leçon comprise ! Je commence 🚀
+    </button>
+  </div>
+</div>
+
+  </div>
+
+  <!-- ENTRAÎNEMENT 1 -->
+  <div class="phase" id="phase-ex1">
+    <div class="mascot-msg"><span class="emo">🦉</span><p><strong>Super, la leçon est terminée !</strong> Premier entraînement : tu dois trouver le <strong>noyau</strong> dans chaque groupe nominal. Souviens-toi — c'est le NOM principal !</p></div>
+    <div class="ex-num">ENTRAÎNEMENT 1 / 2</div>
+    <div class="ex-header"><h2>Trouve le noyau du GN</h2><p>Clique sur le mot qui est le chef du groupe (le noyau).</p></div>
+    <div id="qcm1-container"></div>
+    <button class="btn-suivant" id="btn-to-ex2" onclick="goToPhase('ex2',2)">Suite → Entraînement 2 ✏️</button>
+  </div>
+
+  <!-- ENTRAÎNEMENT 2 -->
+  <div class="phase" id="phase-ex2">
+    <div class="mascot-msg"><span class="emo">🦉</span><p><strong>Excellent !</strong> Maintenant tu vas identifier le <strong>type d'expansion</strong>. Il y en a 4 : déterminant, adjectif, CDN, proposition relative.</p></div>
+    <div class="ex-num">ENTRAÎNEMENT 2 / 2</div>
+    <div class="ex-header"><h2>Quel type d'expansion ?</h2><p>Clique sur la bonne description pour chaque mot souligné.</p></div>
+    <div id="qcm2-container"></div>
+    <button class="btn-suivant" id="btn-to-drag1" onclick="goToPhase('drag1',3)">Suite → Exercice 1 🖊️</button>
+  </div>
+
+  <!-- EXERCICE 1 — DRAG -->
+  <div class="phase" id="phase-drag1">
+    <div class="mascot-msg"><span class="emo">🦉</span><p><strong>Glisse les mots</strong> dans les bonnes cases pour compléter chaque groupe nominal. Attention : l'ordre est mélangé !</p></div>
+    <div class="ex-num">EXERCICE 1 / 3 — Glisser-déposer</div>
+    <div class="ex-header"><h2>Complète le groupe nominal</h2><p>Glisse le bon mot dans chaque case bleue.</p></div>
+    <div class="bank-area">
+      <div class="bank-label">🎒 Banque de mots (ordre mélangé) :</div>
+      <div class="word-chips" id="pool1">
+        <div class="word-chip" draggable="true" data-word="laine" ondragstart="onDS(event,1)" ontouchstart="onTS(event)" ontouchmove="onTM(event)" ontouchend="onTE(event,1)">laine</div>
+        <div class="word-chip" draggable="true" data-word="rapide" ondragstart="onDS(event,1)" ontouchstart="onTS(event)" ontouchmove="onTM(event)" ontouchend="onTE(event,1)">rapide</div>
+        <div class="word-chip" draggable="true" data-word="délicieux" ondragstart="onDS(event,1)" ontouchstart="onTS(event)" ontouchmove="onTM(event)" ontouchend="onTE(event,1)">délicieux</div>
+        <div class="word-chip" draggable="true" data-word="campagne" ondragstart="onDS(event,1)" ontouchstart="onTS(event)" ontouchmove="onTM(event)" ontouchend="onTE(event,1)">campagne</div>
+        </div>
+      <div class="drop-sentences">
+      <div class="drop-row">un gâteau <span class="drop-zone" data-bank="1" data-idx="0" ondragover="onDO(event)" ondragleave="onDL(event)" ondrop="onDP(event,1)"></span></div>
+      <div class="drop-row">une maison de <span class="drop-zone" data-bank="1" data-idx="1" ondragover="onDO(event)" ondragleave="onDL(event)" ondrop="onDP(event,1)"></span></div>
+      <div class="drop-row">un coureur très <span class="drop-zone" data-bank="1" data-idx="2" ondragover="onDO(event)" ondragleave="onDL(event)" ondrop="onDP(event,1)"></span></div>
+      <div class="drop-row">une écharpe en <span class="drop-zone" data-bank="1" data-idx="3" ondragover="onDO(event)" ondragleave="onDL(event)" ondrop="onDP(event,1)"></span></div></div>
+      <button class="btn-verifier" id="btn-vd1" onclick="verifyDrag(1)" disabled>✅ Vérifier mes réponses</button>
+      <div class="ex-feedback" id="fb-d1"></div>
+    </div>
+    <button class="btn-suivant" id="btn-to-drag2" onclick="goToPhase('drag2',4)">Suite → Exercice 2 🖊️</button>
+  </div>
+
+  <!-- EXERCICE 2 — DRAG NOYAU -->
+  <div class="phase" id="phase-drag2">
+    <div class="mascot-msg"><span class="emo">🦉</span><p>Cette fois, tu dois glisser le <strong>noyau manquant</strong> dans chaque groupe nominal. Souviens-toi : le noyau, c'est le NOM principal ! 👑</p></div>
+    <div class="ex-num">EXERCICE 2 / 3 — Glisser-déposer</div>
+    <div class="ex-header"><h2>Place le noyau manquant</h2><p>Glisse le bon noyau dans chaque groupe nominal. Ordre mélangé !</p></div>
+    <div class="bank-area">
+      <div class="bank-label">🎒 Banque de mots (ordre mélangé) :</div>
+      <div class="word-chips" id="pool2">
+        <div class="word-chip" draggable="true" data-word="jardin" ondragstart="onDS(event,2)" ontouchstart="onTS(event)" ontouchmove="onTM(event)" ontouchend="onTE(event,2)">jardin</div>
+        <div class="word-chip" draggable="true" data-word="chat" ondragstart="onDS(event,2)" ontouchstart="onTS(event)" ontouchmove="onTM(event)" ontouchend="onTE(event,2)">chat</div>
+        <div class="word-chip" draggable="true" data-word="copine" ondragstart="onDS(event,2)" ontouchstart="onTS(event)" ontouchmove="onTM(event)" ontouchend="onTE(event,2)">copine</div>
+        <div class="word-chip" draggable="true" data-word="livre" ondragstart="onDS(event,2)" ontouchstart="onTS(event)" ontouchmove="onTM(event)" ontouchend="onTE(event,2)">livre</div>
+        </div>
+      <div class="drop-sentences">
+      <div class="drop-row">le grand <span class="drop-zone" data-bank="2" data-idx="0" ondragover="onDO(event)" ondragleave="onDL(event)" ondrop="onDP(event,2)"></span> blanc</div>
+      <div class="drop-row">un <span class="drop-zone" data-bank="2" data-idx="1" ondragover="onDO(event)" ondragleave="onDL(event)" ondrop="onDP(event,2)"></span> passionnant</div>
+      <div class="drop-row">ma meilleure <span class="drop-zone" data-bank="2" data-idx="2" ondragover="onDO(event)" ondragleave="onDL(event)" ondrop="onDP(event,2)"></span> de classe</div>
+      <div class="drop-row">le beau <span class="drop-zone" data-bank="2" data-idx="3" ondragover="onDO(event)" ondragleave="onDL(event)" ondrop="onDP(event,2)"></span> de mes parents</div></div>
+      <button class="btn-verifier" id="btn-vd2" onclick="verifyDrag(2)" disabled>✅ Vérifier mes réponses</button>
+      <div class="ex-feedback" id="fb-d2"></div>
+    </div>
+    <button class="btn-suivant" id="btn-to-typing" onclick="goToPhase('typing',5)">Suite → Exercice 3 ⌨️</button>
+  </div>
+
+  <!-- EXERCICE 3 — TYPING -->
+  <div class="phase" id="phase-typing">
+    <div class="mascot-msg"><span class="emo">🦉</span><p>Dernier exercice ! Cette fois, <strong>écris toi-même le noyau</strong> de chaque groupe nominal. Plus de banque de mots — tu dois te souvenir !</p></div>
+    <div class="ex-num">EXERCICE 3 / 3 — Écris ta réponse</div>
+    <div class="ex-header"><h2>Quel est le noyau ?</h2><p>Lis chaque groupe nominal et tape son noyau dans la case.</p></div>
+    <div class="typing-block">
+      <div class="typing-rows">
+      <div class="typing-row">la grande <input class="typing-input" id="tin-0" type="text" placeholder="…" autocomplete="off" autocorrect="off" spellcheck="false"> bleue<span class="hint">Noyau du GN (école)</span></div>
+      <div class="typing-row">un <input class="typing-input" id="tin-1" type="text" placeholder="…" autocomplete="off" autocorrect="off" spellcheck="false"> de berger<span class="hint">Noyau du GN (chien)</span></div>
+      <div class="typing-row">mes <input class="typing-input" id="tin-2" type="text" placeholder="…" autocomplete="off" autocorrect="off" spellcheck="false"> qui rigolent<span class="hint">Noyau du GN (amis)</span></div>
+      <div class="typing-row">le beau <input class="typing-input" id="tin-3" type="text" placeholder="…" autocomplete="off" autocorrect="off" spellcheck="false"> de contes<span class="hint">Noyau du GN (livre)</span></div></div>
+      <button class="btn-verifier" id="btn-typing" onclick="verifyTyping()" style="margin-top:18px;">✅ Vérifier mes réponses</button>
+      <div class="ex-feedback" id="fb-typing"></div>
+    </div>
+    <button class="btn-suivant" id="btn-to-bilan" onclick="goToPhase('bilan',6)">🌟 Voir mon bilan !</button>
+  </div>
+
+  <!-- BILAN -->
+  <div class="phase" id="phase-bilan">
+    <div class="bilan-card">
+      <span class="bilan-mascot" id="bilan-mascot">🦉</span>
+      <h2 class="bilan-title" id="bilan-title">Super travail !</h2>
+      <p class="bilan-msg" id="bilan-msg"></p>
+      <div class="stars-row">
+        <span class="star-big" id="star1">⭐</span>
+        <span class="star-big" id="star2">⭐</span>
+        <span class="star-big" id="star3">⭐</span>
+      </div>
+      <div class="score-circle"><span class="score-num" id="bilan-score">0</span><span style="font-size:.72rem;opacity:.85;">/ 18 pts</span></div>
+      <div class="memo-card">
+        <h3>🗒️ Mon mémo — Le groupe nominal</h3>
+        <div class="memo-grid">
+          <div class="memo-item gold"><strong>👑 Le NOYAU</strong>C'est le NOM principal. Remplace tout le GN par il/elle/ils/elles.</div>
+          <div class="memo-item blue"><strong>🔑 Déterminant (OBLIGATOIRE)</strong>le, la, les, un, une, mon, ma, mes, ce, cette…</div>
+          <div class="memo-item green"><strong>🎨 Adjectif qualificatif</strong>Décrit le noyau. Ex : un <em>grand</em> chien</div>
+          <div class="memo-item orange"><strong>📦 Complément du nom</strong>Précise le noyau. Ex : maison <em>de campagne</em></div>
+        </div>
+      </div>
+      <div class="bilan-btns">
+        <button class="btn-act sky-pale" onclick="restartFiche()">🔄 Recommencer</button>
+        <button class="btn-act sky" onclick="location.href='../9-12ans.html'">🏠 Retour aux fiches</button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+
+// ── IMPRESSION ─────────────────────────────────
+function printLecon() {
+  document.body.classList.remove('print-mode-eval');
+  document.body.classList.add('print-mode-lecon');
+  setTimeout(function() { window.print(); setTimeout(function() { document.body.classList.remove('print-mode-lecon'); }, 600); }, 60);
+}
+function printEval() {
+  document.body.classList.remove('print-mode-lecon');
+  document.body.classList.add('print-mode-eval');
+  setTimeout(function() { window.print(); setTimeout(function() { document.body.classList.remove('print-mode-eval'); }, 600); }, 60);
+}
+
+// ── RAPPEL ─────────────────────────────────────
+function toggleRappel() {
+  var box = document.getElementById('rappel-box');
+  var arrow = document.getElementById('rappel-arrow');
+  var isOpen = box.classList.contains('open');
+  box.classList.toggle('open');
+  arrow.textContent = isOpen ? '▼' : '▲';
+}
+
+// ── DONNÉES QCM ─────────────────────────────────
+var qcm1 = [
+  {
+    sentence: "Dans ce groupe : <span class='qhl'>le petit chien noir</span> — quel est le noyau (le chef du groupe) ?",
+    verb: "Noyau",
+    options: ["petit", "chien", "noir"],
+    answer: "chien",
+    expl: "Le noyau est <strong>chien</strong> — c'est le NOM. On peut dire \"il\" à la place du GN. \"Petit\" et \"noir\" sont des adjectifs qui décrivent le chien."
+  },
+  {
+    sentence: "Dans ce groupe : <span class='qhl'>une belle maison de campagne</span> — quel est le noyau ?",
+    verb: "Noyau",
+    options: ["belle", "maison", "campagne"],
+    answer: "maison",
+    expl: "Le noyau est <strong>maison</strong>. On peut dire \"elle\" à la place. \"Belle\" est un adjectif et \"de campagne\" est un complément du nom."
+  },
+  {
+    sentence: "Dans ce groupe : <span class='qhl'>mes amis qui rigolent</span> — quel est le noyau ?",
+    verb: "Noyau",
+    options: ["mes", "amis", "rigolent"],
+    answer: "amis",
+    expl: "Le noyau est <strong>amis</strong>. On peut dire \"ils\" à la place. \"Mes\" est le déterminant et \"qui rigolent\" est une proposition relative."
+  }
+];
+
+var qcm2 = [
+  {
+    sentence: "Dans <span class='qhl'>le vélo rouge</span> — à quoi sert le mot <span class='qhl-coral'>rouge</span> ?",
+    verb: "Type d'expansion",
+    options: ["C'est un déterminant", "C'est un adjectif qualificatif", "C'est un complément du nom"],
+    answer: "C'est un adjectif qualificatif",
+    expl: "<strong>Rouge</strong> est un adjectif qualificatif — il décrit le vélo. On pourrait le supprimer : \"le vélo\" est encore correct !"
+  },
+  {
+    sentence: "Dans <span class='qhl'>la table de bois</span> — à quoi sert <span class='qhl-coral'>de bois</span> ?",
+    verb: "Type d'expansion",
+    options: ["C'est un adjectif qualificatif", "C'est un complément du nom", "C'est une proposition relative"],
+    answer: "C'est un complément du nom",
+    expl: "<strong>De bois</strong> est un complément du nom — il précise la matière de la table. Il est introduit par la préposition \"de\"."
+  },
+  {
+    sentence: "Dans <span class='qhl'>le chat qui miaule</span> — à quoi sert <span class='qhl-coral'>qui miaule</span> ?",
+    verb: "Type d'expansion",
+    options: ["C'est un adjectif qualificatif", "C'est un complément du nom", "C'est une proposition relative"],
+    answer: "C'est une proposition relative",
+    expl: "<strong>Qui miaule</strong> est une proposition relative — c'est une mini-phrase qui donne plus d'infos sur le chat. Elle commence par \"qui\"."
+  }
+];
+
+var drag1Answers = ["delicieux", "campagne", "rapide", "laine"];
+var drag1Words   = ["laine", "rapide", "delicieux", "campagne"];
+
+var drag2Answers = ["chat", "livre", "copine", "jardin"];
+var drag2Words   = ["jardin", "chat", "copine", "livre"];
+
+var typingAnswers = ["ecole", "chien", "amis", "livre"];
+
+// ── ÉTAT ───────────────────────────────────────
+var score = 0, qcm1Done = 0, qcm2Done = 0;
+var drag1Filled = [null, null, null, null];
+var drag2Filled = [null, null, null, null];
+var draggedChip = null, draggedBank = 0;
+var touchChip = null, touchBank = 0, touchClone = null;
+
+// ── LEÇON ──────────────────────────────────────
+function revealBloc(n) {
+  var bloc = document.getElementById('bloc-' + n);
+  if (!bloc) return;
+  var prev = document.getElementById('bloc-' + (n - 1));
+  if (prev) {
+    var btn = prev.querySelector('.btn-compris');
+    if (btn) { btn.textContent = '✅ Compris !'; btn.disabled = true; btn.style.opacity = '.5'; }
+  }
+  bloc.classList.add('revealed');
+  setTimeout(function () {
+    var hH = (document.querySelector('.header') || { offsetHeight: 0 }).offsetHeight;
+    var rect = bloc.getBoundingClientRect();
+    window.scrollTo({ top: window.pageYOffset + rect.top - hH - 20, behavior: 'smooth' });
+    bloc.style.transition = 'background .3s';
+    bloc.style.background = '#daf6ff';
+    setTimeout(function () { bloc.style.background = ''; }, 800);
+  }, 50);
+}
+
+// ── NAVIGATION ─────────────────────────────────
+function startExercises() { goToPhase('ex1', 1); buildQCM('qcm1-container', qcm1, 1, 'btn-to-ex2'); }
+function goToPhase(phase, stepIdx) {
+  document.querySelectorAll('.phase').forEach(function (p) { p.classList.remove('active'); });
+  document.getElementById('phase-' + phase).classList.add('active');
+  updateSteps(stepIdx);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (phase === 'ex2') buildQCM('qcm2-container', qcm2, 2, 'btn-to-drag1');
+  if (phase === 'bilan') showBilan();
+}
+function updateSteps(active) {
+  for (var i = 0; i < 7; i++) {
+    var s = document.getElementById('step-' + i);
+    s.classList.remove('active', 'done');
+    if (i < active) s.classList.add('done');
+    else if (i === active) s.classList.add('active');
+  }
+}
+
+// ── QCM ────────────────────────────────────────
+function buildQCM(cId, data, exNum, nextBtnId) {
+  var c = document.getElementById(cId); c.innerHTML = '';
+  data.forEach(function (q, qi) {
+    var div = document.createElement('div');
+    div.className = 'qcm-question'; div.id = 'qq-' + exNum + '-' + qi;
+    var optHtml = q.options.map(function (opt) {
+      return '<button class="qcm-opt"'
+        + ' data-exnum="' + exNum + '"'
+        + ' data-qi="' + qi + '"'
+        + ' data-opt="' + encodeURIComponent(opt) + '"'
+        + ' data-ans="' + encodeURIComponent(q.answer) + '"'
+        + ' onclick="handleQCM(this)">' + opt + '</button>';
+    }).join('');
+    div.innerHTML = '<div class="qcm-sentence">' + q.sentence + '</div>'
+      + '<div class="qcm-options">' + optHtml + '</div>'
+      + '<div class="qcm-feedback" id="qf-' + exNum + '-' + qi + '"></div>';
+    c.appendChild(div);
+  });
+}
+function handleQCM(btn) {
+  var exNum   = parseInt(btn.dataset.exnum);
+  var qi      = parseInt(btn.dataset.qi);
+  var chosen  = decodeURIComponent(btn.dataset.opt);
+  var correct = decodeURIComponent(btn.dataset.ans);
+  answerQCM(exNum, qi, btn, chosen, correct);
+}
+function answerQCM(exNum, qi, btn, chosen, correct) {
+  var qDiv = document.getElementById('qq-' + exNum + '-' + qi);
+  if (qDiv.classList.contains('answered')) return;
+  qDiv.classList.add('answered');
+  var opts = qDiv.querySelectorAll('.qcm-opt');
+  var fb   = document.getElementById('qf-' + exNum + '-' + qi);
+  var expl = (exNum === 1 ? qcm1 : qcm2)[qi].expl;
+  if (chosen === correct) {
+    btn.classList.add('correct');
+    btn.textContent = '✅ ' + btn.textContent;
+    fb.className = 'qcm-feedback show ok';
+    fb.innerHTML = '✅ <span>Bravo ! ' + expl + '</span>';
+    score++;
+    document.getElementById('score-display').textContent = score;
+  } else {
+    btn.classList.add('wrong');
+    btn.textContent = '❌ ' + btn.textContent;
+    opts.forEach(function (o) {
+      if (decodeURIComponent(o.dataset.opt) === correct) {
+        o.classList.add('reveal');
+        o.textContent = '✅ ' + correct;
+      }
+    });
+    fb.className = 'qcm-feedback show ko';
+    fb.innerHTML = '💡 <span>Pas encore ! ' + expl + '</span>';
+  }
+  if (exNum === 1) qcm1Done++; else qcm2Done++;
+  var total   = exNum === 1 ? qcm1.length : qcm2.length;
+  var done    = exNum === 1 ? qcm1Done : qcm2Done;
+  var nextBtn = exNum === 1 ? 'btn-to-ex2' : 'btn-to-drag1';
+  if (done >= total) {
+    setTimeout(function () {
+      document.getElementById(nextBtn).classList.add('show');
+      document.getElementById(nextBtn).scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 600);
+  }
+}
+
+// ── DRAG MOUSE ─────────────────────────────────
+function onDS(e, bank) { draggedChip = e.currentTarget; draggedBank = bank; e.dataTransfer.setData('text/plain', draggedChip.dataset.word); draggedChip.classList.add('dragging'); }
+function onDO(e) { e.preventDefault(); e.currentTarget.classList.add('drag-over'); }
+function onDL(e) { e.currentTarget.classList.remove('drag-over'); }
+function onDP(e, bank) {
+  e.preventDefault();
+  var zone = e.currentTarget; zone.classList.remove('drag-over');
+  if (!draggedChip) return;
+  var word = draggedChip.dataset.word;
+  var idx = parseInt(zone.dataset.idx);
+  var filled = bank === 1 ? drag1Filled : drag2Filled;
+  if (filled[idx]) returnToPool(filled[idx], bank);
+  filled[idx] = word; zone.textContent = word; zone.classList.add('filled');
+  draggedChip.classList.add('used'); draggedChip.classList.remove('dragging');
+  draggedChip = null; checkDragBtn(bank);
+}
+
+// ── DRAG TOUCH ─────────────────────────────────
+function onTS(e) {
+  touchChip = e.currentTarget;
+  var t = e.touches[0];
+  touchClone = touchChip.cloneNode(true);
+  touchClone.style.cssText = 'position:fixed;z-index:9999;pointer-events:none;opacity:.8;padding:10px 18px;border-radius:50px;border:2.5px solid var(--sky);background:white;font-weight:800;font-size:.9rem;color:var(--sky-deep);';
+  setCP(t.clientX, t.clientY); document.body.appendChild(touchClone);
+}
+function onTM(e) {
+  e.preventDefault(); if (!touchClone) return;
+  var t = e.touches[0]; setCP(t.clientX, t.clientY);
+  document.querySelectorAll('.drop-zone').forEach(function (z) { z.classList.remove('drag-over'); });
+  var el = document.elementFromPoint(t.clientX, t.clientY);
+  if (el && el.classList.contains('drop-zone')) el.classList.add('drag-over');
+}
+function onTE(e, bank) {
+  if (touchClone) { touchClone.remove(); touchClone = null; }
+  if (!touchChip) return;
+  var t = e.changedTouches[0];
+  var el = document.elementFromPoint(t.clientX, t.clientY);
+  if (el && el.classList.contains('drop-zone')) {
+    var idx = parseInt(el.dataset.idx);
+    var word = touchChip.dataset.word;
+    var filled = bank === 1 ? drag1Filled : drag2Filled;
+    if (filled[idx]) returnToPool(filled[idx], bank);
+    filled[idx] = word; el.textContent = word; el.classList.add('filled'); el.classList.remove('drag-over');
+    touchChip.classList.add('used'); checkDragBtn(bank);
+  }
+  touchChip = null;
+}
+function setCP(x, y) { if (touchClone) { touchClone.style.left = (x - 60) + 'px'; touchClone.style.top = (y - 20) + 'px'; } }
+function returnToPool(word, bank) {
+  document.getElementById('pool' + bank).querySelectorAll('.word-chip').forEach(function (c) { if (c.dataset.word === word) c.classList.remove('used'); });
+}
+function checkDragBtn(bank) {
+  var filled = bank === 1 ? drag1Filled : drag2Filled;
+  document.getElementById('btn-vd' + bank).disabled = !filled.every(function (f) { return f !== null; });
+}
+function verifyDrag(bank) {
+  var filled = bank === 1 ? drag1Filled : drag2Filled;
+  var answers = bank === 1 ? drag1Answers : drag2Answers;
+  var fb = document.getElementById('fb-d' + bank);
+  var correct = 0;
+  document.querySelectorAll('[data-bank="' + bank + '"].drop-zone').forEach(function (zone) {
+    var idx = parseInt(zone.dataset.idx);
+    zone.classList.remove('filled', 'drag-over');
+    if (filled[idx] === answers[idx]) { zone.classList.add('correct'); correct++; score++; }
+    else { zone.classList.add('wrong'); zone.textContent = (filled[idx] || '?') + ' → ' + answers[idx]; }
+  });
+  document.getElementById('score-display').textContent = score;
+  document.getElementById('btn-vd' + bank).disabled = true;
+  document.getElementById('pool' + bank).style.pointerEvents = 'none';
+  if (correct === 4) { fb.className = 'ex-feedback show ok'; fb.innerHTML = '✅ Parfait ! Les 4 mots au bon endroit 🎉'; }
+  else { fb.className = 'ex-feedback show ko'; fb.innerHTML = '💡 ' + correct + '/4 bons mots. Les corrections sont en rouge.'; }
+  var nextBtn = bank === 1 ? 'btn-to-drag2' : 'btn-to-typing';
+  setTimeout(function () { document.getElementById(nextBtn).classList.add('show'); }, 800);
+}
+
+// ── TYPING ─────────────────────────────────────
+function normalise(s) {
+  return s.trim().toLowerCase()
+    .replace(/é|è|ê|ë/g, 'e')
+    .replace(/à|â/g, 'a')
+    .replace(/î|ï/g, 'i')
+    .replace(/ô/g, 'o')
+    .replace(/ù|û/g, 'u');
+}
+function verifyTyping() {
+  var fb = document.getElementById('fb-typing');
+  var correct = 0;
+  typingAnswers.forEach(function (ans, i) {
+    var inp = document.getElementById('tin-' + i);
+    inp.classList.remove('correct', 'wrong');
+    if (normalise(inp.value) === normalise(ans)) { inp.classList.add('correct'); correct++; score++; }
+    else { inp.classList.add('wrong'); inp.value = inp.value + ' → ' + ans; }
+    inp.readOnly = true;
+  });
+  document.getElementById('score-display').textContent = score;
+  document.getElementById('btn-typing').disabled = true;
+  if (correct === 4) { fb.className = 'ex-feedback show ok'; fb.innerHTML = '✅ Parfait ! Tu as trouvé tous les noyaux 🎉'; }
+  else { fb.className = 'ex-feedback show ko'; fb.innerHTML = '💡 ' + correct + '/4 bons noyaux. Les corrections sont indiquées.'; }
+  setTimeout(function () { document.getElementById('btn-to-bilan').classList.add('show'); }, 800);
+}
+
+// ── BILAN ──────────────────────────────────────
+function showBilan() {
+  document.getElementById('bilan-score').textContent = score;
+  var mascot, title, msg;
+  if (score >= 16) { mascot = '🦉🌟'; title = 'Excellent !'; msg = 'Tu maîtrises parfaitement le groupe nominal. Bravo !'; }
+  else if (score >= 13) { mascot = '🦉'; title = 'Très bien !'; msg = 'Relis les types d\'expansions pour être au top !'; }
+  else if (score >= 9) { mascot = '🦉'; title = 'Bonne tentative !'; msg = 'Relis la leçon sur les expansions et réessaie !'; }
+  else { mascot = '🦉'; title = 'Continue à t\'entraîner !'; msg = 'Relis la leçon depuis le début. Tu vas y arriver !'; }
+  document.getElementById('bilan-mascot').textContent = mascot;
+  document.getElementById('bilan-title').textContent = title;
+  document.getElementById('bilan-msg').textContent = msg;
+  [{ id: 'star1', t: 9 }, { id: 'star2', t: 13 }, { id: 'star3', t: 16 }].forEach(function (s, i) {
+    var el = document.getElementById(s.id);
+    if (score >= s.t) setTimeout(function () { el.classList.add('earned'); }, 300 + i * 400);
+    else el.style.filter = 'grayscale(1)';
+  });
+  if (score >= 13) launchConfetti();
+}
+function launchConfetti() {
+  var colors = ['#4FBDDF', '#FFD93D', '#6BCFB0', '#FF8A65', '#9B8AFF'];
+  for (var i = 0; i < 60; i++) {
+    var el = document.createElement('div'); el.className = 'confetti-piece';
+    el.style.cssText = 'left:' + Math.random() * 100 + 'vw;background:' + colors[Math.floor(Math.random() * 5)] + ';animation-duration:' + (1.5 + Math.random() * 2) + 's;animation-delay:' + Math.random() * 1.5 + 's;width:' + (8 + Math.random() * 8) + 'px;height:' + (8 + Math.random() * 8) + 'px;border-radius:' + (Math.random() > .5 ? '50%' : '2px') + ';';
+    document.body.appendChild(el);
+    setTimeout(function () { if (el.parentNode) el.remove(); }, 4000);
+  }
+}
+function restartFiche() {
+  score = 0; qcm1Done = 0; qcm2Done = 0;
+  drag1Filled = [null, null, null, null]; drag2Filled = [null, null, null, null];
+  document.getElementById('score-display').textContent = '0';
+  document.querySelectorAll('.lecon-block').forEach(function (b, i) { if (i > 0) b.classList.remove('revealed'); });
+  document.querySelectorAll('.btn-suivant').forEach(function (b) { b.classList.remove('show'); });
+  document.querySelectorAll('.word-chip').forEach(function (c) { c.classList.remove('used'); });
+  ['pool1', 'pool2'].forEach(function (id) { document.getElementById(id).style.pointerEvents = ''; });
+  document.querySelectorAll('.drop-zone').forEach(function (z) { z.textContent = ''; z.className = 'drop-zone'; });
+  document.querySelectorAll('.btn-verifier').forEach(function (b) { b.disabled = true; });
+  document.querySelectorAll('.ex-feedback, .qcm-feedback').forEach(function (f) { f.className = f.className.replace(/show.*/g, ''); f.innerHTML = ''; });
+  document.querySelectorAll('.typing-input').forEach(function (inp) { inp.value = ''; inp.className = 'typing-input'; inp.readOnly = false; });
+  ['star1', 'star2', 'star3'].forEach(function (id) { document.getElementById(id).classList.remove('earned'); });
+  document.getElementById('rappel-box').classList.remove('open');
+  document.getElementById('rappel-arrow').textContent = '▼';
+  goToPhase('lecon', 0);
+}
+
+</script>
+</body>
+</html>
