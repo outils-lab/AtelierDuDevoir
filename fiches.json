@@ -1,30 +1,74 @@
 {
   "6-9ans": [
     {
-  "id": "ce2-francais-present-indicatif",
-  "titre": "Le présent de l'indicatif",
-  "sous_titre": "1er groupe + être, avoir, aller, faire",
-  "matiere": "Français",
-  "niveau": "CE2",
-  "emoji": "📝",
-  "description": "Apprends à conjuguer les verbes du 1er groupe et les verbes irréguliers au présent avec des exercices interactifs et un bilan gamifié.",
-  "fichier": "fiches/fiche_present_CE2_v2.html",
-  "nouveau": true,
-  "difficulte": 2,
-  "duree": "20 min"
-}
+      "id": "ce2-francais-present-indicatif",
+      "titre": "Le présent de l'indicatif",
+      "sous_titre": "1er groupe + être, avoir, aller, faire",
+      "matiere": "Français",
+      "categorie": "Conjugaison",
+      "niveau": "CE2",
+      "emoji": "🔄",
+      "description": "Apprends à conjuguer les verbes du 1er groupe et les verbes irréguliers avec des exercices interactifs.",
+      "fichier": "fiches/fiche_present_CE2_v5.html",
+      "nouveau": true,
+      "difficulte": 2,
+      "duree": "25 min"
+    },
+    {
+      "id": "ce2-dictee-mots-nature",
+      "titre": "Dictée de mots — La nature au printemps",
+      "sous_titre": "6 mots à retenir et à écrire",
+      "matiere": "Français",
+      "categorie": "Dictées mots",
+      "niveau": "CE2",
+      "emoji": "🎙️",
+      "description": "Apprends 6 mots sur la nature, écoute-les et écris-les. Correction immédiate !",
+      "fichier": "fiches/dictee_TYPE1_mots_CE2.html",
+      "nouveau": true,
+      "difficulte": 2,
+      "duree": "15 min"
+    },
+    {
+      "id": "ce2-dictee-phrases-present",
+      "titre": "Dictée — Le présent de l'indicatif",
+      "sous_titre": "5 phrases à écouter et à écrire",
+      "matiere": "Français",
+      "categorie": "Dictées phrases",
+      "niveau": "CE2",
+      "emoji": "🎙️",
+      "description": "Écoute 5 phrases sur le présent de l'indicatif et écris-les. Correction détaillée mot par mot.",
+      "fichier": "fiches/dictee_TYPE2_phrases_CE2.html",
+      "nouveau": true,
+      "difficulte": 2,
+      "duree": "15 min"
+    }
   ],
   "9-12ans": [
     {
       "id": "cm2-sciences-electricite",
-      "titre": "L'électricité",
-      "sous_titre": "Circuits simples et composants",
+      "titre": "L'électricité : circuits simples",
+      "sous_titre": "Circuits, conducteurs et isolants",
       "matiere": "Sciences",
+      "categorie": "Énergie",
       "niveau": "CM2",
       "emoji": "⚡",
       "description": "Découvre les circuits électriques, les conducteurs, les isolants et construis tes propres schémas.",
       "fichier": "fiches/fiche_interactive_electricite_CM2.html",
       "nouveau": false,
+      "difficulte": 2,
+      "duree": "25 min"
+    },
+    {
+      "id": "cm1-francais-groupe-nominal",
+      "titre": "Le groupe nominal : noyau et expansions",
+      "sous_titre": "Trouver le noyau et ses expansions",
+      "matiere": "Français",
+      "categorie": "Grammaire",
+      "niveau": "CM1",
+      "emoji": "📐",
+      "description": "Apprends à repérer le noyau du groupe nominal et ses expansions : adjectif, CDN, proposition relative.",
+      "fichier": "fiches/fiche_G301_groupe_nominal_CM1.html",
+      "nouveau": true,
       "difficulte": 2,
       "duree": "25 min"
     }
