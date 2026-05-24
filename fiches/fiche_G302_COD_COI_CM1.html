@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>COD vs COI – CM1 | L'Atelier du Devoir</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sky:#4FBDDF;--sky-pale:#E8F7FC;--sky-deep:#2fa8cc;
+  --yellow:#FFD93D;--yellow-deep:#F7B731;--yellow-pale:#FFF8E1;
+  --mint:#6BCFB0;--mint-pale:#E8FFF7;--mint-deep:#4db896;
+  --coral:#FF8A65;--coral-pale:#FFF0EB;
+  --violet:#9B8AFF;--violet-pale:#F0EEFF;
+  --cod:#4FBDDF;--cod-pale:#E8F7FC;
+  --coi:#FF8A65;--coi-pale:#FFF0EB;
+  --text:#2C3E50;--text-light:#7F8C8D;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Nunito',sans-serif;background:#f0fbff;color:var(--text);font-size:16px;line-height:1.6;}
+
+/* PRINT BAR */
+.print-bar{position:fixed;right:16px;top:50%;transform:translateY(-50%);z-index:200;display:flex;flex-direction:column;gap:8px;}
+.print-btn{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.78rem;border:none;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.18);white-space:nowrap;transition:all .25s;}
+.print-btn-lecon{background:var(--sky);color:white;}
+.print-btn-lecon:hover{background:var(--sky-deep);transform:scale(1.05);}
+.print-btn-eval{background:var(--coral);color:white;}
+.print-btn-eval:hover{background:#e8704a;transform:scale(1.05);}
+@media(max-width:600px){.print-bar{right:6px;}.print-btn{font-size:0;width:40px;height:40px;padding:0;justify-content:center;}.print-btn .lbl{display:none;}.print-btn .ico{font-size:1.2rem;}}
+
+/* HEADER */
+.header{background:white;border-bottom:3px solid var(--sky-pale);position:sticky;top:0;z-index:100;box-shadow:0 4px 20px rgba(79,189,223,.12);}
+.header-top{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;}
+.logo{font-family:'Fredoka One',cursive;font-size:1.2rem;color:var(--sky);text-decoration:none;}
+.score-badge{background:var(--yellow);font-weight:900;font-size:.9rem;padding:6px 14px;border-radius:50px;display:flex;align-items:center;gap:4px;}
+.steps-wrap{padding:0 20px 8px;}
+.steps{display:flex;gap:4px;}
+.step{flex:1;height:7px;border-radius:50px;background:var(--sky-pale);transition:all .4s;}
+.step.done{background:var(--mint);}.step.active{background:var(--sky);transform:scaleY(1.3);}
+.steps-labels{display:flex;gap:4px;padding-top:3px;}
+.step-lbl{flex:1;font-size:.52rem;font-weight:800;color:var(--text-light);text-align:center;line-height:1.2;}
+
+.main{max-width:760px;margin:0 auto;padding:24px 16px 100px;}
+.phase{display:none;}.phase.active{display:block;}
+
+/* ACCROCHE */
+.accroche{background:linear-gradient(135deg,#daf6ff,#fff0eb);border-radius:24px;padding:22px 26px;margin-bottom:20px;display:flex;gap:18px;align-items:center;}
+.accroche-mascot{font-size:3rem;flex-shrink:0;animation:float 3s ease-in-out infinite;}
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+.accroche-text h1{font-family:'Fredoka One',cursive;font-size:1.5rem;color:var(--sky);margin-bottom:5px;}
+.accroche-text p{color:var(--text-light);font-size:.9rem;}
+.meta-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;}
+.meta-tag{background:white;border-radius:50px;padding:4px 12px;font-size:.74rem;font-weight:800;color:var(--text-light);}
+
+/* LEÇON */
+.lecon-card{background:white;border-radius:24px;padding:22px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);}
+.lecon-card h2{font-family:'Fredoka One',cursive;font-size:1.3rem;color:var(--sky);margin-bottom:14px;}
+.lecon-block{display:none;}.lecon-block.revealed{display:block;}
+.lecon-subtitle{font-family:'Fredoka One',cursive;font-size:1.1rem;color:var(--sky-deep);margin-bottom:12px;}
+.sep{margin:20px 0;border:none;border-top:2px solid var(--sky-pale);}
+
+/* COMPARAISON COD / COI */
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
+@media(max-width:480px){.compare-grid{grid-template-columns:1fr;}}
+.compare-card{border-radius:16px;padding:16px 18px;}
+.compare-card.cod{background:var(--cod-pale);border:2px solid var(--cod);}
+.compare-card.coi{background:var(--coi-pale);border:2px solid var(--coi);}
+.compare-card h4{font-family:'Fredoka One',cursive;font-size:1.1rem;margin-bottom:8px;}
+.compare-card.cod h4{color:var(--cod);}
+.compare-card.coi h4{color:var(--coi);}
+.compare-card .question{font-size:.88rem;font-weight:800;margin-bottom:6px;}
+.compare-card .exemple{background:white;border-radius:10px;padding:8px 12px;font-size:.86rem;font-weight:700;margin-bottom:6px;}
+.compare-card .rule{font-size:.82rem;color:var(--text-light);}
+
+/* ASTUCE */
+.astuce{background:var(--yellow-pale);border-left:4px solid var(--yellow-deep);border-radius:0 12px 12px 0;padding:12px 16px;margin-top:12px;font-size:.88rem;}
+.astuce strong{color:var(--yellow-deep);}
+
+/* PHRASE ANNOTÉE */
+.phrase-annot{background:var(--sky-pale);border-radius:14px;padding:14px 18px;margin-bottom:12px;font-size:1.05rem;font-weight:700;line-height:2.4;}
+.tag-cod{background:var(--cod);color:white;border-radius:6px;padding:2px 8px;margin:0 2px;font-size:.78rem;font-weight:900;vertical-align:super;}
+.tag-coi{background:var(--coi);color:white;border-radius:6px;padding:2px 8px;margin:0 2px;font-size:.78rem;font-weight:900;vertical-align:super;}
+.hl-cod{background:var(--cod-pale);color:var(--sky-deep);border-radius:6px;padding:2px 8px;margin:0 2px;border-bottom:3px solid var(--cod);}
+.hl-coi{background:var(--coi-pale);color:var(--coi);border-radius:6px;padding:2px 8px;margin:0 2px;border-bottom:3px solid var(--coi);}
+
+/* TRICK BOX */
+.trick-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;}
+.trick-box{border-radius:14px;padding:14px 16px;text-align:center;}
+.trick-box.cod{background:var(--cod-pale);border:2px solid var(--cod);}
+.trick-box.coi{background:var(--coi-pale);border:2px solid var(--coi);}
+.trick-emoji{font-size:2rem;display:block;margin-bottom:6px;}
+.trick-title{font-weight:900;font-size:.9rem;margin-bottom:4px;}
+.trick-box.cod .trick-title{color:var(--sky-deep);}
+.trick-box.coi .trick-title{color:var(--coi);}
+.trick-tip{font-size:.8rem;color:var(--text-light);}
+
+/* BTN COMPRIS */
+.btn-compris{margin-top:20px;padding:14px 30px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.95rem;background:linear-gradient(135deg,var(--mint),var(--sky));color:white;border:none;cursor:pointer;box-shadow:0 4px 18px rgba(107,207,176,.35);transition:all .25s;display:inline-flex;align-items:center;gap:10px;}
+.btn-compris:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(107,207,176,.45);}
+.btn-compris:disabled{opacity:.5;cursor:default;transform:none;}
+
+/* MASCOT MSG */
+.mascot-msg{background:white;border-radius:24px;padding:14px 18px;margin:14px 0;display:flex;align-items:flex-start;gap:12px;box-shadow:0 4px 16px rgba(0,0,0,.06);}
+.mascot-msg .emo{font-size:2rem;flex-shrink:0;}
+.mascot-msg p{font-size:.9rem;color:var(--text-light);}
+
+/* EX HEADER */
+.ex-num{display:inline-block;background:var(--sky);color:white;font-weight:900;font-size:.74rem;padding:3px 10px;border-radius:50px;margin-bottom:8px;}
+.ex-header h2{font-family:'Fredoka One',cursive;font-size:1.25rem;margin-bottom:4px;}
+.ex-header p{color:var(--text-light);font-size:.86rem;margin-bottom:14px;}
+
+/* QCM */
+.qcm-question{background:white;border-radius:24px;padding:22px;box-shadow:0 4px 20px rgba(0,0,0,.06);margin-bottom:14px;}
+.qcm-question.answered{pointer-events:none;}
+.qcm-sentence{font-size:.96rem;font-weight:700;margin-bottom:14px;line-height:1.8;background:var(--sky-pale);border-radius:12px;padding:12px 14px;}
+.qhl{color:#c47a00;font-weight:900;background:var(--yellow-pale);border-radius:6px;padding:1px 6px;}
+.qhl-coral{color:var(--coi);font-weight:900;background:var(--coi-pale);border-radius:6px;padding:1px 6px;text-decoration:underline;}
+.qcm-options{display:flex;flex-direction:column;gap:9px;}
+.qcm-opt{padding:11px 16px;border-radius:12px;border:2.5px solid var(--sky-pale);background:white;font-family:'Nunito',sans-serif;font-weight:700;font-size:.9rem;cursor:pointer;text-align:left;transition:all .2s;}
+.qcm-opt:hover{border-color:var(--sky);background:var(--sky-pale);}
+.qcm-opt.correct{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.qcm-opt.wrong{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
+.qcm-opt.reveal{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.qcm-feedback{margin-top:12px;padding:11px 14px;border-radius:12px;font-size:.86rem;font-weight:700;display:none;}
+.qcm-feedback.show{display:flex;align-items:flex-start;gap:10px;}
+.qcm-feedback.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.qcm-feedback.ko{background:var(--coral-pale);color:#c0392b;}
+.btn-suivant{margin-top:14px;padding:11px 22px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.88rem;background:var(--sky);color:white;border:none;cursor:pointer;display:none;align-items:center;gap:8px;transition:all .2s;}
+.btn-suivant.show{display:inline-flex;}
+
+/* DRAG */
+.bank-area{background:white;border-radius:24px;padding:18px 22px;margin-bottom:18px;box-shadow:0 4px 20px rgba(0,0,0,.06);}
+.bank-label{font-weight:800;margin-bottom:10px;font-size:.9rem;}
+.word-chips{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:16px;min-height:50px;padding:10px;background:var(--sky-pale);border-radius:12px;}
+.word-chip{padding:10px 18px;border-radius:50px;border:2.5px solid var(--sky);background:white;font-weight:800;font-size:.88rem;cursor:grab;color:var(--sky-deep);transition:all .2s;user-select:none;-webkit-user-select:none;}
+.word-chip.used{opacity:.22;pointer-events:none;}
+.drop-sentences{display:flex;flex-direction:column;gap:11px;}
+.drop-row{background:var(--sky-pale);border-radius:14px;padding:13px 16px;display:flex;align-items:center;flex-wrap:wrap;gap:8px;font-size:.97rem;font-weight:600;}
+.drop-zone{display:inline-flex;align-items:center;justify-content:center;min-width:110px;height:36px;border:2.5px dashed var(--sky);border-radius:10px;background:white;color:var(--sky-deep);font-weight:900;font-size:.9rem;padding:0 10px;transition:all .25s;cursor:pointer;}
+.drop-zone.drag-over{border-color:var(--sky-deep);background:var(--sky-pale);transform:scale(1.05);border-style:solid;}
+.drop-zone.filled{border-style:solid;border-color:var(--sky-deep);}
+.drop-zone.correct{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);cursor:default;border-style:solid;}
+.drop-zone.wrong{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);border-style:solid;font-size:.78rem;}
+.btn-verifier{margin-top:16px;padding:11px 24px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.9rem;background:linear-gradient(135deg,var(--sky),var(--mint));color:white;border:none;cursor:pointer;transition:all .2s;}
+.btn-verifier:disabled{opacity:.45;cursor:not-allowed;}
+.ex-feedback{margin-top:12px;padding:12px 15px;border-radius:14px;font-size:.86rem;font-weight:700;display:none;}
+.ex-feedback.show{display:block;}.ex-feedback.ok{background:var(--mint-pale);color:var(--mint-deep);}.ex-feedback.ko{background:var(--coral-pale);color:#c0392b;}
+
+/* TYPING */
+.typing-rows{display:flex;flex-direction:column;gap:14px;}
+.typing-card{background:var(--sky-pale);border-radius:14px;padding:14px 18px;display:flex;flex-direction:column;gap:10px;}
+.typing-gn{font-size:1rem;color:var(--text);line-height:1.6;}
+.typing-question{display:flex;align-items:center;gap:10px;font-size:.92rem;font-weight:700;color:var(--text-light);}
+.typing-input{border:2.5px solid var(--sky);border-radius:10px;background:white;padding:7px 12px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.95rem;color:var(--sky-deep);width:140px;outline:none;transition:border-color .2s;}
+.typing-input:focus{border-color:var(--sky-deep);}
+.typing-input.correct{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.typing-input.wrong{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
+
+/* BILAN */
+.bilan-card{background:white;border-radius:24px;padding:30px 26px;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,.08);}
+.bilan-mascot{font-size:4rem;margin-bottom:12px;display:block;animation:bigFloat 2s ease-in-out infinite;}
+@keyframes bigFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-12px);}}
+.bilan-title{font-family:'Fredoka One',cursive;font-size:2rem;margin-bottom:8px;}
+.bilan-msg{color:var(--text-light);font-size:1rem;margin-bottom:22px;}
+.stars-row{display:flex;justify-content:center;gap:12px;margin-bottom:22px;}
+.star-big{font-size:3rem;filter:grayscale(1);transition:all .5s;}
+.star-big.earned{filter:none;animation:starPop .5s ease both;}
+@keyframes starPop{0%{transform:scale(0);}60%{transform:scale(1.3);}100%{transform:scale(1);}}
+.score-circle{width:110px;height:110px;border-radius:50%;background:linear-gradient(135deg,var(--sky),var(--mint));display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 22px;color:white;}
+.score-num{font-family:'Fredoka One',cursive;font-size:2rem;line-height:1;}
+.memo-card{background:linear-gradient(135deg,var(--sky-pale),var(--coi-pale));border-radius:24px;padding:18px 22px;margin:20px 0;text-align:left;border:2px solid rgba(79,189,223,.2);}
+.memo-card h3{font-family:'Fredoka One',cursive;font-size:1.05rem;color:var(--sky-deep);margin-bottom:11px;text-align:center;}
+.memo-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media(max-width:480px){.memo-grid{grid-template-columns:1fr;}}
+.memo-item{background:white;border-radius:10px;padding:10px 12px;font-size:.82rem;}
+.memo-item strong{display:block;margin-bottom:4px;font-size:.85rem;}
+.memo-item.cod strong{color:var(--sky-deep);}
+.memo-item.coi strong{color:var(--coi);}
+.bilan-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:18px;}
+.btn-act{padding:12px 22px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.88rem;cursor:pointer;border:none;transition:all .2s;}
+.btn-act.sky{background:var(--sky);color:white;}.btn-act.sky-pale{background:var(--sky-pale);color:var(--sky-deep);border:2px solid var(--sky);}
+.confetti-piece{position:fixed;border-radius:2px;top:-20px;animation:fall linear both;pointer-events:none;z-index:9999;}
+@keyframes fall{0%{transform:translateY(0) rotate(0deg);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
+
+/* PRINT */
+.print-lecon-content,.print-eval-content{display:none;}
+@media print{
+  .header,.print-bar,.accroche,.phase,.confetti-piece{display:none!important;}
+  body{background:white;font-size:11pt;}@page{margin:14mm;}
+  body.print-mode-lecon .print-lecon-content{display:block!important;}
+  body.print-mode-eval .print-eval-content{display:block!important;}
+  .ph{display:flex;align-items:center;justify-content:space-between;border-bottom:2pt solid #4FBDDF;padding-bottom:7pt;margin-bottom:14pt;}
+  .pt{font-family:'Fredoka One',cursive;font-size:16pt;color:#4FBDDF;}.pm{font-size:8pt;color:#7F8C8D;}
+  .ps{margin-bottom:12pt;page-break-inside:avoid;}
+  .pst{font-size:11pt;font-weight:900;color:#2C3E50;border-left:4pt solid #4FBDDF;padding-left:8pt;margin-bottom:7pt;}
+  .pcmp{display:grid;grid-template-columns:1fr 1fr;gap:8pt;margin-bottom:10pt;}
+  .pcod{background:#E8F7FC;border:1pt solid #4FBDDF;border-radius:5pt;padding:8pt;}
+  .pcoi{background:#FFF0EB;border:1pt solid #FF8A65;border-radius:5pt;padding:8pt;}
+  .pcod h4{color:#2fa8cc;font-size:10pt;margin-bottom:5pt;}.pcoi h4{color:#FF8A65;font-size:10pt;margin-bottom:5pt;}
+  .pcod p,.pcoi p{font-size:8.5pt;color:#7F8C8D;margin-bottom:4pt;}
+  .pcod .ex,.pcoi .ex{background:white;border-radius:3pt;padding:3pt 7pt;font-size:8pt;font-weight:700;display:inline-block;}
+  .pex-num{background:#4FBDDF;color:white;font-weight:900;font-size:7pt;padding:2pt 8pt;border-radius:20pt;display:inline-block;margin-bottom:4pt;}
+  .pphr{font-size:10.5pt;margin-bottom:6pt;display:flex;align-items:center;flex-wrap:wrap;gap:5pt;}
+  .pblk{display:inline-block;min-width:65pt;border-bottom:1.5pt solid #2C3E50;height:12pt;margin:0 3pt;}
+  .popts{display:flex;gap:8pt;flex-wrap:wrap;margin:3pt 0 7pt;}
+  .popt{display:flex;align-items:center;gap:3pt;font-size:9.5pt;}
+  .pcb{width:10pt;height:10pt;border:1.5pt solid #2C3E50;border-radius:2pt;display:inline-block;}
+  .pmemo{background:linear-gradient(135deg,#E8F7FC,#FFF0EB);border-radius:7pt;padding:10pt;margin-top:10pt;border:1pt solid #4FBDDF;}
+  .pmemo-t{font-weight:900;font-size:10pt;color:#2fa8cc;text-align:center;margin-bottom:7pt;}
+  .pmemo-g{display:grid;grid-template-columns:1fr 1fr;gap:7pt;}
+  .pmemo-i{background:white;border-radius:4pt;padding:6pt 8pt;font-size:8pt;}
+  .pmemo-i strong{display:block;margin-bottom:3pt;font-size:8.5pt;}
+  .pmemo-i.cod strong{color:#2fa8cc;}.pmemo-i.coi strong{color:#FF8A65;}
+  .pastuce{background:#FFF8E1;border-left:3pt solid #F7B731;padding:5pt 9pt;border-radius:0 5pt 5pt 0;font-size:8.5pt;margin-top:6pt;}
+  .pscor{border:1pt solid #DDD;border-radius:5pt;margin-top:9pt;padding:7pt;}
+  .pscor-t{font-weight:900;font-size:9pt;margin-bottom:5pt;}
+  .pscor-r{display:flex;justify-content:space-between;padding:2pt 0;border-bottom:.5pt solid #EEE;font-size:8.5pt;}
+  .pscor-r.tot{font-weight:900;font-size:10pt;color:#4FBDDF;border:none;}
+  .pcorr{background:#FFF8E1;border-radius:5pt;padding:7pt;margin-top:7pt;font-size:8pt;}
+  .pcorr strong{color:#F7B731;display:block;margin-bottom:3pt;}
+}
+</style>
+</head>
+<body>
+
+<!-- PRINT BAR -->
+<div class="print-bar">
+  <button class="print-btn print-btn-lecon" onclick="printLecon()"><span class="ico">📖</span><span class="lbl"> Imprimer la leçon</span></button>
+  <button class="print-btn print-btn-eval" onclick="printEval()"><span class="ico">📝</span><span class="lbl"> Imprimer les exercices</span></button>
+</div>
+
+<!-- PRINT LEÇON -->
+<div class="print-lecon-content">
+  <div class="ph"><div class="pt">🦉 COD vs COI : les compléments du verbe</div><div class="pm">CM1 · Français · Grammaire · L'Atelier du Devoir</div></div>
+  <div class="ps"><div class="pst">① Le COD — Complément d'Objet Direct</div>
+    <div class="pcmp">
+      <div class="pcod"><h4>🔵 COD</h4><p>Répond à : <strong>Quoi ? / Qui ?</strong></p><p>Pas de préposition entre le verbe et le complément.</p><div class="ex">Je mange <u>une pomme</u>. → mange quoi ? une pomme = COD</div></div>
+      <div class="pcoi"><h4>🟠 COI</h4><p>Répond à : <strong>À qui ? À quoi ? De qui ?</strong></p><p>Il y a une préposition (à, de…) entre le verbe et le complément.</p><div class="ex">Il parle <u>à ses amis</u>. → parle à qui ? à ses amis = COI</div></div>
+    </div>
+    <div class="pastuce">🦉 <strong>Astuce COD :</strong> Remplace le COD par <em>le / la / les</em> : "Je mange <strong>la</strong>" → ça marche = COD !<br>
+    🦉 <strong>Astuce COI :</strong> Remplace le COI par <em>lui / leur</em> : "Il parle <strong>lui</strong>" → ça marche = COI !</div>
+  </div>
+  <div class="ps"><div class="pst">② Exemples complets annotés</div>
+    <div style="font-size:10.5pt;margin-bottom:6pt;">Léa lit <span style="background:#E8F7FC;color:#2fa8cc;border-radius:4pt;padding:1pt 5pt;border-bottom:2pt solid #4FBDDF;"><strong>un roman</strong></span> <span style="font-size:8pt;color:#2fa8cc;">[COD]</span> et parle <span style="background:#FFF0EB;color:#FF8A65;border-radius:4pt;padding:1pt 5pt;border-bottom:2pt solid #FF8A65;"><strong>à sa sœur</strong></span> <span style="font-size:8pt;color:#FF8A65;">[COI]</span> de l'histoire.</div>
+  </div>
+  <div class="ps"><div class="pst">✏️ Entraînement 1 — COD ou COI ?</div>
+    <div class="pphr">Léa mange <span class="pblk"></span>. (une pomme)</div>
+    <div class="popts"><div class="popt"><span class="pcb"></span> COD</div><div class="popt"><span class="pcb"></span> COI</div></div>
+    <div class="pphr">Tom parle <span class="pblk"></span>. (à sa sœur)</div>
+    <div class="popts"><div class="popt"><span class="pcb"></span> COD</div><div class="popt"><span class="pcb"></span> COI</div></div>
+    <div class="pphr">Nous regardons <span class="pblk"></span>. (le film)</div>
+    <div class="popts"><div class="popt"><span class="pcb"></span> COD</div><div class="popt"><span class="pcb"></span> COI</div></div>
+  </div>
+  <div class="ps"><div class="pst">✏️ Entraînement 2 — Identifier le type</div>
+    <div class="pphr">Elle pense <span class="pblk"></span>. (à ses vacances)</div>
+    <div class="popts"><div class="popt"><span class="pcb"></span> COD</div><div class="popt"><span class="pcb"></span> COI</div></div>
+    <div class="pphr">Il lit <span class="pblk"></span>. (un roman)</div>
+    <div class="popts"><div class="popt"><span class="pcb"></span> COD</div><div class="popt"><span class="pcb"></span> COI</div></div>
+    <div class="pphr">Ma mère répond <span class="pblk"></span>. (au professeur)</div>
+    <div class="popts"><div class="popt"><span class="pcb"></span> COD</div><div class="popt"><span class="pcb"></span> COI</div></div>
+  </div>
+  <div class="pmemo"><div class="pmemo-t">🗒️ Mon mémo — COD vs COI</div>
+    <div class="pmemo-g">
+      <div class="pmemo-i cod"><strong>🔵 COD — Direct</strong>Verbe + complément directement.<br>Question : <em>quoi ?</em> ou <em>qui ?</em><br>Remplacement : le / la / les</div>
+      <div class="pmemo-i coi"><strong>🟠 COI — Indirect</strong>Verbe + préposition + complément.<br>Question : <em>à qui ? à quoi ?</em><br>Remplacement : lui / leur</div>
+    </div>
+  </div>
+</div>
+
+<!-- PRINT EXERCICES -->
+<div class="print-eval-content">
+  <div class="ph"><div class="pt">📝 Exercices — COD vs COI</div><div class="pm">CM1 · Français · L'Atelier du Devoir | Nom : _________________________ | Date : ___________</div></div>
+  <div class="ps"><div class="pex-num">EXERCICE 1 — Complète avec le bon verbe (COD)</div>
+    <div class="pastuce" style="margin-bottom:8pt;">🎒 Banque : <strong>mange · voit · dessine · aime</strong></div>
+    <div class="pphr">Chaque matin, elle <span class="pblk"></span> une tartine.</div>
+    <div class="pphr">Le chat <span class="pblk"></span> la souris.</div>
+    <div class="pphr">Lucas <span class="pblk"></span> un dragon dans son cahier.</div>
+    <div class="pphr">Mon chien <span class="pblk"></span> les caresses.</div>
+  </div>
+  <div class="ps"><div class="pex-num">EXERCICE 2 — Complète avec le bon verbe (COI)</div>
+    <div class="pastuce" style="margin-bottom:8pt;">🎒 Banque : <strong>téléphone · pense · répond · rêve</strong></div>
+    <div class="pphr">Elle <span class="pblk"></span> à ses grands-parents chaque dimanche.</div>
+    <div class="pphr">Il <span class="pblk"></span> souvent à ses copains de vacances.</div>
+    <div class="pphr">Le maître <span class="pblk"></span> à la question difficile.</div>
+    <div class="pphr">La nuit, il <span class="pblk"></span> de dragons et d'aventures.</div>
+  </div>
+  <div class="ps"><div class="pex-num">EXERCICE 3 — COD ou COI ?</div>
+    <div class="pphr">Je lis <u>un livre</u> passionnant. → C'est un <span class="pblk"></span></div>
+    <div class="pphr">Elle écrit <u>à sa mamie</u>. → C'est un <span class="pblk"></span></div>
+    <div class="pphr">Nous regardons <u>les étoiles</u>. → C'est un <span class="pblk"></span></div>
+    <div class="pphr">Il obéit <u>à ses parents</u>. → C'est un <span class="pblk"></span></div>
+  </div>
+  <div class="pscor"><div class="pscor-t">📊 Évaluation</div>
+    <div class="pscor-r"><span>Exercice 1 — Verbes COD</span><span>.... / 4</span></div>
+    <div class="pscor-r"><span>Exercice 2 — Verbes COI</span><span>.... / 4</span></div>
+    <div class="pscor-r"><span>Exercice 3 — Identifier COD/COI</span><span>.... / 4</span></div>
+    <div class="pscor-r tot"><span>TOTAL</span><span>.... / 12</span></div>
+  </div>
+  <div class="pcorr"><strong>✅ Corrigé :</strong>Ex.1 : mange · voit · dessine · aime | Ex.2 : téléphone · pense · répond · rêve | Ex.3 : COD · COI · COD · COI</div>
+</div>
+
+<!-- PAGE INTERACTIVE -->
+<header class="header">
+  <div class="header-top">
+    <a href="../9-12ans.html" class="logo">🦉 L'Atelier du Devoir</a>
+    <div class="score-badge">⭐ <span id="score-display">0</span> pts</div>
+  </div>
+  <div class="steps-wrap">
+    <div class="steps">
+      <div class="step active" id="step-0"></div>
+      <div class="step" id="step-1"></div>
+      <div class="step" id="step-2"></div>
+      <div class="step" id="step-3"></div>
+      <div class="step" id="step-4"></div>
+      <div class="step" id="step-5"></div>
+      <div class="step" id="step-6"></div>
+    </div>
+    <div class="steps-labels">
+      <div class="step-lbl">📖 Leçon</div>
+      <div class="step-lbl">✏️ Entraînement 1</div>
+      <div class="step-lbl">✏️ Entraînement 2</div>
+      <div class="step-lbl">🖊️ Exercice 1</div>
+      <div class="step-lbl">🖊️ Exercice 2</div>
+      <div class="step-lbl">⌨️ Exercice 3</div>
+      <div class="step-lbl">⭐ Bilan</div>
+    </div>
+  </div>
+</header>
+
+<main class="main">
+  <div class="accroche">
+    <div class="accroche-mascot">🦉</div>
+    <div class="accroche-text">
+      <h1>COD vs COI</h1>
+      <p>Certains verbes ont besoin d'un complément pour dire quelque chose de complet. Mais ce complément peut être <strong>direct</strong> (COD) ou <strong>indirect</strong> (COI) — et c'est ça qu'on va apprendre à distinguer aujourd'hui !</p>
+      <div class="meta-row">
+        <span class="meta-tag">📚 CM1</span>
+        <span class="meta-tag">⏱️ ~20 min</span>
+        <span class="meta-tag">⭐ 18 pts</span>
+        <span class="meta-tag">🎯 Français — Grammaire</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- LEÇON -->
+  <div class="phase active" id="phase-lecon">
+    <div class="lecon-card">
+      <h2>📖 La leçon</h2>
+
+      <!-- BLOC 0 -->
+      <div class="lecon-block revealed" id="bloc-0">
+        <div class="lecon-subtitle">① Le COD — il répond à "Quoi ?" ou "Qui ?"</div>
+        <div class="compare-grid">
+          <div class="compare-card cod">
+            <h4>🔵 Le COD</h4>
+            <div class="question">❓ La question à poser :</div>
+            <div class="exemple">verbe + <strong>quoi ?</strong> ou <strong>qui ?</strong></div>
+            <div class="rule">Aucune préposition entre le verbe et son complément. Le verbe "attrape" directement l'objet.</div>
+          </div>
+          <div class="compare-card coi">
+            <h4>🟠 Le COI</h4>
+            <div class="question">❓ La question à poser :</div>
+            <div class="exemple">verbe + <strong>à qui ? à quoi ?</strong><br>verbe + <strong>de qui ? de quoi ?</strong></div>
+            <div class="rule">Il y a toujours une préposition (<em>à, de…</em>) entre le verbe et son complément.</div>
+          </div>
+        </div>
+        <div class="astuce">🦉 <strong>Ugo te dit :</strong> Le COD c'est comme attraper une balle à la main directement. Le COI c'est comme donner quelque chose via une préposition, un "intermédiaire" !</div>
+        <button class="btn-compris" onclick="revealBloc(1)">J'ai compris ! → Voir des exemples 📝</button>
+      </div>
+
+      <!-- BLOC 1 -->
+      <div class="lecon-block" id="bloc-1">
+        <hr class="sep">
+        <div class="lecon-subtitle">② Des exemples pour bien comprendre</div>
+        <div class="phrase-annot">
+          Léa lit <span class="hl-cod">un roman</span><span class="tag-cod">COD</span> passionnant.
+        </div>
+        <div style="font-size:.86rem;color:var(--text-light);margin-bottom:14px;">→ lit <strong>quoi ?</strong> un roman. Pas de préposition = COD ✅</div>
+        <div class="phrase-annot">
+          Il parle <span class="hl-coi">à ses amis</span><span class="tag-coi">COI</span> de foot.
+        </div>
+        <div style="font-size:.86rem;color:var(--text-light);margin-bottom:14px;">→ parle <strong>à qui ?</strong> à ses amis. Préposition <em>à</em> = COI ✅</div>
+        <div class="phrase-annot">
+          Elle pense <span class="hl-coi">à ses vacances</span><span class="tag-coi">COI</span> chaque soir.
+        </div>
+        <div style="font-size:.86rem;color:var(--text-light);margin-bottom:14px;">→ pense <strong>à quoi ?</strong> à ses vacances. Préposition <em>à</em> = COI ✅</div>
+        <button class="btn-compris" onclick="revealBloc(2)">Suivant → L'astuce de remplacement 🔄</button>
+      </div>
+
+      <!-- BLOC 2 -->
+      <div class="lecon-block" id="bloc-2">
+        <hr class="sep">
+        <div class="lecon-subtitle">③ L'astuce du remplacement</div>
+        <div class="trick-grid">
+          <div class="trick-box cod">
+            <span class="trick-emoji">🔵</span>
+            <div class="trick-title">Remplace par le / la / les</div>
+            <div class="trick-tip">Je mange <strong>une pomme</strong><br>→ Je <strong>la</strong> mange ✅<br>= COD</div>
+          </div>
+          <div class="trick-box coi">
+            <span class="trick-emoji">🟠</span>
+            <div class="trick-title">Remplace par lui / leur</div>
+            <div class="trick-tip">Je parle <strong>à ma mère</strong><br>→ Je <strong>lui</strong> parle ✅<br>= COI</div>
+          </div>
+        </div>
+        <div class="astuce">💡 <strong>Test rapide :</strong> Si la phrase marche avec <em>le / la / les</em> → COD. Si elle marche avec <em>lui / leur</em> → COI !</div>
+        <button class="btn-compris" onclick="startExercises()" style="background:linear-gradient(135deg,var(--yellow-deep),var(--coral));">✅ Leçon comprise ! Passer aux exercices 🚀</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ENTRAÎNEMENT 1 -->
+  <div class="phase" id="phase-ex1">
+    <div class="mascot-msg"><span class="emo">🦉</span><p><strong>La leçon est terminée !</strong> Regarde bien le groupe souligné dans chaque phrase. C'est un COD ou un COI ?</p></div>
+    <div class="ex-num">ENTRAÎNEMENT 1 / 2</div>
+    <div class="ex-header"><h2>COD ou COI ?</h2><p>Clique sur la bonne réponse pour chaque phrase.</p></div>
+    <div id="qcm1-container"></div>
+    <button class="btn-suivant" id="btn-to-ex2" onclick="goToPhase('ex2',2)">Suite → Entraînement 2 ✏️</button>
+  </div>
+
+  <!-- ENTRAÎNEMENT 2 -->
+  <div class="phase" id="phase-ex2">
+    <div class="mascot-msg"><span class="emo">🦉</span><p><strong>Excellent !</strong> Utilise les deux questions ET le test de remplacement pour identifier le type de complément.</p></div>
+    <div class="ex-num">ENTRAÎNEMENT 2 / 2</div>
+    <div class="ex-header"><h2>Quel type de complément ?</h2><p>Clique sur la bonne description.</p></div>
+    <div id="qcm2-container"></div>
+    <button class="btn-suivant" id="btn-to-drag1" onclick="goToPhase('drag1',3)">Suite → Exercice 1 🖊️</button>
+  </div>
+
+  <!-- EXERCICE 1 : DRAG COD -->
+  <div class="phase" id="phase-drag1">
+    <div class="mascot-msg"><span class="emo">🦉</span><p>Ces phrases ont toutes un <strong>COD</strong>. Glisse le bon verbe pour compléter chaque phrase. Ordre mélangé !</p></div>
+    <div class="ex-num">EXERCICE 1 / 3 — Glisser-déposer</div>
+    <div class="ex-header"><h2>Complète avec le bon verbe</h2><p>Ces verbes construisent tous un COD (sans préposition).</p></div>
+    <div class="bank-area">
+      <div class="bank-label">🎒 Banque de mots (ordre mélangé) :</div>
+      <div class="word-chips" id="pool1">
+        <div class="word-chip" draggable="true" data-word="voit" ondragstart="onDS(event,1)" ontouchstart="onTS(event)" ontouchmove="onTM(event)" ontouchend="onTE(event,1)">voit</div>
+        <div class="word-chip" draggable="true" data-word="aime" ondragstart="onDS(event,1)" ontouchstart="onTS(event)" ontouchmove="onTM(event)" ontouchend="onTE(event,1)">aime</div>
+        <div class="word-chip" draggable="true" data-word="dessine" ondragstart="onDS(event,1)" ontouchstart="onTS(event)" ontouchmove="onTM(event)" ontouchend="onTE(event,1)">dessine</div>
+        <div class="word-chip" draggable="true" data-word="mange" ondragstart="onDS(event,1)" ontouchstart="onTS(event)" ontouchmove="onTM(event)" ontouchend="onTE(event,1)">mange</div>
+      </div>
+      <div class="drop-sentences">
+        <div class="drop-row">Chaque matin, elle <span class="drop-zone" data-bank="1" data-idx="0" ondragover="onDO(event)" ondragleave="onDL(event)" ondrop="onDP(event,1)"></span> une tartine.</div>
+        <div class="drop-row">Le chat <span class="drop-zone" data-bank="1" data-idx="1" ondragover="onDO(event)" ondragleave="onDL(event)" ondrop="onDP(event,1)"></span> la souris.</div>
+        <div class="drop-row">Lucas <span class="drop-zone" data-bank="1" data-idx="2" ondragover="onDO(event)" ondragleave="onDL(event)" ondrop="onDP(event,1)"></span> un dragon dans son cahier.</div>
+        <div class="drop-row">Mon chien <span class="drop-zone" data-bank="1" data-idx="3" ondragover="onDO(event)" ondragleave="onDL(event)" ondrop="onDP(event,1)"></span> les caresses.</div>
+      </div>
+      <button class="btn-verifier" id="btn-vd1" onclick="verifyDrag(1)" disabled>✅ Vérifier mes réponses</button>
+      <div class="ex-feedback" id="fb-d1"></div>
+    </div>
+    <button class="btn-suivant" id="btn-to-drag2" onclick="goToPhase('drag2',4)">Suite → Exercice 2 🖊️</button>
+  </div>
+
+  <!-- EXERCICE 2 : DRAG COI -->
+  <div class="phase" id="phase-drag2">
+    <div class="mascot-msg"><span class="emo">🦉</span><p>Ces phrases ont toutes un <strong>COI</strong>. On voit la préposition <em>à</em> ou <em>de</em> dans les blancs. Glisse le bon verbe !</p></div>
+    <div class="ex-num">EXERCICE 2 / 3 — Glisser-déposer</div>
+    <div class="ex-header"><h2>Complète avec le bon verbe</h2><p>Ces verbes se construisent avec un COI (avec préposition).</p></div>
+    <div class="bank-area">
+      <div class="bank-label">🎒 Banque de mots (ordre mélangé) :</div>
+      <div class="word-chips" id="pool2">
+        <div class="word-chip" draggable="true" data-word="pense" ondragstart="onDS(event,2)" ontouchstart="onTS(event)" ontouchmove="onTM(event)" ontouchend="onTE(event,2)">pense</div>
+        <div class="word-chip" draggable="true" data-word="répond" ondragstart="onDS(event,2)" ontouchstart="onTS(event)" ontouchmove="onTM(event)" ontouchend="onTE(event,2)">répond</div>
+        <div class="word-chip" draggable="true" data-word="téléphone" ondragstart="onDS(event,2)" ontouchstart="onTS(event)" ontouchmove="onTM(event)" ontouchend="onTE(event,2)">téléphone</div>
+        <div class="word-chip" draggable="true" data-word="rêve" ondragstart="onDS(event,2)" ontouchstart="onTS(event)" ontouchmove="onTM(event)" ontouchend="onTE(event,2)">rêve</div>
+      </div>
+      <div class="drop-sentences">
+        <div class="drop-row">Elle <span class="drop-zone" data-bank="2" data-idx="0" ondragover="onDO(event)" ondragleave="onDL(event)" ondrop="onDP(event,2)"></span> à ses grands-parents chaque dimanche.</div>
+        <div class="drop-row">Il <span class="drop-zone" data-bank="2" data-idx="1" ondragover="onDO(event)" ondragleave="onDL(event)" ondrop="onDP(event,2)"></span> souvent à ses copains de vacances.</div>
+        <div class="drop-row">Le maître <span class="drop-zone" data-bank="2" data-idx="2" ondragover="onDO(event)" ondragleave="onDL(event)" ondrop="onDP(event,2)"></span> à la question difficile.</div>
+        <div class="drop-row">La nuit, il <span class="drop-zone" data-bank="2" data-idx="3" ondragover="onDO(event)" ondragleave="onDL(event)" ondrop="onDP(event,2)"></span> de dragons et d'aventures.</div>
+      </div>
+      <button class="btn-verifier" id="btn-vd2" onclick="verifyDrag(2)" disabled>✅ Vérifier mes réponses</button>
+      <div class="ex-feedback" id="fb-d2"></div>
+    </div>
+    <button class="btn-suivant" id="btn-to-typing" onclick="goToPhase('typing',5)">Suite → Exercice 3 ⌨️</button>
+  </div>
+
+  <!-- EXERCICE 3 : TYPING -->
+  <div class="phase" id="phase-typing">
+    <div class="mascot-msg"><span class="emo">🦉</span><p>Dernier exercice ! Le groupe souligné est-il un <strong>COD</strong> ou un <strong>COI</strong> ? Tape ta réponse (COD ou COI).</p></div>
+    <div class="ex-num">EXERCICE 3 / 3 — Écris ta réponse</div>
+    <div class="ex-header"><h2>COD ou COI ?</h2><p>Lis la phrase, identifie le groupe souligné et écris COD ou COI.</p></div>
+    <div class="bank-area">
+      <div class="typing-rows">
+        <div class="typing-card">
+          <div class="typing-gn">📝 Je lis <u>un livre</u> passionnant.</div>
+          <div class="typing-question">
+            <span>C'est un</span>
+            <input class="typing-input" id="tin-0" type="text" placeholder="COD ou COI ?" autocomplete="off" autocorrect="off" spellcheck="false" style="width:140px;text-transform:uppercase;">
+          </div>
+        </div>
+        <div class="typing-card">
+          <div class="typing-gn">📝 Elle écrit <u>à sa mamie</u> tous les dimanches.</div>
+          <div class="typing-question">
+            <span>C'est un</span>
+            <input class="typing-input" id="tin-1" type="text" placeholder="COD ou COI ?" autocomplete="off" autocorrect="off" spellcheck="false" style="width:140px;text-transform:uppercase;">
+          </div>
+        </div>
+        <div class="typing-card">
+          <div class="typing-gn">📝 Nous regardons <u>les étoiles</u>.</div>
+          <div class="typing-question">
+            <span>C'est un</span>
+            <input class="typing-input" id="tin-2" type="text" placeholder="COD ou COI ?" autocomplete="off" autocorrect="off" spellcheck="false" style="width:140px;text-transform:uppercase;">
+          </div>
+        </div>
+        <div class="typing-card">
+          <div class="typing-gn">📝 Il obéit <u>à ses parents</u>.</div>
+          <div class="typing-question">
+            <span>C'est un</span>
+            <input class="typing-input" id="tin-3" type="text" placeholder="COD ou COI ?" autocomplete="off" autocorrect="off" spellcheck="false" style="width:140px;text-transform:uppercase;">
+          </div>
+        </div>
+      </div>
+      <button class="btn-verifier" id="btn-typing" onclick="verifyTyping()" style="margin-top:18px;">✅ Vérifier mes réponses</button>
+      <div class="ex-feedback" id="fb-typing"></div>
+    </div>
+    <button class="btn-suivant" id="btn-to-bilan" onclick="goToPhase('bilan',6)">🌟 Voir mon bilan !</button>
+  </div>
+
+  <!-- BILAN -->
+  <div class="phase" id="phase-bilan">
+    <div class="bilan-card">
+      <span class="bilan-mascot" id="bilan-mascot">🦉</span>
+      <h2 class="bilan-title" id="bilan-title">Super travail !</h2>
+      <p class="bilan-msg" id="bilan-msg"></p>
+      <div class="stars-row">
+        <span class="star-big" id="star1">⭐</span>
+        <span class="star-big" id="star2">⭐</span>
+        <span class="star-big" id="star3">⭐</span>
+      </div>
+      <div class="score-circle"><span class="score-num" id="bilan-score">0</span><span style="font-size:.72rem;opacity:.85;">/ 18 pts</span></div>
+      <div class="memo-card">
+        <h3>🗒️ Mon mémo — COD vs COI</h3>
+        <div class="memo-grid">
+          <div class="memo-item cod"><strong>🔵 COD — Complément d'Objet Direct</strong>Pose la question <em>quoi ?</em> ou <em>qui ?</em><br>Pas de préposition. Remplace par <em>le / la / les</em>.</div>
+          <div class="memo-item coi"><strong>🟠 COI — Complément d'Objet Indirect</strong>Pose la question <em>à qui ? à quoi ?</em><br>Préposition (à, de…). Remplace par <em>lui / leur</em>.</div>
+        </div>
+      </div>
+      <div class="bilan-btns">
+        <button class="btn-act sky-pale" onclick="restartFiche()">🔄 Recommencer</button>
+        <button class="btn-act sky" onclick="location.href='../9-12ans.html'">🏠 Retour aux fiches</button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+// ── IMPRESSION ─────────────────────────────────
+function printLecon() {
+  document.body.classList.remove('print-mode-eval');
+  document.body.classList.add('print-mode-lecon');
+  setTimeout(function() { window.print(); setTimeout(function() { document.body.classList.remove('print-mode-lecon'); }, 600); }, 60);
+}
+function printEval() {
+  document.body.classList.remove('print-mode-lecon');
+  document.body.classList.add('print-mode-eval');
+  setTimeout(function() { window.print(); setTimeout(function() { document.body.classList.remove('print-mode-eval'); }, 600); }, 60);
+}
+
+// ── DONNÉES ─────────────────────────────────────
+var QCM1 = [{"sentence": "Dans la phrase : <span class='qhl'>Léa mange <span class='qhl-coral'>une pomme</span>.</span><br>Le groupe souligné est-il COD ou COI ?", "options": ["COD — complément d'objet direct", "COI — complément d'objet indirect", "Ce n'est ni l'un ni l'autre"], "answer": "COD — complément d'objet direct", "expl": "<strong>une pomme</strong> = COD. Pose la question : mange <strong>quoi ?</strong> → une pomme. Pas de préposition entre le verbe et le complément !"}, {"sentence": "Dans la phrase : <span class='qhl'>Tom parle <span class='qhl-coral'>à sa sœur</span>.</span><br>Le groupe souligné est-il COD ou COI ?", "options": ["COD — complément d'objet direct", "COI — complément d'objet indirect", "Ce n'est ni l'un ni l'autre"], "answer": "COI — complément d'objet indirect", "expl": "<strong>à sa sœur</strong> = COI. Il y a la préposition <strong>à</strong> entre le verbe et le complément. Parle <strong>à qui ?</strong> → à sa sœur."}, {"sentence": "Dans la phrase : <span class='qhl'>Nous regardons <span class='qhl-coral'>le film</span>.</span><br>Le groupe souligné est-il COD ou COI ?", "options": ["COD — complément d'objet direct", "COI — complément d'objet indirect", "Ce n'est ni l'un ni l'autre"], "answer": "COD — complément d'objet direct", "expl": "<strong>le film</strong> = COD. Regardons <strong>quoi ?</strong> → le film. Aucune préposition, le verbe attrape directement son complément !"}];
+var QCM2 = [{"sentence": "Dans la phrase : <span class='qhl'>Elle pense <span class='qhl-coral'>à ses vacances</span>.</span><br>Quel type de complément ?", "options": ["COD — on pose la question Quoi ?", "COI — on pose la question À quoi ?", "CC de lieu"], "answer": "COI — on pose la question À quoi ?", "expl": "<strong>à ses vacances</strong> = COI. La préposition <em>à</em> est bien présente. Pense <strong>à quoi ?</strong> → à ses vacances."}, {"sentence": "Dans la phrase : <span class='qhl'>Il lit <span class='qhl-coral'>un roman</span> passionnant.</span><br>Quel type de complément ?", "options": ["COD — on pose la question Quoi ?", "COI — on pose la question À quoi ?", "Adjectif qualificatif"], "answer": "COD — on pose la question Quoi ?", "expl": "<strong>un roman</strong> = COD. Lit <strong>quoi ?</strong> → un roman. Pas de préposition entre lire et le complément."}, {"sentence": "Dans la phrase : <span class='qhl'>Ma mère répond <span class='qhl-coral'>au professeur</span>.</span><br>Quel type de complément ?", "options": ["COD — on pose la question Qui ?", "COI — on pose la question À qui ?", "Ce n'est pas un complément du verbe"], "answer": "COI — on pose la question À qui ?", "expl": "<strong>au professeur</strong> = COI. <em>au</em> = <em>à le</em> (préposition !). Répond <strong>à qui ?</strong> → au professeur."}];
+var drag1Answers = ["mange", "voit", "dessine", "aime"];
+var drag2Answers = ["téléphone", "pense", "répond", "rêve"];
+var typingAnswers = ["cod", "coi", "cod", "coi"];
+
+// ── ÉTAT ────────────────────────────────────────
+var score = 0, qcm1Done = 0, qcm2Done = 0;
+var drag1Filled = [null,null,null,null];
+var drag2Filled = [null,null,null,null];
+var draggedChip = null, touchChip = null, touchClone = null;
+
+// ── LEÇON ───────────────────────────────────────
+function revealBloc(n) {
+  var bloc = document.getElementById('bloc-'+n);
+  if (!bloc) return;
+  var prev = document.getElementById('bloc-'+(n-1));
+  if (prev) { var b = prev.querySelector('.btn-compris'); if(b){b.textContent='✅ Compris !';b.disabled=true;b.style.opacity='.5';} }
+  bloc.classList.add('revealed');
+  setTimeout(function() {
+    var hH = (document.querySelector('.header')||{offsetHeight:0}).offsetHeight;
+    var rect = bloc.getBoundingClientRect();
+    window.scrollTo({top:window.pageYOffset+rect.top-hH-20,behavior:'smooth'});
+    bloc.style.transition='background .3s'; bloc.style.background='#daf6ff';
+    setTimeout(function(){bloc.style.background='';},800);
+  },50);
+}
+
+// ── NAVIGATION ──────────────────────────────────
+function startExercises() { goToPhase('ex1',1); buildQCM('qcm1-container',QCM1,1); }
+function goToPhase(phase, stepIdx) {
+  document.querySelectorAll('.phase').forEach(function(p){p.classList.remove('active');});
+  document.getElementById('phase-'+phase).classList.add('active');
+  updateSteps(stepIdx);
+  window.scrollTo({top:0,behavior:'smooth'});
+  if (phase==='ex2') buildQCM('qcm2-container',QCM2,2);
+  if (phase==='bilan') showBilan();
+}
+function updateSteps(active) {
+  for(var i=0;i<7;i++) {
+    var s=document.getElementById('step-'+i);
+    s.classList.remove('active','done');
+    if(i<active) s.classList.add('done'); else if(i===active) s.classList.add('active');
+  }
+}
+
+// ── QCM ─────────────────────────────────────────
+function buildQCM(cId, data, exNum) {
+  var c=document.getElementById(cId); c.innerHTML='';
+  data.forEach(function(q,qi) {
+    var div=document.createElement('div');
+    div.className='qcm-question'; div.id='qq-'+exNum+'-'+qi;
+    var optHtml=q.options.map(function(opt) {
+      return '<button class="qcm-opt" data-exnum="'+exNum+'" data-qi="'+qi+'" data-opt="'+encodeURIComponent(opt)+'" data-ans="'+encodeURIComponent(q.answer)+'" onclick="handleQCM(this)">'+opt+'</button>';
+    }).join('');
+    div.innerHTML='<div class="qcm-sentence">'+q.sentence+'</div><div class="qcm-options">'+optHtml+'</div><div class="qcm-feedback" id="qf-'+exNum+'-'+qi+'"></div>';
+    c.appendChild(div);
+  });
+}
+function handleQCM(btn) {
+  var exNum=parseInt(btn.dataset.exnum), qi=parseInt(btn.dataset.qi);
+  var chosen=decodeURIComponent(btn.dataset.opt), correct=decodeURIComponent(btn.dataset.ans);
+  var qDiv=document.getElementById('qq-'+exNum+'-'+qi);
+  if(qDiv.classList.contains('answered')) return;
+  qDiv.classList.add('answered');
+  var opts=qDiv.querySelectorAll('.qcm-opt');
+  var fb=document.getElementById('qf-'+exNum+'-'+qi);
+  var expl=(exNum===1?QCM1:QCM2)[qi].expl;
+  if(chosen===correct) {
+    btn.classList.add('correct'); btn.textContent='✅ '+btn.textContent;
+    fb.className='qcm-feedback show ok'; fb.innerHTML='✅ <span>Bravo ! '+expl+'</span>';
+    score++; document.getElementById('score-display').textContent=score;
+  } else {
+    btn.classList.add('wrong'); btn.textContent='❌ '+btn.textContent;
+    opts.forEach(function(o){ if(decodeURIComponent(o.dataset.opt)===correct){o.classList.add('reveal');o.textContent='✅ '+correct;} });
+    fb.className='qcm-feedback show ko'; fb.innerHTML='💡 <span>Pas encore ! '+expl+'</span>';
+  }
+  if(exNum===1) qcm1Done++; else qcm2Done++;
+  var total=exNum===1?QCM1.length:QCM2.length, done=exNum===1?qcm1Done:qcm2Done;
+  var nextBtn=exNum===1?'btn-to-ex2':'btn-to-drag1';
+  if(done>=total){setTimeout(function(){document.getElementById(nextBtn).classList.add('show');document.getElementById(nextBtn).scrollIntoView({behavior:'smooth',block:'nearest'});},600);}
+}
+
+// ── DRAG MOUSE ──────────────────────────────────
+function onDS(e,bank){draggedChip=e.currentTarget;e.dataTransfer.setData('text/plain',draggedChip.dataset.word);draggedChip.classList.add('dragging');}
+function onDO(e){e.preventDefault();e.currentTarget.classList.add('drag-over');}
+function onDL(e){e.currentTarget.classList.remove('drag-over');}
+function onDP(e,bank){
+  e.preventDefault();
+  var zone=e.currentTarget; zone.classList.remove('drag-over');
+  if(!draggedChip) return;
+  var word=draggedChip.dataset.word, idx=parseInt(zone.dataset.idx);
+  var filled=bank===1?drag1Filled:drag2Filled;
+  if(filled[idx]) returnToPool(filled[idx],bank);
+  filled[idx]=word; zone.textContent=word; zone.classList.add('filled');
+  draggedChip.classList.add('used'); draggedChip.classList.remove('dragging');
+  draggedChip=null; checkDragBtn(bank);
+}
+
+// ── DRAG TOUCH ──────────────────────────────────
+function onTS(e){
+  touchChip=e.currentTarget; var t=e.touches[0];
+  touchClone=touchChip.cloneNode(true);
+  touchClone.style.cssText='position:fixed;z-index:9999;pointer-events:none;opacity:.8;padding:10px 18px;border-radius:50px;border:2.5px solid var(--sky);background:white;font-weight:800;font-size:.9rem;color:var(--sky-deep);';
+  setCP(t.clientX,t.clientY); document.body.appendChild(touchClone);
+}
+function onTM(e){
+  e.preventDefault(); if(!touchClone) return;
+  var t=e.touches[0]; setCP(t.clientX,t.clientY);
+  document.querySelectorAll('.drop-zone').forEach(function(z){z.classList.remove('drag-over');});
+  var el=document.elementFromPoint(t.clientX,t.clientY);
+  while(el&&!el.classList.contains('drop-zone')){el=el.parentElement;}
+  if(el&&el.classList.contains('drop-zone')) el.classList.add('drag-over');
+}
+function onTE(e,bank){
+  if(touchClone){touchClone.remove();touchClone=null;}
+  if(!touchChip) return;
+  var t=e.changedTouches[0];
+  var el=document.elementFromPoint(t.clientX,t.clientY);
+  if(el&&el.classList.contains('drop-zone')){
+    var idx=parseInt(el.dataset.idx), word=touchChip.dataset.word;
+    var filled=bank===1?drag1Filled:drag2Filled;
+    if(filled[idx]) returnToPool(filled[idx],bank);
+    filled[idx]=word; el.textContent=word; el.classList.add('filled'); el.classList.remove('drag-over');
+    touchChip.classList.add('used'); checkDragBtn(bank);
+  }
+  touchChip=null;
+}
+function setCP(x,y){if(touchClone){touchClone.style.left=(x-60)+'px';touchClone.style.top=(y-20)+'px';}}
+function returnToPool(word,bank){
+  document.getElementById('pool'+bank).querySelectorAll('.word-chip').forEach(function(c){if(c.dataset.word===word)c.classList.remove('used');});
+}
+function checkDragBtn(bank){
+  var filled=bank===1?drag1Filled:drag2Filled;
+  document.getElementById('btn-vd'+bank).disabled=!filled.every(function(f){return f!==null;});
+}
+function verifyDrag(bank){
+  var filled=bank===1?drag1Filled:drag2Filled;
+  var answers=bank===1?drag1Answers:drag2Answers;
+  var fb=document.getElementById('fb-d'+bank);
+  var correct=0;
+  var normStr=function(s){return (s||'').normalize('NFC').toLowerCase().replace(/\s+/g,' ').trim();};
+  document.querySelectorAll('[data-bank="'+bank+'"].drop-zone').forEach(function(zone){
+    var idx=parseInt(zone.dataset.idx);
+    zone.classList.remove('filled','drag-over');
+    if(normStr(filled[idx])===normStr(answers[idx])){zone.classList.add('correct');correct++;score++;}
+    else{zone.classList.add('wrong');zone.textContent=(filled[idx]||'?')+' → '+answers[idx];}
+  });
+  document.getElementById('score-display').textContent=score;
+  document.getElementById('btn-vd'+bank).disabled=true;
+  document.getElementById('pool'+bank).style.pointerEvents='none';
+  if(correct===4){fb.className='ex-feedback show ok';fb.innerHTML='✅ Parfait ! Les 4 mots au bon endroit 🎉';}
+  else{fb.className='ex-feedback show ko';fb.innerHTML='💡 '+correct+'/4 bons mots. Les corrections sont en rouge.';}
+  var nextBtn=bank===1?'btn-to-drag2':'btn-to-typing';
+  setTimeout(function(){document.getElementById(nextBtn).classList.add('show');},800);
+}
+
+// ── TYPING ──────────────────────────────────────
+function verifyTyping(){
+  var fb=document.getElementById('fb-typing');
+  var correct=0;
+  typingAnswers.forEach(function(ans,i){
+    var inp=document.getElementById('tin-'+i);
+    var val=inp.value.trim().toLowerCase().replace(/\s/g,'');
+    inp.classList.remove('correct','wrong');
+    if(val===ans.toLowerCase()){inp.classList.add('correct');correct++;score++;}
+    else{inp.classList.add('wrong');inp.value=inp.value+' → '+ans.toUpperCase();}
+    inp.readOnly=true;
+  });
+  document.getElementById('score-display').textContent=score;
+  document.getElementById('btn-typing').disabled=true;
+  if(correct===4){fb.className='ex-feedback show ok';fb.innerHTML='✅ Parfait ! Tu sais distinguer COD et COI 🎉';}
+  else{fb.className='ex-feedback show ko';fb.innerHTML='💡 '+correct+'/4 bonnes réponses. Les corrections sont affichées.';}
+  setTimeout(function(){document.getElementById('btn-to-bilan').classList.add('show');},800);
+}
+
+// ── BILAN ───────────────────────────────────────
+function showBilan(){
+  document.getElementById('bilan-score').textContent=score;
+  var pct=score/18, mascot,title,msg;
+  if(pct>=0.89){mascot='🦉🌟';title='Excellent !';msg='Tu maîtrises parfaitement la distinction COD/COI. Bravo !'}
+  else if(pct>=0.65){mascot='🦉';title='Très bien !';msg='Relis les astuces de remplacement et tu seras au top !'}
+  else{mascot='🦉';title='Continue !';msg='Relis la leçon sur les questions à poser. Tu vas y arriver !'}
+  document.getElementById('bilan-mascot').textContent=mascot;
+  document.getElementById('bilan-title').textContent=title;
+  document.getElementById('bilan-msg').textContent=msg;
+  var seuils=[7,12,16];
+  ['star1','star2','star3'].forEach(function(id,i){
+    var el=document.getElementById(id);
+    if(score>=seuils[i]){(function(elem,delay){setTimeout(function(){elem.classList.add('earned');},delay);})(el,300+i*400);}else{el.style.filter='grayscale(1)';}
+  });
+  if(pct>=0.65) lanceConfetti();
+}
+function lanceConfetti(){
+  var cols=['#4FBDDF','#FFD93D','#6BCFB0','#FF8A65','#9B8AFF'];
+  for(var i=0;i<60;i++){
+    var el=document.createElement('div'); el.className='confetti-piece';
+    el.style.cssText='left:'+Math.random()*100+'vw;background:'+cols[Math.floor(Math.random()*5)]+';animation-duration:'+(1.5+Math.random()*2)+'s;animation-delay:'+Math.random()*1.5+'s;width:'+(7+Math.random()*8)+'px;height:'+(7+Math.random()*8)+'px;border-radius:'+(Math.random()>.5?'50%':'2px')+';';
+    document.body.appendChild(el);
+    setTimeout(function(){if(el.parentNode)el.remove();},4000);
+  }
+}
+function restartFiche(){
+  score=0;qcm1Done=0;qcm2Done=0;
+  drag1Filled=[null,null,null,null];drag2Filled=[null,null,null,null];
+  document.getElementById('score-display').textContent='0';
+  document.querySelectorAll('.lecon-block').forEach(function(b,i){if(i>0)b.classList.remove('revealed');});
+  document.querySelectorAll('.btn-suivant').forEach(function(b){b.classList.remove('show');});
+  document.querySelectorAll('.word-chip').forEach(function(c){c.classList.remove('used');});
+  ['pool1','pool2'].forEach(function(id){var p=document.getElementById(id);if(p)p.style.pointerEvents='';});
+  document.querySelectorAll('.drop-zone').forEach(function(z){z.textContent='';z.className='drop-zone';});
+  document.querySelectorAll('.btn-verifier').forEach(function(b){b.disabled=true;});
+  document.querySelectorAll('.ex-feedback,.qcm-feedback').forEach(function(f){f.className=f.className.replace(/show.*/g,'');f.innerHTML='';});
+  document.querySelectorAll('.typing-input').forEach(function(inp){inp.value='';inp.className='typing-input';inp.readOnly=false;});
+  ['star1','star2','star3'].forEach(function(id){document.getElementById(id).classList.remove('earned');document.getElementById(id).style.filter='';});
+  goToPhase('lecon',0);
+}
+</script>
+</body>
+</html>
