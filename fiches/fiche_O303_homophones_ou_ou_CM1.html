@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>O303 — Homophones : ou / où</title>
+<style>
+  :root {
+    --accent: #b45309;
+    --accent-light: #fef3c7;
+    --accent-mid: #fde68a;
+    --ok: #16a34a;
+    --ok-bg: #dcfce7;
+    --err: #dc2626;
+    --err-bg: #fee2e2;
+    --warn: #d97706;
+    --warn-bg: #fef3c7;
+    --bg: #fffbeb;
+    --card: #ffffff;
+    --text: #78350f;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+    --radius: 14px;
+    --shadow: 0 2px 12px rgba(180,83,9,0.10);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 16px;
+    line-height: 1.6;
+    padding-bottom: 80px;
+  }
+
+  .sticky-header {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--accent); color: white;
+    padding: 10px 20px;
+    display: flex; align-items: center; justify-content: space-between;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15); min-height: 54px;
+  }
+  .sticky-header .titre-court { font-weight: 700; font-size: 1rem; }
+  .sticky-header .score-live { font-size: 0.9rem; opacity: 0.9; }
+
+  .print-btns {
+    position: fixed; bottom: 20px; right: 20px;
+    display: flex; flex-direction: column; gap: 8px; z-index: 200;
+  }
+  .print-btn {
+    background: var(--accent); color: white; border: none;
+    border-radius: 50px; padding: 10px 16px; cursor: pointer;
+    font-size: 0.85rem; font-weight: 600;
+    box-shadow: 0 4px 12px rgba(180,83,9,0.35);
+    display: flex; align-items: center; gap: 6px;
+    transition: transform 0.15s;
+  }
+  .print-btn:hover { transform: translateY(-2px); }
+
+  .main { max-width: 800px; margin: 0 auto; padding: 24px 16px; }
+
+  .accroche {
+    background: var(--accent); color: white;
+    border-radius: var(--radius); padding: 28px 28px 24px;
+    margin-bottom: 24px; position: relative; overflow: hidden;
+  }
+  .accroche::before {
+    content: ''; position: absolute; top: -40px; right: -40px;
+    width: 160px; height: 160px; background: rgba(255,255,255,0.08); border-radius: 50%;
+  }
+  .accroche h1 { font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; }
+  .accroche .sous-titre { font-size: 1rem; opacity: 0.9; margin-bottom: 16px; }
+  .meta-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag { background: rgba(255,255,255,0.2); border-radius: 20px; padding: 4px 12px; font-size: 0.78rem; font-weight: 600; }
+
+  .card {
+    background: var(--card); border-radius: var(--radius);
+    padding: 24px; margin-bottom: 20px;
+    box-shadow: var(--shadow); border: 1.5px solid var(--border);
+  }
+  .card h2 { font-size: 1.1rem; font-weight: 700; color: var(--accent); margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+
+  .lecon-bloc {
+    background: var(--accent-light); border-left: 4px solid var(--accent);
+    border-radius: 0 10px 10px 0; padding: 16px 18px; margin-bottom: 16px;
+  }
+  .lecon-bloc h3 { font-size: 1rem; font-weight: 700; color: var(--accent); margin-bottom: 10px; }
+  .lecon-bloc p { margin-bottom: 8px; color: #78350f; font-size: 0.97rem; }
+
+  .homo-table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 0.95rem; }
+  .homo-table th { background: var(--accent); color: white; padding: 10px 14px; text-align: left; font-weight: 700; }
+  .homo-table th:first-child { border-radius: 8px 0 0 0; }
+  .homo-table th:last-child { border-radius: 0 8px 0 0; }
+  .homo-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); }
+  .homo-table tr:last-child td { border-bottom: none; }
+  .homo-table tr:nth-child(even) td { background: #fffbeb; }
+  .homo-table .mot { font-weight: 800; color: var(--accent); font-size: 1.05rem; }
+  .homo-table .astuce { color: var(--ok); font-weight: 600; font-size: 0.88rem; }
+
+  .astuce-box {
+    background: var(--warn-bg); border: 1.5px solid #fcd34d;
+    border-radius: 10px; padding: 14px 16px; margin: 12px 0;
+    font-size: 0.93rem; color: #92400e;
+  }
+  .astuce-box strong { color: var(--warn); }
+
+  .btn-compris {
+    display: block; margin: 18px auto 0;
+    background: var(--accent); color: white; border: none;
+    border-radius: 50px; padding: 12px 32px;
+    font-size: 1rem; font-weight: 700; cursor: pointer;
+    transition: transform 0.15s; box-shadow: 0 4px 12px rgba(180,83,9,0.3);
+  }
+  .btn-compris:hover { transform: translateY(-2px); }
+
+  .phase { display: none; }
+  .phase.active { display: block; }
+
+  .ugo-bulle {
+    display: flex; align-items: flex-start; gap: 14px;
+    background: var(--accent-light); border: 1.5px solid var(--accent-mid);
+    border-radius: var(--radius); padding: 16px 18px; margin-bottom: 20px;
+  }
+  .ugo-emoji { font-size: 2.2rem; flex-shrink: 0; }
+  .ugo-text { font-size: 0.93rem; color: var(--text); line-height: 1.6; }
+  .ugo-text strong { color: var(--accent); }
+
+  .qcm-question { margin-bottom: 22px; }
+  .qcm-question p { font-weight: 600; margin-bottom: 10px; font-size: 0.97rem; }
+  .qcm-options { display: flex; flex-direction: column; gap: 8px; }
+  .qcm-options button {
+    background: white; border: 2px solid var(--border); border-radius: 10px;
+    padding: 10px 16px; text-align: left; cursor: pointer;
+    font-size: 0.95rem; font-weight: 500; color: var(--text);
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .qcm-options button:hover { border-color: var(--accent); background: var(--accent-light); }
+  .qcm-options button.correct { border-color: var(--ok); background: var(--ok-bg); color: var(--ok); font-weight: 700; pointer-events: none; }
+  .qcm-options button.incorrect { border-color: var(--err); background: var(--err-bg); color: var(--err); pointer-events: none; }
+  .qcm-options button.disabled { pointer-events: none; opacity: 0.5; }
+  .qcm-feedback { display: none; margin-top: 10px; padding: 10px 14px; border-radius: 8px; font-size: 0.9rem; font-weight: 600; }
+  .qcm-feedback.show { display: block; }
+  .qcm-feedback.ok { background: var(--ok-bg); color: var(--ok); }
+  .qcm-feedback.ko { background: var(--err-bg); color: var(--err); }
+
+  .drag-zone { margin-bottom: 22px; }
+  .drag-phrase {
+    background: #fffbeb; border: 2px dashed var(--accent-mid);
+    border-radius: 10px; padding: 14px 16px; margin-bottom: 10px;
+    font-size: 0.97rem; line-height: 2.2;
+  }
+  .drop-target {
+    display: inline-block; min-width: 60px;
+    border-bottom: 3px solid var(--accent); background: white;
+    border-radius: 6px; padding: 2px 8px; margin: 0 4px;
+    text-align: center; font-weight: 700; color: var(--accent);
+    vertical-align: middle; cursor: pointer;
+    font-size: 1rem; min-height: 30px; transition: background 0.15s;
+  }
+  .drop-target.filled { background: var(--accent-light); }
+  .drop-target.correct { background: var(--ok-bg); color: var(--ok); border-color: var(--ok); }
+  .drop-target.incorrect { background: var(--err-bg); color: var(--err); border-color: var(--err); }
+  .word-bank { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+  .word-chip {
+    background: var(--accent); color: white; border-radius: 50px;
+    padding: 6px 16px; cursor: pointer; font-weight: 700; font-size: 0.95rem;
+    user-select: none; transition: opacity 0.15s, transform 0.1s;
+  }
+  .word-chip.chip-on {
+    background: #92400e; outline: 3px solid #fff;
+    transform: scale(1.12); box-shadow: 0 0 0 5px rgba(180,83,9,0.4);
+  }
+  .drag-feedback { display: none; margin-top: 8px; padding: 8px 12px; border-radius: 8px; font-size: 0.88rem; font-weight: 600; }
+  .drag-feedback.show { display: block; }
+  .drag-feedback.ok { background: var(--ok-bg); color: var(--ok); }
+  .drag-feedback.ko { background: var(--err-bg); color: var(--err); }
+
+  .btn-verif {
+    background: #0891b2; color: white; border: none;
+    border-radius: 50px; padding: 10px 28px;
+    font-size: 0.95rem; font-weight: 700; cursor: pointer;
+    margin-top: 8px; transition: transform 0.15s;
+  }
+  .btn-verif:hover { transform: translateY(-1px); }
+  .btn-verif:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .btn-next {
+    display: none; margin: 24px auto 0;
+    background: var(--accent); color: white; border: none;
+    border-radius: 50px; padding: 13px 36px;
+    font-size: 1rem; font-weight: 700; cursor: pointer;
+    box-shadow: 0 4px 12px rgba(180,83,9,0.3); transition: transform 0.15s;
+  }
+  .btn-next:hover { transform: translateY(-2px); }
+
+  .section-label {
+    font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em;
+    color: var(--muted); text-transform: uppercase; margin-bottom: 12px;
+  }
+  .exercice-num {
+    display: inline-block; background: var(--accent); color: white;
+    font-size: 0.75rem; font-weight: 800; border-radius: 50%;
+    width: 24px; height: 24px; line-height: 24px; text-align: center;
+    margin-right: 8px; flex-shrink: 0;
+  }
+
+  #bilan { display: none; }
+  .bilan-card {
+    background: var(--card); border-radius: var(--radius);
+    padding: 32px 24px; text-align: center;
+    box-shadow: var(--shadow); border: 1.5px solid var(--border);
+  }
+  .bilan-card h2 { font-size: 1.4rem; font-weight: 800; color: var(--accent); margin-bottom: 8px; }
+  .bilan-score { font-size: 2.8rem; font-weight: 900; color: var(--accent); margin: 16px 0 8px; }
+  .bilan-stars { font-size: 2rem; margin-bottom: 16px; }
+  .bilan-msg { font-size: 1rem; color: var(--text); margin-bottom: 20px; line-height: 1.6; }
+  .bilan-memo { background: var(--accent-light); border: 1.5px solid var(--accent-mid); border-radius: 10px; padding: 16px; text-align: left; margin: 16px 0; font-size: 0.93rem; }
+  .bilan-memo h3 { font-size: 0.95rem; font-weight: 700; color: var(--accent); margin-bottom: 10px; }
+  .bilan-memo ul { padding-left: 18px; }
+  .bilan-memo li { margin-bottom: 6px; color: #78350f; }
+  .btn-recommencer {
+    background: white; border: 2px solid var(--accent); color: var(--accent);
+    border-radius: 50px; padding: 10px 28px; font-size: 0.95rem;
+    font-weight: 700; cursor: pointer; margin-top: 12px;
+  }
+  .btn-recommencer:hover { background: var(--accent-light); }
+
+  .confetti { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 999; }
+  .confetti-piece {
+    position: absolute; width: 10px; height: 10px; border-radius: 2px;
+    animation: confettiFall linear forwards;
+  }
+  @keyframes confettiFall {
+    0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+  }
+
+  @media print {
+    .sticky-header, .print-btns, .btn-compris, .btn-next, .btn-verif, .btn-recommencer, #bilan, .ugo-bulle { display: none !important; }
+    body { background: white; }
+    .card { box-shadow: none; border: 1px solid #ccc; }
+    .phase { display: block !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="sticky-header">
+  <span class="titre-court">🔀 O303 — ou / où</span>
+  <span class="score-live" id="scoreLive">Score : 0 / 19</span>
+</div>
+
+<div class="print-btns">
+  <button class="print-btn" onclick="imprimerLecon()">📖 Leçon</button>
+  <button class="print-btn" onclick="imprimerExos()">📝 Exercices</button>
+</div>
+
+<div class="main">
+
+  <div class="accroche">
+    <h1>🔀 ou · où</h1>
+    <p class="sous-titre">Un seul accent les sépare… mais ils n'ont pas du tout le même sens !</p>
+    <div class="meta-tags">
+      <span class="tag">📚 CM1</span>
+      <span class="tag">✍️ Orthographe</span>
+      <span class="tag">⏱ 20 min</span>
+      <span class="tag">⭐⭐ Difficulté 2/3</span>
+    </div>
+  </div>
+
+  <!-- LEÇON -->
+  <div id="lecon">
+
+    <div class="card phase active" id="lecon-bloc1">
+      <h2>📖 Leçon — Bloc 1 : OU sans accent</h2>
+
+      <div class="lecon-bloc">
+        <h3>🔵 OU — conjonction de coordination</h3>
+        <p><strong>Ou</strong> (sans accent) exprime un <em>choix</em> entre deux possibilités. On peut toujours le remplacer par <strong>"ou bien"</strong>.</p>
+        <p>👉 Astuce : remplace par <strong>"ou bien"</strong>. Si ça fonctionne → <strong>ou</strong> sans accent.</p>
+        <p>Exemples :<br>
+        — <em>Tu veux du lait ou du jus ?</em> → <em>Tu veux du lait ou bien du jus ?</em> ✅<br>
+        — <em>Il viendra lundi ou mardi.</em> → <em>Il viendra lundi ou bien mardi.</em> ✅</p>
+      </div>
+
+      <div class="astuce-box">
+        💡 <strong>Truc :</strong> "Ou bien" fonctionne ? → <strong>ou</strong> sans accent. C'est un mot de choix.
+      </div>
+
+      <button class="btn-compris" onclick="revelerBloc('lecon-bloc2', this)">J'ai compris ✔</button>
+    </div>
+
+    <div class="card phase" id="lecon-bloc2">
+      <h2>📖 Leçon — Bloc 2 : OÙ avec accent</h2>
+
+      <div class="lecon-bloc">
+        <h3>🟠 OÙ — adverbe de lieu ou pronom relatif</h3>
+        <p><strong>Où</strong> (avec accent) indique un <em>lieu</em> ou un <em>moment</em>. Il peut aussi introduire une question. On peut le remplacer par <strong>"là où"</strong> ou <strong>"dans lequel"</strong>.</p>
+        <p>👉 Astuce : si la phrase parle d'un endroit ou d'un moment → <strong>où</strong> avec accent.</p>
+        <p>Exemples :<br>
+        — <em>Je ne sais pas où il est.</em> → lieu ✅<br>
+        — <em>La ville où je vis est belle.</em> → <em>La ville dans laquelle je vis.</em> ✅<br>
+        — <em>Où vas-tu ?</em> → question sur un lieu ✅</p>
+      </div>
+
+      <div class="astuce-box">
+        💡 <strong>Truc :</strong> Ça parle d'un lieu ou d'un moment ? → <strong>où</strong> avec accent. "Ou bien" ne fonctionne pas ? → <strong>où</strong>.
+      </div>
+
+      <button class="btn-compris" onclick="revelerBloc('lecon-bloc3', this)">J'ai compris ✔</button>
+    </div>
+
+    <div class="card phase" id="lecon-bloc3">
+      <h2>📖 Leçon — Bloc 3 : Tableau récapitulatif</h2>
+
+      <table class="homo-table">
+        <tr>
+          <th>Mot</th>
+          <th>Rôle</th>
+          <th>Test de remplacement</th>
+          <th>Exemple</th>
+        </tr>
+        <tr>
+          <td><span class="mot">ou</span><br><small style="color:var(--muted)">conjonction</small></td>
+          <td>Exprime un choix</td>
+          <td class="astuce">→ "ou bien" fonctionne</td>
+          <td><em>Thé ou café ?</em></td>
+        </tr>
+        <tr>
+          <td><span class="mot">où</span><br><small style="color:var(--muted)">adverbe / pronom</small></td>
+          <td>Lieu ou moment</td>
+          <td class="astuce">→ "ou bien" ne fonctionne pas</td>
+          <td><em>Où habites-tu ?</em></td>
+        </tr>
+      </table>
+
+      <div class="astuce-box">
+        💡 <strong>Résumé :</strong> Teste "ou bien". Si ça marche → <strong>ou</strong>. Sinon → <strong>où</strong>.
+      </div>
+
+      <button class="btn-compris" onclick="lancerExercices()">C'est parti pour les exercices ! 🚀</button>
+    </div>
+
+  </div>
+
+  <!-- EXERCICES -->
+  <div id="exercices" style="display:none;">
+
+    <div class="ugo-bulle">
+      <div class="ugo-emoji">🦉</div>
+      <div class="ugo-text">
+        <strong>Ugo dit :</strong> Souviens-toi du test magique : essaie de remplacer par <strong>"ou bien"</strong>. Si ça marche → <strong>ou</strong>. Sinon → <strong>où</strong>. À toi !
+      </div>
+    </div>
+
+    <div class="card phase active" id="ex1">
+      <h2><span class="exercice-num">1</span> QCM — Ou ou où ?</h2>
+      <p class="section-label">Entraînement</p>
+      <div id="qcm1-container"></div>
+      <button class="btn-next" id="btn-ex1-next" onclick="allerPhase('ex2', 'btn-ex1-next')">Exercice suivant →</button>
+    </div>
+
+    <div class="card phase" id="ex2">
+      <h2><span class="exercice-num">2</span> QCM — Applique le test "ou bien"</h2>
+      <p class="section-label">Entraînement</p>
+      <div id="qcm2-container"></div>
+      <button class="btn-next" id="btn-ex2-next" onclick="allerPhase('ex3', 'btn-ex2-next')">Exercice suivant →</button>
+    </div>
+
+    <div class="card phase" id="ex3">
+      <h2><span class="exercice-num">3</span> Choisis le bon mot et place-le dans la phrase</h2>
+      <p class="section-label">① Appuie sur un mot · ② Appuie sur le <strong>?</strong></p>
+      <div id="drag3-container"></div>
+      <button class="btn-next" id="btn-ex3-next" onclick="allerPhase('ex4', 'btn-ex3-next')">Exercice suivant →</button>
+    </div>
+
+    <div class="card phase" id="ex4">
+      <h2><span class="exercice-num">4</span> Choisis le bon mot et place-le dans la phrase</h2>
+      <p class="section-label">① Appuie sur un mot · ② Appuie sur le <strong>?</strong></p>
+      <div id="drag4-container"></div>
+      <button class="btn-next" id="btn-ex4-next" onclick="allerPhase('ex5', 'btn-ex4-next')">Exercice suivant →</button>
+    </div>
+
+    <div class="card phase" id="ex5">
+      <h2><span class="exercice-num">5</span> Écris ou ou où dans chaque phrase</h2>
+      <p class="section-label">Complète avec le bon homophone · Sans aide !</p>
+      <div class="ugo-bulle" style="margin-bottom:16px;">
+        <div class="ugo-emoji">🦉</div>
+        <div class="ugo-text"><strong>Ugo dit :</strong> Lis la phrase, teste "ou bien", puis écris le bon mot.</div>
+      </div>
+      <div id="saisie5-container"></div>
+      <button class="btn-next" id="btn-ex5-next" onclick="showBilan()">Voir mon bilan 🎯</button>
+    </div>
+
+  </div>
+
+  <!-- BILAN -->
+  <div id="bilan">
+    <div id="confetti-container" class="confetti"></div>
+    <div class="bilan-card">
+      <h2>🎯 Bilan de la fiche</h2>
+      <div class="bilan-stars" id="bilanStars"></div>
+      <div class="bilan-score" id="bilanScore"></div>
+      <div class="bilan-msg" id="bilanMsg"></div>
+      <div class="bilan-memo">
+        <h3>📌 À retenir :</h3>
+        <ul>
+          <li><strong>ou</strong> (sans accent) → remplaçable par "ou bien" → exprime un choix</li>
+          <li><strong>où</strong> (avec accent) → indique un lieu ou un moment → "ou bien" ne fonctionne pas</li>
+        </ul>
+      </div>
+      <button class="btn-recommencer" onclick="recommencer()">🔄 Recommencer</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+var score = 0;
+var TOTAL = 19; // 4+4+4+4+3
+var qcm1Done = false, qcm2Done = false;
+var drag3Done = false, drag4Done = false, classify5Done = false;
+
+function shuffle(arr) {
+  var a = arr.slice();
+  for (var i = a.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+  }
+  return a;
+}
+
+function updateScore() {
+  document.getElementById("scoreLive").textContent = "Score : " + score + " / " + TOTAL;
+}
+
+function scrollToEl(el) {
+  var headerH = document.querySelector(".sticky-header").offsetHeight;
+  var top = el.getBoundingClientRect().top + window.scrollY - headerH - 12;
+  window.scrollTo({ top: top, behavior: "smooth" });
+}
+
+function revelerBloc(idBloc, btn) {
+  btn.disabled = true;
+  btn.textContent = "✔ Compris !";
+  var bloc = document.getElementById(idBloc);
+  bloc.classList.add("active");
+  setTimeout(function() { scrollToEl(bloc); }, 150);
+}
+
+function lancerExercices() {
+  document.getElementById("lecon").style.display = "none";
+  document.getElementById("exercices").style.display = "block";
+  buildQCM1(); buildQCM2(); buildDrag3(); buildDrag4(); buildSaisie5();
+  setTimeout(function() { scrollToEl(document.getElementById("exercices")); }, 150);
+}
+
+function allerPhase(idPhase, idBtnNext) {
+  document.getElementById(idBtnNext).style.display = "none";
+  var ph = document.getElementById(idPhase);
+  ph.classList.add("active");
+  setTimeout(function() { scrollToEl(ph); }, 150);
+}
+
+// =============================================
+// QCM
+// =============================================
+var qcm1Expls = {
+  0: "\"ou\" : remplace par \"ou bien\" → lundi ou bien mardi. ✅ Conjonction de choix.",
+  1: "\"où\" : parle d'un lieu → \"ou bien\" ne fonctionne pas. ✅ Adverbe de lieu.",
+  2: "\"ou\" : remplace par \"ou bien\" → du pain ou bien des pâtes. ✅ Conjonction de choix.",
+  3: "\"où\" : question sur un lieu → \"ou bien\" impossible. ✅ Adverbe interrogatif."
+};
+var qcm1Questions = [
+  { phrase: "Il part lundi _____ mardi.", options: ["ou", "où"], correct: "ou", idx: 0 },
+  { phrase: "Je ne sais pas _____ il habite.", options: ["ou", "où"], correct: "où", idx: 1 },
+  { phrase: "Tu veux du pain _____ des pâtes ?", options: ["ou", "où"], correct: "ou", idx: 2 },
+  { phrase: "_____ as-tu mis mes clés ?", options: ["ou", "où"], correct: "où", idx: 3 }
+];
+
+var qcm2Expls = {
+  0: "\"où\" : \"la ville dans laquelle\" → lieu. \"ou bien\" impossible. ✅",
+  1: "\"ou\" : \"ou bien\" → choix entre deux options. ✅",
+  2: "\"où\" : moment précis → \"ou bien\" impossible. ✅",
+  3: "\"ou\" : \"ou bien\" → choix. ✅"
+};
+var qcm2Questions = [
+  { phrase: "La ville _____ je suis né est grande.", options: ["ou", "où"], correct: "où", idx: 0 },
+  { phrase: "Veux-tu venir ce soir _____ demain ?", options: ["ou", "où"], correct: "ou", idx: 1 },
+  { phrase: "Le jour _____ tout a changé était un lundi.", options: ["ou", "où"], correct: "où", idx: 2 },
+  { phrase: "C'est toi _____ moi qui commence ?", options: ["ou", "où"], correct: "ou", idx: 3 }
+];
+
+function buildQCMBlock(questions, explsObj, containerId, onAllDone) {
+  var container = document.getElementById(containerId);
+  container.innerHTML = "";
+  questions.forEach(function(q, qi) {
+    var shuffledOpts = shuffle(q.options);
+    var div = document.createElement("div");
+    div.className = "qcm-question";
+    var p = document.createElement("p");
+    p.innerHTML = "<strong>" + (qi + 1) + ".</strong> " + q.phrase;
+    div.appendChild(p);
+    var optsDiv = document.createElement("div");
+    optsDiv.className = "qcm-options";
+    shuffledOpts.forEach(function(opt) {
+      var btn = document.createElement("button");
+      btn.innerHTML = opt;
+      btn.addEventListener("click", function() {
+        var allBtns = optsDiv.querySelectorAll("button");
+        var isCorrect = (opt === q.correct);
+        allBtns.forEach(function(b) {
+          b.classList.add("disabled");
+          if (b.innerHTML === q.correct) b.classList.add("correct");
+        });
+        if (!isCorrect) { btn.classList.remove("disabled"); btn.classList.add("incorrect"); }
+        var fb = div.querySelector(".qcm-feedback");
+        if (isCorrect) {
+          score++; updateScore();
+          fb.className = "qcm-feedback show ok";
+          fb.textContent = explsObj[q.idx];
+        } else {
+          fb.className = "qcm-feedback show ko";
+          fb.textContent = "Pas encore ! La bonne réponse est \"" + q.correct + "\". " + explsObj[q.idx];
+        }
+        div.dataset.done = "1";
+        var dones = container.querySelectorAll("[data-done='1']");
+        if (dones.length === questions.length) onAllDone();
+      });
+      optsDiv.appendChild(btn);
+    });
+    var fb = document.createElement("div");
+    fb.className = "qcm-feedback";
+    div.appendChild(optsDiv);
+    div.appendChild(fb);
+    container.appendChild(div);
+  });
+}
+
+function buildQCM1() {
+  buildQCMBlock(qcm1Questions, qcm1Expls, "qcm1-container", function() {
+    if (!qcm1Done) { qcm1Done = true; document.getElementById("btn-ex1-next").style.display = "block"; }
+  });
+}
+function buildQCM2() {
+  buildQCMBlock(qcm2Questions, qcm2Expls, "qcm2-container", function() {
+    if (!qcm2Done) { qcm2Done = true; document.getElementById("btn-ex2-next").style.display = "block"; }
+  });
+}
+
+// =============================================
+// TAP-TO-SELECT
+// =============================================
+var _sel = null;
+
+function _selectChip(word, chipEl) {
+  if (_sel) _sel.chipEl.classList.remove("chip-on");
+  _sel = { word: word, chipEl: chipEl };
+  chipEl.classList.add("chip-on");
+}
+
+function _placeOn(drop) {
+  if (!_sel) return false;
+  if (drop.dataset.verified === "1") return false;
+  drop.textContent = _sel.word;
+  drop.dataset.filled = _sel.word;
+  drop.classList.add("filled");
+  drop.classList.remove("correct", "incorrect");
+  _sel.chipEl.classList.remove("chip-on");
+  _sel = null;
+  return true;
+}
+
+// =============================================
+// DONNÉES DRAG
+// =============================================
+var drag3Data = [
+  { id: "d3a", before: "Tu préfères le vélo", after: "la trottinette ?", correct: "ou", bank: ["ou", "où"] },
+  { id: "d3b", before: "Je ne sais pas", after: "j'ai mis mon cahier.", correct: "où", bank: ["ou", "où"] },
+  { id: "d3c", before: "Elle viendra ce soir", after: "demain matin.", correct: "ou", bank: ["ou", "où"] },
+  { id: "d3d", before: "Le parc", after: "nous jouons est grand.", correct: "où", bank: ["ou", "où"] }
+];
+var drag3Expls = {
+  "d3a": "\"ou\" : remplace par \"ou bien\" → le vélo ou bien la trottinette. ✅ Choix.",
+  "d3b": "\"où\" : lieu → \"ou bien\" impossible. ✅",
+  "d3c": "\"ou\" : remplace par \"ou bien\" → ou bien demain. ✅ Choix.",
+  "d3d": "\"où\" : \"le parc dans lequel\" → lieu. ✅"
+};
+
+var drag4Data = [
+  { id: "d4a", before: "Dis-moi", after: "tu vas.", correct: "où", bank: ["ou", "où"] },
+  { id: "d4b", before: "Il peut rester", after: "partir, c'est son choix.", correct: "ou", bank: ["ou", "où"] },
+  { id: "d4c", before: "La maison", after: "il est né est à vendre.", correct: "où", bank: ["ou", "où"] },
+  { id: "d4d", before: "Tu veux du chocolat", after: "de la vanille ?", correct: "ou", bank: ["ou", "où"] }
+];
+var drag4Expls = {
+  "d4a": "\"où\" : lieu → \"ou bien\" impossible. ✅",
+  "d4b": "\"ou\" : remplace par \"ou bien\" → rester ou bien partir. ✅ Choix.",
+  "d4c": "\"où\" : \"la maison dans laquelle\" → lieu. ✅",
+  "d4d": "\"ou\" : remplace par \"ou bien\" → ou bien de la vanille. ✅ Choix."
+};
+
+function buildDragExercise(data, expls, containerId, doneFlagSetter, nextBtnId) {
+  var container = document.getElementById(containerId);
+  container.innerHTML = "";
+  data.forEach(function(item) {
+    var div = document.createElement("div");
+    div.className = "drag-zone";
+    var phraseDiv = document.createElement("div");
+    phraseDiv.className = "drag-phrase";
+    if (item.before) phraseDiv.appendChild(document.createTextNode(item.before + " "));
+    var drop = document.createElement("span");
+    drop.className = "drop-target";
+    drop.dataset.id = item.id;
+    drop.dataset.correct = item.correct;
+    drop.dataset.verified = "0";
+    drop.dataset.filled = "";
+    drop.textContent = "?";
+    drop.addEventListener("click", function() { _placeOn(drop); });
+    phraseDiv.appendChild(drop);
+    if (item.after) phraseDiv.appendChild(document.createTextNode(" " + item.after));
+    div.appendChild(phraseDiv);
+    var bank = document.createElement("div");
+    bank.className = "word-bank";
+    shuffle(item.bank).forEach(function(w) {
+      var chip = document.createElement("span");
+      chip.className = "word-chip";
+      chip.textContent = w;
+      chip.addEventListener("click", function() { _selectChip(w, chip); });
+      bank.appendChild(chip);
+    });
+    div.appendChild(bank);
+    var fb = document.createElement("div");
+    fb.className = "drag-feedback";
+    div.appendChild(fb);
+    var btnV = document.createElement("button");
+    btnV.className = "btn-verif";
+    btnV.textContent = "Vérifier";
+    btnV.addEventListener("click", function() {
+      if (drop.dataset.verified === "1") return;
+      var chosen = drop.dataset.filled;
+      if (!chosen) {
+        fb.className = "drag-feedback show ko";
+        fb.textContent = "Appuie d'abord sur un mot, puis sur le ?";
+        return;
+      }
+      drop.dataset.verified = "1";
+      var isOk = (chosen === item.correct);
+      drop.classList.remove("filled");
+      if (isOk) {
+        score++; updateScore();
+        drop.classList.add("correct");
+        fb.className = "drag-feedback show ok";
+        fb.textContent = "Bravo ! " + expls[item.id];
+      } else {
+        drop.classList.add("incorrect");
+        fb.className = "drag-feedback show ko";
+        fb.textContent = "Pas encore ! La bonne réponse est \"" + item.correct + "\". " + expls[item.id];
+      }
+      this.disabled = true;
+      var allBtns = container.querySelectorAll(".btn-verif");
+      var allDone = true;
+      allBtns.forEach(function(b) { if (!b.disabled) allDone = false; });
+      if (allDone) { doneFlagSetter(); document.getElementById(nextBtnId).style.display = "block"; }
+    });
+    div.appendChild(btnV);
+    container.appendChild(div);
+  });
+}
+
+function buildDrag3() {
+  buildDragExercise(drag3Data, drag3Expls, "drag3-container", function() { drag3Done = true; }, "btn-ex3-next");
+}
+function buildDrag4() {
+  buildDragExercise(drag4Data, drag4Expls, "drag4-container", function() { drag4Done = true; }, "btn-ex4-next");
+}
+
+// =============================================
+// SAISIE — EX 5
+// =============================================
+var saisie5Data = [
+  { before: "Je ne sais pas", after: "tu habites maintenant.", correct: "où",
+    expl: "\"où\" : lieu → \"ou bien\" impossible. Adverbe de lieu." },
+  { before: "Tu veux du thé", after: "du café ?", correct: "ou",
+    expl: "\"ou\" : remplace par \"ou bien\" → du thé ou bien du café. ✅ Choix." },
+  { before: "Le village", after: "je suis né est magnifique.", correct: "où",
+    expl: "\"où\" : \"le village dans lequel\" → lieu. ✅" }
+];
+
+function buildSaisie5() {
+  var container = document.getElementById("saisie5-container");
+  container.innerHTML = "";
+  var allVerified = 0;
+
+  saisie5Data.forEach(function(item, i) {
+    var div = document.createElement("div");
+    div.style.cssText = "margin-bottom:20px;";
+
+    var phraseDiv = document.createElement("div");
+    phraseDiv.style.cssText = "background:#fffbeb;border:2px dashed #fde68a;border-radius:10px;padding:14px 16px;font-size:1rem;line-height:2.2;margin-bottom:8px;";
+    if (item.before) phraseDiv.appendChild(document.createTextNode(item.before + " "));
+
+    var inp = document.createElement("input");
+    inp.type = "text";
+    inp.placeholder = "écris ici…";
+    inp.style.cssText = "border:none;border-bottom:2px solid #b45309;background:transparent;font-size:1rem;font-weight:700;color:#b45309;width:70px;outline:none;padding:0 4px;";
+    phraseDiv.appendChild(inp);
+    if (item.after) phraseDiv.appendChild(document.createTextNode(" " + item.after));
+    div.appendChild(phraseDiv);
+
+    var fb = document.createElement("div");
+    fb.className = "drag-feedback";
+    div.appendChild(fb);
+
+    var btnV = document.createElement("button");
+    btnV.className = "btn-verif";
+    btnV.textContent = "Vérifier";
+    btnV.addEventListener("click", function() {
+      var val = inp.value.trim().toLowerCase();
+      if (!val) { fb.className = "drag-feedback show ko"; fb.textContent = "Écris ta réponse d'abord !"; return; }
+      var isOk = (val === item.correct);
+      inp.disabled = true;
+      this.disabled = true;
+      if (isOk) {
+        score++; updateScore();
+        inp.style.color = "#16a34a";
+        fb.className = "drag-feedback show ok";
+        fb.textContent = "Bravo ! " + item.expl;
+      } else {
+        inp.style.color = "#dc2626";
+        inp.value = item.correct;
+        fb.className = "drag-feedback show ko";
+        fb.textContent = "Pas encore ! La bonne réponse est \"" + item.correct + "\". " + item.expl;
+      }
+      allVerified++;
+      if (allVerified === saisie5Data.length && !classify5Done) {
+        classify5Done = true;
+        document.getElementById("btn-ex5-next").style.display = "block";
+      }
+    });
+    div.appendChild(btnV);
+    container.appendChild(div);
+  });
+}
+
+// =============================================
+// BILAN
+// =============================================
+function showBilan() {
+  document.getElementById("exercices").style.display = "none";
+  document.getElementById("bilan").style.display = "block";
+  scrollToEl(document.getElementById("bilan"));
+  var pct = score / TOTAL;
+  var stars, msg;
+  if (pct >= 0.89) {
+    stars = "⭐⭐⭐"; msg = "Excellent ! Tu distingues parfaitement ou et où. Bravo !";
+    lancerConfettis();
+  } else if (pct >= 0.66) {
+    stars = "⭐⭐"; msg = "Très bien ! Relis le test \"ou bien\" pour consolider.";
+  } else if (pct >= 0.33) {
+    stars = "⭐"; msg = "C'est un bon début ! Relis la leçon et retente.";
+  } else {
+    stars = "💪"; msg = "Continue ! Le test \"ou bien\" va t'aider à chaque fois.";
+  }
+  document.getElementById("bilanStars").textContent = stars;
+  document.getElementById("bilanScore").textContent = score + " / " + TOTAL;
+  document.getElementById("bilanMsg").textContent = msg;
+}
+
+function lancerConfettis() {
+  var container = document.getElementById("confetti-container");
+  var couleurs = ["#b45309", "#fde68a", "#16a34a", "#fbbf24", "#ec4899", "#3b82f6"];
+  for (var i = 0; i < 80; i++) {
+    var p = document.createElement("div");
+    p.className = "confetti-piece";
+    p.style.left = Math.random() * 100 + "vw";
+    p.style.background = couleurs[Math.floor(Math.random() * couleurs.length)];
+    p.style.width = (8 + Math.random() * 8) + "px";
+    p.style.height = (8 + Math.random() * 8) + "px";
+    p.style.animationDuration = (1.5 + Math.random() * 2) + "s";
+    p.style.animationDelay = Math.random() + "s";
+    container.appendChild(p);
+  }
+  setTimeout(function() { container.innerHTML = ""; }, 4000);
+}
+
+function recommencer() {
+  score = 0; updateScore();
+  qcm1Done = false; qcm2Done = false;
+  drag3Done = false; drag4Done = false; classify5Done = false;
+  _sel = null;
+  document.getElementById("bilan").style.display = "none";
+  document.getElementById("lecon").style.display = "block";
+  document.getElementById("exercices").style.display = "none";
+  document.querySelectorAll(".phase").forEach(function(p) { p.classList.remove("active"); });
+  document.getElementById("lecon-bloc1").classList.add("active");
+  document.getElementById("ex1").classList.add("active");
+  document.querySelectorAll(".btn-compris").forEach(function(b) { b.disabled = false; b.textContent = "J'ai compris ✔"; });
+  document.querySelectorAll(".btn-next").forEach(function(b) { b.style.display = "none"; });
+  scrollToEl(document.querySelector(".accroche"));
+}
+
+function imprimerLecon() {
+  document.getElementById("lecon").style.display = "block";
+  document.querySelectorAll("#lecon .phase").forEach(function(p) { p.classList.add("active"); });
+  document.getElementById("exercices").style.display = "none";
+  document.getElementById("bilan").style.display = "none";
+  window.print();
+}
+
+function imprimerExos() {
+  document.getElementById("lecon").style.display = "none";
+  document.getElementById("exercices").style.display = "block";
+  document.querySelectorAll("#exercices .phase").forEach(function(p) { p.classList.add("active"); });
+  document.getElementById("bilan").style.display = "none";
+  window.print();
+  document.getElementById("lecon").style.display = "block";
+  document.getElementById("exercices").style.display = "none";
+}
+
+updateScore();
+</script>
+</body>
+</html>
