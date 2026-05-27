@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>L303 Les niveaux de langue — CM1 | L'Atelier du Devoir</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+:root{--sky:#4FBDDF;--sky-pale:#E8F7FC;--sky-deep:#2fa8cc;--yellow:#FFD93D;--yellow-deep:#F7B731;--yellow-pale:#FFF8E1;--mint:#6BCFB0;--mint-pale:#E8FFF7;--mint-deep:#4db896;--coral:#FF8A65;--coral-pale:#FFF0EB;--acc:#6d28d9;--acc-pale:#ede9fe;--acc-mid:#c4b5fd;--text:#2C3E50;--text-light:#7F8C8D;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Nunito',sans-serif;background:#f5f3ff;color:var(--text);font-size:16px;line-height:1.6;}
+.print-bar{position:fixed;right:16px;top:50%;transform:translateY(-50%);z-index:200;display:flex;flex-direction:column;gap:8px;}
+.print-btn{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.78rem;border:none;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.18);}
+.print-btn-lecon{background:var(--yellow-deep);color:white;}.print-btn-eval{background:var(--coral);color:white;}
+@media(max-width:600px){.print-bar{right:6px;}.print-btn{font-size:0;width:40px;height:40px;padding:0;justify-content:center;}.print-btn span.lbl{display:none;}.print-btn span.ico{font-size:1.2rem;}}
+.header{background:white;border-bottom:3px solid var(--acc-pale);position:sticky;top:0;z-index:100;box-shadow:0 4px 20px rgba(109,40,217,.08);}
+.header-top{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;}
+.logo{font-family:'Fredoka One',cursive;font-size:1.2rem;color:var(--acc);text-decoration:none;}
+.score-badge{background:var(--acc-pale);font-weight:900;font-size:.9rem;padding:6px 14px;border-radius:50px;display:flex;align-items:center;gap:4px;color:var(--acc);}
+.steps-wrap{padding:0 20px 8px;}
+.steps{display:flex;gap:4px;}.step{flex:1;height:7px;border-radius:50px;background:var(--acc-pale);transition:all .4s;}
+.step.done{background:var(--mint);}.step.active{background:var(--acc);transform:scaleY(1.3);}
+.steps-labels{display:flex;gap:4px;padding-top:3px;}
+.step-lbl{flex:1;font-size:.52rem;font-weight:800;color:var(--text-light);text-align:center;line-height:1.2;}
+.main{max-width:760px;margin:0 auto;padding:24px 16px 100px;}
+.phase{display:none;}.phase.active{display:block;}
+.accroche{background:linear-gradient(135deg,#ede9fe,#E8F7FC);border-radius:24px;padding:22px 26px;margin-bottom:20px;display:flex;gap:18px;align-items:center;}
+.accroche-mascot{font-size:3rem;flex-shrink:0;animation:float 3s ease-in-out infinite;}
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+.accroche-text h1{font-family:'Fredoka One',cursive;font-size:1.4rem;color:var(--acc);margin-bottom:5px;}
+.accroche-text p{color:var(--text-light);font-size:.9rem;}
+.meta-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;}
+.meta-tag{background:white;border-radius:50px;padding:4px 12px;font-size:.74rem;font-weight:800;color:var(--text-light);}
+.lecon-card{background:white;border-radius:24px;padding:22px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);}
+.lecon-card h2{font-family:'Fredoka One',cursive;font-size:1.3rem;color:var(--acc);margin-bottom:14px;}
+.lecon-block{display:none;}.lecon-block.revealed{display:block;}
+.lecon-subtitle{font-family:'Fredoka One',cursive;font-size:1.1rem;color:var(--acc);margin-bottom:12px;}
+.sep{margin:20px 0;border:none;border-top:2px solid var(--acc-pale);}
+.acc-box{background:var(--sky-pale);border:2px solid var(--sky);border-radius:16px;padding:15px 18px;margin-bottom:12px;}
+.acc-box h4{font-family:'Fredoka One',cursive;color:var(--sky-deep);margin-bottom:8px;font-size:1rem;}
+.acc-box.fam{background:#fef3c7;border-color:#f59e0b;}
+.acc-box.fam h4{color:#d97706;}
+.acc-box.cou{background:#dbeafe;border-color:#3b82f6;}
+.acc-box.cou h4{color:#1d4ed8;}
+.acc-box.sou{background:var(--acc-pale);border-color:var(--acc);}
+.acc-box.sou h4{color:var(--acc);}
+.niv-table{width:100%;border-collapse:collapse;margin:10px 0;font-size:.88rem;}
+.niv-table th{padding:8px 12px;text-align:left;font-weight:800;}
+.niv-table th:nth-child(1){background:#f59e0b;color:white;border-radius:8px 0 0 0;}
+.niv-table th:nth-child(2){background:#3b82f6;color:white;}
+.niv-table th:nth-child(3){background:var(--acc);color:white;border-radius:0 8px 0 0;}
+.niv-table td{padding:8px 12px;border-bottom:1px solid #e5e7eb;}
+.niv-table tr:last-child td{border-bottom:none;}
+.niv-table tr:nth-child(even) td{background:#fafafa;}
+.phrase-ex{background:white;border-radius:10px;padding:8px 12px;font-size:.92rem;font-weight:700;margin-bottom:6px;line-height:1.8;}
+.hl-fam{background:#fef3c7;color:#d97706;border-radius:6px;padding:2px 8px;border-bottom:3px solid #f59e0b;font-weight:900;margin:0 2px;}
+.hl-cou{background:#dbeafe;color:#1d4ed8;border-radius:6px;padding:2px 8px;border-bottom:3px solid #3b82f6;font-weight:900;margin:0 2px;}
+.hl-sou{background:var(--acc-pale);color:var(--acc);border-radius:6px;padding:2px 8px;border-bottom:3px solid var(--acc);font-weight:900;margin:0 2px;}
+.astuce{background:var(--acc-pale);border-left:4px solid var(--acc);border-radius:0 12px 12px 0;padding:12px 16px;margin-top:12px;font-size:.88rem;}
+.astuce strong{color:var(--acc);}
+.btn-compris{margin-top:20px;padding:14px 30px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.95rem;background:linear-gradient(135deg,var(--acc),var(--sky));color:white;border:none;cursor:pointer;box-shadow:0 4px 18px rgba(109,40,217,.25);transition:all .25s;display:inline-flex;align-items:center;gap:10px;}
+.btn-compris:hover{transform:translateY(-2px);}.btn-compris:disabled{opacity:.5;cursor:default;transform:none;}
+.mascot-msg{background:white;border-radius:24px;padding:14px 18px;margin:14px 0;display:flex;align-items:flex-start;gap:12px;box-shadow:0 4px 16px rgba(0,0,0,.06);}
+.mascot-msg .emo{font-size:2rem;flex-shrink:0;}.mascot-msg p{font-size:.9rem;color:var(--text-light);}
+.ex-num{display:inline-block;background:var(--acc);color:white;font-weight:900;font-size:.74rem;padding:3px 10px;border-radius:50px;margin-bottom:8px;}
+.ex-header h2{font-family:'Fredoka One',cursive;font-size:1.25rem;margin-bottom:4px;}
+.ex-header p{color:var(--text-light);font-size:.86rem;margin-bottom:14px;}
+.qcm-question{background:white;border-radius:24px;padding:22px;box-shadow:0 4px 20px rgba(0,0,0,.06);margin-bottom:14px;}
+.qcm-question.answered{pointer-events:none;}
+.qcm-sentence{font-size:.95rem;font-weight:700;margin-bottom:14px;line-height:1.8;background:var(--acc-pale);border-radius:12px;padding:12px 14px;}
+.qcm-options{display:flex;flex-direction:column;gap:9px;}
+.qcm-opt{padding:11px 16px;border-radius:12px;border:2.5px solid var(--acc-pale);background:white;font-family:'Nunito',sans-serif;font-weight:700;font-size:.88rem;cursor:pointer;text-align:left;transition:all .2s;}
+.qcm-opt:hover{border-color:var(--acc);background:var(--acc-pale);}
+.qcm-opt.correct{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.qcm-opt.wrong{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
+.qcm-opt.reveal{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.qcm-feedback{margin-top:12px;padding:11px 14px;border-radius:12px;font-size:.86rem;font-weight:700;display:none;}
+.qcm-feedback.show{display:block;}.qcm-feedback.ok{background:var(--mint-pale);color:var(--mint-deep);}.qcm-feedback.ko{background:var(--coral-pale);color:#c0392b;}
+.btn-suivant{margin-top:14px;padding:11px 22px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.88rem;background:var(--acc);color:white;border:none;cursor:pointer;display:none;align-items:center;gap:8px;}
+.btn-suivant.show{display:inline-flex;}
+.bank-area{background:white;border-radius:24px;padding:18px 22px;margin-bottom:18px;box-shadow:0 4px 20px rgba(0,0,0,.06);}
+.bank-label{font-weight:800;margin-bottom:10px;font-size:.9rem;}
+.word-chips{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:16px;min-height:50px;padding:10px;background:var(--acc-pale);border-radius:12px;}
+.word-chip{padding:10px 18px;border-radius:50px;border:2.5px solid var(--acc);background:white;font-weight:900;font-size:.95rem;cursor:grab;color:var(--acc);transition:all .2s;user-select:none;-webkit-user-select:none;}
+.word-chip.used{opacity:.22;pointer-events:none;}
+.drop-sentences{display:flex;flex-direction:column;gap:11px;}
+.drop-row{background:var(--acc-pale);border-radius:14px;padding:13px 16px;display:flex;align-items:center;flex-wrap:wrap;gap:6px;font-size:.96rem;font-weight:600;}
+.drop-zone{display:inline-flex;align-items:center;justify-content:center;min-width:90px;height:36px;border:2.5px dashed var(--acc);border-radius:10px;background:white;color:var(--acc);font-weight:900;font-size:.95rem;padding:0 10px;transition:all .25s;cursor:pointer;}
+.drop-zone.drag-over{border-color:#4c1d95;background:var(--acc-pale);transform:scale(1.05);border-style:solid;}
+.drop-zone.filled{border-style:solid;}
+.drop-zone.correct{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);cursor:default;}
+.drop-zone.wrong{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);font-size:.78rem;}
+.btn-verifier{margin-top:16px;padding:11px 24px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.9rem;background:linear-gradient(135deg,var(--acc),var(--coral));color:white;border:none;cursor:pointer;}
+.btn-verifier:disabled{opacity:.45;cursor:not-allowed;}
+.ex-feedback{margin-top:12px;padding:12px 15px;border-radius:14px;font-size:.86rem;font-weight:700;display:none;}
+.ex-feedback.show{display:block;}.ex-feedback.ok{background:var(--mint-pale);color:var(--mint-deep);}.ex-feedback.ko{background:var(--coral-pale);color:#c0392b;}
+.classify-block{background:white;border-radius:24px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);margin-bottom:14px;}
+.classify-block.answered{pointer-events:none;}
+.classify-phrase{background:var(--acc-pale);border-radius:14px;padding:12px 16px;font-size:.96rem;font-weight:700;margin-bottom:14px;line-height:1.6;}
+.classify-btns{display:flex;gap:8px;flex-wrap:wrap;}
+.classify-btn{padding:10px 16px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.82rem;border:none;cursor:pointer;transition:all .2s;flex:1;text-align:center;min-width:100px;}
+.fam-btn{background:#fef3c7;color:#d97706;border:2px solid #f59e0b;}
+.cou-btn{background:#dbeafe;color:#1d4ed8;border:2px solid #3b82f6;}
+.sou-btn{background:var(--acc-pale);color:var(--acc);border:2px solid var(--acc);}
+.classify-btn.sel-ok{color:white!important;background:var(--mint)!important;border-color:transparent!important;}
+.classify-btn.sel-ko{background:var(--coral-pale)!important;color:var(--coral)!important;border-color:var(--coral)!important;}
+.classify-btn.rev-ok{color:white!important;background:var(--acc)!important;border-color:transparent!important;}
+.classify-feedback{margin-top:12px;padding:10px 14px;border-radius:12px;font-size:.85rem;font-weight:700;display:none;}
+.classify-feedback.show{display:block;}
+.classify-feedback.ok{background:var(--mint-pale);color:var(--mint-deep);}.classify-feedback.ko{background:var(--coral-pale);color:#c0392b;}
+.conj-ex-wrap{display:flex;flex-direction:column;gap:24px;}
+.conj-verb-block{background:white;border-radius:24px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);}
+.conj-verb-title{font-family:'Fredoka One',cursive;font-size:1rem;color:var(--acc);margin-bottom:14px;text-align:center;background:var(--acc-pale);border-radius:12px;padding:10px 14px;}
+.conj-rows{display:flex;flex-direction:column;gap:8px;}
+.conj-row-item{display:flex;align-items:center;gap:4px;background:var(--acc-pale);border-radius:12px;padding:8px 12px;flex-wrap:wrap;}
+.conj-pron-part{font-weight:700;color:var(--text);font-size:.92rem;}
+.conj-pron-part.suite{color:var(--text-light);font-size:.8rem;}
+.conj-input{border:2.5px solid var(--acc);border-radius:10px;padding:6px 8px;font-family:'Nunito',sans-serif;font-weight:900;font-size:1rem;color:var(--text);background:white;outline:none;flex-shrink:0;text-align:center;}
+.conj-input-sm{width:160px;}
+.conj-input:focus{border-color:#4c1d95;box-shadow:0 0 0 3px rgba(109,40,217,.15);}
+.conj-input.correct{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.conj-input.wrong{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);font-size:.72rem;width:auto;flex:1;}
+.btn-verif-conj{margin-top:14px;padding:12px 24px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.9rem;background:linear-gradient(135deg,var(--acc),var(--coral));color:white;border:none;cursor:pointer;display:block;width:100%;}
+.btn-verif-conj:disabled{opacity:.45;cursor:not-allowed;}
+.conj-feedback{margin-top:10px;padding:10px 14px;border-radius:12px;font-size:.85rem;font-weight:700;display:none;}
+.conj-feedback.show{display:block;}
+.conj-feedback.ok{background:var(--mint-pale);color:var(--mint-deep);}.conj-feedback.ko{background:var(--coral-pale);color:#c0392b;}
+.bilan-card{background:white;border-radius:24px;padding:30px 26px;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,.08);}
+.bilan-mascot{font-size:4rem;margin-bottom:12px;display:block;animation:bigFloat 2s ease-in-out infinite;}
+@keyframes bigFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-12px);}}
+.bilan-title{font-family:'Fredoka One',cursive;font-size:2rem;margin-bottom:8px;}
+.bilan-msg{color:var(--text-light);font-size:1rem;margin-bottom:22px;}
+.stars-row{display:flex;justify-content:center;gap:12px;margin-bottom:22px;}
+.star-big{font-size:3rem;filter:grayscale(1);transition:all .5s;}.star-big.earned{filter:none;animation:starPop .5s ease both;}
+@keyframes starPop{0%{transform:scale(0);}60%{transform:scale(1.3);}100%{transform:scale(1);}}
+.score-circle{width:110px;height:110px;border-radius:50%;background:linear-gradient(135deg,var(--acc),var(--coral));display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 22px;color:white;}
+.score-num{font-family:'Fredoka One',cursive;font-size:2rem;line-height:1;}
+.memo-card{background:linear-gradient(135deg,var(--acc-pale),var(--sky-pale));border-radius:24px;padding:18px 22px;margin:20px 0;text-align:left;}
+.memo-card h3{font-family:'Fredoka One',cursive;font-size:1.05rem;color:var(--acc);margin-bottom:11px;text-align:center;}
+.memo-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+@media(max-width:480px){.memo-grid{grid-template-columns:1fr;}}
+.memo-item{background:white;border-radius:10px;padding:9px 12px;font-size:.8rem;font-weight:700;}
+.bilan-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:18px;}
+.btn-act{padding:12px 22px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.88rem;cursor:pointer;border:none;}
+.btn-act.purple{background:var(--acc);color:white;}
+.btn-act.purple-pale{background:var(--acc-pale);color:var(--acc);border:2px solid var(--acc);}
+.confetti-piece{position:fixed;border-radius:2px;top:-20px;animation:fall linear both;pointer-events:none;z-index:9999;}
+@keyframes fall{0%{transform:translateY(0) rotate(0deg);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
+@media print{.print-bar,.btn-compris,.btn-suivant,.btn-verifier,.btn-verif-conj,.bilan-card,.mascot-msg{display:none!important;}body{background:white;}.phase{display:block!important;}}
+</style>
+</head>
+<body>
+<div class="print-bar">
+  <button class="print-btn print-btn-lecon" onclick="printLecon()"><span class="ico">📖</span><span class="lbl"> Imprimer la leçon</span></button>
+  <button class="print-btn print-btn-eval" onclick="printEval()"><span class="ico">📝</span><span class="lbl"> Imprimer les exercices</span></button>
+</div>
+<header class="header">
+  <div class="header-top">
+    <a href="../9-12ans.html" class="logo">🦉 L'Atelier du Devoir</a>
+    <div class="score-badge">⭐ <span id="score-display">0</span> pts</div>
+  </div>
+  <div class="steps-wrap">
+    <div class="steps">
+      <div class="step active" id="step-0"></div><div class="step" id="step-1"></div><div class="step" id="step-2"></div>
+      <div class="step" id="step-3"></div><div class="step" id="step-4"></div><div class="step" id="step-5"></div>
+      <div class="step" id="step-6"></div><div class="step" id="step-7"></div>
+    </div>
+    <div class="steps-labels">
+      <div class="step-lbl">📖 Leçon</div><div class="step-lbl">✏️ Entr. 1</div><div class="step-lbl">✏️ Entr. 2</div>
+      <div class="step-lbl">🖊️ Ex. 1</div><div class="step-lbl">🖊️ Ex. 2</div><div class="step-lbl">🎯 Ex. 3</div>
+      <div class="step-lbl">⌨️ Ex. 4</div><div class="step-lbl">⭐ Bilan</div>
+    </div>
+  </div>
+</header>
+
+<main class="main">
+  <div class="accroche">
+    <div class="accroche-mascot">🎩</div>
+    <div class="accroche-text">
+      <h1>Les niveaux de langue</h1>
+      <p>On ne parle pas de la même façon avec ses amis, ses parents ou son directeur ! Apprends à adapter ton langage à chaque situation.</p>
+      <div class="meta-row">
+        <span class="meta-tag">📚 CM1</span><span class="meta-tag">⏱️ ~20 min</span>
+        <span class="meta-tag">⭐⭐ Difficulté</span><span class="meta-tag">🎯 Français — Lexique</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- LEÇON -->
+  <div class="phase active" id="phase-lecon">
+    <div class="lecon-card">
+      <h2>📖 La leçon</h2>
+
+      <!-- BLOC 1 -->
+      <div class="lecon-block revealed" id="bloc-0">
+        <div class="lecon-subtitle">① Le niveau familier</div>
+        <div class="acc-box fam">
+          <h4>😎 Niveau familier — avec les amis et la famille proche</h4>
+          <p style="font-size:.85rem;color:var(--text-light);margin-bottom:10px;">Le niveau <strong>familier</strong> s'utilise avec les personnes qu'on connaît bien. Il est détendu, utilise des abréviations, de l'argot et des expressions populaires. À éviter à l'écrit scolaire !</p>
+          <div class="phrase-ex">— <span class="hl-fam">C'est trop cool ce film !</span> (avec des amis)</div>
+          <div class="phrase-ex">— <span class="hl-fam">T'as vu le match hier soir ?</span> (familier oral)</div>
+          <div class="phrase-ex">— <span class="hl-fam">J'me casse, à plus !</span> (argot familier)</div>
+          <p style="font-size:.82rem;color:#92400e;margin-top:8px;">⚠️ Mots typiques : <strong>super, génial, trop, bosser, bouquin, bagnole, pote, kiffe, se casser</strong></p>
+        </div>
+        <div class="astuce">🦉 <strong>Quand utiliser le familier ?</strong> Uniquement à l'oral avec des proches. Jamais dans une rédaction, une lettre ou un exposé scolaire.</div>
+        <button class="btn-compris" onclick="revealBloc(1)">J'ai compris ! → Le niveau courant 🗣️</button>
+      </div>
+
+      <!-- BLOC 2 -->
+      <div class="lecon-block" id="bloc-1">
+        <hr class="sep">
+        <div class="lecon-subtitle">② Le niveau courant</div>
+        <div class="acc-box cou">
+          <h4>🗣️ Niveau courant — la langue de tous les jours</h4>
+          <p style="font-size:.85rem;color:var(--text-light);margin-bottom:10px;">Le niveau <strong>courant</strong> est le plus utilisé. C'est la langue standard, correcte et compréhensible par tous. On l'emploie à l'école, dans les rédactions et avec des inconnus.</p>
+          <div class="phrase-ex">— <span class="hl-cou">Ce film est vraiment bien !</span> (courant)</div>
+          <div class="phrase-ex">— <span class="hl-cou">As-tu regardé le match hier soir ?</span> (courant)</div>
+          <div class="phrase-ex">— <span class="hl-cou">Je dois partir, à bientôt !</span> (courant)</div>
+          <p style="font-size:.82rem;color:#1e40af;margin-top:8px;">✅ Mots typiques : <strong>bien, super (acceptable), travailler, livre, voiture, ami, aimer, partir</strong></p>
+        </div>
+        <div class="astuce">🦉 <strong>Quand utiliser le courant ?</strong> C'est le niveau par défaut — école, rédactions, conversations avec des inconnus, e-mails normaux.</div>
+        <button class="btn-compris" onclick="revealBloc(2)">J'ai compris ! → Le niveau soutenu 🎩</button>
+      </div>
+
+      <!-- BLOC 3 -->
+      <div class="lecon-block" id="bloc-2">
+        <hr class="sep">
+        <div class="lecon-subtitle">③ Le niveau soutenu + tableau comparatif</div>
+        <div class="acc-box sou">
+          <h4>🎩 Niveau soutenu — les situations formelles</h4>
+          <p style="font-size:.85rem;color:var(--text-light);margin-bottom:10px;">Le niveau <strong>soutenu</strong> s'utilise dans les contextes formels : discours, lettres officielles, textes littéraires. Vocabulaire riche, phrases complexes, aucune abréviation.</p>
+          <div class="phrase-ex">— <span class="hl-sou">Cette œuvre cinématographique est remarquable.</span></div>
+          <div class="phrase-ex">— <span class="hl-sou">Avez-vous visionné la rencontre sportive d'hier soir ?</span></div>
+          <div class="phrase-ex">— <span class="hl-sou">Je vous prie de bien vouloir m'excuser, je dois me retirer.</span></div>
+        </div>
+        <table class="niv-table">
+          <tr><th>😎 Familier</th><th>🗣️ Courant</th><th>🎩 Soutenu</th></tr>
+          <tr><td>bouquin</td><td>livre</td><td>ouvrage</td></tr>
+          <tr><td>bosser</td><td>travailler</td><td>labeur, œuvrer</td></tr>
+          <tr><td>bagnole</td><td>voiture</td><td>véhicule automobile</td></tr>
+          <tr><td>pote</td><td>ami</td><td>camarade, compagnon</td></tr>
+          <tr><td>se casser</td><td>partir</td><td>se retirer, prendre congé</td></tr>
+        </table>
+        <div class="astuce">🦉 <strong>La règle d'or :</strong> adapte ton niveau de langue à la <strong>situation</strong> et à ton <strong>interlocuteur</strong>. Un message à un ami ≠ une lettre à un directeur !</div>
+        <button class="btn-compris" onclick="startExercises()" style="background:linear-gradient(135deg,var(--acc),var(--coral));">✅ Leçon comprise ! Aux exercices 🚀</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- QCM 1 -->
+  <div class="phase" id="phase-ex1">
+    <div class="mascot-msg"><span class="emo">🎩</span><p>Familier = avec les amis · Courant = à l'école · Soutenu = situations formelles !</p></div>
+    <div class="ex-num">ENTRAÎNEMENT 1 / 2</div>
+    <div class="ex-header"><h2>Quel niveau de langue ?</h2><p>Clique sur le bon niveau.</p></div>
+    <div id="qcm1-container"></div>
+    <button class="btn-suivant" id="btn-to-ex2" onclick="goToPhase('ex2',2)">Suite → Entraînement 2 ✏️</button>
+  </div>
+
+  <!-- QCM 2 -->
+  <div class="phase" id="phase-ex2">
+    <div class="mascot-msg"><span class="emo">🎩</span><p>Bien joué ! Maintenant, identifie le bon équivalent selon le niveau.</p></div>
+    <div class="ex-num">ENTRAÎNEMENT 2 / 2</div>
+    <div class="ex-header"><h2>Trouver l'équivalent</h2><p>Clique sur la bonne réponse.</p></div>
+    <div id="qcm2-container"></div>
+    <button class="btn-suivant" id="btn-to-drag1" onclick="goToPhase('drag1',3)">Suite → Exercice 1 🖊️</button>
+  </div>
+
+  <!-- DRAG 1 -->
+  <div class="phase" id="phase-drag1">
+    <div class="mascot-msg"><span class="emo">🎩</span><p>Glisse le niveau de langue correspondant à chaque phrase !</p></div>
+    <div class="ex-num">EXERCICE 1 / 3 — Glisser-déposer</div>
+    <div class="ex-header"><h2>Quel est le niveau de cette phrase ?</h2><p>Glisse le bon niveau.</p></div>
+    <div class="bank-area">
+      <div class="bank-label">🎒 Les niveaux :</div>
+      <div class="word-chips" id="pool1">
+        <div class="word-chip" draggable="true" data-word="Familier" ondragstart="onDS(event,1)" ontouchstart="onTS(event)" ontouchmove="onTM(event)" ontouchend="onTE(event,1)">Familier</div>
+        <div class="word-chip" draggable="true" data-word="Courant" ondragstart="onDS(event,1)" ontouchstart="onTS(event)" ontouchmove="onTM(event)" ontouchend="onTE(event,1)">Courant</div>
+        <div class="word-chip" draggable="true" data-word="Soutenu" ondragstart="onDS(event,1)" ontouchstart="onTS(event)" ontouchmove="onTM(event)" ontouchend="onTE(event,1)">Soutenu</div>
+        <div class="word-chip" draggable="true" data-word="Familier" ondragstart="onDS(event,1)" ontouchstart="onTS(event)" ontouchmove="onTM(event)" ontouchend="onTE(event,1)">Familier</div>
+      </div>
+      <div class="drop-sentences" id="drop-sentences-1">
+        <div class="drop-row" data-answer="Familier">« T'as pas un crayon à me filer ? » → <span class="drop-zone" data-bank="1" data-idx="0" ondragover="onDO(event)" ondragleave="onDL(event)" ondrop="onDP(event,1)"></span></div>
+        <div class="drop-row" data-answer="Soutenu">« Je vous serais reconnaissant de bien vouloir me prêter un crayon. » → <span class="drop-zone" data-bank="1" data-idx="1" ondragover="onDO(event)" ondragleave="onDL(event)" ondrop="onDP(event,1)"></span></div>
+        <div class="drop-row" data-answer="Courant">« Est-ce que tu as un crayon à me prêter ? » → <span class="drop-zone" data-bank="1" data-idx="2" ondragover="onDO(event)" ondragleave="onDL(event)" ondrop="onDP(event,1)"></span></div>
+        <div class="drop-row" data-answer="Familier">« Ce devoir, c'est trop chiant ! » → <span class="drop-zone" data-bank="1" data-idx="3" ondragover="onDO(event)" ondragleave="onDL(event)" ondrop="onDP(event,1)"></span></div>
+      </div>
+      <button class="btn-verifier" id="btn-vd1" onclick="verifyDrag(1)" disabled>✅ Vérifier mes réponses</button>
+      <div class="ex-feedback" id="fb-d1"></div>
+    </div>
+    <button class="btn-suivant" id="btn-to-drag2" onclick="goToPhase('drag2',4)">Suite → Exercice 2 🖊️</button>
+  </div>
+
+  <!-- DRAG 2 -->
+  <div class="phase" id="phase-drag2">
+    <div class="mascot-msg"><span class="emo">🎩</span><p>Glisse l'équivalent soutenu de chaque mot familier !</p></div>
+    <div class="ex-num">EXERCICE 2 / 3 — Glisser-déposer</div>
+    <div class="ex-header"><h2>Trouve l'équivalent soutenu</h2><p>Glisse le mot soutenu correspondant au mot familier.</p></div>
+    <div class="bank-area">
+      <div class="bank-label">🎒 Les mots soutenus :</div>
+      <div class="word-chips" id="pool2">
+        <div class="word-chip" draggable="true" data-word="ouvrage" ondragstart="onDS(event,2)" ontouchstart="onTS(event)" ontouchmove="onTM(event)" ontouchend="onTE(event,2)">ouvrage</div>
+        <div class="word-chip" draggable="true" data-word="se retirer" ondragstart="onDS(event,2)" ontouchstart="onTS(event)" ontouchmove="onTM(event)" ontouchend="onTE(event,2)">se retirer</div>
+        <div class="word-chip" draggable="true" data-word="demeure" ondragstart="onDS(event,2)" ontouchstart="onTS(event)" ontouchmove="onTM(event)" ontouchend="onTE(event,2)">demeure</div>
+        <div class="word-chip" draggable="true" data-word="véhicule" ondragstart="onDS(event,2)" ontouchstart="onTS(event)" ontouchmove="onTM(event)" ontouchend="onTE(event,2)">véhicule</div>
+      </div>
+      <div class="drop-sentences" id="drop-sentences-2">
+        <div class="drop-row" data-answer="ouvrage">bouquin → <span class="drop-zone" data-bank="2" data-idx="0" ondragover="onDO(event)" ondragleave="onDL(event)" ondrop="onDP(event,2)"></span></div>
+        <div class="drop-row" data-answer="se retirer">se casser → <span class="drop-zone" data-bank="2" data-idx="1" ondragover="onDO(event)" ondragleave="onDL(event)" ondrop="onDP(event,2)"></span></div>
+        <div class="drop-row" data-answer="demeure">baraque → <span class="drop-zone" data-bank="2" data-idx="2" ondragover="onDO(event)" ondragleave="onDL(event)" ondrop="onDP(event,2)"></span></div>
+        <div class="drop-row" data-answer="véhicule">bagnole → <span class="drop-zone" data-bank="2" data-idx="3" ondragover="onDO(event)" ondragleave="onDL(event)" ondrop="onDP(event,2)"></span></div>
+      </div>
+      <button class="btn-verifier" id="btn-vd2" onclick="verifyDrag(2)" disabled>✅ Vérifier mes réponses</button>
+      <div class="ex-feedback" id="fb-d2"></div>
+    </div>
+    <button class="btn-suivant" id="btn-to-classify" onclick="goToPhase('classify',5)">Suite → Exercice 3 🎯</button>
+  </div>
+
+  <!-- CLASSIFICATION -->
+  <div class="phase" id="phase-classify">
+    <div class="mascot-msg"><span class="emo">🎩</span><p>Identifie le niveau de langue de la phrase soulignée !</p></div>
+    <div class="ex-num">EXERCICE 3 / 4 — Identifier le niveau</div>
+    <div class="ex-header"><h2>Quel est le niveau de langue ?</h2><p>Clique sur familier, courant ou soutenu.</p></div>
+
+    <div class="classify-block" id="cl-0">
+      <div class="classify-phrase">📝 « <u>Je vous prie de bien vouloir agréer mes salutations distinguées.</u> »</div>
+      <div class="classify-btns">
+        <button class="classify-btn fam-btn" data-idx="0" data-type="fam" data-correct="sou" onclick="classifyAnswer(this)">😎 Familier</button>
+        <button class="classify-btn cou-btn" data-idx="0" data-type="cou" data-correct="sou" onclick="classifyAnswer(this)">🗣️ Courant</button>
+        <button class="classify-btn sou-btn" data-idx="0" data-type="sou" data-correct="sou" onclick="classifyAnswer(this)">🎩 Soutenu</button>
+      </div>
+      <div class="classify-feedback" id="clf-0"></div>
+    </div>
+
+    <div class="classify-block" id="cl-1">
+      <div class="classify-phrase">📝 « <u>C'est super ce que t'as fait, franchement trop bien !</u> »</div>
+      <div class="classify-btns">
+        <button class="classify-btn fam-btn" data-idx="1" data-type="fam" data-correct="fam" onclick="classifyAnswer(this)">😎 Familier</button>
+        <button class="classify-btn cou-btn" data-idx="1" data-type="cou" data-correct="fam" onclick="classifyAnswer(this)">🗣️ Courant</button>
+        <button class="classify-btn sou-btn" data-idx="1" data-type="sou" data-correct="fam" onclick="classifyAnswer(this)">🎩 Soutenu</button>
+      </div>
+      <div class="classify-feedback" id="clf-1"></div>
+    </div>
+
+    <div class="classify-block" id="cl-2">
+      <div class="classify-phrase">📝 « <u>Le directeur vous recevra demain matin à neuf heures.</u> »</div>
+      <div class="classify-btns">
+        <button class="classify-btn fam-btn" data-idx="2" data-type="fam" data-correct="cou" onclick="classifyAnswer(this)">😎 Familier</button>
+        <button class="classify-btn cou-btn" data-idx="2" data-type="cou" data-correct="cou" onclick="classifyAnswer(this)">🗣️ Courant</button>
+        <button class="classify-btn sou-btn" data-idx="2" data-type="sou" data-correct="cou" onclick="classifyAnswer(this)">🎩 Soutenu</button>
+      </div>
+      <div class="classify-feedback" id="clf-2"></div>
+    </div>
+
+    <div class="classify-block" id="cl-3">
+      <div class="classify-phrase">📝 « <u>J'ai lu un bouquin super bien ce week-end.</u> »</div>
+      <div class="classify-btns">
+        <button class="classify-btn fam-btn" data-idx="3" data-type="fam" data-correct="fam" onclick="classifyAnswer(this)">😎 Familier</button>
+        <button class="classify-btn cou-btn" data-idx="3" data-type="cou" data-correct="fam" onclick="classifyAnswer(this)">🗣️ Courant</button>
+        <button class="classify-btn sou-btn" data-idx="3" data-type="sou" data-correct="fam" onclick="classifyAnswer(this)">🎩 Soutenu</button>
+      </div>
+      <div class="classify-feedback" id="clf-3"></div>
+    </div>
+
+    <button class="btn-suivant" id="btn-to-conjtable" onclick="goToPhase('conjtable',6)">Suite → Exercice 4 ⌨️</button>
+  </div>
+
+  <!-- SAISIE -->
+  <div class="phase" id="phase-conjtable">
+    <div class="mascot-msg"><span class="emo">🎩</span><p><strong>Dernier exercice !</strong> Réécris chaque phrase dans le niveau de langue indiqué.</p></div>
+    <div class="ex-num">EXERCICE 4 / 4 — Reformule</div>
+    <div class="ex-header"><h2>Trouve l'équivalent dans le niveau demandé</h2><p>Écris le mot équivalent dans le bon niveau de langue.</p></div>
+    <div class="bank-area">
+      <div class="conj-ex-wrap">
+
+        <div class="conj-verb-block">
+          <div class="conj-verb-title">✏️ Du familier au courant</div>
+          <div class="conj-rows">
+            <div class="conj-row-item"><span class="conj-pron-part">bouquin (fam.) →</span><input class="conj-input conj-input-sm" id="ci-0-0" type="text" placeholder="courant…" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false"></div>
+            <div class="conj-row-item"><span class="conj-pron-part">bosser (fam.) →</span><input class="conj-input conj-input-sm" id="ci-0-1" type="text" placeholder="courant…" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false"></div>
+            <div class="conj-row-item"><span class="conj-pron-part">pote (fam.) →</span><input class="conj-input conj-input-sm" id="ci-0-2" type="text" placeholder="courant…" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false"></div>
+            <div class="conj-row-item"><span class="conj-pron-part">se casser (fam.) →</span><input class="conj-input conj-input-sm" id="ci-0-3" type="text" placeholder="courant…" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false"></div>
+            <div class="conj-row-item"><span class="conj-pron-part">bagnole (fam.) →</span><input class="conj-input conj-input-sm" id="ci-0-4" type="text" placeholder="courant…" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false"></div>
+            <div class="conj-row-item"><span class="conj-pron-part">fringues (fam.) →</span><input class="conj-input conj-input-sm" id="ci-0-5" type="text" placeholder="courant…" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false"></div>
+          </div>
+          <button class="btn-verif-conj" id="btn-verif-conj-0" onclick="verifyConjVerb(0, conjAnswers[0])">✅ Vérifier</button>
+          <div class="conj-feedback" id="conj-fb-0"></div>
+        </div>
+
+        <div class="conj-verb-block">
+          <div class="conj-verb-title">✏️ Du courant au soutenu</div>
+          <div class="conj-rows">
+            <div class="conj-row-item"><span class="conj-pron-part">maison (cour.) →</span><input class="conj-input conj-input-sm" id="ci-1-0" type="text" placeholder="soutenu…" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false"></div>
+            <div class="conj-row-item"><span class="conj-pron-part">ami (cour.) →</span><input class="conj-input conj-input-sm" id="ci-1-1" type="text" placeholder="soutenu…" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false"></div>
+            <div class="conj-row-item"><span class="conj-pron-part">travailler (cour.) →</span><input class="conj-input conj-input-sm" id="ci-1-2" type="text" placeholder="soutenu…" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false"></div>
+            <div class="conj-row-item"><span class="conj-pron-part">partir (cour.) →</span><input class="conj-input conj-input-sm" id="ci-1-3" type="text" placeholder="soutenu…" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false"></div>
+            <div class="conj-row-item"><span class="conj-pron-part">livre (cour.) →</span><input class="conj-input conj-input-sm" id="ci-1-4" type="text" placeholder="soutenu…" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false"></div>
+            <div class="conj-row-item"><span class="conj-pron-part">voiture (cour.) →</span><input class="conj-input conj-input-sm" id="ci-1-5" type="text" placeholder="soutenu…" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false"></div>
+          </div>
+          <button class="btn-verif-conj" id="btn-verif-conj-1" onclick="verifyConjVerb(1, conjAnswers[1])">✅ Vérifier</button>
+          <div class="conj-feedback" id="conj-fb-1"></div>
+        </div>
+
+      </div>
+    </div>
+    <button class="btn-suivant" id="btn-to-bilan" onclick="goToPhase('bilan',7)">🌟 Voir mon bilan !</button>
+  </div>
+
+  <!-- BILAN -->
+  <div class="phase" id="phase-bilan">
+    <div class="bilan-card">
+      <span class="bilan-mascot">🎩</span>
+      <h2 class="bilan-title" id="bilan-title">Super travail !</h2>
+      <p class="bilan-msg" id="bilan-msg"></p>
+      <div class="stars-row"><span class="star-big" id="star1">⭐</span><span class="star-big" id="star2">⭐</span><span class="star-big" id="star3">⭐</span></div>
+      <div class="score-circle"><span class="score-num" id="bilan-score">0</span><span style="font-size:.72rem;opacity:.85;">/ 26 pts</span></div>
+      <div class="memo-card">
+        <h3>🗒️ Mon mémo — niveaux de langue</h3>
+        <div class="memo-grid">
+          <div class="memo-item"><strong style="color:#d97706;">😎 Familier</strong><br>Amis, famille proche<br>Oral informel<br><em>bouquin, pote, bosser</em></div>
+          <div class="memo-item"><strong style="color:#1d4ed8;">🗣️ Courant</strong><br>École, inconnus<br>Rédactions, e-mails<br><em>livre, ami, travailler</em></div>
+          <div class="memo-item"><strong style="color:#6d28d9;">🎩 Soutenu</strong><br>Lettres officielles<br>Discours, textes litt.<br><em>ouvrage, labeur</em></div>
+        </div>
+      </div>
+      <div class="bilan-btns">
+        <button class="btn-act purple-pale" onclick="restartFiche()">🔄 Recommencer</button>
+        <button class="btn-act purple" onclick="location.href='../9-12ans.html'">🏠 Retour aux fiches</button>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+function printLecon(){document.body.classList.add('print-mode-lecon');setTimeout(function(){window.print();setTimeout(function(){document.body.classList.remove('print-mode-lecon');},600);},60);}
+function printEval(){document.body.classList.add('print-mode-eval');setTimeout(function(){window.print();setTimeout(function(){document.body.classList.remove('print-mode-eval');},600);},60);}
+
+var classifyExpls={
+  "0":"Soutenu : 'Je vous prie de bien vouloir agréer mes salutations distinguées' → formule de politesse de lettre officielle. Vocabulaire très formel.",
+  "1":"Familier : 'super', 't'as fait', 'trop bien' → mots familiers, élision ('t'as' au lieu de 'tu as'). À utiliser seulement avec des proches.",
+  "2":"Courant : phrase correcte, vocabulaire standard, ton neutre. Utilisable à l'école et avec des inconnus.",
+  "3":"Familier : 'bouquin' (= livre, familier) et 'super bien' sont des marques du niveau familier."
+};
+
+var conjAnswers={
+  "0":[["livre"],["travailler"],["ami","copain"],["partir"],["voiture"],["vêtements","habits"]],
+  "1":[["demeure","résidence"],["camarade","compagnon"],["labeur","œuvrer","travailler"],["se retirer","prendre congé"],["ouvrage"],["véhicule","automobile"]]
+};
+
+var conjTotal=2;
+var conjVerified={};
+
+var QCM1=[
+  {
+    sentence:"Dans quelle situation utilise-t-on le <strong>niveau soutenu</strong> ?",
+    options:["Avec ses amis au parc","Pour écrire une lettre au maire","En envoyant un SMS à sa sœur"],
+    answer:"Pour écrire une lettre au maire",
+    expl:"Le niveau soutenu s'utilise dans les situations formelles : lettres officielles, discours, textes littéraires. Avec ses amis → familier. SMS à sa sœur → familier ou courant."
+  },
+  {
+    sentence:"Laquelle de ces phrases est au niveau <strong>courant</strong> ?",
+    options:[
+      "J'ai pas envie de bosser aujourd'hui.",
+      "Je n'ai pas envie de travailler aujourd'hui.",
+      "Je ne suis guère enclin à travailler en ce jour."
+    ],
+    answer:"Je n'ai pas envie de travailler aujourd'hui.",
+    expl:"Courant : vocabulaire standard, phrases correctes. 'J'ai pas' + 'bosser' → familier. 'Guère enclin' + 'en ce jour' → soutenu."
+  },
+  {
+    sentence:"Quel mot est familier ?",
+    options:["voiture","véhicule","bagnole"],
+    answer:"bagnole",
+    expl:"bagnole = niveau familier (argot). voiture = niveau courant. véhicule = niveau soutenu ou courant."
+  }
+];
+
+var QCM2=[
+  {
+    sentence:"Quel est l'équivalent <strong>soutenu</strong> du mot familier <em>pote</em> ?",
+    options:["ami","camarade","compagnon"],
+    answer:"compagnon",
+    expl:"compagnon est le terme le plus soutenu. ami est courant. camarade est courant/légèrement soutenu. pote est familier."
+  },
+  {
+    sentence:"Laquelle de ces phrases est au niveau <strong>familier</strong> ?",
+    options:[
+      "Il m'a raconté une histoire.",
+      "Il m'a balancé une histoire de ouf.",
+      "Il m'a relaté un récit fort intéressant."
+    ],
+    answer:"Il m'a balancé une histoire de ouf.",
+    expl:"'balancé' et 'de ouf' sont des termes familiers (argot). 'raconté' → courant. 'relaté' + 'récit fort intéressant' → soutenu."
+  },
+  {
+    sentence:"À l'école, dans une rédaction, quel niveau de langue faut-il utiliser ?",
+    options:["Familier","Courant","Soutenu"],
+    answer:"Courant",
+    expl:"À l'école et dans les rédactions, on utilise le niveau courant : correct, clair, compréhensible. Le soutenu est pour les lettres formelles et les discours. Le familier est à éviter à l'écrit scolaire."
+  }
+];
+
+var drag1Answers=["Familier","Soutenu","Courant","Familier"];
+var drag2Answers=["ouvrage","se retirer","demeure","véhicule"];
+var score=0,qcm1Done=0,qcm2Done=0,classifyDone=0;
+var drag1Filled=[null,null,null,null],drag2Filled=[null,null,null,null];
+var draggedChip=null,touchChip=null,touchClone=null;
+
+function shuffle(arr){var a=arr.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+
+function revealBloc(n){
+  var bloc=document.getElementById('bloc-'+n);if(!bloc)return;
+  var prev=document.getElementById('bloc-'+(n-1));
+  if(prev){var b=prev.querySelector('.btn-compris');if(b){b.textContent='✅ Compris !';b.disabled=true;b.style.opacity='.5';}}
+  bloc.classList.add('revealed');
+  setTimeout(function(){var hH=(document.querySelector('.header')||{offsetHeight:0}).offsetHeight;var rect=bloc.getBoundingClientRect();window.scrollTo({top:window.pageYOffset+rect.top-hH-20,behavior:'smooth'});bloc.style.transition='background .3s';bloc.style.background='#ede9fe';setTimeout(function(){bloc.style.background='';},800);},50);
+}
+
+function startExercises(){
+  ['pool1','pool2'].forEach(function(id){
+    var pool=document.getElementById(id);if(!pool)return;
+    var chips=Array.from(pool.querySelectorAll('.word-chip'));
+    shuffle(chips).forEach(function(c){pool.appendChild(c);});
+  });
+  goToPhase('ex1',1);buildQCM('qcm1-container',QCM1,1);
+}
+
+function goToPhase(phase,stepIdx){
+  document.querySelectorAll('.phase').forEach(function(p){p.classList.remove('active');});
+  var el=document.getElementById('phase-'+phase);
+  if(el){el.classList.add('active');setTimeout(function(){el.scrollIntoView({behavior:'smooth',block:'start'});},100);}
+  updateSteps(stepIdx);
+  if(phase==='ex2')buildQCM('qcm2-container',QCM2,2);
+  if(phase==='drag1'||phase==='drag2'){
+    var bank=phase==='drag1'?1:2;
+    var cont=document.getElementById('drop-sentences-'+bank);
+    if(cont){
+      var rows=Array.from(cont.querySelectorAll('.drop-row'));
+      var shuffled=shuffle(rows);
+      var newAnswers=shuffled.map(function(r){return r.dataset.answer;});
+      if(bank===1)drag1Answers=newAnswers;else drag2Answers=newAnswers;
+      shuffled.forEach(function(r,i){r.querySelector('.drop-zone').dataset.idx=String(i);cont.appendChild(r);});
+    }
+    var pool=document.getElementById('pool'+bank);
+    if(pool){var chips=Array.from(pool.querySelectorAll('.word-chip'));shuffle(chips).forEach(function(c){pool.appendChild(c);});}
+    if(bank===1)drag1Filled=[null,null,null,null];else drag2Filled=[null,null,null,null];
+  }
+  if(phase==='bilan')showBilan();
+}
+
+function updateSteps(active){for(var i=0;i<8;i++){var s=document.getElementById('step-'+i);if(!s)continue;s.classList.remove('active','done');if(i<active)s.classList.add('done');else if(i===active)s.classList.add('active');}}
+
+function buildQCM(cId,data,exNum){
+  var c=document.getElementById(cId);c.innerHTML='';
+  data.forEach(function(q,qi){
+    var div=document.createElement('div');div.className='qcm-question';div.id='qq-'+exNum+'-'+qi;
+    var opts=shuffle(q.options);
+    var optHtml=opts.map(function(opt){return '<button class="qcm-opt" data-exnum="'+exNum+'" data-qi="'+qi+'" data-opt="'+encodeURIComponent(opt)+'" data-ans="'+encodeURIComponent(q.answer)+'" onclick="handleQCM(this)">'+opt+'</button>';}).join('');
+    div.innerHTML='<div class="qcm-sentence">'+q.sentence+'</div><div class="qcm-options">'+optHtml+'</div><div class="qcm-feedback" id="qf-'+exNum+'-'+qi+'"></div>';
+    c.appendChild(div);
+  });
+}
+
+function handleQCM(btn){
+  var exNum=parseInt(btn.dataset.exnum),qi=parseInt(btn.dataset.qi);
+  var chosen=decodeURIComponent(btn.dataset.opt),correct=decodeURIComponent(btn.dataset.ans);
+  var qDiv=document.getElementById('qq-'+exNum+'-'+qi);
+  if(qDiv.classList.contains('answered'))return;
+  qDiv.classList.add('answered');
+  var opts=qDiv.querySelectorAll('.qcm-opt'),fb=document.getElementById('qf-'+exNum+'-'+qi);
+  var expl=(exNum===1?QCM1:QCM2)[qi].expl;
+  if(chosen===correct){
+    btn.classList.add('correct');btn.innerHTML='✅ '+btn.innerHTML;
+    fb.className='qcm-feedback show ok';fb.innerHTML='✅ Bravo ! '+expl;
+    score++;document.getElementById('score-display').textContent=score;
+  }else{
+    btn.classList.add('wrong');btn.innerHTML='❌ '+btn.innerHTML;
+    opts.forEach(function(o){if(decodeURIComponent(o.dataset.opt)===correct){o.classList.add('reveal');o.innerHTML='✅ '+o.innerHTML;}});
+    fb.className='qcm-feedback show ko';fb.innerHTML='💡 Pas encore ! '+expl;
+  }
+  if(exNum===1)qcm1Done++;else qcm2Done++;
+  var total=exNum===1?QCM1.length:QCM2.length,done=exNum===1?qcm1Done:qcm2Done;
+  if(done>=total){setTimeout(function(){var nb=document.getElementById(exNum===1?'btn-to-ex2':'btn-to-drag1');nb.classList.add('show');nb.scrollIntoView({behavior:'smooth',block:'nearest'});},600);}
+}
+
+function onDS(e,bank){draggedChip=e.currentTarget;e.dataTransfer.setData('text/plain',draggedChip.dataset.word);}
+function onDO(e){e.preventDefault();e.currentTarget.classList.add('drag-over');}
+function onDL(e){e.currentTarget.classList.remove('drag-over');}
+function onDP(e,bank){
+  e.preventDefault();var zone=e.currentTarget;zone.classList.remove('drag-over');
+  if(!draggedChip)return;
+  var word=draggedChip.dataset.word,idx=parseInt(zone.dataset.idx);
+  var filled=bank===1?drag1Filled:drag2Filled;
+  if(filled[idx])returnToPool(filled[idx],bank);
+  filled[idx]=word;zone.textContent=word;zone.classList.add('filled');
+  draggedChip.classList.add('used');draggedChip=null;checkDragBtn(bank);
+}
+function onTS(e){
+  touchChip=e.currentTarget;var t=e.touches[0];
+  touchClone=touchChip.cloneNode(true);
+  touchClone.style.cssText='position:fixed;z-index:9999;pointer-events:none;opacity:.8;padding:10px 18px;border-radius:50px;border:2.5px solid var(--acc);background:white;font-weight:800;font-size:.95rem;color:var(--acc);';
+  setCP(t.clientX,t.clientY);document.body.appendChild(touchClone);
+}
+function onTM(e){
+  e.preventDefault();if(!touchClone)return;var t=e.touches[0];setCP(t.clientX,t.clientY);
+  document.querySelectorAll('.drop-zone').forEach(function(z){z.classList.remove('drag-over');});
+  var el=document.elementFromPoint(t.clientX,t.clientY);
+  if(el&&el.classList.contains('drop-zone'))el.classList.add('drag-over');
+}
+function onTE(e,bank){
+  if(touchClone){touchClone.remove();touchClone=null;}if(!touchChip)return;
+  var t=e.changedTouches[0];var el=document.elementFromPoint(t.clientX,t.clientY);
+  while(el&&!el.classList.contains('drop-zone')){el=el.parentElement;}
+  if(el&&el.classList.contains('drop-zone')){
+    var idx=parseInt(el.dataset.idx),word=touchChip.dataset.word;
+    var filled=bank===1?drag1Filled:drag2Filled;
+    if(filled[idx])returnToPool(filled[idx],bank);
+    filled[idx]=word;el.textContent=word;el.classList.add('filled');el.classList.remove('drag-over');
+    touchChip.classList.add('used');checkDragBtn(bank);
+  }touchChip=null;
+}
+function setCP(x,y){if(touchClone){touchClone.style.left=(x-60)+'px';touchClone.style.top=(y-20)+'px';}}
+function returnToPool(word,bank){
+  document.getElementById('pool'+bank).querySelectorAll('.word-chip').forEach(function(c){if(c.dataset.word===word&&c.classList.contains('used')){c.classList.remove('used');}});
+}
+function checkDragBtn(bank){
+  var filled=bank===1?drag1Filled:drag2Filled;
+  document.getElementById('btn-vd'+bank).disabled=!filled.every(function(f){return f!==null;});
+}
+function verifyDrag(bank){
+  var filled=bank===1?drag1Filled:drag2Filled,answers=bank===1?drag1Answers:drag2Answers;
+  var fb=document.getElementById('fb-d'+bank),correct=0;
+  document.querySelectorAll('[data-bank="'+bank+'"].drop-zone').forEach(function(zone){
+    var idx=parseInt(zone.dataset.idx);zone.classList.remove('filled');
+    var ans=answers[idx];
+    if((filled[idx]||'')===(ans||'')){zone.classList.add('correct');correct++;score++;}
+    else{zone.classList.add('wrong');zone.textContent=(filled[idx]||'?')+' → '+ans;}
+  });
+  document.getElementById('score-display').textContent=score;
+  document.getElementById('btn-vd'+bank).disabled=true;
+  document.getElementById('pool'+bank).style.pointerEvents='none';
+  fb.className='ex-feedback show '+(correct===4?'ok':'ko');
+  fb.innerHTML=correct===4?'✅ Parfait ! 4/4 🎉':'💡 '+correct+'/4. Les corrections sont en rouge.';
+  setTimeout(function(){var nb=document.getElementById(bank===1?'btn-to-drag2':'btn-to-classify');nb.classList.add('show');nb.scrollIntoView({behavior:'smooth',block:'nearest'});},800);
+}
+
+function classifyAnswer(btn){
+  var idx=parseInt(btn.dataset.idx),chosen=btn.dataset.type,correct=btn.dataset.correct;
+  var expl=classifyExpls[String(idx)]||'';
+  var block=document.getElementById('cl-'+idx),fb=document.getElementById('clf-'+idx);
+  if(block.classList.contains('answered'))return;
+  block.classList.add('answered');classifyDone++;
+  if(chosen===correct){
+    btn.classList.add('sel-ok');fb.className='classify-feedback show ok';fb.innerHTML='✅ '+expl;
+    score++;document.getElementById('score-display').textContent=score;
+  }else{
+    btn.classList.add('sel-ko');
+    block.querySelectorAll('.classify-btn').forEach(function(b){if(b.dataset.type===correct)b.classList.add('rev-ok');});
+    fb.className='classify-feedback show ko';fb.innerHTML='💡 '+expl;
+  }
+  if(classifyDone>=4){setTimeout(function(){var nb=document.getElementById('btn-to-conjtable');nb.classList.add('show');nb.scrollIntoView({behavior:'smooth',block:'nearest'});},600);}
+}
+
+function nsConj(s){return(s||'').toLowerCase().trim();}
+function verifyConjVerb(verbIdx,answers){
+  var nbOk=0,nbTotal=answers.length;
+  answers.forEach(function(ans,row){
+    var inp=document.getElementById('ci-'+verbIdx+'-'+row);if(!inp)return;
+    inp.classList.remove('correct','wrong');inp.readOnly=true;
+    var accepted=Array.isArray(ans)?ans:[ans];
+    var ok=accepted.some(function(a){return nsConj(inp.value)===nsConj(a);});
+    if(ok){inp.classList.add('correct');nbOk++;score++;document.getElementById('score-display').textContent=score;}
+    else{inp.classList.add('wrong');inp.value=inp.value+' → '+(Array.isArray(ans)?ans[0]:ans);}
+  });
+  var btn=document.getElementById('btn-verif-conj-'+verbIdx);if(btn)btn.disabled=true;
+  var fb=document.getElementById('conj-fb-'+verbIdx);
+  if(fb){fb.className='conj-feedback show '+(nbOk===nbTotal?'ok':'ko');fb.innerHTML=nbOk===nbTotal?'✅ Parfait ! '+nbTotal+'/'+nbTotal+' 🎉':'💡 '+nbOk+'/'+nbTotal+' bonnes réponses.';}
+  conjVerified[verbIdx]=true;
+  if(Object.keys(conjVerified).length>=conjTotal){setTimeout(function(){var nb=document.getElementById('btn-to-bilan');if(nb){nb.classList.add('show');nb.scrollIntoView({behavior:'smooth',block:'nearest'});}},800);}
+}
+
+function showBilan(){
+  document.getElementById('bilan-score').textContent=score;
+  var pct=score/26;
+  var title,msg;
+  if(pct>=0.89){title='Excellent !';msg="Tu sais parfaitement adapter ton niveau de langue à chaque situation. Bravo !";}
+  else if(pct>=0.65){title='Très bien !';msg="Mémorise le tableau des équivalents (familier / courant / soutenu) pour consolider.";}
+  else{title='Continue !';msg="Pense toujours à te demander : qui est mon interlocuteur ? C'est la clé du bon niveau !";}
+  document.getElementById('bilan-title').textContent=title;
+  document.getElementById('bilan-msg').textContent=msg;
+  var seuils=[9,17,23];
+  ['star1','star2','star3'].forEach(function(id,i){
+    var el=document.getElementById(id);
+    if(score>=seuils[i]){(function(elem,delay){setTimeout(function(){elem.classList.add('earned');},delay);})(el,300+i*400);}
+    else{el.style.filter='grayscale(1)';}
+  });
+  if(pct>=0.65)lanceConfetti();
+}
+
+function lanceConfetti(){
+  var cols=['#6d28d9','#c4b5fd','#6BCFB0','#FF8A65','#FFD93D'];
+  for(var i=0;i<60;i++){
+    var el=document.createElement('div');el.className='confetti-piece';
+    el.style.cssText='left:'+Math.random()*100+'vw;background:'+cols[Math.floor(Math.random()*5)]+';animation-duration:'+(1.5+Math.random()*2)+'s;animation-delay:'+Math.random()*1.5+'s;width:'+(7+Math.random()*8)+'px;height:'+(7+Math.random()*8)+'px;border-radius:'+(Math.random()>.5?'50%':'2px')+';';
+    document.body.appendChild(el);
+    setTimeout(function(){if(el.parentNode)el.remove();},4000);
+  }
+}
+
+function restartFiche(){
+  score=0;qcm1Done=0;qcm2Done=0;classifyDone=0;conjVerified={};
+  drag1Filled=[null,null,null,null];drag2Filled=[null,null,null,null];
+  drag1Answers=["Familier","Soutenu","Courant","Familier"];
+  drag2Answers=["ouvrage","se retirer","demeure","véhicule"];
+  document.getElementById('score-display').textContent='0';
+  document.querySelectorAll('.btn-suivant').forEach(function(b){b.classList.remove('show');});
+  document.querySelectorAll('.word-chip').forEach(function(c){c.classList.remove('used');});
+  ['pool1','pool2'].forEach(function(id){var p=document.getElementById(id);if(p)p.style.pointerEvents='';});
+  document.querySelectorAll('.drop-zone').forEach(function(z){z.textContent='';z.className='drop-zone';});
+  document.querySelectorAll('.btn-verifier').forEach(function(b){b.disabled=true;});
+  document.querySelectorAll('.ex-feedback,.qcm-feedback,.classify-feedback,.conj-feedback').forEach(function(f){f.className=f.className.replace(/show.*/g,'');f.innerHTML='';});
+  document.querySelectorAll('.classify-block').forEach(function(b){b.classList.remove('answered');});
+  document.querySelectorAll('.classify-btn').forEach(function(b){b.classList.remove('sel-ok','sel-ko','rev-ok');});
+  document.querySelectorAll('.conj-input').forEach(function(inp){inp.value='';inp.className=inp.classList.contains('conj-input-sm')?'conj-input conj-input-sm':'conj-input';inp.readOnly=false;});
+  document.querySelectorAll('.btn-verif-conj').forEach(function(b){if(b)b.disabled=false;});
+  ['star1','star2','star3'].forEach(function(id){document.getElementById(id).classList.remove('earned');document.getElementById(id).style.filter='';});
+  document.querySelectorAll('.lecon-block').forEach(function(b,i){if(i>0)b.classList.remove('revealed');});
+  document.querySelectorAll('.btn-compris').forEach(function(b){b.disabled=false;b.style.opacity='1';if(b.textContent==='✅ Compris !')b.textContent='J\'ai compris !';});
+  goToPhase('lecon',0);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>O304 Homophones mais/mes — CM2 | L'Atelier du Devoir</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+:root{--sky:#4FBDDF;--sky-pale:#E8F7FC;--sky-deep:#2fa8cc;--yellow:#FFD93D;--yellow-deep:#F7B731;--yellow-pale:#FFF8E1;--mint:#6BCFB0;--mint-pale:#E8FFF7;--mint-deep:#4db896;--coral:#FF8A65;--coral-pale:#FFF0EB;--violet:#9B8AFF;--violet-pale:#F0EEFF;--acc:#F7B731;--acc-pale:#FFF8E1;--text:#2C3E50;--text-light:#7F8C8D;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Nunito',sans-serif;background:#f0fbff;color:var(--text);font-size:16px;line-height:1.6;}
+.print-bar{position:fixed;right:16px;top:50%;transform:translateY(-50%);z-index:200;display:flex;flex-direction:column;gap:8px;}
+.print-btn{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.78rem;border:none;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.18);}
+.print-btn-lecon{background:var(--yellow-deep);color:white;}.print-btn-eval{background:var(--coral);color:white;}
+@media(max-width:600px){.print-bar{right:6px;}.print-btn{font-size:0;width:40px;height:40px;padding:0;justify-content:center;}.print-btn span.lbl{display:none;}.print-btn span.ico{font-size:1.2rem;}}
+.header{background:white;border-bottom:3px solid var(--yellow-pale);position:sticky;top:0;z-index:100;box-shadow:0 4px 20px rgba(247,183,49,.1);}
+.header-top{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;}
+.logo{font-family:'Fredoka One',cursive;font-size:1.2rem;color:var(--yellow-deep);text-decoration:none;}
+.score-badge{background:var(--yellow);font-weight:900;font-size:.9rem;padding:6px 14px;border-radius:50px;display:flex;align-items:center;gap:4px;}
+.steps-wrap{padding:0 20px 8px;}
+.steps{display:flex;gap:4px;}.step{flex:1;height:7px;border-radius:50px;background:var(--yellow-pale);transition:all .4s;}
+.step.done{background:var(--mint);}.step.active{background:var(--yellow-deep);transform:scaleY(1.3);}
+.steps-labels{display:flex;gap:4px;padding-top:3px;}
+.step-lbl{flex:1;font-size:.52rem;font-weight:800;color:var(--text-light);text-align:center;line-height:1.2;}
+.main{max-width:760px;margin:0 auto;padding:24px 16px 100px;}
+.phase{display:none;}.phase.active{display:block;}
+.accroche{background:linear-gradient(135deg,#FFF8E1,#E8F7FC);border-radius:24px;padding:22px 26px;margin-bottom:20px;display:flex;gap:18px;align-items:center;}
+.accroche-mascot{font-size:3rem;flex-shrink:0;animation:float 3s ease-in-out infinite;}
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+.accroche-text h1{font-family:'Fredoka One',cursive;font-size:1.4rem;color:var(--yellow-deep);margin-bottom:5px;}
+.accroche-text p{color:var(--text-light);font-size:.9rem;}
+.meta-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;}
+.meta-tag{background:white;border-radius:50px;padding:4px 12px;font-size:.74rem;font-weight:800;color:var(--text-light);}
+.lecon-card{background:white;border-radius:24px;padding:22px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);}
+.lecon-card h2{font-family:'Fredoka One',cursive;font-size:1.3rem;color:var(--yellow-deep);margin-bottom:14px;}
+.lecon-block{display:none;}.lecon-block.revealed{display:block;}
+.sep{margin:20px 0;border:none;border-top:2px solid var(--yellow-pale);}
+.lecon-subtitle{font-family:'Fredoka One',cursive;font-size:1.1rem;color:var(--yellow-deep);margin-bottom:12px;}
+.acc-box{background:var(--sky-pale);border:2px solid var(--sky);border-radius:16px;padding:15px 18px;margin-bottom:12px;}
+.acc-box h4{font-family:'Fredoka One',cursive;color:var(--sky-deep);margin-bottom:8px;font-size:1rem;}
+.phrase-ex{background:white;border-radius:10px;padding:8px 12px;font-size:.92rem;font-weight:700;margin-bottom:6px;line-height:1.8;}
+.hl-a{background:var(--sky-pale);color:var(--sky-deep);border-radius:6px;padding:2px 8px;border-bottom:3px solid var(--sky);font-weight:900;margin:0 2px;}
+.hl-b{background:var(--yellow-pale);color:var(--yellow-deep);border-radius:6px;padding:2px 8px;border-bottom:3px solid var(--yellow-deep);font-weight:900;margin:0 2px;}
+.astuce{background:var(--yellow-pale);border-left:4px solid var(--yellow-deep);border-radius:0 12px 12px 0;padding:12px 16px;margin-top:12px;font-size:.88rem;}
+.astuce strong{color:var(--yellow-deep);}
+.btn-compris{margin-top:20px;padding:14px 30px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.95rem;background:linear-gradient(135deg,var(--mint),var(--sky));color:white;border:none;cursor:pointer;box-shadow:0 4px 18px rgba(107,207,176,.35);transition:all .25s;display:inline-flex;align-items:center;gap:10px;}
+.btn-compris:hover{transform:translateY(-2px);}.btn-compris:disabled{opacity:.5;cursor:default;transform:none;}
+.mascot-msg{background:white;border-radius:24px;padding:14px 18px;margin:14px 0;display:flex;align-items:flex-start;gap:12px;box-shadow:0 4px 16px rgba(0,0,0,.06);}
+.mascot-msg .emo{font-size:2rem;flex-shrink:0;}.mascot-msg p{font-size:.9rem;color:var(--text-light);}
+.ex-num{display:inline-block;background:var(--yellow-deep);color:white;font-weight:900;font-size:.74rem;padding:3px 10px;border-radius:50px;margin-bottom:8px;}
+.ex-header h2{font-family:'Fredoka One',cursive;font-size:1.25rem;margin-bottom:4px;}
+.ex-header p{color:var(--text-light);font-size:.86rem;margin-bottom:14px;}
+.qcm-question{background:white;border-radius:24px;padding:22px;box-shadow:0 4px 20px rgba(0,0,0,.06);margin-bottom:14px;}
+.qcm-question.answered{pointer-events:none;}
+.qcm-sentence{font-size:.95rem;font-weight:700;margin-bottom:14px;line-height:1.8;background:var(--yellow-pale);border-radius:12px;padding:12px 14px;}
+.qhl{color:#2fa8cc;font-weight:900;background:var(--sky-pale);border-radius:6px;padding:1px 6px;}
+.qhl-acc{color:var(--yellow-deep);font-weight:900;background:var(--yellow-pale);border-radius:6px;padding:1px 6px;text-decoration:underline;}
+.qcm-options{display:flex;flex-direction:column;gap:9px;}
+.qcm-opt{padding:11px 16px;border-radius:12px;border:2.5px solid var(--yellow-pale);background:white;font-family:'Nunito',sans-serif;font-weight:700;font-size:.88rem;cursor:pointer;text-align:left;transition:all .2s;}
+.qcm-opt:hover{border-color:var(--yellow-deep);background:var(--yellow-pale);}.qcm-opt.correct{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.qcm-opt.wrong{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}.qcm-opt.reveal{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.qcm-feedback{margin-top:12px;padding:11px 14px;border-radius:12px;font-size:.86rem;font-weight:700;display:none;}
+.qcm-feedback.show{display:block;}.qcm-feedback.ok{background:var(--mint-pale);color:var(--mint-deep);}.qcm-feedback.ko{background:var(--coral-pale);color:#c0392b;}
+.btn-suivant{margin-top:14px;padding:11px 22px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.88rem;background:var(--yellow-deep);color:white;border:none;cursor:pointer;display:none;align-items:center;gap:8px;transition:all .2s;}
+.btn-suivant.show{display:inline-flex;}
+.bank-area{background:white;border-radius:24px;padding:18px 22px;margin-bottom:18px;box-shadow:0 4px 20px rgba(0,0,0,.06);}
+.bank-label{font-weight:800;margin-bottom:10px;font-size:.9rem;}
+.word-chips{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:16px;min-height:50px;padding:10px;background:var(--yellow-pale);border-radius:12px;}
+.word-chip{padding:10px 18px;border-radius:50px;border:2.5px solid var(--yellow-deep);background:white;font-weight:900;font-size:.95rem;cursor:grab;color:var(--yellow-deep);transition:all .2s;user-select:none;-webkit-user-select:none;}
+.word-chip.used{opacity:.22;pointer-events:none;}
+.drop-sentences{display:flex;flex-direction:column;gap:11px;}
+.drop-row{background:var(--yellow-pale);border-radius:14px;padding:13px 16px;display:flex;align-items:center;flex-wrap:wrap;gap:6px;font-size:.96rem;font-weight:600;}
+.drop-zone{display:inline-flex;align-items:center;justify-content:center;min-width:70px;height:36px;border:2.5px dashed var(--yellow-deep);border-radius:10px;background:white;color:var(--yellow-deep);font-weight:900;font-size:.95rem;padding:0 10px;transition:all .25s;cursor:pointer;}
+.drop-zone.drag-over{border-color:#c47a00;background:var(--yellow-pale);transform:scale(1.05);border-style:solid;}
+.drop-zone.filled{border-style:solid;}.drop-zone.correct{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);cursor:default;border-style:solid;}
+.drop-zone.wrong{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);border-style:solid;font-size:.78rem;}
+.btn-verifier{margin-top:16px;padding:11px 24px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.9rem;background:linear-gradient(135deg,var(--yellow-deep),var(--coral));color:white;border:none;cursor:pointer;}
+.btn-verifier:disabled{opacity:.45;cursor:not-allowed;}
+.ex-feedback{margin-top:12px;padding:12px 15px;border-radius:14px;font-size:.86rem;font-weight:700;display:none;}
+.ex-feedback.show{display:block;}.ex-feedback.ok{background:var(--mint-pale);color:var(--mint-deep);}.ex-feedback.ko{background:var(--coral-pale);color:#c0392b;}
+.classify-block{background:white;border-radius:24px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);margin-bottom:14px;}
+.classify-block.answered{pointer-events:none;}
+.classify-phrase{background:var(--yellow-pale);border-radius:14px;padding:12px 16px;font-size:.96rem;font-weight:700;margin-bottom:14px;line-height:1.6;}
+.classify-btns{display:flex;gap:10px;flex-wrap:wrap;}
+.classify-btn{padding:12px 20px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.88rem;border:none;cursor:pointer;transition:all .2s;flex:1;text-align:center;}
+.classify-btn.mais-btn{background:var(--sky-pale);color:var(--sky-deep);border:2px solid var(--sky);}
+.classify-btn.mes-btn{background:var(--yellow-pale);color:var(--yellow-deep);border:2px solid var(--yellow-deep);}
+.classify-btn.sel-ok{color:white!important;background:var(--mint)!important;border-color:transparent!important;}
+.classify-btn.sel-ko{background:var(--coral-pale)!important;color:var(--coral)!important;border-color:var(--coral)!important;}
+.classify-btn.rev-ok{color:white!important;background:var(--yellow-deep)!important;border-color:transparent!important;}
+.classify-feedback{margin-top:12px;padding:10px 14px;border-radius:12px;font-size:.85rem;font-weight:700;display:none;}
+.classify-feedback.show{display:block;}
+.classify-feedback.ok{background:var(--mint-pale);color:var(--mint-deep);}.classify-feedback.ko{background:var(--coral-pale);color:#c0392b;}
+.conj-ex-wrap{display:flex;flex-direction:column;gap:24px;}
+.conj-verb-block{background:white;border-radius:24px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);}
+.conj-verb-title{font-family:'Fredoka One',cursive;font-size:1rem;color:var(--yellow-deep);margin-bottom:14px;text-align:center;background:var(--yellow-pale);border-radius:12px;padding:10px 14px;}
+.conj-rows{display:flex;flex-direction:column;gap:8px;}
+.conj-row-item{display:flex;align-items:center;gap:4px;background:var(--yellow-pale);border-radius:12px;padding:8px 12px;flex-wrap:nowrap;}
+.conj-row-phrase{gap:4px;}
+.conj-pron-part{font-weight:700;color:var(--text);font-size:.92rem;}
+.conj-pron-part.suite{color:var(--text-light);font-size:.8rem;}
+.conj-input{border:2.5px solid var(--yellow-deep);border-radius:10px;padding:6px 8px;font-family:'Nunito',sans-serif;font-weight:900;font-size:1rem;color:var(--text);background:white;outline:none;flex-shrink:0;text-align:center;}
+.conj-input-sm{width:60px;}
+.conj-input:focus{border-color:#c47a00;box-shadow:0 0 0 3px rgba(247,183,49,.2);}
+.conj-input.correct{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.conj-input.wrong{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);font-size:.72rem;width:auto;flex:1;}
+.btn-verif-conj{margin-top:14px;padding:12px 24px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.9rem;background:linear-gradient(135deg,var(--yellow-deep),var(--coral));color:white;border:none;cursor:pointer;display:block;width:100%;}
+.btn-verif-conj:disabled{opacity:.45;cursor:not-allowed;}
+.conj-feedback{margin-top:10px;padding:10px 14px;border-radius:12px;font-size:.85rem;font-weight:700;display:none;}
+.conj-feedback.show{display:block;}
+.conj-feedback.ok{background:var(--mint-pale);color:var(--mint-deep);}.conj-feedback.ko{background:var(--coral-pale);color:#c0392b;}
+.bilan-card{background:white;border-radius:24px;padding:30px 26px;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,.08);}
+.bilan-mascot{font-size:4rem;margin-bottom:12px;display:block;animation:bigFloat 2s ease-in-out infinite;}
+@keyframes bigFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-12px);}}
+.bilan-title{font-family:'Fredoka One',cursive;font-size:2rem;margin-bottom:8px;}
+.bilan-msg{color:var(--text-light);font-size:1rem;margin-bottom:22px;}
+.stars-row{display:flex;justify-content:center;gap:12px;margin-bottom:22px;}
+.star-big{font-size:3rem;filter:grayscale(1);transition:all .5s;}.star-big.earned{filter:none;animation:starPop .5s ease both;}
+@keyframes starPop{0%{transform:scale(0);}60%{transform:scale(1.3);}100%{transform:scale(1);}}
+.score-circle{width:110px;height:110px;border-radius:50%;background:linear-gradient(135deg,var(--yellow-deep),var(--coral));display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 22px;color:white;}
+.score-num{font-family:'Fredoka One',cursive;font-size:2rem;line-height:1;}
+.memo-card{background:linear-gradient(135deg,var(--yellow-pale),var(--sky-pale));border-radius:24px;padding:18px 22px;margin:20px 0;text-align:left;}
+.memo-card h3{font-family:'Fredoka One',cursive;font-size:1.05rem;color:var(--yellow-deep);margin-bottom:11px;text-align:center;}
+.memo-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media(max-width:480px){.memo-grid{grid-template-columns:1fr;}}
+.memo-item{background:white;border-radius:10px;padding:9px 12px;font-size:.8rem;font-weight:700;}
+.bilan-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:18px;}
+.btn-act{padding:12px 22px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.88rem;cursor:pointer;border:none;}
+.btn-act.sky{background:var(--sky);color:white;}.btn-act.sky-pale{background:var(--sky-pale);color:var(--sky-deep);border:2px solid var(--sky);}
+.confetti-piece{position:fixed;border-radius:2px;top:-20px;animation:fall linear both;pointer-events:none;z-index:9999;}
+@keyframes fall{0%{transform:translateY(0) rotate(0deg);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
+</style>
+</head>
+<body>
+<div class="print-bar">
+  <button class="print-btn print-btn-lecon" onclick="printLecon()"><span class="ico">📖</span><span class="lbl"> Imprimer la leçon</span></button>
+  <button class="print-btn print-btn-eval" onclick="printEval()"><span class="ico">📝</span><span class="lbl"> Imprimer les exercices</span></button>
+</div>
+<header class="header">
+  <div class="header-top">
+    <a href="../9-12ans.html" class="logo">🦉 L'Atelier du Devoir</a>
+    <div class="score-badge">⭐ <span id="score-display">0</span> pts</div>
+  </div>
+  <div class="steps-wrap">
+    <div class="steps">
+      <div class="step active" id="step-0"></div><div class="step" id="step-1"></div><div class="step" id="step-2"></div>
+      <div class="step" id="step-3"></div><div class="step" id="step-4"></div><div class="step" id="step-5"></div>
+      <div class="step" id="step-6"></div><div class="step" id="step-7"></div>
+    </div>
+    <div class="steps-labels">
+      <div class="step-lbl">📖 Leçon</div><div class="step-lbl">✏️ Entr. 1</div><div class="step-lbl">✏️ Entr. 2</div>
+      <div class="step-lbl">🖊️ Ex. 1</div><div class="step-lbl">🖊️ Ex. 2</div><div class="step-lbl">🎯 Ex. 3</div>
+      <div class="step-lbl">⌨️ Ex. 4</div><div class="step-lbl">⭐ Bilan</div>
+    </div>
+  </div>
+</header>
+<main class="main">
+  <div class="accroche" id="accroche-bloc">
+    <div class="accroche-mascot">🤔</div>
+    <div class="accroche-text">
+      <h1>Homophones : mais / mes</h1>
+      <p>Ils se prononcent pareil mais s'écrivent différemment ! Apprends les tests pour ne plus te tromper.</p>
+      <div class="meta-row">
+        <span class="meta-tag">📚 CM2</span>
+        <span class="meta-tag">⏱️ ~20 min</span>
+        <span class="meta-tag">⭐☆☆ Difficulté</span>
+        <span class="meta-tag">🎯 Français — Orthographe</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase active" id="phase-lecon">
+    <div class="lecon-card"><h2>📖 La leçon</h2>
+
+      <div class="lecon-block revealed" id="bloc-0">
+        <div class="lecon-subtitle">① mais — la conjonction d'opposition</div>
+        <div class="acc-box"><h4>🔵 mais = conjonction de coordination</h4>
+        <div class="phrase-ex">Il est grand <span class="hl-a">mais</span> maladroit. → Il est grand <em>cependant</em> maladroit ✅</div>
+        <div class="phrase-ex">Je veux venir, <span class="hl-a">mais</span> je suis fatigué. → <em>cependant</em> je suis fatigué ✅</div>
+        <p style="font-size:.85rem;color:var(--text-light);margin-top:8px;"><strong>mais</strong> relie deux parties de phrase avec une idée d'opposition ou de restriction.</p></div>
+        <div class="astuce">🦉 <strong>Test :</strong> Remplace par <strong>cependant</strong>. Si ça marche → <strong>mais</strong>.</div>
+        <button class="btn-compris" onclick="revealBloc(1)">J'ai compris ! → mes 🟡</button>
+      </div>
+
+      <div class="lecon-block" id="bloc-1">
+        <hr class="sep">
+        <div class="lecon-subtitle">② mes — le déterminant possessif</div>
+        <div class="acc-box" style="background:var(--yellow-pale);border-color:var(--yellow-deep);"><h4 style="color:var(--yellow-deep);">🟡 mes = déterminant possessif</h4>
+        <div class="phrase-ex">J'ai oublié <span class="hl-b">mes</span> clés. → J'ai oublié <em>ses</em> clés ✅</div>
+        <div class="phrase-ex"><span class="hl-b">Mes</span> parents arrivent. → <em>Ses</em> parents arrivent ✅</div>
+        <p style="font-size:.85rem;color:var(--text-light);margin-top:8px;"><strong>mes</strong> = pluriel de <em>mon / ma</em>. Il s'accorde avec le nom qui suit.</p></div>
+        <div class="astuce">🦉 <strong>Test :</strong> Remplace par <strong>ses</strong>. Si ça marche → <strong>mes</strong>.</div>
+        <button class="btn-compris" onclick="revealBloc(2)">J'ai compris ! → Les deux tests ✅</button>
+      </div>
+
+      <div class="lecon-block" id="bloc-2">
+        <hr class="sep">
+        <div class="lecon-subtitle">③ Les deux tests d'Ugo</div>
+        <div class="astuce">🦉 <strong>Les tests d'Ugo :</strong><br>
+→ Remplace par <strong>cependant</strong> : si ça marche = <strong>mais</strong><br>
+→ Remplace par <strong>ses</strong> : si ça marche = <strong>mes</strong></div>
+        <div class="acc-box" style="margin-top:12px;">
+          <div class="phrase-ex">Je suis fatigué, <span class="hl-a">mais</span> je continue. → <em>cependant</em> je continue ✅ → mais</div>
+          <div class="phrase-ex">J'ai rangé <span class="hl-b">mes</span> affaires. → <em>ses</em> affaires ✅ → mes</div>
+          <div class="phrase-ex"><span class="hl-b">Mes</span> amis arrivent ce soir. → <em>ses</em> amis ✅ → mes (majuscule car début de phrase)</div>
+        </div>
+        <button class="btn-compris" onclick="startExercises()" style="background:linear-gradient(135deg,var(--yellow-deep),var(--coral));">✅ Leçon comprise ! Aux exercices 🚀</button>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="phase" id="phase-ex1">
+    <div class="mascot-msg"><span class="emo">🤔</span><p>Utilise les tests : <strong>cependant</strong> pour mais, <strong>ses</strong> pour mes !</p></div>
+    <div class="ex-num">ENTRAÎNEMENT 1 / 2</div>
+    <div class="ex-header"><h2>Comprendre mais et mes</h2><p>Clique sur la bonne réponse.</p></div>
+    <div id="qcm1-container"></div>
+    <button class="btn-suivant" id="btn-to-ex2" onclick="goToPhase('ex2',2)">Suite → Entraînement 2 ✏️</button>
+  </div>
+
+  <div class="phase" id="phase-ex2">
+    <div class="mascot-msg"><span class="emo">🤔</span><p>Bien joué ! Quelques cas plus délicats maintenant.</p></div>
+    <div class="ex-num">ENTRAÎNEMENT 2 / 2</div>
+    <div class="ex-header"><h2>Cas particuliers</h2><p>Clique sur la bonne réponse.</p></div>
+    <div id="qcm2-container"></div>
+    <button class="btn-suivant" id="btn-to-drag1" onclick="goToPhase('drag1',3)">Suite → Exercice 1 🖊️</button>
+  </div>
+
+  <div class="phase" id="phase-drag1">
+    <div class="mascot-msg"><span class="emo">🤔</span><p>Glisse le bon mot — teste avant de déposer !</p></div>
+    <div class="ex-num">EXERCICE 1 / 3 — Glisser-déposer</div>
+    <div class="ex-header"><h2>mais ou mes ?</h2><p>Glisse le bon homophone dans chaque phrase.</p></div>
+    <div class="bank-area">
+      <div class="bank-label">🎒 Les mots :</div>
+      <div class="word-chips" id="pool1">
+      <div class="word-chip" draggable="true" data-word="mes" ondragstart="onDS(event,1)" ontouchstart="onTS(event)" ontouchmove="onTM(event)" ontouchend="onTE(event,1)">mes</div>
+      <div class="word-chip" draggable="true" data-word="mais" ondragstart="onDS(event,1)" ontouchstart="onTS(event)" ontouchmove="onTM(event)" ontouchend="onTE(event,1)">mais</div>
+      <div class="word-chip" draggable="true" data-word="mes" ondragstart="onDS(event,1)" ontouchstart="onTS(event)" ontouchmove="onTM(event)" ontouchend="onTE(event,1)">mes</div>
+      <div class="word-chip" draggable="true" data-word="mais" ondragstart="onDS(event,1)" ontouchstart="onTS(event)" ontouchmove="onTM(event)" ontouchend="onTE(event,1)">mais</div>
+      </div>
+            <div class="drop-sentences">
+        <div class="drop-row">Il voulait venir, <span class="drop-zone" data-bank="1" data-idx="0" ondragover="onDO(event)" ondragleave="onDL(event)" ondrop="onDP(event,1)"></span> il était malade.</div>
+        <div class="drop-row">Elle a oublié <span class="drop-zone" data-bank="1" data-idx="1" ondragover="onDO(event)" ondragleave="onDL(event)" ondrop="onDP(event,1)"></span> affaires à l'école.</div>
+        <div class="drop-row">J'aime le sport, <span class="drop-zone" data-bank="1" data-idx="2" ondragover="onDO(event)" ondragleave="onDL(event)" ondrop="onDP(event,1)"></span> je préfère la lecture.</div>
+        <div class="drop-row">Tu as vu <span class="drop-zone" data-bank="1" data-idx="3" ondragover="onDO(event)" ondragleave="onDL(event)" ondrop="onDP(event,1)"></span> nouvelles chaussures ?</div>
+      </div>
+      <button class="btn-verifier" id="btn-vd1" onclick="verifyDrag(1)" disabled>✅ Vérifier mes réponses</button>
+      <div class="ex-feedback" id="fb-d1"></div>
+    </div>
+    <button class="btn-suivant" id="btn-to-drag2" onclick="goToPhase('drag2',4)">Suite → Exercice 2 🖊️</button>
+  </div>
+
+  <div class="phase" id="phase-drag2">
+    <div class="mascot-msg"><span class="emo">🤔</span><p>Attention aux majuscules en début de phrase !</p></div>
+    <div class="ex-num">EXERCICE 2 / 3 — Glisser-déposer</div>
+    <div class="ex-header"><h2>mais ou mes ? (suite)</h2><p>Glisse le bon mot — attention aux majuscules.</p></div>
+    <div class="bank-area">
+      <div class="bank-label">🎒 Les mots :</div>
+      <div class="word-chips" id="pool2">
+      <div class="word-chip" draggable="true" data-word="mais" ondragstart="onDS(event,2)" ontouchstart="onTS(event)" ontouchmove="onTM(event)" ontouchend="onTE(event,2)">mais</div>
+      <div class="word-chip" draggable="true" data-word="Mes" ondragstart="onDS(event,2)" ontouchstart="onTS(event)" ontouchmove="onTM(event)" ontouchend="onTE(event,2)">Mes</div>
+      <div class="word-chip" draggable="true" data-word="mais" ondragstart="onDS(event,2)" ontouchstart="onTS(event)" ontouchmove="onTM(event)" ontouchend="onTE(event,2)">mais</div>
+      <div class="word-chip" draggable="true" data-word="mes" ondragstart="onDS(event,2)" ontouchstart="onTS(event)" ontouchmove="onTM(event)" ontouchend="onTE(event,2)">mes</div>
+      </div>
+            <div class="drop-sentences">
+        <div class="drop-row"><span class="drop-zone" data-bank="2" data-idx="0" ondragover="onDO(event)" ondragleave="onDL(event)" ondrop="onDP(event,2)"></span> amis sont venus me voir.</div>
+        <div class="drop-row">Je suis fatigué, <span class="drop-zone" data-bank="2" data-idx="1" ondragover="onDO(event)" ondragleave="onDL(event)" ondrop="onDP(event,2)"></span> je continue.</div>
+        <div class="drop-row">Il a pris <span class="drop-zone" data-bank="2" data-idx="2" ondragover="onDO(event)" ondragleave="onDL(event)" ondrop="onDP(event,2)"></span> affaires par erreur.</div>
+        <div class="drop-row">C'est difficile, <span class="drop-zone" data-bank="2" data-idx="3" ondragover="onDO(event)" ondragleave="onDL(event)" ondrop="onDP(event,2)"></span> possible.</div>
+      </div>
+      <button class="btn-verifier" id="btn-vd2" onclick="verifyDrag(2)" disabled>✅ Vérifier mes réponses</button>
+      <div class="ex-feedback" id="fb-d2"></div>
+    </div>
+    <button class="btn-suivant" id="btn-to-classify" onclick="goToPhase('classify',5)">Suite → Exercice 3 🎯</button>
+  </div>
+
+  <div class="phase" id="phase-classify">
+    <div class="mascot-msg"><span class="emo">🤔</span><p>Identifie le rôle grammatical du mot souligné !</p></div>
+    <div class="ex-num">EXERCICE 3 / 4 — Identifie le rôle</div>
+    <div class="ex-header"><h2>Conjonction ou possessif ?</h2><p>Identifie la nature du mot souligné.</p></div>
+        <div class="classify-block" id="cl-0"><div class="classify-phrase">📝 Il fait froid <u>mais</u> le soleil brille.</div><div class="classify-btns"><button class="classify-btn mais-btn" data-idx="0" data-type="mais_conj" data-correct="mais_conj" onclick="classifyAnswer(this)">🔵 mais (conjonction)</button><button class="classify-btn mes-btn" data-idx="0" data-type="mes_poss" data-correct="mais_conj" onclick="classifyAnswer(this)">🟡 mes (possessif)</button></div><div class="classify-feedback" id="clf-0"></div></div>
+    <div class="classify-block" id="cl-1"><div class="classify-phrase">📝 J'ai retrouvé <u>mes</u> clés sous le canapé.</div><div class="classify-btns"><button class="classify-btn mais-btn" data-idx="1" data-type="mais_conj" data-correct="mes_poss" onclick="classifyAnswer(this)">🔵 mais (conjonction)</button><button class="classify-btn mes-btn" data-idx="1" data-type="mes_poss" data-correct="mes_poss" onclick="classifyAnswer(this)">🟡 mes (possessif)</button></div><div class="classify-feedback" id="clf-1"></div></div>
+    <div class="classify-block" id="cl-2"><div class="classify-phrase">📝 Elle est gentille, <u>mais</u> très timide.</div><div class="classify-btns"><button class="classify-btn mais-btn" data-idx="2" data-type="mais_conj" data-correct="mais_conj" onclick="classifyAnswer(this)">🔵 mais (conjonction)</button><button class="classify-btn mes-btn" data-idx="2" data-type="mes_poss" data-correct="mais_conj" onclick="classifyAnswer(this)">🟡 mes (possessif)</button></div><div class="classify-feedback" id="clf-2"></div></div>
+    <div class="classify-block" id="cl-3"><div class="classify-phrase">📝 <u>Mes</u> parents arrivent ce soir.</div><div class="classify-btns"><button class="classify-btn mais-btn" data-idx="3" data-type="mais_conj" data-correct="mes_poss" onclick="classifyAnswer(this)">🔵 mais (conjonction)</button><button class="classify-btn mes-btn" data-idx="3" data-type="mes_poss" data-correct="mes_poss" onclick="classifyAnswer(this)">🟡 mes (possessif)</button></div><div class="classify-feedback" id="clf-3"></div></div>
+
+    <button class="btn-suivant" id="btn-to-conjtable" onclick="goToPhase('conjtable',6)">Suite → Exercice 4 ⌨️</button>
+  </div>
+
+  <div class="phase" id="phase-conjtable">
+    <div class="mascot-msg"><span class="emo">🤔</span><p><strong>Dernier exercice !</strong> Écris mais ou mes dans chaque phrase.</p></div>
+    <div class="ex-num">EXERCICE 4 / 4 — Écris le bon mot</div>
+    <div class="ex-header"><h2>Complète avec mais ou mes</h2><p>Teste mentalement avant d'écrire !</p></div>
+    <div class="bank-area">
+      <div class="conj-ex-wrap">
+  <div class="conj-verb-block"><div class="conj-verb-title">✏️ mais ou mes — écris le bon mot</div><div class="conj-rows">
+    <div class="conj-row-item conj-row-phrase"><span class="conj-pron-part">Il est intelligent ___ paresseux.</span><input class="conj-input conj-input-sm" id="ci-0-0" type="text" placeholder="…" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" maxlength="4"><span class="conj-pron-part suite"></span></div>
+    <div class="conj-row-item conj-row-phrase"><span class="conj-pron-part">J'ai rangé ___ affaires dans mon sac.</span><input class="conj-input conj-input-sm" id="ci-0-1" type="text" placeholder="…" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" maxlength="4"><span class="conj-pron-part suite"></span></div>
+    <div class="conj-row-item conj-row-phrase"><span class="conj-pron-part">Elle chante bien, ___ elle a le trac.</span><input class="conj-input conj-input-sm" id="ci-0-2" type="text" placeholder="…" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" maxlength="4"><span class="conj-pron-part suite"></span></div>
+    <div class="conj-row-item conj-row-phrase"><span class="conj-pron-part">Tu as vu ___ nouveaux livres ?</span><input class="conj-input conj-input-sm" id="ci-0-3" type="text" placeholder="…" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" maxlength="4"><span class="conj-pron-part suite"></span></div>
+    <div class="conj-row-item conj-row-phrase"><span class="conj-pron-part">Il voulait partir, ___ il est resté.</span><input class="conj-input conj-input-sm" id="ci-0-4" type="text" placeholder="…" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" maxlength="4"><span class="conj-pron-part suite"></span></div>
+    <div class="conj-row-item conj-row-phrase"><span class="conj-pron-part">___ parents sont très gentils.</span><input class="conj-input conj-input-sm" id="ci-0-5" type="text" placeholder="…" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" maxlength="4"><span class="conj-pron-part suite"></span></div>
+  </div><button class="btn-verif-conj" id="btn-verif-conj-0" onclick="verifyConjVerb(0, conjAnswers[0])">✅ Vérifier</button><div class="conj-feedback" id="conj-fb-0"></div></div>
+  <div class="conj-verb-block"><div class="conj-verb-title">✏️ mais ou mes — phrases plus difficiles</div><div class="conj-rows">
+    <div class="conj-row-item conj-row-phrase"><span class="conj-pron-part">C'est loin, ___ on y va quand même.</span><input class="conj-input conj-input-sm" id="ci-1-0" type="text" placeholder="…" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" maxlength="4"><span class="conj-pron-part suite"></span></div>
+    <div class="conj-row-item conj-row-phrase"><span class="conj-pron-part">J'ai perdu ___ lunettes ce matin.</span><input class="conj-input conj-input-sm" id="ci-1-1" type="text" placeholder="…" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" maxlength="4"><span class="conj-pron-part suite"></span></div>
+    <div class="conj-row-item conj-row-phrase"><span class="conj-pron-part">Il travaille dur, ___ il échoue souvent.</span><input class="conj-input conj-input-sm" id="ci-1-2" type="text" placeholder="…" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" maxlength="4"><span class="conj-pron-part suite"></span></div>
+    <div class="conj-row-item conj-row-phrase"><span class="conj-pron-part">___ amis m'ont fait une surprise.</span><input class="conj-input conj-input-sm" id="ci-1-3" type="text" placeholder="…" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" maxlength="4"><span class="conj-pron-part suite"></span></div>
+    <div class="conj-row-item conj-row-phrase"><span class="conj-pron-part">Le film était long ___ passionnant.</span><input class="conj-input conj-input-sm" id="ci-1-4" type="text" placeholder="…" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" maxlength="4"><span class="conj-pron-part suite"></span></div>
+    <div class="conj-row-item conj-row-phrase"><span class="conj-pron-part">J'ai apporté ___ devoirs à corriger.</span><input class="conj-input conj-input-sm" id="ci-1-5" type="text" placeholder="…" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" maxlength="4"><span class="conj-pron-part suite"></span></div>
+  </div><button class="btn-verif-conj" id="btn-verif-conj-1" onclick="verifyConjVerb(1, conjAnswers[1])">✅ Vérifier</button><div class="conj-feedback" id="conj-fb-1"></div></div>
+  <div class="conj-verb-block"><div class="conj-verb-title">✏️ Applique le test : remplace par cependant ou ses</div><div class="conj-rows">
+    <div class="conj-row-item conj-row-phrase"><span class="conj-pron-part">Elle est douce ___ courageuse.</span><input class="conj-input conj-input-sm" id="ci-2-0" type="text" placeholder="…" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" maxlength="4"><span class="conj-pron-part suite"> </span></div>
+    <div class="conj-row-item conj-row-phrase"><span class="conj-pron-part">J'ai retrouvé ___ clés !</span><input class="conj-input conj-input-sm" id="ci-2-1" type="text" placeholder="…" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" maxlength="4"><span class="conj-pron-part suite"> </span></div>
+    <div class="conj-row-item conj-row-phrase"><span class="conj-pron-part">Il fait chaud ___ il y a du vent.</span><input class="conj-input conj-input-sm" id="ci-2-2" type="text" placeholder="…" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" maxlength="4"><span class="conj-pron-part suite"> </span></div>
+    <div class="conj-row-item conj-row-phrase"><span class="conj-pron-part">___ notes sont bonnes ce trimestre.</span><input class="conj-input conj-input-sm" id="ci-2-3" type="text" placeholder="…" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" maxlength="4"><span class="conj-pron-part suite"> </span></div>
+    <div class="conj-row-item conj-row-phrase"><span class="conj-pron-part">Je veux bien, ___ je suis occupé.</span><input class="conj-input conj-input-sm" id="ci-2-4" type="text" placeholder="…" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" maxlength="4"><span class="conj-pron-part suite"> </span></div>
+    <div class="conj-row-item conj-row-phrase"><span class="conj-pron-part">Elle a pris ___ médicaments.</span><input class="conj-input conj-input-sm" id="ci-2-5" type="text" placeholder="…" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" maxlength="4"><span class="conj-pron-part suite"> </span></div>
+  </div><button class="btn-verif-conj" id="btn-verif-conj-2" onclick="verifyConjVerb(2, conjAnswers[2])">✅ Vérifier</button><div class="conj-feedback" id="conj-fb-2"></div></div>
+  <div class="conj-verb-block"><div class="conj-verb-title">✏️ Phrases à compléter — contextes variés</div><div class="conj-rows">
+    <div class="conj-row-item conj-row-phrase"><span class="conj-pron-part">C'est difficile ___ faisable.</span><input class="conj-input conj-input-sm" id="ci-3-0" type="text" placeholder="…" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" maxlength="4"><span class="conj-pron-part suite"></span></div>
+    <div class="conj-row-item conj-row-phrase"><span class="conj-pron-part">Tu as vu ___ nouvelles baskets ?</span><input class="conj-input conj-input-sm" id="ci-3-1" type="text" placeholder="…" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" maxlength="4"><span class="conj-pron-part suite"></span></div>
+    <div class="conj-row-item conj-row-phrase"><span class="conj-pron-part">Il parle doucement ___ clairement.</span><input class="conj-input conj-input-sm" id="ci-3-2" type="text" placeholder="…" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" maxlength="4"><span class="conj-pron-part suite"></span></div>
+    <div class="conj-row-item conj-row-phrase"><span class="conj-pron-part">J'ai oublié ___ clés à la maison.</span><input class="conj-input conj-input-sm" id="ci-3-3" type="text" placeholder="…" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" maxlength="4"><span class="conj-pron-part suite"></span></div>
+    <div class="conj-row-item conj-row-phrase"><span class="conj-pron-part">Elle voulait rester, ___ elle est partie.</span><input class="conj-input conj-input-sm" id="ci-3-4" type="text" placeholder="…" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" maxlength="4"><span class="conj-pron-part suite"></span></div>
+    <div class="conj-row-item conj-row-phrase"><span class="conj-pron-part">___ professeurs sont très sympas.</span><input class="conj-input conj-input-sm" id="ci-3-5" type="text" placeholder="…" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" maxlength="4"><span class="conj-pron-part suite"></span></div>
+  </div><button class="btn-verif-conj" id="btn-verif-conj-3" onclick="verifyConjVerb(3, conjAnswers[3])">✅ Vérifier</button><div class="conj-feedback" id="conj-fb-3"></div></div>
+</div>
+    </div>
+    <button class="btn-suivant" id="btn-to-bilan" onclick="goToPhase('bilan',7)">🌟 Voir mon bilan !</button>
+  </div>
+
+  <div class="phase" id="phase-bilan">
+    <div class="bilan-card">
+      <span class="bilan-mascot" id="bilan-mascot">🤔</span>
+      <h2 class="bilan-title" id="bilan-title">Super travail !</h2>
+      <p class="bilan-msg" id="bilan-msg"></p>
+      <div class="stars-row"><span class="star-big" id="star1">⭐</span><span class="star-big" id="star2">⭐</span><span class="star-big" id="star3">⭐</span></div>
+      <div class="score-circle"><span class="score-num" id="bilan-score">0</span><span style="font-size:.72rem;opacity:.85;">/ 42 pts</span></div>
+      <div class="memo-card"><h3>🗒️ Mon mémo — mais / mes</h3>
+<div class="memo-grid">
+<div class="memo-item"><strong style="color:#4FBDDF;">🔵 mais</strong>Conjonction d'opposition<br>→ remplaçable par <em>cependant</em><br><em>Il travaille, mais il échoue.</em></div>
+<div class="memo-item"><strong style="color:#F7B731;">🟡 mes</strong>Déterminant possessif<br>→ remplaçable par <em>ses / tes</em><br><em>Mes livres sont là.</em></div>
+</div>
+<div style="margin-top:10px;background:white;border-radius:10px;padding:9px 12px;font-size:.8rem;text-align:center;">
+<strong>Test rapide :</strong> cependant → <strong>mais</strong> · ses/tes → <strong>mes</strong>
+</div></div>
+      <div class="bilan-btns">
+        <button class="btn-act sky-pale" onclick="restartFiche()">🔄 Recommencer</button>
+        <button class="btn-act sky" onclick="location.href='../9-12ans.html'">🏠 Retour aux fiches</button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+function printLecon(){document.body.classList.add('print-mode-lecon');setTimeout(function(){window.print();setTimeout(function(){document.body.classList.remove('print-mode-lecon');},600);},60);}
+function printEval(){document.body.classList.add('print-mode-eval');setTimeout(function(){window.print();setTimeout(function(){document.body.classList.remove('print-mode-eval');},600);},60);}
+var classifyExpls={"0": "mais = conjonction de coordination (cependant fonctionne ✅). Il relie deux propositions avec une opposition.", "1": "mes = déterminant possessif (ses fonctionne ✅). Il s'accorde avec clés (pluriel).", "2": "mais = conjonction (cependant fonctionne ✅). Opposition entre gentille et timide.", "3": "Mes = déterminant possessif en début de phrase (majuscule car premier mot). ses parents fonctionne ✅."};
+var conjAnswers={"0": [["mais"], ["mes"], ["mais"], ["mes"], ["mais"], ["Mes"]], "1": [["mais"], ["mes"], ["mais"], ["Mes"], ["mais"], ["mes"]], "2": [["mais"], ["mes"], ["mais"], ["Mes"], ["mais"], ["mes"]], "3": [["mais"], ["mes"], ["mais"], ["mes"], ["mais"], ["Mes"]]};
+var conjTotal=4;
+var conjVerified={};
+var QCM1=[{"sentence": "Comment distinguer <em>mais</em> de <em>mes</em> ?", "options": ["On remplace par <em>cependant</em> : si ça marche → mais ; sinon → mes", "mais s'écrit toujours en début de phrase", "mes vient toujours après un verbe"], "answer": "On remplace par <em>cependant</em> : si ça marche → mais ; sinon → mes", "expl": "Test infaillible : Il est grand mais faible → Il est grand cependant faible ✅ = conjonction de coordination → mais. Mes livres → cependant livres ❌ = déterminant possessif → mes."}, {"sentence": "Dans la phrase : <span class='qhl'>J'ai oublié <span class='qhl-acc'>mes</span> clés.</span><br><em>mes</em> est ici :", "options": ["Une conjonction de coordination", "Un déterminant possessif (= les clés qui m'appartiennent)", "Un adverbe"], "answer": "Un déterminant possessif (= les clés qui m'appartiennent)", "expl": "mes = déterminant possessif, pluriel de mon/ma. Il s'accorde avec le nom qui suit : mes clés (pluriel). On peut le remplacer par ses, tes, les. Jamais par cependant."}, {"sentence": "Laquelle de ces phrases utilise <strong>correctement</strong> mais et mes ?", "options": ["Je veux venir, mes je suis fatigué.", "J'ai pris mais affaires et je pars.", "Je veux venir, mais je suis fatigué."], "answer": "Je veux venir, mais je suis fatigué.", "expl": "mais = conjonction (cependant fonctionne ✅). mes affaires = déterminant possessif (mes = ses affaires ✅). Je veux venir, mes → cependant ✅ → mais. J'ai pris mais affaires → cependant affaires ❌ → mes."}];
+var QCM2=[{"sentence": "Dans <span class='qhl'><span class='qhl-acc'>Mes</span> parents sont là, <span class='qhl-acc'>mais</span> ils sont fatigués.</span><br>Pourquoi <em>Mes</em> prend-il une majuscule ?", "options": ["Parce que mes est une conjonction importante", "Parce que c'est le premier mot de la phrase", "Parce que parents est un nom propre"], "answer": "Parce que c'est le premier mot de la phrase", "expl": "Mes parents → Mes prend une majuscule uniquement parce qu'il est en début de phrase. C'est toujours la règle : premier mot de phrase = majuscule. Ici mes reste un déterminant possessif."}, {"sentence": "Quel mot peut remplacer <em>mes</em> dans : <span class='qhl'>J'ai perdu <span class='qhl-acc'>mes</span> lunettes.</span>", "options": ["cependant", "pourtant", "ses"], "answer": "ses", "expl": "mes est un déterminant possessif → on peut le remplacer par un autre possessif : ses, tes, les. Jamais par cependant ou pourtant qui remplacent mais (conjonction). J'ai perdu ses lunettes = même structure grammaticale."}, {"sentence": "Laquelle de ces phrases est <strong>incorrecte</strong> ?", "options": ["Il pleut, mais je sors quand même.", "J'ai rangé mes jouets dans la boîte.", "Il pleut, mes je sors quand même."], "answer": "Il pleut, mes je sors quand même.", "expl": "Test : il pleut, cependant je sors ✅ → conjonction → mais (pas mes). mes jouets → ses jouets ✅ → déterminant possessif → mes. Il pleut, mes = FAUX car cependant fonctionne → c'est mais qu'il faut."}];
+var drag1Answers=["mais", "mes", "mais", "mes"];
+var drag2Answers=["Mes", "mais", "mes", "mais"];
+var score=0,qcm1Done=0,qcm2Done=0,classifyDone=0;
+var drag1Filled=[null,null,null,null],drag2Filled=[null,null,null,null];
+var draggedChip=null,touchChip=null,touchClone=null;
+function revealBloc(n){
+  var bloc=document.getElementById('bloc-'+n);if(!bloc)return;
+  var prev=document.getElementById('bloc-'+(n-1));
+  if(prev){var b=prev.querySelector('.btn-compris');if(b){b.textContent='✅ Compris !';b.disabled=true;b.style.opacity='.5';}}
+  bloc.classList.add('revealed');
+  setTimeout(function(){var hH=(document.querySelector('.header')||{offsetHeight:0}).offsetHeight;var rect=bloc.getBoundingClientRect();window.scrollTo({top:window.pageYOffset+rect.top-hH-20,behavior:'smooth'});bloc.style.transition='background .3s';bloc.style.background='#FFF8E1';setTimeout(function(){bloc.style.background='';},800);},50);
+}
+function startExercises(){goToPhase('ex1',1);buildQCM('qcm1-container',QCM1,1);}
+function goToPhase(phase,stepIdx){
+  document.querySelectorAll('.phase').forEach(function(p){p.classList.remove('active');});
+  document.getElementById('phase-'+phase).classList.add('active');
+  updateSteps(stepIdx);window.scrollTo({top:0,behavior:'smooth'});
+  var acc=document.getElementById('accroche-bloc');
+  if(acc)acc.style.display=(phase==='lecon')?'':'none';
+  if(phase==='ex2')buildQCM('qcm2-container',QCM2,2);
+  if(phase==='bilan')showBilan();
+}
+function updateSteps(active){for(var i=0;i<8;i++){var s=document.getElementById('step-'+i);s.classList.remove('active','done');if(i<active)s.classList.add('done');else if(i===active)s.classList.add('active');}}
+function shuffle(arr){var a=arr.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function buildQCM(cId,data,exNum){
+  var c=document.getElementById(cId);c.innerHTML='';
+  data.forEach(function(q,qi){
+    var div=document.createElement('div');div.className='qcm-question';div.id='qq-'+exNum+'-'+qi;
+    var opts=shuffle(q.options);
+    var optHtml=opts.map(function(opt){return '<button class="qcm-opt" data-exnum="'+exNum+'" data-qi="'+qi+'" data-opt="'+encodeURIComponent(opt)+'" data-ans="'+encodeURIComponent(q.answer)+'" onclick="handleQCM(this)">'+opt+'</button>';}).join('');
+    div.innerHTML='<div class="qcm-sentence">'+q.sentence+'</div><div class="qcm-options">'+optHtml+'</div><div class="qcm-feedback" id="qf-'+exNum+'-'+qi+'"></div>';
+    c.appendChild(div);
+  });
+}
+function handleQCM(btn){
+  var exNum=parseInt(btn.dataset.exnum),qi=parseInt(btn.dataset.qi);
+  var chosen=decodeURIComponent(btn.dataset.opt),correct=decodeURIComponent(btn.dataset.ans);
+  var qDiv=document.getElementById('qq-'+exNum+'-'+qi);
+  if(qDiv.classList.contains('answered'))return;
+  qDiv.classList.add('answered');
+  var opts=qDiv.querySelectorAll('.qcm-opt'),fb=document.getElementById('qf-'+exNum+'-'+qi);
+  var expl=(exNum===1?QCM1:QCM2)[qi].expl;
+  if(chosen===correct){btn.classList.add('correct');btn.innerHTML='✅ '+btn.innerHTML;fb.className='qcm-feedback show ok';fb.innerHTML='✅ Bravo ! '+expl;score++;document.getElementById('score-display').textContent=score;}
+  else{btn.classList.add('wrong');btn.innerHTML='❌ '+btn.innerHTML;opts.forEach(function(o){if(decodeURIComponent(o.dataset.opt)===correct){o.classList.add('reveal');o.innerHTML='✅ '+o.innerHTML;}});fb.className='qcm-feedback show ko';fb.innerHTML='💡 Pas encore ! '+expl;}
+  if(exNum===1)qcm1Done++;else qcm2Done++;
+  var total=exNum===1?QCM1.length:QCM2.length,done=exNum===1?qcm1Done:qcm2Done;
+  if(done>=total){setTimeout(function(){var nb=document.getElementById(exNum===1?'btn-to-ex2':'btn-to-drag1');nb.classList.add('show');nb.scrollIntoView({behavior:'smooth',block:'nearest'});},600);}
+}
+function onDS(e,bank){draggedChip=e.currentTarget;e.dataTransfer.setData('text/plain',draggedChip.dataset.word);}
+function onDO(e){e.preventDefault();e.currentTarget.classList.add('drag-over');}
+function onDL(e){e.currentTarget.classList.remove('drag-over');}
+function onDP(e,bank){
+  e.preventDefault();var zone=e.currentTarget;zone.classList.remove('drag-over');
+  if(!draggedChip)return;
+  var word=draggedChip.dataset.word,idx=parseInt(zone.dataset.idx);
+  var filled=bank===1?drag1Filled:drag2Filled;
+  if(filled[idx])returnToPool(filled[idx],bank);
+  filled[idx]=word;zone.textContent=word;zone.classList.add('filled');
+  draggedChip.classList.add('used');draggedChip=null;checkDragBtn(bank);
+}
+function onTS(e){touchChip=e.currentTarget;var t=e.touches[0];touchClone=touchChip.cloneNode(true);touchClone.style.cssText='position:fixed;z-index:9999;pointer-events:none;opacity:.8;padding:10px 18px;border-radius:50px;border:2.5px solid var(--yellow-deep);background:white;font-weight:800;font-size:.95rem;color:var(--yellow-deep);';setCP(t.clientX,t.clientY);document.body.appendChild(touchClone);}
+function onTM(e){e.preventDefault();if(!touchClone)return;var t=e.touches[0];setCP(t.clientX,t.clientY);document.querySelectorAll('.drop-zone').forEach(function(z){z.classList.remove('drag-over');});var el=document.elementFromPoint(t.clientX,t.clientY);if(el&&el.classList.contains('drop-zone'))el.classList.add('drag-over');}
+function onTE(e,bank){
+  if(touchClone){touchClone.remove();touchClone=null;}if(!touchChip)return;
+  var t=e.changedTouches[0];var el=document.elementFromPoint(t.clientX,t.clientY);
+  while(el&&!el.classList.contains('drop-zone')){el=el.parentElement;}
+  if(el&&el.classList.contains('drop-zone')){
+    var idx=parseInt(el.dataset.idx),word=touchChip.dataset.word;
+    var filled=bank===1?drag1Filled:drag2Filled;
+    if(filled[idx])returnToPool(filled[idx],bank);
+    filled[idx]=word;el.textContent=word;el.classList.add('filled');el.classList.remove('drag-over');
+    touchChip.classList.add('used');checkDragBtn(bank);
+  }touchChip=null;
+}
+function setCP(x,y){if(touchClone){touchClone.style.left=(x-60)+'px';touchClone.style.top=(y-20)+'px';}}
+function returnToPool(word,bank){document.getElementById('pool'+bank).querySelectorAll('.word-chip').forEach(function(c){if(c.dataset.word===word)c.classList.remove('used');});}
+function checkDragBtn(bank){var filled=bank===1?drag1Filled:drag2Filled;document.getElementById('btn-vd'+bank).disabled=!filled.every(function(f){return f!==null;});}
+function verifyDrag(bank){
+  var filled=bank===1?drag1Filled:drag2Filled,answers=bank===1?drag1Answers:drag2Answers;
+  var fb=document.getElementById('fb-d'+bank),correct=0;
+  document.querySelectorAll('[data-bank="'+bank+'"].drop-zone').forEach(function(zone){
+    var idx=parseInt(zone.dataset.idx);zone.classList.remove('filled');
+    var ans=answers[idx];
+    if((filled[idx]||'').toLowerCase()===(ans||'').toLowerCase()){zone.classList.add('correct');correct++;score++;}
+    else{zone.classList.add('wrong');zone.textContent=(filled[idx]||'?')+' → '+ans;}
+  });
+  document.getElementById('score-display').textContent=score;
+  document.getElementById('btn-vd'+bank).disabled=true;
+  document.getElementById('pool'+bank).style.pointerEvents='none';
+  fb.className='ex-feedback show '+(correct===4?'ok':'ko');
+  fb.innerHTML=correct===4?'✅ Parfait ! 4/4 🎉':'💡 '+correct+'/4. Les corrections sont en rouge.';
+  setTimeout(function(){var nb=document.getElementById(bank===1?'btn-to-drag2':'btn-to-classify');nb.classList.add('show');nb.scrollIntoView({behavior:'smooth',block:'nearest'});},800);
+}
+function classifyAnswer(btn){
+  var idx=parseInt(btn.dataset.idx),chosen=btn.dataset.type,correct=btn.dataset.correct;
+  var expl=classifyExpls[String(idx)]||'';
+  var block=document.getElementById('cl-'+idx),fb=document.getElementById('clf-'+idx);
+  if(block.classList.contains('answered'))return;
+  block.classList.add('answered');classifyDone++;
+  if(chosen===correct){btn.classList.add('sel-ok');fb.className='classify-feedback show ok';fb.innerHTML='✅ '+expl;score++;document.getElementById('score-display').textContent=score;}
+  else{btn.classList.add('sel-ko');block.querySelectorAll('.classify-btn').forEach(function(b){if(b.dataset.type===correct)b.classList.add('rev-ok');});fb.className='classify-feedback show ko';fb.innerHTML='💡 '+expl;}
+  if(classifyDone>=4){setTimeout(function(){var nb=document.getElementById('btn-to-conjtable');nb.classList.add('show');nb.scrollIntoView({behavior:'smooth',block:'nearest'});},600);}
+}
+function nsConj(s){return(s||'').toLowerCase().trim();}
+function verifyConjVerb(verbIdx,answers){
+  var nbOk=0,nbTotal=answers.length;
+  answers.forEach(function(ans,row){
+    var inp=document.getElementById('ci-'+verbIdx+'-'+row);if(!inp)return;
+    inp.classList.remove('correct','wrong');inp.readOnly=true;
+    var accepted=Array.isArray(ans)?ans:[ans];
+    var ok=accepted.some(function(a){return nsConj(inp.value)===nsConj(a);});
+    if(ok){inp.classList.add('correct');nbOk++;score++;document.getElementById('score-display').textContent=score;}
+    else{inp.classList.add('wrong');inp.value=inp.value+' → '+(Array.isArray(ans)?ans[0]:ans);}
+  });
+  var btn=document.getElementById('btn-verif-conj-'+verbIdx);if(btn)btn.disabled=true;
+  var fb=document.getElementById('conj-fb-'+verbIdx);
+  if(fb){fb.className='conj-feedback show '+(nbOk===nbTotal?'ok':'ko');fb.innerHTML=nbOk===nbTotal?'✅ Parfait ! '+nbTotal+'/'+nbTotal+' 🎉':'💡 '+nbOk+'/'+nbTotal+' bonnes réponses.';}
+  conjVerified[verbIdx]=true;
+  if(Object.keys(conjVerified).length>=conjTotal){setTimeout(function(){var nb=document.getElementById('btn-to-bilan');if(nb){nb.classList.add('show');nb.scrollIntoView({behavior:'smooth',block:'nearest'});}},800);}
+}
+function showBilan(){
+  document.getElementById('bilan-score').textContent=score;
+  var pct=score/42;
+  var title,msg;
+  if(pct>=0.89){title='Excellent !';msg="Tu maîtrises mais et mes. Plus aucune faute possible !";}
+  else if(pct>=0.65){title='Très bien !';msg="Relis les tests cependant/ses — tu vas y arriver !";}
+  else{title='Continue !';msg="Entraîne-toi à tester chaque phrase. Ça va venir !";}
+  document.getElementById('bilan-title').textContent=title;
+  document.getElementById('bilan-msg').textContent=msg;
+  var seuils=[14,28,37];
+  ['star1','star2','star3'].forEach(function(id,i){
+    var el=document.getElementById(id);
+    if(score>=seuils[i]){(function(elem,delay){setTimeout(function(){elem.classList.add('earned');},delay);})(el,300+i*400);}
+    else{el.style.filter='grayscale(1)';}
+  });
+  if(pct>=0.65)lanceConfetti();
+}
+function lanceConfetti(){var cols=['#4FBDDF','#FFD93D','#6BCFB0','#FF8A65','#9B8AFF'];for(var i=0;i<60;i++){var el=document.createElement('div');el.className='confetti-piece';el.style.cssText='left:'+Math.random()*100+'vw;background:'+cols[Math.floor(Math.random()*5)]+';animation-duration:'+(1.5+Math.random()*2)+'s;animation-delay:'+Math.random()*1.5+'s;width:'+(7+Math.random()*8)+'px;height:'+(7+Math.random()*8)+'px;border-radius:'+(Math.random()>.5?'50%':'2px')+';';document.body.appendChild(el);setTimeout(function(){if(el.parentNode)el.remove();},4000);}}
+function restartFiche(){
+  score=0;qcm1Done=0;qcm2Done=0;classifyDone=0;conjVerified={};
+  drag1Filled=[null,null,null,null];drag2Filled=[null,null,null,null];
+  document.getElementById('score-display').textContent='0';
+  document.querySelectorAll('.lecon-block').forEach(function(b,i){if(i>0)b.classList.remove('revealed');});
+  document.querySelectorAll('.btn-suivant').forEach(function(b){b.classList.remove('show');});
+  document.querySelectorAll('.word-chip').forEach(function(c){c.classList.remove('used');});
+  ['pool1','pool2'].forEach(function(id){var p=document.getElementById(id);if(p)p.style.pointerEvents='';});
+  document.querySelectorAll('.drop-zone').forEach(function(z){z.textContent='';z.className='drop-zone';});
+  document.querySelectorAll('.btn-verifier').forEach(function(b){b.disabled=true;});
+  document.querySelectorAll('.ex-feedback,.qcm-feedback,.classify-feedback,.conj-feedback').forEach(function(f){f.className=f.className.replace(/show.*/g,'');f.innerHTML='';});
+  document.querySelectorAll('.classify-block').forEach(function(b){b.classList.remove('answered');});
+  document.querySelectorAll('.classify-btn').forEach(function(b){b.classList.remove('sel-ok','sel-ko','rev-ok');});
+  document.querySelectorAll('.conj-input').forEach(function(inp){inp.value='';inp.className=inp.classList.contains('conj-input-sm')?'conj-input conj-input-sm':'conj-input';inp.readOnly=false;});
+  document.querySelectorAll('.btn-verif-conj').forEach(function(b){if(b)b.disabled=false;});
+  ['star1','star2','star3'].forEach(function(id){document.getElementById(id).classList.remove('earned');document.getElementById(id).style.filter='';});
+  var acc=document.getElementById('accroche-bloc');if(acc)acc.style.display='';
+  goToPhase('lecon',0);
+}
+</script>
+</body>
+</html>
