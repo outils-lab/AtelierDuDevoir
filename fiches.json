@@ -5225,7 +5225,7 @@
   ],
   "12-15ans": [
     {
-      "id": "5e-fran-ais-g402",
+      "id": "5e-francais-g402",
       "code": "G402",
       "titre": "Les propositions subordonnées relatives",
       "sous_titre": "Qui, que, dont, où, lequel",
@@ -5234,9 +5234,9 @@
       "niveau": "5e",
       "emoji": "📐",
       "description": "Maîtrise les propositions subordonnées relatives et les pronoms relatifs.",
-      "fichier": "",
-      "disponible": false,
-      "nouveau": false,
+      "fichier": "fiches/fiche_G402_subordonnees_relatives_5e.html",
+      "disponible": true,
+      "nouveau": true,
       "priorite": "",
       "type": "",
       "difficulte": 3,
