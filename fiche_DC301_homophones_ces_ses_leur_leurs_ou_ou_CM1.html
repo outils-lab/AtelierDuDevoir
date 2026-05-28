@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DC301 — Dictée : Homophones ces/ses/leur/leurs/ou/où</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --acc: #0891b2;
+      --acc-pale: #cffafe;
+      --text: #1f2937;
+      --text-light: #6b7280;
+      --bg: #f0f9ff;
+      --border: #e5e7eb;
+      --correct-bg: #dcfce7;
+      --correct-text: #166534;
+      --wrong-bg: #fee2e2;
+      --wrong-text: #991b1b;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, var(--bg) 0%, #f8fbff 100%);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      padding: 16px;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      overflow: hidden;
+    }
+    .header {
+      background: linear-gradient(135deg, #0891b2 0%, #06b6d4 100%);
+      color: white;
+      padding: 32px 24px;
+      text-align: center;
+    }
+    .header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .header p {
+      font-size: 16px;
+      opacity: 0.95;
+    }
+    .score-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--acc-pale);
+      padding: 12px 24px;
+      border-bottom: 2px solid var(--acc);
+      font-weight: 600;
+      color: var(--acc);
+    }
+    .phase {
+      display: none;
+      padding: 32px 24px;
+    }
+    .phase.active {
+      display: block;
+      animation: fadeIn 0.4s ease-in;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .mascot-msg {
+      background: var(--acc-pale);
+      border-left: 4px solid var(--acc);
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 24px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .mascot-msg .emo {
+      font-size: 28px;
+      flex-shrink: 0;
+    }
+    .mascot-msg p {
+      font-size: 15px;
+      margin: 0;
+    }
+    .section-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--acc);
+      margin: 24px 0 16px 0;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .lecon-block {
+      background: var(--bg);
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      border-left: 4px solid var(--acc);
+    }
+    .lecon-block h3 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--acc);
+      margin-bottom: 8px;
+    }
+    .lecon-block p {
+      font-size: 14px;
+      line-height: 1.6;
+      margin: 8px 0;
+    }
+    .lecon-block .exemple {
+      background: white;
+      padding: 10px 12px;
+      border-radius: 6px;
+      margin-top: 8px;
+      font-size: 13px;
+      font-style: italic;
+      color: var(--text-light);
+      border-left: 3px solid #fbbf24;
+    }
+    .dictee-box {
+      background: white;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+    .dictee-phrase {
+      margin-bottom: 16px;
+    }
+    .dictee-phrase label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .audio-controls {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .btn-audio {
+      background: var(--acc);
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .btn-audio:hover {
+      background: #0891b2;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(8,145,178,0.3);
+    }
+    .btn-audio:active {
+      transform: translateY(0);
+    }
+    .dictee-input {
+      width: 100%;
+      padding: 12px;
+      font-size: 15px;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      font-family: inherit;
+      transition: all 0.2s;
+    }
+    .dictee-input:focus {
+      outline: none;
+      border-color: var(--acc);
+      background: var(--acc-pale);
+    }
+    .dictee-input.correct {
+      border-color: #16a34a;
+      background: var(--correct-bg);
+      color: var(--correct-text);
+    }
+    .dictee-input.wrong {
+      border-color: #dc2626;
+      background: var(--wrong-bg);
+      color: var(--wrong-text);
+    }
+    .btn-verif {
+      background: var(--acc);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 16px;
+      transition: all 0.2s;
+      width: 100%;
+    }
+    .btn-verif:hover:not(:disabled) {
+      background: #0891b2;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(8,145,178,0.3);
+    }
+    .btn-verif:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .feedback {
+      margin-top: 16px;
+      padding: 12px;
+      border-radius: 8px;
+      font-weight: 600;
+      display: none;
+    }
+    .feedback.show {
+      display: block;
+      animation: slideDown 0.3s ease-out;
+    }
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .feedback.ok {
+      background: var(--correct-bg);
+      color: var(--correct-text);
+      border-left: 4px solid #16a34a;
+    }
+    .feedback.ko {
+      background: var(--wrong-bg);
+      color: var(--wrong-text);
+      border-left: 4px solid #dc2626;
+    }
+    .btn-suivant {
+      background: var(--acc);
+      color: white;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      display: none;
+      width: 100%;
+      margin-top: 24px;
+      transition: all 0.2s;
+    }
+    .btn-suivant.show {
+      display: block;
+    }
+    .btn-suivant:hover {
+      background: #0891b2;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(8,145,178,0.3);
+    }
+    .progress-bar {
+      height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-top: 12px;
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--acc);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🎙️ DC301 — Dictée homophones</h1>
+      <p>CM1 — ces · ses · leur · leurs · ou · où</p>
+    </div>
+
+    <div class="score-bar">
+      <span>Points : <strong id="score-display">0</strong> / 15</span>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+    </div>
+
+    <!-- PHASE 1 : LEÇON -->
+    <div class="phase active" id="phase-lecon">
+      <div class="mascot-msg">
+        <span class="emo">🎤</span>
+        <p><strong>Bienvenue à la dictée !</strong> Aujourd'hui tu vas écouter des phrases courtes et écrire les homophones : ces, ses, leur, leurs, ou, où. Lis bien la leçon d'abord !</p>
+      </div>
+
+      <div class="section-title">📚 Rappel rapide</div>
+
+      <div class="lecon-block">
+        <h3>ces vs ses</h3>
+        <p><strong>ces</strong> = adjectif démonstratif → montre quelque chose : "Ces enfants jouent dehors."</p>
+        <div class="exemple">exemple : Ces stylos sont à moi.</div>
+        <p style="margin-top: 8px;"><strong>ses</strong> = adjectif possessif → indique un propriétaire : "Ses amis arrivent."</p>
+        <div class="exemple">exemple : Il range ses affaires.</div>
+      </div>
+
+      <div class="lecon-block">
+        <h3>leur vs leurs</h3>
+        <p><strong>leur</strong> = singulier → une seule chose : "Je leur donne un cadeau."</p>
+        <div class="exemple">exemple : Je lui parle, je leur parle = à une personne, à plusieurs personnes.</div>
+        <p style="margin-top: 8px;"><strong>leurs</strong> = adjectif possessif pluriel → plusieurs choses qui appartiennent à plusieurs personnes : "Leurs enfants jouent ensemble."</p>
+        <div class="exemple">exemple : Leurs maisons sont grandes.</div>
+      </div>
+
+      <div class="lecon-block">
+        <h3>ou vs où</h3>
+        <p><strong>ou</strong> = conjonction → proposition ou choix : "Tu préfères le rouge ou le bleu ?"</p>
+        <div class="exemple">exemple : Je pars en vacances ou je reste à la maison.</div>
+        <p style="margin-top: 8px;"><strong>où</strong> = adverbe interrogatif ou relatif → lieu : "Où habites-tu ?"</p>
+        <div class="exemple">exemple : C'est l'endroit où j'aime jouer.</div>
+      </div>
+
+      <button class="btn-suivant" onclick="goToPhase('dictee')" style="display:block; margin-top: 24px;">➡️ Commencer la dictée</button>
+    </div>
+
+    <!-- PHASE 2 : DICTÉE -->
+    <div class="phase" id="phase-dictee">
+      <div class="mascot-msg">
+        <span class="emo">🎙️</span>
+        <p><strong>Écoute bien les phrases !</strong> Clique sur le bouton « Écouter » pour entendre la phrase. Écris ce que tu entends dans le champ. Tu peux écouter autant de fois que tu veux.</p>
+      </div>
+
+      <div class="section-title">🔊 Dictée de phrases — 5 phrases</div>
+
+      <div class="dictee-box">
+        <div class="dictee-phrase">
+          <label>Phrase 1 :</label>
+          <div class="audio-controls">
+            <button class="btn-audio" onclick="speak(dicteeTexts[0], 1)">🔊 Normal</button>
+            <button class="btn-audio" onclick="speak(dicteeTexts[0], 0.7)">🐢 Lent</button>
+          </div>
+          <input type="text" class="dictee-input" id="input-0" placeholder="écris ici…" autocomplete="off" spellcheck="false">
+        </div>
+
+        <div class="dictee-phrase">
+          <label>Phrase 2 :</label>
+          <div class="audio-controls">
+            <button class="btn-audio" onclick="speak(dicteeTexts[1], 1)">🔊 Normal</button>
+            <button class="btn-audio" onclick="speak(dicteeTexts[1], 0.7)">🐢 Lent</button>
+          </div>
+          <input type="text" class="dictee-input" id="input-1" placeholder="écris ici…" autocomplete="off" spellcheck="false">
+        </div>
+
+        <div class="dictee-phrase">
+          <label>Phrase 3 :</label>
+          <div class="audio-controls">
+            <button class="btn-audio" onclick="speak(dicteeTexts[2], 1)">🔊 Normal</button>
+            <button class="btn-audio" onclick="speak(dicteeTexts[2], 0.7)">🐢 Lent</button>
+          </div>
+          <input type="text" class="dictee-input" id="input-2" placeholder="écris ici…" autocomplete="off" spellcheck="false">
+        </div>
+
+        <div class="dictee-phrase">
+          <label>Phrase 4 :</label>
+          <div class="audio-controls">
+            <button class="btn-audio" onclick="speak(dicteeTexts[3], 1)">🔊 Normal</button>
+            <button class="btn-audio" onclick="speak(dicteeTexts[3], 0.7)">🐢 Lent</button>
+          </div>
+          <input type="text" class="dictee-input" id="input-3" placeholder="écris ici…" autocomplete="off" spellcheck="false">
+        </div>
+
+        <div class="dictee-phrase">
+          <label>Phrase 5 :</label>
+          <div class="audio-controls">
+            <button class="btn-audio" onclick="speak(dicteeTexts[4], 1)">🔊 Normal</button>
+            <button class="btn-audio" onclick="speak(dicteeTexts[4], 0.7)">🐢 Lent</button>
+          </div>
+          <input type="text" class="dictee-input" id="input-4" placeholder="écris ici…" autocomplete="off" spellcheck="false">
+        </div>
+      </div>
+
+      <button class="btn-verif" onclick="verifyDictee()">✅ Vérifier ma dictée</button>
+      <div class="feedback" id="feedback"></div>
+      <button class="btn-suivant" id="btn-to-bilan" onclick="goToPhase('bilan')">🌟 Voir mon bilan !</button>
+    </div>
+
+    <!-- PHASE 3 : BILAN -->
+    <div class="phase" id="phase-bilan">
+      <div class="mascot-msg">
+        <span class="emo">🌟</span>
+        <p><strong>Bravo !</strong> Tu as terminé cette dictée. Veux-tu refaire une dictée ou revenir à la leçon pour mieux mémoriser ?</p>
+      </div>
+
+      <div class="section-title">📊 Ton bilan</div>
+      <div style="background: var(--acc-pale); padding: 20px; border-radius: 12px; text-align: center;">
+        <div style="font-size: 48px; font-weight: 700; color: var(--acc); margin-bottom: 8px;" id="final-score">0 / 15</div>
+        <div style="font-size: 16px; color: var(--text);" id="final-msg">Continue tes efforts !</div>
+      </div>
+
+      <div style="margin-top: 24px; display: flex; gap: 12px; flex-wrap: wrap;">
+        <button class="btn-suivant" onclick="location.reload()" style="display: block; flex: 1; margin: 0;">🔄 Refaire la dictée</button>
+        <button class="btn-suivant" onclick="goToPhase('lecon')" style="display: block; flex: 1; margin: 0;">📚 Relire la leçon</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const dicteeTexts = [
+      "Ces enfants... courent vers leurs parents... point.",
+      "Ses affaires... sont sur la table... virgule... ou dans son cartable... point.",
+      "Ses amis... et les leurs... jouent ensemble... dans la cour... point.",
+      "Tu peux jouer... où tu veux... virgule... ou rester... avec nous... point.",
+      "Leurs chiens... dorment dans ces petites maisons... en bois... point."
+    ];
+
+    const answers = [
+      "Ces enfants courent vers leurs parents.",
+      "Ses affaires sont sur la table, ou dans son cartable.",
+      "Ses amis et les leurs jouent ensemble dans la cour.",
+      "Tu peux jouer où tu veux, ou rester avec nous.",
+      "Leurs chiens dorment dans ces petites maisons en bois."
+    ];
+
+    let score = 0;
+    let verified = false;
+
+    function normalize(s) {
+      return (s || '').toLowerCase()
+        .replace(/\s*([.,;:!?])\s*/g, '$1')
+        .replace(/[.!?]$/, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    var _bestVoice = null;
+
+    function loadBestVoice() {
+      var voices = speechSynthesis.getVoices();
+      var priority = [
+        'Thomas', 'Amelie', 'Aurelie', 'Julie',
+        'fr-FR', 'fr_FR', 'fr-CA', 'fr'
+      ];
+      var found = null;
+      for (var p = 0; p < priority.length; p++) {
+        for (var v = 0; v < voices.length; v++) {
+          if ((voices[v].name + voices[v].lang).toLowerCase().indexOf(priority[p].toLowerCase()) !== -1) {
+            found = voices[v];
+            break;
+          }
+        }
+        if (found) break;
+      }
+      if (!found) {
+        for (var v = 0; v < voices.length; v++) {
+          if (voices[v].lang && voices[v].lang.toLowerCase().indexOf('fr') === 0) {
+            found = voices[v]; break;
+          }
+        }
+      }
+      _bestVoice = found;
+    }
+
+    if (window.speechSynthesis) {
+      speechSynthesis.getVoices();
+      speechSynthesis.onvoiceschanged = loadBestVoice;
+      setTimeout(loadBestVoice, 300);
+    }
+
+    function speak(text, rate) {
+      rate = rate || 1;
+      if (!('speechSynthesis' in window)) return;
+      speechSynthesis.cancel();
+      var utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'fr-FR';
+      utterance.rate = rate === 1 ? 0.92 : 0.52;
+      utterance.pitch = rate === 1 ? 1.05 : 0.95;
+      utterance.volume = 1;
+      if (_bestVoice) utterance.voice = _bestVoice;
+      setTimeout(function() { speechSynthesis.speak(utterance); }, 80);
+    }
+
+    function verifyDictee() {
+      if (verified) return;
+      verified = true;
+      score = 0;
+
+      for (let i = 0; i < 5; i++) {
+        const inp = document.getElementById('input-' + i);
+        const isCorrect = normalize(inp.value) === normalize(answers[i]);
+        
+        if (isCorrect) {
+          inp.classList.add('correct');
+          inp.readOnly = true;
+          score += 3;
+        } else {
+          inp.classList.add('wrong');
+          inp.readOnly = true;
+          inp.value = (inp.value ? inp.value + ' ' : '') + '→ ' + answers[i];
+          inp.style.fontSize = '.85rem';
+        }
+      }
+
+      document.getElementById('score-display').textContent = score;
+      document.getElementById('progress-fill').style.width = (score / 15 * 100) + '%';
+
+      const fb = document.getElementById('feedback');
+      fb.className = 'feedback show ' + (score === 15 ? 'ok' : 'ko');
+      fb.innerHTML = score === 15 
+        ? '✅ Parfait ! 15/15 🎉 Tu maîtrises ces homophones !'
+        : '💡 ' + score + '/15 — Les corrections sont affichées en rouge. Relis bien la leçon.';
+
+      document.getElementById('btn-to-bilan').classList.add('show');
+    }
+
+    function goToPhase(phase) {
+      document.querySelectorAll('.phase').forEach(p => p.classList.remove('active'));
+      document.getElementById('phase-' + phase).classList.add('active');
+
+      if (phase === 'bilan') {
+        const finalScore = document.getElementById('final-score');
+        const finalMsg = document.getElementById('final-msg');
+        finalScore.textContent = score + ' / 15';
+        
+        if (score === 15) finalMsg.textContent = 'Excellent ! Tu as tout réussi ! 🌟';
+        else if (score >= 12) finalMsg.textContent = 'Très bien ! Continue comme ça ! 👏';
+        else if (score >= 9) finalMsg.textContent = 'Pas mal ! Quelques erreurs à corriger.';
+        else finalMsg.textContent = 'Continue tes efforts et refais la dictée ! 💪';
+      }
+    }
+  </script>
+</body>
+</html>

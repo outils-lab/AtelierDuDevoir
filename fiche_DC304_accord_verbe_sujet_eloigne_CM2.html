@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DC304 — Dictée : Accord du verbe avec sujet éloigné</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --acc: #be185d;
+      --acc-pale: #fce7f3;
+      --text: #1f2937;
+      --text-light: #6b7280;
+      --bg: #fff0f7;
+      --border: #e5e7eb;
+      --correct-bg: #dcfce7;
+      --correct-text: #166534;
+      --wrong-bg: #fee2e2;
+      --wrong-text: #991b1b;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, var(--bg) 0%, #fff8fb 100%);
+      color: var(--text); line-height: 1.6; min-height: 100vh; padding: 16px;
+    }
+    .container { max-width: 900px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); overflow: hidden; }
+    .header { background: linear-gradient(135deg, #be185d 0%, #ec4899 100%); color: white; padding: 32px 24px; text-align: center; }
+    .header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+    .header p { font-size: 16px; opacity: 0.95; }
+    .score-bar { display: flex; justify-content: space-between; align-items: center; background: var(--acc-pale); padding: 12px 24px; border-bottom: 2px solid var(--acc); font-weight: 600; color: var(--acc); gap: 16px; }
+    .progress-bar { flex: 1; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+    .progress-fill { height: 100%; background: var(--acc); width: 0%; transition: width 0.3s ease; }
+    .phase { display: none; padding: 32px 24px; }
+    .phase.active { display: block; animation: fadeIn 0.4s ease-in; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .mascot-msg { background: var(--acc-pale); border-left: 4px solid var(--acc); padding: 16px; border-radius: 8px; margin-bottom: 24px; display: flex; gap: 12px; align-items: flex-start; }
+    .mascot-msg .emo { font-size: 28px; flex-shrink: 0; }
+    .mascot-msg p { font-size: 15px; margin: 0; }
+    .section-title { font-size: 18px; font-weight: 700; color: var(--acc); margin: 24px 0 16px 0; display: flex; gap: 8px; align-items: center; }
+    .lecon-block { background: var(--bg); padding: 16px; border-radius: 8px; margin-bottom: 14px; border-left: 4px solid var(--acc); }
+    .lecon-block h3 { font-size: 14px; font-weight: 700; color: var(--acc); margin-bottom: 8px; }
+    .lecon-block p { font-size: 14px; line-height: 1.6; margin: 6px 0; }
+    .exemple { background: white; padding: 8px 12px; border-radius: 6px; margin-top: 6px; font-size: 13px; font-style: italic; color: var(--text-light); border-left: 3px solid #fbbf24; }
+    .astuce { background: #fefce8; border: 1px solid #fde68a; border-radius: 8px; padding: 12px 16px; font-size: 13px; margin-top: 8px; color: #78350f; }
+    .astuce strong { color: #92400e; }
+    .piege { background: #fff1f2; border: 1px solid #fecdd3; border-radius: 8px; padding: 12px 16px; font-size: 13px; margin-top: 8px; color: #9f1239; }
+    .piege strong { color: #be123c; }
+    .dictee-box { background: white; border: 2px solid var(--border); border-radius: 12px; padding: 20px; margin: 20px 0; }
+    .dictee-phrase { margin-bottom: 20px; }
+    .dictee-phrase label { display: block; font-size: 14px; font-weight: 700; color: var(--acc); margin-bottom: 8px; }
+    .audio-controls { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+    .btn-audio { background: var(--acc); color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600; transition: all 0.2s; }
+    .btn-audio:hover { opacity: 0.85; transform: translateY(-1px); }
+    .dictee-input { width: 100%; padding: 12px; font-size: 15px; border: 2px solid var(--border); border-radius: 8px; font-family: inherit; transition: all 0.2s; }
+    .dictee-input:focus { outline: none; border-color: var(--acc); background: var(--acc-pale); }
+    .dictee-input.correct { border-color: #16a34a; background: var(--correct-bg); color: var(--correct-text); }
+    .dictee-input.wrong { border-color: #dc2626; background: var(--wrong-bg); color: var(--wrong-text); }
+    .btn-verif { background: #0891b2; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 8px; transition: all 0.2s; width: 100%; }
+    .btn-verif:hover:not(:disabled) { opacity: 0.9; transform: translateY(-2px); }
+    .btn-verif:disabled { opacity: 0.5; cursor: not-allowed; }
+    .feedback { margin-top: 16px; padding: 14px; border-radius: 8px; font-weight: 600; display: none; }
+    .feedback.show { display: block; animation: slideDown 0.3s ease-out; }
+    @keyframes slideDown { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+    .feedback.ok { background: var(--correct-bg); color: var(--correct-text); border-left: 4px solid #16a34a; }
+    .feedback.ko { background: var(--wrong-bg); color: var(--wrong-text); border-left: 4px solid #dc2626; }
+    .btn-suivant { background: var(--acc); color: white; border: none; padding: 14px 28px; border-radius: 8px; font-size: 16px; font-weight: 700; cursor: pointer; display: none; width: 100%; margin-top: 24px; transition: all 0.2s; }
+    .btn-suivant.show { display: block; }
+    .btn-suivant:hover { opacity: 0.9; transform: translateY(-2px); }
+    .bilan-score { background: var(--acc-pale); padding: 24px; border-radius: 12px; text-align: center; margin: 16px 0; }
+    .bilan-score .chiffre { font-size: 56px; font-weight: 700; color: var(--acc); }
+    .bilan-score .msg { font-size: 16px; color: var(--text); margin-top: 8px; }
+    .btn-row { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 20px; }
+    .btn-row .btn-suivant { flex: 1; margin: 0; display: block; }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <h1>🎙️ DC304 — Dictée accord</h1>
+    <p>CM2 — L'accord du verbe avec un sujet éloigné</p>
+  </div>
+
+  <div class="score-bar">
+    <span>Points : <strong id="score-display">0</strong> / 15</span>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+  </div>
+
+  <!-- LEÇON -->
+  <div class="phase active" id="phase-lecon">
+    <div class="mascot-msg">
+      <span class="emo">🦉</span>
+      <p><strong>Un piège classique !</strong> Quand le sujet est loin du verbe, on oublie souvent de bien accorder. Ugo te rappelle comment ne pas se faire piéger.</p>
+    </div>
+
+    <div class="section-title">📚 Rappel rapide</div>
+
+    <div class="lecon-block">
+      <h3>La règle de base</h3>
+      <p>Le verbe s'accorde toujours avec son <strong>sujet</strong>, même quand des mots s'intercalent entre eux.</p>
+      <div class="exemple">Les enfants <em>de la classe</em> <strong>chantent</strong> très bien. → sujet = "Les enfants" (pluriel)</div>
+      <div class="astuce"><strong>Astuce :</strong> pour trouver le sujet, pose la question "Qui est-ce qui…?" avant le verbe.</div>
+    </div>
+
+    <div class="lecon-block">
+      <h3>Les pièges les plus fréquents</h3>
+      <p><strong>Groupe prépositionnel intercalé :</strong> les mots entre le sujet et le verbe peuvent tromper.</p>
+      <div class="exemple">La couleur <em>des fleurs</em> <strong>est</strong> magnifique. → sujet = "La couleur" (singulier)</div>
+      <p style="margin-top:8px;"><strong>Sujet inversé :</strong> après certains verbes ou en début de phrase.</p>
+      <div class="exemple">Dans ce jardin <strong>poussent</strong> de belles roses rouges. → sujet = "de belles roses" (pluriel)</div>
+      <div class="piege"><strong>Piège :</strong> "La bouquet de roses est beau" — le sujet c'est "bouquet", pas "roses" !</div>
+    </div>
+
+    <div class="lecon-block">
+      <h3>Sujet collectif</h3>
+      <p>Un nom collectif singulier (foule, groupe, troupe, équipe…) entraîne un verbe au singulier.</p>
+      <div class="exemple">Une foule <em>de curieux</em> <strong>regardait</strong> le spectacle.</div>
+    </div>
+
+    <button class="btn-suivant" onclick="goToPhase('dictee')" style="display:block; margin-top:24px;">➡️ Commencer la dictée</button>
+  </div>
+
+  <!-- DICTÉE -->
+  <div class="phase" id="phase-dictee">
+    <div class="mascot-msg">
+      <span class="emo">🎙️</span>
+      <p><strong>Attention aux sujets éloignés !</strong> Dans chaque phrase, cherche bien le vrai sujet avant d'écrire le verbe. Ne te laisse pas piéger par les mots intercalés.</p>
+    </div>
+
+    <div class="section-title">🔊 Dictée — 5 phrases</div>
+
+    <div class="dictee-box">
+
+      <div class="dictee-phrase">
+        <label>Phrase 1 :</label>
+        <div class="audio-controls">
+          <button class="btn-audio" onclick="speak(phrasesLues[0], 1)">🔊 Normal</button>
+          <button class="btn-audio" onclick="speak(phrasesLues[0], 0.7)">🐢 Lent</button>
+        </div>
+        <input class="dictee-input" id="inp-0" type="text" placeholder="écris ici…" autocomplete="off" spellcheck="false">
+      </div>
+
+      <div class="dictee-phrase">
+        <label>Phrase 2 :</label>
+        <div class="audio-controls">
+          <button class="btn-audio" onclick="speak(phrasesLues[1], 1)">🔊 Normal</button>
+          <button class="btn-audio" onclick="speak(phrasesLues[1], 0.7)">🐢 Lent</button>
+        </div>
+        <input class="dictee-input" id="inp-1" type="text" placeholder="écris ici…" autocomplete="off" spellcheck="false">
+      </div>
+
+      <div class="dictee-phrase">
+        <label>Phrase 3 :</label>
+        <div class="audio-controls">
+          <button class="btn-audio" onclick="speak(phrasesLues[2], 1)">🔊 Normal</button>
+          <button class="btn-audio" onclick="speak(phrasesLues[2], 0.7)">🐢 Lent</button>
+        </div>
+        <input class="dictee-input" id="inp-2" type="text" placeholder="écris ici…" autocomplete="off" spellcheck="false">
+      </div>
+
+      <div class="dictee-phrase">
+        <label>Phrase 4 :</label>
+        <div class="audio-controls">
+          <button class="btn-audio" onclick="speak(phrasesLues[3], 1)">🔊 Normal</button>
+          <button class="btn-audio" onclick="speak(phrasesLues[3], 0.7)">🐢 Lent</button>
+        </div>
+        <input class="dictee-input" id="inp-3" type="text" placeholder="écris ici…" autocomplete="off" spellcheck="false">
+      </div>
+
+      <div class="dictee-phrase">
+        <label>Phrase 5 :</label>
+        <div class="audio-controls">
+          <button class="btn-audio" onclick="speak(phrasesLues[4], 1)">🔊 Normal</button>
+          <button class="btn-audio" onclick="speak(phrasesLues[4], 0.7)">🐢 Lent</button>
+        </div>
+        <input class="dictee-input" id="inp-4" type="text" placeholder="écris ici…" autocomplete="off" spellcheck="false">
+      </div>
+
+    </div>
+
+    <button class="btn-verif" id="btn-verif" onclick="verifier()">✅ Vérifier ma dictée</button>
+    <div class="feedback" id="feedback"></div>
+    <button class="btn-suivant" id="btn-to-bilan" onclick="goToPhase('bilan')">🌟 Voir mon bilan !</button>
+  </div>
+
+  <!-- BILAN -->
+  <div class="phase" id="phase-bilan">
+    <div class="mascot-msg">
+      <span class="emo">🌟</span>
+      <p id="ugo-bilan"><strong>Tu as terminé !</strong> Regarde ton score et relis tes erreurs.</p>
+    </div>
+    <div class="bilan-score">
+      <div class="chiffre" id="final-score">0 / 15</div>
+      <div class="msg" id="final-msg"></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn-suivant" onclick="location.reload()">🔄 Refaire la dictée</button>
+      <button class="btn-suivant" onclick="goToPhase('lecon')">📚 Relire la leçon</button>
+    </div>
+  </div>
+
+</div>
+<script>
+var phrasesLues = [
+  "La couleur des feuilles... change en automne... point.",
+  "Les élèves de cette école... chantent très bien... ensemble... point.",
+  "Une troupe de comédiens... joue une pièce amusante... ce soir... point.",
+  "Le bruit des voitures... et des camions... empêche les enfants... de dormir... point.",
+  "Dans ce vieux grenier... dormaient des dizaines... de cartons poussiéreux... point."
+];
+
+var phrases = [
+  "La couleur des feuilles change en automne.",
+  "Les élèves de cette école chantent très bien ensemble.",
+  "Une troupe de comédiens joue une pièce amusante ce soir.",
+  "Le bruit des voitures et des camions empêche les enfants de dormir.",
+  "Dans ce vieux grenier dormaient des dizaines de cartons poussiéreux."
+];
+
+var score = 0;
+var verifie = false;
+
+function ns(s) {
+  return (s || '').toLowerCase()
+    .replace(/\s*([.,;:!?])\s*/g, '$1')
+    .replace(/[.!?]$/, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+var _bestVoice = null;
+
+function loadBestVoice() {
+  var voices = speechSynthesis.getVoices();
+  var priority = ['Thomas','Amelie','Aurelie','Julie','fr-FR','fr_FR','fr-CA','fr'];
+  var found = null;
+  for (var p = 0; p < priority.length; p++) {
+    for (var v = 0; v < voices.length; v++) {
+      if ((voices[v].name + voices[v].lang).toLowerCase().indexOf(priority[p].toLowerCase()) !== -1) {
+        found = voices[v]; break;
+      }
+    }
+    if (found) break;
+  }
+  if (!found) {
+    for (var v = 0; v < voices.length; v++) {
+      if (voices[v].lang && voices[v].lang.toLowerCase().indexOf('fr') === 0) {
+        found = voices[v]; break;
+      }
+    }
+  }
+  _bestVoice = found;
+}
+
+if (window.speechSynthesis) {
+  speechSynthesis.getVoices();
+  speechSynthesis.onvoiceschanged = loadBestVoice;
+  setTimeout(loadBestVoice, 300);
+}
+
+function speak(text, rate) {
+  if (!window.speechSynthesis) return;
+  speechSynthesis.cancel();
+  var u = new SpeechSynthesisUtterance(text);
+  u.lang = "fr-FR";
+  u.rate = rate === 1 ? 0.78 : 0.40;
+  u.pitch = rate === 1 ? 1.05 : 0.95;
+  u.volume = 1;
+  if (_bestVoice) u.voice = _bestVoice;
+  setTimeout(function() { speechSynthesis.speak(u); }, 80);
+}
+
+function verifier() {
+  if (verifie) return;
+  verifie = true;
+  score = 0;
+  for (var i = 0; i < 5; i++) {
+    var inp = document.getElementById("inp-" + i);
+    inp.readOnly = true;
+    var ok = ns(inp.value) === ns(phrases[i]);
+    if (ok) {
+      inp.classList.add("correct");
+      score += 3;
+    } else {
+      inp.classList.add("wrong");
+      inp.value = (inp.value ? inp.value + " " : "") + "→ " + phrases[i];
+      inp.style.fontSize = ".82rem";
+    }
+  }
+  document.getElementById("score-display").textContent = score;
+  document.getElementById("progress-fill").style.width = (score / 15 * 100) + "%";
+  var fb = document.getElementById("feedback");
+  fb.className = "feedback show " + (score === 15 ? "ok" : "ko");
+  fb.innerHTML = score === 15
+    ? "✅ Parfait ! 15/15 — Tu n'as pas été piégé par les sujets éloignés ! 🎉"
+    : "💡 " + score + "/15 — Les corrections s'affichent en rouge. Repère bien le sujet réel de chaque verbe.";
+  document.getElementById("btn-verif").disabled = true;
+  document.getElementById("btn-to-bilan").classList.add("show");
+}
+
+function goToPhase(phase) {
+  document.querySelectorAll(".phase").forEach(function(p) { p.classList.remove("active"); });
+  document.getElementById("phase-" + phase).classList.add("active");
+  if (phase === "bilan") {
+    document.getElementById("final-score").textContent = score + " / 15";
+    var msg = "", ugo = "";
+    if (score === 15) { msg = "Excellent ! Tous les accords sont parfaits ! 🌟"; ugo = "Bravo ! Tu as trouvé le vrai sujet à chaque fois !"; }
+    else if (score >= 12) { msg = "Très bien ! Encore un petit effort ! 👏"; ugo = "Presque parfait ! Relis les phrases en rouge et cherche le sujet."; }
+    else if (score >= 9) { msg = "Pas mal, quelques accords à revoir."; ugo = "Pose-toi toujours la question : qui fait l'action ?"; }
+    else { msg = "Continue tes efforts — refais la dictée ! 💪"; ugo = "Relis la leçon sur le sujet éloigné et réessaie !"; }
+    document.getElementById("final-msg").textContent = msg;
+    document.getElementById("ugo-bilan").innerHTML = "<strong>Tu as terminé !</strong> " + ugo;
+  }
+}
+</script>
+</body>
+</html>
