@@ -364,48 +364,28 @@ body{font-family:'Lato',sans-serif;background:#f8fafc;color:var(--text);font-siz
     <div class="erreur-block" id="err-0" data-correct="mais">
       <div class="erreur-label">⚠ Phrase avec erreur :</div>
       <div class="erreur-phrase">« Il voulait réussir <u>car</u> il n'a pas assez travaillé. »</div>
-      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;">
-        <button class="classify-btn simple-btn" data-choice="mais" onclick="verifyErreur(0, this)">mais</button>
-        <button class="classify-btn simple-btn" data-choice="donc" onclick="verifyErreur(0, this)">donc</button>
-        <button class="classify-btn simple-btn" data-choice="et" onclick="verifyErreur(0, this)">et</button>
-        <button class="classify-btn simple-btn" data-choice="ou" onclick="verifyErreur(0, this)">ou</button>
-      </div>
+      <div class="erreur-choix" id="errch-0"></div>
       <div class="erreur-feedback" id="err-fb-0"></div>
     </div>
 
     <div class="erreur-block" id="err-1" data-correct="que">
       <div class="erreur-label">⚠ Phrase avec erreur :</div>
       <div class="erreur-phrase">« Je pense <u>qui</u> cette solution est la meilleure. »</div>
-      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;">
-        <button class="classify-btn simple-btn" data-choice="que" onclick="verifyErreur(1, this)">que</button>
-        <button class="classify-btn simple-btn" data-choice="où" onclick="verifyErreur(1, this)">où</button>
-        <button class="classify-btn simple-btn" data-choice="dont" onclick="verifyErreur(1, this)">dont</button>
-        <button class="classify-btn simple-btn" data-choice="si" onclick="verifyErreur(1, this)">si</button>
-      </div>
+      <div class="erreur-choix" id="errch-1"></div>
       <div class="erreur-feedback" id="err-fb-1"></div>
     </div>
 
     <div class="erreur-block" id="err-2" data-correct="donc">
       <div class="erreur-label">⚠ Phrase avec erreur :</div>
       <div class="erreur-phrase">« Il a beaucoup plu <u>mais</u> les rivières ont débordé. »</div>
-      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;">
-        <button class="classify-btn simple-btn" data-choice="donc" onclick="verifyErreur(2, this)">donc</button>
-        <button class="classify-btn simple-btn" data-choice="ou" onclick="verifyErreur(2, this)">ou</button>
-        <button class="classify-btn simple-btn" data-choice="car" onclick="verifyErreur(2, this)">car</button>
-        <button class="classify-btn simple-btn" data-choice="que" onclick="verifyErreur(2, this)">que</button>
-      </div>
+      <div class="erreur-choix" id="errch-2"></div>
       <div class="erreur-feedback" id="err-fb-2"></div>
     </div>
 
     <div class="erreur-block" id="err-3" data-correct="qui">
       <div class="erreur-label">⚠ Phrase avec erreur :</div>
       <div class="erreur-phrase">« L'élève <u>que</u> travaille régulièrement finit toujours par progresser. »</div>
-      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;">
-        <button class="classify-btn simple-btn" data-choice="qui" onclick="verifyErreur(3, this)">qui</button>
-        <button class="classify-btn simple-btn" data-choice="où" onclick="verifyErreur(3, this)">où</button>
-        <button class="classify-btn simple-btn" data-choice="dont" onclick="verifyErreur(3, this)">dont</button>
-        <button class="classify-btn simple-btn" data-choice="lequel" onclick="verifyErreur(3, this)">lequel</button>
-      </div>
+      <div class="erreur-choix" id="errch-3"></div>
       <div class="erreur-feedback" id="err-fb-3"></div>
     </div>
 
@@ -466,7 +446,7 @@ body{font-family:'Lato',sans-serif;background:#f8fafc;color:var(--text);font-siz
       <h2 class="bilan-title" id="bilan-title">Résultat</h2>
       <p class="bilan-msg" id="bilan-msg"></p>
       <div class="stars-row"><span class="star-big" id="star1">⭐</span><span class="star-big" id="star2">⭐</span><span class="star-big" id="star3">⭐</span></div>
-      <div class="score-circle"><span class="score-num" id="bilan-score">0</span><span class="score-sub">/ 21 pts</span></div>
+      <div class="score-circle"><span class="score-num" id="bilan-score">0</span><span class="score-sub">/ 18 pts</span></div>
       <div class="memo-card">
         <h3>Mémo — La phrase complexe</h3>
         <div class="memo-grid">
@@ -489,7 +469,7 @@ function printLecon(){document.body.classList.add('print-mode-lecon');setTimeout
 function printEval(){document.body.classList.add('print-mode-eval');setTimeout(function(){window.print();setTimeout(function(){document.body.classList.remove('print-mode-eval');},600);},60);}
 
 /* ── DONNÉES ─────────────────────────────── */
-var TOTAL_PTS = 21;
+var TOTAL_PTS = 18;
 
 var QCM1 = [
   {
@@ -663,11 +643,9 @@ function buildJugement() {
     div.className = 'jugement-block';
     div.id = 'jug-' + ji;
     div.innerHTML = '<div class="jugement-options">'
-      + '<div class="jugement-opt" id="jopt-'+ji+'-A" onclick="selectJugement('+ji+', \'A\')"><strong>A —</strong> ' + item.phraseA + '</div>'
-      + '<div class="jugement-opt" id="jopt-'+ji+'-B" onclick="selectJugement('+ji+', \'B\')"><strong>B —</strong> ' + item.phraseB + '</div>'
+      + '<div class="jugement-opt" id="jopt-'+ji+'-A" onclick="verifyJugement('+ji+', \'A\')"><strong>A —</strong> ' + item.phraseA + '</div>'
+      + '<div class="jugement-opt" id="jopt-'+ji+'-B" onclick="verifyJugement('+ji+', \'B\')"><strong>B —</strong> ' + item.phraseB + '</div>'
       + '</div>'
-      + '<textarea class="jugement-expl" id="jexpl-'+ji+'" placeholder="Explique pourquoi cette phrase est correctement construite…"></textarea>'
-      + '<button class="btn-jugement" onclick="verifyJugement('+ji+')">✓ Valider</button>'
       + '<div class="jugement-feedback" id="jfb-'+ji+'"></div>';
     c.appendChild(div);
   });
@@ -683,30 +661,19 @@ function selectJugement(ji, choice) {
   document.getElementById('jopt-'+ji+'-'+choice).classList.add('selected');
 }
 
-function verifyJugement(ji) {
+function verifyJugement(ji, choice) {
   var block = document.getElementById('jug-' + ji);
   if (block.classList.contains('answered')) return;
-  var choice = jugementSelected[ji];
-  var expl = (document.getElementById('jexpl-'+ji).value || '').trim();
-  if (!choice) { alert('Sélectionne une phrase avant de valider.'); return; }
   block.classList.add('answered');
   var correct = jugementData[ji].correct;
   var fb = document.getElementById('jfb-' + ji);
   var choiceOk = (choice === correct);
-  var explOk = expl.length >= 8;
   document.getElementById('jopt-'+ji+'-'+correct).classList.add('correct-choice');
   if (!choiceOk) document.getElementById('jopt-'+ji+'-'+choice).classList.add('wrong-choice');
-  var expl_field = document.getElementById('jexpl-'+ji);
-  expl_field.readOnly = true;
-  if (choiceOk) { expl_field.classList.add('correct'); } else { expl_field.classList.add('wrong'); }
-  if (choiceOk && explOk) {
-    score += 2; document.getElementById('score-display').textContent = score;
+  if (choiceOk) {
+    score++; document.getElementById('score-display').textContent = score;
     fb.className = 'jugement-feedback show ok';
-    fb.innerHTML = '✓ Correct (+2). ' + jugementData[ji].expl;
-  } else if (choiceOk) {
-    score += 1; document.getElementById('score-display').textContent = score;
-    fb.className = 'jugement-feedback show ok';
-    fb.innerHTML = '✓ Bonne phrase (+1), mais l\'explication est trop courte. ' + jugementData[ji].expl;
+    fb.innerHTML = '✓ Correct. ' + jugementData[ji].expl;
   } else {
     fb.className = 'jugement-feedback show ko';
     fb.innerHTML = '✗ ' + jugementData[ji].expl;
@@ -764,7 +731,28 @@ function revealBloc(n){
   setTimeout(function(){var hH=(document.querySelector('.header')||{offsetHeight:0}).offsetHeight;var rect=bloc.getBoundingClientRect();window.scrollTo({top:window.pageYOffset+rect.top-hH-20,behavior:'smooth'});},150);
 }
 
+var erreurChoix = [
+  ["mais","donc","et","ou"],
+  ["que","où","dont","si"],
+  ["donc","ou","car","que"],
+  ["qui","où","dont","lequel"]
+];
+
 function startExercises(){
+  // Générer les boutons shufflés pour l'ex. 1
+  erreurChoix.forEach(function(opts, idx) {
+    var container = document.getElementById('errch-' + idx);
+    if (!container) return;
+    container.style.cssText = 'display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;';
+    shuffle(opts).forEach(function(word) {
+      var btn = document.createElement('button');
+      btn.className = 'classify-btn simple-btn';
+      btn.dataset.choice = word;
+      btn.textContent = word;
+      btn.setAttribute('onclick', 'verifyErreur(' + idx + ', this)');
+      container.appendChild(btn);
+    });
+  });
   goToPhase('ex1',1);
   buildQCM('qcm1-container',QCM1,1);
 }
@@ -915,7 +903,7 @@ function showBilan(){
   else{title='À consolider';msg="Relis la leçon en t'attardant sur les mots subordonnants et les conjonctions de coordination. Les exercices de détection d'erreur sont à reprendre.";}
   document.getElementById('bilan-title').textContent=title;
   document.getElementById('bilan-msg').textContent=msg;
-  var seuils=[8,14,19];
+  var seuils=[7,12,16];
   ['star1','star2','star3'].forEach(function(id,i){
     var el=document.getElementById(id);
     if(score>=seuils[i]){(function(e,d){setTimeout(function(){e.classList.add('earned');},d);})(el,300+i*400);}
