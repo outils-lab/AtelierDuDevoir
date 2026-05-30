@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>O401 — Les accords complexes dans le GN | L'Atelier du Devoir</title>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --acc:#0f4c75;--acc-pale:#e8f4fd;--acc-mid:#7fb3d3;
+  --mint:#059669;--mint-pale:#d1fae5;--mint-deep:#047857;
+  --coral:#dc2626;--coral-pale:#fee2e2;
+  --sky:#0369a1;--sky-pale:#e0f2fe;
+  --yellow:#d97706;--yellow-pale:#fef3c7;
+  --text:#1e293b;--text-light:#64748b;
+  --radius:12px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Lato',sans-serif;background:#e8f4fd;color:var(--text);font-size:16px;line-height:1.65;}
+.print-bar{position:fixed;right:16px;top:50%;transform:translateY(-50%);z-index:200;display:flex;flex-direction:column;gap:8px;}
+.print-btn{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:8px;font-family:'Lato',sans-serif;font-weight:700;font-size:.78rem;border:none;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.15);}
+.print-btn-lecon{background:#d97706;color:white;}.print-btn-eval{background:#dc2626;color:white;}
+@media(max-width:600px){.print-bar{right:6px;}.print-btn{font-size:0;width:40px;height:40px;padding:0;justify-content:center;}.print-btn span.lbl{display:none;}.print-btn span.ico{font-size:1.1rem;}}
+.header{background:white;border-bottom:2px solid var(--acc-pale);position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.06);}
+.header-top{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;}
+.logo{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--acc);text-decoration:none;}
+.score-badge{background:var(--acc);color:white;font-weight:700;font-size:.85rem;padding:5px 14px;border-radius:6px;display:flex;align-items:center;gap:5px;}
+.steps-wrap{padding:0 20px 8px;}
+.steps{display:flex;gap:3px;}
+.step{flex:1;height:5px;border-radius:4px;background:var(--acc-pale);transition:all .35s;}
+.step.done{background:var(--mint);}.step.active{background:var(--acc);}
+.steps-labels{display:flex;gap:3px;padding-top:3px;}
+.step-lbl{flex:1;font-size:.5rem;font-weight:700;color:var(--text-light);text-align:center;text-transform:uppercase;letter-spacing:.04em;}
+.main{max-width:760px;margin:0 auto;padding:28px 16px 100px;}
+.phase{display:none;}.phase.active{display:block;}
+.accroche{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:22px 24px;margin-bottom:22px;display:flex;gap:16px;align-items:flex-start;}
+.accroche-icon{font-size:2.4rem;flex-shrink:0;margin-top:2px;}
+.accroche-text h1{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--acc);margin-bottom:6px;}
+.accroche-text p{color:var(--text-light);font-size:.92rem;line-height:1.5;}
+.meta-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+.meta-tag{background:var(--acc-pale);border-radius:4px;padding:3px 10px;font-size:.72rem;font-weight:700;color:var(--acc);text-transform:uppercase;letter-spacing:.04em;}
+.lecon-card{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:22px;margin-bottom:18px;}
+.lecon-card h2{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--acc);margin-bottom:14px;border-bottom:2px solid var(--acc-pale);padding-bottom:8px;}
+.lecon-block{display:none;}.lecon-block.revealed{display:block;}
+.lecon-subtitle{font-weight:900;font-size:1rem;color:var(--acc);margin-bottom:10px;margin-top:6px;}
+.sep{margin:18px 0;border:none;border-top:1px solid var(--acc-pale);}
+.analogie{font-size:.92rem;color:var(--text-light);font-style:italic;margin-bottom:12px;line-height:1.6;}
+.def-box{border-left:4px solid var(--acc);background:var(--acc-pale);border-radius:0 var(--radius) var(--radius) 0;padding:14px 16px;margin-bottom:12px;}
+.def-box h4{font-weight:900;color:var(--acc);font-size:.9rem;margin-bottom:6px;}
+.def-box p{font-size:.88rem;color:var(--text);line-height:1.55;}
+.phrase-ex{background:white;border:1px solid #e2e8f0;border-radius:8px;padding:9px 14px;font-size:.9rem;margin-bottom:6px;line-height:1.7;}
+.hl{background:var(--acc-pale);color:var(--acc);border-radius:4px;padding:1px 6px;font-weight:700;margin:0 2px;}
+.tableau{width:100%;border-collapse:collapse;margin:10px 0;font-size:.85rem;}
+.tableau th{padding:8px 10px;text-align:left;font-weight:700;background:var(--acc);color:white;}
+.tableau td{padding:7px 10px;border:1px solid #e2e8f0;}
+.tableau tr:nth-child(even) td{background:var(--acc-pale);}
+.astuce{background:#fefce8;border:1px solid #fde68a;border-radius:8px;padding:11px 14px;font-size:.85rem;margin-top:8px;color:#78350f;}
+.astuce strong{color:#92400e;}
+.piege{background:#fff1f2;border:1px solid #fecdd3;border-radius:8px;padding:11px 14px;font-size:.85rem;margin-top:8px;color:#9f1239;}
+.piege strong{color:#be123c;}
+.btn-compris{margin-top:18px;padding:11px 26px;border-radius:8px;font-family:'Lato',sans-serif;font-weight:700;font-size:.9rem;background:var(--acc);color:white;border:none;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:8px;}
+.btn-compris:hover{background:#0a3a5c;transform:translateY(-1px);}
+.btn-compris:disabled{opacity:.4;cursor:default;transform:none;}
+.mascot-msg{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:13px 16px;margin:14px 0;display:flex;align-items:flex-start;gap:10px;}
+.mascot-msg .emo{font-size:1.6rem;flex-shrink:0;}
+.mascot-msg p{font-size:.88rem;color:var(--text-light);}
+.ex-num{display:inline-block;background:var(--acc);color:white;font-weight:700;font-size:.7rem;padding:3px 10px;border-radius:4px;margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em;}
+.ex-header h2{font-family:'Playfair Display',serif;font-size:1.15rem;margin-bottom:4px;}
+.ex-header p{color:var(--text-light);font-size:.85rem;margin-bottom:14px;}
+.qcm-question{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:18px;margin-bottom:12px;}
+.qcm-question.answered{pointer-events:none;}
+.qcm-sentence{font-size:.92rem;font-weight:700;margin-bottom:12px;line-height:1.7;background:var(--acc-pale);border-radius:8px;padding:11px 14px;}
+.qcm-options{display:flex;flex-direction:column;gap:8px;}
+.qcm-opt{padding:10px 14px;border-radius:8px;border:2px solid #e2e8f0;background:white;font-family:'Lato',sans-serif;font-weight:400;font-size:.88rem;cursor:pointer;text-align:left;transition:all .2s;}
+.qcm-opt:hover{border-color:var(--acc);background:var(--acc-pale);}
+.qcm-opt.correct{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);font-weight:700;}
+.qcm-opt.wrong{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
+.qcm-opt.reveal{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);font-weight:700;}
+.qcm-feedback{margin-top:10px;padding:10px 13px;border-radius:8px;font-size:.84rem;font-weight:700;display:none;}
+.qcm-feedback.show{display:block;}
+.qcm-feedback.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.qcm-feedback.ko{background:var(--coral-pale);color:#b91c1c;}
+.btn-suivant{margin-top:14px;padding:10px 22px;border-radius:8px;font-family:'Lato',sans-serif;font-weight:700;font-size:.88rem;background:var(--acc);color:white;border:none;cursor:pointer;display:none;align-items:center;gap:8px;transition:all .2s;}
+.btn-suivant.show{display:inline-flex;}
+.btn-suivant:hover{background:#0a3a5c;}
+.classify-block{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:18px;margin-bottom:12px;}
+.classify-block.answered{pointer-events:none;}
+.classify-phrase{background:var(--acc-pale);border-radius:8px;padding:11px 14px;font-size:.92rem;margin-bottom:12px;line-height:1.7;}
+.classify-btns{display:flex;gap:8px;flex-wrap:wrap;}
+.classify-btn{padding:9px 14px;border-radius:6px;font-family:'Lato',sans-serif;font-weight:700;font-size:.78rem;border:2px solid;cursor:pointer;transition:all .2s;flex:1;text-align:center;min-width:80px;}
+.g-btn{background:var(--sky-pale);color:var(--sky);border-color:var(--sky);}
+.n-btn{background:#fef3c7;color:#92400e;border-color:#d97706;}
+.gn-btn{background:var(--acc-pale);color:var(--acc);border-color:var(--acc);}
+.classify-btn.sel-ok{color:white!important;background:var(--mint)!important;border-color:var(--mint)!important;}
+.classify-btn.sel-ko{background:var(--coral-pale)!important;color:var(--coral)!important;border-color:var(--coral)!important;}
+.classify-btn.rev-ok{color:white!important;background:var(--acc)!important;border-color:var(--acc)!important;}
+.classify-feedback{margin-top:10px;padding:9px 13px;border-radius:8px;font-size:.83rem;font-weight:700;display:none;}
+.classify-feedback.show{display:block;}
+.classify-feedback.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.classify-feedback.ko{background:var(--coral-pale);color:#b91c1c;}
+.erreur-block{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:18px;margin-bottom:12px;}
+.erreur-block.answered{pointer-events:none;}
+.erreur-phrase{background:#fff1f2;border:1px solid #fecdd3;border-radius:8px;padding:11px 14px;font-size:.95rem;margin-bottom:12px;line-height:1.7;}
+.erreur-label{font-size:.78rem;font-weight:700;color:#be123c;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;}
+.erreur-choix{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+.erreur-feedback{margin-top:8px;padding:9px 13px;border-radius:8px;font-size:.83rem;font-weight:700;display:none;}
+.erreur-feedback.show{display:block;}
+.erreur-feedback.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.erreur-feedback.ko{background:var(--coral-pale);color:#b91c1c;}
+.bank-area{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:18px;margin-bottom:16px;}
+.bank-label{font-weight:700;margin-bottom:10px;font-size:.85rem;color:var(--text-light);text-transform:uppercase;letter-spacing:.05em;}
+.word-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;min-height:46px;padding:10px;background:var(--acc-pale);border-radius:8px;}
+.word-chip{padding:8px 16px;border-radius:6px;border:2px solid var(--acc);background:white;font-weight:700;font-size:.88rem;cursor:grab;color:var(--acc);transition:all .15s;user-select:none;-webkit-user-select:none;}
+.word-chip.used{opacity:.2;pointer-events:none;}
+.drop-sentences{display:flex;flex-direction:column;gap:10px;}
+.drop-row{background:var(--acc-pale);border-radius:10px;padding:12px 14px;display:flex;align-items:center;flex-wrap:wrap;gap:6px;font-size:.9rem;line-height:1.6;}
+.drop-zone{display:inline-flex;align-items:center;justify-content:center;min-width:90px;height:32px;border:2px dashed var(--acc);border-radius:6px;background:white;color:var(--acc);font-weight:700;font-size:.85rem;padding:0 8px;transition:all .2s;cursor:pointer;}
+.drop-zone.drag-over{border-color:#0a3a5c;background:var(--acc-pale);border-style:solid;}
+.drop-zone.filled{border-style:solid;}
+.drop-zone.correct{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.drop-zone.wrong{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);font-size:.75rem;}
+.btn-verifier{margin-top:14px;padding:10px 22px;border-radius:8px;font-family:'Lato',sans-serif;font-weight:700;font-size:.88rem;background:var(--acc);color:white;border:none;cursor:pointer;transition:all .2s;}
+.btn-verifier:hover{background:#0a3a5c;}
+.btn-verifier:disabled{opacity:.4;cursor:not-allowed;}
+.ex-feedback{margin-top:10px;padding:11px 14px;border-radius:8px;font-size:.84rem;font-weight:700;display:none;}
+.ex-feedback.show{display:block;}
+.ex-feedback.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.ex-feedback.ko{background:var(--coral-pale);color:#b91c1c;}
+.reform-block{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:18px;margin-bottom:12px;}
+.reform-consigne{background:var(--acc-pale);border-radius:8px;padding:10px 14px;font-size:.9rem;margin-bottom:12px;line-height:1.7;font-weight:700;}
+.reform-input{width:100%;border:2px solid var(--acc);border-radius:6px;padding:9px 12px;font-family:'Lato',sans-serif;font-size:.92rem;color:var(--text);background:white;outline:none;}
+.reform-input:focus{border-color:#0a3a5c;}
+.reform-input.correct{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.reform-input.wrong{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);font-size:.82rem;}
+.btn-reform{margin-top:10px;padding:8px 18px;border-radius:6px;font-family:'Lato',sans-serif;font-weight:700;font-size:.85rem;background:var(--acc);color:white;border:none;cursor:pointer;transition:all .2s;}
+.btn-reform:hover{background:#0a3a5c;}
+.reform-feedback{margin-top:8px;padding:9px 13px;border-radius:8px;font-size:.83rem;font-weight:700;display:none;}
+.reform-feedback.show{display:block;}
+.reform-feedback.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.reform-feedback.ko{background:var(--coral-pale);color:#b91c1c;}
+.jugement-block{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:18px;margin-bottom:12px;}
+.jugement-block.answered{pointer-events:none;}
+.jugement-options{display:flex;flex-direction:column;gap:10px;}
+.jugement-opt{padding:12px 16px;border-radius:8px;border:2px solid #e2e8f0;background:white;font-family:'Lato',sans-serif;font-size:.9rem;cursor:pointer;text-align:left;transition:all .2s;line-height:1.6;}
+.jugement-opt:hover{border-color:var(--acc);background:var(--acc-pale);}
+.jugement-opt.correct-choice{border-color:var(--mint);background:var(--mint-pale);}
+.jugement-opt.wrong-choice{border-color:var(--coral);background:var(--coral-pale);}
+.jugement-feedback{margin-top:8px;padding:9px 13px;border-radius:8px;font-size:.83rem;font-weight:700;display:none;}
+.jugement-feedback.show{display:block;}
+.jugement-feedback.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.jugement-feedback.ko{background:var(--coral-pale);color:#b91c1c;}
+.bilan-card{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:28px 24px;text-align:center;}
+.bilan-icon{font-size:3.5rem;margin-bottom:12px;display:block;}
+.bilan-title{font-family:'Playfair Display',serif;font-size:1.8rem;margin-bottom:6px;color:var(--acc);}
+.bilan-msg{color:var(--text-light);font-size:.95rem;margin-bottom:20px;}
+.stars-row{display:flex;justify-content:center;gap:10px;margin-bottom:20px;}
+.star-big{font-size:2.5rem;filter:grayscale(1);transition:all .5s;}
+.star-big.earned{filter:none;animation:starPop .5s ease both;}
+@keyframes starPop{0%{transform:scale(0);}60%{transform:scale(1.2);}100%{transform:scale(1);}}
+.score-circle{width:100px;height:100px;border-radius:50%;background:var(--acc);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 20px;color:white;}
+.score-num{font-family:'Playfair Display',serif;font-size:1.8rem;line-height:1;}
+.score-sub{font-size:.65rem;opacity:.8;}
+.memo-card{background:var(--acc-pale);border-radius:var(--radius);padding:16px 20px;margin:18px 0;text-align:left;}
+.memo-card h3{font-weight:700;font-size:.85rem;color:var(--acc);margin-bottom:10px;text-transform:uppercase;letter-spacing:.04em;}
+.memo-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media(max-width:480px){.memo-grid{grid-template-columns:1fr;}}
+.memo-item{background:white;border-radius:8px;padding:10px 12px;font-size:.82rem;border:1px solid #e2e8f0;}
+.memo-item strong{color:var(--acc);}
+.bilan-btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:16px;}
+.btn-act{padding:10px 20px;border-radius:8px;font-family:'Lato',sans-serif;font-weight:700;font-size:.85rem;cursor:pointer;border:none;transition:all .2s;}
+.btn-act.primary{background:var(--acc);color:white;}
+.btn-act.secondary{background:var(--acc-pale);color:var(--acc);border:2px solid var(--acc);}
+.btn-act:hover{transform:translateY(-1px);}
+.confetti-piece{position:fixed;border-radius:2px;top:-20px;animation:fall linear both;pointer-events:none;z-index:9999;}
+@keyframes fall{0%{transform:translateY(0) rotate(0deg);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
+@media print{.print-bar,.btn-compris,.btn-suivant,.btn-verifier,.btn-reform,.bilan-card,.mascot-msg{display:none!important;}body{background:white;}.phase{display:block!important;}}
+</style>
+</head>
+<body>
+<div class="print-bar">
+  <button class="print-btn print-btn-lecon" onclick="window.print()"><span class="ico">📖</span><span class="lbl"> Imprimer la leçon</span></button>
+  <button class="print-btn print-btn-eval" onclick="window.print()"><span class="ico">📝</span><span class="lbl"> Imprimer les exercices</span></button>
+</div>
+<header class="header">
+  <div class="header-top">
+    <a href="../12-15ans.html" class="logo">🦉 L'Atelier du Devoir</a>
+    <div class="score-badge">⭐ <span id="score-display">0</span> pts</div>
+  </div>
+  <div class="steps-wrap">
+    <div class="steps">
+      <div class="step active" id="step-0"></div><div class="step" id="step-1"></div><div class="step" id="step-2"></div>
+      <div class="step" id="step-3"></div><div class="step" id="step-4"></div><div class="step" id="step-5"></div>
+      <div class="step" id="step-6"></div><div class="step" id="step-7"></div>
+    </div>
+    <div class="steps-labels">
+      <div class="step-lbl">Leçon</div><div class="step-lbl">Entr. 1</div><div class="step-lbl">Entr. 2</div>
+      <div class="step-lbl">Ex. 1</div><div class="step-lbl">Ex. 2</div><div class="step-lbl">Ex. 3</div>
+      <div class="step-lbl">Ex. 4</div><div class="step-lbl">Bilan</div>
+    </div>
+  </div>
+</header>
+<main class="main">
+  <div class="accroche">
+    <div class="accroche-icon">🔤</div>
+    <div class="accroche-text">
+      <h1>Les accords complexes dans le GN</h1>
+      <p>Maîtriser les accords du déterminant, de l'adjectif et du nom dans des groupes nominaux complexes.</p>
+      <div class="meta-row">
+        <span class="meta-tag">5e</span><span class="meta-tag">~20 min</span>
+        <span class="meta-tag">⭐⭐ Difficulté</span>
+        <span class="meta-tag">Français — Orthographe</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase active" id="phase-lecon">
+    <div class="lecon-card">
+      <h2>📖 La leçon</h2>
+      <div class="lecon-block revealed" id="bloc-0">
+        <div class="lecon-subtitle">① Rappel : la chaîne d'accord dans le GN</div>
+        <p class="analogie">Le GN fonctionne comme un réseau : le nom est le chef. Tout ce qui l'entoure — déterminants, adjectifs — doit s'aligner sur son genre et son nombre. Une seule erreur dans la chaîne, et l'accord est rompu.</p>
+        <div class="def-box">
+          <h4>La règle de base</h4>
+          <p>Dans un groupe nominal, le <strong>déterminant</strong> et tous les <strong>adjectifs qualificatifs</strong> s'accordent en genre et en nombre avec le <strong>nom noyau</strong>.</p>
+        </div>
+        <div class="phrase-ex">— <span class="hl">Une</span> <span class="hl">longue</span> route <span class="hl">sinueuse</span> → féminin singulier</div>
+        <div class="phrase-ex">— <span class="hl">De</span> <span class="hl">vieux</span> livres <span class="hl">abîmés</span> → masculin pluriel</div>
+        <div class="astuce"><strong>Méthode :</strong> identifie d'abord le nom noyau, détermine son genre et son nombre, puis vérifie chaque déterminant et adjectif.</div>
+        <button class="btn-compris" onclick="revealBloc(1)">Bloc suivant →</button>
+      </div>
+      <div class="lecon-block" id="bloc-1">
+        <hr class="sep">
+        <div class="lecon-subtitle">② Les cas complexes</div>
+        <p class="analogie">Certains GN tendent des pièges : deux noms coordonnés, un nom noyau éloigné de ses adjectifs, ou des adjectifs aux formes homonymiques. Ce sont ces cas qu'il faut apprendre à déjouer.</p>
+        <table class="tableau">
+          <tr><th>Cas</th><th>Règle</th><th>Exemple</th></tr>
+          <tr><td><strong>Deux noms coordonnés</strong></td><td>L'adjectif se met au pluriel — au masculin si les deux noms sont de genres différents</td><td>Un courage et une détermination <em>exemplaires</em>.</td></tr>
+          <tr><td><strong>Adjectif épithète éloigné</strong></td><td>L'accord se fait toujours avec le nom noyau, même si l'adjectif est loin</td><td>Les résultats de l'équipe, <em>encourageants</em>, ont surpris.</td></tr>
+          <tr><td><strong>Adjectif de couleur composé</strong></td><td>Invariable si composé de deux éléments ou si c'est un nom commun employé comme adjectif</td><td>Des robes <em>bleu marine</em>, des yeux <em>vert-de-gris</em>.</td></tr>
+          <tr><td><strong>Adjectif numéral</strong></td><td>"Vingt" et "cent" prennent un s quand ils terminent le nombre et ne sont pas suivis d'un autre nombre</td><td><em>Quatre-vingts</em> élèves / <em>quatre-vingt-deux</em> élèves.</td></tr>
+        </table>
+        <div class="piege"><strong>Piège coordination :</strong> "un garçon et une fille ravis" → masculin pluriel (accord au masculin dès qu'il y a un nom masculin). "deux filles ravies" → féminin pluriel.</div>
+        <button class="btn-compris" onclick="revealBloc(2)">Bloc suivant →</button>
+      </div>
+      <div class="lecon-block" id="bloc-2">
+        <hr class="sep">
+        <div class="lecon-subtitle">③ Les adjectifs à double forme</div>
+        <p class="analogie">Certains adjectifs ont une forme spéciale au masculin singulier devant une voyelle. C'est une subtilité phonétique — la langue évite le hiatus entre deux voyelles.</p>
+        <div class="def-box">
+          <h4>Formes spéciales devant voyelle</h4>
+          <p>Certains adjectifs ont une forme masculine singulière spéciale devant voyelle ou h muet : beau → <strong>bel</strong>, nouveau → <strong>nouvel</strong>, vieux → <strong>vieil</strong>, fou → <strong>fol</strong>, mou → <strong>mol</strong>.</p>
+        </div>
+        <div class="phrase-ex">— un <span class="hl">bel</span> appartement / un <span class="hl">beau</span> jardin</div>
+        <div class="phrase-ex">— un <span class="hl">nouvel</span> élan / un <span class="hl">nouveau</span> projet</div>
+        <div class="phrase-ex">— un <span class="hl">vieil</span> homme / un <span class="hl">vieux</span> monsieur</div>
+        <div class="astuce"><strong>Astuce :</strong> ces formes spéciales ne s'emploient qu'au masculin singulier devant voyelle ou h muet. Au pluriel ou au féminin, on revient aux formes normales : de <em>beaux</em> appartements, une <em>belle</em> maison.</div>
+        <button class="btn-compris" onclick="startExercises()">✓ Leçon comprise — Aux exercices</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase" id="phase-ex1">
+    <div class="mascot-msg"><span class="emo">🦉</span><p>Entraînement 1 — Identifier le GN correctement accordé. Repère le nom noyau en premier.</p></div>
+    <div class="ex-num">Entraînement 1 / 2 — Reconnaître</div>
+    <div class="ex-header"><h2>Quel GN est correctement accordé ?</h2><p>Sélectionne la bonne réponse.</p></div>
+    <div id="qcm1-container"></div>
+    <button class="btn-suivant" id="btn-to-ex2" onclick="goToPhase('ex2',2)">Entraînement 2 →</button>
+  </div>
+
+  <div class="phase" id="phase-ex2">
+    <div class="mascot-msg"><span class="emo">🦉</span><p>Entraînement 2 — Identifie si l'erreur d'accord porte sur le genre, le nombre, ou les deux.</p></div>
+    <div class="ex-num">Entraînement 2 / 2 — Analyser</div>
+    <div class="ex-header"><h2>Quel type d'erreur d'accord ?</h2><p>Identifie ce qui ne s'accorde pas correctement dans le GN en gras.</p></div>
+
+    <div class="classify-block" id="cl-0">
+      <div class="classify-phrase">« Il portait un <strong>veste élégant</strong>. »</div>
+      <div class="classify-btns">
+        <button class="classify-btn g-btn" data-idx="0" data-type="g" data-correct="g" onclick="classifyAnswer(this)">Erreur de genre</button>
+        <button class="classify-btn n-btn" data-idx="0" data-type="n" data-correct="g" onclick="classifyAnswer(this)">Erreur de nombre</button>
+        <button class="classify-btn gn-btn" data-idx="0" data-type="gn" data-correct="g" onclick="classifyAnswer(this)">Genre et nombre</button>
+      </div>
+      <div class="classify-feedback" id="clf-0"></div>
+    </div>
+
+    <div class="classify-block" id="cl-1">
+      <div class="classify-phrase">« Elle a rédigé <strong>des rapport détaillés</strong>. »</div>
+      <div class="classify-btns">
+        <button class="classify-btn g-btn" data-idx="1" data-type="g" data-correct="n" onclick="classifyAnswer(this)">Erreur de genre</button>
+        <button class="classify-btn n-btn" data-idx="1" data-type="n" data-correct="n" onclick="classifyAnswer(this)">Erreur de nombre</button>
+        <button class="classify-btn gn-btn" data-idx="1" data-type="gn" data-correct="n" onclick="classifyAnswer(this)">Genre et nombre</button>
+      </div>
+      <div class="classify-feedback" id="clf-1"></div>
+    </div>
+
+    <div class="classify-block" id="cl-2">
+      <div class="classify-phrase">« C'était une <strong>belle idée originale</strong>. »</div>
+      <div class="classify-btns">
+        <button class="classify-btn g-btn" data-idx="2" data-type="g" data-correct="ok" onclick="classifyAnswer(this)">Erreur de genre</button>
+        <button class="classify-btn n-btn" data-idx="2" data-type="n" data-correct="ok" onclick="classifyAnswer(this)">Erreur de nombre</button>
+        <button class="classify-btn gn-btn" data-idx="2" data-type="ok" data-correct="ok" onclick="classifyAnswer(this)">Aucune erreur ✓</button>
+      </div>
+      <div class="classify-feedback" id="clf-2"></div>
+    </div>
+
+    <div class="classify-block" id="cl-3">
+      <div class="classify-phrase">« Les <strong>nouveau élèves enthousiastes</strong> ont vite intégré le groupe. »</div>
+      <div class="classify-btns">
+        <button class="classify-btn g-btn" data-idx="3" data-type="g" data-correct="n" onclick="classifyAnswer(this)">Erreur de genre</button>
+        <button class="classify-btn n-btn" data-idx="3" data-type="n" data-correct="n" onclick="classifyAnswer(this)">Erreur de nombre</button>
+        <button class="classify-btn gn-btn" data-idx="3" data-type="gn" data-correct="n" onclick="classifyAnswer(this)">Genre et nombre</button>
+      </div>
+      <div class="classify-feedback" id="clf-3"></div>
+    </div>
+
+    <button class="btn-suivant" id="btn-to-drag1" onclick="goToPhase('drag1',3)">Exercice 1 →</button>
+  </div>
+
+  <div class="phase" id="phase-drag1">
+    <div class="mascot-msg"><span class="emo">🦉</span><p>Exercice 1 — L'accord dans le GN est incorrect. Sélectionne la forme correcte.</p></div>
+    <div class="ex-num">Exercice 1 / 4 — Détection d'erreur</div>
+    <div class="ex-header"><h2>Corriger l'accord</h2><p>Le GN souligné contient une erreur. Clique sur la forme correcte.</p></div>
+
+    <div class="erreur-block" id="err-0" data-correct="un bel enfant">
+      <div class="erreur-label">⚠ Erreur d'accord :</div>
+      <div class="erreur-phrase">« C'était <u>un beau enfant</u> aux yeux clairs. »</div>
+      <div class="erreur-choix" id="errch-0"></div>
+      <div class="erreur-feedback" id="err-fb-0"></div>
+    </div>
+
+    <div class="erreur-block" id="err-1" data-correct="des résultats encourageants">
+      <div class="erreur-label">⚠ Erreur d'accord :</div>
+      <div class="erreur-phrase">« L'équipe a obtenu <u>des résultats encourageant</u> ce trimestre. »</div>
+      <div class="erreur-choix" id="errch-1"></div>
+      <div class="erreur-feedback" id="err-fb-1"></div>
+    </div>
+
+    <div class="erreur-block" id="err-2" data-correct="une décision courageuse et réfléchie">
+      <div class="erreur-label">⚠ Erreur d'accord :</div>
+      <div class="erreur-phrase">« Il a pris <u>une décision courageux et réfléchi</u>. »</div>
+      <div class="erreur-choix" id="errch-2"></div>
+      <div class="erreur-feedback" id="err-fb-2"></div>
+    </div>
+
+    <div class="erreur-block" id="err-3" data-correct="de nouveaux enjeux">
+      <div class="erreur-label">⚠ Erreur d'accord :</div>
+      <div class="erreur-phrase">« Cette découverte soulève <u>de nouveau enjeux</u> scientifiques. »</div>
+      <div class="erreur-choix" id="errch-3"></div>
+      <div class="erreur-feedback" id="err-fb-3"></div>
+    </div>
+
+    <button class="btn-suivant" id="btn-to-drag2" onclick="goToPhase('drag2',4)">Exercice 2 →</button>
+  </div>
+
+  <div class="phase" id="phase-drag2">
+    <div class="mascot-msg"><span class="emo">🦉</span><p>Exercice 2 — Place la forme correcte du GN dans chaque phrase.</p></div>
+    <div class="ex-num">Exercice 2 / 4 — Compléter</div>
+    <div class="ex-header"><h2>Quel accord ?</h2><p>Glisse le GN correctement accordé dans chaque phrase.</p></div>
+    <div class="bank-area">
+      <div class="bank-label">GN disponibles :</div>
+      <div class="word-chips" id="pool1">
+        <div class="word-chip" draggable="true" data-word="un vieil ami" ondragstart="onDS(event,1)" ontouchstart="onTS(event)" ontouchmove="onTM(event)" ontouchend="onTE(event,1)">un vieil ami</div>
+        <div class="word-chip" draggable="true" data-word="des idées novatrices" ondragstart="onDS(event,1)" ontouchstart="onTS(event)" ontouchmove="onTM(event)" ontouchend="onTE(event,1)">des idées novatrices</div>
+        <div class="word-chip" draggable="true" data-word="un courage et une patience exemplaires" ondragstart="onDS(event,1)" ontouchstart="onTS(event)" ontouchmove="onTM(event)" ontouchend="onTE(event,1)">un courage et une patience exemplaires</div>
+        <div class="word-chip" draggable="true" data-word="des robes bleu marine" ondragstart="onDS(event,1)" ontouchstart="onTS(event)" ontouchmove="onTM(event)" ontouchend="onTE(event,1)">des robes bleu marine</div>
+      </div>
+      <div class="drop-sentences" id="drop-sentences-1">
+        <div class="drop-row" data-answer="un vieil ami">Il a retrouvé <span class="drop-zone" data-bank="1" data-idx="0" ondragover="onDO(event)" ondragleave="onDL(event)" ondrop="onDP(event,1)"></span> qu'il n'avait pas vu depuis dix ans.</div>
+        <div class="drop-row" data-answer="des idées novatrices">La réunion a permis de dégager <span class="drop-zone" data-bank="1" data-idx="1" ondragover="onDO(event)" ondragleave="onDL(event)" ondrop="onDP(event,1)"></span>.</div>
+        <div class="drop-row" data-answer="un courage et une patience exemplaires">Face à l'adversité, elle a montré <span class="drop-zone" data-bank="1" data-idx="2" ondragover="onDO(event)" ondragleave="onDL(event)" ondrop="onDP(event,1)"></span>.</div>
+        <div class="drop-row" data-answer="des robes bleu marine">La styliste a présenté <span class="drop-zone" data-bank="1" data-idx="3" ondragover="onDO(event)" ondragleave="onDL(event)" ondrop="onDP(event,1)"></span> pour la collection d'hiver.</div>
+      </div>
+      <button class="btn-verifier" id="btn-vd1" onclick="verifyDrag(1)" disabled>✓ Vérifier</button>
+      <div class="ex-feedback" id="fb-d1"></div>
+    </div>
+    <button class="btn-suivant" id="btn-to-classify" onclick="goToPhase('classify',5)">Exercice 3 →</button>
+  </div>
+
+  <div class="phase" id="phase-classify">
+    <div class="mascot-msg"><span class="emo">🦉</span><p>Exercice 3 — Réécris chaque GN en changeant le genre ou le nombre indiqué. Attention aux accords en chaîne.</p></div>
+    <div class="ex-num">Exercice 3 / 4 — Reformuler</div>
+    <div class="ex-header"><h2>Changer le genre ou le nombre</h2><p>Réécris le GN selon la consigne. Tous les éléments doivent s'accorder.</p></div>
+
+    <div class="reform-block" id="ref-0">
+      <div class="reform-consigne">« un vieil homme fatigué » → <strong>mets au féminin singulier</strong></div>
+      <input class="reform-input" id="ri-0" type="text" placeholder="écris le GN au féminin…" autocomplete="off" spellcheck="false">
+      <button class="btn-reform" onclick="verifyReform(0)">✓ Vérifier</button>
+      <div class="reform-feedback" id="rfb-0"></div>
+    </div>
+
+    <div class="reform-block" id="ref-1">
+      <div class="reform-consigne">« une décision importante et difficile » → <strong>mets au masculin pluriel</strong></div>
+      <input class="reform-input" id="ri-1" type="text" placeholder="écris le GN au masculin pluriel…" autocomplete="off" spellcheck="false">
+      <button class="btn-reform" onclick="verifyReform(1)">✓ Vérifier</button>
+      <div class="reform-feedback" id="rfb-1"></div>
+    </div>
+
+    <div class="reform-block" id="ref-2">
+      <div class="reform-consigne">« de beaux appartements lumineux » → <strong>mets au singulier</strong></div>
+      <input class="reform-input" id="ri-2" type="text" placeholder="écris le GN au singulier…" autocomplete="off" spellcheck="false">
+      <button class="btn-reform" onclick="verifyReform(2)">✓ Vérifier</button>
+      <div class="reform-feedback" id="rfb-2"></div>
+    </div>
+
+    <button class="btn-suivant" id="btn-to-conjtable" onclick="goToPhase('conjtable',6)">Exercice 4 →</button>
+  </div>
+
+  <div class="phase" id="phase-conjtable">
+    <div class="mascot-msg"><span class="emo">🦉</span><p>Exercice 4 — Un GN est correctement accordé, l'autre non. Clique sur le bon.</p></div>
+    <div class="ex-num">Exercice 4 / 4 — Jugement</div>
+    <div class="ex-header"><h2>Lequel est correctement accordé ?</h2><p>Clique directement sur le GN juste.</p></div>
+    <div id="jugement-container"></div>
+    <button class="btn-suivant" id="btn-to-bilan" onclick="goToPhase('bilan',7)">🌟 Voir mon bilan</button>
+  </div>
+
+  <div class="phase" id="phase-bilan">
+    <div class="bilan-card">
+      <span class="bilan-icon">🔤</span>
+      <h2 class="bilan-title" id="bilan-title">Résultat</h2>
+      <p class="bilan-msg" id="bilan-msg"></p>
+      <div class="stars-row"><span class="star-big" id="star1">⭐</span><span class="star-big" id="star2">⭐</span><span class="star-big" id="star3">⭐</span></div>
+      <div class="score-circle"><span class="score-num" id="bilan-score">0</span><span class="score-sub" id="bilan-total">/ ? pts</span></div>
+      <div class="memo-card">
+        <h3>Mémo — Accords dans le GN</h3>
+        <div class="memo-grid">
+          <div class="memo-item"><strong>Règle de base</strong><br>Déterminant + adjectif(s) s'accordent avec le nom noyau</div>
+          <div class="memo-item"><strong>Deux noms coordonnés</strong><br>Adjectif au pluriel, masculin si genres mixtes</div>
+          <div class="memo-item"><strong>beau/nouveau/vieux</strong><br>bel/nouvel/vieil devant voyelle ou h muet</div>
+          <div class="memo-item"><strong>Couleurs composées</strong><br>bleu marine, vert-de-gris → invariables</div>
+        </div>
+      </div>
+      <div class="bilan-btns">
+        <button class="btn-act secondary" onclick="location.reload()">↺ Recommencer</button>
+        <button class="btn-act primary" onclick="location.href='../12-15ans.html'">← Retour aux fiches</button>
+      </div>
+    </div>
+  </div>
+</main>
+<script>
+var classifyExpls = {
+  "0": "Erreur de genre : 'veste' est féminin. 'élégant' doit être au féminin : 'élégante'. Forme correcte : 'une veste élégante'.",
+  "1": "Erreur de nombre : 'des rapports' est pluriel. 'rapport' sans -s est incorrect. Forme correcte : 'des rapports détaillés'.",
+  "2": "Aucune erreur : 'belle' (féminin singulier) et 'originale' (féminin singulier) s'accordent bien avec 'idée' (féminin singulier).",
+  "3": "Erreur de nombre : 'nouveaux' (pluriel) est requis avec 'les élèves'. 'nouveau' est au singulier — incorrect. Forme correcte : 'les nouveaux élèves enthousiastes'."
+};
+
+var erreurExpls = {
+  "0": "Devant une voyelle, 'beau' devient 'bel' au masculin singulier. 'beau enfant' crée un hiatus — 'bel enfant' est la forme correcte.",
+  "1": "'encourageant' sans -s est incorrect. 'résultats' est masculin pluriel → 'encourageants' avec -s.",
+  "2": "'décision' est féminin. 'courageux' et 'réfléchi' sont des formes masculines — il faut 'courageuse' et 'réfléchie'.",
+  "3": "'nouveaux' est requis car 'enjeux' est masculin pluriel. 'nouveau' est au singulier — incorrect."
+};
+
+var erreurChoix = [
+  ["un bel enfant","un beau enfant","un bels enfant","un belle enfant"],
+  ["des résultats encourageants","des résultats encourageant","des résultats encourageantes","des résultat encourageants"],
+  ["une décision courageuse et réfléchie","une décision courageux et réfléchi","une décision courageuse et réfléchi","une décision courageux et réfléchie"],
+  ["de nouveaux enjeux","de nouveau enjeux","des nouveaux enjeux","de nouvel enjeux"]
+];
+
+var reformData = [
+  {
+    consigne: "féminin singulier",
+    accepted: ["une vieille femme fatiguee","une vieille femme fatiguée"],
+    expl: "'Vieil' → 'vieille' au féminin. 'fatigué' → 'fatiguée'. Forme attendue : 'une vieille femme fatiguée'."
+  },
+  {
+    consigne: "masculin pluriel",
+    accepted: ["des choix importants et difficiles","des choix importants et difficiles"],
+    expl: "'décision' (féminin) → 'choix' (masculin). 'importante' → 'important'. 'difficile' → reste 'difficiles' au pluriel. Forme attendue : 'des choix importants et difficiles'."
+  },
+  {
+    consigne: "singulier",
+    accepted: ["un bel appartement lumineux","un bel appartement lumineux"],
+    expl: "'beaux' → 'bel' (devant voyelle). 'appartements' → 'appartement'. 'lumineux' → 'lumineux' (invariable). Forme attendue : 'un bel appartement lumineux'."
+  }
+];
+
+var jugementData = [
+  {
+    phraseA: "Il a présenté un nouvel argument convaincant.",
+    phraseB: "Il a présenté un nouveau argument convaincant.",
+    correct: "A",
+    expl: "Devant voyelle, 'nouveau' devient 'nouvel' au masculin singulier. 'argument' commence par une voyelle → 'un nouvel argument'. 'convaincant' s'accorde correctement avec 'argument' (masculin singulier)."
+  },
+  {
+    phraseA: "Elle déployait une énergie et une rigueur remarquables.",
+    phraseB: "Elle déployait une énergie et une rigueur remarquable.",
+    correct: "A",
+    expl: "Deux noms coordonnés ('énergie' + 'rigueur') → l'adjectif se met au pluriel. Les deux sont féminins → 'remarquables' (féminin pluriel). 'remarquable' (singulier) est incorrect."
+  },
+  {
+    phraseA: "Les conclusions de l'étude, publiées hier, sont prometteuses.",
+    phraseB: "Les conclusions de l'étude, publiés hier, sont prometteuses.",
+    correct: "A",
+    expl: "'publiées' s'accorde avec 'les conclusions' (féminin pluriel). 'publiés' (masculin pluriel) est incorrect — l'adjectif épithète doit s'accorder avec le nom auquel il se rapporte, même éloigné."
+  }
+];
+
+var QCM1 = [
+  {
+    sentence: "Lequel de ces GN est correctement accordé ?",
+    options: ["un belle après-midi","un bel après-midi","un beau après-midi","une belle après-midi"],
+    answer: "un bel après-midi",
+    expl: "'Après-midi' est masculin singulier. Devant voyelle, 'beau' devient 'bel'. La forme correcte est 'un bel après-midi'."
+  },
+  {
+    sentence: "Dans « un courage et une détermination ___ », quelle forme convient ?",
+    options: ["remarquable","remarquables","remarquable et remarquable","remarquablés"],
+    answer: "remarquables",
+    expl: "Deux noms coordonnés de genres différents → adjectif au masculin pluriel. Mais ici les deux noms sont abstraits et l'usage accepte le pluriel 'remarquables'. Pluriel obligatoire avec deux noms coordonnés."
+  },
+  {
+    sentence: "Laquelle de ces règles est VRAIE pour les adjectifs de couleur composés ?",
+    options: [
+      "Ils s'accordent normalement",
+      "Ils sont toujours invariables",
+      "Ils s'accordent uniquement en nombre",
+      "Ils s'accordent uniquement devant un nom féminin"
+    ],
+    answer: "Ils sont toujours invariables",
+    expl: "Les adjectifs de couleur composés (bleu marine, vert olive, rouge sang…) sont invariables — ils ne prennent ni -e ni -s. Seuls les adjectifs de couleur simples et seuls s'accordent."
+  }
+];
+
+var score=0,TOTAL_PTS=0,qcm1Done=0,classifyDone=0,erreurDone=0,reformDone=0,jugementDone=0;
+var drag1Answers=["un vieil ami","des idées novatrices","un courage et une patience exemplaires","des robes bleu marine"];
+var drag1Filled=[null,null,null,null];
+var draggedChip=null,touchChip=null,touchClone=null;
+var NB_QCM=3,NB_CLASSIFY=4,NB_ERREUR=4,NB_DRAG=4,NB_REFORM=3,NB_JUGEMENT=3;
+TOTAL_PTS=NB_QCM+NB_CLASSIFY+NB_ERREUR+NB_DRAG+NB_REFORM+NB_JUGEMENT; // 21
+var jugementSelected=[null,null,null];
+
+function nsR(s){return(s||'').toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,' ');}
+function shuffle(arr){var a=arr.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+
+function revealBloc(n){
+  var bloc=document.getElementById('bloc-'+n);if(!bloc)return;
+  var prev=document.getElementById('bloc-'+(n-1));
+  if(prev){var b=prev.querySelector('.btn-compris');if(b){b.textContent='✓ Compris';b.disabled=true;b.style.opacity='.4';}}
+  bloc.classList.add('revealed');
+  setTimeout(function(){var hH=(document.querySelector('.header')||{offsetHeight:0}).offsetHeight;var rect=bloc.getBoundingClientRect();window.scrollTo({top:window.pageYOffset+rect.top-hH-20,behavior:'smooth'});},150);
+}
+
+function startExercises(){
+  erreurChoix.forEach(function(opts,idx){
+    var c=document.getElementById('errch-'+idx);if(!c)return;
+    c.style.cssText='display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;';
+    shuffle(opts).forEach(function(w){
+      var btn=document.createElement('button');btn.className='classify-btn gn-btn';
+      btn.dataset.choice=w;btn.textContent=w;
+      btn.onclick=function(){verifyErreur(idx,this);};
+      c.appendChild(btn);
+    });
+  });
+  document.getElementById('bilan-total').textContent='/ '+TOTAL_PTS+' pts';
+  var cont=document.getElementById('drop-sentences-1');
+  if(cont){
+    var rows=Array.from(cont.querySelectorAll('.drop-row'));
+    var shuffled=shuffle(rows);
+    drag1Answers=shuffled.map(function(r){return r.dataset.answer;});
+    shuffled.forEach(function(r,i){r.querySelector('.drop-zone').dataset.idx=String(i);cont.appendChild(r);});
+  }
+  var pool=document.getElementById('pool1');
+  if(pool){shuffle(Array.from(pool.querySelectorAll('.word-chip'))).forEach(function(c){pool.appendChild(c);});}
+  goToPhase('ex1',1);buildQCM('qcm1-container',QCM1,1);
+}
+
+function goToPhase(phase,stepIdx){
+  document.querySelectorAll('.phase').forEach(function(p){p.classList.remove('active');});
+  var el=document.getElementById('phase-'+phase);
+  if(el){el.classList.add('active');setTimeout(function(){el.scrollIntoView({behavior:'smooth',block:'start'});},100);}
+  updateSteps(stepIdx);
+  if(phase==='conjtable')buildJugement();
+  if(phase==='bilan')showBilan();
+}
+
+function updateSteps(active){for(var i=0;i<8;i++){var s=document.getElementById('step-'+i);if(!s)continue;s.classList.remove('active','done');if(i<active)s.classList.add('done');else if(i===active)s.classList.add('active');}}
+
+function buildQCM(cId,data,exNum){
+  var c=document.getElementById(cId);c.innerHTML='';
+  data.forEach(function(q,qi){
+    var div=document.createElement('div');div.className='qcm-question';div.id='qq-'+exNum+'-'+qi;
+    var opts=shuffle(q.options);
+    var optHtml=opts.map(function(opt){return '<button class="qcm-opt" data-exnum="'+exNum+'" data-qi="'+qi+'" data-opt="'+encodeURIComponent(opt)+'" data-ans="'+encodeURIComponent(q.answer)+'" onclick="handleQCM(this)">'+opt+'</button>';}).join('');
+    div.innerHTML='<div class="qcm-sentence">'+q.sentence+'</div><div class="qcm-options">'+optHtml+'</div><div class="qcm-feedback" id="qf-'+exNum+'-'+qi+'"></div>';
+    c.appendChild(div);
+  });
+}
+
+function handleQCM(btn){
+  var exNum=parseInt(btn.dataset.exnum),qi=parseInt(btn.dataset.qi);
+  var chosen=decodeURIComponent(btn.dataset.opt),correct=decodeURIComponent(btn.dataset.ans);
+  var qDiv=document.getElementById('qq-'+exNum+'-'+qi);if(qDiv.classList.contains('answered'))return;
+  qDiv.classList.add('answered');
+  var opts=qDiv.querySelectorAll('.qcm-opt'),fb=document.getElementById('qf-'+exNum+'-'+qi);
+  if(chosen===correct){btn.classList.add('correct');fb.className='qcm-feedback show ok';fb.innerHTML='✓ Correct. '+QCM1[qi].expl;score++;document.getElementById('score-display').textContent=score;}
+  else{btn.classList.add('wrong');opts.forEach(function(o){if(decodeURIComponent(o.dataset.opt)===correct)o.classList.add('reveal');});fb.className='qcm-feedback show ko';fb.innerHTML='✗ '+QCM1[qi].expl;}
+  qcm1Done++;
+  if(qcm1Done>=NB_QCM){setTimeout(function(){var nb=document.getElementById('btn-to-ex2');if(nb){nb.classList.add('show');nb.scrollIntoView({behavior:'smooth',block:'nearest'});}},500);}
+}
+
+function classifyAnswer(btn){
+  var idx=parseInt(btn.dataset.idx),chosen=btn.dataset.type,correct=btn.dataset.correct;
+  var block=document.getElementById('cl-'+idx),fb=document.getElementById('clf-'+idx);
+  if(block.classList.contains('answered'))return;
+  block.classList.add('answered');classifyDone++;
+  if(chosen===correct){btn.classList.add('sel-ok');fb.className='classify-feedback show ok';fb.innerHTML='✓ '+classifyExpls[String(idx)];score++;document.getElementById('score-display').textContent=score;}
+  else{btn.classList.add('sel-ko');block.querySelectorAll('.classify-btn').forEach(function(b){if(b.dataset.type===correct)b.classList.add('rev-ok');});fb.className='classify-feedback show ko';fb.innerHTML='✗ '+classifyExpls[String(idx)];}
+  if(classifyDone>=4){setTimeout(function(){var nb=document.getElementById('btn-to-drag1');nb.classList.add('show');nb.scrollIntoView({behavior:'smooth',block:'nearest'});},500);}
+}
+
+function verifyErreur(idx,btn){
+  var block=document.getElementById('err-'+idx);if(block.classList.contains('answered'))return;
+  block.classList.add('answered');
+  var chosen=btn.dataset.choice,correct=block.dataset.correct,fb=document.getElementById('err-fb-'+idx);
+  block.querySelectorAll('button').forEach(function(b){b.style.pointerEvents='none';});
+  if(chosen===correct){btn.classList.add('sel-ok');score++;document.getElementById('score-display').textContent=score;fb.className='erreur-feedback show ok';fb.innerHTML='✓ Correct — <strong>'+correct+'</strong>. '+erreurExpls[String(idx)];}
+  else{btn.classList.add('sel-ko');block.querySelectorAll('button').forEach(function(b){if(b.dataset.choice===correct)b.classList.add('rev-ok');});fb.className='erreur-feedback show ko';fb.innerHTML='✗ La forme correcte est <strong>'+correct+'</strong>. '+erreurExpls[String(idx)];}
+  erreurDone++;
+  if(erreurDone>=4){setTimeout(function(){var nb=document.getElementById('btn-to-drag2');nb.classList.add('show');nb.scrollIntoView({behavior:'smooth',block:'nearest'});},600);}
+}
+
+function onDS(e,bank){draggedChip=e.currentTarget;e.dataTransfer.setData('text/plain',draggedChip.dataset.word);}
+function onDO(e){e.preventDefault();e.currentTarget.classList.add('drag-over');}
+function onDL(e){e.currentTarget.classList.remove('drag-over');}
+function onDP(e,bank){
+  e.preventDefault();var zone=e.currentTarget;zone.classList.remove('drag-over');
+  if(!draggedChip)return;
+  var word=draggedChip.dataset.word,idx=parseInt(zone.dataset.idx);
+  if(drag1Filled[idx])returnToPool(drag1Filled[idx],bank);
+  drag1Filled[idx]=word;zone.textContent=word;zone.classList.add('filled');
+  draggedChip.classList.add('used');draggedChip=null;checkDragBtn(bank);
+}
+function onTS(e){
+  touchChip=e.currentTarget;var t=e.touches[0];
+  touchClone=touchChip.cloneNode(true);
+  touchClone.style.cssText='position:fixed;z-index:9999;pointer-events:none;opacity:.8;padding:8px 16px;border-radius:6px;border:2px solid var(--acc);background:white;font-weight:700;font-size:.88rem;color:var(--acc);';
+  setCP(t.clientX,t.clientY);document.body.appendChild(touchClone);
+}
+function onTM(e){
+  e.preventDefault();if(!touchClone)return;var t=e.touches[0];setCP(t.clientX,t.clientY);
+  document.querySelectorAll('.drop-zone').forEach(function(z){z.classList.remove('drag-over');});
+  var el=document.elementFromPoint(t.clientX,t.clientY);
+  if(el&&el.classList.contains('drop-zone'))el.classList.add('drag-over');
+}
+function onTE(e,bank){
+  if(touchClone){touchClone.remove();touchClone=null;}if(!touchChip)return;
+  var t=e.changedTouches[0];var el=document.elementFromPoint(t.clientX,t.clientY);
+  while(el&&!el.classList.contains('drop-zone')){el=el.parentElement;}
+  if(el&&el.classList.contains('drop-zone')){
+    var idx=parseInt(el.dataset.idx),word=touchChip.dataset.word;
+    if(drag1Filled[idx])returnToPool(drag1Filled[idx],bank);
+    drag1Filled[idx]=word;el.textContent=word;el.classList.add('filled');el.classList.remove('drag-over');
+    touchChip.classList.add('used');checkDragBtn(bank);
+  }touchChip=null;
+}
+function setCP(x,y){if(touchClone){touchClone.style.left=(x-50)+'px';touchClone.style.top=(y-18)+'px';}}
+function returnToPool(word,bank){
+  document.getElementById('pool'+bank).querySelectorAll('.word-chip').forEach(function(c){if(c.dataset.word===word&&c.classList.contains('used'))c.classList.remove('used');});
+}
+function checkDragBtn(bank){document.getElementById('btn-vd'+bank).disabled=!drag1Filled.every(function(f){return f!==null;});}
+
+function verifyDrag(bank){
+  var fb=document.getElementById('fb-d'+bank),correct=0;
+  document.querySelectorAll('[data-bank="'+bank+'"].drop-zone').forEach(function(zone){
+    var idx=parseInt(zone.dataset.idx);zone.classList.remove('filled');
+    var ans=drag1Answers[idx];
+    if((drag1Filled[idx]||'')===(ans||'')){zone.classList.add('correct');correct++;score++;}
+    else{zone.classList.add('wrong');zone.textContent=(drag1Filled[idx]||'?')+' → '+ans;}
+  });
+  document.getElementById('score-display').textContent=score;
+  document.getElementById('btn-vd'+bank).disabled=true;
+  document.getElementById('pool'+bank).style.pointerEvents='none';
+  fb.className='ex-feedback show '+(correct===4?'ok':'ko');
+  fb.innerHTML=correct===4?'✓ Parfait — 4/4':'✗ '+correct+'/4. Corrections en rouge.';
+  setTimeout(function(){var nb=document.getElementById('btn-to-classify');nb.classList.add('show');nb.scrollIntoView({behavior:'smooth',block:'nearest'});},700);
+}
+
+function verifyReform(idx){
+  var block=document.getElementById('ref-'+idx);
+  if(block.classList.contains('answered'))return;
+  var inp=document.getElementById('ri-'+idx);
+  var accepted=reformData[idx].accepted;
+  var ok=accepted.some(function(a){return nsR(inp.value)===nsR(a);});
+  block.classList.add('answered');
+  inp.readOnly=true;
+  var fb=document.getElementById('rfb-'+idx);
+  if(ok){
+    inp.classList.add('correct');score++;document.getElementById('score-display').textContent=score;
+    fb.className='reform-feedback show ok';fb.innerHTML='✓ Correct. '+reformData[idx].expl;
+  }else{
+    inp.classList.add('wrong');
+    var original=inp.value;inp.value=(original?original+' ':'')+'\u2192 '+reformData[idx].accepted[0];inp.style.fontSize='.82rem';
+    fb.className='reform-feedback show ko';fb.innerHTML='✗ '+reformData[idx].expl;
+  }
+  reformDone++;
+  if(reformDone>=NB_REFORM){setTimeout(function(){var nb=document.getElementById('btn-to-conjtable');nb.classList.add('show');nb.scrollIntoView({behavior:'smooth',block:'nearest'});},600);}
+}
+
+function buildJugement(){
+  var c=document.getElementById('jugement-container');c.innerHTML='';
+  jugementData.forEach(function(item,ji){
+    jugementSelected[ji]=null;
+    var div=document.createElement('div');div.className='jugement-block';div.id='jug-'+ji;
+    div.innerHTML='<div class="jugement-options">'
+      +'<div class="jugement-opt" id="jopt-'+ji+'-A" onclick="verifyJugement('+ji+',\'A\')"><strong>A \u2014</strong> '+item.phraseA+'</div>'
+      +'<div class="jugement-opt" id="jopt-'+ji+'-B" onclick="verifyJugement('+ji+',\'B\')"><strong>B \u2014</strong> '+item.phraseB+'</div>'
+      +'</div><div class="jugement-feedback" id="jfb-'+ji+'"></div>';
+    c.appendChild(div);
+  });
+}
+
+function verifyJugement(ji,choice){
+  var block=document.getElementById('jug-'+ji);if(block.classList.contains('answered'))return;
+  block.classList.add('answered');
+  var correct=jugementData[ji].correct,fb=document.getElementById('jfb-'+ji);
+  document.getElementById('jopt-'+ji+'-'+correct).classList.add('correct-choice');
+  if(choice!==correct)document.getElementById('jopt-'+ji+'-'+choice).classList.add('wrong-choice');
+  if(choice===correct){score++;document.getElementById('score-display').textContent=score;fb.className='jugement-feedback show ok';fb.innerHTML='✓ Correct. '+jugementData[ji].expl;}
+  else{fb.className='jugement-feedback show ko';fb.innerHTML='✗ '+jugementData[ji].expl;}
+  jugementDone++;
+  if(jugementDone>=NB_JUGEMENT){setTimeout(function(){var nb=document.getElementById('btn-to-bilan');nb.classList.add('show');nb.scrollIntoView({behavior:'smooth',block:'nearest'});},600);}
+}
+
+function showBilan(){
+  document.getElementById('bilan-score').textContent=score;
+  document.getElementById('bilan-total').textContent='/ '+TOTAL_PTS+' pts';
+  var pct=score/TOTAL_PTS;
+  var title,msg;
+  if(pct>=0.89){title='Excellent';msg="Maîtrise complète des accords dans le GN. Tu gères les cas complexes : noms coordonnés, adjectifs éloignés, formes spéciales.";}
+  else if(pct>=0.65){title='Satisfaisant';msg="Bonne compréhension globale. Revois les formes bel/nouvel/vieil et la règle des adjectifs de couleur composés.";}
+  else{title='À consolider';msg="Relis la chaîne d'accord : identifie le nom noyau, détermine son genre et nombre, puis accorde tous les éléments. Les cas complexes demandent de la méthode.";}
+  document.getElementById('bilan-title').textContent=title;
+  document.getElementById('bilan-msg').textContent=msg;
+  var seuils=[Math.ceil(TOTAL_PTS*.33),Math.ceil(TOTAL_PTS*.66),Math.ceil(TOTAL_PTS*.89)];
+  ['star1','star2','star3'].forEach(function(id,i){
+    var el=document.getElementById(id);
+    if(score>=seuils[i]){(function(e,d){setTimeout(function(){e.classList.add('earned');},d);})(el,300+i*400);}
+    else el.style.filter='grayscale(1)';
+  });
+  if(pct>=0.65)lanceConfetti();
+}
+
+function lanceConfetti(){
+  var cols=['#0f4c75','#7fb3d3','#059669','#d97706','#0369a1'];
+  for(var i=0;i<50;i++){
+    var el=document.createElement('div');el.className='confetti-piece';
+    el.style.cssText='left:'+Math.random()*100+'vw;background:'+cols[Math.floor(Math.random()*5)]+';animation-duration:'+(1.5+Math.random()*2)+'s;animation-delay:'+Math.random()*1.2+'s;width:'+(6+Math.random()*7)+'px;height:'+(6+Math.random()*7)+'px;border-radius:'+(Math.random()>.5?'50%':'2px')+';';
+    document.body.appendChild(el);setTimeout(function(){if(el.parentNode)el.remove();},4000);
+  }
+}
+</script>
+</body>
+</html>

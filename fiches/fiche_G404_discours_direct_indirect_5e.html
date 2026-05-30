@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>G404 — Discours direct et indirect | L'Atelier du Devoir</title>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --acc:#7c2d12;--acc-pale:#fff7ed;--acc-mid:#fdba74;
+  --mint:#059669;--mint-pale:#d1fae5;--mint-deep:#047857;
+  --coral:#dc2626;--coral-pale:#fee2e2;
+  --sky:#0369a1;--sky-pale:#e0f2fe;
+  --yellow:#d97706;--yellow-pale:#fef3c7;
+  --text:#1e293b;--text-light:#64748b;
+  --radius:12px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Lato',sans-serif;background:#fff7ed;color:var(--text);font-size:16px;line-height:1.65;}
+.print-bar{position:fixed;right:16px;top:50%;transform:translateY(-50%);z-index:200;display:flex;flex-direction:column;gap:8px;}
+.print-btn{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:8px;font-family:'Lato',sans-serif;font-weight:700;font-size:.78rem;border:none;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.15);}
+.print-btn-lecon{background:#d97706;color:white;}.print-btn-eval{background:#dc2626;color:white;}
+@media(max-width:600px){.print-bar{right:6px;}.print-btn{font-size:0;width:40px;height:40px;padding:0;justify-content:center;}.print-btn span.lbl{display:none;}.print-btn span.ico{font-size:1.1rem;}}
+.header{background:white;border-bottom:2px solid var(--acc-pale);position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.06);}
+.header-top{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;}
+.logo{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--acc);text-decoration:none;}
+.score-badge{background:var(--acc);color:white;font-weight:700;font-size:.85rem;padding:5px 14px;border-radius:6px;display:flex;align-items:center;gap:5px;}
+.steps-wrap{padding:0 20px 8px;}
+.steps{display:flex;gap:3px;}
+.step{flex:1;height:5px;border-radius:4px;background:var(--acc-pale);transition:all .35s;}
+.step.done{background:var(--mint);}.step.active{background:var(--acc);}
+.steps-labels{display:flex;gap:3px;padding-top:3px;}
+.step-lbl{flex:1;font-size:.5rem;font-weight:700;color:var(--text-light);text-align:center;text-transform:uppercase;letter-spacing:.04em;}
+.main{max-width:760px;margin:0 auto;padding:28px 16px 100px;}
+.phase{display:none;}.phase.active{display:block;}
+.accroche{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:22px 24px;margin-bottom:22px;display:flex;gap:16px;align-items:flex-start;}
+.accroche-icon{font-size:2.4rem;flex-shrink:0;margin-top:2px;}
+.accroche-text h1{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--acc);margin-bottom:6px;}
+.accroche-text p{color:var(--text-light);font-size:.92rem;line-height:1.5;}
+.meta-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+.meta-tag{background:var(--acc-pale);border-radius:4px;padding:3px 10px;font-size:.72rem;font-weight:700;color:var(--acc);text-transform:uppercase;letter-spacing:.04em;}
+.lecon-card{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:22px;margin-bottom:18px;}
+.lecon-card h2{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--acc);margin-bottom:14px;border-bottom:2px solid var(--acc-pale);padding-bottom:8px;}
+.lecon-block{display:none;}.lecon-block.revealed{display:block;}
+.lecon-subtitle{font-weight:900;font-size:1rem;color:var(--acc);margin-bottom:10px;margin-top:6px;}
+.sep{margin:18px 0;border:none;border-top:1px solid var(--acc-pale);}
+.analogie{font-size:.92rem;color:var(--text-light);font-style:italic;margin-bottom:12px;line-height:1.6;}
+.def-box{border-left:4px solid var(--acc);background:var(--acc-pale);border-radius:0 var(--radius) var(--radius) 0;padding:14px 16px;margin-bottom:12px;}
+.def-box h4{font-weight:900;color:var(--acc);font-size:.9rem;margin-bottom:6px;}
+.def-box p{font-size:.88rem;color:var(--text);line-height:1.55;}
+.compare-box{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0;}
+@media(max-width:480px){.compare-box{grid-template-columns:1fr;}}
+.compare-item{border-radius:8px;padding:12px 14px;font-size:.88rem;line-height:1.6;}
+.compare-item.direct{background:#fef3c7;border-left:4px solid #d97706;}
+.compare-item.indirect{background:var(--acc-pale);border-left:4px solid var(--acc);}
+.compare-item h5{font-weight:900;font-size:.78rem;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;}
+.compare-item.direct h5{color:#92400e;}
+.compare-item.indirect h5{color:var(--acc);}
+.phrase-ex{background:white;border:1px solid #e2e8f0;border-radius:8px;padding:9px 14px;font-size:.9rem;margin-bottom:6px;line-height:1.7;}
+.hl-dd{background:#fef3c7;color:#92400e;border-radius:4px;padding:1px 6px;font-weight:700;margin:0 2px;}
+.hl-di{background:var(--acc-pale);color:var(--acc);border-radius:4px;padding:1px 6px;font-weight:700;margin:0 2px;}
+.tableau{width:100%;border-collapse:collapse;margin:10px 0;font-size:.85rem;}
+.tableau th{padding:8px 10px;text-align:left;font-weight:700;background:var(--acc);color:white;}
+.tableau td{padding:7px 10px;border:1px solid #e2e8f0;}
+.tableau tr:nth-child(even) td{background:var(--acc-pale);}
+.astuce{background:#fefce8;border:1px solid #fde68a;border-radius:8px;padding:11px 14px;font-size:.85rem;margin-top:8px;color:#78350f;}
+.astuce strong{color:#92400e;}
+.piege{background:#fff1f2;border:1px solid #fecdd3;border-radius:8px;padding:11px 14px;font-size:.85rem;margin-top:8px;color:#9f1239;}
+.piege strong{color:#be123c;}
+.btn-compris{margin-top:18px;padding:11px 26px;border-radius:8px;font-family:'Lato',sans-serif;font-weight:700;font-size:.9rem;background:var(--acc);color:white;border:none;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:8px;}
+.btn-compris:hover{background:#6b2410;transform:translateY(-1px);}
+.btn-compris:disabled{opacity:.4;cursor:default;transform:none;}
+.mascot-msg{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:13px 16px;margin:14px 0;display:flex;align-items:flex-start;gap:10px;}
+.mascot-msg .emo{font-size:1.6rem;flex-shrink:0;}
+.mascot-msg p{font-size:.88rem;color:var(--text-light);}
+.ex-num{display:inline-block;background:var(--acc);color:white;font-weight:700;font-size:.7rem;padding:3px 10px;border-radius:4px;margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em;}
+.ex-header h2{font-family:'Playfair Display',serif;font-size:1.15rem;margin-bottom:4px;}
+.ex-header p{color:var(--text-light);font-size:.85rem;margin-bottom:14px;}
+.qcm-question{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:18px;margin-bottom:12px;}
+.qcm-question.answered{pointer-events:none;}
+.qcm-sentence{font-size:.92rem;font-weight:700;margin-bottom:12px;line-height:1.7;background:var(--acc-pale);border-radius:8px;padding:11px 14px;}
+.qcm-options{display:flex;flex-direction:column;gap:8px;}
+.qcm-opt{padding:10px 14px;border-radius:8px;border:2px solid #e2e8f0;background:white;font-family:'Lato',sans-serif;font-weight:400;font-size:.88rem;cursor:pointer;text-align:left;transition:all .2s;}
+.qcm-opt:hover{border-color:var(--acc);background:var(--acc-pale);}
+.qcm-opt.correct{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);font-weight:700;}
+.qcm-opt.wrong{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
+.qcm-opt.reveal{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);font-weight:700;}
+.qcm-feedback{margin-top:10px;padding:10px 13px;border-radius:8px;font-size:.84rem;font-weight:700;display:none;}
+.qcm-feedback.show{display:block;}
+.qcm-feedback.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.qcm-feedback.ko{background:var(--coral-pale);color:#b91c1c;}
+.btn-suivant{margin-top:14px;padding:10px 22px;border-radius:8px;font-family:'Lato',sans-serif;font-weight:700;font-size:.88rem;background:var(--acc);color:white;border:none;cursor:pointer;display:none;align-items:center;gap:8px;transition:all .2s;}
+.btn-suivant.show{display:inline-flex;}
+.btn-suivant:hover{background:#6b2410;}
+.classify-block{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:18px;margin-bottom:12px;}
+.classify-block.answered{pointer-events:none;}
+.classify-phrase{background:var(--acc-pale);border-radius:8px;padding:11px 14px;font-size:.92rem;margin-bottom:12px;line-height:1.7;}
+.classify-btns{display:flex;gap:8px;flex-wrap:wrap;}
+.classify-btn{padding:9px 14px;border-radius:6px;font-family:'Lato',sans-serif;font-weight:700;font-size:.82rem;border:2px solid;cursor:pointer;transition:all .2s;flex:1;text-align:center;min-width:80px;}
+.dd-btn{background:#fef3c7;color:#92400e;border-color:#d97706;}
+.di-btn{background:var(--acc-pale);color:var(--acc);border-color:var(--acc);}
+.ok-btn{background:var(--mint-pale);color:var(--mint-deep);border-color:var(--mint);}
+.ko-btn{background:var(--coral-pale);color:var(--coral);border-color:var(--coral);}
+.classify-btn.sel-ok{color:white!important;background:var(--mint)!important;border-color:var(--mint)!important;}
+.classify-btn.sel-ko{background:var(--coral-pale)!important;color:var(--coral)!important;border-color:var(--coral)!important;}
+.classify-btn.rev-ok{color:white!important;background:var(--acc)!important;border-color:var(--acc)!important;}
+.classify-feedback{margin-top:10px;padding:9px 13px;border-radius:8px;font-size:.83rem;font-weight:700;display:none;}
+.classify-feedback.show{display:block;}
+.classify-feedback.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.classify-feedback.ko{background:var(--coral-pale);color:#b91c1c;}
+.erreur-block{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:18px;margin-bottom:12px;}
+.erreur-block.answered{pointer-events:none;}
+.erreur-phrase{background:#fff1f2;border:1px solid #fecdd3;border-radius:8px;padding:11px 14px;font-size:.95rem;margin-bottom:12px;line-height:1.7;}
+.erreur-label{font-size:.78rem;font-weight:700;color:#be123c;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;}
+.erreur-choix{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+.erreur-feedback{margin-top:8px;padding:9px 13px;border-radius:8px;font-size:.83rem;font-weight:700;display:none;}
+.erreur-feedback.show{display:block;}
+.erreur-feedback.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.erreur-feedback.ko{background:var(--coral-pale);color:#b91c1c;}
+.bank-area{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:18px;margin-bottom:16px;}
+.bank-label{font-weight:700;margin-bottom:10px;font-size:.85rem;color:var(--text-light);text-transform:uppercase;letter-spacing:.05em;}
+.word-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;min-height:46px;padding:10px;background:var(--acc-pale);border-radius:8px;}
+.word-chip{padding:8px 16px;border-radius:6px;border:2px solid var(--acc);background:white;font-weight:700;font-size:.88rem;cursor:grab;color:var(--acc);transition:all .15s;user-select:none;-webkit-user-select:none;}
+.word-chip.used{opacity:.2;pointer-events:none;}
+.drop-sentences{display:flex;flex-direction:column;gap:10px;}
+.drop-row{background:var(--acc-pale);border-radius:10px;padding:12px 14px;display:flex;align-items:center;flex-wrap:wrap;gap:6px;font-size:.9rem;line-height:1.6;}
+.drop-zone{display:inline-flex;align-items:center;justify-content:center;min-width:80px;height:32px;border:2px dashed var(--acc);border-radius:6px;background:white;color:var(--acc);font-weight:700;font-size:.85rem;padding:0 8px;transition:all .2s;cursor:pointer;}
+.drop-zone.drag-over{border-color:#6b2410;background:var(--acc-pale);border-style:solid;}
+.drop-zone.filled{border-style:solid;}
+.drop-zone.correct{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.drop-zone.wrong{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);font-size:.75rem;}
+.btn-verifier{margin-top:14px;padding:10px 22px;border-radius:8px;font-family:'Lato',sans-serif;font-weight:700;font-size:.88rem;background:var(--acc);color:white;border:none;cursor:pointer;transition:all .2s;}
+.btn-verifier:hover{background:#6b2410;}
+.btn-verifier:disabled{opacity:.4;cursor:not-allowed;}
+.ex-feedback{margin-top:10px;padding:11px 14px;border-radius:8px;font-size:.84rem;font-weight:700;display:none;}
+.ex-feedback.show{display:block;}
+.ex-feedback.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.ex-feedback.ko{background:var(--coral-pale);color:#b91c1c;}
+.reorg-block{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:18px;margin-bottom:12px;}
+.reorg-consigne{font-size:.85rem;color:var(--text-light);margin-bottom:10px;}
+.reorg-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;padding:10px;background:var(--acc-pale);border-radius:8px;min-height:44px;}
+.reorg-chip{padding:7px 14px;border-radius:6px;border:2px solid var(--acc);background:white;font-weight:700;font-size:.85rem;cursor:pointer;color:var(--acc);transition:all .15s;user-select:none;}
+.reorg-chip.used{opacity:.25;pointer-events:none;}
+.reorg-result{min-height:40px;background:#f8fafc;border:2px dashed #94a3b8;border-radius:8px;padding:10px 14px;font-size:.9rem;margin-bottom:8px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;}
+.reorg-result-chip{padding:5px 12px;border-radius:5px;background:var(--acc);color:white;font-weight:700;font-size:.85rem;cursor:pointer;}
+.btn-reorg{padding:8px 16px;border-radius:6px;font-family:'Lato',sans-serif;font-weight:700;font-size:.82rem;border:none;cursor:pointer;transition:all .2s;}
+.btn-reorg.verify{background:var(--acc);color:white;}
+.btn-reorg.reset{background:var(--acc-pale);color:var(--acc);border:2px solid var(--acc);margin-left:8px;}
+.btn-reorg:hover{opacity:.85;}
+.reorg-feedback{margin-top:8px;padding:9px 13px;border-radius:8px;font-size:.83rem;font-weight:700;display:none;}
+.reorg-feedback.show{display:block;}
+.reorg-feedback.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.reorg-feedback.ko{background:var(--coral-pale);color:#b91c1c;}
+.jugement-block{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:18px;margin-bottom:12px;}
+.jugement-block.answered{pointer-events:none;}
+.jugement-options{display:flex;flex-direction:column;gap:10px;margin-bottom:12px;}
+.jugement-opt{padding:12px 16px;border-radius:8px;border:2px solid #e2e8f0;background:white;font-family:'Lato',sans-serif;font-size:.9rem;cursor:pointer;text-align:left;transition:all .2s;line-height:1.6;}
+.jugement-opt:hover{border-color:var(--acc);background:var(--acc-pale);}
+.jugement-opt.correct-choice{border-color:var(--mint);background:var(--mint-pale);}
+.jugement-opt.wrong-choice{border-color:var(--coral);background:var(--coral-pale);}
+.jugement-feedback{margin-top:8px;padding:9px 13px;border-radius:8px;font-size:.83rem;font-weight:700;display:none;}
+.jugement-feedback.show{display:block;}
+.jugement-feedback.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.jugement-feedback.ko{background:var(--coral-pale);color:#b91c1c;}
+.bilan-card{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:28px 24px;text-align:center;}
+.bilan-icon{font-size:3.5rem;margin-bottom:12px;display:block;}
+.bilan-title{font-family:'Playfair Display',serif;font-size:1.8rem;margin-bottom:6px;color:var(--acc);}
+.bilan-msg{color:var(--text-light);font-size:.95rem;margin-bottom:20px;}
+.stars-row{display:flex;justify-content:center;gap:10px;margin-bottom:20px;}
+.star-big{font-size:2.5rem;filter:grayscale(1);transition:all .5s;}
+.star-big.earned{filter:none;animation:starPop .5s ease both;}
+@keyframes starPop{0%{transform:scale(0);}60%{transform:scale(1.2);}100%{transform:scale(1);}}
+.score-circle{width:100px;height:100px;border-radius:50%;background:var(--acc);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 20px;color:white;}
+.score-num{font-family:'Playfair Display',serif;font-size:1.8rem;line-height:1;}
+.score-sub{font-size:.65rem;opacity:.8;}
+.memo-card{background:var(--acc-pale);border-radius:var(--radius);padding:16px 20px;margin:18px 0;text-align:left;}
+.memo-card h3{font-weight:700;font-size:.85rem;color:var(--acc);margin-bottom:10px;text-transform:uppercase;letter-spacing:.04em;}
+.memo-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media(max-width:480px){.memo-grid{grid-template-columns:1fr;}}
+.memo-item{background:white;border-radius:8px;padding:10px 12px;font-size:.82rem;border:1px solid #e2e8f0;}
+.memo-item strong{color:var(--acc);}
+.bilan-btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:16px;}
+.btn-act{padding:10px 20px;border-radius:8px;font-family:'Lato',sans-serif;font-weight:700;font-size:.85rem;cursor:pointer;border:none;transition:all .2s;}
+.btn-act.primary{background:var(--acc);color:white;}
+.btn-act.secondary{background:var(--acc-pale);color:var(--acc);border:2px solid var(--acc);}
+.btn-act:hover{transform:translateY(-1px);}
+.confetti-piece{position:fixed;border-radius:2px;top:-20px;animation:fall linear both;pointer-events:none;z-index:9999;}
+@keyframes fall{0%{transform:translateY(0) rotate(0deg);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
+@media print{.print-bar,.btn-compris,.btn-suivant,.btn-verifier,.btn-reorg,.bilan-card,.mascot-msg{display:none!important;}body{background:white;}.phase{display:block!important;}}
+</style>
+</head>
+<body>
+<div class="print-bar">
+  <button class="print-btn print-btn-lecon" onclick="window.print()"><span class="ico">📖</span><span class="lbl"> Imprimer la leçon</span></button>
+  <button class="print-btn print-btn-eval" onclick="window.print()"><span class="ico">📝</span><span class="lbl"> Imprimer les exercices</span></button>
+</div>
+
+<header class="header">
+  <div class="header-top">
+    <a href="../12-15ans.html" class="logo">🦉 L'Atelier du Devoir</a>
+    <div class="score-badge">⭐ <span id="score-display">0</span> pts</div>
+  </div>
+  <div class="steps-wrap">
+    <div class="steps">
+      <div class="step active" id="step-0"></div><div class="step" id="step-1"></div><div class="step" id="step-2"></div>
+      <div class="step" id="step-3"></div><div class="step" id="step-4"></div><div class="step" id="step-5"></div>
+      <div class="step" id="step-6"></div><div class="step" id="step-7"></div>
+    </div>
+    <div class="steps-labels">
+      <div class="step-lbl">Leçon</div><div class="step-lbl">Entr. 1</div><div class="step-lbl">Entr. 2</div>
+      <div class="step-lbl">Ex. 1</div><div class="step-lbl">Ex. 2</div><div class="step-lbl">Ex. 3</div>
+      <div class="step-lbl">Ex. 4</div><div class="step-lbl">Bilan</div>
+    </div>
+  </div>
+</header>
+
+<main class="main">
+
+  <div class="accroche">
+    <div class="accroche-icon">🔄</div>
+    <div class="accroche-text">
+      <h1>Discours direct et indirect</h1>
+      <p>Maîtriser la transformation des paroles rapportées : du discours direct au discours indirect et inversement.</p>
+      <div class="meta-row">
+        <span class="meta-tag">5e</span>
+        <span class="meta-tag">~20 min</span>
+        <span class="meta-tag">⭐⭐ Difficulté</span>
+        <span class="meta-tag">Français — Grammaire</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- LEÇON -->
+  <div class="phase active" id="phase-lecon">
+    <div class="lecon-card">
+      <h2>📖 La leçon</h2>
+
+      <div class="lecon-block revealed" id="bloc-0">
+        <div class="lecon-subtitle">① Discours direct vs discours indirect</div>
+        <p class="analogie">Imagine un journaliste qui relaie des propos. Il peut citer mot pour mot — c'est le discours direct, avec les guillemets. Ou il peut reformuler — c'est le discours indirect, sans guillemets, intégré dans sa phrase.</p>
+        <div class="def-box">
+          <h4>Définition</h4>
+          <p>Le <strong>discours direct</strong> reproduit les paroles exactes entre guillemets, précédées d'un verbe introducteur. Le <strong>discours indirect</strong> intègre les paroles dans la phrase principale via une conjonction (que, si, où…), sans guillemets.</p>
+        </div>
+        <div class="compare-box">
+          <div class="compare-item direct">
+            <h5>Discours direct</h5>
+            Il dit : <strong>« Je viendrai demain. »</strong><br>
+            Elle demande : <strong>« Où vas-tu ? »</strong>
+          </div>
+          <div class="compare-item indirect">
+            <h5>Discours indirect</h5>
+            Il dit <strong>qu'il viendra demain.</strong><br>
+            Elle demande <strong>où il va.</strong>
+          </div>
+        </div>
+        <div class="astuce"><strong>Méthode :</strong> repère d'abord le verbe introducteur (dire, demander, affirmer, expliquer…), puis la conjonction qui introduit la subordonnée au discours indirect.</div>
+        <button class="btn-compris" onclick="revealBloc(1)">Bloc suivant →</button>
+      </div>
+
+      <div class="lecon-block" id="bloc-1">
+        <hr class="sep">
+        <div class="lecon-subtitle">② Les transformations au discours indirect</div>
+        <p class="analogie">Passer au discours indirect, c'est comme traduire d'une langue à une autre — le sens reste, mais la forme change. Pronoms, temps, mots interrogatifs : tout se recalibre.</p>
+        <table class="tableau">
+          <tr><th>Ce qui change</th><th>Discours direct</th><th>Discours indirect</th></tr>
+          <tr><td><strong>Conjonction</strong></td><td>« Je viendrai. »</td><td>…qu'il viendrait.</td></tr>
+          <tr><td><strong>Pronoms</strong></td><td>« Je suis fatigué. »</td><td>…qu'il était fatigué.</td></tr>
+          <tr><td><strong>Temps</strong></td><td>« Je viendrai. » (futur)</td><td>…qu'il viendrait. (cond.)</td></tr>
+          <tr><td><strong>Question totale</strong></td><td>« Viens-tu ? »</td><td>…s'il venait.</td></tr>
+          <tr><td><strong>Question partielle</strong></td><td>« Où vas-tu ? »</td><td>…où il allait.</td></tr>
+        </table>
+        <div class="piege"><strong>Piège temps :</strong> quand le verbe introducteur est au passé, le présent devient imparfait, le futur devient conditionnel. "Il dit : 'je viens'" → "Il a dit qu'il venait."</div>
+        <button class="btn-compris" onclick="revealBloc(2)">Bloc suivant →</button>
+      </div>
+
+      <div class="lecon-block" id="bloc-2">
+        <hr class="sep">
+        <div class="lecon-subtitle">③ Les verbes introducteurs</div>
+        <p class="analogie">Le verbe introducteur est la signature du locuteur — il dit non seulement que quelqu'un a parlé, mais comment il a parlé : avec conviction, avec doute, avec ordre.</p>
+        <div class="def-box">
+          <h4>Choisir le bon verbe introducteur</h4>
+          <p>Le verbe introducteur n'est pas neutre — il interprète les paroles rapportées. "Il affirme" ≠ "Il admet" ≠ "Il prétend".</p>
+        </div>
+        <table class="tableau">
+          <tr><th>Type de parole</th><th>Verbes introducteurs</th></tr>
+          <tr><td>Déclaration</td><td>dire, affirmer, déclarer, expliquer, préciser</td></tr>
+          <tr><td>Question</td><td>demander, s'interroger, vouloir savoir</td></tr>
+          <tr><td>Ordre</td><td>ordonner, demander de, exiger que</td></tr>
+          <tr><td>Doute / nuance</td><td>admettre, reconnaître, prétendre, suggérer</td></tr>
+        </table>
+        <div class="astuce"><strong>À retenir :</strong> une déclaration → "que" + indicatif. Une question totale → "si". Une question partielle → le mot interrogatif (où, quand, comment…). Un ordre → "de" + infinitif.</div>
+        <button class="btn-compris" onclick="startExercises()">✓ Leçon comprise — Aux exercices</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ENTRAÎNEMENT 1 — QCM -->
+  <div class="phase" id="phase-ex1">
+    <div class="mascot-msg"><span class="emo">🦉</span><p>Entraînement 1 — Reconnaître le type de discours et identifier les transformations opérées.</p></div>
+    <div class="ex-num">Entraînement 1 / 2 — Reconnaître</div>
+    <div class="ex-header"><h2>Discours direct ou indirect ?</h2><p>Sélectionne la bonne réponse.</p></div>
+    <div id="qcm1-container"></div>
+    <button class="btn-suivant" id="btn-to-ex2" onclick="goToPhase('ex2',2)">Entraînement 2 →</button>
+  </div>
+
+  <!-- ENTRAÎNEMENT 2 — CLASSIFY -->
+  <div class="phase" id="phase-ex2">
+    <div class="mascot-msg"><span class="emo">🦉</span><p>Entraînement 2 — La transformation est-elle correcte ou incorrecte ?</p></div>
+    <div class="ex-num">Entraînement 2 / 2 — Analyser</div>
+    <div class="ex-header"><h2>La transformation est-elle correcte ?</h2><p>Clique sur Correcte ou Incorrecte pour chaque paire.</p></div>
+
+    <div class="classify-block" id="cl-0">
+      <div class="classify-phrase">
+        Direct : « Je viendrai demain. »<br>
+        Indirect : Il a dit <strong>qu'il viendrait le lendemain.</strong>
+      </div>
+      <div class="classify-btns">
+        <button class="classify-btn ok-btn" data-idx="0" data-type="ok" data-correct="ok" onclick="classifyAnswer(this)">✓ Correcte</button>
+        <button class="classify-btn ko-btn" data-idx="0" data-type="ko" data-correct="ok" onclick="classifyAnswer(this)">✗ Incorrecte</button>
+      </div>
+      <div class="classify-feedback" id="clf-0"></div>
+    </div>
+
+    <div class="classify-block" id="cl-1">
+      <div class="classify-phrase">
+        Direct : « Où vas-tu ? »<br>
+        Indirect : Elle demande <strong>où tu vas.</strong>
+      </div>
+      <div class="classify-btns">
+        <button class="classify-btn ok-btn" data-idx="1" data-type="ok" data-correct="ko" onclick="classifyAnswer(this)">✓ Correcte</button>
+        <button class="classify-btn ko-btn" data-idx="1" data-type="ko" data-correct="ko" onclick="classifyAnswer(this)">✗ Incorrecte</button>
+      </div>
+      <div class="classify-feedback" id="clf-1"></div>
+    </div>
+
+    <div class="classify-block" id="cl-2">
+      <div class="classify-phrase">
+        Direct : « Est-ce qu'il pleut ? »<br>
+        Indirect : Il demande <strong>s'il pleut.</strong>
+      </div>
+      <div class="classify-btns">
+        <button class="classify-btn ok-btn" data-idx="2" data-type="ok" data-correct="ok" onclick="classifyAnswer(this)">✓ Correcte</button>
+        <button class="classify-btn ko-btn" data-idx="2" data-type="ko" data-correct="ok" onclick="classifyAnswer(this)">✗ Incorrecte</button>
+      </div>
+      <div class="classify-feedback" id="clf-2"></div>
+    </div>
+
+    <div class="classify-block" id="cl-3">
+      <div class="classify-phrase">
+        Direct : « Viens ici ! »<br>
+        Indirect : Il lui ordonne <strong>que venir ici.</strong>
+      </div>
+      <div class="classify-btns">
+        <button class="classify-btn ok-btn" data-idx="3" data-type="ok" data-correct="ko" onclick="classifyAnswer(this)">✓ Correcte</button>
+        <button class="classify-btn ko-btn" data-idx="3" data-type="ko" data-correct="ko" onclick="classifyAnswer(this)">✗ Incorrecte</button>
+      </div>
+      <div class="classify-feedback" id="clf-3"></div>
+    </div>
+
+    <button class="btn-suivant" id="btn-to-drag1" onclick="goToPhase('drag1',3)">Exercice 1 →</button>
+  </div>
+
+  <!-- EXERCICE 1 — DÉTECTION D'ERREUR -->
+  <div class="phase" id="phase-drag1">
+    <div class="mascot-msg"><span class="emo">🦉</span><p>Exercice 1 — La transformation au discours indirect contient une erreur. Sélectionne la version correcte.</p></div>
+    <div class="ex-num">Exercice 1 / 4 — Détection d'erreur</div>
+    <div class="ex-header"><h2>Quelle est la version correcte ?</h2><p>Une seule proposition est correctement transformée au discours indirect.</p></div>
+
+    <div class="erreur-block" id="err-0" data-correct="qu'il partirait le lendemain">
+      <div class="erreur-label">⚠ Direct : « Je partirai demain. » — Il a dit…</div>
+      <div class="erreur-phrase">Laquelle est la bonne transformation ?</div>
+      <div class="erreur-choix" id="errch-0"></div>
+      <div class="erreur-feedback" id="err-fb-0"></div>
+    </div>
+
+    <div class="erreur-block" id="err-1" data-correct="s'il avait faim">
+      <div class="erreur-label">⚠ Direct : « As-tu faim ? » — Elle lui a demandé…</div>
+      <div class="erreur-phrase">Laquelle est la bonne transformation ?</div>
+      <div class="erreur-choix" id="errch-1"></div>
+      <div class="erreur-feedback" id="err-fb-1"></div>
+    </div>
+
+    <div class="erreur-block" id="err-2" data-correct="de fermer la porte">
+      <div class="erreur-label">⚠ Direct : « Ferme la porte ! » — Il lui a demandé…</div>
+      <div class="erreur-phrase">Laquelle est la bonne transformation ?</div>
+      <div class="erreur-choix" id="errch-2"></div>
+      <div class="erreur-feedback" id="err-fb-2"></div>
+    </div>
+
+    <div class="erreur-block" id="err-3" data-correct="où il habitait">
+      <div class="erreur-label">⚠ Direct : « Où habites-tu ? » — Elle lui a demandé…</div>
+      <div class="erreur-phrase">Laquelle est la bonne transformation ?</div>
+      <div class="erreur-choix" id="errch-3"></div>
+      <div class="erreur-feedback" id="err-fb-3"></div>
+    </div>
+
+    <button class="btn-suivant" id="btn-to-drag2" onclick="goToPhase('drag2',4)">Exercice 2 →</button>
+  </div>
+
+  <!-- EXERCICE 2 — GLISSER-DÉPOSER -->
+  <div class="phase" id="phase-drag2">
+    <div class="mascot-msg"><span class="emo">🦉</span><p>Exercice 2 — Place le verbe introducteur qui correspond au type de parole rapportée.</p></div>
+    <div class="ex-num">Exercice 2 / 4 — Compléter</div>
+    <div class="ex-header"><h2>Quel verbe introducteur ?</h2><p>Glisse le verbe qui convient le mieux.</p></div>
+    <div class="bank-area">
+      <div class="bank-label">Verbes disponibles :</div>
+      <div class="word-chips" id="pool1">
+        <div class="word-chip" draggable="true" data-word="affirme" ondragstart="onDS(event,1)" ontouchstart="onTS(event)" ontouchmove="onTM(event)" ontouchend="onTE(event,1)">affirme</div>
+        <div class="word-chip" draggable="true" data-word="demande" ondragstart="onDS(event,1)" ontouchstart="onTS(event)" ontouchmove="onTM(event)" ontouchend="onTE(event,1)">demande</div>
+        <div class="word-chip" draggable="true" data-word="ordonne" ondragstart="onDS(event,1)" ontouchstart="onTS(event)" ontouchmove="onTM(event)" ontouchend="onTE(event,1)">ordonne</div>
+        <div class="word-chip" draggable="true" data-word="admet" ondragstart="onDS(event,1)" ontouchstart="onTS(event)" ontouchmove="onTM(event)" ontouchend="onTE(event,1)">admet</div>
+      </div>
+      <div class="drop-sentences" id="drop-sentences-1">
+        <div class="drop-row" data-answer="affirme">Le scientifique <span class="drop-zone" data-bank="1" data-idx="0" ondragover="onDO(event)" ondragleave="onDL(event)" ondrop="onDP(event,1)"></span> que cette théorie est désormais prouvée.</div>
+        <div class="drop-row" data-answer="demande">L'enseignante <span class="drop-zone" data-bank="1" data-idx="1" ondragover="onDO(event)" ondragleave="onDL(event)" ondrop="onDP(event,1)"></span> si tout le monde a bien compris.</div>
+        <div class="drop-row" data-answer="ordonne">Le directeur <span class="drop-zone" data-bank="1" data-idx="2" ondragover="onDO(event)" ondragleave="onDL(event)" ondrop="onDP(event,1)"></span> aux élèves de regagner leurs classes.</div>
+        <div class="drop-row" data-answer="admet">Le candidat <span class="drop-zone" data-bank="1" data-idx="3" ondragover="onDO(event)" ondragleave="onDL(event)" ondrop="onDP(event,1)"></span> qu'il a commis une erreur de jugement.</div>
+      </div>
+      <button class="btn-verifier" id="btn-vd1" onclick="verifyDrag(1)" disabled>✓ Vérifier</button>
+      <div class="ex-feedback" id="fb-d1"></div>
+    </div>
+    <button class="btn-suivant" id="btn-to-classify" onclick="goToPhase('classify',5)">Exercice 3 →</button>
+  </div>
+
+  <!-- EXERCICE 3 — RÉORGANISATION -->
+  <div class="phase" id="phase-classify">
+    <div class="mascot-msg"><span class="emo">🦉</span><p>Exercice 3 — Remets les groupes dans le bon ordre pour construire une phrase au discours indirect correcte.</p></div>
+    <div class="ex-num">Exercice 3 / 4 — Réorganiser</div>
+    <div class="ex-header"><h2>Remettre dans l'ordre</h2><p>Clique sur les groupes dans l'ordre correct.</p></div>
+    <div id="reorg-container"></div>
+    <button class="btn-suivant" id="btn-to-conjtable" onclick="goToPhase('conjtable',6)">Exercice 4 →</button>
+  </div>
+
+  <!-- EXERCICE 4 — JUGEMENT -->
+  <div class="phase" id="phase-conjtable">
+    <div class="mascot-msg"><span class="emo">🦉</span><p>Exercice 4 — Une phrase est correctement transformée au discours indirect, l'autre non. Clique sur la bonne.</p></div>
+    <div class="ex-num">Exercice 4 / 4 — Jugement</div>
+    <div class="ex-header"><h2>Laquelle est correcte ?</h2><p>Clique directement sur la phrase juste.</p></div>
+    <div id="jugement-container"></div>
+    <button class="btn-suivant" id="btn-to-bilan" onclick="goToPhase('bilan',7)">🌟 Voir mon bilan</button>
+  </div>
+
+  <!-- BILAN -->
+  <div class="phase" id="phase-bilan">
+    <div class="bilan-card">
+      <span class="bilan-icon">🔄</span>
+      <h2 class="bilan-title" id="bilan-title">Résultat</h2>
+      <p class="bilan-msg" id="bilan-msg"></p>
+      <div class="stars-row"><span class="star-big" id="star1">⭐</span><span class="star-big" id="star2">⭐</span><span class="star-big" id="star3">⭐</span></div>
+      <div class="score-circle"><span class="score-num" id="bilan-score">0</span><span class="score-sub">/ 21 pts</span></div>
+      <div class="memo-card">
+        <h3>Mémo — Discours direct / indirect</h3>
+        <div class="memo-grid">
+          <div class="memo-item"><strong>Déclaration</strong><br>…que + indicatif<br><em>Il dit qu'il viendra.</em></div>
+          <div class="memo-item"><strong>Question totale</strong><br>…si<br><em>Il demande si tu viens.</em></div>
+          <div class="memo-item"><strong>Question partielle</strong><br>…mot interrogatif<br><em>Il demande où tu vas.</em></div>
+          <div class="memo-item"><strong>Ordre</strong><br>…de + infinitif<br><em>Il ordonne de partir.</em></div>
+          <div class="memo-item"><strong>Verbe au passé</strong><br>présent → imparfait<br>futur → conditionnel</div>
+          <div class="memo-item"><strong>Pronoms</strong><br>"je" → il/elle<br>"tu" → il/elle ou je</div>
+        </div>
+      </div>
+      <div class="bilan-btns">
+        <button class="btn-act secondary" onclick="location.reload()">↺ Recommencer</button>
+        <button class="btn-act primary" onclick="location.href='../12-15ans.html'">← Retour aux fiches</button>
+      </div>
+    </div>
+  </div>
+
+</main>
+<script>
+var TOTAL_PTS = 21;
+
+var classifyExpls = {
+  "0": "Correcte. 'demain' devient 'le lendemain' (changement de repère temporel), le futur 'viendrai' devient conditionnel 'viendrait' car le verbe introducteur est au passé.",
+  "1": "Incorrecte. Le pronom doit changer : 'où vas-tu' → 'où il allait'. 'Tu' ne peut pas rester au discours indirect si on rapporte les paroles d'un tiers.",
+  "2": "Correcte. Question totale (oui/non) → 'si' + indicatif. Le temps reste au présent car le verbe introducteur 'demande' est au présent.",
+  "3": "Incorrecte. Un ordre se transforme avec 'de' + infinitif : 'Il lui ordonne de venir ici'. 'Que venir' n'est pas une construction française correcte."
+};
+
+var erreurExpls = {
+  "0": "Verbe introducteur au passé → futur devient conditionnel ('viendrait'). 'demain' devient 'le lendemain' car le repère temporel change.",
+  "1": "Question totale (oui/non) → 'si' + verbe conjugué. Verbe introducteur au passé → présent devient imparfait ('avait faim').",
+  "2": "Ordre au discours indirect → 'de' + infinitif. Jamais 'que' + subjonctif pour un ordre avec 'demander de'.",
+  "3": "Question partielle → on conserve le mot interrogatif 'où'. Verbe introducteur au passé → présent 'habites' devient imparfait 'habitait'."
+};
+
+var reorgData = [
+  {
+    groupes: ["que le projet était ambitieux", "Le directeur a déclaré", "mais réalisable"],
+    correct: ["Le directeur a déclaré", "que le projet était ambitieux", "mais réalisable"],
+    expl: "La proposition principale avec le verbe introducteur d'abord, puis la subordonnée conjonctive introduite par 'que', puis le complément."
+  },
+  {
+    groupes: ["s'il avait bien compris", "La professeure a demandé", "les consignes de l'exercice"],
+    correct: ["La professeure a demandé", "s'il avait bien compris", "les consignes de l'exercice"],
+    expl: "Question totale au discours indirect : principale + 'si' + verbe à l'imparfait (verbe introducteur au passé) + complément."
+  },
+  {
+    groupes: ["de remettre les copies", "Il a ordonné aux élèves", "avant la fin de l'heure"],
+    correct: ["Il a ordonné aux élèves", "de remettre les copies", "avant la fin de l'heure"],
+    expl: "Ordre au discours indirect : principale avec verbe introducteur + 'de' + infinitif + complément circonstanciel."
+  }
+];
+
+var jugementData = [
+  {
+    phraseA: "Elle a demandé où il habitait.",
+    phraseB: "Elle a demandé où il habite.",
+    correct: "A",
+    expl: "Le verbe introducteur 'a demandé' est au passé → le présent 'habite' devient imparfait 'habitait'. C'est la concordance des temps au discours indirect."
+  },
+  {
+    phraseA: "Il a dit qu'il a froid.",
+    phraseB: "Il a dit qu'il avait froid.",
+    correct: "B",
+    expl: "Verbe introducteur au passé composé → le présent 'a froid' devient imparfait 'avait froid'. Le présent ne peut pas suivre un verbe introducteur au passé."
+  },
+  {
+    phraseA: "Le médecin lui a conseillé de se reposer.",
+    phraseB: "Le médecin lui a conseillé qu'il se repose.",
+    correct: "A",
+    expl: "'Conseiller de' + infinitif est la construction correcte pour un conseil/ordre indirect. 'Qu'il se repose' serait possible avec 'demander que' mais pas avec 'conseiller de'."
+  }
+];
+
+var QCM1 = [
+  {
+    sentence: "« Je ne savais pas que tu étais là. » — Cette phrase est au discours :",
+    options: ["Direct","Indirect","Ni l'un ni l'autre"],
+    answer: "Direct",
+    expl: "Cette phrase ne rapporte pas les paroles de quelqu'un d'autre — c'est une affirmation directe à la première personne, sans verbe introducteur ni guillemets de citation."
+  },
+  {
+    sentence: "Il a affirmé <u>qu'il n'avait rien vu</u>. La proposition soulignée est :",
+    options: ["Une subordonnée au discours indirect","Une proposition indépendante","Une subordonnée relative"],
+    answer: "Une subordonnée au discours indirect",
+    expl: "'qu'il n'avait rien vu' est une subordonnée conjonctive COD de 'a affirmé'. C'est bien du discours indirect : les paroles sont intégrées sans guillemets."
+  },
+  {
+    sentence: "Direct : « Viens-tu demain ? » → Indirect : Elle demande ___ il vient le lendemain.",
+    options: ["que","si","où"],
+    answer: "si",
+    expl: "Question totale (réponse oui/non) → 'si' au discours indirect. 'Que' introduit une déclaration, 'où' une question de lieu."
+  }
+];
+
+var erreurChoix = [
+  ["qu'il partirait le lendemain","qu'il partira demain","s'il partait demain","de partir demain"],
+  ["s'il avait faim","s'il a faim","qu'il avait faim","si tu as faim"],
+  ["de fermer la porte","que ferme la porte","qu'il ferme la porte","fermer la porte"],
+  ["où il habitait","où tu habitais","où il habite","que tu habitais"]
+];
+
+var score = 0;
+var qcm1Done = 0;
+var classifyDone = 0;
+var erreurDone = 0;
+var reorgDone = 0;
+var jugementDone = 0;
+var drag1Answers = ["affirme","demande","ordonne","admet"];
+var drag1Filled = [null,null,null,null];
+var draggedChip = null, touchChip = null, touchClone = null;
+var reorgState = [];
+var jugementSelected = [null,null,null];
+
+function shuffle(arr){var a=arr.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+
+function revealBloc(n){
+  var bloc=document.getElementById('bloc-'+n);if(!bloc)return;
+  var prev=document.getElementById('bloc-'+(n-1));
+  if(prev){var b=prev.querySelector('.btn-compris');if(b){b.textContent='✓ Compris';b.disabled=true;b.style.opacity='.4';}}
+  bloc.classList.add('revealed');
+  setTimeout(function(){var hH=(document.querySelector('.header')||{offsetHeight:0}).offsetHeight;var rect=bloc.getBoundingClientRect();window.scrollTo({top:window.pageYOffset+rect.top-hH-20,behavior:'smooth'});},150);
+}
+
+function startExercises(){
+  erreurChoix.forEach(function(opts,idx){
+    var container=document.getElementById('errch-'+idx);
+    if(!container)return;
+    container.style.cssText='display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;';
+    shuffle(opts).forEach(function(word){
+      var btn=document.createElement('button');
+      btn.className='classify-btn di-btn';
+      btn.dataset.choice=word;
+      btn.textContent=word;
+      btn.onclick=function(){verifyErreur(idx,this);};
+      container.appendChild(btn);
+    });
+  });
+  goToPhase('ex1',1);
+  buildQCM('qcm1-container',QCM1,1);
+}
+
+function goToPhase(phase,stepIdx){
+  document.querySelectorAll('.phase').forEach(function(p){p.classList.remove('active');});
+  var el=document.getElementById('phase-'+phase);
+  if(el){el.classList.add('active');setTimeout(function(){el.scrollIntoView({behavior:'smooth',block:'start'});},100);}
+  updateSteps(stepIdx);
+  if(phase==='drag2'){
+    var cont=document.getElementById('drop-sentences-1');
+    if(cont){
+      var rows=Array.from(cont.querySelectorAll('.drop-row'));
+      var shuffled=shuffle(rows);
+      drag1Answers=shuffled.map(function(r){return r.dataset.answer;});
+      shuffled.forEach(function(r,i){r.querySelector('.drop-zone').dataset.idx=String(i);cont.appendChild(r);});
+    }
+    var pool=document.getElementById('pool1');
+    if(pool){shuffle(Array.from(pool.querySelectorAll('.word-chip'))).forEach(function(c){pool.appendChild(c);});}
+    drag1Filled=[null,null,null,null];
+  }
+  if(phase==='classify')buildReorg();
+  if(phase==='conjtable')buildJugement();
+  if(phase==='bilan')showBilan();
+}
+
+function updateSteps(active){for(var i=0;i<8;i++){var s=document.getElementById('step-'+i);if(!s)continue;s.classList.remove('active','done');if(i<active)s.classList.add('done');else if(i===active)s.classList.add('active');}}
+
+function buildQCM(cId,data,exNum){
+  var c=document.getElementById(cId);c.innerHTML='';
+  data.forEach(function(q,qi){
+    var div=document.createElement('div');div.className='qcm-question';div.id='qq-'+exNum+'-'+qi;
+    var opts=shuffle(q.options);
+    var optHtml=opts.map(function(opt){return '<button class="qcm-opt" data-exnum="'+exNum+'" data-qi="'+qi+'" data-opt="'+encodeURIComponent(opt)+'" data-ans="'+encodeURIComponent(q.answer)+'" onclick="handleQCM(this)">'+opt+'</button>';}).join('');
+    div.innerHTML='<div class="qcm-sentence">'+q.sentence+'</div><div class="qcm-options">'+optHtml+'</div><div class="qcm-feedback" id="qf-'+exNum+'-'+qi+'"></div>';
+    c.appendChild(div);
+  });
+}
+
+function handleQCM(btn){
+  var exNum=parseInt(btn.dataset.exnum),qi=parseInt(btn.dataset.qi);
+  var chosen=decodeURIComponent(btn.dataset.opt),correct=decodeURIComponent(btn.dataset.ans);
+  var qDiv=document.getElementById('qq-'+exNum+'-'+qi);
+  if(qDiv.classList.contains('answered'))return;
+  qDiv.classList.add('answered');
+  var opts=qDiv.querySelectorAll('.qcm-opt'),fb=document.getElementById('qf-'+exNum+'-'+qi);
+  if(chosen===correct){
+    btn.classList.add('correct');
+    fb.className='qcm-feedback show ok';fb.innerHTML='✓ Correct. '+QCM1[qi].expl;
+    score++;document.getElementById('score-display').textContent=score;
+  }else{
+    btn.classList.add('wrong');
+    opts.forEach(function(o){if(decodeURIComponent(o.dataset.opt)===correct)o.classList.add('reveal');});
+    fb.className='qcm-feedback show ko';fb.innerHTML='✗ '+QCM1[qi].expl;
+  }
+  qcm1Done++;
+  if(qcm1Done>=QCM1.length){
+    setTimeout(function(){var nb=document.getElementById('btn-to-ex2');if(nb){nb.classList.add('show');nb.scrollIntoView({behavior:'smooth',block:'nearest'});}},500);
+  }
+}
+
+function classifyAnswer(btn){
+  var idx=parseInt(btn.dataset.idx),chosen=btn.dataset.type,correct=btn.dataset.correct;
+  var block=document.getElementById('cl-'+idx),fb=document.getElementById('clf-'+idx);
+  if(block.classList.contains('answered'))return;
+  block.classList.add('answered');classifyDone++;
+  if(chosen===correct){
+    btn.classList.add('sel-ok');fb.className='classify-feedback show ok';fb.innerHTML='✓ '+classifyExpls[String(idx)];
+    score++;document.getElementById('score-display').textContent=score;
+  }else{
+    btn.classList.add('sel-ko');
+    block.querySelectorAll('.classify-btn').forEach(function(b){if(b.dataset.type===correct)b.classList.add('rev-ok');});
+    fb.className='classify-feedback show ko';fb.innerHTML='✗ '+classifyExpls[String(idx)];
+  }
+  if(classifyDone>=4){setTimeout(function(){var nb=document.getElementById('btn-to-drag1');nb.classList.add('show');nb.scrollIntoView({behavior:'smooth',block:'nearest'});},500);}
+}
+
+function verifyErreur(idx,btn){
+  var block=document.getElementById('err-'+idx);
+  if(block.classList.contains('answered'))return;
+  block.classList.add('answered');
+  var chosen=btn.dataset.choice,correct=block.dataset.correct;
+  var fb=document.getElementById('err-fb-'+idx);
+  block.querySelectorAll('button').forEach(function(b){b.style.pointerEvents='none';});
+  if(chosen===correct){
+    btn.classList.add('sel-ok');score++;document.getElementById('score-display').textContent=score;
+    fb.className='erreur-feedback show ok';fb.innerHTML='✓ Correct. '+erreurExpls[String(idx)];
+  }else{
+    btn.classList.add('sel-ko');
+    block.querySelectorAll('button').forEach(function(b){if(b.dataset.choice===correct)b.classList.add('rev-ok');});
+    fb.className='erreur-feedback show ko';fb.innerHTML='✗ La bonne réponse était <strong>"'+correct+'"</strong>. '+erreurExpls[String(idx)];
+  }
+  erreurDone++;
+  if(erreurDone>=4){setTimeout(function(){var nb=document.getElementById('btn-to-drag2');nb.classList.add('show');nb.scrollIntoView({behavior:'smooth',block:'nearest'});},600);}
+}
+
+function onDS(e,bank){draggedChip=e.currentTarget;e.dataTransfer.setData('text/plain',draggedChip.dataset.word);}
+function onDO(e){e.preventDefault();e.currentTarget.classList.add('drag-over');}
+function onDL(e){e.currentTarget.classList.remove('drag-over');}
+function onDP(e,bank){
+  e.preventDefault();var zone=e.currentTarget;zone.classList.remove('drag-over');
+  if(!draggedChip)return;
+  var word=draggedChip.dataset.word,idx=parseInt(zone.dataset.idx);
+  if(drag1Filled[idx])returnToPool(drag1Filled[idx],bank);
+  drag1Filled[idx]=word;zone.textContent=word;zone.classList.add('filled');
+  draggedChip.classList.add('used');draggedChip=null;checkDragBtn(bank);
+}
+function onTS(e){
+  touchChip=e.currentTarget;var t=e.touches[0];
+  touchClone=touchChip.cloneNode(true);
+  touchClone.style.cssText='position:fixed;z-index:9999;pointer-events:none;opacity:.8;padding:8px 16px;border-radius:6px;border:2px solid var(--acc);background:white;font-weight:700;font-size:.88rem;color:var(--acc);';
+  setCP(t.clientX,t.clientY);document.body.appendChild(touchClone);
+}
+function onTM(e){
+  e.preventDefault();if(!touchClone)return;var t=e.touches[0];setCP(t.clientX,t.clientY);
+  document.querySelectorAll('.drop-zone').forEach(function(z){z.classList.remove('drag-over');});
+  var el=document.elementFromPoint(t.clientX,t.clientY);
+  if(el&&el.classList.contains('drop-zone'))el.classList.add('drag-over');
+}
+function onTE(e,bank){
+  if(touchClone){touchClone.remove();touchClone=null;}if(!touchChip)return;
+  var t=e.changedTouches[0];var el=document.elementFromPoint(t.clientX,t.clientY);
+  while(el&&!el.classList.contains('drop-zone')){el=el.parentElement;}
+  if(el&&el.classList.contains('drop-zone')){
+    var idx=parseInt(el.dataset.idx),word=touchChip.dataset.word;
+    if(drag1Filled[idx])returnToPool(drag1Filled[idx],bank);
+    drag1Filled[idx]=word;el.textContent=word;el.classList.add('filled');el.classList.remove('drag-over');
+    touchChip.classList.add('used');checkDragBtn(bank);
+  }touchChip=null;
+}
+function setCP(x,y){if(touchClone){touchClone.style.left=(x-50)+'px';touchClone.style.top=(y-18)+'px';}}
+function returnToPool(word,bank){
+  document.getElementById('pool'+bank).querySelectorAll('.word-chip').forEach(function(c){if(c.dataset.word===word&&c.classList.contains('used'))c.classList.remove('used');});
+}
+function checkDragBtn(bank){
+  document.getElementById('btn-vd'+bank).disabled=!drag1Filled.every(function(f){return f!==null;});
+}
+function verifyDrag(bank){
+  var fb=document.getElementById('fb-d'+bank),correct=0;
+  document.querySelectorAll('[data-bank="'+bank+'"].drop-zone').forEach(function(zone){
+    var idx=parseInt(zone.dataset.idx);zone.classList.remove('filled');
+    var ans=drag1Answers[idx];
+    if((drag1Filled[idx]||'')===(ans||'')){zone.classList.add('correct');correct++;score++;}
+    else{zone.classList.add('wrong');zone.textContent=(drag1Filled[idx]||'?')+' → '+ans;}
+  });
+  document.getElementById('score-display').textContent=score;
+  document.getElementById('btn-vd'+bank).disabled=true;
+  document.getElementById('pool'+bank).style.pointerEvents='none';
+  fb.className='ex-feedback show '+(correct===4?'ok':'ko');
+  fb.innerHTML=correct===4?'✓ Parfait — 4/4':'✗ '+correct+'/4. Corrections en rouge.';
+  setTimeout(function(){var nb=document.getElementById('btn-to-classify');nb.classList.add('show');nb.scrollIntoView({behavior:'smooth',block:'nearest'});},700);
+}
+
+function buildReorg(){
+  var c=document.getElementById('reorg-container');c.innerHTML='';
+  reorgData.forEach(function(item,ri){
+    reorgState[ri]={placed:[]};
+    var div=document.createElement('div');div.className='reorg-block';div.id='reorg-'+ri;
+    var shuffled=shuffle(item.groupes);
+    var chipsHtml=shuffled.map(function(g,gi){return '<div class="reorg-chip" id="rchip-'+ri+'-'+gi+'" data-ri="'+ri+'" data-text="'+encodeURIComponent(g)+'" onclick="clickReorgChip(this)">'+g+'</div>';}).join('');
+    div.innerHTML='<div class="reorg-consigne">Remets ces groupes dans le bon ordre :</div>'
+      +'<div class="reorg-chips" id="rpool-'+ri+'">'+chipsHtml+'</div>'
+      +'<div class="reorg-result" id="rresult-'+ri+'"></div>'
+      +'<div style="margin-top:8px;"><button class="btn-reorg verify" onclick="verifyReorg('+ri+')">✓ Vérifier</button>'
+      +'<button class="btn-reorg reset" onclick="resetReorg('+ri+')">↺ Réinitialiser</button></div>'
+      +'<div class="reorg-feedback" id="rfb-'+ri+'"></div>';
+    c.appendChild(div);
+  });
+}
+
+function clickReorgChip(chip){
+  var ri=parseInt(chip.dataset.ri),text=decodeURIComponent(chip.dataset.text);
+  if(chip.classList.contains('used'))return;
+  chip.classList.add('used');
+  reorgState[ri].placed.push(text);
+  var result=document.getElementById('rresult-'+ri);
+  var rc=document.createElement('div');rc.className='reorg-result-chip';rc.textContent=text;
+  rc.dataset.ri=ri;rc.dataset.text=encodeURIComponent(text);
+  rc.onclick=function(){removeReorgChip(this);};
+  result.appendChild(rc);
+}
+
+function removeReorgChip(rc){
+  var ri=parseInt(rc.dataset.ri),text=decodeURIComponent(rc.dataset.text);
+  reorgState[ri].placed=reorgState[ri].placed.filter(function(t){return t!==text;});
+  rc.remove();
+  document.querySelectorAll('#rpool-'+ri+' .reorg-chip').forEach(function(chip){if(decodeURIComponent(chip.dataset.text)===text)chip.classList.remove('used');});
+}
+
+function resetReorg(ri){
+  reorgState[ri].placed=[];
+  document.getElementById('rresult-'+ri).innerHTML='';
+  document.querySelectorAll('#rpool-'+ri+' .reorg-chip').forEach(function(c){c.classList.remove('used');});
+}
+
+function verifyReorg(ri){
+  var placed=reorgState[ri].placed,correct=reorgData[ri].correct;
+  var fb=document.getElementById('rfb-'+ri);
+  var block=document.getElementById('reorg-'+ri);
+  var ok=placed.length===correct.length&&placed.every(function(t,i){return t===correct[i];});
+  block.style.pointerEvents='none';
+  if(ok){score++;document.getElementById('score-display').textContent=score;fb.className='reorg-feedback show ok';fb.innerHTML='✓ Correct. '+reorgData[ri].expl;}
+  else{fb.className='reorg-feedback show ko';fb.innerHTML='✗ '+reorgData[ri].expl+'<br><em>Ordre attendu : '+correct.join(' / ')+'</em>';}
+  reorgDone++;
+  if(reorgDone>=reorgData.length){setTimeout(function(){var nb=document.getElementById('btn-to-conjtable');nb.classList.add('show');nb.scrollIntoView({behavior:'smooth',block:'nearest'});},600);}
+}
+
+function buildJugement(){
+  var c=document.getElementById('jugement-container');c.innerHTML='';
+  jugementData.forEach(function(item,ji){
+    jugementSelected[ji]=null;
+    var div=document.createElement('div');div.className='jugement-block';div.id='jug-'+ji;
+    div.innerHTML='<div class="jugement-options">'
+      +'<div class="jugement-opt" id="jopt-'+ji+'-A" onclick="verifyJugement('+ji+',\'A\')"><strong>A \u2014</strong> '+item.phraseA+'</div>'
+      +'<div class="jugement-opt" id="jopt-'+ji+'-B" onclick="verifyJugement('+ji+',\'B\')"><strong>B \u2014</strong> '+item.phraseB+'</div>'
+      +'</div>'
+      +'<div class="jugement-feedback" id="jfb-'+ji+'"></div>';
+    c.appendChild(div);
+  });
+}
+
+function verifyJugement(ji,choice){
+  var block=document.getElementById('jug-'+ji);
+  if(block.classList.contains('answered'))return;
+  block.classList.add('answered');
+  var correct=jugementData[ji].correct,fb=document.getElementById('jfb-'+ji);
+  var choiceOk=(choice===correct);
+  document.getElementById('jopt-'+ji+'-'+correct).classList.add('correct-choice');
+  if(!choiceOk)document.getElementById('jopt-'+ji+'-'+choice).classList.add('wrong-choice');
+  if(choiceOk){
+    score++;document.getElementById('score-display').textContent=score;
+    fb.className='jugement-feedback show ok';fb.innerHTML='✓ Correct. '+jugementData[ji].expl;
+  }else{
+    fb.className='jugement-feedback show ko';fb.innerHTML='✗ '+jugementData[ji].expl;
+  }
+  jugementDone++;
+  if(jugementDone>=jugementData.length){setTimeout(function(){var nb=document.getElementById('btn-to-bilan');nb.classList.add('show');nb.scrollIntoView({behavior:'smooth',block:'nearest'});},600);}
+}
+
+function showBilan(){
+  document.getElementById('bilan-score').textContent=score;
+  var pct=score/TOTAL_PTS;
+  var title,msg;
+  if(pct>=0.89){title='Excellent';msg="Maîtrise complète du discours indirect. Tu transformes correctement pronoms, temps et mots introducteurs.";}
+  else if(pct>=0.65){title='Satisfaisant';msg="Bonne compréhension globale. Revois la concordance des temps et la transformation des questions.";}
+  else{title='À consolider';msg="Relis la leçon sur les transformations : pronoms, temps (présent→imparfait, futur→conditionnel), et les conjonctions si/que/infinitif.";}
+  document.getElementById('bilan-title').textContent=title;
+  document.getElementById('bilan-msg').textContent=msg;
+  var seuils=[Math.ceil(TOTAL_PTS*.33),Math.ceil(TOTAL_PTS*.66),Math.ceil(TOTAL_PTS*.89)];
+  ['star1','star2','star3'].forEach(function(id,i){
+    var el=document.getElementById(id);
+    if(score>=seuils[i]){(function(e,d){setTimeout(function(){e.classList.add('earned');},d);})(el,300+i*400);}
+    else el.style.filter='grayscale(1)';
+  });
+  if(pct>=0.65)lanceConfetti();
+}
+
+function lanceConfetti(){
+  var cols=['#7c2d12','#fdba74','#059669','#d97706','#0369a1'];
+  for(var i=0;i<50;i++){
+    var el=document.createElement('div');el.className='confetti-piece';
+    el.style.cssText='left:'+Math.random()*100+'vw;background:'+cols[Math.floor(Math.random()*5)]+';animation-duration:'+(1.5+Math.random()*2)+'s;animation-delay:'+Math.random()*1.2+'s;width:'+(6+Math.random()*7)+'px;height:'+(6+Math.random()*7)+'px;border-radius:'+(Math.random()>.5?'50%':'2px')+';';
+    document.body.appendChild(el);
+    setTimeout(function(){if(el.parentNode)el.remove();},4000);
+  }
+}
+</script>
+</body>
+</html>

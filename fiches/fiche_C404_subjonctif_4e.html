@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>C404 — Le subjonctif : emplois et valeurs | L'Atelier du Devoir</title>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --acc:#9a3412;--acc-pale:#fff7ed;--acc-mid:#fdba74;
+  --mint:#059669;--mint-pale:#d1fae5;--mint-deep:#047857;
+  --coral:#dc2626;--coral-pale:#fee2e2;
+  --sky:#0369a1;--sky-pale:#e0f2fe;
+  --yellow:#d97706;--yellow-pale:#fef3c7;
+  --text:#1e293b;--text-light:#64748b;
+  --radius:12px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Lato',sans-serif;background:#fff7ed;color:var(--text);font-size:16px;line-height:1.65;}
+.print-bar{position:fixed;right:16px;top:50%;transform:translateY(-50%);z-index:200;display:flex;flex-direction:column;gap:8px;}
+.print-btn{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:8px;font-family:'Lato',sans-serif;font-weight:700;font-size:.78rem;border:none;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.15);}
+.print-btn-lecon{background:#d97706;color:white;}.print-btn-eval{background:#dc2626;color:white;}
+@media(max-width:600px){.print-bar{right:6px;}.print-btn{font-size:0;width:40px;height:40px;padding:0;justify-content:center;}.print-btn span.lbl{display:none;}.print-btn span.ico{font-size:1.1rem;}}
+.header{background:white;border-bottom:2px solid var(--acc-pale);position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.06);}
+.header-top{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;}
+.logo{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--acc);text-decoration:none;}
+.score-badge{background:var(--acc);color:white;font-weight:700;font-size:.85rem;padding:5px 14px;border-radius:6px;display:flex;align-items:center;gap:5px;}
+.steps-wrap{padding:0 20px 8px;}
+.steps{display:flex;gap:3px;}
+.step{flex:1;height:5px;border-radius:4px;background:var(--acc-pale);transition:all .35s;}
+.step.done{background:var(--mint);}.step.active{background:var(--acc);}
+.steps-labels{display:flex;gap:3px;padding-top:3px;}
+.step-lbl{flex:1;font-size:.5rem;font-weight:700;color:var(--text-light);text-align:center;text-transform:uppercase;letter-spacing:.04em;}
+.main{max-width:760px;margin:0 auto;padding:28px 16px 100px;}
+.phase{display:none;}.phase.active{display:block;}
+.accroche{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:22px 24px;margin-bottom:22px;display:flex;gap:16px;align-items:flex-start;}
+.accroche-icon{font-size:2.4rem;flex-shrink:0;margin-top:2px;}
+.accroche-text h1{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--acc);margin-bottom:6px;}
+.accroche-text p{color:var(--text-light);font-size:.92rem;line-height:1.5;}
+.meta-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+.meta-tag{background:var(--acc-pale);border-radius:4px;padding:3px 10px;font-size:.72rem;font-weight:700;color:var(--acc);text-transform:uppercase;letter-spacing:.04em;}
+.lecon-card{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:22px;margin-bottom:18px;}
+.lecon-card h2{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--acc);margin-bottom:14px;border-bottom:2px solid var(--acc-pale);padding-bottom:8px;}
+.lecon-block{display:none;}.lecon-block.revealed{display:block;}
+.lecon-subtitle{font-weight:900;font-size:1rem;color:var(--acc);margin-bottom:10px;margin-top:6px;}
+.sep{margin:18px 0;border:none;border-top:1px solid var(--acc-pale);}
+.analogie{font-size:.92rem;color:var(--text-light);font-style:italic;margin-bottom:12px;line-height:1.6;}
+.def-box{border-left:4px solid var(--acc);background:var(--acc-pale);border-radius:0 var(--radius) var(--radius) 0;padding:14px 16px;margin-bottom:12px;}
+.def-box h4{font-weight:900;color:var(--acc);font-size:.9rem;margin-bottom:6px;}
+.def-box p{font-size:.88rem;color:var(--text);line-height:1.55;}
+.phrase-ex{background:white;border:1px solid #e2e8f0;border-radius:8px;padding:9px 14px;font-size:.9rem;margin-bottom:6px;line-height:1.7;}
+.hl-s{background:var(--acc-pale);color:var(--acc);border-radius:4px;padding:1px 6px;font-weight:700;margin:0 2px;}
+.tableau{width:100%;border-collapse:collapse;margin:10px 0;font-size:.85rem;}
+.tableau th{padding:8px 10px;text-align:left;font-weight:700;background:var(--acc);color:white;}
+.tableau td{padding:7px 10px;border:1px solid #e2e8f0;}
+.tableau tr:nth-child(even) td{background:var(--acc-pale);}
+.astuce{background:#fefce8;border:1px solid #fde68a;border-radius:8px;padding:11px 14px;font-size:.85rem;margin-top:8px;color:#78350f;}
+.astuce strong{color:#92400e;}
+.piege{background:#fff1f2;border:1px solid #fecdd3;border-radius:8px;padding:11px 14px;font-size:.85rem;margin-top:8px;color:#9f1239;}
+.piege strong{color:#be123c;}
+.btn-compris{margin-top:18px;padding:11px 26px;border-radius:8px;font-family:'Lato',sans-serif;font-weight:700;font-size:.9rem;background:var(--acc);color:white;border:none;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:8px;}
+.btn-compris:hover{background:#7c2a0e;transform:translateY(-1px);}
+.btn-compris:disabled{opacity:.4;cursor:default;transform:none;}
+.mascot-msg{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:13px 16px;margin:14px 0;display:flex;align-items:flex-start;gap:10px;}
+.mascot-msg .emo{font-size:1.6rem;flex-shrink:0;}
+.mascot-msg p{font-size:.88rem;color:var(--text-light);}
+.ex-num{display:inline-block;background:var(--acc);color:white;font-weight:700;font-size:.7rem;padding:3px 10px;border-radius:4px;margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em;}
+.ex-header h2{font-family:'Playfair Display',serif;font-size:1.15rem;margin-bottom:4px;}
+.ex-header p{color:var(--text-light);font-size:.85rem;margin-bottom:14px;}
+.qcm-question{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:18px;margin-bottom:12px;}
+.qcm-question.answered{pointer-events:none;}
+.qcm-sentence{font-size:.92rem;font-weight:700;margin-bottom:12px;line-height:1.7;background:var(--acc-pale);border-radius:8px;padding:11px 14px;}
+.qcm-options{display:flex;flex-direction:column;gap:8px;}
+.qcm-opt{padding:10px 14px;border-radius:8px;border:2px solid #e2e8f0;background:white;font-family:'Lato',sans-serif;font-weight:400;font-size:.88rem;cursor:pointer;text-align:left;transition:all .2s;}
+.qcm-opt:hover{border-color:var(--acc);background:var(--acc-pale);}
+.qcm-opt.correct{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);font-weight:700;}
+.qcm-opt.wrong{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
+.qcm-opt.reveal{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);font-weight:700;}
+.qcm-feedback{margin-top:10px;padding:10px 13px;border-radius:8px;font-size:.84rem;font-weight:700;display:none;}
+.qcm-feedback.show{display:block;}
+.qcm-feedback.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.qcm-feedback.ko{background:var(--coral-pale);color:#b91c1c;}
+.btn-suivant{margin-top:14px;padding:10px 22px;border-radius:8px;font-family:'Lato',sans-serif;font-weight:700;font-size:.88rem;background:var(--acc);color:white;border:none;cursor:pointer;display:none;align-items:center;gap:8px;transition:all .2s;}
+.btn-suivant.show{display:inline-flex;}
+.btn-suivant:hover{background:#7c2a0e;}
+.classify-block{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:18px;margin-bottom:12px;}
+.classify-block.answered{pointer-events:none;}
+.classify-phrase{background:var(--acc-pale);border-radius:8px;padding:11px 14px;font-size:.92rem;margin-bottom:12px;line-height:1.7;}
+.classify-btns{display:flex;gap:8px;flex-wrap:wrap;}
+.classify-btn{padding:9px 14px;border-radius:6px;font-family:'Lato',sans-serif;font-weight:700;font-size:.78rem;border:2px solid;cursor:pointer;transition:all .2s;flex:1;text-align:center;min-width:80px;}
+.ok-btn{background:var(--mint-pale);color:var(--mint-deep);border-color:var(--mint);}
+.ko-btn{background:var(--coral-pale);color:var(--coral);border-color:var(--coral);}
+.ind-btn{background:var(--acc-pale);color:var(--acc);border-color:var(--acc);}
+.subj-btn{background:#fef3c7;color:#92400e;border-color:#d97706;}
+.classify-btn.sel-ok{color:white!important;background:var(--mint)!important;border-color:var(--mint)!important;}
+.classify-btn.sel-ko{background:var(--coral-pale)!important;color:var(--coral)!important;border-color:var(--coral)!important;}
+.classify-btn.rev-ok{color:white!important;background:var(--acc)!important;border-color:var(--acc)!important;}
+.classify-feedback{margin-top:10px;padding:9px 13px;border-radius:8px;font-size:.83rem;font-weight:700;display:none;}
+.classify-feedback.show{display:block;}
+.classify-feedback.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.classify-feedback.ko{background:var(--coral-pale);color:#b91c1c;}
+.erreur-block{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:18px;margin-bottom:12px;}
+.erreur-block.answered{pointer-events:none;}
+.erreur-phrase{background:#fff1f2;border:1px solid #fecdd3;border-radius:8px;padding:11px 14px;font-size:.95rem;margin-bottom:12px;line-height:1.7;}
+.erreur-label{font-size:.78rem;font-weight:700;color:#be123c;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;}
+.erreur-choix{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+.erreur-feedback{margin-top:8px;padding:9px 13px;border-radius:8px;font-size:.83rem;font-weight:700;display:none;}
+.erreur-feedback.show{display:block;}
+.erreur-feedback.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.erreur-feedback.ko{background:var(--coral-pale);color:#b91c1c;}
+.saisie-block{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:18px;margin-bottom:12px;}
+.saisie-consigne{font-size:.88rem;color:var(--text-light);margin-bottom:14px;background:var(--acc-pale);padding:10px 14px;border-radius:8px;}
+.saisie-rows{display:flex;flex-direction:column;gap:10px;}
+.saisie-row{display:flex;align-items:center;gap:10px;background:var(--acc-pale);border-radius:8px;padding:10px 14px;flex-wrap:wrap;}
+.saisie-phrase{font-size:.9rem;flex:1;min-width:200px;line-height:1.6;}
+.saisie-input{border:2px solid var(--acc);border-radius:6px;padding:7px 10px;font-family:'Lato',sans-serif;font-weight:700;font-size:.92rem;color:var(--text);background:white;outline:none;min-width:160px;flex:1;}
+.saisie-input:focus{border-color:#7c2a0e;}
+.saisie-input.correct{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.saisie-input.wrong{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);font-size:.78rem;}
+.btn-verif-saisie{margin-top:14px;padding:10px 22px;border-radius:8px;font-family:'Lato',sans-serif;font-weight:700;font-size:.88rem;background:var(--acc);color:white;border:none;cursor:pointer;display:block;width:100%;transition:all .2s;}
+.btn-verif-saisie:hover{background:#7c2a0e;}
+.btn-verif-saisie:disabled{opacity:.4;cursor:not-allowed;}
+.saisie-feedback{margin-top:8px;padding:9px 13px;border-radius:8px;font-size:.83rem;font-weight:700;display:none;}
+.saisie-feedback.show{display:block;}
+.saisie-feedback.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.saisie-feedback.ko{background:var(--coral-pale);color:#b91c1c;}
+.jugement-block{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:18px;margin-bottom:12px;}
+.jugement-block.answered{pointer-events:none;}
+.jugement-options{display:flex;flex-direction:column;gap:10px;}
+.jugement-opt{padding:12px 16px;border-radius:8px;border:2px solid #e2e8f0;background:white;font-family:'Lato',sans-serif;font-size:.9rem;cursor:pointer;text-align:left;transition:all .2s;line-height:1.6;}
+.jugement-opt:hover{border-color:var(--acc);background:var(--acc-pale);}
+.jugement-opt.correct-choice{border-color:var(--mint);background:var(--mint-pale);}
+.jugement-opt.wrong-choice{border-color:var(--coral);background:var(--coral-pale);}
+.jugement-feedback{margin-top:8px;padding:9px 13px;border-radius:8px;font-size:.83rem;font-weight:700;display:none;}
+.jugement-feedback.show{display:block;}
+.jugement-feedback.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.jugement-feedback.ko{background:var(--coral-pale);color:#b91c1c;}
+.bilan-card{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:28px 24px;text-align:center;}
+.bilan-icon{font-size:3.5rem;margin-bottom:12px;display:block;}
+.bilan-title{font-family:'Playfair Display',serif;font-size:1.8rem;margin-bottom:6px;color:var(--acc);}
+.bilan-msg{color:var(--text-light);font-size:.95rem;margin-bottom:20px;}
+.stars-row{display:flex;justify-content:center;gap:10px;margin-bottom:20px;}
+.star-big{font-size:2.5rem;filter:grayscale(1);transition:all .5s;}
+.star-big.earned{filter:none;animation:starPop .5s ease both;}
+@keyframes starPop{0%{transform:scale(0);}60%{transform:scale(1.2);}100%{transform:scale(1);}}
+.score-circle{width:100px;height:100px;border-radius:50%;background:var(--acc);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 20px;color:white;}
+.score-num{font-family:'Playfair Display',serif;font-size:1.8rem;line-height:1;}
+.score-sub{font-size:.65rem;opacity:.8;}
+.memo-card{background:var(--acc-pale);border-radius:var(--radius);padding:16px 20px;margin:18px 0;text-align:left;}
+.memo-card h3{font-weight:700;font-size:.85rem;color:var(--acc);margin-bottom:10px;text-transform:uppercase;letter-spacing:.04em;}
+.memo-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media(max-width:480px){.memo-grid{grid-template-columns:1fr;}}
+.memo-item{background:white;border-radius:8px;padding:10px 12px;font-size:.82rem;border:1px solid #e2e8f0;}
+.memo-item strong{color:var(--acc);}
+.bilan-btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:16px;}
+.btn-act{padding:10px 20px;border-radius:8px;font-family:'Lato',sans-serif;font-weight:700;font-size:.85rem;cursor:pointer;border:none;transition:all .2s;}
+.btn-act.primary{background:var(--acc);color:white;}
+.btn-act.secondary{background:var(--acc-pale);color:var(--acc);border:2px solid var(--acc);}
+.btn-act:hover{transform:translateY(-1px);}
+.confetti-piece{position:fixed;border-radius:2px;top:-20px;animation:fall linear both;pointer-events:none;z-index:9999;}
+@keyframes fall{0%{transform:translateY(0) rotate(0deg);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
+@media print{.print-bar,.btn-compris,.btn-suivant,.btn-verif-saisie,.bilan-card,.mascot-msg{display:none!important;}body{background:white;}.phase{display:block!important;}}
+</style>
+</head>
+<body>
+<div class="print-bar">
+  <button class="print-btn print-btn-lecon" onclick="window.print()"><span class="ico">📖</span><span class="lbl"> Imprimer la leçon</span></button>
+  <button class="print-btn print-btn-eval" onclick="window.print()"><span class="ico">📝</span><span class="lbl"> Imprimer les exercices</span></button>
+</div>
+<header class="header">
+  <div class="header-top">
+    <a href="../12-15ans.html" class="logo">🦉 L'Atelier du Devoir</a>
+    <div class="score-badge">⭐ <span id="score-display">0</span> pts</div>
+  </div>
+  <div class="steps-wrap">
+    <div class="steps">
+      <div class="step active" id="step-0"></div><div class="step" id="step-1"></div><div class="step" id="step-2"></div>
+      <div class="step" id="step-3"></div><div class="step" id="step-4"></div><div class="step" id="step-5"></div>
+      <div class="step" id="step-6"></div><div class="step" id="step-7"></div>
+    </div>
+    <div class="steps-labels">
+      <div class="step-lbl">Leçon</div><div class="step-lbl">Entr. 1</div><div class="step-lbl">Entr. 2</div>
+      <div class="step-lbl">Ex. 1</div><div class="step-lbl">Ex. 2</div><div class="step-lbl">Ex. 3</div>
+      <div class="step-lbl">Ex. 4</div><div class="step-lbl">Bilan</div>
+    </div>
+  </div>
+</header>
+<main class="main">
+  <div class="accroche">
+    <div class="accroche-icon">🌀</div>
+    <div class="accroche-text">
+      <h1>Le subjonctif</h1>
+      <p>Emplois et valeurs : maîtriser le mode du possible, du souhaité et du craint.</p>
+      <div class="meta-row">
+        <span class="meta-tag">4e</span><span class="meta-tag">~25 min</span>
+        <span class="meta-tag">⭐⭐⭐ Difficulté</span>
+        <span class="meta-tag">Français — Conjugaison</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase active" id="phase-lecon">
+    <div class="lecon-card">
+      <h2>📖 La leçon</h2>
+      <div class="lecon-block revealed" id="bloc-0">
+        <div class="lecon-subtitle">① Qu'est-ce que le subjonctif ?</div>
+        <p class="analogie">L'indicatif dit ce qui est. Le subjonctif dit ce qui pourrait être, ce qu'on désire, ce qu'on craint, ce qu'on doute. C'est le mode de l'incertitude et de la subjectivité.</p>
+        <div class="def-box">
+          <h4>Définition</h4>
+          <p>Le subjonctif est un mode — pas un temps — qui s'emploie principalement dans les propositions subordonnées introduites par <strong>que</strong>. Il exprime le doute, le souhait, la crainte, la volonté ou la nécessité.</p>
+        </div>
+        <div class="phrase-ex">— Il faut <span class="hl-s">que tu viennes</span>. (nécessité)</div>
+        <div class="phrase-ex">— Je souhaite <span class="hl-s">qu'il réussisse</span>. (souhait)</div>
+        <div class="phrase-ex">— Bien <span class="hl-s">qu'il soit fatigué</span>, il continue. (concession)</div>
+        <div class="astuce"><strong>Méthode :</strong> le subjonctif présent se forme sur le radical de la 3e personne du pluriel de l'indicatif présent + terminaisons : -e, -es, -e, -ions, -iez, -ent.</div>
+        <button class="btn-compris" onclick="revealBloc(1)">Bloc suivant →</button>
+      </div>
+      <div class="lecon-block" id="bloc-1">
+        <hr class="sep">
+        <div class="lecon-subtitle">② Les principales constructions qui imposent le subjonctif</div>
+        <p class="analogie">Retenir les déclencheurs du subjonctif, c'est comme mémoriser les feux rouges d'une route — dès qu'on les voit, on sait qu'il faut changer de mode.</p>
+        <table class="tableau">
+          <tr><th>Catégorie</th><th>Exemples</th></tr>
+          <tr><td><strong>Verbes de volonté</strong></td><td>vouloir que, souhaiter que, exiger que, ordonner que</td></tr>
+          <tr><td><strong>Verbes de sentiment</strong></td><td>craindre que, regretter que, être content que, avoir peur que</td></tr>
+          <tr><td><strong>Verbes de doute / négation</strong></td><td>douter que, ne pas croire que, ne pas penser que</td></tr>
+          <tr><td><strong>Expressions impersonnelles</strong></td><td>il faut que, il est nécessaire que, il est possible que</td></tr>
+          <tr><td><strong>Conjonctions</strong></td><td>bien que, pour que, afin que, à condition que, avant que</td></tr>
+        </table>
+        <div class="piege"><strong>Piège :</strong> "penser que" et "croire que" à la forme affirmative → indicatif. À la forme négative ou interrogative → subjonctif. "Je pense qu'il <em>vient</em>" mais "Je ne pense pas qu'il <em>vienne</em>".</div>
+        <button class="btn-compris" onclick="revealBloc(2)">Bloc suivant →</button>
+      </div>
+      <div class="lecon-block" id="bloc-2">
+        <hr class="sep">
+        <div class="lecon-subtitle">③ Formes irrégulières à mémoriser</div>
+        <p class="analogie">Le subjonctif a ses rebelles — des verbes qui refusent la règle générale. Être, avoir, aller, faire sont les plus fréquents. Il faut les apprendre par cœur.</p>
+        <table class="tableau">
+          <tr><th>Verbe</th><th>que je</th><th>que tu</th><th>qu'il/elle</th><th>que nous</th><th>que vous</th><th>qu'ils/elles</th></tr>
+          <tr><td><strong>être</strong></td><td>sois</td><td>sois</td><td>soit</td><td>soyons</td><td>soyez</td><td>soient</td></tr>
+          <tr><td><strong>avoir</strong></td><td>aie</td><td>aies</td><td>ait</td><td>ayons</td><td>ayez</td><td>aient</td></tr>
+          <tr><td><strong>aller</strong></td><td>aille</td><td>ailles</td><td>aille</td><td>allions</td><td>alliez</td><td>aillent</td></tr>
+          <tr><td><strong>faire</strong></td><td>fasse</td><td>fasses</td><td>fasse</td><td>fassions</td><td>fassiez</td><td>fassent</td></tr>
+        </table>
+        <button class="btn-compris" onclick="startExercises()">✓ Leçon comprise — Aux exercices</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase" id="phase-ex1">
+    <div class="mascot-msg"><span class="emo">🦉</span><p>Entraînement 1 — Reconnaître si le subjonctif est requis ou non. Attention au piège penser/croire.</p></div>
+    <div class="ex-num">Entraînement 1 / 2 — Reconnaître</div>
+    <div class="ex-header"><h2>Subjonctif ou indicatif ?</h2><p>Sélectionne la bonne réponse.</p></div>
+    <div id="qcm1-container"></div>
+    <button class="btn-suivant" id="btn-to-ex2" onclick="goToPhase('ex2',2)">Entraînement 2 →</button>
+  </div>
+
+  <div class="phase" id="phase-ex2">
+    <div class="mascot-msg"><span class="emo">🦉</span><p>Entraînement 2 — La construction impose-t-elle le subjonctif ou l'indicatif ?</p></div>
+    <div class="ex-num">Entraînement 2 / 2 — Classer</div>
+    <div class="ex-header"><h2>Quel mode ?</h2><p>Clique sur Subjonctif ou Indicatif.</p></div>
+
+    <div class="classify-block" id="cl-0">
+      <div class="classify-phrase">« Il est indispensable que tu _____ (prendre) une décision rapidement. »</div>
+      <div class="classify-btns">
+        <button class="classify-btn subj-btn" data-idx="0" data-type="subj" data-correct="subj" onclick="classifyAnswer(this)">Subjonctif</button>
+        <button class="classify-btn ind-btn" data-idx="0" data-type="ind" data-correct="subj" onclick="classifyAnswer(this)">Indicatif</button>
+      </div>
+      <div class="classify-feedback" id="clf-0"></div>
+    </div>
+
+    <div class="classify-block" id="cl-1">
+      <div class="classify-phrase">« Je pense qu'il _____ (avoir) raison sur ce point. »</div>
+      <div class="classify-btns">
+        <button class="classify-btn subj-btn" data-idx="1" data-type="subj" data-correct="ind" onclick="classifyAnswer(this)">Subjonctif</button>
+        <button class="classify-btn ind-btn" data-idx="1" data-type="ind" data-correct="ind" onclick="classifyAnswer(this)">Indicatif</button>
+      </div>
+      <div class="classify-feedback" id="clf-1"></div>
+    </div>
+
+    <div class="classify-block" id="cl-2">
+      <div class="classify-phrase">« Bien qu'il _____ (faire) froid, elle est sortie sans manteau. »</div>
+      <div class="classify-btns">
+        <button class="classify-btn subj-btn" data-idx="2" data-type="subj" data-correct="subj" onclick="classifyAnswer(this)">Subjonctif</button>
+        <button class="classify-btn ind-btn" data-idx="2" data-type="ind" data-correct="subj" onclick="classifyAnswer(this)">Indicatif</button>
+      </div>
+      <div class="classify-feedback" id="clf-2"></div>
+    </div>
+
+    <div class="classify-block" id="cl-3">
+      <div class="classify-phrase">« Je ne crois pas qu'il _____ (être) sincère. »</div>
+      <div class="classify-btns">
+        <button class="classify-btn subj-btn" data-idx="3" data-type="subj" data-correct="subj" onclick="classifyAnswer(this)">Subjonctif</button>
+        <button class="classify-btn ind-btn" data-idx="3" data-type="ind" data-correct="subj" onclick="classifyAnswer(this)">Indicatif</button>
+      </div>
+      <div class="classify-feedback" id="clf-3"></div>
+    </div>
+
+    <button class="btn-suivant" id="btn-to-drag1" onclick="goToPhase('drag1',3)">Exercice 1 →</button>
+  </div>
+
+  <div class="phase" id="phase-drag1">
+    <div class="mascot-msg"><span class="emo">🦉</span><p>Exercice 1 — La forme du subjonctif est incorrecte. Sélectionne la forme juste.</p></div>
+    <div class="ex-num">Exercice 1 / 4 — Détection d'erreur</div>
+    <div class="ex-header"><h2>Corriger la forme</h2><p>La forme soulignée est incorrecte au subjonctif. Clique sur la bonne.</p></div>
+
+    <div class="erreur-block" id="err-0" data-correct="sois">
+      <div class="erreur-label">⚠ Phrase avec erreur :</div>
+      <div class="erreur-phrase">« Il faut que tu <u>es</u> prudent. »</div>
+      <div class="erreur-choix" id="errch-0"></div>
+      <div class="erreur-feedback" id="err-fb-0"></div>
+    </div>
+
+    <div class="erreur-block" id="err-1" data-correct="fasse">
+      <div class="erreur-label">⚠ Phrase avec erreur :</div>
+      <div class="erreur-phrase">« Je souhaite qu'il <u>fait</u> attention. »</div>
+      <div class="erreur-choix" id="errch-1"></div>
+      <div class="erreur-feedback" id="err-fb-1"></div>
+    </div>
+
+    <div class="erreur-block" id="err-2" data-correct="aille">
+      <div class="erreur-label">⚠ Phrase avec erreur :</div>
+      <div class="erreur-phrase">« Il est possible qu'elle <u>va</u> au marché ce matin. »</div>
+      <div class="erreur-choix" id="errch-2"></div>
+      <div class="erreur-feedback" id="err-fb-2"></div>
+    </div>
+
+    <div class="erreur-block" id="err-3" data-correct="finisse">
+      <div class="erreur-label">⚠ Phrase avec erreur :</div>
+      <div class="erreur-phrase">« Bien qu'il <u>finit</u> tard, il prend toujours le temps de relire. »</div>
+      <div class="erreur-choix" id="errch-3"></div>
+      <div class="erreur-feedback" id="err-fb-3"></div>
+    </div>
+
+    <button class="btn-suivant" id="btn-to-drag2" onclick="goToPhase('drag2',4)">Exercice 2 →</button>
+  </div>
+
+  <div class="phase" id="phase-drag2">
+    <div class="mascot-msg"><span class="emo">🦉</span><p>Exercice 2 — Conjugue le verbe au subjonctif présent selon la construction.</p></div>
+    <div class="ex-num">Exercice 2 / 4 — Compléter</div>
+    <div class="ex-header"><h2>Conjuguer au subjonctif</h2><p>Écris la forme correcte au subjonctif présent.</p></div>
+    <div class="saisie-block">
+      <div class="saisie-consigne">Attention aux verbes irréguliers : être, avoir, aller, faire.</div>
+      <div class="saisie-rows">
+        <div class="saisie-row">
+          <span class="saisie-phrase">Il faut qu'il _____ là demain. <em>(être)</em></span>
+          <input class="saisie-input" id="si-0" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false">
+        </div>
+        <div class="saisie-row">
+          <span class="saisie-phrase">Je veux que tu _____ de la patience. <em>(avoir)</em></span>
+          <input class="saisie-input" id="si-1" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false">
+        </div>
+        <div class="saisie-row">
+          <span class="saisie-phrase">Pour que nous _____ à l'heure, il faut partir maintenant. <em>(arriver)</em></span>
+          <input class="saisie-input" id="si-2" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false">
+        </div>
+        <div class="saisie-row">
+          <span class="saisie-phrase">Bien qu'ils _____ des efforts, les résultats restent insuffisants. <em>(faire)</em></span>
+          <input class="saisie-input" id="si-3" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false">
+        </div>
+        <div class="saisie-row">
+          <span class="saisie-phrase">Il est possible que vous _____ en retard. <em>(aller)</em></span>
+          <input class="saisie-input" id="si-4" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false">
+        </div>
+      </div>
+      <button class="btn-verif-saisie" id="btn-vs" onclick="verifySaisie()">✓ Vérifier</button>
+      <div class="saisie-feedback" id="saisie-fb"></div>
+    </div>
+    <button class="btn-suivant" id="btn-to-classify" onclick="goToPhase('classify',5)">Exercice 3 →</button>
+  </div>
+
+  <div class="phase" id="phase-classify">
+    <div class="mascot-msg"><span class="emo">🦉</span><p>Exercice 3 — Conjugue chaque verbe au subjonctif présent à toutes les personnes.</p></div>
+    <div class="ex-num">Exercice 3 / 4 — Tableau de conjugaison</div>
+    <div class="ex-header"><h2>Subjonctif présent</h2><p>Complète chaque tableau — formes régulières et irrégulières.</p></div>
+
+    <div class="saisie-block">
+      <div style="font-weight:700;font-size:.88rem;color:var(--acc);margin-bottom:12px;background:var(--acc-pale);border-radius:6px;padding:8px 12px;text-transform:uppercase;letter-spacing:.04em;">ÊTRE — subjonctif présent (irrégulier)</div>
+      <div class="saisie-rows">
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">que je</span><input class="saisie-input" id="ct-0-0" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">que tu</span><input class="saisie-input" id="ct-0-1" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">qu'il / elle</span><input class="saisie-input" id="ct-0-2" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">que nous</span><input class="saisie-input" id="ct-0-3" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">que vous</span><input class="saisie-input" id="ct-0-4" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">qu'ils / elles</span><input class="saisie-input" id="ct-0-5" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+      </div>
+      <button class="btn-verif-saisie" id="btn-ct-0" onclick="verifyConjTab(0)" style="margin-top:12px;">✓ Vérifier</button>
+      <div class="saisie-feedback" id="ctfb-0"></div>
+    </div>
+
+    <div class="saisie-block">
+      <div style="font-weight:700;font-size:.88rem;color:var(--acc);margin-bottom:12px;background:var(--acc-pale);border-radius:6px;padding:8px 12px;text-transform:uppercase;letter-spacing:.04em;">AVOIR — subjonctif présent (irrégulier)</div>
+      <div class="saisie-rows">
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">que j'</span><input class="saisie-input" id="ct-1-0" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">que tu</span><input class="saisie-input" id="ct-1-1" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">qu'il / elle</span><input class="saisie-input" id="ct-1-2" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">que nous</span><input class="saisie-input" id="ct-1-3" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">que vous</span><input class="saisie-input" id="ct-1-4" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">qu'ils / elles</span><input class="saisie-input" id="ct-1-5" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+      </div>
+      <button class="btn-verif-saisie" id="btn-ct-1" onclick="verifyConjTab(1)" style="margin-top:12px;">✓ Vérifier</button>
+      <div class="saisie-feedback" id="ctfb-1"></div>
+    </div>
+
+    <div class="saisie-block">
+      <div style="font-weight:700;font-size:.88rem;color:var(--acc);margin-bottom:12px;background:var(--acc-pale);border-radius:6px;padding:8px 12px;text-transform:uppercase;letter-spacing:.04em;">FINIR — subjonctif présent (2e groupe, régulier)</div>
+      <div class="saisie-rows">
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">que je</span><input class="saisie-input" id="ct-2-0" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">que tu</span><input class="saisie-input" id="ct-2-1" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">qu'il / elle</span><input class="saisie-input" id="ct-2-2" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">que nous</span><input class="saisie-input" id="ct-2-3" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">que vous</span><input class="saisie-input" id="ct-2-4" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">qu'ils / elles</span><input class="saisie-input" id="ct-2-5" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+      </div>
+      <button class="btn-verif-saisie" id="btn-ct-2" onclick="verifyConjTab(2)" style="margin-top:12px;">✓ Vérifier</button>
+      <div class="saisie-feedback" id="ctfb-2"></div>
+    </div>
+
+    <div class="saisie-block">
+      <div style="font-weight:700;font-size:.88rem;color:var(--acc);margin-bottom:12px;background:var(--acc-pale);border-radius:6px;padding:8px 12px;text-transform:uppercase;letter-spacing:.04em;">ALLER — subjonctif présent (irrégulier)</div>
+      <div class="saisie-rows">
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">que j'</span><input class="saisie-input" id="ct-3-0" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">que tu</span><input class="saisie-input" id="ct-3-1" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">qu'il / elle</span><input class="saisie-input" id="ct-3-2" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">que nous</span><input class="saisie-input" id="ct-3-3" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">que vous</span><input class="saisie-input" id="ct-3-4" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">qu'ils / elles</span><input class="saisie-input" id="ct-3-5" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+      </div>
+      <button class="btn-verif-saisie" id="btn-ct-3" onclick="verifyConjTab(3)" style="margin-top:12px;">✓ Vérifier</button>
+      <div class="saisie-feedback" id="ctfb-3"></div>
+    </div>
+
+    <button class="btn-suivant" id="btn-to-conjtable" onclick="goToPhase('conjtable',6)">Exercice 4 →</button>
+  </div>
+
+  <div class="phase" id="phase-conjtable">
+    <div class="mascot-msg"><span class="emo">🦉</span><p>Exercice 4 — Une phrase emploie correctement le subjonctif, l'autre non. Clique sur la bonne.</p></div>
+    <div class="ex-num">Exercice 4 / 4 — Jugement</div>
+    <div class="ex-header"><h2>Laquelle est correcte ?</h2><p>Clique directement sur la phrase juste.</p></div>
+    <div id="jugement-container"></div>
+    <button class="btn-suivant" id="btn-to-bilan" onclick="goToPhase('bilan',7)">🌟 Voir mon bilan</button>
+  </div>
+
+  <div class="phase" id="phase-bilan">
+    <div class="bilan-card">
+      <span class="bilan-icon">🌀</span>
+      <h2 class="bilan-title" id="bilan-title">Résultat</h2>
+      <p class="bilan-msg" id="bilan-msg"></p>
+      <div class="stars-row"><span class="star-big" id="star1">⭐</span><span class="star-big" id="star2">⭐</span><span class="star-big" id="star3">⭐</span></div>
+      <div class="score-circle"><span class="score-num" id="bilan-score">0</span><span class="score-sub" id="bilan-total">/ ? pts</span></div>
+      <div class="memo-card">
+        <h3>Mémo — Le subjonctif</h3>
+        <div class="memo-grid">
+          <div class="memo-item"><strong>Déclencheurs</strong><br>il faut que, vouloir que, bien que, pour que, craindre que</div>
+          <div class="memo-item"><strong>Piège penser/croire</strong><br>affirmatif → indicatif<br>négatif/interrogatif → subjonctif</div>
+          <div class="memo-item"><strong>Être</strong><br>sois, sois, soit, soyons, soyez, soient</div>
+          <div class="memo-item"><strong>Avoir</strong><br>aie, aies, ait, ayons, ayez, aient</div>
+        </div>
+      </div>
+      <div class="bilan-btns">
+        <button class="btn-act secondary" onclick="location.reload()">↺ Recommencer</button>
+        <button class="btn-act primary" onclick="location.href='../12-15ans.html'">← Retour aux fiches</button>
+      </div>
+    </div>
+  </div>
+</main>
+<script>
+var classifyExpls = {
+  "0": "Subjonctif : 'il est indispensable que' est une expression impersonnelle de nécessité → subjonctif obligatoire. Forme correcte : 'prennes'.",
+  "1": "Indicatif : 'penser que' à la forme affirmative → indicatif. On dit 'je pense qu'il a raison' (indicatif). À la forme négative seulement → subjonctif.",
+  "2": "Subjonctif : 'bien que' est une conjonction de concession → subjonctif obligatoire. Forme correcte : 'fasse'.",
+  "3": "Subjonctif : 'ne pas croire que' à la forme négative → subjonctif. Forme correcte : 'soit'."
+};
+
+var erreurExpls = {
+  "0": "'être' au subjonctif est irrégulier : que je sois, que tu sois, qu'il soit… 'es' est l'indicatif présent — incorrect ici.",
+  "1": "'faire' au subjonctif est irrégulier : que je fasse, que tu fasses, qu'il fasse… 'fait' est l'indicatif présent — incorrect ici.",
+  "2": "'aller' au subjonctif est irrégulier : que j'aille, que tu ailles, qu'il/elle aille… 'va' est l'indicatif présent — incorrect ici.",
+  "3": "'finir' au subjonctif suit la règle générale : radical 'finiss-' + terminaisons. 'finisse' est correct. 'finit' est l'indicatif présent."
+};
+
+var erreurChoix = [
+  ["sois","soit","soient","soyez"],
+  ["fasse","fasses","fassent","fassiez"],
+  ["aille","ailles","aillent","allions"],
+  ["finisse","finisses","finissent","finissions"]
+];
+
+var saisieAnswers = [
+  ["soit"],["aies"],["arrivions"],["fassent"],["alliez"]
+];
+
+var conjTabData = [
+  { answers: [["sois"],["sois"],["soit"],["soyons"],["soyez"],["soient"]] },
+  { answers: [["aie"],["aies"],["ait"],["ayons"],["ayez"],["aient"]] },
+  { answers: [["finisse"],["finisses"],["finisse"],["finissions"],["finissiez"],["finissent"]] },
+  { answers: [["aille"],["ailles"],["aille"],["allions"],["alliez"],["aillent"]] }
+];
+
+var jugementData = [
+  {
+    phraseA: "Il faut que tu sois à l'heure demain.",
+    phraseB: "Il faut que tu es à l'heure demain.",
+    correct: "A",
+    expl: "'Il faut que' impose le subjonctif. 'sois' est la forme correcte du subjonctif de 'être'. 'es' est l'indicatif présent — incorrect après 'il faut que'."
+  },
+  {
+    phraseA: "Je pense qu'il vient ce soir.",
+    phraseB: "Je pense qu'il vienne ce soir.",
+    correct: "A",
+    expl: "'Penser que' à la forme affirmative → indicatif. 'vient' (indicatif présent) est correct. 'vienne' (subjonctif) serait réservé à 'je ne pense pas que'."
+  },
+  {
+    phraseA: "Bien qu'elle soit fatiguée, elle continue à travailler.",
+    phraseB: "Bien qu'elle est fatiguée, elle continue à travailler.",
+    correct: "A",
+    expl: "'Bien que' est une conjonction de concession → subjonctif obligatoire. 'soit' est le subjonctif de 'être'. 'est' (indicatif) est incorrect après 'bien que'."
+  }
+];
+
+var QCM1 = [
+  {
+    sentence: "Après quelle expression le subjonctif est-il TOUJOURS requis ?",
+    options: ["Je pense que","Il est certain que","Il faut que","Je sais que"],
+    answer: "Il faut que",
+    expl: "'Il faut que' est une expression impersonnelle de nécessité → subjonctif obligatoire. Les autres expressions ('je pense', 'il est certain', 'je sais') → indicatif à la forme affirmative."
+  },
+  {
+    sentence: "Laquelle est la forme correcte du subjonctif de 'avoir' à la 3e personne du singulier ?",
+    options: ["a","avait","ait","aura"],
+    answer: "ait",
+    expl: "'Avoir' au subjonctif est irrégulier : que j'aie, que tu aies, qu'il/elle ait, que nous ayons, que vous ayez, qu'ils/elles aient."
+  },
+  {
+    sentence: "Dans « Je ne crois pas qu'il ___ raison », quel temps convient ?",
+    options: ["a (indicatif présent)","ait (subjonctif)","avait (imparfait)","aura (futur)"],
+    answer: "ait (subjonctif)",
+    expl: "'Ne pas croire que' à la forme négative → subjonctif. 'ait' est la forme correcte du subjonctif de 'avoir'. À la forme affirmative 'je crois que', on utiliserait l'indicatif 'a'."
+  }
+];
+
+var score=0,TOTAL_PTS=0,qcm1Done=0,classifyDone=0,erreurDone=0,saisieDone=false,conjTabDone={},conjTabVerified=0,jugementDone=0;
+var NB_QCM=3,NB_CLASSIFY=4,NB_ERREUR=4,NB_SAISIE=5,NB_CONJTAB=24,NB_JUGEMENT=3;
+TOTAL_PTS=NB_QCM+NB_CLASSIFY+NB_ERREUR+NB_SAISIE+NB_CONJTAB+NB_JUGEMENT; // 43
+var jugementSelected=[null,null,null];
+
+function nsConj(s){return(s||'').toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,' ');}
+function shuffle(arr){var a=arr.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+
+function revealBloc(n){
+  var bloc=document.getElementById('bloc-'+n);if(!bloc)return;
+  var prev=document.getElementById('bloc-'+(n-1));
+  if(prev){var b=prev.querySelector('.btn-compris');if(b){b.textContent='✓ Compris';b.disabled=true;b.style.opacity='.4';}}
+  bloc.classList.add('revealed');
+  setTimeout(function(){var hH=(document.querySelector('.header')||{offsetHeight:0}).offsetHeight;var rect=bloc.getBoundingClientRect();window.scrollTo({top:window.pageYOffset+rect.top-hH-20,behavior:'smooth'});},150);
+}
+
+function startExercises(){
+  erreurChoix.forEach(function(opts,idx){
+    var c=document.getElementById('errch-'+idx);if(!c)return;
+    c.style.cssText='display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;';
+    shuffle(opts).forEach(function(w){
+      var btn=document.createElement('button');btn.className='classify-btn ind-btn';
+      btn.dataset.choice=w;btn.textContent=w;
+      btn.onclick=function(){verifyErreur(idx,this);};
+      c.appendChild(btn);
+    });
+  });
+  document.getElementById('bilan-total').textContent='/ '+TOTAL_PTS+' pts';
+  goToPhase('ex1',1);buildQCM('qcm1-container',QCM1,1);
+}
+
+function goToPhase(phase,stepIdx){
+  document.querySelectorAll('.phase').forEach(function(p){p.classList.remove('active');});
+  var el=document.getElementById('phase-'+phase);
+  if(el){el.classList.add('active');setTimeout(function(){el.scrollIntoView({behavior:'smooth',block:'start'});},100);}
+  updateSteps(stepIdx);
+  if(phase==='conjtable')buildJugement();
+  if(phase==='bilan')showBilan();
+}
+
+function updateSteps(active){for(var i=0;i<8;i++){var s=document.getElementById('step-'+i);if(!s)continue;s.classList.remove('active','done');if(i<active)s.classList.add('done');else if(i===active)s.classList.add('active');}}
+
+function buildQCM(cId,data,exNum){
+  var c=document.getElementById(cId);c.innerHTML='';
+  data.forEach(function(q,qi){
+    var div=document.createElement('div');div.className='qcm-question';div.id='qq-'+exNum+'-'+qi;
+    var opts=shuffle(q.options);
+    var optHtml=opts.map(function(opt){return '<button class="qcm-opt" data-exnum="'+exNum+'" data-qi="'+qi+'" data-opt="'+encodeURIComponent(opt)+'" data-ans="'+encodeURIComponent(q.answer)+'" onclick="handleQCM(this)">'+opt+'</button>';}).join('');
+    div.innerHTML='<div class="qcm-sentence">'+q.sentence+'</div><div class="qcm-options">'+optHtml+'</div><div class="qcm-feedback" id="qf-'+exNum+'-'+qi+'"></div>';
+    c.appendChild(div);
+  });
+}
+
+function handleQCM(btn){
+  var exNum=parseInt(btn.dataset.exnum),qi=parseInt(btn.dataset.qi);
+  var chosen=decodeURIComponent(btn.dataset.opt),correct=decodeURIComponent(btn.dataset.ans);
+  var qDiv=document.getElementById('qq-'+exNum+'-'+qi);
+  if(qDiv.classList.contains('answered'))return;
+  qDiv.classList.add('answered');
+  var opts=qDiv.querySelectorAll('.qcm-opt'),fb=document.getElementById('qf-'+exNum+'-'+qi);
+  if(chosen===correct){btn.classList.add('correct');fb.className='qcm-feedback show ok';fb.innerHTML='✓ Correct. '+QCM1[qi].expl;score++;document.getElementById('score-display').textContent=score;}
+  else{btn.classList.add('wrong');opts.forEach(function(o){if(decodeURIComponent(o.dataset.opt)===correct)o.classList.add('reveal');});fb.className='qcm-feedback show ko';fb.innerHTML='✗ '+QCM1[qi].expl;}
+  qcm1Done++;
+  if(qcm1Done>=NB_QCM){setTimeout(function(){var nb=document.getElementById('btn-to-ex2');if(nb){nb.classList.add('show');nb.scrollIntoView({behavior:'smooth',block:'nearest'});}},500);}
+}
+
+function classifyAnswer(btn){
+  var idx=parseInt(btn.dataset.idx),chosen=btn.dataset.type,correct=btn.dataset.correct;
+  var block=document.getElementById('cl-'+idx),fb=document.getElementById('clf-'+idx);
+  if(block.classList.contains('answered'))return;
+  block.classList.add('answered');classifyDone++;
+  if(chosen===correct){btn.classList.add('sel-ok');fb.className='classify-feedback show ok';fb.innerHTML='✓ '+classifyExpls[String(idx)];score++;document.getElementById('score-display').textContent=score;}
+  else{btn.classList.add('sel-ko');block.querySelectorAll('.classify-btn').forEach(function(b){if(b.dataset.type===correct)b.classList.add('rev-ok');});fb.className='classify-feedback show ko';fb.innerHTML='✗ '+classifyExpls[String(idx)];}
+  if(classifyDone>=4){setTimeout(function(){var nb=document.getElementById('btn-to-drag1');nb.classList.add('show');nb.scrollIntoView({behavior:'smooth',block:'nearest'});},500);}
+}
+
+function verifyErreur(idx,btn){
+  var block=document.getElementById('err-'+idx);if(block.classList.contains('answered'))return;
+  block.classList.add('answered');
+  var chosen=btn.dataset.choice,correct=block.dataset.correct,fb=document.getElementById('err-fb-'+idx);
+  block.querySelectorAll('button').forEach(function(b){b.style.pointerEvents='none';});
+  if(chosen===correct){btn.classList.add('sel-ok');score++;document.getElementById('score-display').textContent=score;fb.className='erreur-feedback show ok';fb.innerHTML='✓ Correct — <strong>'+correct+'</strong>. '+erreurExpls[String(idx)];}
+  else{btn.classList.add('sel-ko');block.querySelectorAll('button').forEach(function(b){if(b.dataset.choice===correct)b.classList.add('rev-ok');});fb.className='erreur-feedback show ko';fb.innerHTML='✗ La forme correcte était <strong>'+correct+'</strong>. '+erreurExpls[String(idx)];}
+  erreurDone++;
+  if(erreurDone>=4){setTimeout(function(){var nb=document.getElementById('btn-to-drag2');nb.classList.add('show');nb.scrollIntoView({behavior:'smooth',block:'nearest'});},600);}
+}
+
+function verifySaisie(){
+  if(saisieDone)return;saisieDone=true;var nbOk=0;
+  saisieAnswers.forEach(function(accepted,i){
+    var inp=document.getElementById('si-'+i);inp.readOnly=true;
+    var ok=accepted.some(function(a){return nsConj(inp.value)===nsConj(a);});
+    if(ok){inp.classList.add('correct');nbOk++;score++;document.getElementById('score-display').textContent=score;}
+    else{inp.classList.add('wrong');var original=inp.value;inp.value=(original?original+' ':'')+'\u2192 '+accepted[0];inp.style.fontSize='.78rem';}
+  });
+  document.getElementById('btn-vs').disabled=true;
+  var fb=document.getElementById('saisie-fb');
+  fb.className='saisie-feedback show '+(nbOk===NB_SAISIE?'ok':'ko');
+  fb.innerHTML=nbOk===NB_SAISIE?'✓ Parfait — '+NB_SAISIE+'/'+NB_SAISIE:'✗ '+nbOk+'/'+NB_SAISIE+' — corrections en rouge.';
+  setTimeout(function(){var nb=document.getElementById('btn-to-classify');nb.classList.add('show');nb.scrollIntoView({behavior:'smooth',block:'nearest'});},700);
+}
+
+function verifyConjTab(ti){
+  if(conjTabDone[ti])return;conjTabDone[ti]=true;
+  var data=conjTabData[ti],nbOk=0;
+  data.answers.forEach(function(accepted,row){
+    var inp=document.getElementById('ct-'+ti+'-'+row);if(!inp)return;
+    inp.readOnly=true;
+    var ok=accepted.some(function(a){return nsConj(inp.value)===nsConj(a);});
+    if(ok){inp.classList.add('correct');nbOk++;score++;document.getElementById('score-display').textContent=score;}
+    else{inp.classList.add('wrong');var original=inp.value;inp.value=(original?original+' ':'')+'\u2192 '+accepted[0];inp.style.fontSize='.78rem';}
+  });
+  var btn=document.getElementById('btn-ct-'+ti);if(btn)btn.disabled=true;
+  var fb=document.getElementById('ctfb-'+ti);
+  fb.className='saisie-feedback show '+(nbOk===6?'ok':'ko');
+  fb.innerHTML=nbOk===6?'✓ Parfait — 6/6':'✗ '+nbOk+'/6 — corrections en rouge.';
+  conjTabVerified++;
+  if(conjTabVerified>=4){setTimeout(function(){var nb=document.getElementById('btn-to-conjtable');nb.classList.add('show');nb.scrollIntoView({behavior:'smooth',block:'nearest'});},600);}
+}
+
+function buildJugement(){
+  var c=document.getElementById('jugement-container');c.innerHTML='';
+  jugementData.forEach(function(item,ji){
+    jugementSelected[ji]=null;
+    var div=document.createElement('div');div.className='jugement-block';div.id='jug-'+ji;
+    div.innerHTML='<div class="jugement-options">'
+      +'<div class="jugement-opt" id="jopt-'+ji+'-A" onclick="verifyJugement('+ji+',\'A\')"><strong>A \u2014</strong> '+item.phraseA+'</div>'
+      +'<div class="jugement-opt" id="jopt-'+ji+'-B" onclick="verifyJugement('+ji+',\'B\')"><strong>B \u2014</strong> '+item.phraseB+'</div>'
+      +'</div><div class="jugement-feedback" id="jfb-'+ji+'"></div>';
+    c.appendChild(div);
+  });
+}
+
+function verifyJugement(ji,choice){
+  var block=document.getElementById('jug-'+ji);if(block.classList.contains('answered'))return;
+  block.classList.add('answered');
+  var correct=jugementData[ji].correct,fb=document.getElementById('jfb-'+ji);
+  document.getElementById('jopt-'+ji+'-'+correct).classList.add('correct-choice');
+  if(choice!==correct)document.getElementById('jopt-'+ji+'-'+choice).classList.add('wrong-choice');
+  if(choice===correct){score++;document.getElementById('score-display').textContent=score;fb.className='jugement-feedback show ok';fb.innerHTML='✓ Correct. '+jugementData[ji].expl;}
+  else{fb.className='jugement-feedback show ko';fb.innerHTML='✗ '+jugementData[ji].expl;}
+  jugementDone++;
+  if(jugementDone>=NB_JUGEMENT){setTimeout(function(){var nb=document.getElementById('btn-to-bilan');nb.classList.add('show');nb.scrollIntoView({behavior:'smooth',block:'nearest'});},600);}
+}
+
+function showBilan(){
+  document.getElementById('bilan-score').textContent=score;
+  document.getElementById('bilan-total').textContent='/ '+TOTAL_PTS+' pts';
+  var pct=score/TOTAL_PTS;
+  var title,msg;
+  if(pct>=0.89){title='Excellent';msg="Maîtrise complète du subjonctif. Tu identifies les déclencheurs, formes les irréguliers et évites le piège penser/croire.";}
+  else if(pct>=0.65){title='Satisfaisant';msg="Bonne compréhension globale. Revois les formes irrégulières (être, avoir, aller) et le piège penser que / ne pas penser que.";}
+  else{title='À consolider';msg="Relis la liste des déclencheurs et le tableau des formes irrégulières. Être et avoir au subjonctif sont à mémoriser absolument.";}
+  document.getElementById('bilan-title').textContent=title;
+  document.getElementById('bilan-msg').textContent=msg;
+  var seuils=[Math.ceil(TOTAL_PTS*.33),Math.ceil(TOTAL_PTS*.66),Math.ceil(TOTAL_PTS*.89)];
+  ['star1','star2','star3'].forEach(function(id,i){
+    var el=document.getElementById(id);
+    if(score>=seuils[i]){(function(e,d){setTimeout(function(){e.classList.add('earned');},d);})(el,300+i*400);}
+    else el.style.filter='grayscale(1)';
+  });
+  if(pct>=0.65)lanceConfetti();
+}
+
+function lanceConfetti(){
+  var cols=['#9a3412','#fdba74','#059669','#d97706','#6b21a8'];
+  for(var i=0;i<50;i++){
+    var el=document.createElement('div');el.className='confetti-piece';
+    el.style.cssText='left:'+Math.random()*100+'vw;background:'+cols[Math.floor(Math.random()*5)]+';animation-duration:'+(1.5+Math.random()*2)+'s;animation-delay:'+Math.random()*1.2+'s;width:'+(6+Math.random()*7)+'px;height:'+(6+Math.random()*7)+'px;border-radius:'+(Math.random()>.5?'50%':'2px')+';';
+    document.body.appendChild(el);setTimeout(function(){if(el.parentNode)el.remove();},4000);
+  }
+}
+</script>
+</body>
+</html>

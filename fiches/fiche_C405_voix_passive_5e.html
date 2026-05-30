@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>C405 — La voix passive | L'Atelier du Devoir</title>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --acc:#155e75;--acc-pale:#ecfeff;--acc-mid:#67e8f9;
+  --mint:#059669;--mint-pale:#d1fae5;--mint-deep:#047857;
+  --coral:#dc2626;--coral-pale:#fee2e2;
+  --sky:#0369a1;--sky-pale:#e0f2fe;
+  --yellow:#d97706;--yellow-pale:#fef3c7;
+  --text:#1e293b;--text-light:#64748b;
+  --radius:12px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Lato',sans-serif;background:#ecfeff;color:var(--text);font-size:16px;line-height:1.65;}
+.print-bar{position:fixed;right:16px;top:50%;transform:translateY(-50%);z-index:200;display:flex;flex-direction:column;gap:8px;}
+.print-btn{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:8px;font-family:'Lato',sans-serif;font-weight:700;font-size:.78rem;border:none;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.15);}
+.print-btn-lecon{background:#d97706;color:white;}.print-btn-eval{background:#dc2626;color:white;}
+@media(max-width:600px){.print-bar{right:6px;}.print-btn{font-size:0;width:40px;height:40px;padding:0;justify-content:center;}.print-btn span.lbl{display:none;}.print-btn span.ico{font-size:1.1rem;}}
+.header{background:white;border-bottom:2px solid var(--acc-pale);position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.06);}
+.header-top{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;}
+.logo{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--acc);text-decoration:none;}
+.score-badge{background:var(--acc);color:white;font-weight:700;font-size:.85rem;padding:5px 14px;border-radius:6px;display:flex;align-items:center;gap:5px;}
+.steps-wrap{padding:0 20px 8px;}
+.steps{display:flex;gap:3px;}
+.step{flex:1;height:5px;border-radius:4px;background:var(--acc-pale);transition:all .35s;}
+.step.done{background:var(--mint);}.step.active{background:var(--acc);}
+.steps-labels{display:flex;gap:3px;padding-top:3px;}
+.step-lbl{flex:1;font-size:.5rem;font-weight:700;color:var(--text-light);text-align:center;text-transform:uppercase;letter-spacing:.04em;}
+.main{max-width:760px;margin:0 auto;padding:28px 16px 100px;}
+.phase{display:none;}.phase.active{display:block;}
+.accroche{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:22px 24px;margin-bottom:22px;display:flex;gap:16px;align-items:flex-start;}
+.accroche-icon{font-size:2.4rem;flex-shrink:0;margin-top:2px;}
+.accroche-text h1{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--acc);margin-bottom:6px;}
+.accroche-text p{color:var(--text-light);font-size:.92rem;line-height:1.5;}
+.meta-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+.meta-tag{background:var(--acc-pale);border-radius:4px;padding:3px 10px;font-size:.72rem;font-weight:700;color:var(--acc);text-transform:uppercase;letter-spacing:.04em;}
+.lecon-card{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:22px;margin-bottom:18px;}
+.lecon-card h2{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--acc);margin-bottom:14px;border-bottom:2px solid var(--acc-pale);padding-bottom:8px;}
+.lecon-block{display:none;}.lecon-block.revealed{display:block;}
+.lecon-subtitle{font-weight:900;font-size:1rem;color:var(--acc);margin-bottom:10px;margin-top:6px;}
+.sep{margin:18px 0;border:none;border-top:1px solid var(--acc-pale);}
+.analogie{font-size:.92rem;color:var(--text-light);font-style:italic;margin-bottom:12px;line-height:1.6;}
+.def-box{border-left:4px solid var(--acc);background:var(--acc-pale);border-radius:0 var(--radius) var(--radius) 0;padding:14px 16px;margin-bottom:12px;}
+.def-box h4{font-weight:900;color:var(--acc);font-size:.9rem;margin-bottom:6px;}
+.def-box p{font-size:.88rem;color:var(--text);line-height:1.55;}
+.compare-box{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0;}
+@media(max-width:480px){.compare-box{grid-template-columns:1fr;}}
+.compare-item{border-radius:8px;padding:12px 14px;font-size:.88rem;line-height:1.6;}
+.compare-item.actif{background:#fef3c7;border-left:4px solid #d97706;}
+.compare-item.passif{background:var(--acc-pale);border-left:4px solid var(--acc);}
+.compare-item h5{font-weight:900;font-size:.78rem;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;}
+.compare-item.actif h5{color:#92400e;}
+.compare-item.passif h5{color:var(--acc);}
+.phrase-ex{background:white;border:1px solid #e2e8f0;border-radius:8px;padding:9px 14px;font-size:.9rem;margin-bottom:6px;line-height:1.7;}
+.hl-a{background:#fef3c7;color:#92400e;border-radius:4px;padding:1px 6px;font-weight:700;margin:0 2px;}
+.hl-p{background:var(--acc-pale);color:var(--acc);border-radius:4px;padding:1px 6px;font-weight:700;margin:0 2px;}
+.tableau{width:100%;border-collapse:collapse;margin:10px 0;font-size:.85rem;}
+.tableau th{padding:8px 10px;text-align:left;font-weight:700;background:var(--acc);color:white;}
+.tableau td{padding:7px 10px;border:1px solid #e2e8f0;}
+.tableau tr:nth-child(even) td{background:var(--acc-pale);}
+.astuce{background:#fefce8;border:1px solid #fde68a;border-radius:8px;padding:11px 14px;font-size:.85rem;margin-top:8px;color:#78350f;}
+.astuce strong{color:#92400e;}
+.piege{background:#fff1f2;border:1px solid #fecdd3;border-radius:8px;padding:11px 14px;font-size:.85rem;margin-top:8px;color:#9f1239;}
+.piege strong{color:#be123c;}
+.btn-compris{margin-top:18px;padding:11px 26px;border-radius:8px;font-family:'Lato',sans-serif;font-weight:700;font-size:.9rem;background:var(--acc);color:white;border:none;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:8px;}
+.btn-compris:hover{background:#0e4a5e;transform:translateY(-1px);}
+.btn-compris:disabled{opacity:.4;cursor:default;transform:none;}
+.mascot-msg{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:13px 16px;margin:14px 0;display:flex;align-items:flex-start;gap:10px;}
+.mascot-msg .emo{font-size:1.6rem;flex-shrink:0;}
+.mascot-msg p{font-size:.88rem;color:var(--text-light);}
+.ex-num{display:inline-block;background:var(--acc);color:white;font-weight:700;font-size:.7rem;padding:3px 10px;border-radius:4px;margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em;}
+.ex-header h2{font-family:'Playfair Display',serif;font-size:1.15rem;margin-bottom:4px;}
+.ex-header p{color:var(--text-light);font-size:.85rem;margin-bottom:14px;}
+.qcm-question{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:18px;margin-bottom:12px;}
+.qcm-question.answered{pointer-events:none;}
+.qcm-sentence{font-size:.92rem;font-weight:700;margin-bottom:12px;line-height:1.7;background:var(--acc-pale);border-radius:8px;padding:11px 14px;}
+.qcm-options{display:flex;flex-direction:column;gap:8px;}
+.qcm-opt{padding:10px 14px;border-radius:8px;border:2px solid #e2e8f0;background:white;font-family:'Lato',sans-serif;font-weight:400;font-size:.88rem;cursor:pointer;text-align:left;transition:all .2s;}
+.qcm-opt:hover{border-color:var(--acc);background:var(--acc-pale);}
+.qcm-opt.correct{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);font-weight:700;}
+.qcm-opt.wrong{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
+.qcm-opt.reveal{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);font-weight:700;}
+.qcm-feedback{margin-top:10px;padding:10px 13px;border-radius:8px;font-size:.84rem;font-weight:700;display:none;}
+.qcm-feedback.show{display:block;}
+.qcm-feedback.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.qcm-feedback.ko{background:var(--coral-pale);color:#b91c1c;}
+.btn-suivant{margin-top:14px;padding:10px 22px;border-radius:8px;font-family:'Lato',sans-serif;font-weight:700;font-size:.88rem;background:var(--acc);color:white;border:none;cursor:pointer;display:none;align-items:center;gap:8px;transition:all .2s;}
+.btn-suivant.show{display:inline-flex;}
+.btn-suivant:hover{background:#0e4a5e;}
+.classify-block{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:18px;margin-bottom:12px;}
+.classify-block.answered{pointer-events:none;}
+.classify-phrase{background:var(--acc-pale);border-radius:8px;padding:11px 14px;font-size:.92rem;margin-bottom:12px;line-height:1.7;}
+.classify-btns{display:flex;gap:8px;flex-wrap:wrap;}
+.classify-btn{padding:9px 14px;border-radius:6px;font-family:'Lato',sans-serif;font-weight:700;font-size:.82rem;border:2px solid;cursor:pointer;transition:all .2s;flex:1;text-align:center;min-width:80px;}
+.act-btn{background:#fef3c7;color:#92400e;border-color:#d97706;}
+.pass-btn{background:var(--acc-pale);color:var(--acc);border-color:var(--acc);}
+.classify-btn.sel-ok{color:white!important;background:var(--mint)!important;border-color:var(--mint)!important;}
+.classify-btn.sel-ko{background:var(--coral-pale)!important;color:var(--coral)!important;border-color:var(--coral)!important;}
+.classify-btn.rev-ok{color:white!important;background:var(--acc)!important;border-color:var(--acc)!important;}
+.classify-feedback{margin-top:10px;padding:9px 13px;border-radius:8px;font-size:.83rem;font-weight:700;display:none;}
+.classify-feedback.show{display:block;}
+.classify-feedback.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.classify-feedback.ko{background:var(--coral-pale);color:#b91c1c;}
+.erreur-block{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:18px;margin-bottom:12px;}
+.erreur-block.answered{pointer-events:none;}
+.erreur-phrase{background:#fff1f2;border:1px solid #fecdd3;border-radius:8px;padding:11px 14px;font-size:.95rem;margin-bottom:12px;line-height:1.7;}
+.erreur-label{font-size:.78rem;font-weight:700;color:#be123c;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;}
+.erreur-choix{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+.erreur-feedback{margin-top:8px;padding:9px 13px;border-radius:8px;font-size:.83rem;font-weight:700;display:none;}
+.erreur-feedback.show{display:block;}
+.erreur-feedback.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.erreur-feedback.ko{background:var(--coral-pale);color:#b91c1c;}
+.saisie-block{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:18px;margin-bottom:12px;}
+.saisie-consigne{font-size:.88rem;color:var(--text-light);margin-bottom:14px;background:var(--acc-pale);padding:10px 14px;border-radius:8px;}
+.saisie-rows{display:flex;flex-direction:column;gap:10px;}
+.saisie-row{display:flex;align-items:center;gap:10px;background:var(--acc-pale);border-radius:8px;padding:10px 14px;flex-wrap:wrap;}
+.saisie-phrase{font-size:.9rem;flex:1;min-width:200px;line-height:1.6;}
+.saisie-input{border:2px solid var(--acc);border-radius:6px;padding:7px 10px;font-family:'Lato',sans-serif;font-weight:700;font-size:.92rem;color:var(--text);background:white;outline:none;min-width:160px;flex:1;}
+.saisie-input:focus{border-color:#0e4a5e;}
+.saisie-input.correct{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.saisie-input.wrong{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);font-size:.78rem;}
+.btn-verif-saisie{margin-top:14px;padding:10px 22px;border-radius:8px;font-family:'Lato',sans-serif;font-weight:700;font-size:.88rem;background:var(--acc);color:white;border:none;cursor:pointer;display:block;width:100%;transition:all .2s;}
+.btn-verif-saisie:hover{background:#0e4a5e;}
+.btn-verif-saisie:disabled{opacity:.4;cursor:not-allowed;}
+.saisie-feedback{margin-top:8px;padding:9px 13px;border-radius:8px;font-size:.83rem;font-weight:700;display:none;}
+.saisie-feedback.show{display:block;}
+.saisie-feedback.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.saisie-feedback.ko{background:var(--coral-pale);color:#b91c1c;}
+.jugement-block{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:18px;margin-bottom:12px;}
+.jugement-block.answered{pointer-events:none;}
+.jugement-options{display:flex;flex-direction:column;gap:10px;}
+.jugement-opt{padding:12px 16px;border-radius:8px;border:2px solid #e2e8f0;background:white;font-family:'Lato',sans-serif;font-size:.9rem;cursor:pointer;text-align:left;transition:all .2s;line-height:1.6;}
+.jugement-opt:hover{border-color:var(--acc);background:var(--acc-pale);}
+.jugement-opt.correct-choice{border-color:var(--mint);background:var(--mint-pale);}
+.jugement-opt.wrong-choice{border-color:var(--coral);background:var(--coral-pale);}
+.jugement-feedback{margin-top:8px;padding:9px 13px;border-radius:8px;font-size:.83rem;font-weight:700;display:none;}
+.jugement-feedback.show{display:block;}
+.jugement-feedback.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.jugement-feedback.ko{background:var(--coral-pale);color:#b91c1c;}
+.bilan-card{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:28px 24px;text-align:center;}
+.bilan-icon{font-size:3.5rem;margin-bottom:12px;display:block;}
+.bilan-title{font-family:'Playfair Display',serif;font-size:1.8rem;margin-bottom:6px;color:var(--acc);}
+.bilan-msg{color:var(--text-light);font-size:.95rem;margin-bottom:20px;}
+.stars-row{display:flex;justify-content:center;gap:10px;margin-bottom:20px;}
+.star-big{font-size:2.5rem;filter:grayscale(1);transition:all .5s;}
+.star-big.earned{filter:none;animation:starPop .5s ease both;}
+@keyframes starPop{0%{transform:scale(0);}60%{transform:scale(1.2);}100%{transform:scale(1);}}
+.score-circle{width:100px;height:100px;border-radius:50%;background:var(--acc);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 20px;color:white;}
+.score-num{font-family:'Playfair Display',serif;font-size:1.8rem;line-height:1;}
+.score-sub{font-size:.65rem;opacity:.8;}
+.memo-card{background:var(--acc-pale);border-radius:var(--radius);padding:16px 20px;margin:18px 0;text-align:left;}
+.memo-card h3{font-weight:700;font-size:.85rem;color:var(--acc);margin-bottom:10px;text-transform:uppercase;letter-spacing:.04em;}
+.memo-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media(max-width:480px){.memo-grid{grid-template-columns:1fr;}}
+.memo-item{background:white;border-radius:8px;padding:10px 12px;font-size:.82rem;border:1px solid #e2e8f0;}
+.memo-item strong{color:var(--acc);}
+.bilan-btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:16px;}
+.btn-act{padding:10px 20px;border-radius:8px;font-family:'Lato',sans-serif;font-weight:700;font-size:.85rem;cursor:pointer;border:none;transition:all .2s;}
+.btn-act.primary{background:var(--acc);color:white;}
+.btn-act.secondary{background:var(--acc-pale);color:var(--acc);border:2px solid var(--acc);}
+.btn-act:hover{transform:translateY(-1px);}
+.confetti-piece{position:fixed;border-radius:2px;top:-20px;animation:fall linear both;pointer-events:none;z-index:9999;}
+@keyframes fall{0%{transform:translateY(0) rotate(0deg);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
+@media print{.print-bar,.btn-compris,.btn-suivant,.btn-verif-saisie,.bilan-card,.mascot-msg{display:none!important;}body{background:white;}.phase{display:block!important;}}
+</style>
+</head>
+<body>
+<div class="print-bar">
+  <button class="print-btn print-btn-lecon" onclick="window.print()"><span class="ico">📖</span><span class="lbl"> Imprimer la leçon</span></button>
+  <button class="print-btn print-btn-eval" onclick="window.print()"><span class="ico">📝</span><span class="lbl"> Imprimer les exercices</span></button>
+</div>
+<header class="header">
+  <div class="header-top">
+    <a href="../12-15ans.html" class="logo">🦉 L'Atelier du Devoir</a>
+    <div class="score-badge">⭐ <span id="score-display">0</span> pts</div>
+  </div>
+  <div class="steps-wrap">
+    <div class="steps">
+      <div class="step active" id="step-0"></div><div class="step" id="step-1"></div><div class="step" id="step-2"></div>
+      <div class="step" id="step-3"></div><div class="step" id="step-4"></div><div class="step" id="step-5"></div>
+      <div class="step" id="step-6"></div><div class="step" id="step-7"></div>
+    </div>
+    <div class="steps-labels">
+      <div class="step-lbl">Leçon</div><div class="step-lbl">Entr. 1</div><div class="step-lbl">Entr. 2</div>
+      <div class="step-lbl">Ex. 1</div><div class="step-lbl">Ex. 2</div><div class="step-lbl">Ex. 3</div>
+      <div class="step-lbl">Ex. 4</div><div class="step-lbl">Bilan</div>
+    </div>
+  </div>
+</header>
+<main class="main">
+  <div class="accroche">
+    <div class="accroche-icon">🔃</div>
+    <div class="accroche-text">
+      <h1>La voix passive</h1>
+      <p>Formation, emploi et transformation : comprendre la construction passive et son effet sur le sens.</p>
+      <div class="meta-row">
+        <span class="meta-tag">5e</span><span class="meta-tag">~25 min</span>
+        <span class="meta-tag">⭐⭐ Difficulté</span>
+        <span class="meta-tag">Français — Conjugaison</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase active" id="phase-lecon">
+    <div class="lecon-card">
+      <h2>📖 La leçon</h2>
+      <div class="lecon-block revealed" id="bloc-0">
+        <div class="lecon-subtitle">① Voix active vs voix passive</div>
+        <p class="analogie">À la voix active, le sujet agit. À la voix passive, le sujet subit. C'est un changement de perspective : au lieu de dire qui fait quoi, on dit sur qui ça se fait.</p>
+        <div class="def-box">
+          <h4>Définition</h4>
+          <p>À la <strong>voix active</strong>, le sujet fait l'action. À la <strong>voix passive</strong>, le sujet subit l'action. Le COD de la phrase active devient le sujet de la phrase passive. L'ancien sujet devient le <strong>complément d'agent</strong> (introduit par "par" ou "de").</p>
+        </div>
+        <div class="compare-box">
+          <div class="compare-item actif">
+            <h5>Voix active</h5>
+            <span class="hl-a">Le chat</span> mange <span class="hl-p">la souris</span>.
+          </div>
+          <div class="compare-item passif">
+            <h5>Voix passive</h5>
+            <span class="hl-p">La souris</span> est mangée <span class="hl-a">par le chat</span>.
+          </div>
+        </div>
+        <div class="astuce"><strong>Méthode :</strong> COD actif → sujet passif. Sujet actif → complément d'agent ("par + ancien sujet"). Le verbe prend la forme : être + participe passé accordé.</div>
+        <button class="btn-compris" onclick="revealBloc(1)">Bloc suivant →</button>
+      </div>
+      <div class="lecon-block" id="bloc-1">
+        <hr class="sep">
+        <div class="lecon-subtitle">② Formation de la voix passive à différents temps</div>
+        <p class="analogie">La voix passive n'est pas un temps — c'est une construction. On peut la mettre à tous les temps, simplement en changeant le temps de l'auxiliaire "être".</p>
+        <table class="tableau">
+          <tr><th>Temps</th><th>Formation</th><th>Exemple</th></tr>
+          <tr><td>Présent</td><td>est / sont + pp</td><td>Le rapport <em>est rédigé</em> par le directeur.</td></tr>
+          <tr><td>Imparfait</td><td>était / étaient + pp</td><td>Le rapport <em>était rédigé</em> chaque semaine.</td></tr>
+          <tr><td>Passé composé</td><td>a été / ont été + pp</td><td>Le rapport <em>a été rédigé</em> hier.</td></tr>
+          <tr><td>Futur simple</td><td>sera / seront + pp</td><td>Le rapport <em>sera rédigé</em> demain.</td></tr>
+          <tr><td>Conditionnel</td><td>serait / seraient + pp</td><td>Le rapport <em>serait rédigé</em> si…</td></tr>
+        </table>
+        <div class="piege"><strong>Piège accord :</strong> le participe passé s'accorde toujours avec le sujet de la phrase passive. "Les lettres ont été écrites" → "écrites" s'accorde avec "les lettres" (féminin pluriel).</div>
+        <button class="btn-compris" onclick="revealBloc(2)">Bloc suivant →</button>
+      </div>
+      <div class="lecon-block" id="bloc-2">
+        <hr class="sep">
+        <div class="lecon-subtitle">③ Effets et emplois de la voix passive</div>
+        <p class="analogie">On choisit la voix passive quand l'agent est inconnu, sans importance, ou qu'on veut mettre en valeur ce qui subit l'action plutôt que celui qui agit. C'est un choix stylistique, pas une erreur.</p>
+        <div class="def-box">
+          <h4>Quand utiliser la voix passive ?</h4>
+          <p>Agent inconnu : "La voiture a été volée." (on ne sait pas qui)<br>
+          Agent non important : "Ce roman a été publié en 1945."<br>
+          Mise en valeur du sujet : "Le président est élu par les citoyens."</p>
+        </div>
+        <div class="phrase-ex">— "La décision <span class="hl-p">sera annoncée</span> vendredi." → l'agent est omis volontairement</div>
+        <div class="phrase-ex">— "Les résultats <span class="hl-p">ont été publiés</span> par le jury." → l'agent est précisé</div>
+        <div class="astuce"><strong>Note :</strong> certains verbes ne peuvent pas se mettre à la voix passive (verbes intransitifs sans COD : "dormir", "partir", "arriver"…).</div>
+        <button class="btn-compris" onclick="startExercises()">✓ Leçon comprise — Aux exercices</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase" id="phase-ex1">
+    <div class="mascot-msg"><span class="emo">🦉</span><p>Entraînement 1 — Reconnaître la voix active et passive et leurs caractéristiques.</p></div>
+    <div class="ex-num">Entraînement 1 / 2 — Reconnaître</div>
+    <div class="ex-header"><h2>Voix active ou passive ?</h2><p>Sélectionne la bonne réponse.</p></div>
+    <div id="qcm1-container"></div>
+    <button class="btn-suivant" id="btn-to-ex2" onclick="goToPhase('ex2',2)">Entraînement 2 →</button>
+  </div>
+
+  <div class="phase" id="phase-ex2">
+    <div class="mascot-msg"><span class="emo">🦉</span><p>Entraînement 2 — Identifie si chaque phrase est à la voix active ou passive.</p></div>
+    <div class="ex-num">Entraînement 2 / 2 — Classer</div>
+    <div class="ex-header"><h2>Active ou passive ?</h2><p>Clique sur le bon type pour chaque phrase.</p></div>
+
+    <div class="classify-block" id="cl-0">
+      <div class="classify-phrase">« Le nouveau pont a été inauguré par le ministre hier matin. »</div>
+      <div class="classify-btns">
+        <button class="classify-btn act-btn" data-idx="0" data-type="act" data-correct="pass" onclick="classifyAnswer(this)">Active</button>
+        <button class="classify-btn pass-btn" data-idx="0" data-type="pass" data-correct="pass" onclick="classifyAnswer(this)">Passive</button>
+      </div>
+      <div class="classify-feedback" id="clf-0"></div>
+    </div>
+
+    <div class="classify-block" id="cl-1">
+      <div class="classify-phrase">« Les chercheurs ont publié leurs résultats dans une revue scientifique. »</div>
+      <div class="classify-btns">
+        <button class="classify-btn act-btn" data-idx="1" data-type="act" data-correct="act" onclick="classifyAnswer(this)">Active</button>
+        <button class="classify-btn pass-btn" data-idx="1" data-type="pass" data-correct="act" onclick="classifyAnswer(this)">Passive</button>
+      </div>
+      <div class="classify-feedback" id="clf-1"></div>
+    </div>
+
+    <div class="classify-block" id="cl-2">
+      <div class="classify-phrase">« Les décisions seront prises par le conseil d'administration en fin de semaine. »</div>
+      <div class="classify-btns">
+        <button class="classify-btn act-btn" data-idx="2" data-type="act" data-correct="pass" onclick="classifyAnswer(this)">Active</button>
+        <button class="classify-btn pass-btn" data-idx="2" data-type="pass" data-correct="pass" onclick="classifyAnswer(this)">Passive</button>
+      </div>
+      <div class="classify-feedback" id="clf-2"></div>
+    </div>
+
+    <div class="classify-block" id="cl-3">
+      <div class="classify-phrase">« Le jury a sélectionné trois candidats pour la phase finale. »</div>
+      <div class="classify-btns">
+        <button class="classify-btn act-btn" data-idx="3" data-type="act" data-correct="act" onclick="classifyAnswer(this)">Active</button>
+        <button class="classify-btn pass-btn" data-idx="3" data-type="pass" data-correct="act" onclick="classifyAnswer(this)">Passive</button>
+      </div>
+      <div class="classify-feedback" id="clf-3"></div>
+    </div>
+
+    <button class="btn-suivant" id="btn-to-drag1" onclick="goToPhase('drag1',3)">Exercice 1 →</button>
+  </div>
+
+  <div class="phase" id="phase-drag1">
+    <div class="mascot-msg"><span class="emo">🦉</span><p>Exercice 1 — La construction passive est incorrecte. Sélectionne la forme juste.</p></div>
+    <div class="ex-num">Exercice 1 / 4 — Détection d'erreur</div>
+    <div class="ex-header"><h2>Corriger la forme passive</h2><p>La forme soulignée est incorrecte. Clique sur la bonne.</p></div>
+
+    <div class="erreur-block" id="err-0" data-correct="est lu">
+      <div class="erreur-label">⚠ Phrase avec erreur :</div>
+      <div class="erreur-phrase">« Ce roman <u>est lire</u> par des milliers d'élèves chaque année. »</div>
+      <div class="erreur-choix" id="errch-0"></div>
+      <div class="erreur-feedback" id="err-fb-0"></div>
+    </div>
+
+    <div class="erreur-block" id="err-1" data-correct="ont été sélectionnées">
+      <div class="erreur-label">⚠ Phrase avec erreur :</div>
+      <div class="erreur-phrase">« Les candidates <u>ont été sélectionné</u> par le jury. »</div>
+      <div class="erreur-choix" id="errch-1"></div>
+      <div class="erreur-feedback" id="err-fb-1"></div>
+    </div>
+
+    <div class="erreur-block" id="err-2" data-correct="sera signé">
+      <div class="erreur-label">⚠ Phrase avec erreur :</div>
+      <div class="erreur-phrase">« Le contrat <u>sera signer</u> demain matin. »</div>
+      <div class="erreur-choix" id="errch-2"></div>
+      <div class="erreur-feedback" id="err-fb-2"></div>
+    </div>
+
+    <div class="erreur-block" id="err-3" data-correct="était surveillée">
+      <div class="erreur-label">⚠ Phrase avec erreur :</div>
+      <div class="erreur-phrase">« La frontière <u>était surveillé</u> en permanence par les gardes. »</div>
+      <div class="erreur-choix" id="errch-3"></div>
+      <div class="erreur-feedback" id="err-fb-3"></div>
+    </div>
+
+    <button class="btn-suivant" id="btn-to-drag2" onclick="goToPhase('drag2',4)">Exercice 2 →</button>
+  </div>
+
+  <div class="phase" id="phase-drag2">
+    <div class="mascot-msg"><span class="emo">🦉</span><p>Exercice 2 — Transforme chaque phrase active en phrase passive.</p></div>
+    <div class="ex-num">Exercice 2 / 4 — Transformer</div>
+    <div class="ex-header"><h2>Actif → Passif</h2><p>Réécris chaque phrase à la voix passive. Attention à l'accord du participe passé.</p></div>
+    <div class="saisie-block">
+      <div class="saisie-consigne">Structure : nouveau sujet + être (même temps) + participe passé accordé + par + ancien sujet.</div>
+      <div class="saisie-rows">
+        <div class="saisie-row">
+          <span class="saisie-phrase">Actif : « Le directeur signe le contrat. » → Passif : « Le contrat _____ par le directeur. »</span>
+          <input class="saisie-input" id="si-0" type="text" placeholder="est signé" autocomplete="off" autocorrect="off" spellcheck="false">
+        </div>
+        <div class="saisie-row">
+          <span class="saisie-phrase">Actif : « Les élèves ont lu ce texte. » → Passif : « Ce texte _____ par les élèves. »</span>
+          <input class="saisie-input" id="si-1" type="text" placeholder="a été lu" autocomplete="off" autocorrect="off" spellcheck="false">
+        </div>
+        <div class="saisie-row">
+          <span class="saisie-phrase">Actif : « Le jury sélectionnera les candidats. » → Passif : « Les candidats _____ par le jury. »</span>
+          <input class="saisie-input" id="si-2" type="text" placeholder="seront sélectionnés" autocomplete="off" autocorrect="off" spellcheck="false">
+        </div>
+        <div class="saisie-row">
+          <span class="saisie-phrase">Actif : « Les médecins ont sauvé la patiente. » → Passif : « La patiente _____ par les médecins. »</span>
+          <input class="saisie-input" id="si-3" type="text" placeholder="a été sauvée" autocomplete="off" autocorrect="off" spellcheck="false">
+        </div>
+        <div class="saisie-row">
+          <span class="saisie-phrase">Actif : « Le professeur expliquait la leçon. » → Passif : « La leçon _____ par le professeur. »</span>
+          <input class="saisie-input" id="si-4" type="text" placeholder="était expliquée" autocomplete="off" autocorrect="off" spellcheck="false">
+        </div>
+      </div>
+      <button class="btn-verif-saisie" id="btn-vs" onclick="verifySaisie()">✓ Vérifier</button>
+      <div class="saisie-feedback" id="saisie-fb"></div>
+    </div>
+    <button class="btn-suivant" id="btn-to-classify" onclick="goToPhase('classify',5)">Exercice 3 →</button>
+  </div>
+
+  <div class="phase" id="phase-classify">
+    <div class="mascot-msg"><span class="emo">🦉</span><p>Exercice 3 — Conjugue le verbe ÊTRE à différents temps : c'est la clé de la construction passive.</p></div>
+    <div class="ex-num">Exercice 3 / 4 — Tableau de conjugaison</div>
+    <div class="ex-header"><h2>Conjuguer ÊTRE à tous les temps</h2><p>Maîtriser être c'est maîtriser la voix passive.</p></div>
+
+    <div class="saisie-block">
+      <div style="font-weight:700;font-size:.88rem;color:var(--acc);margin-bottom:12px;background:var(--acc-pale);border-radius:6px;padding:8px 12px;text-transform:uppercase;letter-spacing:.04em;">ÊTRE — Présent de l'indicatif</div>
+      <div class="saisie-rows">
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">je</span><input class="saisie-input" id="ct-0-0" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">tu</span><input class="saisie-input" id="ct-0-1" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">il / elle</span><input class="saisie-input" id="ct-0-2" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">nous</span><input class="saisie-input" id="ct-0-3" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">vous</span><input class="saisie-input" id="ct-0-4" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">ils / elles</span><input class="saisie-input" id="ct-0-5" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+      </div>
+      <button class="btn-verif-saisie" id="btn-ct-0" onclick="verifyConjTab(0)" style="margin-top:12px;">✓ Vérifier</button>
+      <div class="saisie-feedback" id="ctfb-0"></div>
+    </div>
+
+    <div class="saisie-block">
+      <div style="font-weight:700;font-size:.88rem;color:var(--acc);margin-bottom:12px;background:var(--acc-pale);border-radius:6px;padding:8px 12px;text-transform:uppercase;letter-spacing:.04em;">ÊTRE — Imparfait</div>
+      <div class="saisie-rows">
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">je</span><input class="saisie-input" id="ct-1-0" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">tu</span><input class="saisie-input" id="ct-1-1" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">il / elle</span><input class="saisie-input" id="ct-1-2" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">nous</span><input class="saisie-input" id="ct-1-3" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">vous</span><input class="saisie-input" id="ct-1-4" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">ils / elles</span><input class="saisie-input" id="ct-1-5" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+      </div>
+      <button class="btn-verif-saisie" id="btn-ct-1" onclick="verifyConjTab(1)" style="margin-top:12px;">✓ Vérifier</button>
+      <div class="saisie-feedback" id="ctfb-1"></div>
+    </div>
+
+    <div class="saisie-block">
+      <div style="font-weight:700;font-size:.88rem;color:var(--acc);margin-bottom:12px;background:var(--acc-pale);border-radius:6px;padding:8px 12px;text-transform:uppercase;letter-spacing:.04em;">ÊTRE — Futur simple</div>
+      <div class="saisie-rows">
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">je</span><input class="saisie-input" id="ct-2-0" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">tu</span><input class="saisie-input" id="ct-2-1" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">il / elle</span><input class="saisie-input" id="ct-2-2" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">nous</span><input class="saisie-input" id="ct-2-3" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">vous</span><input class="saisie-input" id="ct-2-4" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">ils / elles</span><input class="saisie-input" id="ct-2-5" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+      </div>
+      <button class="btn-verif-saisie" id="btn-ct-2" onclick="verifyConjTab(2)" style="margin-top:12px;">✓ Vérifier</button>
+      <div class="saisie-feedback" id="ctfb-2"></div>
+    </div>
+
+    <div class="saisie-block">
+      <div style="font-weight:700;font-size:.88rem;color:var(--acc);margin-bottom:12px;background:var(--acc-pale);border-radius:6px;padding:8px 12px;text-transform:uppercase;letter-spacing:.04em;">ÊTRE — Conditionnel présent</div>
+      <div class="saisie-rows">
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">je</span><input class="saisie-input" id="ct-3-0" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">tu</span><input class="saisie-input" id="ct-3-1" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">il / elle</span><input class="saisie-input" id="ct-3-2" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">nous</span><input class="saisie-input" id="ct-3-3" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">vous</span><input class="saisie-input" id="ct-3-4" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">ils / elles</span><input class="saisie-input" id="ct-3-5" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+      </div>
+      <button class="btn-verif-saisie" id="btn-ct-3" onclick="verifyConjTab(3)" style="margin-top:12px;">✓ Vérifier</button>
+      <div class="saisie-feedback" id="ctfb-3"></div>
+    </div>
+
+    <button class="btn-suivant" id="btn-to-conjtable" onclick="goToPhase('conjtable',6)">Exercice 4 →</button>
+  </div>
+
+  <div class="phase" id="phase-conjtable">
+    <div class="mascot-msg"><span class="emo">🦉</span><p>Exercice 4 — Une phrase est correctement construite à la voix passive, l'autre contient une erreur. Clique sur la bonne.</p></div>
+    <div class="ex-num">Exercice 4 / 4 — Jugement</div>
+    <div class="ex-header"><h2>Laquelle est correcte ?</h2><p>Clique directement sur la phrase juste.</p></div>
+    <div id="jugement-container"></div>
+    <button class="btn-suivant" id="btn-to-bilan" onclick="goToPhase('bilan',7)">🌟 Voir mon bilan</button>
+  </div>
+
+  <div class="phase" id="phase-bilan">
+    <div class="bilan-card">
+      <span class="bilan-icon">🔃</span>
+      <h2 class="bilan-title" id="bilan-title">Résultat</h2>
+      <p class="bilan-msg" id="bilan-msg"></p>
+      <div class="stars-row"><span class="star-big" id="star1">⭐</span><span class="star-big" id="star2">⭐</span><span class="star-big" id="star3">⭐</span></div>
+      <div class="score-circle"><span class="score-num" id="bilan-score">0</span><span class="score-sub" id="bilan-total">/ ? pts</span></div>
+      <div class="memo-card">
+        <h3>Mémo — La voix passive</h3>
+        <div class="memo-grid">
+          <div class="memo-item"><strong>Formation</strong><br>être (au temps voulu) + participe passé accordé</div>
+          <div class="memo-item"><strong>Transformation</strong><br>COD actif → sujet passif<br>sujet actif → "par + …"</div>
+          <div class="memo-item"><strong>Accord</strong><br>Participe passé accordé avec le sujet de la phrase passive</div>
+          <div class="memo-item"><strong>Emploi</strong><br>Agent inconnu, non important, ou mise en valeur du sujet</div>
+        </div>
+      </div>
+      <div class="bilan-btns">
+        <button class="btn-act secondary" onclick="location.reload()">↺ Recommencer</button>
+        <button class="btn-act primary" onclick="location.href='../12-15ans.html'">← Retour aux fiches</button>
+      </div>
+    </div>
+  </div>
+</main>
+<script>
+var classifyExpls = {
+  "0": "Passive : 'a été inauguré' = être au passé composé + participe passé. Le sujet 'le nouveau pont' subit l'action. Le complément d'agent est 'par le ministre'.",
+  "1": "Active : 'ont publié' est un passé composé actif. Le sujet 'les chercheurs' fait l'action. 'leurs résultats' est le COD.",
+  "2": "Passive : 'seront prises' = être au futur + participe passé accordé féminin pluriel. Le sujet 'les décisions' subit l'action.",
+  "3": "Active : 'a sélectionné' est un passé composé actif. Le sujet 'le jury' fait l'action. 'trois candidats' est le COD."
+};
+
+var erreurExpls = {
+  "0": "À la voix passive, on utilise être + participe passé. 'lire' est l'infinitif — incorrect. La forme correcte est 'est lu' (être au présent + participe passé de lire).",
+  "1": "Le participe passé s'accorde avec le sujet 'les candidates' (féminin pluriel). 'sélectionné' est au masculin singulier — incorrect. La forme correcte est 'ont été sélectionnées'.",
+  "2": "Le participe passé de 'signer' est 'signé', pas 'signer' (infinitif). La forme correcte est 'sera signé'.",
+  "3": "Le participe passé s'accorde avec le sujet 'la frontière' (féminin singulier). 'surveillé' est au masculin — incorrect. La forme correcte est 'était surveillée'."
+};
+
+var erreurChoix = [
+  ["est lu","est lire","a lu","fut lu"],
+  ["ont été sélectionnées","ont été sélectionné","ont été sélectionnés","ont sélectionnées"],
+  ["sera signé","sera signer","sera signe","était signé"],
+  ["était surveillée","était surveillé","a été surveillée","sera surveillée"]
+];
+
+var saisieAnswers = [
+  ["est signé"],
+  ["a été lu"],
+  ["seront sélectionnés","seront selectionnés","seront selectionnees","seront sélectionnées"],
+  ["a été sauvée"],
+  ["etait expliquée","était expliquée"]
+];
+
+var conjTabData = [
+  { answers: [["suis"],["es"],["est"],["sommes"],["êtes","etes"],["sont"]] },
+  { answers: [["etais","étais"],["etais","étais"],["etait","était"],["etions","étions"],["etiez","étiez"],["etaient","étaient"]] },
+  { answers: [["serai"],["seras"],["sera"],["serons"],["serez"],["seront"]] },
+  { answers: [["serais"],["serais"],["serait"],["serions"],["seriez"],["seraient"]] }
+];
+
+var jugementData = [
+  {
+    phraseA: "La lettre a été écrite par le directeur.",
+    phraseB: "La lettre a été écrit par le directeur.",
+    correct: "A",
+    expl: "Le participe passé s'accorde avec le sujet 'la lettre' (féminin singulier). 'écrite' est correct. 'écrit' (masculin singulier) ne s'accorde pas avec le sujet féminin."
+  },
+  {
+    phraseA: "Les résultats seront publiés demain par le jury.",
+    phraseB: "Les résultats seront publié demain par le jury.",
+    correct: "A",
+    expl: "Le participe passé s'accorde avec 'les résultats' (masculin pluriel) → 'publiés'. 'publié' (singulier) est incorrect."
+  },
+  {
+    phraseA: "Ce tableau a été peint par Monet au XIXe siècle.",
+    phraseB: "Ce tableau a peint par Monet au XIXe siècle.",
+    correct: "A",
+    expl: "La voix passive requiert l'auxiliaire 'être' entre le sujet et le participe passé. 'a été peint' est correct. 'a peint' est une forme active — le sens serait que le tableau a fait l'action de peindre."
+  }
+];
+
+var QCM1 = [
+  {
+    sentence: "Quelle est la formation de la voix passive ?",
+    options: ["avoir + participe passé","être + participe passé","avoir été + infinitif","être + infinitif"],
+    answer: "être + participe passé",
+    expl: "La voix passive = auxiliaire être (conjugué au temps voulu) + participe passé accordé avec le sujet. L'agent est introduit par 'par' ou 'de'."
+  },
+  {
+    sentence: "Dans « Le rapport est rédigé par le directeur », quel est le complément d'agent ?",
+    options: ["le rapport","est rédigé","par le directeur","rédigé"],
+    answer: "par le directeur",
+    expl: "'par le directeur' est le complément d'agent — c'est l'ancien sujet de la phrase active ('Le directeur rédige le rapport'). Il indique qui fait l'action."
+  },
+  {
+    sentence: "Laquelle de ces phrases est à la voix passive ?",
+    options: [
+      "Le professeur corrige les copies.",
+      "Les copies sont corrigées par le professeur.",
+      "Le professeur a corrigé les copies.",
+      "Les copies, le professeur les corrige."
+    ],
+    answer: "Les copies sont corrigées par le professeur.",
+    expl: "'sont corrigées' = être au présent + participe passé accordé. Le sujet 'les copies' subit l'action. C'est bien la voix passive."
+  }
+];
+
+var score=0,TOTAL_PTS=0,qcm1Done=0,classifyDone=0,erreurDone=0,saisieDone=false,conjTabDone={},conjTabVerified=0,jugementDone=0;
+var NB_QCM=3,NB_CLASSIFY=4,NB_ERREUR=4,NB_SAISIE=5,NB_CONJTAB=24,NB_JUGEMENT=3;
+TOTAL_PTS=NB_QCM+NB_CLASSIFY+NB_ERREUR+NB_SAISIE+NB_CONJTAB+NB_JUGEMENT; // 43
+var jugementSelected=[null,null,null];
+
+function nsConj(s){return(s||'').toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,' ');}
+function shuffle(arr){var a=arr.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+
+function revealBloc(n){
+  var bloc=document.getElementById('bloc-'+n);if(!bloc)return;
+  var prev=document.getElementById('bloc-'+(n-1));
+  if(prev){var b=prev.querySelector('.btn-compris');if(b){b.textContent='✓ Compris';b.disabled=true;b.style.opacity='.4';}}
+  bloc.classList.add('revealed');
+  setTimeout(function(){var hH=(document.querySelector('.header')||{offsetHeight:0}).offsetHeight;var rect=bloc.getBoundingClientRect();window.scrollTo({top:window.pageYOffset+rect.top-hH-20,behavior:'smooth'});},150);
+}
+
+function startExercises(){
+  erreurChoix.forEach(function(opts,idx){
+    var c=document.getElementById('errch-'+idx);if(!c)return;
+    c.style.cssText='display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;';
+    shuffle(opts).forEach(function(w){
+      var btn=document.createElement('button');btn.className='classify-btn pass-btn';
+      btn.dataset.choice=w;btn.textContent=w;
+      btn.onclick=function(){verifyErreur(idx,this);};
+      c.appendChild(btn);
+    });
+  });
+  document.getElementById('bilan-total').textContent='/ '+TOTAL_PTS+' pts';
+  goToPhase('ex1',1);buildQCM('qcm1-container',QCM1,1);
+}
+
+function goToPhase(phase,stepIdx){
+  document.querySelectorAll('.phase').forEach(function(p){p.classList.remove('active');});
+  var el=document.getElementById('phase-'+phase);
+  if(el){el.classList.add('active');setTimeout(function(){el.scrollIntoView({behavior:'smooth',block:'start'});},100);}
+  updateSteps(stepIdx);
+  if(phase==='conjtable')buildJugement();
+  if(phase==='bilan')showBilan();
+}
+
+function updateSteps(active){for(var i=0;i<8;i++){var s=document.getElementById('step-'+i);if(!s)continue;s.classList.remove('active','done');if(i<active)s.classList.add('done');else if(i===active)s.classList.add('active');}}
+
+function buildQCM(cId,data,exNum){
+  var c=document.getElementById(cId);c.innerHTML='';
+  data.forEach(function(q,qi){
+    var div=document.createElement('div');div.className='qcm-question';div.id='qq-'+exNum+'-'+qi;
+    var opts=shuffle(q.options);
+    var optHtml=opts.map(function(opt){return '<button class="qcm-opt" data-exnum="'+exNum+'" data-qi="'+qi+'" data-opt="'+encodeURIComponent(opt)+'" data-ans="'+encodeURIComponent(q.answer)+'" onclick="handleQCM(this)">'+opt+'</button>';}).join('');
+    div.innerHTML='<div class="qcm-sentence">'+q.sentence+'</div><div class="qcm-options">'+optHtml+'</div><div class="qcm-feedback" id="qf-'+exNum+'-'+qi+'"></div>';
+    c.appendChild(div);
+  });
+}
+
+function handleQCM(btn){
+  var exNum=parseInt(btn.dataset.exnum),qi=parseInt(btn.dataset.qi);
+  var chosen=decodeURIComponent(btn.dataset.opt),correct=decodeURIComponent(btn.dataset.ans);
+  var qDiv=document.getElementById('qq-'+exNum+'-'+qi);if(qDiv.classList.contains('answered'))return;
+  qDiv.classList.add('answered');
+  var opts=qDiv.querySelectorAll('.qcm-opt'),fb=document.getElementById('qf-'+exNum+'-'+qi);
+  if(chosen===correct){btn.classList.add('correct');fb.className='qcm-feedback show ok';fb.innerHTML='✓ Correct. '+QCM1[qi].expl;score++;document.getElementById('score-display').textContent=score;}
+  else{btn.classList.add('wrong');opts.forEach(function(o){if(decodeURIComponent(o.dataset.opt)===correct)o.classList.add('reveal');});fb.className='qcm-feedback show ko';fb.innerHTML='✗ '+QCM1[qi].expl;}
+  qcm1Done++;
+  if(qcm1Done>=NB_QCM){setTimeout(function(){var nb=document.getElementById('btn-to-ex2');if(nb){nb.classList.add('show');nb.scrollIntoView({behavior:'smooth',block:'nearest'});}},500);}
+}
+
+function classifyAnswer(btn){
+  var idx=parseInt(btn.dataset.idx),chosen=btn.dataset.type,correct=btn.dataset.correct;
+  var block=document.getElementById('cl-'+idx),fb=document.getElementById('clf-'+idx);
+  if(block.classList.contains('answered'))return;
+  block.classList.add('answered');classifyDone++;
+  if(chosen===correct){btn.classList.add('sel-ok');fb.className='classify-feedback show ok';fb.innerHTML='✓ '+classifyExpls[String(idx)];score++;document.getElementById('score-display').textContent=score;}
+  else{btn.classList.add('sel-ko');block.querySelectorAll('.classify-btn').forEach(function(b){if(b.dataset.type===correct)b.classList.add('rev-ok');});fb.className='classify-feedback show ko';fb.innerHTML='✗ '+classifyExpls[String(idx)];}
+  if(classifyDone>=4){setTimeout(function(){var nb=document.getElementById('btn-to-drag1');nb.classList.add('show');nb.scrollIntoView({behavior:'smooth',block:'nearest'});},500);}
+}
+
+function verifyErreur(idx,btn){
+  var block=document.getElementById('err-'+idx);if(block.classList.contains('answered'))return;
+  block.classList.add('answered');
+  var chosen=btn.dataset.choice,correct=block.dataset.correct,fb=document.getElementById('err-fb-'+idx);
+  block.querySelectorAll('button').forEach(function(b){b.style.pointerEvents='none';});
+  if(chosen===correct){btn.classList.add('sel-ok');score++;document.getElementById('score-display').textContent=score;fb.className='erreur-feedback show ok';fb.innerHTML='✓ Correct — <strong>'+correct+'</strong>. '+erreurExpls[String(idx)];}
+  else{btn.classList.add('sel-ko');block.querySelectorAll('button').forEach(function(b){if(b.dataset.choice===correct)b.classList.add('rev-ok');});fb.className='erreur-feedback show ko';fb.innerHTML='✗ La forme correcte était <strong>'+correct+'</strong>. '+erreurExpls[String(idx)];}
+  erreurDone++;
+  if(erreurDone>=4){setTimeout(function(){var nb=document.getElementById('btn-to-drag2');nb.classList.add('show');nb.scrollIntoView({behavior:'smooth',block:'nearest'});},600);}
+}
+
+function verifySaisie(){
+  if(saisieDone)return;saisieDone=true;var nbOk=0;
+  saisieAnswers.forEach(function(accepted,i){
+    var inp=document.getElementById('si-'+i);inp.readOnly=true;
+    var ok=accepted.some(function(a){return nsConj(inp.value)===nsConj(a);});
+    if(ok){inp.classList.add('correct');nbOk++;score++;document.getElementById('score-display').textContent=score;}
+    else{inp.classList.add('wrong');var original=inp.value;inp.value=(original?original+' ':'')+'\u2192 '+accepted[0];inp.style.fontSize='.78rem';}
+  });
+  document.getElementById('btn-vs').disabled=true;
+  var fb=document.getElementById('saisie-fb');
+  fb.className='saisie-feedback show '+(nbOk===NB_SAISIE?'ok':'ko');
+  fb.innerHTML=nbOk===NB_SAISIE?'✓ Parfait — '+NB_SAISIE+'/'+NB_SAISIE:'✗ '+nbOk+'/'+NB_SAISIE+' — corrections en rouge.';
+  setTimeout(function(){var nb=document.getElementById('btn-to-classify');nb.classList.add('show');nb.scrollIntoView({behavior:'smooth',block:'nearest'});},700);
+}
+
+function verifyConjTab(ti){
+  if(conjTabDone[ti])return;conjTabDone[ti]=true;
+  var data=conjTabData[ti],nbOk=0;
+  data.answers.forEach(function(accepted,row){
+    var inp=document.getElementById('ct-'+ti+'-'+row);if(!inp)return;
+    inp.readOnly=true;
+    var ok=accepted.some(function(a){return nsConj(inp.value)===nsConj(a);});
+    if(ok){inp.classList.add('correct');nbOk++;score++;document.getElementById('score-display').textContent=score;}
+    else{inp.classList.add('wrong');var original=inp.value;inp.value=(original?original+' ':'')+'\u2192 '+accepted[0];inp.style.fontSize='.78rem';}
+  });
+  var btn=document.getElementById('btn-ct-'+ti);if(btn)btn.disabled=true;
+  var fb=document.getElementById('ctfb-'+ti);
+  fb.className='saisie-feedback show '+(nbOk===6?'ok':'ko');
+  fb.innerHTML=nbOk===6?'✓ Parfait — 6/6':'✗ '+nbOk+'/6 — corrections en rouge.';
+  conjTabVerified++;
+  if(conjTabVerified>=4){setTimeout(function(){var nb=document.getElementById('btn-to-conjtable');nb.classList.add('show');nb.scrollIntoView({behavior:'smooth',block:'nearest'});},600);}
+}
+
+function buildJugement(){
+  var c=document.getElementById('jugement-container');c.innerHTML='';
+  jugementData.forEach(function(item,ji){
+    jugementSelected[ji]=null;
+    var div=document.createElement('div');div.className='jugement-block';div.id='jug-'+ji;
+    div.innerHTML='<div class="jugement-options">'
+      +'<div class="jugement-opt" id="jopt-'+ji+'-A" onclick="verifyJugement('+ji+',\'A\')"><strong>A \u2014</strong> '+item.phraseA+'</div>'
+      +'<div class="jugement-opt" id="jopt-'+ji+'-B" onclick="verifyJugement('+ji+',\'B\')"><strong>B \u2014</strong> '+item.phraseB+'</div>'
+      +'</div><div class="jugement-feedback" id="jfb-'+ji+'"></div>';
+    c.appendChild(div);
+  });
+}
+
+function verifyJugement(ji,choice){
+  var block=document.getElementById('jug-'+ji);if(block.classList.contains('answered'))return;
+  block.classList.add('answered');
+  var correct=jugementData[ji].correct,fb=document.getElementById('jfb-'+ji);
+  document.getElementById('jopt-'+ji+'-'+correct).classList.add('correct-choice');
+  if(choice!==correct)document.getElementById('jopt-'+ji+'-'+choice).classList.add('wrong-choice');
+  if(choice===correct){score++;document.getElementById('score-display').textContent=score;fb.className='jugement-feedback show ok';fb.innerHTML='✓ Correct. '+jugementData[ji].expl;}
+  else{fb.className='jugement-feedback show ko';fb.innerHTML='✗ '+jugementData[ji].expl;}
+  jugementDone++;
+  if(jugementDone>=NB_JUGEMENT){setTimeout(function(){var nb=document.getElementById('btn-to-bilan');nb.classList.add('show');nb.scrollIntoView({behavior:'smooth',block:'nearest'});},600);}
+}
+
+function showBilan(){
+  document.getElementById('bilan-score').textContent=score;
+  document.getElementById('bilan-total').textContent='/ '+TOTAL_PTS+' pts';
+  var pct=score/TOTAL_PTS;
+  var title,msg;
+  if(pct>=0.89){title='Excellent';msg="Maîtrise complète de la voix passive. Formation, accord du participe passé et transformation actif/passif sont bien intégrés.";}
+  else if(pct>=0.65){title='Satisfaisant';msg="Bonne compréhension globale. Revois l'accord du participe passé avec le sujet et la transformation active/passive.";}
+  else{title='À consolider';msg="Relis la formation : être (conjugué) + participe passé accordé. Le piège principal est l'accord du participe avec le sujet de la phrase passive.";}
+  document.getElementById('bilan-title').textContent=title;
+  document.getElementById('bilan-msg').textContent=msg;
+  var seuils=[Math.ceil(TOTAL_PTS*.33),Math.ceil(TOTAL_PTS*.66),Math.ceil(TOTAL_PTS*.89)];
+  ['star1','star2','star3'].forEach(function(id,i){
+    var el=document.getElementById(id);
+    if(score>=seuils[i]){(function(e,d){setTimeout(function(){e.classList.add('earned');},d);})(el,300+i*400);}
+    else el.style.filter='grayscale(1)';
+  });
+  if(pct>=0.65)lanceConfetti();
+}
+
+function lanceConfetti(){
+  var cols=['#155e75','#67e8f9','#059669','#d97706','#0369a1'];
+  for(var i=0;i<50;i++){
+    var el=document.createElement('div');el.className='confetti-piece';
+    el.style.cssText='left:'+Math.random()*100+'vw;background:'+cols[Math.floor(Math.random()*5)]+';animation-duration:'+(1.5+Math.random()*2)+'s;animation-delay:'+Math.random()*1.2+'s;width:'+(6+Math.random()*7)+'px;height:'+(6+Math.random()*7)+'px;border-radius:'+(Math.random()>.5?'50%':'2px')+';';
+    document.body.appendChild(el);setTimeout(function(){if(el.parentNode)el.remove();},4000);
+  }
+}
+</script>
+</body>
+</html>

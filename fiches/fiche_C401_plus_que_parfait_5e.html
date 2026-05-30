@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>C401 — Le plus-que-parfait | L'Atelier du Devoir</title>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --acc:#1e3a8a;--acc-pale:#eff6ff;--acc-mid:#93c5fd;
+  --mint:#059669;--mint-pale:#d1fae5;--mint-deep:#047857;
+  --coral:#dc2626;--coral-pale:#fee2e2;
+  --sky:#0369a1;--sky-pale:#e0f2fe;
+  --yellow:#d97706;--yellow-pale:#fef3c7;
+  --text:#1e293b;--text-light:#64748b;
+  --radius:12px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Lato',sans-serif;background:#eff6ff;color:var(--text);font-size:16px;line-height:1.65;}
+.print-bar{position:fixed;right:16px;top:50%;transform:translateY(-50%);z-index:200;display:flex;flex-direction:column;gap:8px;}
+.print-btn{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:8px;font-family:'Lato',sans-serif;font-weight:700;font-size:.78rem;border:none;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.15);}
+.print-btn-lecon{background:#d97706;color:white;}.print-btn-eval{background:#dc2626;color:white;}
+@media(max-width:600px){.print-bar{right:6px;}.print-btn{font-size:0;width:40px;height:40px;padding:0;justify-content:center;}.print-btn span.lbl{display:none;}.print-btn span.ico{font-size:1.1rem;}}
+.header{background:white;border-bottom:2px solid var(--acc-pale);position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.06);}
+.header-top{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;}
+.logo{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--acc);text-decoration:none;}
+.score-badge{background:var(--acc);color:white;font-weight:700;font-size:.85rem;padding:5px 14px;border-radius:6px;display:flex;align-items:center;gap:5px;}
+.steps-wrap{padding:0 20px 8px;}
+.steps{display:flex;gap:3px;}
+.step{flex:1;height:5px;border-radius:4px;background:var(--acc-pale);transition:all .35s;}
+.step.done{background:var(--mint);}.step.active{background:var(--acc);}
+.steps-labels{display:flex;gap:3px;padding-top:3px;}
+.step-lbl{flex:1;font-size:.5rem;font-weight:700;color:var(--text-light);text-align:center;text-transform:uppercase;letter-spacing:.04em;}
+.main{max-width:760px;margin:0 auto;padding:28px 16px 100px;}
+.phase{display:none;}.phase.active{display:block;}
+.accroche{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:22px 24px;margin-bottom:22px;display:flex;gap:16px;align-items:flex-start;}
+.accroche-icon{font-size:2.4rem;flex-shrink:0;margin-top:2px;}
+.accroche-text h1{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--acc);margin-bottom:6px;}
+.accroche-text p{color:var(--text-light);font-size:.92rem;line-height:1.5;}
+.meta-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+.meta-tag{background:var(--acc-pale);border-radius:4px;padding:3px 10px;font-size:.72rem;font-weight:700;color:var(--acc);text-transform:uppercase;letter-spacing:.04em;}
+.lecon-card{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:22px;margin-bottom:18px;}
+.lecon-card h2{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--acc);margin-bottom:14px;border-bottom:2px solid var(--acc-pale);padding-bottom:8px;}
+.lecon-block{display:none;}.lecon-block.revealed{display:block;}
+.lecon-subtitle{font-weight:900;font-size:1rem;color:var(--acc);margin-bottom:10px;margin-top:6px;}
+.sep{margin:18px 0;border:none;border-top:1px solid var(--acc-pale);}
+.analogie{font-size:.92rem;color:var(--text-light);font-style:italic;margin-bottom:12px;line-height:1.6;}
+.def-box{border-left:4px solid var(--acc);background:var(--acc-pale);border-radius:0 var(--radius) var(--radius) 0;padding:14px 16px;margin-bottom:12px;}
+.def-box h4{font-weight:900;color:var(--acc);font-size:.9rem;margin-bottom:6px;}
+.def-box p{font-size:.88rem;color:var(--text);line-height:1.55;}
+.phrase-ex{background:white;border:1px solid #e2e8f0;border-radius:8px;padding:9px 14px;font-size:.9rem;margin-bottom:6px;line-height:1.7;}
+.hl-pqp{background:var(--acc-pale);color:var(--acc);border-radius:4px;padding:1px 6px;font-weight:700;margin:0 2px;}
+.hl-pc{background:#fef3c7;color:#92400e;border-radius:4px;padding:1px 6px;font-weight:700;margin:0 2px;}
+.tableau{width:100%;border-collapse:collapse;margin:10px 0;font-size:.85rem;}
+.tableau th{padding:8px 10px;text-align:left;font-weight:700;background:var(--acc);color:white;}
+.tableau td{padding:7px 10px;border:1px solid #e2e8f0;}
+.tableau tr:nth-child(even) td{background:var(--acc-pale);}
+.astuce{background:#fefce8;border:1px solid #fde68a;border-radius:8px;padding:11px 14px;font-size:.85rem;margin-top:8px;color:#78350f;}
+.astuce strong{color:#92400e;}
+.piege{background:#fff1f2;border:1px solid #fecdd3;border-radius:8px;padding:11px 14px;font-size:.85rem;margin-top:8px;color:#9f1239;}
+.piege strong{color:#be123c;}
+.btn-compris{margin-top:18px;padding:11px 26px;border-radius:8px;font-family:'Lato',sans-serif;font-weight:700;font-size:.9rem;background:var(--acc);color:white;border:none;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:8px;}
+.btn-compris:hover{background:#1e3070;transform:translateY(-1px);}
+.btn-compris:disabled{opacity:.4;cursor:default;transform:none;}
+.mascot-msg{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:13px 16px;margin:14px 0;display:flex;align-items:flex-start;gap:10px;}
+.mascot-msg .emo{font-size:1.6rem;flex-shrink:0;}
+.mascot-msg p{font-size:.88rem;color:var(--text-light);}
+.ex-num{display:inline-block;background:var(--acc);color:white;font-weight:700;font-size:.7rem;padding:3px 10px;border-radius:4px;margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em;}
+.ex-header h2{font-family:'Playfair Display',serif;font-size:1.15rem;margin-bottom:4px;}
+.ex-header p{color:var(--text-light);font-size:.85rem;margin-bottom:14px;}
+.qcm-question{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:18px;margin-bottom:12px;}
+.qcm-question.answered{pointer-events:none;}
+.qcm-sentence{font-size:.92rem;font-weight:700;margin-bottom:12px;line-height:1.7;background:var(--acc-pale);border-radius:8px;padding:11px 14px;}
+.qcm-options{display:flex;flex-direction:column;gap:8px;}
+.qcm-opt{padding:10px 14px;border-radius:8px;border:2px solid #e2e8f0;background:white;font-family:'Lato',sans-serif;font-weight:400;font-size:.88rem;cursor:pointer;text-align:left;transition:all .2s;}
+.qcm-opt:hover{border-color:var(--acc);background:var(--acc-pale);}
+.qcm-opt.correct{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);font-weight:700;}
+.qcm-opt.wrong{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
+.qcm-opt.reveal{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);font-weight:700;}
+.qcm-feedback{margin-top:10px;padding:10px 13px;border-radius:8px;font-size:.84rem;font-weight:700;display:none;}
+.qcm-feedback.show{display:block;}
+.qcm-feedback.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.qcm-feedback.ko{background:var(--coral-pale);color:#b91c1c;}
+.btn-suivant{margin-top:14px;padding:10px 22px;border-radius:8px;font-family:'Lato',sans-serif;font-weight:700;font-size:.88rem;background:var(--acc);color:white;border:none;cursor:pointer;display:none;align-items:center;gap:8px;transition:all .2s;}
+.btn-suivant.show{display:inline-flex;}
+.btn-suivant:hover{background:#1e3070;}
+.classify-block{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:18px;margin-bottom:12px;}
+.classify-block.answered{pointer-events:none;}
+.classify-phrase{background:var(--acc-pale);border-radius:8px;padding:11px 14px;font-size:.92rem;margin-bottom:12px;line-height:1.7;}
+.classify-btns{display:flex;gap:8px;flex-wrap:wrap;}
+.classify-btn{padding:9px 14px;border-radius:6px;font-family:'Lato',sans-serif;font-weight:700;font-size:.78rem;border:2px solid;cursor:pointer;transition:all .2s;flex:1;text-align:center;min-width:80px;}
+.ant-btn{background:var(--acc-pale);color:var(--acc);border-color:var(--acc);}
+.cause-btn{background:#fef3c7;color:#92400e;border-color:#d97706;}
+.cond-btn{background:var(--mint-pale);color:var(--mint-deep);border-color:var(--mint);}
+.classify-btn.sel-ok{color:white!important;background:var(--mint)!important;border-color:var(--mint)!important;}
+.classify-btn.sel-ko{background:var(--coral-pale)!important;color:var(--coral)!important;border-color:var(--coral)!important;}
+.classify-btn.rev-ok{color:white!important;background:var(--acc)!important;border-color:var(--acc)!important;}
+.classify-feedback{margin-top:10px;padding:9px 13px;border-radius:8px;font-size:.83rem;font-weight:700;display:none;}
+.classify-feedback.show{display:block;}
+.classify-feedback.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.classify-feedback.ko{background:var(--coral-pale);color:#b91c1c;}
+.erreur-block{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:18px;margin-bottom:12px;}
+.erreur-block.answered{pointer-events:none;}
+.erreur-phrase{background:#fff1f2;border:1px solid #fecdd3;border-radius:8px;padding:11px 14px;font-size:.95rem;margin-bottom:12px;line-height:1.7;}
+.erreur-label{font-size:.78rem;font-weight:700;color:#be123c;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;}
+.erreur-choix{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+.erreur-feedback{margin-top:8px;padding:9px 13px;border-radius:8px;font-size:.83rem;font-weight:700;display:none;}
+.erreur-feedback.show{display:block;}
+.erreur-feedback.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.erreur-feedback.ko{background:var(--coral-pale);color:#b91c1c;}
+/* SAISIE */
+.saisie-block{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:18px;margin-bottom:12px;}
+.saisie-consigne{font-size:.88rem;color:var(--text-light);margin-bottom:14px;background:var(--acc-pale);padding:10px 14px;border-radius:8px;}
+.saisie-rows{display:flex;flex-direction:column;gap:10px;}
+.saisie-row{display:flex;align-items:center;gap:10px;background:var(--acc-pale);border-radius:8px;padding:10px 14px;flex-wrap:wrap;}
+.saisie-phrase{font-size:.9rem;flex:1;min-width:200px;line-height:1.6;}
+.saisie-input{border:2px solid var(--acc);border-radius:6px;padding:7px 10px;font-family:'Lato',sans-serif;font-weight:700;font-size:.92rem;color:var(--text);background:white;outline:none;min-width:160px;flex:1;}
+.saisie-input:focus{border-color:#1e3070;box-shadow:0 0 0 3px rgba(30,58,138,.1);}
+.saisie-input.correct{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.saisie-input.wrong{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);font-size:.78rem;}
+.btn-verif-saisie{margin-top:14px;padding:10px 22px;border-radius:8px;font-family:'Lato',sans-serif;font-weight:700;font-size:.88rem;background:var(--acc);color:white;border:none;cursor:pointer;display:block;width:100%;transition:all .2s;}
+.btn-verif-saisie:hover{background:#1e3070;}
+.btn-verif-saisie:disabled{opacity:.4;cursor:not-allowed;}
+.saisie-feedback{margin-top:8px;padding:9px 13px;border-radius:8px;font-size:.83rem;font-weight:700;display:none;}
+.saisie-feedback.show{display:block;}
+.saisie-feedback.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.saisie-feedback.ko{background:var(--coral-pale);color:#b91c1c;}
+/* REORG */
+.reorg-block{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:18px;margin-bottom:12px;}
+.reorg-consigne{font-size:.85rem;color:var(--text-light);margin-bottom:10px;}
+.reorg-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;padding:10px;background:var(--acc-pale);border-radius:8px;min-height:44px;}
+.reorg-chip{padding:7px 14px;border-radius:6px;border:2px solid var(--acc);background:white;font-weight:700;font-size:.85rem;cursor:pointer;color:var(--acc);transition:all .15s;user-select:none;}
+.reorg-chip.used{opacity:.25;pointer-events:none;}
+.reorg-result{min-height:40px;background:#f8fafc;border:2px dashed #94a3b8;border-radius:8px;padding:10px 14px;font-size:.9rem;margin-bottom:8px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;}
+.reorg-result-chip{padding:5px 12px;border-radius:5px;background:var(--acc);color:white;font-weight:700;font-size:.85rem;cursor:pointer;}
+.btn-reorg{padding:8px 16px;border-radius:6px;font-family:'Lato',sans-serif;font-weight:700;font-size:.82rem;border:none;cursor:pointer;transition:all .2s;}
+.btn-reorg.verify{background:var(--acc);color:white;}
+.btn-reorg.reset{background:var(--acc-pale);color:var(--acc);border:2px solid var(--acc);margin-left:8px;}
+.btn-reorg:hover{opacity:.85;}
+.reorg-feedback{margin-top:8px;padding:9px 13px;border-radius:8px;font-size:.83rem;font-weight:700;display:none;}
+.reorg-feedback.show{display:block;}
+.reorg-feedback.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.reorg-feedback.ko{background:var(--coral-pale);color:#b91c1c;}
+/* JUGEMENT */
+.jugement-block{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:18px;margin-bottom:12px;}
+.jugement-block.answered{pointer-events:none;}
+.jugement-options{display:flex;flex-direction:column;gap:10px;margin-bottom:12px;}
+.jugement-opt{padding:12px 16px;border-radius:8px;border:2px solid #e2e8f0;background:white;font-family:'Lato',sans-serif;font-size:.9rem;cursor:pointer;text-align:left;transition:all .2s;line-height:1.6;}
+.jugement-opt:hover{border-color:var(--acc);background:var(--acc-pale);}
+.jugement-opt.correct-choice{border-color:var(--mint);background:var(--mint-pale);}
+.jugement-opt.wrong-choice{border-color:var(--coral);background:var(--coral-pale);}
+.jugement-feedback{margin-top:8px;padding:9px 13px;border-radius:8px;font-size:.83rem;font-weight:700;display:none;}
+.jugement-feedback.show{display:block;}
+.jugement-feedback.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.jugement-feedback.ko{background:var(--coral-pale);color:#b91c1c;}
+/* BILAN */
+.bilan-card{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:28px 24px;text-align:center;}
+.bilan-icon{font-size:3.5rem;margin-bottom:12px;display:block;}
+.bilan-title{font-family:'Playfair Display',serif;font-size:1.8rem;margin-bottom:6px;color:var(--acc);}
+.bilan-msg{color:var(--text-light);font-size:.95rem;margin-bottom:20px;}
+.stars-row{display:flex;justify-content:center;gap:10px;margin-bottom:20px;}
+.star-big{font-size:2.5rem;filter:grayscale(1);transition:all .5s;}
+.star-big.earned{filter:none;animation:starPop .5s ease both;}
+@keyframes starPop{0%{transform:scale(0);}60%{transform:scale(1.2);}100%{transform:scale(1);}}
+.score-circle{width:100px;height:100px;border-radius:50%;background:var(--acc);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 20px;color:white;}
+.score-num{font-family:'Playfair Display',serif;font-size:1.8rem;line-height:1;}
+.score-sub{font-size:.65rem;opacity:.8;}
+.memo-card{background:var(--acc-pale);border-radius:var(--radius);padding:16px 20px;margin:18px 0;text-align:left;}
+.memo-card h3{font-weight:700;font-size:.85rem;color:var(--acc);margin-bottom:10px;text-transform:uppercase;letter-spacing:.04em;}
+.memo-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media(max-width:480px){.memo-grid{grid-template-columns:1fr;}}
+.memo-item{background:white;border-radius:8px;padding:10px 12px;font-size:.82rem;border:1px solid #e2e8f0;}
+.memo-item strong{color:var(--acc);}
+.bilan-btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:16px;}
+.btn-act{padding:10px 20px;border-radius:8px;font-family:'Lato',sans-serif;font-weight:700;font-size:.85rem;cursor:pointer;border:none;transition:all .2s;}
+.btn-act.primary{background:var(--acc);color:white;}
+.btn-act.secondary{background:var(--acc-pale);color:var(--acc);border:2px solid var(--acc);}
+.btn-act:hover{transform:translateY(-1px);}
+.confetti-piece{position:fixed;border-radius:2px;top:-20px;animation:fall linear both;pointer-events:none;z-index:9999;}
+@keyframes fall{0%{transform:translateY(0) rotate(0deg);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
+@media print{.print-bar,.btn-compris,.btn-suivant,.btn-verif-saisie,.btn-reorg,.bilan-card,.mascot-msg{display:none!important;}body{background:white;}.phase{display:block!important;}}
+</style>
+</head>
+<body>
+<div class="print-bar">
+  <button class="print-btn print-btn-lecon" onclick="window.print()"><span class="ico">📖</span><span class="lbl"> Imprimer la leçon</span></button>
+  <button class="print-btn print-btn-eval" onclick="window.print()"><span class="ico">📝</span><span class="lbl"> Imprimer les exercices</span></button>
+</div>
+
+<header class="header">
+  <div class="header-top">
+    <a href="../12-15ans.html" class="logo">🦉 L'Atelier du Devoir</a>
+    <div class="score-badge">⭐ <span id="score-display">0</span> pts</div>
+  </div>
+  <div class="steps-wrap">
+    <div class="steps">
+      <div class="step active" id="step-0"></div><div class="step" id="step-1"></div><div class="step" id="step-2"></div>
+      <div class="step" id="step-3"></div><div class="step" id="step-4"></div><div class="step" id="step-5"></div>
+      <div class="step" id="step-6"></div><div class="step" id="step-7"></div>
+    </div>
+    <div class="steps-labels">
+      <div class="step-lbl">Leçon</div><div class="step-lbl">Entr. 1</div><div class="step-lbl">Entr. 2</div>
+      <div class="step-lbl">Ex. 1</div><div class="step-lbl">Ex. 2</div><div class="step-lbl">Ex. 3</div>
+      <div class="step-lbl">Ex. 4</div><div class="step-lbl">Bilan</div>
+    </div>
+  </div>
+</header>
+
+<main class="main">
+
+  <div class="accroche">
+    <div class="accroche-icon">⏮</div>
+    <div class="accroche-text">
+      <h1>Le plus-que-parfait</h1>
+      <p>Exprimer une action accomplie avant une autre action passée — formation, valeurs et emplois.</p>
+      <div class="meta-row">
+        <span class="meta-tag">5e</span>
+        <span class="meta-tag">~20 min</span>
+        <span class="meta-tag">⭐⭐ Difficulté</span>
+        <span class="meta-tag">Français — Conjugaison</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- LEÇON -->
+  <div class="phase active" id="phase-lecon">
+    <div class="lecon-card">
+      <h2>📖 La leçon</h2>
+
+      <div class="lecon-block revealed" id="bloc-0">
+        <div class="lecon-subtitle">① Formation du plus-que-parfait</div>
+        <p class="analogie">Si le passé composé est une photo d'une action passée, le plus-que-parfait est la photo d'avant la photo. Une action encore plus ancienne, qui s'était déjà terminée quand l'autre a commencé.</p>
+        <div class="def-box">
+          <h4>Formation</h4>
+          <p>Auxiliaire <strong>être</strong> ou <strong>avoir</strong> à l'<strong>imparfait</strong> + <strong>participe passé</strong> du verbe.</p>
+        </div>
+        <table class="tableau">
+          <tr><th>Pronom</th><th>Avoir (ex: manger)</th><th>Être (ex: partir)</th></tr>
+          <tr><td>je / j'</td><td>j'avais mangé</td><td>j'étais parti(e)</td></tr>
+          <tr><td>tu</td><td>tu avais mangé</td><td>tu étais parti(e)</td></tr>
+          <tr><td>il / elle</td><td>il avait mangé</td><td>elle était partie</td></tr>
+          <tr><td>nous</td><td>nous avions mangé</td><td>nous étions parti(e)s</td></tr>
+          <tr><td>vous</td><td>vous aviez mangé</td><td>vous étiez parti(e)s</td></tr>
+          <tr><td>ils / elles</td><td>ils avaient mangé</td><td>elles étaient parties</td></tr>
+        </table>
+        <div class="astuce"><strong>Méthode :</strong> même logique que le passé composé — mêmes auxiliaires, même accord — mais l'auxiliaire est à l'imparfait au lieu du présent.</div>
+        <button class="btn-compris" onclick="revealBloc(1)">Bloc suivant →</button>
+      </div>
+
+      <div class="lecon-block" id="bloc-1">
+        <hr class="sep">
+        <div class="lecon-subtitle">② Valeurs du plus-que-parfait</div>
+        <p class="analogie">Le plus-que-parfait est le temps de l'avant-avant. Il sert à ordonner les événements passés entre eux : expliquer ce qui avait déjà eu lieu, ce qui avait causé quelque chose, ce qui aurait pu arriver autrement.</p>
+        <table class="tableau">
+          <tr><th>Valeur</th><th>Exemple</th></tr>
+          <tr><td><strong>Antériorité</strong><br><em>Action achevée avant une autre action passée</em></td><td>Quand il <span style="background:var(--acc-pale);padding:1px 4px;border-radius:3px;font-weight:700;">arriva</span>, elle <span style="background:#fef3c7;padding:1px 4px;border-radius:3px;font-weight:700;">était déjà partie</span>.</td></tr>
+          <tr><td><strong>Cause passée</strong><br><em>Expliquer pourquoi quelque chose s'est produit</em></td><td>Il était épuisé parce qu'il <span style="background:#fef3c7;padding:1px 4px;border-radius:3px;font-weight:700;">avait travaillé</span> toute la nuit.</td></tr>
+          <tr><td><strong>Condition irréelle</strong><br><em>Avec "si" → ce qui aurait pu arriver</em></td><td>Si tu <span style="background:#fef3c7;padding:1px 4px;border-radius:3px;font-weight:700;">avais révisé</span>, tu aurais réussi.</td></tr>
+        </table>
+        <div class="piege"><strong>Piège :</strong> ne pas confondre avec l'imparfait. L'imparfait décrit une situation ou une action habituelle dans le passé. Le plus-que-parfait marque une action <em>achevée avant</em> une autre action passée.</div>
+        <button class="btn-compris" onclick="revealBloc(2)">Bloc suivant →</button>
+      </div>
+
+      <div class="lecon-block" id="bloc-2">
+        <hr class="sep">
+        <div class="lecon-subtitle">③ Accord du participe passé</div>
+        <p class="analogie">Les règles d'accord du participe passé sont les mêmes qu'au passé composé. Le plus-que-parfait n'invente pas de nouvelles règles — il les applique dans un temps antérieur.</p>
+        <div class="def-box">
+          <h4>Rappel des accords</h4>
+          <p>Avec <strong>être</strong> : accord avec le sujet en genre et en nombre.<br>Avec <strong>avoir</strong> : accord avec le COD si celui-ci est placé <em>avant</em> le verbe.</p>
+        </div>
+        <div class="phrase-ex">— Elle <span class="hl-pqp">était arrivée</span> en avance. → "arrivée" s'accorde avec "elle" (féminin singulier)</div>
+        <div class="phrase-ex">— Les lettres qu'il <span class="hl-pqp">avait écrites</span>. → "écrites" s'accorde avec "les lettres" (COD féminin pluriel, placé avant)</div>
+        <div class="phrase-ex">— Il <span class="hl-pqp">avait mangé</span> une pomme. → pas d'accord ("une pomme" est après le verbe)</div>
+        <button class="btn-compris" onclick="startExercises()">✓ Leçon comprise — Aux exercices</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ENTRAÎNEMENT 1 — QCM -->
+  <div class="phase" id="phase-ex1">
+    <div class="mascot-msg"><span class="emo">🦉</span><p>Entraînement 1 — Identifier et former le plus-que-parfait. Auxiliaire être ou avoir à l'imparfait + participe passé.</p></div>
+    <div class="ex-num">Entraînement 1 / 2 — Reconnaître</div>
+    <div class="ex-header"><h2>Reconnaître le plus-que-parfait</h2><p>Sélectionne la bonne réponse.</p></div>
+    <div id="qcm1-container"></div>
+    <button class="btn-suivant" id="btn-to-ex2" onclick="goToPhase('ex2',2)">Entraînement 2 →</button>
+  </div>
+
+  <!-- ENTRAÎNEMENT 2 — CLASSIFY -->
+  <div class="phase" id="phase-ex2">
+    <div class="mascot-msg"><span class="emo">🦉</span><p>Entraînement 2 — Identifier la valeur du plus-que-parfait : antériorité, cause passée ou condition irréelle.</p></div>
+    <div class="ex-num">Entraînement 2 / 2 — Classer</div>
+    <div class="ex-header"><h2>Quelle valeur ?</h2><p>Identifie la valeur du plus-que-parfait souligné.</p></div>
+
+    <div class="classify-block" id="cl-0">
+      <div class="classify-phrase">« Quand les secours arrivèrent, les habitants <u>avaient déjà évacué</u> le bâtiment. »</div>
+      <div class="classify-btns">
+        <button class="classify-btn ant-btn" data-idx="0" data-type="ant" data-correct="ant" onclick="classifyAnswer(this)">Antériorité</button>
+        <button class="classify-btn cause-btn" data-idx="0" data-type="cause" data-correct="ant" onclick="classifyAnswer(this)">Cause passée</button>
+        <button class="classify-btn cond-btn" data-idx="0" data-type="cond" data-correct="ant" onclick="classifyAnswer(this)">Condition irréelle</button>
+      </div>
+      <div class="classify-feedback" id="clf-0"></div>
+    </div>
+
+    <div class="classify-block" id="cl-1">
+      <div class="classify-phrase">« Il était épuisé parce qu'il <u>avait couru</u> pendant deux heures sans s'arrêter. »</div>
+      <div class="classify-btns">
+        <button class="classify-btn ant-btn" data-idx="1" data-type="ant" data-correct="cause" onclick="classifyAnswer(this)">Antériorité</button>
+        <button class="classify-btn cause-btn" data-idx="1" data-type="cause" data-correct="cause" onclick="classifyAnswer(this)">Cause passée</button>
+        <button class="classify-btn cond-btn" data-idx="1" data-type="cond" data-correct="cause" onclick="classifyAnswer(this)">Condition irréelle</button>
+      </div>
+      <div class="classify-feedback" id="clf-1"></div>
+    </div>
+
+    <div class="classify-block" id="cl-2">
+      <div class="classify-phrase">« Si tu <u>avais écouté</u> les conseils de ton professeur, tu aurais évité cette erreur. »</div>
+      <div class="classify-btns">
+        <button class="classify-btn ant-btn" data-idx="2" data-type="ant" data-correct="cond" onclick="classifyAnswer(this)">Antériorité</button>
+        <button class="classify-btn cause-btn" data-idx="2" data-type="cause" data-correct="cond" onclick="classifyAnswer(this)">Cause passée</button>
+        <button class="classify-btn cond-btn" data-idx="2" data-type="cond" data-correct="cond" onclick="classifyAnswer(this)">Condition irréelle</button>
+      </div>
+      <div class="classify-feedback" id="clf-2"></div>
+    </div>
+
+    <div class="classify-block" id="cl-3">
+      <div class="classify-phrase">« Lorsqu'il ouvrit la lettre, il réalisa qu'elle <u>était partie</u> depuis trois jours. »</div>
+      <div class="classify-btns">
+        <button class="classify-btn ant-btn" data-idx="3" data-type="ant" data-correct="ant" onclick="classifyAnswer(this)">Antériorité</button>
+        <button class="classify-btn cause-btn" data-idx="3" data-type="cause" data-correct="ant" onclick="classifyAnswer(this)">Cause passée</button>
+        <button class="classify-btn cond-btn" data-idx="3" data-type="cond" data-correct="ant" onclick="classifyAnswer(this)">Condition irréelle</button>
+      </div>
+      <div class="classify-feedback" id="clf-3"></div>
+    </div>
+
+    <button class="btn-suivant" id="btn-to-drag1" onclick="goToPhase('drag1',3)">Exercice 1 →</button>
+  </div>
+
+  <!-- EXERCICE 1 — DÉTECTION D'ERREUR -->
+  <div class="phase" id="phase-drag1">
+    <div class="mascot-msg"><span class="emo">🦉</span><p>Exercice 1 — Le plus-que-parfait est mal formé. Sélectionne la forme correcte.</p></div>
+    <div class="ex-num">Exercice 1 / 4 — Détection d'erreur</div>
+    <div class="ex-header"><h2>Corriger la forme</h2><p>La forme soulignée est incorrecte. Clique sur la forme juste.</p></div>
+
+    <div class="erreur-block" id="err-0" data-correct="avait terminé">
+      <div class="erreur-label">⚠ Phrase avec erreur :</div>
+      <div class="erreur-phrase">« Quand je suis arrivé, il <u>a terminé</u> son travail. » (contexte passé — action antérieure)</div>
+      <div class="erreur-choix" id="errch-0"></div>
+      <div class="erreur-feedback" id="err-fb-0"></div>
+    </div>
+
+    <div class="erreur-block" id="err-1" data-correct="était tombée">
+      <div class="erreur-label">⚠ Phrase avec erreur :</div>
+      <div class="erreur-phrase">« Elle <u>avait tombée</u> avant que les secours arrivent. »</div>
+      <div class="erreur-choix" id="errch-1"></div>
+      <div class="erreur-feedback" id="err-fb-1"></div>
+    </div>
+
+    <div class="erreur-block" id="err-2" data-correct="avions préparé">
+      <div class="erreur-label">⚠ Phrase avec erreur :</div>
+      <div class="erreur-phrase">« Nous <u>avions préparer</u> le dossier avant la réunion. »</div>
+      <div class="erreur-choix" id="errch-2"></div>
+      <div class="erreur-feedback" id="err-fb-2"></div>
+    </div>
+
+    <div class="erreur-block" id="err-3" data-correct="avaient déjà lu">
+      <div class="erreur-label">⚠ Phrase avec erreur :</div>
+      <div class="erreur-phrase">« Les élèves <u>ont déjà lu</u> ce livre l'année précédente. » (contexte récit passé)</div>
+      <div class="erreur-choix" id="errch-3"></div>
+      <div class="erreur-feedback" id="err-fb-3"></div>
+    </div>
+
+    <button class="btn-suivant" id="btn-to-drag2" onclick="goToPhase('drag2',4)">Exercice 2 →</button>
+  </div>
+
+  <!-- EXERCICE 2 — SAISIE CLAVIER -->
+  <div class="phase" id="phase-drag2">
+    <div class="mascot-msg"><span class="emo">🦉</span><p>Exercice 2 — Conjugue chaque verbe au plus-que-parfait. Auxiliaire être ou avoir à l'imparfait + participe passé.</p></div>
+    <div class="ex-num">Exercice 2 / 4 — Conjuguer</div>
+    <div class="ex-header"><h2>Conjuguer au plus-que-parfait</h2><p>Écris la forme correcte dans chaque champ.</p></div>
+
+    <div class="saisie-block">
+      <div class="saisie-consigne">Complète chaque phrase en conjuguant le verbe entre parenthèses au plus-que-parfait.</div>
+      <div class="saisie-rows">
+        <div class="saisie-row">
+          <span class="saisie-phrase">Quand je suis arrivé, ses amis _____. <em>(partir — ils)</em></span>
+          <input class="saisie-input" id="si-0" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false">
+        </div>
+        <div class="saisie-row">
+          <span class="saisie-phrase">Elle ne savait pas qu'il _____ la lettre. <em>(lire)</em></span>
+          <input class="saisie-input" id="si-1" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false">
+        </div>
+        <div class="saisie-row">
+          <span class="saisie-phrase">Si nous _____ plus tôt, nous aurions réussi. <em>(partir)</em></span>
+          <input class="saisie-input" id="si-2" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false">
+        </div>
+        <div class="saisie-row">
+          <span class="saisie-phrase">Les photos qu'il _____ étaient magnifiques. <em>(prendre)</em></span>
+          <input class="saisie-input" id="si-3" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false">
+        </div>
+        <div class="saisie-row">
+          <span class="saisie-phrase">Tu _____ toute la nuit avant l'examen. <em>(travailler)</em></span>
+          <input class="saisie-input" id="si-4" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false">
+        </div>
+      </div>
+      <button class="btn-verif-saisie" id="btn-vs" onclick="verifySaisie()">✓ Vérifier</button>
+      <div class="saisie-feedback" id="saisie-fb"></div>
+    </div>
+    <button class="btn-suivant" id="btn-to-classify" onclick="goToPhase('classify',5)">Exercice 3 →</button>
+  </div>
+
+  <!-- EXERCICE 3 — TABLEAU DE CONJUGAISON -->
+  <div class="phase" id="phase-classify">
+    <div class="mascot-msg"><span class="emo">🦉</span><p>Exercice 3 — Conjugue chaque verbe au plus-que-parfait à toutes les personnes. Auxiliaire être ou avoir à l'imparfait + participe passé.</p></div>
+    <div class="ex-num">Exercice 3 / 4 — Tableau de conjugaison</div>
+    <div class="ex-header"><h2>Conjuguer au plus-que-parfait</h2><p>Complète chaque tableau. Écris la forme complète (auxiliaire + participe passé).</p></div>
+
+
+    <div class="saisie-block">
+      <div style="font-weight:700;font-size:.88rem;color:var(--acc);margin-bottom:12px;background:var(--acc-pale);border-radius:6px;padding:8px 12px;text-transform:uppercase;letter-spacing:.04em;">Verbe : FINIR (auxiliaire avoir — 2e groupe)</div>
+      <div class="saisie-rows">
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">j'</span><input class="saisie-input" id="ct-0-0" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">tu</span><input class="saisie-input" id="ct-0-1" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">il / elle</span><input class="saisie-input" id="ct-0-2" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">nous</span><input class="saisie-input" id="ct-0-3" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">vous</span><input class="saisie-input" id="ct-0-4" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">ils / elles</span><input class="saisie-input" id="ct-0-5" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+      </div>
+      <button class="btn-verif-saisie" id="btn-ct-0" onclick="verifyConjTab(0)" style="margin-top:12px;">✓ Vérifier</button>
+      <div class="saisie-feedback" id="ctfb-0"></div>
+    </div>
+    <div class="saisie-block">
+      <div style="font-weight:700;font-size:.88rem;color:var(--acc);margin-bottom:12px;background:var(--acc-pale);border-radius:6px;padding:8px 12px;text-transform:uppercase;letter-spacing:.04em;">Verbe : PARTIR (auxiliaire être — 3e groupe)</div>
+      <div class="saisie-rows">
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">je (masculin)</span><input class="saisie-input" id="ct-1-0" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">tu (féminin)</span><input class="saisie-input" id="ct-1-1" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">il</span><input class="saisie-input" id="ct-1-2" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">elle</span><input class="saisie-input" id="ct-1-3" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">nous (masculin)</span><input class="saisie-input" id="ct-1-4" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">ils</span><input class="saisie-input" id="ct-1-5" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+      </div>
+      <button class="btn-verif-saisie" id="btn-ct-1" onclick="verifyConjTab(1)" style="margin-top:12px;">✓ Vérifier</button>
+      <div class="saisie-feedback" id="ctfb-1"></div>
+    </div>
+    <div class="saisie-block">
+      <div style="font-weight:700;font-size:.88rem;color:var(--acc);margin-bottom:12px;background:var(--acc-pale);border-radius:6px;padding:8px 12px;text-transform:uppercase;letter-spacing:.04em;">Verbe : PRENDRE (auxiliaire avoir — participe irrégulier : pris)</div>
+      <div class="saisie-rows">
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">j'</span><input class="saisie-input" id="ct-2-0" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">tu</span><input class="saisie-input" id="ct-2-1" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">il / elle</span><input class="saisie-input" id="ct-2-2" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">nous</span><input class="saisie-input" id="ct-2-3" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">vous</span><input class="saisie-input" id="ct-2-4" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">ils / elles</span><input class="saisie-input" id="ct-2-5" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+      </div>
+      <button class="btn-verif-saisie" id="btn-ct-2" onclick="verifyConjTab(2)" style="margin-top:12px;">✓ Vérifier</button>
+      <div class="saisie-feedback" id="ctfb-2"></div>
+    </div>
+    <div class="saisie-block">
+      <div style="font-weight:700;font-size:.88rem;color:var(--acc);margin-bottom:12px;background:var(--acc-pale);border-radius:6px;padding:8px 12px;text-transform:uppercase;letter-spacing:.04em;">Verbe : SE LEVER (auxiliaire être — pronominal)</div>
+      <div class="saisie-rows">
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">je (masculin)</span><input class="saisie-input" id="ct-3-0" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">tu (féminin)</span><input class="saisie-input" id="ct-3-1" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">il</span><input class="saisie-input" id="ct-3-2" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">elle</span><input class="saisie-input" id="ct-3-3" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">nous (masculin)</span><input class="saisie-input" id="ct-3-4" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+        <div class="saisie-row"><span class="saisie-phrase" style="min-width:140px;max-width:140px;">ils</span><input class="saisie-input" id="ct-3-5" type="text" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+      </div>
+      <button class="btn-verif-saisie" id="btn-ct-3" onclick="verifyConjTab(3)" style="margin-top:12px;">✓ Vérifier</button>
+      <div class="saisie-feedback" id="ctfb-3"></div>
+    </div>
+
+    <button class="btn-suivant" id="btn-to-conjtable" onclick="goToPhase('conjtable',6)">Exercice 4 →</button>
+  </div>
+
+  <!-- EXERCICE 4 — JUGEMENT -->
+  <div class="phase" id="phase-conjtable">
+    <div class="mascot-msg"><span class="emo">🦉</span><p>Exercice 4 — Une phrase emploie correctement le plus-que-parfait, l'autre non. Clique sur la bonne.</p></div>
+    <div class="ex-num">Exercice 4 / 4 — Jugement</div>
+    <div class="ex-header"><h2>Laquelle est correcte ?</h2><p>Clique directement sur la phrase juste.</p></div>
+    <div id="jugement-container"></div>
+    <button class="btn-suivant" id="btn-to-bilan" onclick="goToPhase('bilan',7)">🌟 Voir mon bilan</button>
+  </div>
+
+  <!-- BILAN -->
+  <div class="phase" id="phase-bilan">
+    <div class="bilan-card">
+      <span class="bilan-icon">⏮</span>
+      <h2 class="bilan-title" id="bilan-title">Résultat</h2>
+      <p class="bilan-msg" id="bilan-msg"></p>
+      <div class="stars-row"><span class="star-big" id="star1">⭐</span><span class="star-big" id="star2">⭐</span><span class="star-big" id="star3">⭐</span></div>
+      <div class="score-circle"><span class="score-num" id="bilan-score">0</span><span class="score-sub" id="bilan-total">/ ? pts</span></div>
+      <div class="memo-card">
+        <h3>Mémo — Le plus-que-parfait</h3>
+        <div class="memo-grid">
+          <div class="memo-item"><strong>Formation</strong><br>avoir/être à l'imparfait + participe passé</div>
+          <div class="memo-item"><strong>Antériorité</strong><br>Action achevée avant une autre passée<br><em>il était déjà parti</em></div>
+          <div class="memo-item"><strong>Cause passée</strong><br>Expliquer pourquoi quelque chose s'est produit<br><em>parce qu'il avait couru</em></div>
+          <div class="memo-item"><strong>Condition irréelle</strong><br>Si + PQP → conditionnel passé<br><em>Si tu avais révisé…</em></div>
+        </div>
+      </div>
+      <div class="bilan-btns">
+        <button class="btn-act secondary" onclick="location.reload()">↺ Recommencer</button>
+        <button class="btn-act primary" onclick="location.href='../12-15ans.html'">← Retour aux fiches</button>
+      </div>
+    </div>
+  </div>
+
+</main>
+<script>
+var classifyExpls = {
+  "0": "Antériorité : l'évacuation s'est achevée avant l'arrivée des secours. Le plus-que-parfait marque cette action accomplie antérieurement.",
+  "1": "Cause passée : 'avait couru' explique pourquoi il était épuisé. L'action de courir est la cause de l'état présent dans le récit.",
+  "2": "Condition irréelle : 'Si tu avais écouté' + conditionnel passé 'tu aurais évité'. C'est la structure classique de la condition non réalisée dans le passé.",
+  "3": "Antériorité : le départ d'elle (plus-que-parfait) est antérieur au moment où il ouvre la lettre (passé simple). Les deux événements sont ordonnés."
+};
+
+var erreurExpls = {
+  "0": "Dans un récit au passé, pour exprimer qu'une action est antérieure à une autre action passée, on utilise le plus-que-parfait : 'avait terminé'.",
+  "1": "Tomber est un verbe qui se conjugue avec être. La forme correcte est 'était tombée' (accord avec elle, féminin singulier). 'Avait tombée' est incorrect.",
+  "2": "Le participe passé de 'préparer' est 'préparé', pas 'préparer'. La forme correcte est 'avions préparé'.",
+  "3": "Dans un récit au passé simple, l'action antérieure s'exprime au plus-que-parfait : 'avaient déjà lu'. Le passé composé ne s'emploie pas dans un récit au passé simple."
+};
+
+var erreurChoix = [
+  ["avait terminé","avait terminer","a terminé","était terminé"],
+  ["était tombée","avait tombé","était tombé","avait tombée"],
+  ["avions préparé","avions préparer","avons préparé","avions prépare"],
+  ["avaient déjà lu","ont déjà lu","avaient déjà lire","étaient déjà lus"]
+];
+
+var saisieAnswers = [
+  ["étaient partis","étaient parties"],
+  ["avait lu"],
+  ["étions partis","étions parties"],
+  ["avait prises","avait pris"],
+  ["avais travaillé"]
+];
+
+var conjTabData = [
+  {
+    verb: "finir",
+    label: "FINIR (avoir — 2e groupe)",
+    answers: [
+      ["avais fini"],["avais fini"],["avait fini"],
+      ["avions fini"],["aviez fini"],["avaient fini"]
+    ]
+  },
+  {
+    verb: "partir",
+    label: "PARTIR (être — 3e groupe)",
+    answers: [
+      ["etais parti","étais parti"],
+      ["etais partie","étais partie"],
+      ["etait parti","était parti"],
+      ["etait partie","était partie"],
+      ["etions partis","étions partis","etions parties","étions parties"],
+      ["etaient partis","étaient partis","etaient parties","étaient parties"]
+    ]
+  },
+  {
+    verb: "prendre",
+    label: "PRENDRE (avoir — participe irrégulier)",
+    answers: [
+      ["avais pris"],["avais pris"],["avait pris"],
+      ["avions pris"],["aviez pris"],["avaient pris"]
+    ]
+  },
+  {
+    verb: "se lever",
+    label: "SE LEVER (être — pronominal)",
+    answers: [
+      ["m'etais leve","m'étais levé","m'etais levée","m'étais levée"],
+      ["t'etais leve","t'étais levé","t'etais levée","t'étais levée"],
+      ["s'etait leve","s'était levé"],
+      ["s'etait levee","s'était levée"],
+      ["nous etions leves","nous étions levés","nous etions levees","nous étions levées"],
+      ["s'etaient leves","s'étaient levés","s'etaient levees","s'étaient levées"]
+    ]
+  }
+];
+
+var conjTabDone = {};
+var conjTabVerified = 0;
+
+var jugementData = [
+  {
+    phraseA: "Quand il rentra, sa mère avait déjà préparé le dîner.",
+    phraseB: "Quand il rentra, sa mère a déjà préparé le dîner.",
+    correct: "A",
+    expl: "Dans un récit au passé simple ('rentra'), l'action antérieure s'exprime au plus-que-parfait ('avait préparé'). Le passé composé 'a préparé' est incorrect dans ce contexte narratif."
+  },
+  {
+    phraseA: "Si vous aviez prévenu plus tôt, nous aurions pu organiser quelque chose.",
+    phraseB: "Si vous auriez prévenu plus tôt, nous aurions pu organiser quelque chose.",
+    correct: "A",
+    expl: "Après 'si' exprimant une condition irréelle dans le passé, on utilise le plus-que-parfait (jamais le conditionnel). 'Si vous auriez' est une faute classique."
+  },
+  {
+    phraseA: "Elle était fatiguée car elle avait travaillé toute la nuit.",
+    phraseB: "Elle était fatiguée car elle a travaillé toute la nuit.",
+    correct: "A",
+    expl: "Dans un contexte de récit à l'imparfait, la cause passée s'exprime au plus-que-parfait ('avait travaillé'). Le passé composé 'a travaillé' est incohérent avec l'imparfait 'était'."
+  }
+];
+
+var QCM1 = [
+  {
+    sentence: "Laquelle de ces formes est un plus-que-parfait ?",
+    options: ["il avait mangé","il mangeait","il a mangé","il mangea"],
+    answer: "il avait mangé",
+    expl: "'il avait mangé' = auxiliaire avoir à l'imparfait ('avait') + participe passé ('mangé'). C'est bien la formation du plus-que-parfait."
+  },
+  {
+    sentence: "Quel auxiliaire utilise-t-on pour former le plus-que-parfait de 'arriver' ?",
+    options: ["avoir","être","les deux selon le sens","ni l'un ni l'autre"],
+    answer: "être",
+    expl: "'Arriver' se conjugue toujours avec être (verbe de déplacement). Au plus-que-parfait : j'étais arrivé(e), tu étais arrivé(e)…"
+  },
+  {
+    sentence: "Dans « Elle avait lu les documents avant la réunion », le plus-que-parfait exprime :",
+    options: ["Une action simultanée","Une action antérieure à une autre action passée","Une habitude dans le passé","Une condition irréelle"],
+    answer: "Une action antérieure à une autre action passée",
+    expl: "La lecture des documents (plus-que-parfait) est achevée avant la réunion. C'est la valeur d'antériorité — l'action 'avant' dans le passé."
+  }
+];
+
+var score = 0;
+var TOTAL_PTS = 0;
+var qcm1Done = 0;
+var classifyDone = 0;
+var erreurDone = 0;
+var saisieDone = false;
+var reorgDone = 0;
+var jugementDone = 0;
+var reorgState = [];
+var jugementSelected = [null,null,null];
+
+// Calcul dynamique du total
+var NB_QCM = 3;
+var NB_CLASSIFY = 4;
+var NB_ERREUR = 4;
+var NB_SAISIE = 5;
+var NB_CONJTAB = 24; // 4 verbes × 6 formes
+var NB_JUGEMENT = 3;
+TOTAL_PTS = NB_QCM + NB_CLASSIFY + NB_ERREUR + NB_SAISIE + NB_CONJTAB + NB_JUGEMENT; // 43
+
+function nsConj(s){
+  return (s||'').toLowerCase().trim()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .replace(/\s+/g,' ');
+}
+
+function shuffle(arr){var a=arr.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+
+function revealBloc(n){
+  var bloc=document.getElementById('bloc-'+n);if(!bloc)return;
+  var prev=document.getElementById('bloc-'+(n-1));
+  if(prev){var b=prev.querySelector('.btn-compris');if(b){b.textContent='✓ Compris';b.disabled=true;b.style.opacity='.4';}}
+  bloc.classList.add('revealed');
+  setTimeout(function(){var hH=(document.querySelector('.header')||{offsetHeight:0}).offsetHeight;var rect=bloc.getBoundingClientRect();window.scrollTo({top:window.pageYOffset+rect.top-hH-20,behavior:'smooth'});},150);
+}
+
+function startExercises(){
+  erreurChoix.forEach(function(opts,idx){
+    var container=document.getElementById('errch-'+idx);
+    if(!container)return;
+    container.style.cssText='display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;';
+    shuffle(opts).forEach(function(word){
+      var btn=document.createElement('button');
+      btn.className='classify-btn ant-btn';
+      btn.dataset.choice=word;
+      btn.textContent=word;
+      btn.onclick=function(){verifyErreur(idx,this);};
+      container.appendChild(btn);
+    });
+  });
+  document.getElementById('bilan-total').textContent='/ '+TOTAL_PTS+' pts';
+  document.querySelector('.score-sub').textContent='/ '+TOTAL_PTS+' pts';
+  goToPhase('ex1',1);
+  buildQCM('qcm1-container',QCM1,1);
+}
+
+function goToPhase(phase,stepIdx){
+  document.querySelectorAll('.phase').forEach(function(p){p.classList.remove('active');});
+  var el=document.getElementById('phase-'+phase);
+  if(el){el.classList.add('active');setTimeout(function(){el.scrollIntoView({behavior:'smooth',block:'start'});},100);}
+  updateSteps(stepIdx);
+  if(phase==='classify') { /* tableau HTML statique, rien à construire */ }
+  if(phase==='conjtable')buildJugement();
+  if(phase==='bilan')showBilan();
+}
+
+function updateSteps(active){for(var i=0;i<8;i++){var s=document.getElementById('step-'+i);if(!s)continue;s.classList.remove('active','done');if(i<active)s.classList.add('done');else if(i===active)s.classList.add('active');}}
+
+function buildQCM(cId,data,exNum){
+  var c=document.getElementById(cId);c.innerHTML='';
+  data.forEach(function(q,qi){
+    var div=document.createElement('div');div.className='qcm-question';div.id='qq-'+exNum+'-'+qi;
+    var opts=shuffle(q.options);
+    var optHtml=opts.map(function(opt){return '<button class="qcm-opt" data-exnum="'+exNum+'" data-qi="'+qi+'" data-opt="'+encodeURIComponent(opt)+'" data-ans="'+encodeURIComponent(q.answer)+'" onclick="handleQCM(this)">'+opt+'</button>';}).join('');
+    div.innerHTML='<div class="qcm-sentence">'+q.sentence+'</div><div class="qcm-options">'+optHtml+'</div><div class="qcm-feedback" id="qf-'+exNum+'-'+qi+'"></div>';
+    c.appendChild(div);
+  });
+}
+
+function handleQCM(btn){
+  var exNum=parseInt(btn.dataset.exnum),qi=parseInt(btn.dataset.qi);
+  var chosen=decodeURIComponent(btn.dataset.opt),correct=decodeURIComponent(btn.dataset.ans);
+  var qDiv=document.getElementById('qq-'+exNum+'-'+qi);
+  if(qDiv.classList.contains('answered'))return;
+  qDiv.classList.add('answered');
+  var opts=qDiv.querySelectorAll('.qcm-opt'),fb=document.getElementById('qf-'+exNum+'-'+qi);
+  if(chosen===correct){
+    btn.classList.add('correct');
+    fb.className='qcm-feedback show ok';fb.innerHTML='✓ Correct. '+QCM1[qi].expl;
+    score++;document.getElementById('score-display').textContent=score;
+  }else{
+    btn.classList.add('wrong');
+    opts.forEach(function(o){if(decodeURIComponent(o.dataset.opt)===correct)o.classList.add('reveal');});
+    fb.className='qcm-feedback show ko';fb.innerHTML='✗ '+QCM1[qi].expl;
+  }
+  qcm1Done++;
+  if(qcm1Done>=QCM1.length){
+    setTimeout(function(){var nb=document.getElementById('btn-to-ex2');if(nb){nb.classList.add('show');nb.scrollIntoView({behavior:'smooth',block:'nearest'});}},500);
+  }
+}
+
+function classifyAnswer(btn){
+  var idx=parseInt(btn.dataset.idx),chosen=btn.dataset.type,correct=btn.dataset.correct;
+  var block=document.getElementById('cl-'+idx),fb=document.getElementById('clf-'+idx);
+  if(block.classList.contains('answered'))return;
+  block.classList.add('answered');classifyDone++;
+  if(chosen===correct){
+    btn.classList.add('sel-ok');fb.className='classify-feedback show ok';fb.innerHTML='✓ '+classifyExpls[String(idx)];
+    score++;document.getElementById('score-display').textContent=score;
+  }else{
+    btn.classList.add('sel-ko');
+    block.querySelectorAll('.classify-btn').forEach(function(b){if(b.dataset.type===correct)b.classList.add('rev-ok');});
+    fb.className='classify-feedback show ko';fb.innerHTML='✗ '+classifyExpls[String(idx)];
+  }
+  if(classifyDone>=4){setTimeout(function(){var nb=document.getElementById('btn-to-drag1');nb.classList.add('show');nb.scrollIntoView({behavior:'smooth',block:'nearest'});},500);}
+}
+
+function verifyErreur(idx,btn){
+  var block=document.getElementById('err-'+idx);
+  if(block.classList.contains('answered'))return;
+  block.classList.add('answered');
+  var chosen=btn.dataset.choice,correct=block.dataset.correct;
+  var fb=document.getElementById('err-fb-'+idx);
+  block.querySelectorAll('button').forEach(function(b){b.style.pointerEvents='none';});
+  if(chosen===correct){
+    btn.classList.add('sel-ok');score++;document.getElementById('score-display').textContent=score;
+    fb.className='erreur-feedback show ok';fb.innerHTML='✓ Correct — <strong>'+correct+'</strong>. '+erreurExpls[String(idx)];
+  }else{
+    btn.classList.add('sel-ko');
+    block.querySelectorAll('button').forEach(function(b){if(b.dataset.choice===correct)b.classList.add('rev-ok');});
+    fb.className='erreur-feedback show ko';fb.innerHTML='✗ La forme correcte était <strong>'+correct+'</strong>. '+erreurExpls[String(idx)];
+  }
+  erreurDone++;
+  if(erreurDone>=4){setTimeout(function(){var nb=document.getElementById('btn-to-drag2');nb.classList.add('show');nb.scrollIntoView({behavior:'smooth',block:'nearest'});},600);}
+}
+
+function verifySaisie(){
+  if(saisieDone)return;
+  saisieDone=true;
+  var nbOk=0;
+  saisieAnswers.forEach(function(accepted,i){
+    var inp=document.getElementById('si-'+i);
+    inp.readOnly=true;
+    var ok=accepted.some(function(a){return nsConj(inp.value)===nsConj(a);});
+    if(ok){
+      inp.classList.add('correct');nbOk++;score++;
+      document.getElementById('score-display').textContent=score;
+    }else{
+      inp.classList.add('wrong');
+      var original=inp.value;
+      inp.value=(original?original+' ':'')+'\u2192 '+accepted[0];
+      inp.style.fontSize='.78rem';
+    }
+  });
+  document.getElementById('btn-vs').disabled=true;
+  var fb=document.getElementById('saisie-fb');
+  fb.className='saisie-feedback show '+(nbOk===saisieAnswers.length?'ok':'ko');
+  fb.innerHTML=nbOk===saisieAnswers.length
+    ?'✓ Parfait — '+saisieAnswers.length+'/'+saisieAnswers.length
+    :'✗ '+nbOk+'/'+saisieAnswers.length+' — corrections en rouge.';
+  setTimeout(function(){var nb=document.getElementById('btn-to-classify');nb.classList.add('show');nb.scrollIntoView({behavior:'smooth',block:'nearest'});},700);
+}
+
+function verifyConjTab(ti){
+  if(conjTabDone[ti])return;
+  conjTabDone[ti]=true;
+  var data=conjTabData[ti];
+  var nbOk=0;
+  data.answers.forEach(function(accepted,row){
+    var inp=document.getElementById('ct-'+ti+'-'+row);
+    if(!inp)return;
+    inp.readOnly=true;
+    var ok=accepted.some(function(a){return nsConj(inp.value)===nsConj(a);});
+    if(ok){
+      inp.classList.add('correct');nbOk++;score++;
+      document.getElementById('score-display').textContent=score;
+    }else{
+      inp.classList.add('wrong');
+      var original=inp.value;
+      inp.value=(original?original+' ':'')+'\u2192 '+accepted[0];
+      inp.style.fontSize='.78rem';
+    }
+  });
+  var btn=document.getElementById('btn-ct-'+ti);if(btn)btn.disabled=true;
+  var fb=document.getElementById('ctfb-'+ti);
+  fb.className='saisie-feedback show '+(nbOk===6?'ok':'ko');
+  fb.innerHTML=nbOk===6?'✓ Parfait — 6/6':'✗ '+nbOk+'/6 — corrections en rouge.';
+  conjTabVerified++;
+  if(conjTabVerified>=4){
+    setTimeout(function(){var nb=document.getElementById('btn-to-conjtable');nb.classList.add('show');nb.scrollIntoView({behavior:'smooth',block:'nearest'});},600);
+  }
+}
+
+function buildJugement(){
+  var c=document.getElementById('jugement-container');c.innerHTML='';
+  jugementData.forEach(function(item,ji){
+    jugementSelected[ji]=null;
+    var div=document.createElement('div');div.className='jugement-block';div.id='jug-'+ji;
+    div.innerHTML='<div class="jugement-options">'
+      +'<div class="jugement-opt" id="jopt-'+ji+'-A" onclick="verifyJugement('+ji+',\'A\')"><strong>A \u2014</strong> '+item.phraseA+'</div>'
+      +'<div class="jugement-opt" id="jopt-'+ji+'-B" onclick="verifyJugement('+ji+',\'B\')"><strong>B \u2014</strong> '+item.phraseB+'</div>'
+      +'</div>'
+      +'<div class="jugement-feedback" id="jfb-'+ji+'"></div>';
+    c.appendChild(div);
+  });
+}
+
+function verifyJugement(ji,choice){
+  var block=document.getElementById('jug-'+ji);
+  if(block.classList.contains('answered'))return;
+  block.classList.add('answered');
+  var correct=jugementData[ji].correct,fb=document.getElementById('jfb-'+ji);
+  var choiceOk=(choice===correct);
+  document.getElementById('jopt-'+ji+'-'+correct).classList.add('correct-choice');
+  if(!choiceOk)document.getElementById('jopt-'+ji+'-'+choice).classList.add('wrong-choice');
+  if(choiceOk){
+    score++;document.getElementById('score-display').textContent=score;
+    fb.className='jugement-feedback show ok';fb.innerHTML='✓ Correct. '+jugementData[ji].expl;
+  }else{
+    fb.className='jugement-feedback show ko';fb.innerHTML='✗ '+jugementData[ji].expl;
+  }
+  jugementDone++;
+  if(jugementDone>=jugementData.length){setTimeout(function(){var nb=document.getElementById('btn-to-bilan');nb.classList.add('show');nb.scrollIntoView({behavior:'smooth',block:'nearest'});},600);}
+}
+
+function showBilan(){
+  document.getElementById('bilan-score').textContent=score;
+  document.getElementById('bilan-total').textContent='/ '+TOTAL_PTS+' pts';
+  var pct=score/TOTAL_PTS;
+  var title,msg;
+  if(pct>=0.89){title='Excellent';msg="Maîtrise complète du plus-que-parfait. Formation, valeurs et accords sont bien intégrés.";}
+  else if(pct>=0.65){title='Satisfaisant';msg="Bonne compréhension globale. Revois les valeurs (antériorité, cause, condition) et l'accord du participe passé.";}
+  else{title='À consolider';msg="Relis la formation : auxiliaire être ou avoir à l'imparfait + participe passé. Les valeurs et la règle 'si + PQP → conditionnel passé' sont à ancrer.";}
+  document.getElementById('bilan-title').textContent=title;
+  document.getElementById('bilan-msg').textContent=msg;
+  var seuils=[Math.ceil(TOTAL_PTS*.33),Math.ceil(TOTAL_PTS*.66),Math.ceil(TOTAL_PTS*.89)];
+  ['star1','star2','star3'].forEach(function(id,i){
+    var el=document.getElementById(id);
+    if(score>=seuils[i]){(function(e,d){setTimeout(function(){e.classList.add('earned');},d);})(el,300+i*400);}
+    else el.style.filter='grayscale(1)';
+  });
+  if(pct>=0.65)lanceConfetti();
+}
+
+function lanceConfetti(){
+  var cols=['#1e3a8a','#93c5fd','#059669','#d97706','#0369a1'];
+  for(var i=0;i<50;i++){
+    var el=document.createElement('div');el.className='confetti-piece';
+    el.style.cssText='left:'+Math.random()*100+'vw;background:'+cols[Math.floor(Math.random()*5)]+';animation-duration:'+(1.5+Math.random()*2)+'s;animation-delay:'+Math.random()*1.2+'s;width:'+(6+Math.random()*7)+'px;height:'+(6+Math.random()*7)+'px;border-radius:'+(Math.random()>.5?'50%':'2px')+';';
+    document.body.appendChild(el);
+    setTimeout(function(){if(el.parentNode)el.remove();},4000);
+  }
+}
+</script>
+</body>
+</html>
