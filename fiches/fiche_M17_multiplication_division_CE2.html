@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title id="page-title">M17 | L'Atelier du Devoir</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../template_cycle2_maths.css">
+</head>
+<body>
+
+<!-- ═══ HEADER ═══ -->
+<header class="header">
+  <div class="header-top">
+    <a href="../6-9ans.html" class="logo">🦉 L'Atelier du Devoir</a>
+    <div class="score-badge">⭐ <span id="score-display">0</span></div>
+  </div>
+  <div class="steps-wrap"><div class="steps">
+    <div class="step active"></div><div class="step"></div><div class="step"></div>
+    <div class="step"></div><div class="step"></div><div class="step"></div>
+  </div></div>
+</header>
+
+<main class="main">
+
+<!-- ═══ ACCROCHE ═══ -->
+<div class="accroche">
+  <div class="big-icon" id="fiche-icon"></div>
+  <h1 id="fiche-titre"></h1>
+  <p id="fiche-soustitre" style="font-family:'Nunito',sans-serif;"></p>
+  <div class="meta-row" id="fiche-metas"></div>
+</div>
+
+<!-- ═══ LEÇON ═══ -->
+<div class="phase active" id="phase-lecon">
+  <div class="lecon-card">
+    <h2>📖 La leçon</h2>
+    <div id="lecon-content"></div>
+  </div>
+</div>
+
+<!-- ═══ PHASES MOTEUR ═══ -->
+<div class="phase" id="phase-g1">
+  <div class="ugo-box"><span class="ugo">🦉</span><p id="g1-intro"></p></div>
+  <div id="g1-reset" class="reset-box"><div class="r-ugo">🦉</div><h3>On recommence !</h3><p id="g1-reset-msg"></p><button class="btn-reset" onclick="initG1()">↺ Réessayer !</button></div>
+  <div id="g1-zone"></div>
+  <button class="btn-suite" id="btn-g1-to-g2" onclick="goPhase('g2',2)">Encore des questions ! 🌟</button>
+</div>
+
+<div class="phase" id="phase-g2">
+  <div class="ugo-box"><span class="ugo">🦉</span><p id="g2-intro"></p></div>
+  <div id="g2-reset" class="reset-box"><div class="r-ugo">🦉</div><h3>On recommence !</h3><p id="g2-reset-msg"></p><button class="btn-reset" onclick="initG2()">↺ Réessayer !</button></div>
+  <div id="g2-zone"></div>
+  <button class="btn-suite" id="btn-g2-to-free" onclick="goPhase('free',3)">Super ! Exercices libres 🎯</button>
+</div>
+
+<div class="phase" id="phase-free">
+  <div class="ugo-box"><span class="ugo">🦉</span><p id="free1-intro"><strong>5 questions !</strong> 🧡</p></div>
+  <div id="free1-zone"></div>
+  <button class="btn-suite" id="btn-free-to-free2" onclick="goPhase('free2',4)">5 dernières ! 💪</button>
+</div>
+
+<div class="phase" id="phase-free2">
+  <div class="ugo-box"><span class="ugo">🦉</span><p>Encore <strong>5 questions</strong> ! 🏁</p></div>
+  <div id="free2-zone"></div>
+  <button class="btn-suite" id="btn-free2-to-bilan" onclick="goPhase('bilan',5)">🌟 Mon résultat !</button>
+</div>
+
+<div class="phase" id="phase-bilan">
+  <div class="bilan-card">
+    <span class="bilan-ugo">🦉</span>
+    <h2 class="bilan-title" id="bilan-title"></h2>
+    <p class="bilan-msg" id="bilan-msg"></p>
+    <div class="stars-row"><span class="star-big" id="etoile1">⭐</span><span class="star-big" id="etoile2">⭐</span><span class="star-big" id="etoile3">⭐</span></div>
+    <div class="score-circle"><span class="score-num" id="bilan-pts">0</span><span class="score-sub" id="bilan-sur">/0</span></div>
+    <div class="memo"><h3>📝 Ce que j'ai appris</h3><div class="memo-grid" id="memo-grid"></div></div>
+    <div class="bilan-btns">
+      <button class="btn-bilan secondary" onclick="location.reload()">↺ Recommencer</button>
+      <button class="btn-bilan primary" onclick="location.href='../6-9ans.html'">← Les fiches</button>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<!-- ═══════════════════════════════════════
+     DONNÉES DE LA FICHE — seule partie
+     que Claude génère à chaque nouvelle fiche
+     ═══════════════════════════════════════ -->
+<script>
+var FICHE_CONFIG={
+  code:'M17',titre:'Multiplication vs Division',soustitre:'Choisir × ou ÷ selon le problème',
+  icon:'🔄',metas:['CE2','⭐⭐ Moyen','🔢 Maths'],
+  acc:'#d97706',acc_pale:'#fffbeb',acc_mid:'#fcd34d',acc_dark:'#b45309',
+  confetti_colors:['#d97706','#fcd34d','#059669','#0369a1','#7c3aed'],
+  g1_intro:'Super ! <strong>3 questions</strong> sur le choix de l\'opération. <strong>3 essais</strong> ! 🧡',
+  g2_intro:'Excellent ! <strong>3 problèmes</strong> complets. Tu vas y arriver ! 🏆',
+  g1_reset:'"En tout" → ×. "Partager / chacun" → ÷. 💪',
+  g2_reset:'Cherche le mot-indice et utilise tes tables ! 💪',
+  bilan_top:'BRAVO ! 🎉🎊',bilan_top_msg:'Tu sais choisir × ou ÷ ! Ugo est super fier de toi ! 🦉⭐',
+  bilan_mid:'Très bien ! 😊🌟',bilan_mid_msg:'Pense aux mots-indices : "en tout"→×, "partager"→÷. Continue !',
+  bilan_low:'Bien essayé ! 💪',bilan_low_msg:'× = grouper, ÷ = partager. Recommence ! 🦉',
+  memo:[
+    {titre:'× Multiplier',contenu:'Groupes en tout\n3 paquets × 4 = 12'},
+    {titre:'÷ Diviser',contenu:'Partager en groupes\n12 ÷ 3 groupes = 4'},
+    {titre:'Mots × ',contenu:'"en tout", "au total"\n"chaque × nombre"'},
+    {titre:'Mots ÷',contenu:'"partager", "chacun"\n"par groupe", "répartir"'}
+  ],
+  lecon_html:`
+<div class="lecon-block revealed" id="bloc-0">
+  <div class="bloc-titre">① × ou ÷ : la différence</div>
+  <div class="ugo-box"><span class="ugo">🦉</span>
+    <p><strong>Multiplier</strong> = regrouper des groupes égaux → on cherche le <strong>total</strong>.<br>
+    <strong>Diviser</strong> = partager en groupes égaux → on cherche <strong>chaque part</strong>. 🔄</p>
+  </div>
+  <div class="ex-grille">
+    <div class="ex-card" style="background:#f0fdf4;border-color:#6ee7b7;">
+      <div style="font-size:.95rem;color:#047857;font-family:'Fredoka One';margin-bottom:6px;">✖️ Multiplication</div>
+      <div style="font-family:'Nunito',sans-serif;font-size:.85rem;color:#475569;line-height:1.7;">
+        3 boîtes de 4 bonbons<br><strong style="color:#047857;">3 × 4 = 12</strong> en tout
+      </div>
+    </div>
+    <div class="ex-card" style="background:#fffbeb;border-color:#fcd34d;">
+      <div style="font-size:.95rem;color:#b45309;font-family:'Fredoka One';margin-bottom:6px;">➗ Division</div>
+      <div style="font-family:'Nunito',sans-serif;font-size:.85rem;color:#475569;line-height:1.7;">
+        12 bonbons en 3 groupes<br><strong style="color:#b45309;">12 ÷ 3 = 4</strong> par groupe
+      </div>
+    </div>
+  </div>
+  <div class="info-box"><strong>Le lien :</strong> 3×4=12 ↔ 12÷3=4 ↔ 12÷4=3. Mêmes nombres, deux opérations inverses !</div>
+  <button class="btn-compris" onclick="revealBloc(1)">J'ai compris ! 🎉</button>
+</div>
+<div class="lecon-block" id="bloc-1">
+  <hr class="sep">
+  <div class="bloc-titre">② Les mots-indices</div>
+  <div class="ugo-box"><span class="ugo">🦉</span><p>Des <strong>mots dans le problème</strong> t'indiquent quelle opération choisir ! 🔍</p></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0;">
+    <div style="background:#f0fdf4;border:2px solid #6ee7b7;border-radius:14px;padding:13px;">
+      <div style="font-family:'Fredoka One';color:#047857;margin-bottom:6px;">✖️ Multiplication</div>
+      <div style="font-family:'Nunito',sans-serif;font-size:.82rem;color:#475569;line-height:1.9;">→ en tout, au total<br>→ chaque × nombre<br>→ combien au total ?</div>
+    </div>
+    <div style="background:#fffbeb;border:2px solid #fcd34d;border-radius:14px;padding:13px;">
+      <div style="font-family:'Fredoka One';color:#b45309;margin-bottom:6px;">➗ Division</div>
+      <div style="font-family:'Nunito',sans-serif;font-size:.82rem;color:#475569;line-height:1.9;">→ partager, répartir<br>→ combien chacun ?<br>→ par groupe, parts égales</div>
+    </div>
+  </div>
+  <button class="btn-compris" onclick="revealBloc(2)">J'ai compris ! 🎉</button>
+</div>
+<div class="lecon-block" id="bloc-2">
+  <hr class="sep">
+  <div class="bloc-titre">③ Exemples</div>
+  <div class="ugo-box"><span class="ugo">🦉</span><p>Repère le mot-indice ! 🎯</p></div>
+  <div style="display:flex;flex-direction:column;gap:10px;margin:14px 0;">
+    <div class="ex-card" style="background:#f0fdf4;border-color:#6ee7b7;text-align:left;padding:13px;">
+      <div style="font-family:'Nunito',sans-serif;font-size:.86rem;color:#475569;margin-bottom:5px;">6 rangées de 7 élèves. Combien <strong>en tout</strong> ?</div>
+      <div style="color:#047857;">"en tout" → ✖️ : 6 × 7 = <strong>42</strong></div>
+    </div>
+    <div class="ex-card" style="background:#fffbeb;border-color:#fcd34d;text-align:left;padding:13px;">
+      <div style="font-family:'Nunito',sans-serif;font-size:.86rem;color:#475569;margin-bottom:5px;">42 élèves <strong>répartis</strong> en 6 groupes. Combien <strong>par groupe</strong> ?</div>
+      <div style="color:#b45309;">"répartis / par groupe" → ➗ : 42 ÷ 6 = <strong>7</strong></div>
+    </div>
+  </div>
+  <button class="btn-compris" onclick="goPhase('g1',1)">On joue ! 🚀</button>
+</div>`
+};
+
+var G1=[
+  {titre:"🔄 × ou ÷ ?",etapes:[
+    {q:"6 rangées de 7 élèves. Combien EN TOUT ?",opts:["✖️ 6 × 7 = 42","➗ 42 ÷ 6","➕ 6 + 7"],ok:0,
+     hint:"EN TOUT = on regroupe → multiplication.",
+     expl_ok:"✖️ 6 × 7 = 42 ! 'En tout' → multiplication. 🎉",expl_ko:"'En tout' → multiplication. 6×7=42."},
+    {q:"42 élèves répartis en 6 groupes égaux. Combien PAR GROUPE ?",opts:["➗ 42 ÷ 6 = 7","✖️ 42 × 6 = 252","➕ 42 + 6"],ok:0,
+     hint:"RÉPARTIS / PAR GROUPE = on partage → division.",
+     expl_ok:"➗ 42 ÷ 6 = 7 ! 'Répartis / par groupe' → division. 🌟",expl_ko:"'Partager' → division. 42÷6=7."},
+    {q:"8 boîtes de 9 crayons. Combien AU TOTAL ?",opts:["✖️ 8 × 9 = 72","➗ 8 ÷ 9","➖ 9 - 8"],ok:0,
+     hint:"AU TOTAL → multiplication.",
+     expl_ok:"✖️ 8 × 9 = 72 ! 'Au total' → multiplication. 🎉",expl_ko:"'Au total' → multiplication. 8×9=72."}
+  ]},
+  {titre:"🔄 Mots-indices",etapes:[
+    {q:"'PARTAGER 24 bonbons ENTRE 4 enfants' →",opts:["➗ Division : 24 ÷ 4 = 6","✖️ Multiplication : 24 × 4"],ok:0,
+     hint:"PARTAGER ENTRE = on divise.",
+     expl_ok:"➗ 'Partager entre' → 24÷4=6. 🌟",expl_ko:"'Partager entre' → division."},
+    {q:"'5 FOIS 8 images' →",opts:["✖️ Multiplication : 5 × 8 = 40","➗ Division : 40 ÷ 5"],ok:0,
+     hint:"FOIS → multiplication.",
+     expl_ok:"✖️ 'Fois' → 5×8=40. 🎉",expl_ko:"'Fois' → multiplication."},
+    {q:"'56 cartes PARTAGÉES en 7 paquets ÉGAUX' →",opts:["➗ 56 ÷ 7 = 8","✖️ 56 × 7 = 392"],ok:0,
+     hint:"PARTAGÉES ÉGALEMENT = division.",
+     expl_ok:"➗ 56÷7=8 ! 'Partagées également' → division. 🌟",expl_ko:"'Partagées' → division. 56÷7=8."}
+  ]},
+  {titre:"🔄 Résoudre",etapes:[
+    {q:"7 paquets de 6 bonbons. Total ?",opts:["42 (7×6)","13 (7+6)"],ok:0,
+     hint:"Groupes × taille → multiplication.",
+     expl_ok:"42 ! 7×6=42. 🎉",expl_ko:"7×6=42."},
+    {q:"63 billes partagées en 9 groupes. Combien par groupe ?",opts:["7 (63÷9)","72 (63+9)"],ok:0,
+     hint:"Partager → division. 63÷9=?",
+     expl_ok:"7 ! 63÷9=7. 9×7=63 ✓ 🌟",expl_ko:"Partager → division. 63÷9=7."},
+    {q:"Si 6×8=48, quelle division peut-on écrire ?",opts:["48÷6=8","48÷2=24"],ok:0,
+     hint:"× et ÷ sont inverses ! 6×8=48 → 48÷6=?",
+     expl_ok:"48÷6=8 ! Division = inverse de la multiplication. 🎉",expl_ko:"6×8=48 → 48÷6=8."}
+  ]},
+  {titre:"🔄 Opération ET résultat",etapes:[
+    {q:"4 enfants ont CHACUN 9 billes. Total ?",opts:["36 (4×9)","5 (9−4)"],ok:0,
+     hint:"CHACUN → plusieurs groupes = multiplication.",
+     expl_ok:"36 ! 'Chacun' → multiplication. 4×9=36. 🌟",expl_ko:"'Chacun' → multiplication. 4×9=36."},
+    {q:"36 élèves en 4 équipes ÉGALES. Combien par équipe ?",opts:["9 (36÷4)","40 (36+4)"],ok:0,
+     hint:"ÉQUIPES ÉGALES → division.",
+     expl_ok:"9 ! 36÷4=9. 4×9=36 ✓ 🎉",expl_ko:"Équipes égales → division. 36÷4=9."},
+    {q:"Les tables de × servent aussi à faire ÷ ?",opts:["Oui ! 7×8=56 → 56÷7=8","Non, aucun lien"],ok:0,
+     hint:"× et ÷ sont inverses l'une de l'autre.",
+     expl_ok:"Oui ! On utilise les tables pour les deux. 🌟",expl_ko:"7×8=56 → 56÷7=8. Les deux sont liées !"}
+  ]}
+];
+
+var G2=[
+  {titre:"✏️ Problèmes × et ÷",etapes:[
+    {q:"6 boîtes de 8 crayons. Combien EN TOUT ?",opts:["48 (6×8)","14 (6+8)"],ok:0,
+     hint:"'En tout' + groupes → multiplication. 6×8=?",
+     expl_ok:"48 ! 6×8=48 crayons. 🎉",expl_ko:"6 boîtes × 8 = 6×8=48."},
+    {q:"48 images en 6 albums ÉGAUX. Combien par album ?",opts:["8 (48÷6)","54 (48+6)"],ok:0,
+     hint:"'Répartir' → division. 48÷6=?",
+     expl_ok:"8 ! 48÷6=8. 6×8=48 ✓ 🌟",expl_ko:"Répartir → division. 48÷6=8."},
+    {q:"9 rangées de 7 arbres. Combien AU TOTAL ?",opts:["63 (9×7)","16 (9+7)"],ok:0,
+     hint:"'Au total' → multiplication. 9×7=?",
+     expl_ok:"63 ! 9×7=63. 🎉",expl_ko:"9×7=63."}
+  ]},
+  {titre:"✏️ Choisir ET calculer",etapes:[
+    {q:"72 bonbons partagés entre 8 enfants. Combien CHACUN ?",opts:["9 (72÷8)","80 (72+8)"],ok:0,
+     hint:"'Partager / chacun' → division. 72÷8=?",
+     expl_ok:"9 ! 72÷8=9. 8×9=72 ✓ 🌟",expl_ko:"Partager → division. 72÷8=9."},
+    {q:"5 sacs de 7 kg. Poids TOTAL ?",opts:["35 (5×7)","12 (5+7)"],ok:0,
+     hint:"Groupes × poids = total → multiplication.",
+     expl_ok:"35 kg ! 5×7=35. 🎉",expl_ko:"5×7=35 kg."},
+    {q:"35 kg répartis dans 5 sacs égaux. Combien par sac ?",opts:["7 (35÷5)","40 (35+5)"],ok:0,
+     hint:"Répartir → division. 35÷5=?",
+     expl_ok:"7 ! 35÷5=7. 5×7=35 ✓ 🌟",expl_ko:"Répartir → division. 35÷5=7."}
+  ]},
+  {titre:"✏️ Vrai ou faux ?",etapes:[
+    {q:"'3 fois 8' = 3 × 8 = 24 ?",opts:["Oui ! 3×8=24 ✓","Non, c'est 3+8=11"],ok:0,
+     hint:"'Fois' = multiplication.",
+     expl_ok:"Oui ! 3×8=24 ✓ 🎉",expl_ko:"'Fois' → multiplication. 3×8=24."},
+    {q:"Si 4×9=36, alors 36÷4 = 9 ?",opts:["Oui ! Opérations inverses","Non, 36÷4≠9"],ok:0,
+     hint:"× et ÷ sont inverses.",
+     expl_ok:"Oui ! 4×9=36 → 36÷4=9 ✓ 🌟",expl_ko:"4×9=36 → 36÷4=9."},
+    {q:"'Partager 56 en 8 parts' = 56 × 8 ?",opts:["Non ! C'est 56 ÷ 8 = 7","Oui, c'est 56×8"],ok:0,
+     hint:"Partager → division, pas multiplication.",
+     expl_ok:"Non ! Partager → division. 56÷8=7. 🎉",expl_ko:"'Partager' → division. 56÷8=7."}
+  ]},
+  {titre:"✏️ Problèmes variés",etapes:[
+    {q:"6 enfants ont CHACUN 7 autocollants. Total ?",opts:["42 (6×7)","13 (6+7)"],ok:0,
+     hint:"CHACUN + AU TOTAL → multiplication.",
+     expl_ok:"42 ! 6×7=42. 🌟",expl_ko:"6×7=42."},
+    {q:"42 autocollants partagés entre 6 enfants. Chacun ?",opts:["7 (42÷6)","48 (42+6)"],ok:0,
+     hint:"Partager entre = division.",
+     expl_ok:"7 ! 42÷6=7. 6×7=42 ✓ 🎉",expl_ko:"Partager → division. 42÷6=7."},
+    {q:"'En tout' + groupes égaux → on utilise…",opts:["✖️ la multiplication","➗ la division"],ok:0,
+     hint:"'En tout' = on regroupe → multiplication.",
+     expl_ok:"✖️ La multiplication ! 🌟",expl_ko:"'En tout' + groupes → multiplication."}
+  ]}
+];
+
+var FREE_POOL=[
+  {q:"'En tout' → ?",opts:["✖️ Multiplication","➗ Division"],ok:0,expl:"'En tout' = regrouper → multiplication."},
+  {q:"'Partager' → ?",opts:["➗ Division","✖️ Multiplication"],ok:0,expl:"'Partager' = diviser en groupes égaux."},
+  {q:"6 paquets de 8 bonbons. Total ?",opts:["48 (6×8)","14 (6+8)"],ok:0,expl:"6×8=48."},
+  {q:"48 bonbons en 6 groupes. Par groupe ?",opts:["8 (48÷6)","42 (48−6)"],ok:0,expl:"48÷6=8."},
+  {q:"5 × 9 = ?",opts:["45","14"],ok:0,expl:"5×9=45."},
+  {q:"45 ÷ 5 = ?",opts:["9","8"],ok:0,expl:"5×9=45 → 45÷5=9."},
+  {q:"7 rangées de 8 arbres. Total ?",opts:["56 (7×8)","15 (7+8)"],ok:0,expl:"7×8=56."},
+  {q:"56 arbres en 7 rangées. Par rangée ?",opts:["8 (56÷7)","63 (56+7)"],ok:0,expl:"56÷7=8."},
+  {q:"9 enfants × 6 billes chacun. Total ?",opts:["54 (9×6)","15 (9+6)"],ok:0,expl:"9×6=54."},
+  {q:"54 billes partagées à 9 enfants. Chacun ?",opts:["6 (54÷9)","45 (54−9)"],ok:0,expl:"54÷9=6."},
+  {q:"Si 8×7=56, quelle division ?",opts:["56÷8=7","56÷2=28"],ok:0,expl:"8×7=56 → 56÷8=7."},
+  {q:"'Combien par groupe ?' → ?",opts:["➗ Division","✖️ Multiplication"],ok:0,expl:"'Par groupe' = partager → division."},
+  {q:"4 × 9 = ?",opts:["36","45"],ok:0,expl:"4×9=36."},
+  {q:"36 ÷ 4 = ?",opts:["9","8"],ok:0,expl:"36÷4=9."},
+  {q:"63 ÷ 9 = ?",opts:["7","8"],ok:0,expl:"9×7=63 → 63÷9=7."},
+  {q:"3 boîtes de 7 crayons. Total ?",opts:["21 (3×7)","10 (3+7)"],ok:0,expl:"3×7=21."},
+  {q:"21 crayons en 3 boîtes égales. Par boîte ?",opts:["7 (21÷3)","18 (21−3)"],ok:0,expl:"21÷3=7."},
+  {q:"× et ÷ sont des opérations…",opts:["inverses","identiques"],ok:0,expl:"3×7=21 ↔ 21÷3=7. Inverses !"},
+  {q:"8 × 8 = ?",opts:["64","56"],ok:0,expl:"8×8=64."},
+  {q:"64 ÷ 8 = ?",opts:["8","7"],ok:0,expl:"8×8=64 → 64÷8=8."}
+];
+</script>
+
+<!-- Moteur commun -->
+<script src="../template_cycle2_moteur.js"></script>
+
+</body>
+</html>

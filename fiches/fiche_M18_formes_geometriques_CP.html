@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title id="page-title">M18 | L'Atelier du Devoir</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../atelier-template.css">
+</head>
+<body class="c2">
+
+<header class="header">
+  <div class="header-top">
+    <a href="../6-9ans.html" class="logo">🦉 L'Atelier du Devoir</a>
+    <div class="score-badge">⭐ <span id="score-display">0</span></div>
+  </div>
+  <div class="steps-wrap"><div class="steps">
+    <div class="step active"></div><div class="step"></div><div class="step"></div>
+    <div class="step"></div><div class="step"></div><div class="step"></div>
+  </div></div>
+</header>
+
+<main class="main">
+
+<div class="accroche">
+  <div class="big-icon" id="fiche-icon"></div>
+  <h1 id="fiche-titre"></h1>
+  <p id="fiche-soustitre" style="font-family:'Nunito',sans-serif;"></p>
+  <div class="meta-row" id="fiche-metas"></div>
+</div>
+
+<div class="phase active" id="phase-lecon">
+  <div class="lecon-card">
+    <h2>📖 La leçon</h2>
+    <div id="lecon-content"></div>
+  </div>
+</div>
+
+<div class="phase" id="phase-g1">
+  <div class="ugo-box"><span class="ugo">🦉</span><p id="g1-intro"></p></div>
+  <div id="g1-reset" class="reset-box"><div class="r-ugo">🦉</div><h3>On recommence !</h3><p id="g1-reset-msg"></p><button class="btn-reset" onclick="initG1()">↺ Réessayer !</button></div>
+  <div id="g1-zone"></div>
+  <button class="btn-suite" id="btn-g1-to-g2" onclick="goPhase('g2',2)">Encore des questions ! 🌟</button>
+</div>
+
+<div class="phase" id="phase-g2">
+  <div class="ugo-box"><span class="ugo">🦉</span><p id="g2-intro"></p></div>
+  <div id="g2-reset" class="reset-box"><div class="r-ugo">🦉</div><h3>On recommence !</h3><p id="g2-reset-msg"></p><button class="btn-reset" onclick="initG2()">↺ Réessayer !</button></div>
+  <div id="g2-zone"></div>
+  <button class="btn-suite" id="btn-g2-to-free" onclick="goPhase('free',3)">Super ! Exercices libres 🎯</button>
+</div>
+
+<div class="phase" id="phase-free">
+  <div class="ugo-box"><span class="ugo">🦉</span><p id="free1-intro"><strong>5 questions !</strong> 📐</p></div>
+  <div id="free1-zone"></div>
+  <button class="btn-suite" id="btn-free-to-free2" onclick="goPhase('free2',4)">5 dernières ! 💪</button>
+</div>
+
+<div class="phase" id="phase-free2">
+  <div class="ugo-box"><span class="ugo">🦉</span><p>Encore <strong>5 questions</strong> ! 🏁</p></div>
+  <div id="free2-zone"></div>
+  <button class="btn-suite" id="btn-free2-to-bilan" onclick="goPhase('bilan',5)">🌟 Mon résultat !</button>
+</div>
+
+<div class="phase" id="phase-bilan">
+  <div class="bilan-card">
+    <span class="bilan-ugo">🦉</span>
+    <h2 class="bilan-title" id="bilan-title"></h2>
+    <p class="bilan-msg" id="bilan-msg"></p>
+    <div class="stars-row"><span class="star-big" id="etoile1">⭐</span><span class="star-big" id="etoile2">⭐</span><span class="star-big" id="etoile3">⭐</span></div>
+    <div class="score-circle"><span class="score-num" id="bilan-pts">0</span><span class="score-sub" id="bilan-sur">/0</span></div>
+    <div class="memo"><h3>📝 Ce que j'ai appris</h3><div class="memo-grid" id="memo-grid"></div></div>
+    <div class="bilan-btns">
+      <button class="btn-bilan secondary" onclick="location.reload()">↺ Recommencer</button>
+      <button class="btn-bilan primary" onclick="location.href='../6-9ans.html'">← Les fiches</button>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<script>
+var FICHE_CONFIG = {
+  code:'M18', titre:'Les formes géométriques planes', soustitre:'Carré, rectangle, triangle, cercle et plus !',
+  icon:'📐', metas:['CP / CE1','⭐ Facile','📐 Géométrie'],
+  acc:'#059669', acc_pale:'#f0fdf4', acc_mid:'#6ee7b7', acc_dark:'#047857',
+  confetti_colors:['#059669','#6ee7b7','#d97706','#7c3aed','#0369a1'],
+  g1_intro:'Super ! <strong>3 questions</strong> sur les formes. <strong>3 essais</strong> par question ! 💚',
+  g2_intro:'Excellent ! <strong>3 questions</strong> de plus. Tu vas y arriver ! 🏆',
+  g1_reset:'Rappelle-toi : carré = 4 côtés égaux, rectangle = 4 côtés droits, triangle = 3 côtés, cercle = rond ! 💪',
+  g2_reset:'Regarde bien le nombre de côtés et si les angles sont droits ! 💪',
+  bilan_top:'BRAVO ! 🎉🎊', bilan_top_msg:'Tu connais toutes les formes ! Ugo est super fier de toi ! 🦉⭐',
+  bilan_mid:'Très bien ! 😊🌟', bilan_mid_msg:'Tu progresses bien ! Rappelle-toi les formes et leurs côtés.',
+  bilan_low:'Bien essayé ! 💪', bilan_low_msg:'Relis la leçon et recommence ! Tu vas y arriver ! 🦉',
+  memo:[
+    {titre:'Carré',contenu:'4 côtés égaux\n4 angles droits'},
+    {titre:'Rectangle',contenu:'4 côtés (2 paires égales)\n4 angles droits'},
+    {titre:'Triangle',contenu:'3 côtés\n3 angles'},
+    {titre:'Cercle',contenu:'Aucun côté\nTout rond !'}
+  ],
+  lecon_html:`
+<div class="lecon-block revealed" id="bloc-0">
+  <div class="bloc-titre">① Les 4 formes principales</div>
+  <div class="ugo-box"><span class="ugo">🦉</span>
+    <p>Il y a des formes partout autour de toi ! Apprends à les reconnaître. Chaque forme a un <strong>nom</strong> et un <strong>nombre de côtés</strong> ! 😊</p>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0;">
+    <div style="background:#f0fdf4;border:3px solid #6ee7b7;border-radius:14px;padding:14px;text-align:center;">
+      <svg viewBox="0 0 80 80" width="70" height="70"><rect x="10" y="10" width="60" height="60" fill="none" stroke="#059669" stroke-width="4"/></svg>
+      <div style="font-size:1.1rem;color:#047857;margin-top:6px;">Carré</div>
+      <div style="font-family:'Nunito',sans-serif;font-size:.78rem;color:#64748b;">4 côtés <strong>égaux</strong><br>4 angles droits</div>
+    </div>
+    <div style="background:#eff6ff;border:3px solid #93c5fd;border-radius:14px;padding:14px;text-align:center;">
+      <svg viewBox="0 0 80 80" width="70" height="70"><rect x="5" y="20" width="70" height="40" fill="none" stroke="#2563eb" stroke-width="4"/></svg>
+      <div style="font-size:1.1rem;color:#1d4ed8;margin-top:6px;">Rectangle</div>
+      <div style="font-family:'Nunito',sans-serif;font-size:.78rem;color:#64748b;">4 côtés (2 longueurs)<br>4 angles droits</div>
+    </div>
+    <div style="background:#fef3c7;border:3px solid #fcd34d;border-radius:14px;padding:14px;text-align:center;">
+      <svg viewBox="0 0 80 80" width="70" height="70"><polygon points="40,8 72,72 8,72" fill="none" stroke="#d97706" stroke-width="4"/></svg>
+      <div style="font-size:1.1rem;color:#b45309;margin-top:6px;">Triangle</div>
+      <div style="font-family:'Nunito',sans-serif;font-size:.78rem;color:#64748b;">3 côtés<br>3 angles</div>
+    </div>
+    <div style="background:#fdf4ff;border:3px solid #d8b4fe;border-radius:14px;padding:14px;text-align:center;">
+      <svg viewBox="0 0 80 80" width="70" height="70"><circle cx="40" cy="40" r="30" fill="none" stroke="#7c3aed" stroke-width="4"/></svg>
+      <div style="font-size:1.1rem;color:#5b21b6;margin-top:6px;">Cercle</div>
+      <div style="font-family:'Nunito',sans-serif;font-size:.78rem;color:#64748b;">0 côté<br>Tout rond !</div>
+    </div>
+  </div>
+  <div class="info-box" style="font-family:'Nunito',sans-serif;">
+    <strong>Le côté</strong> = une ligne droite qui forme le bord de la forme.<br>
+    Le <strong>carré</strong> est un rectangle spécial : tous ses côtés sont égaux !
+  </div>
+  <button class="btn-compris" onclick="revealBloc(1)">J'ai compris ! 🎉</button>
+</div>
+
+<div class="lecon-block" id="bloc-1">
+  <hr class="sep">
+  <div class="bloc-titre">② D'autres formes</div>
+  <div class="ugo-box"><span class="ugo">🦉</span>
+    <p>Il existe aussi d'autres formes ! Le nombre de <strong>côtés</strong> donne le nom. 😊</p>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:14px 0;">
+    <div style="background:#fff1f2;border:2px solid #fda4af;border-radius:12px;padding:12px;text-align:center;">
+      <svg viewBox="0 0 80 80" width="60" height="60"><polygon points="40,5 75,30 62,70 18,70 5,30" fill="none" stroke="#dc2626" stroke-width="3.5"/></svg>
+      <div style="font-size:.95rem;color:#b91c1c;margin-top:5px;">Pentagone</div>
+      <div style="font-family:'Nunito',sans-serif;font-size:.72rem;color:#64748b;">5 côtés</div>
+    </div>
+    <div style="background:#f0f9ff;border:2px solid #7dd3fc;border-radius:12px;padding:12px;text-align:center;">
+      <svg viewBox="0 0 80 80" width="60" height="60"><polygon points="40,5 70,20 70,60 40,75 10,60 10,20" fill="none" stroke="#0369a1" stroke-width="3.5"/></svg>
+      <div style="font-size:.95rem;color:#075985;margin-top:5px;">Hexagone</div>
+      <div style="font-family:'Nunito',sans-serif;font-size:.72rem;color:#64748b;">6 côtés</div>
+    </div>
+    <div style="background:#f0fdf4;border:2px solid #6ee7b7;border-radius:12px;padding:12px;text-align:center;">
+      <svg viewBox="0 0 80 80" width="60" height="60"><polygon points="40,5 65,15 75,40 65,65 40,75 15,65 5,40 15,15" fill="none" stroke="#059669" stroke-width="3.5"/></svg>
+      <div style="font-size:.95rem;color:#047857;margin-top:5px;">Octogone</div>
+      <div style="font-family:'Nunito',sans-serif;font-size:.72rem;color:#64748b;">8 côtés</div>
+    </div>
+  </div>
+  <div class="info-box" style="font-family:'Nunito',sans-serif;">
+    <strong>Astuce :</strong> compte les côtés pour trouver le nom !<br>
+    3 côtés → triangle · 4 côtés → quadrilatère (carré, rectangle…)<br>
+    5 côtés → pentagone · 6 côtés → hexagone
+  </div>
+  <button class="btn-compris" onclick="revealBloc(2)">J'ai compris ! 🎉</button>
+</div>
+
+<div class="lecon-block" id="bloc-2">
+  <hr class="sep">
+  <div class="bloc-titre">③ Dans la vie de tous les jours</div>
+  <div class="ugo-box"><span class="ugo">🦉</span>
+    <p>Les formes géométriques sont <strong>partout</strong> autour de toi ! Tu peux les retrouver dans ta maison, à l'école… 🏠</p>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:10px;margin:14px 0;">
+    <div style="background:#f0fdf4;border:2px solid #6ee7b7;border-radius:12px;padding:12px;display:flex;align-items:center;gap:14px;">
+      <svg viewBox="0 0 40 40" width="36" height="36"><rect x="2" y="2" width="36" height="36" fill="none" stroke="#059669" stroke-width="3"/></svg>
+      <div style="font-family:'Nunito',sans-serif;font-size:.88rem;color:#475569;"><strong style="color:#047857;">Carré :</strong> une fenêtre, un carreau, un puzzle</div>
+    </div>
+    <div style="background:#eff6ff;border:2px solid #93c5fd;border-radius:12px;padding:12px;display:flex;align-items:center;gap:14px;">
+      <svg viewBox="0 0 60 36" width="54" height="36"><rect x="2" y="2" width="56" height="32" fill="none" stroke="#2563eb" stroke-width="3"/></svg>
+      <div style="font-family:'Nunito',sans-serif;font-size:.88rem;color:#475569;"><strong style="color:#1d4ed8;">Rectangle :</strong> une porte, un livre, un écran</div>
+    </div>
+    <div style="background:#fef3c7;border:2px solid #fcd34d;border-radius:12px;padding:12px;display:flex;align-items:center;gap:14px;">
+      <svg viewBox="0 0 50 44" width="44" height="40"><polygon points="25,2 48,42 2,42" fill="none" stroke="#d97706" stroke-width="3"/></svg>
+      <div style="font-family:'Nunito',sans-serif;font-size:.88rem;color:#475569;"><strong style="color:#b45309;">Triangle :</strong> un toit de maison, une pointe de pizza</div>
+    </div>
+    <div style="background:#fdf4ff;border:2px solid #d8b4fe;border-radius:12px;padding:12px;display:flex;align-items:center;gap:14px;">
+      <svg viewBox="0 0 40 40" width="36" height="36"><circle cx="20" cy="20" r="17" fill="none" stroke="#7c3aed" stroke-width="3"/></svg>
+      <div style="font-family:'Nunito',sans-serif;font-size:.88rem;color:#475569;"><strong style="color:#5b21b6;">Cercle :</strong> une roue, une pièce, le soleil</div>
+    </div>
+  </div>
+  <button class="btn-compris" onclick="goPhase('g1',1)">On joue ! 🚀</button>
+</div>`
+};
+
+var G1 = [
+  {titre:"📐 Reconnaître les formes",etapes:[
+    {q:"Quelle forme a 4 côtés ÉGAUX et 4 angles droits ?",opts:["Le carré","Le rectangle","Le triangle","Le cercle"],ok:0,
+     hint:"4 côtés tous pareils + 4 angles droits = ?",
+     expl_ok:"Le carré ! 4 côtés égaux, 4 angles droits. 🎉",expl_ko:"Le carré a 4 côtés tous égaux et 4 angles droits."},
+    {q:"Quelle forme n'a AUCUN côté ?",opts:["Le cercle","Le triangle","Le carré","Le rectangle"],ok:0,
+     hint:"Une forme toute ronde, sans ligne droite.",
+     expl_ok:"Le cercle ! Tout rond, aucun côté droit. 🌟",expl_ko:"Le cercle est rond et n'a aucun côté droit."},
+    {q:"Quelle forme a exactement 3 côtés ?",opts:["Le triangle","Le carré","L'hexagone","Le rectangle"],ok:0,
+     hint:"TRI = 3. Comme tricycle = 3 roues !",
+     expl_ok:"Le triangle ! TRI = 3 côtés. 🎉",expl_ko:"TRI = 3 → triangle = 3 côtés."}
+  ]},
+  {titre:"📐 Compter les côtés",etapes:[
+    {q:"Un carré a combien de côtés ?",opts:["4","3","6","2"],ok:0,
+     hint:"Compte les lignes droites du carré.",
+     expl_ok:"4 côtés ! Un carré a 4 côtés tous égaux. 🌟",expl_ko:"Un carré a 4 côtés."},
+    {q:"Un triangle a combien de côtés ?",opts:["3","4","5","2"],ok:0,
+     hint:"TRI = 3.",
+     expl_ok:"3 côtés ! Un triangle a toujours 3 côtés. 🎉",expl_ko:"Un triangle a 3 côtés."},
+    {q:"Un hexagone a combien de côtés ?",opts:["6","5","8","4"],ok:0,
+     hint:"HEXA = 6. Comme un alvéole d'abeille !",
+     expl_ok:"6 côtés ! Un hexagone a 6 côtés. 🌟",expl_ko:"Un hexagone a 6 côtés."}
+  ]},
+  {titre:"📐 Dans la vie",etapes:[
+    {q:"Une roue de vélo, c'est quelle forme ?",opts:["Un cercle","Un carré","Un triangle","Un rectangle"],ok:0,
+     hint:"Toute ronde, sans côté droit.",
+     expl_ok:"Un cercle ! Les roues sont rondes. 🎉",expl_ko:"Une roue est ronde → cercle."},
+    {q:"Une porte, c'est quelle forme ?",opts:["Un rectangle","Un carré","Un triangle","Un cercle"],ok:0,
+     hint:"Plus haut que large, 4 côtés.",
+     expl_ok:"Un rectangle ! Une porte est plus haute que large. 🌟",expl_ko:"Une porte est plus haute que large → rectangle."},
+    {q:"Un toit de maison vu de face, c'est quelle forme ?",opts:["Un triangle","Un carré","Un cercle","Un rectangle"],ok:0,
+     hint:"3 côtés, une pointe en haut.",
+     expl_ok:"Un triangle ! Le toit fait une pointe. 🎉",expl_ko:"Un toit avec une pointe en haut → triangle."}
+  ]},
+  {titre:"📐 Carré ou rectangle ?",etapes:[
+    {q:"Différence entre carré et rectangle ?",opts:["Carré = 4 côtés égaux / Rectangle = 2 longueurs différentes","Ils sont identiques","Carré = 3 côtés / Rectangle = 4 côtés","Carré = rond / Rectangle = plat"],ok:0,
+     hint:"Dans un carré, tous les côtés ont la même longueur.",
+     expl_ok:"Carré = 4 côtés égaux. Rectangle = 2 paires de côtés. 🌟",expl_ko:"Carré = 4 côtés tous égaux. Rectangle = 2 longueurs différentes."},
+    {q:"Est-ce qu'un carré est aussi un rectangle ?",opts:["Oui ! C'est un rectangle spécial","Non, ce sont deux formes différentes"],ok:0,
+     hint:"Un carré a 4 côtés droits comme un rectangle, mais ses côtés sont tous égaux.",
+     expl_ok:"Oui ! Le carré est un rectangle dont tous les côtés sont égaux. 🎉",expl_ko:"Oui, le carré EST un rectangle spécial (tous les côtés égaux)."},
+    {q:"Une feuille de papier, c'est quelle forme ?",opts:["Un rectangle","Un carré","Un triangle","Un cercle"],ok:0,
+     hint:"Une feuille est plus longue que large.",
+     expl_ok:"Un rectangle ! La feuille est plus longue que large. 🌟",expl_ko:"Une feuille A4 est plus longue que large → rectangle."}
+  ]}
+];
+
+var G2 = [
+  {titre:"✏️ Problèmes de formes",etapes:[
+    {q:"Léa dessine une forme avec 4 côtés égaux. Quelle forme ?",opts:["Un carré","Un triangle","Un cercle","Un pentagone"],ok:0,
+     hint:"4 côtés tous égaux → ?",
+     expl_ok:"Un carré ! 4 côtés égaux = carré. 🎉",expl_ko:"4 côtés égaux → carré."},
+    {q:"Tom coupe une pizza en morceaux pointus à 3 côtés. Quelle forme ?",opts:["Des triangles","Des carrés","Des cercles","Des rectangles"],ok:0,
+     hint:"Pointu avec 3 côtés = ?",
+     expl_ok:"Des triangles ! 3 côtés → triangle. 🌟",expl_ko:"3 côtés → triangle."},
+    {q:"Une pièce de 2 euros est quelle forme ?",opts:["Un cercle","Un carré","Un triangle","Un hexagone"],ok:0,
+     hint:"Toute ronde !",
+     expl_ok:"Un cercle ! Les pièces de monnaie sont rondes. 🎉",expl_ko:"Une pièce ronde → cercle."}
+  ]},
+  {titre:"✏️ Vrai ou faux ?",etapes:[
+    {q:"Un triangle peut avoir 4 côtés ?",opts:["Non ! Triangle = toujours 3 côtés","Oui, parfois"],ok:0,
+     hint:"TRI = 3. Toujours.",
+     expl_ok:"Non ! TRI = 3. Un triangle a TOUJOURS 3 côtés. 🌟",expl_ko:"Non. Triangle = toujours 3 côtés. TRI = 3."},
+    {q:"Un carré a 4 angles droits ?",opts:["Oui ! Comme un rectangle","Non, seulement 2"],ok:0,
+     hint:"Les 4 coins d'un carré font des angles droits.",
+     expl_ok:"Oui ! Un carré a 4 angles droits, comme un rectangle. 🎉",expl_ko:"Oui, un carré a bien 4 angles droits."},
+    {q:"Un cercle a des côtés droits ?",opts:["Non ! Le cercle est tout rond","Oui, il a 1 côté courbe"],ok:0,
+     hint:"Le cercle est une courbe continue, pas de ligne droite.",
+     expl_ok:"Non ! Le cercle est tout rond, aucun côté droit. 🌟",expl_ko:"Non, le cercle n'a aucun côté droit."}
+  ]},
+  {titre:"✏️ Formes et objets",etapes:[
+    {q:"Une fenêtre carrée a combien de côtés de même longueur ?",opts:["4","2","3","0"],ok:0,
+     hint:"Carré = tous les côtés égaux.",
+     expl_ok:"4 ! Dans un carré, les 4 côtés ont la même longueur. 🎉",expl_ko:"Carré = 4 côtés tous égaux."},
+    {q:"Un panneau STOP est quelle forme ? (8 côtés)",opts:["Un octogone","Un hexagone","Un carré","Un pentagone"],ok:0,
+     hint:"OCTO = 8.",
+     expl_ok:"Un octogone ! OCTO = 8 côtés. 🌟",expl_ko:"8 côtés → octogone. OCTO = 8."},
+    {q:"Une ardoise de classe est quelle forme ?",opts:["Un rectangle","Un triangle","Un cercle","Un pentagone"],ok:0,
+     hint:"Large et pas très haute, 4 côtés.",
+     expl_ok:"Un rectangle ! L'ardoise est plus large que haute. 🎉",expl_ko:"Une ardoise large et rectangulaire → rectangle."}
+  ]},
+  {titre:"✏️ Compter et nommer",etapes:[
+    {q:"Quelle forme a 5 côtés ?",opts:["Un pentagone","Un hexagone","Un triangle","Un octogone"],ok:0,
+     hint:"PENTA = 5.",
+     expl_ok:"Un pentagone ! PENTA = 5 côtés. 🌟",expl_ko:"PENTA = 5 → pentagone."},
+    {q:"Quelle forme ressemble à un alvéole d'abeille ?",opts:["Un hexagone","Un carré","Un triangle","Un cercle"],ok:0,
+     hint:"Les ruches ont des cellules à 6 côtés.",
+     expl_ok:"Un hexagone ! Les abeilles construisent des hexagones. 🎉",expl_ko:"Les cellules d'une ruche ont 6 côtés → hexagone."},
+    {q:"Si je dessine une forme avec 0 côté, c'est…",opts:["Un cercle","Un carré","Un triangle","Un pentagone"],ok:0,
+     hint:"Aucun côté = tout rond.",
+     expl_ok:"Un cercle ! 0 côté = tout rond. 🌟",expl_ko:"0 côté → cercle (tout rond)."}
+  ]}
+];
+
+var FREE_POOL = [
+  {q:"Un carré a combien de côtés ?",opts:["4","3"],ok:0,expl:"Un carré a 4 côtés tous égaux."},
+  {q:"Un triangle a combien de côtés ?",opts:["3","4"],ok:0,expl:"TRI = 3. Un triangle a toujours 3 côtés."},
+  {q:"Quelle forme est toute ronde (0 côté) ?",opts:["Le cercle","Le carré"],ok:0,expl:"Le cercle est tout rond, aucun côté droit."},
+  {q:"Une porte est quelle forme ?",opts:["Un rectangle","Un triangle"],ok:0,expl:"Une porte plus haute que large → rectangle."},
+  {q:"Un toit avec une pointe est quelle forme ?",opts:["Un triangle","Un cercle"],ok:0,expl:"3 côtés, une pointe → triangle."},
+  {q:"Un hexagone a combien de côtés ?",opts:["6","5"],ok:0,expl:"HEXA = 6 côtés."},
+  {q:"Un carré est-il aussi un rectangle ?",opts:["Oui !","Non"],ok:0,expl:"Oui ! Le carré est un rectangle dont tous les côtés sont égaux."},
+  {q:"Une pièce de monnaie est quelle forme ?",opts:["Un cercle","Un carré"],ok:0,expl:"Toute ronde → cercle."},
+  {q:"Un pentagone a combien de côtés ?",opts:["5","6"],ok:0,expl:"PENTA = 5 côtés."},
+  {q:"Une feuille A4 est quelle forme ?",opts:["Un rectangle","Un carré"],ok:0,expl:"Plus longue que large → rectangle."},
+  {q:"Un octogone a combien de côtés ?",opts:["8","6"],ok:0,expl:"OCTO = 8. Le panneau STOP est un octogone."},
+  {q:"Quelle forme a 4 côtés ÉGAUX ?",opts:["Le carré","Le rectangle"],ok:0,expl:"Le carré a 4 côtés tous égaux. Le rectangle en a 2 paires."},
+  {q:"Un livre fermé est quelle forme ?",opts:["Un rectangle","Un triangle"],ok:0,expl:"Un livre a 4 côtés, plus haut que large → rectangle."},
+  {q:"Une roue de vélo est quelle forme ?",opts:["Un cercle","Un hexagone"],ok:0,expl:"Toute ronde → cercle."},
+  {q:"Combien de côtés a un triangle ?",opts:["3","6"],ok:0,expl:"TRI = 3 côtés toujours."},
+  {q:"Le soleil (sans rayons) est quelle forme ?",opts:["Un cercle","Un carré"],ok:0,expl:"Le soleil est rond → cercle."},
+  {q:"Quelle forme ressemble aux cellules d'une ruche ?",opts:["L'hexagone","Le carré"],ok:0,expl:"Les alvéoles d'une ruche sont des hexagones (6 côtés)."},
+  {q:"Un carreau de carrelage carré a combien de côtés ?",opts:["4","3"],ok:0,expl:"Carré = 4 côtés."},
+  {q:"Un panneau STOP a 8 côtés → c'est un…",opts:["octogone","hexagone"],ok:0,expl:"OCTO = 8 → octogone."},
+  {q:"Quelle forme n'a aucun angle droit ?",opts:["Le cercle","Le carré"],ok:0,expl:"Le cercle est tout rond, aucun coin, aucun angle droit."}
+];
+</script>
+
+<script src="../atelier-moteur.js"></script>
+</body>
+</html>
