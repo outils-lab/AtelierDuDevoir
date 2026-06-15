@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>CM2 – L'Atelier du Devoir</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sky:#4FBDDF;--sky-pale:#E8F7FC;--sky-deep:#2fa8cc;
+  --yellow:#FFD93D;--yellow-deep:#F7B731;--yellow-pale:#FFF8E1;
+  --mint:#6BCFB0;--mint-pale:#E8FFF7;--mint-deep:#4db896;
+  --coral:#FF8A65;--coral-pale:#FFF0EB;
+  --violet:#9B8AFF;--violet-pale:#F0EEFF;
+  --text:#2C3E50;--text-light:#7F8C8D;
+  --radius:16px;--radius-lg:24px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Nunito',sans-serif;background:#f0fbff;color:var(--text);overflow-x:hidden;}
+
+/* HEADER */
+.header{background:white;border-bottom:3px solid var(--sky-pale);position:sticky;top:0;z-index:100;box-shadow:0 4px 20px rgba(79,189,223,.12);}
+.header-inner{max-width:1100px;margin:auto;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;}
+.logo{font-family:'Fredoka One',cursive;font-size:1.4rem;color:var(--sky);text-decoration:none;display:flex;align-items:center;gap:6px;}
+.btn-back{padding:8px 18px;border-radius:50px;font-weight:700;font-size:.88rem;border:2px solid var(--sky-pale);background:white;color:var(--sky);text-decoration:none;transition:all .2s;}
+.btn-back:hover{background:var(--sky-pale);}
+
+/* HERO */
+.hero{padding:40px 20px 48px;position:relative;overflow:hidden;}
+.hero-deco{position:absolute;border-radius:50%;opacity:.12;pointer-events:none;}
+.hero-inner{max-width:1100px;margin:auto;position:relative;z-index:1;text-align:center;}
+.breadcrumb{display:flex;align-items:center;justify-content:center;gap:8px;font-size:.84rem;color:var(--text-light);margin-bottom:16px;}
+.breadcrumb a{color:var(--sky);text-decoration:none;font-weight:700;}
+.hero h1{font-family:'Fredoka One',cursive;font-size:clamp(1.8rem,5vw,2.8rem);margin-bottom:10px;}
+.hero p{font-size:.95rem;color:var(--text-light);max-width:600px;margin:0 auto;}
+
+/* MATIÈRES NAV */
+.matieres-nav{background:white;border-bottom:2px solid var(--sky-pale);position:sticky;top:62px;z-index:90;box-shadow:0 2px 12px rgba(0,0,0,.06);}
+.matieres-inner{max-width:1100px;margin:auto;padding:0 16px;display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;}
+.matieres-inner::-webkit-scrollbar{display:none;}
+.mat-tab{padding:14px 20px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.88rem;color:var(--text-light);border:none;background:transparent;cursor:pointer;white-space:nowrap;border-bottom:3px solid transparent;transition:all .2s;display:flex;align-items:center;gap:7px;}
+.mat-tab:hover{color:var(--text);background:var(--sky-pale);}
+.mat-tab.active{color:var(--sky);border-bottom-color:var(--sky);}
+.mat-tab .count{font-size:.7rem;background:var(--sky-pale);color:var(--sky-deep);border-radius:50px;padding:1px 7px;font-weight:900;}
+.mat-tab.active .count{background:var(--sky);color:white;}
+
+/* MAIN */
+.main{max-width:1100px;margin:0 auto;padding:28px 16px 64px;}
+
+/* MATIÈRE SECTION */
+.mat-section{display:none;}
+.mat-section.active{display:block;}
+
+/* SOUS-CATÉGORIE */
+.subcat{margin-bottom:28px;}
+.subcat-header{display:flex;align-items:center;gap:12px;margin-bottom:14px;cursor:pointer;user-select:none;}
+.subcat-icon{font-size:1.4rem;}
+.subcat-title{font-family:'Fredoka One',cursive;font-size:1.2rem;}
+.subcat-count{font-size:.78rem;font-weight:800;color:var(--text-light);background:var(--sky-pale);border-radius:50px;padding:2px 10px;}
+.subcat-toggle{margin-left:auto;font-size:1rem;color:var(--text-light);transition:transform .25s;}
+.subcat-toggle.open{transform:rotate(180deg);}
+.subcat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;transition:all .25s;}
+.subcat-grid.collapsed{display:none;}
+
+/* FICHE CARD */
+.fiche-card{background:white;border-radius:var(--radius-lg);padding:20px;cursor:pointer;transition:all .25s;border:2px solid transparent;box-shadow:0 3px 14px rgba(0,0,0,.06);position:relative;overflow:hidden;text-decoration:none;display:block;color:var(--text);}
+.fiche-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;border-radius:20px 20px 0 0;}
+.fiche-card:hover{transform:translateY(-4px);box-shadow:0 10px 30px rgba(0,0,0,.10);}
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;}
+.card-emoji{font-size:1.9rem;}
+.card-badges{display:flex;flex-direction:column;align-items:flex-end;gap:5px;}
+.badge-niveau{padding:2px 10px;border-radius:50px;font-size:.7rem;font-weight:800;background:var(--sky-pale);color:var(--sky-deep);}
+.badge-new{padding:2px 9px;border-radius:50px;font-size:.68rem;font-weight:800;background:var(--yellow);color:#333;}
+.card-titre{font-family:'Fredoka One',cursive;font-size:1.1rem;margin-bottom:3px;}
+.card-sous-titre{font-size:.82rem;color:var(--text-light);margin-bottom:8px;}
+.card-desc{font-size:.8rem;color:var(--text-light);line-height:1.55;margin-bottom:12px;}
+.card-meta{display:flex;align-items:center;justify-content:space-between;font-size:.78rem;color:var(--text-light);}
+.card-btn{width:100%;padding:10px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.85rem;color:white;border:none;cursor:pointer;transition:all .2s;margin-top:12px;}
+
+/* COULEURS PAR MATIÈRE */
+.fr .fiche-card::before{background:var(--sky);}
+.fr .subcat-title{color:var(--sky-deep);}
+.fr .card-btn{background:linear-gradient(135deg,var(--sky),var(--sky-deep));}
+.ma .fiche-card::before{background:var(--yellow-deep);}
+.ma .subcat-title{color:var(--yellow-deep);}
+.ma .card-btn{background:linear-gradient(135deg,var(--yellow-deep),#e09820);}
+.sc .fiche-card::before{background:var(--mint);}
+.sc .subcat-title{color:var(--mint-deep);}
+.sc .card-btn{background:linear-gradient(135deg,var(--mint),var(--mint-deep));}
+.hi .fiche-card::before{background:var(--coral);}
+.hi .subcat-title{color:var(--coral);}
+.hi .card-btn{background:linear-gradient(135deg,var(--coral),#e06030);}
+.ge .fiche-card::before{background:#2E86AB;}
+.ge .subcat-title{color:#2E86AB;}
+.ge .card-btn{background:linear-gradient(135deg,#2E86AB,#1e6090);}
+.an .fiche-card::before{background:var(--violet);}
+.an .subcat-title{color:var(--violet);}
+.an .card-btn{background:linear-gradient(135deg,var(--violet),#7b69ee);}
+
+/* VIDE */
+.empty{text-align:center;padding:48px 20px;color:var(--text-light);}
+.empty-icon{font-size:3.5rem;display:block;margin-bottom:14px;}
+.empty h3{font-family:'Fredoka One',cursive;font-size:1.5rem;margin-bottom:8px;color:var(--sky);}
+
+/* FOOTER */
+.footer{background:#2C3E50;color:rgba(255,255,255,.6);padding:24px;text-align:center;font-size:.82rem;}
+.footer-logo{font-family:'Fredoka One',cursive;font-size:1.3rem;color:var(--sky);margin-bottom:6px;}
+</style>
+</head>
+<body data-classe="CM2">
+
+<header class="header">
+  <div class="header-inner">
+    <a href="index.html" class="logo">🦉 L'Atelier du Devoir</a>
+    <a href="index.html" class="btn-back">← Accueil</a>
+  </div>
+</header>
+
+<section class="hero" style="background:radial-gradient(ellipse at 60% 40%,#fff8e1 0%,#f0fbff 70%);">
+  <div class="hero-deco" style="width:320px;height:320px;background:#F7B731;top:-100px;right:-80px;"></div>
+  <div class="hero-deco" style="width:180px;height:180px;background:#FFD93D;bottom:-50px;left:-40px;"></div>
+  <div class="hero-inner">
+    <div class="breadcrumb">
+      <a href="index.html">Accueil</a>
+      <span>›</span>
+      <span>CM2</span>
+    </div>
+    <h1 style="color:#F7B731">⭐ Classe de CM2</h1>
+    <p>On vise le collège : participe passé, décimaux, proportionnalité et toute l'histoire de France.</p>
+  </div>
+</section>
+
+<nav class="matieres-nav">
+  <div class="matieres-inner">
+    <button class="mat-tab active" id="tab-fr" onclick="showMat('fr',this)">📖 Français <span class="count">…</span></button>
+<button class="mat-tab " id="tab-ma" onclick="showMat('ma',this)">🔢 Mathématiques <span class="count">…</span></button>
+<button class="mat-tab " id="tab-sc" onclick="showMat('sc',this)">🔬 Sciences <span class="count">…</span></button>
+<button class="mat-tab " id="tab-hi" onclick="showMat('hi',this)">🏛️ Histoire <span class="count">…</span></button>
+<button class="mat-tab " id="tab-ge" onclick="showMat('ge',this)">🌐 Géographie <span class="count">…</span></button>
+<button class="mat-tab " id="tab-an" onclick="showMat('an',this)">🌍 Anglais <span class="count">…</span></button>
+
+  </div>
+</nav>
+
+<main class="main">
+  <div class="mat-section active" id="mat-fr"><div class="empty"><span class="empty-icon">⏳</span><h3>Chargement…</h3></div></div>
+<div class="mat-section " id="mat-ma"><div class="empty"><span class="empty-icon">⏳</span><h3>Chargement…</h3></div></div>
+<div class="mat-section " id="mat-sc"><div class="empty"><span class="empty-icon">⏳</span><h3>Chargement…</h3></div></div>
+<div class="mat-section " id="mat-hi"><div class="empty"><span class="empty-icon">⏳</span><h3>Chargement…</h3></div></div>
+<div class="mat-section " id="mat-ge"><div class="empty"><span class="empty-icon">⏳</span><h3>Chargement…</h3></div></div>
+<div class="mat-section " id="mat-an"><div class="empty"><span class="empty-icon">⏳</span><h3>Chargement…</h3></div></div>
+
+</main>
+
+<footer class="footer">
+  <div class="footer-logo">L'Atelier du Devoir</div>
+  <p>© 2025 L'Atelier du Devoir · <a href="index.html" style="color:var(--sky);text-decoration:none;">Accueil</a></p>
+</footer>
+
+<script>
+
+// ── NAVIGATION MATIÈRES ──────────────────────────────
+function showMat(matId, btn) {
+  document.querySelectorAll('.mat-section').forEach(function(s){ s.classList.remove('active'); });
+  document.querySelectorAll('.mat-tab').forEach(function(t){ t.classList.remove('active'); });
+  var sec = document.getElementById('mat-' + matId);
+  if (sec) sec.classList.add('active');
+  if (btn) btn.classList.add('active');
+}
+
+// ── TOGGLE SOUS-CATÉGORIE ────────────────────────────
+function toggleSubcat(id) {
+  var grid   = document.getElementById('grid-' + id);
+  var toggle = document.getElementById('toggle-' + id);
+  if (!grid) return;
+  grid.classList.toggle('collapsed');
+  if (toggle) toggle.classList.toggle('open');
+}
+
+// ── CHARGEMENT FICHES (FILTRAGE PAR CLASSE) ──────────
+var allFiches = {};
+
+// Fiches à double niveau tranchées selon le programme scolaire
+var CLASSE_OVERRIDE = { "DC305":"CM1", "DC306":"CM2", "DC307":"6e" };
+
+function ficheMatchesClasse(f, classe) {
+  var ov = CLASSE_OVERRIDE[f.code];
+  if (ov) return ov === classe;
+  var niv = f.niveau || '';
+  if (niv.indexOf('/') !== -1) { return niv.split('/')[0].trim() === classe; }
+  return niv === classe;
+}
+
+async function loadFiches() {
+  try {
+    var r = await fetch('fiches.json');
+    var data = await r.json();
+    var classe = document.body.dataset.classe;
+    var all = [];
+    ['6-9ans','9-12ans','12-15ans'].forEach(function(c){
+      if (data[c]) all = all.concat(data[c]);
+    });
+    allFiches = all.filter(function(f){ return ficheMatchesClasse(f, classe); });
+    buildAllSections(allFiches);
+  } catch(e) {
+    console.error('Erreur chargement fiches.json', e);
+    document.getElementById('mat-fr').innerHTML =
+      '<div class="empty"><span class="empty-icon">⚠️</span><h3>Impossible de charger les fiches</h3><p>Vérifiez votre connexion.</p></div>';
+  }
+}
+
+function buildAllSections(fiches) {
+  // Grouper par matière puis par catégorie
+  var byMat = {};
+  fiches.forEach(function(f) {
+    var mat = f.matiere || 'Autre';
+    var cat = f.categorie || 'Général';
+    if (!byMat[mat]) byMat[mat] = {};
+    if (!byMat[mat][cat]) byMat[mat][cat] = [];
+    byMat[mat][cat].push(f);
+  });
+
+  var MATIERES = [
+    { id:'fr', label:'Français',       data:'Français' },
+    { id:'ma', label:'Mathématiques',  data:'Mathématiques' },
+    { id:'sc', label:'Sciences',       data:'Sciences' },
+    { id:'hi', label:'Histoire',       data:'Histoire' },
+    { id:'ge', label:'Géographie',     data:'Géographie' },
+    { id:'an', label:'Anglais',        data:'Anglais' },
+  ];
+
+  MATIERES.forEach(function(m) {
+    var cats = byMat[m.data] || {};
+    var sec  = document.getElementById('mat-' + m.id);
+    var tab  = document.getElementById('tab-' + m.id);
+    if (!sec) return;
+
+    var total = Object.values(cats).reduce(function(s,a){ return s+a.length; }, 0);
+    if (tab) {
+      var countEl = tab.querySelector('.count');
+      if (countEl) countEl.textContent = total;
+      if (total === 0) tab.style.display = 'none';
+    }
+
+    if (total === 0) {
+      sec.innerHTML = '<div class="empty"><span class="empty-icon">🌱</span><h3>Bientôt disponible !</h3><p>Les fiches de cette matière arrivent très prochainement.</p></div>';
+      return;
+    }
+
+    var html = '';
+    Object.keys(cats).forEach(function(catName, ci) {
+      var catFiches = cats[catName];
+      var catId = m.id + '-' + ci;
+      var catInfo = getCatInfo(m.id, catName);
+      html += '<div class="subcat ' + m.id + '">';
+      html += '<div class="subcat-header" onclick="toggleSubcat(\'' + catId + '\')">';
+      html += '<span class="subcat-icon">' + catInfo.icon + '</span>';
+      html += '<span class="subcat-title">' + catInfo.label + '</span>';
+      html += '<span class="subcat-count">' + catFiches.length + ' fiche' + (catFiches.length>1?'s':'') + '</span>';
+      html += '<span class="subcat-toggle open" id="toggle-' + catId + '">▲</span>';
+      html += '</div>';
+      html += '<div class="subcat-grid" id="grid-' + catId + '">';
+      catFiches.forEach(function(f) {
+        html += buildCard(f, m.id);
+      });
+      html += '</div></div>';
+    });
+    sec.innerHTML = html;
+  });
+}
+
+function stars(n) {
+  return '⭐'.repeat(n) + '☆'.repeat(Math.max(0, 3-n));
+}
+
+function buildCard(f, matId) {
+  var dispo = f.disponible !== false && f.fichier;
+  var tag = dispo ? 'a' : 'div';
+  var href = dispo ? ' href="' + f.fichier + '"' : '';
+  var opacity = dispo ? '' : 'opacity:.55;';
+  return '<' + tag + ' class="fiche-card"' + href + ' style="' + opacity + '">'
+    + '<div class="card-top">'
+    + '<span class="card-emoji">' + (f.emoji||'📄') + '</span>'
+    + '<div class="card-badges">'
+    + '<span class="badge-niveau">' + (f.niveau||'') + '</span>'
+    + (f.nouveau ? '<span class="badge-new">✨ Nouveau</span>' : '')
+    + (!dispo ? '<span style="padding:2px 9px;border-radius:50px;font-size:.68rem;font-weight:800;background:#EEE;color:#999;">🔜 Bientôt</span>' : '')
+    + '</div></div>'
+    + '<h3 class="card-titre">' + f.titre + '</h3>'
+    + (f.sous_titre ? '<p class="card-sous-titre">' + f.sous_titre + '</p>' : '')
+    + (f.description ? '<p class="card-desc">' + f.description + '</p>' : '')
+    + '<div class="card-meta">'
+    + '<span>⏱ ' + (f.duree||'?') + '</span>'
+    + '<span>' + stars(f.difficulte||1) + '</span>'
+    + '</div>'
+    + (dispo ? '<button class="card-btn">Ouvrir la fiche →</button>'
+             : '<button class="card-btn" style="background:#CCC;cursor:not-allowed;">Bientôt disponible</button>')
+    + '</' + tag + '>';
+}
+
+// ── INFOS PAR SOUS-CATÉGORIE ─────────────────────────
+function getCatInfo(matId, catName) {
+  var FR = {
+    'Grammaire':     { icon:'📐', label:'Les phrases et les mots' },
+    'Conjugaison':   { icon:'🔄', label:'Les verbes' },
+    'Orthographe':   { icon:'✏️', label:'J\'écris sans fautes' },
+    'Lexique':       { icon:'📚', label:'Mon vocabulaire' },
+    'Dictées mots':  { icon:'🎙️', label:'Dictée de mots' },
+    'Dictées phrases':{ icon:'🎙️', label:'Dictée de phrases' },
+    'Dictées':       { icon:'🎙️', label:'Les dictées' },
+    'Lecture':       { icon:'👁️', label:'Lire et comprendre' },
+  };
+  var MA = {
+    'Numération':    { icon:'🔢', label:'Les nombres' },
+    'Calcul':        { icon:'➕', label:'Calcul' },
+    'Géométrie':     { icon:'📐', label:'Géométrie' },
+    'Mesures':       { icon:'📏', label:'Mesures' },
+    'Problèmes':     { icon:'🧩', label:'Problèmes' },
+    'Statistiques':  { icon:'📊', label:'Statistiques' },
+  };
+  var SC = {
+    'Vivant':        { icon:'🌿', label:'Le vivant' },
+    'Corps humain':  { icon:'🫀', label:'Mon corps' },
+    'Matière':       { icon:'⚗️', label:'La matière' },
+    'Énergie':       { icon:'⚡', label:'Énergie' },
+    'Univers':       { icon:'🪐', label:'L\'univers' },
+    'Écologie':      { icon:'♻️', label:'Écologie' },
+  };
+  var HI = {
+    'Préhistoire':   { icon:'🦕', label:'La Préhistoire' },
+    'Antiquité':     { icon:'🏺', label:'L\'Antiquité' },
+    'Moyen Âge':     { icon:'⚔️', label:'Le Moyen Âge' },
+    'Moderne':       { icon:'🎨', label:'Les Temps Modernes' },
+    'Contemporain':  { icon:'🏭', label:'L\'époque contemporaine' },
+    'XXe siècle':    { icon:'💣', label:'Le XXe siècle' },
+    'Monde actuel':  { icon:'🌍', label:'Le monde actuel' },
+    'Personnages':   { icon:'👤', label:'Personnages historiques' },
+  };
+  var GE = {
+    'France':        { icon:'🇫🇷', label:'La France' },
+    'Europe':        { icon:'🇪🇺', label:'L\'Europe' },
+    'Monde':         { icon:'🌍', label:'Le Monde' },
+    'Afrique':       { icon:'🌍', label:'L\'Afrique' },
+    'Asie':          { icon:'🌏', label:'L\'Asie' },
+    'Amériques':     { icon:'🌎', label:'Les Amériques' },
+    'Enjeux':        { icon:'♻️', label:'Enjeux mondiaux' },
+  };
+  var AN = {
+    'Grammaire':     { icon:'📖', label:'La grammaire' },
+    'Vocabulaire':   { icon:'💬', label:'Le vocabulaire' },
+    'Compréhension': { icon:'👂', label:'Lire et comprendre' },
+    'Expression':    { icon:'✍️', label:'S\'exprimer' },
+  };
+  var maps = { fr:FR, ma:MA, sc:SC, hi:HI, ge:GE, an:AN };
+  var map = maps[matId] || {};
+  return map[catName] || { icon:'📄', label:catName };
+}
+
+loadFiches();
+
+</script>
+</body>
+</html>
