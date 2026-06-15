@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>M412 — Les probabilités N1 | L'Atelier du Devoir</title>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{--acc:#7c3aed;--acc-pale:#f5f3ff;--acc-mid:#c4b5fd;--mint:#059669;--mint-pale:#d1fae5;--mint-deep:#047857;--coral:#dc2626;--coral-pale:#fee2e2;--text:#1e293b;--text-light:#64748b;--radius:12px;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Lato',sans-serif;background:#f5f3ff;color:var(--text);font-size:16px;line-height:1.65;}
+.print-bar{position:fixed;right:16px;top:50%;transform:translateY(-50%);z-index:200;display:flex;flex-direction:column;gap:8px;}
+.print-btn{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:8px;font-family:'Lato',sans-serif;font-weight:700;font-size:.78rem;border:none;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.15);}
+.print-btn-lecon{background:#d97706;color:white;}.print-btn-eval{background:#9f1239;color:white;}
+@media(max-width:600px){.print-bar{right:6px;}.print-btn{font-size:0;width:40px;height:40px;padding:0;justify-content:center;}.print-btn span.lbl{display:none;}.print-btn span.ico{font-size:1.1rem;}}
+.header{background:white;border-bottom:2px solid var(--acc-pale);position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.06);}
+.header-top{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;}
+.logo{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--acc);text-decoration:none;}
+.score-badge{background:var(--acc);color:white;font-weight:700;font-size:.85rem;padding:5px 14px;border-radius:6px;}
+.steps-wrap{padding:0 20px 8px;}
+.steps{display:flex;gap:3px;}
+.step{flex:1;height:5px;border-radius:4px;background:var(--acc-pale);transition:all .35s;}
+.step.done{background:var(--mint);}.step.active{background:var(--acc);}
+.steps-labels{display:flex;gap:3px;padding-top:3px;}
+.step-lbl{flex:1;font-size:.48rem;font-weight:700;color:var(--text-light);text-align:center;text-transform:uppercase;letter-spacing:.03em;}
+.main{max-width:760px;margin:0 auto;padding:28px 16px 100px;}
+.phase{display:none;}.phase.active{display:block;}
+.accroche{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:22px 24px;margin-bottom:22px;display:flex;gap:16px;align-items:flex-start;}
+.accroche-icon{font-size:2.4rem;flex-shrink:0;}
+.accroche-text h1{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--acc);margin-bottom:6px;}
+.accroche-text p{color:var(--text-light);font-size:.92rem;line-height:1.5;}
+.meta-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+.meta-tag{background:var(--acc-pale);border-radius:4px;padding:3px 10px;font-size:.72rem;font-weight:700;color:var(--acc);text-transform:uppercase;letter-spacing:.04em;}
+.lecon-card{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:22px;margin-bottom:18px;}
+.lecon-card h2{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--acc);margin-bottom:14px;border-bottom:2px solid var(--acc-pale);padding-bottom:8px;}
+.lecon-block{display:none;}.lecon-block.revealed{display:block;}
+.lecon-subtitle{font-weight:900;font-size:1rem;color:var(--acc);margin-bottom:10px;margin-top:6px;}
+.sep{margin:18px 0;border:none;border-top:1px solid var(--acc-pale);}
+.analogie{font-size:.92rem;color:var(--text-light);font-style:italic;margin-bottom:12px;line-height:1.6;background:#faf5ff;border-radius:8px;padding:10px 14px;border-left:3px solid var(--acc-mid);}
+.def-box{border-left:4px solid var(--acc);background:var(--acc-pale);border-radius:0 var(--radius) var(--radius) 0;padding:14px 16px;margin-bottom:12px;}
+.def-box h4{font-weight:900;color:var(--acc);font-size:.9rem;margin-bottom:6px;}
+.def-box p{font-size:.88rem;color:var(--text);line-height:1.7;}
+.exemple-ligne{background:white;border:1px solid #e2e8f0;border-radius:8px;padding:10px 16px;font-size:.95rem;margin-bottom:6px;line-height:1.8;display:flex;align-items:center;gap:12px;}
+.exemple-ligne .tag{background:var(--acc);color:white;font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:4px;text-transform:uppercase;flex-shrink:0;}
+.hl{background:var(--acc-pale);color:var(--acc);border-radius:4px;padding:1px 6px;font-weight:700;}
+.astuce{background:#fefce8;border:1px solid #fde68a;border-radius:8px;padding:11px 14px;font-size:.85rem;margin-top:8px;color:#78350f;}
+.astuce strong{color:#92400e;}
+.piege{background:#fff1f2;border:1px solid #fecdd3;border-radius:8px;padding:11px 14px;font-size:.85rem;margin-top:8px;color:#9f1239;}
+.piege strong{color:#be123c;}
+.btn-compris{margin-top:18px;padding:11px 26px;border-radius:8px;font-family:'Lato',sans-serif;font-weight:700;font-size:.9rem;background:var(--acc);color:white;border:none;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:8px;}
+.btn-compris:hover{background:#6d28d9;transform:translateY(-1px);}
+.btn-compris:disabled{opacity:.4;cursor:default;transform:none;}
+.mascot-msg{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:13px 16px;margin:14px 0;display:flex;align-items:flex-start;gap:10px;}
+.mascot-msg .emo{font-size:1.6rem;flex-shrink:0;}
+.mascot-msg p{font-size:.88rem;color:var(--text-light);line-height:1.6;}
+.ex-header-box{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:16px 20px;margin-bottom:16px;}
+.ex-header-box h2{font-family:'Playfair Display',serif;font-size:1.15rem;color:var(--acc);margin-bottom:4px;}
+.ex-header-box p{color:var(--text-light);font-size:.85rem;}
+.guided-problem{background:white;border:2px solid var(--acc);border-radius:var(--radius);padding:20px;margin-bottom:16px;}
+.guided-problem-title{font-size:1.05rem;font-weight:900;color:var(--acc);margin-bottom:16px;background:var(--acc-pale);padding:10px 14px;border-radius:8px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.tries-left{font-size:.75rem;font-weight:700;color:var(--coral);background:var(--coral-pale);padding:2px 8px;border-radius:4px;margin-left:auto;}
+.step-container{display:flex;flex-direction:column;gap:10px;}
+.step-box{border:2px solid #e2e8f0;border-radius:10px;padding:14px 16px;transition:all .3s;opacity:.5;pointer-events:none;}
+.step-box.active{opacity:1;pointer-events:all;border-color:var(--acc-mid);}
+.step-box.correct{border-color:var(--mint);background:var(--mint-pale);opacity:1;}
+.step-num{font-size:.65rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;}
+.step-question{font-size:.95rem;font-weight:700;margin-bottom:10px;line-height:1.6;}
+.step-hint{font-size:.83rem;color:#92400e;background:#fef3c7;border-radius:6px;padding:8px 12px;margin-bottom:8px;display:none;}
+.step-hint.show{display:block;}
+.step-qcm-opts{display:flex;flex-direction:column;gap:6px;}
+.step-qcm-opt{padding:9px 14px;border-radius:8px;border:2px solid #e2e8f0;background:white;font-family:'Lato',sans-serif;font-weight:600;font-size:.9rem;cursor:pointer;text-align:left;transition:all .2s;}
+.step-qcm-opt:hover:not(:disabled){border-color:var(--acc);background:var(--acc-pale);}
+.step-qcm-opt:disabled{cursor:default;}
+.step-qcm-opt.opt-correct{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.step-qcm-opt.opt-wrong{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
+.step-input-row{display:flex;gap:8px;align-items:center;}
+.step-input{border:2px solid var(--acc);border-radius:6px;padding:8px 12px;font-family:'Lato',monospace;font-weight:700;font-size:1rem;color:var(--text);background:white;outline:none;min-width:100px;max-width:160px;text-align:center;}
+.step-input:disabled{border-color:#e2e8f0;background:#f8fafc;color:var(--text-light);}
+.step-input.input-ok{border-color:var(--mint);background:var(--mint-pale);}
+.step-input.input-ko{border-color:var(--coral);}
+.btn-step-check{padding:8px 16px;border-radius:6px;font-family:'Lato',sans-serif;font-weight:700;font-size:.85rem;background:var(--acc);color:white;border:none;cursor:pointer;}
+.btn-step-check:disabled{opacity:.4;cursor:not-allowed;}
+.step-fb{margin-top:8px;padding:8px 12px;border-radius:6px;font-size:.83rem;font-weight:700;display:none;}
+.step-fb.show{display:block;}
+.step-fb.fb-ok{background:var(--mint-pale);color:var(--mint-deep);}
+.step-fb.fb-ko{background:var(--coral-pale);color:#b91c1c;}
+.reset-msg{background:#fff;border:2px solid var(--acc);border-radius:var(--radius);padding:22px 24px;text-align:center;margin-bottom:16px;display:none;}
+.reset-msg.show{display:block;}
+.reset-msg .ugo{font-size:2.5rem;margin-bottom:8px;}
+.reset-msg h3{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--acc);margin-bottom:8px;}
+.reset-msg p{color:var(--text-light);font-size:.9rem;margin-bottom:14px;line-height:1.6;}
+.btn-restart{padding:10px 24px;border-radius:8px;font-family:'Lato',sans-serif;font-weight:700;font-size:.9rem;background:var(--acc);color:white;border:none;cursor:pointer;}
+.free-ex-card{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:18px;margin-bottom:14px;}
+.free-ex-label{font-size:.7rem;font-weight:700;color:var(--acc);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;}
+.free-ex-question{font-size:.95rem;font-weight:700;margin-bottom:12px;background:var(--acc-pale);border-radius:8px;padding:11px 14px;line-height:1.8;}
+.free-classify-btns{display:flex;gap:8px;flex-wrap:wrap;}
+.free-classify-btn{padding:9px 16px;border-radius:6px;font-family:'Lato',sans-serif;font-weight:700;font-size:.85rem;border:2px solid #e2e8f0;background:white;cursor:pointer;transition:all .2s;flex:1;text-align:center;}
+.free-classify-btn:hover{border-color:var(--acc);background:var(--acc-pale);}
+.free-classify-btn.ans-correct{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.free-classify-btn.ans-wrong{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
+.free-classify-btn.ans-reveal{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.free-input-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.free-input{border:2px solid var(--acc);border-radius:6px;padding:8px 12px;font-family:'Lato',monospace;font-weight:700;font-size:1rem;color:var(--text);background:white;outline:none;min-width:80px;max-width:140px;text-align:center;}
+.free-input:disabled{border-color:#e2e8f0;background:#f8fafc;}
+.free-input.free-ok{border-color:var(--mint);background:var(--mint-pale);}
+.free-input.free-ko{border-color:var(--coral);background:var(--coral-pale);}
+.btn-free-check{padding:8px 16px;border-radius:6px;font-family:'Lato',sans-serif;font-weight:700;font-size:.85rem;background:var(--acc);color:white;border:none;cursor:pointer;}
+.jugement-opts{display:flex;flex-direction:column;gap:8px;}
+.jugement-opt-btn{padding:11px 16px;border-radius:8px;border:2px solid #e2e8f0;background:white;font-family:'Lato',sans-serif;font-size:.92rem;cursor:pointer;text-align:left;transition:all .2s;line-height:1.6;}
+.jugement-opt-btn:hover{border-color:var(--acc);background:var(--acc-pale);}
+.jugement-opt-btn.jug-correct{border-color:var(--mint);background:var(--mint-pale);}
+.jugement-opt-btn.jug-wrong{border-color:var(--coral);background:var(--coral-pale);}
+.free-fb{margin-top:10px;padding:9px 13px;border-radius:8px;font-size:.84rem;font-weight:700;display:none;}
+.free-fb.show{display:block;}
+.free-fb.fb-ok{background:var(--mint-pale);color:var(--mint-deep);}
+.free-fb.fb-ko{background:var(--coral-pale);color:#b91c1c;}
+.btn-suivant{margin-top:14px;padding:10px 22px;border-radius:8px;font-family:'Lato',sans-serif;font-weight:700;font-size:.88rem;background:var(--acc);color:white;border:none;cursor:pointer;display:none;align-items:center;gap:8px;transition:all .2s;}
+.btn-suivant.show{display:inline-flex;}
+.btn-suivant:hover{background:#6d28d9;}
+.bilan-card{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:28px 24px;text-align:center;}
+.bilan-icon{font-size:3.5rem;margin-bottom:12px;display:block;}
+.bilan-title{font-family:'Playfair Display',serif;font-size:1.8rem;margin-bottom:6px;color:var(--acc);}
+.bilan-msg{color:var(--text-light);font-size:.95rem;margin-bottom:20px;}
+.stars-row{display:flex;justify-content:center;gap:10px;margin-bottom:20px;}
+.star-big{font-size:2.5rem;filter:grayscale(1);transition:all .5s;}
+.star-big.earned{filter:none;animation:starPop .5s ease both;}
+@keyframes starPop{0%{transform:scale(0);}60%{transform:scale(1.2);}100%{transform:scale(1);}}
+.score-circle{width:100px;height:100px;border-radius:50%;background:var(--acc);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 20px;color:white;}
+.score-num{font-family:'Playfair Display',serif;font-size:1.8rem;line-height:1;}
+.score-sub{font-size:.65rem;opacity:.8;}
+.memo-card{background:var(--acc-pale);border-radius:var(--radius);padding:16px 20px;margin:18px 0;text-align:left;}
+.memo-card h3{font-weight:700;font-size:.85rem;color:var(--acc);margin-bottom:10px;text-transform:uppercase;letter-spacing:.04em;}
+.memo-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media(max-width:480px){.memo-grid{grid-template-columns:1fr;}}
+.memo-item{background:white;border-radius:8px;padding:10px 12px;font-size:.82rem;border:1px solid #e2e8f0;}
+.memo-item strong{color:var(--acc);}
+.bilan-btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:16px;}
+.btn-act{padding:10px 20px;border-radius:8px;font-family:'Lato',sans-serif;font-weight:700;font-size:.85rem;cursor:pointer;border:none;transition:all .2s;}
+.btn-act.primary{background:var(--acc);color:white;}
+.btn-act.secondary{background:var(--acc-pale);color:var(--acc);border:2px solid var(--acc);}
+.btn-act:hover{transform:translateY(-1px);}
+.confetti-piece{position:fixed;border-radius:2px;top:-20px;animation:fall linear both;pointer-events:none;z-index:9999;}
+@keyframes fall{0%{transform:translateY(0) rotate(0deg);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
+@media print{.print-bar,.btn-compris,.btn-suivant,.bilan-card,.mascot-msg{display:none!important;}body{background:white;}.phase{display:block!important;}}
+</style>
+</head>
+<body>
+<div class="print-bar">
+  <button class="print-btn print-btn-lecon" onclick="window.print()"><span class="ico">📖</span><span class="lbl">Leçon</span></button>
+  <button class="print-btn print-btn-eval" onclick="window.print()"><span class="ico">📝</span><span class="lbl">Exercices</span></button>
+</div>
+<header class="header">
+  <div class="header-top">
+    <a href="../12-15ans.html" class="logo">🦉 L'Atelier du Devoir</a>
+    <div class="score-badge">⭐ <span id="score-display">0</span> pts</div>
+  </div>
+  <div class="steps-wrap">
+    <div class="steps">
+      <div class="step active" id="step-0"></div><div class="step" id="step-1"></div><div class="step" id="step-2"></div>
+      <div class="step" id="step-3"></div><div class="step" id="step-4"></div><div class="step" id="step-5"></div>
+    </div>
+    <div class="steps-labels">
+      <div class="step-lbl">Leçon</div><div class="step-lbl">Guidé 1</div><div class="step-lbl">Guidé 2</div>
+      <div class="step-lbl">Exercices</div><div class="step-lbl">+ Exercices</div><div class="step-lbl">Bilan</div>
+    </div>
+  </div>
+</header>
+<main class="main">
+
+<div class="accroche">
+  <div class="accroche-icon">🎲</div>
+  <div class="accroche-text">
+    <h1>Les probabilités N1</h1>
+    <p>Comprendre le hasard, calculer des probabilités simples et explorer l'univers des possibles.</p>
+    <div class="meta-row">
+      <span class="meta-tag">5e</span><span class="meta-tag">~25 min</span>
+      <span class="meta-tag">⭐⭐ Difficulté</span><span class="meta-tag">Mathématiques</span>
+    </div>
+  </div>
+</div>
+
+<!-- LEÇON -->
+<div class="phase active" id="phase-lecon">
+  <div class="lecon-card">
+    <h2>📖 La leçon</h2>
+
+    <div class="lecon-block revealed" id="bloc-0">
+      <div class="lecon-subtitle">① Vocabulaire : expérience, univers, événement</div>
+      <div class="analogie">🎲 Lancer un dé, tirer une carte, faire tourner une roue… Ces expériences ont toutes un point commun : leur résultat dépend du hasard. Les probabilités sont la science qui mesure cette chance — pas pour prédire l'avenir, mais pour le quantifier.</div>
+
+      <!-- Schéma dé à 6 faces -->
+      <svg viewBox="0 0 300 90" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:12px auto;max-width:300px;background:#faf5ff;border-radius:10px;padding:6px;">
+        <text x="150" y="16" font-size="10" fill="#7c3aed" font-weight="bold" text-anchor="middle">Univers d'un dé équilibré = {1, 2, 3, 4, 5, 6}</text>
+        <!-- 6 faces -->
+        <rect x="10" y="24" width="36" height="36" rx="6" fill="#7c3aed"/>
+        <circle cx="28" cy="42" r="4" fill="white"/>
+        <rect x="55" y="24" width="36" height="36" rx="6" fill="#7c3aed"/>
+        <circle cx="65" cy="34" r="3.5" fill="white"/><circle cx="79" cy="50" r="3.5" fill="white"/>
+        <rect x="100" y="24" width="36" height="36" rx="6" fill="#7c3aed"/>
+        <circle cx="110" cy="34" r="3.5" fill="white"/><circle cx="118" cy="42" r="3.5" fill="white"/><circle cx="126" cy="50" r="3.5" fill="white"/>
+        <rect x="145" y="24" width="36" height="36" rx="6" fill="#7c3aed"/>
+        <circle cx="155" cy="34" r="3" fill="white"/><circle cx="155" cy="50" r="3" fill="white"/>
+        <circle cx="169" cy="34" r="3" fill="white"/><circle cx="169" cy="50" r="3" fill="white"/>
+        <rect x="190" y="24" width="36" height="36" rx="6" fill="#7c3aed"/>
+        <circle cx="200" cy="34" r="3" fill="white"/><circle cx="208" cy="42" r="3" fill="white"/><circle cx="216" cy="34" r="3" fill="white"/>
+        <circle cx="200" cy="50" r="3" fill="white"/><circle cx="216" cy="50" r="3" fill="white"/>
+        <rect x="235" y="24" width="36" height="36" rx="6" fill="#7c3aed"/>
+        <circle cx="245" cy="34" r="3" fill="white"/><circle cx="253" cy="34" r="3" fill="white"/><circle cx="261" cy="34" r="3" fill="white"/>
+        <circle cx="245" cy="50" r="3" fill="white"/><circle cx="253" cy="50" r="3" fill="white"/><circle cx="261" cy="50" r="3" fill="white"/>
+        <!-- Labels -->
+        <text x="28" y="72" font-size="9" fill="#7c3aed" text-anchor="middle">1</text>
+        <text x="73" y="72" font-size="9" fill="#7c3aed" text-anchor="middle">2</text>
+        <text x="118" y="72" font-size="9" fill="#7c3aed" text-anchor="middle">3</text>
+        <text x="163" y="72" font-size="9" fill="#7c3aed" text-anchor="middle">4</text>
+        <text x="208" y="72" font-size="9" fill="#7c3aed" text-anchor="middle">5</text>
+        <text x="253" y="72" font-size="9" fill="#7c3aed" text-anchor="middle">6</text>
+      </svg>
+
+      <div class="def-box">
+        <h4>Vocabulaire fondamental</h4>
+        <p><strong>Expérience aléatoire</strong> : expérience dont le résultat dépend du hasard.<br>
+        <strong>Univers Ω</strong> : ensemble de tous les résultats possibles.<br>
+        <strong>Événement</strong> : sous-ensemble de l'univers (un ou plusieurs résultats).<br>
+        <strong>Événement élémentaire</strong> : un seul résultat possible (ex : {3}).<br>
+        <strong>Événement certain</strong> : toujours vrai (P = 1). <strong>Événement impossible</strong> : jamais vrai (P = 0).</p>
+      </div>
+      <div class="exemple-ligne"><span class="tag">Exemple</span> Dé à 6 faces : Ω = {1,2,3,4,5,6}. Événement A = "obtenir un pair" = {2,4,6}</div>
+      <div class="exemple-ligne"><span class="tag">Certain</span> "Obtenir un nombre ≤ 6" → toujours vrai → P = 1</div>
+      <div class="exemple-ligne"><span class="tag">Impossible</span> "Obtenir un 7" → jamais → P = 0</div>
+      <button class="btn-compris" onclick="revealBloc(1)">Bloc suivant →</button>
+    </div>
+
+    <div class="lecon-block" id="bloc-1">
+      <hr class="sep">
+      <div class="lecon-subtitle">② Calculer une probabilité</div>
+      <div class="analogie">⚖️ Si tous les résultats sont également probables (dé équilibré, tirage au sort…), la probabilité d'un événement se calcule comme une fraction : favorable sur possible.</div>
+
+      <div class="def-box">
+        <h4>🔑 Formule fondamentale (équiprobabilité)</h4>
+        <p style="font-size:1.05rem;font-weight:900;color:#7c3aed;">P(A) = nombre de résultats favorables / nombre de résultats possibles</p>
+        <p style="margin-top:8px;font-size:.88rem;">Valeurs possibles : 0 ≤ P(A) ≤ 1. Plus P est proche de 1, plus l'événement est probable.</p>
+      </div>
+
+      <!-- Échelle des probabilités -->
+      <svg viewBox="0 0 300 60" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:12px auto;max-width:300px;background:#faf5ff;border-radius:8px;padding:4px;">
+        <line x1="20" y1="30" x2="280" y2="30" stroke="#7c3aed" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="20" cy="30" r="5" fill="#dc2626"/><text x="20" y="18" font-size="9" fill="#dc2626" text-anchor="middle">0</text><text x="20" y="50" font-size="8" fill="#dc2626" text-anchor="middle">Impossible</text>
+        <circle cx="150" cy="30" r="5" fill="#d97706"/><text x="150" y="18" font-size="9" fill="#d97706" text-anchor="middle">0,5</text><text x="150" y="50" font-size="8" fill="#d97706" text-anchor="middle">1 chance/2</text>
+        <circle cx="280" cy="30" r="5" fill="#059669"/><text x="280" y="18" font-size="9" fill="#059669" text-anchor="middle">1</text><text x="280" y="50" font-size="8" fill="#059669" text-anchor="middle">Certain</text>
+        <circle cx="90" cy="30" r="4" fill="#7c3aed"/><text x="90" y="18" font-size="8" fill="#7c3aed" text-anchor="middle">1/6</text>
+        <circle cx="215" cy="30" r="4" fill="#7c3aed"/><text x="215" y="18" font-size="8" fill="#7c3aed" text-anchor="middle">3/6</text>
+      </svg>
+
+      <div class="exemple-ligne"><span class="tag">Dé</span> P(obtenir 3) = 1/6 — 1 résultat favorable sur 6 possibles</div>
+      <div class="exemple-ligne"><span class="tag">Dé</span> P(obtenir pair) = 3/6 = <span class="hl">1/2</span> — {2,4,6} sur {1,2,3,4,5,6}</div>
+      <div class="exemple-ligne"><span class="tag">Sac</span> Sac : 3 rouges + 2 bleues + 1 verte = 6 billes. P(rouge) = <span class="hl">3/6 = 1/2</span></div>
+      <div class="astuce"><strong>💡 Simplification :</strong> une probabilité s'exprime toujours sous forme irréductible ou décimale. P = 4/8 → simplifier en 1/2.</div>
+      <button class="btn-compris" onclick="revealBloc(2)">Bloc suivant →</button>
+    </div>
+
+    <div class="lecon-block" id="bloc-2">
+      <hr class="sep">
+      <div class="lecon-subtitle">③ Événement contraire et somme des probabilités</div>
+      <div class="analogie">🔄 Si la probabilité de gagner est 1/4, alors la probabilité de ne pas gagner est 3/4. Ce qui n'arrive pas est l'événement contraire — et leurs probabilités s'additionnent toujours pour donner 1.</div>
+
+      <div class="def-box">
+        <h4>Propriétés essentielles</h4>
+        <p><strong>Événement contraire</strong> de A, noté Ā : tout ce qui n'est pas dans A.<br>
+        <strong>P(Ā) = 1 − P(A)</strong><br><br>
+        <strong>Somme des probabilités</strong> : la somme de toutes les probabilités élémentaires = 1.<br>
+        Si A et B sont incompatibles (ne peuvent pas se produire en même temps) :<br>
+        <strong>P(A ou B) = P(A) + P(B)</strong></p>
+      </div>
+
+      <!-- Schéma contraire -->
+      <svg viewBox="0 0 300 80" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:12px auto;max-width:300px;background:#faf5ff;border-radius:8px;padding:4px;">
+        <rect x="10" y="15" width="280" height="50" rx="8" fill="white" stroke="#7c3aed" stroke-width="2"/>
+        <text x="150" y="12" font-size="9" fill="#7c3aed" font-weight="bold" text-anchor="middle">Ω (univers = 1)</text>
+        <!-- Partie A -->
+        <rect x="18" y="22" width="100" height="36" rx="6" fill="#c4b5fd"/>
+        <text x="68" y="37" font-size="10" fill="#7c3aed" font-weight="bold" text-anchor="middle">A</text>
+        <text x="68" y="50" font-size="9" fill="#7c3aed" text-anchor="middle">P(A)</text>
+        <!-- Partie Ā -->
+        <rect x="126" y="22" width="156" height="36" rx="6" fill="#e9d5ff"/>
+        <text x="204" y="37" font-size="10" fill="#7c3aed" font-weight="bold" text-anchor="middle">Ā (contraire)</text>
+        <text x="204" y="50" font-size="9" fill="#7c3aed" text-anchor="middle">P(Ā) = 1 − P(A)</text>
+      </svg>
+
+      <div class="exemple-ligne"><span class="tag">Dé</span> P(obtenir pair) = 1/2 → P(obtenir impair) = 1 − 1/2 = <span class="hl">1/2</span></div>
+      <div class="exemple-ligne"><span class="tag">Billes</span> P(rouge) = 3/6 → P(non rouge) = 1 − 1/2 = <span class="hl">1/2</span></div>
+      <div class="astuce"><strong>💡 Astuce :</strong> si calculer P(A) est difficile, calcule P(Ā) et soustrait de 1 — parfois c'est beaucoup plus simple !</div>
+      <button class="btn-compris" onclick="goToPhase('guided1',1)">✓ Leçon comprise — À l'entraînement !</button>
+    </div>
+  </div>
+</div>
+
+<!-- GUIDÉ 1 -->
+<div class="phase" id="phase-guided1">
+  <div class="mascot-msg"><span class="emo">🦉</span><p><strong>Exercice guidé 1</strong> — QCM étape par étape. <strong>3 essais</strong> par question. Point uniquement au premier essai correct !</p></div>
+  <div class="ex-header-box"><h2>Calculer des probabilités (QCM)</h2><p>Le problème change à chaque recommencement.</p></div>
+  <div id="g1-reset" class="reset-msg">
+    <div class="ugo">🦉</div><h3>On recommence !</h3>
+    <p>Rappelle-toi : P(A) = favorables ÷ possibles. Et P(Ā) = 1 − P(A) pour l'événement contraire.</p>
+    <button class="btn-restart" onclick="initGuided1()">↺ Recommencer</button>
+  </div>
+  <div id="g1-container"></div>
+  <button class="btn-suivant" id="btn-to-g2" onclick="goToPhase('guided2',2)">Bien joué ! Exercice suivant →</button>
+</div>
+
+<!-- GUIDÉ 2 -->
+<div class="phase" id="phase-guided2">
+  <div class="mascot-msg"><span class="emo">🦉</span><p><strong>Exercice guidé 2</strong> — Tu écris ta réponse. <strong>3 essais</strong> par étape. Point uniquement au premier essai correct !</p></div>
+  <div class="ex-header-box"><h2>Calculer pas à pas (saisie)</h2><p>Écris les probabilités sous forme de fraction irréductible (ex : 1/2, 2/5).</p></div>
+  <div id="g2-reset" class="reset-msg">
+    <div class="ugo">🦉</div><h3>On repart !</h3>
+    <p>P(A) = nombre de résultats favorables ÷ nombre total de résultats. Simplifie toujours la fraction.</p>
+    <button class="btn-restart" onclick="initGuided2()">↺ Recommencer</button>
+  </div>
+  <div id="g2-container"></div>
+  <button class="btn-suivant" id="btn-to-free" onclick="goToPhase('free',3)">Excellent ! Exercices libres →</button>
+</div>
+
+<!-- LIBRES 1 -->
+<div class="phase" id="phase-free">
+  <div class="mascot-msg"><span class="emo">🦉</span><p><strong>Exercices libres</strong> — 5 exercices variés sans aide. Chaque bonne réponse compte !</p></div>
+  <div id="free1-container"></div>
+  <button class="btn-suivant" id="btn-to-free2" onclick="goToPhase('free2',4)">Encore des exercices →</button>
+</div>
+
+<!-- LIBRES 2 -->
+<div class="phase" id="phase-free2">
+  <div class="mascot-msg"><span class="emo">🦉</span><p><strong>Entraînement supplémentaire</strong> — 5 exercices de plus. Tu y es presque !</p></div>
+  <div id="free2-container"></div>
+  <button class="btn-suivant" id="btn-to-bilan" onclick="goToPhase('bilan',5)">🌟 Voir mon bilan</button>
+</div>
+
+<!-- BILAN -->
+<div class="phase" id="phase-bilan">
+  <div class="bilan-card">
+    <span class="bilan-icon">🎲</span>
+    <h2 class="bilan-title" id="bilan-title">Résultat</h2>
+    <p class="bilan-msg" id="bilan-msg"></p>
+    <div class="stars-row"><span class="star-big" id="star1">⭐</span><span class="star-big" id="star2">⭐</span><span class="star-big" id="star3">⭐</span></div>
+    <div class="score-circle"><span class="score-num" id="bilan-score">0</span><span class="score-sub" id="bilan-total-txt">/ 0 pts</span></div>
+    <div class="memo-card">
+      <h3>Mémo — Probabilités N1</h3>
+      <div class="memo-grid">
+        <div class="memo-item"><strong>Formule</strong><br>P(A) = favorables ÷ possibles<br>0 ≤ P(A) ≤ 1</div>
+        <div class="memo-item"><strong>Contraire</strong><br>P(Ā) = 1 − P(A)<br>P(A) + P(Ā) = 1</div>
+        <div class="memo-item"><strong>Certain / Impossible</strong><br>Certain : P = 1<br>Impossible : P = 0</div>
+        <div class="memo-item"><strong>Incompatibles</strong><br>P(A ou B) = P(A)+P(B)<br>si A et B ne se chevauchent pas</div>
+      </div>
+    </div>
+    <div class="bilan-btns">
+      <button class="btn-act secondary" onclick="location.reload()">↺ Recommencer</button>
+      <button class="btn-act primary" onclick="location.href='../12-15ans.html'">← Retour aux fiches</button>
+    </div>
+  </div>
+</div>
+</main>
+
+<script>
+// ════ Visuels SVG pour les guidés ════
+function deSVG(highlighting) {
+  // highlighting : tableau de faces à mettre en évidence (ex: [2,4,6])
+  var faces = [1,2,3,4,5,6];
+  var dots = {
+    1:[[18,18]],
+    2:[[10,10],[26,26]],
+    3:[[10,10],[18,18],[26,26]],
+    4:[[10,10],[26,10],[10,26],[26,26]],
+    5:[[10,10],[26,10],[18,18],[10,26],[26,26]],
+    6:[[10,10],[26,10],[10,18],[26,18],[10,26],[26,26]]
+  };
+  var svg = '<svg viewBox="0 0 260 56" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:10px auto;max-width:260px;background:#faf5ff;border-radius:8px;padding:4px;">';
+  faces.forEach(function(f, i) {
+    var x = 8 + i*42;
+    var hl = highlighting.indexOf(f) >= 0;
+    svg += '<rect x="'+x+'" y="4" width="36" height="36" rx="5" fill="'+(hl?'#7c3aed':'#e9d5ff')+'"/>';
+    dots[f].forEach(function(d) {
+      svg += '<circle cx="'+(x+d[0])+'" cy="'+(4+d[1])+'" r="3" fill="'+(hl?'white':'#7c3aed')+'"/>';
+    });
+    svg += '<text x="'+(x+18)+'" y="52" font-size="9" fill="'+(hl?'#7c3aed':'#94a3b8')+'" font-weight="'+(hl?'bold':'400')+'" text-anchor="middle">'+f+'</text>';
+  });
+  svg += '</svg>';
+  return svg;
+}
+
+function sacSVG(billes) {
+  // billes : [{n, couleur, label}]
+  var total = billes.reduce(function(s,b){return s+b.n;},0);
+  var svg = '<svg viewBox="0 0 280 70" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:10px auto;max-width:280px;background:#faf5ff;border-radius:8px;padding:4px;">';
+  svg += '<text x="140" y="14" font-size="10" fill="#7c3aed" font-weight="bold" text-anchor="middle">Contenu du sac ('+total+' billes au total)</text>';
+  var x = 15;
+  billes.forEach(function(b) {
+    for(var i=0;i<b.n;i++) {
+      svg += '<circle cx="'+(x+12)+'" cy="42" r="11" fill="'+b.couleur+'" stroke="white" stroke-width="1.5"/>';
+      x += 26;
+    }
+  });
+  // Légende
+  x = 15;
+  billes.forEach(function(b) {
+    svg += '<text x="'+x+'" y="65" font-size="8.5" fill="'+b.couleur+'" font-weight="bold">×'+b.n+' '+b.label+'</text>';
+    x += 75;
+  });
+  svg += '</svg>';
+  return svg;
+}
+
+function carteSVG(total, favorables, label) {
+  var svg = '<svg viewBox="0 0 280 65" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:10px auto;max-width:280px;background:#faf5ff;border-radius:8px;padding:6px;">';
+  svg += '<text x="140" y="18" font-size="10" fill="#7c3aed" font-weight="bold" text-anchor="middle">Tirage au sort parmi '+total+' cartes</text>';
+  // Représenter les cartes visuellement
+  var w = Math.min(20, 240/total);
+  for(var i=0;i<total;i++) {
+    var hl = i < favorables;
+    svg += '<rect x="'+(14+i*(w+2))+'" y="26" width="'+w+'" height="28" rx="3" fill="'+(hl?'#7c3aed':'#e9d5ff')+'" stroke="white" stroke-width="1"/>';
+  }
+  svg += '<text x="14" y="62" font-size="8.5" fill="#7c3aed" font-weight="bold">'+favorables+' '+label+'</text>';
+  svg += '<text x="'+(14+favorables*(w+2)+4)+'" y="62" font-size="8.5" fill="#94a3b8">'+(total-favorables)+' autres</text>';
+  svg += '</svg>';
+  return svg;
+}
+
+// ════ GUIDÉ 1 — QCM (4 variantes) ════
+var G1=[
+  { titre:"On lance un dé équilibré à 6 faces. On s'intéresse à l'événement A = 'obtenir un nombre pair'.",
+    svg:deSVG([2,4,6]),
+    etapes:[
+      {q:"Étape 1 — Combien y a-t-il de résultats possibles au total ?",
+       opts:["6","3","12","2"],ok:0,hint:"L'univers d'un dé à 6 faces contient 6 résultats.",
+       expl_ok:"Il y a 6 résultats possibles : {1,2,3,4,5,6}.",
+       expl_ko:"Un dé à 6 faces → 6 résultats possibles."},
+      {q:"Étape 2 — Quels résultats sont favorables à l'événement A = 'pair' ?",
+       opts:["{2,4,6} → 3 résultats","{1,3,5} → 3 résultats","{2,4} → 2 résultats"],ok:0,hint:"Les nombres pairs de 1 à 6 sont : 2, 4, 6.",
+       expl_ok:"{2,4,6} sont les 3 résultats pairs favorables.",
+       expl_ko:"Pair = divisible par 2 : 2, 4, 6."},
+      {q:"Étape 3 — P(pair) = résultats favorables ÷ résultats possibles = ?",
+       opts:["3/6 = 1/2","3/6 = 3/6","1/6","6/3"],ok:0,hint:"P = 3 ÷ 6 = ?, puis simplifier.",
+       expl_ok:"P(pair) = 3/6 = 1/2. On simplifie par 3.",
+       expl_ko:"P = 3/6. PGCD(3,6)=3 → 1/2."},
+      {q:"Étape 4 — P(impair) = événement contraire de 'pair'. Calcule.",
+       opts:["1/2","1/3","2/3","1/6"],ok:0,hint:"P(impair) = 1 − P(pair).",
+       expl_ok:"P(impair) = 1 − 1/2 = 1/2. L'équilibre pair/impair est parfait sur un dé.",
+       expl_ko:"P(contraire) = 1 − P(A) = 1 − 1/2 = 1/2."}
+    ]
+  },
+  { titre:"Un sac contient 3 billes rouges, 2 billes bleues et 1 bille verte. On tire une bille au hasard.",
+    svg:sacSVG([{n:3,couleur:"#dc2626",label:"rouges"},{n:2,couleur:"#2563eb",label:"bleues"},{n:1,couleur:"#059669",label:"verte"}]),
+    etapes:[
+      {q:"Étape 1 — Combien de billes y a-t-il au total dans le sac ?",
+       opts:["6","5","3","8"],ok:0,hint:"3 + 2 + 1 = ?",
+       expl_ok:"3+2+1 = 6 billes au total dans le sac.",
+       expl_ko:"Additionne toutes les billes : 3+2+1 = 6."},
+      {q:"Étape 2 — P(tirer une bille rouge) = ?",
+       opts:["3/6 = 1/2","2/6 = 1/3","1/6","3/5"],ok:0,hint:"3 billes rouges sur 6 au total.",
+       expl_ok:"P(rouge) = 3/6 = 1/2.",
+       expl_ko:"P = 3 (rouges) ÷ 6 (total) = 1/2."},
+      {q:"Étape 3 — P(tirer une bille bleue) = ?",
+       opts:["2/6 = 1/3","2/6 = 1/2","1/6","2/5"],ok:0,hint:"2 billes bleues sur 6.",
+       expl_ok:"P(bleue) = 2/6 = 1/3.",
+       expl_ko:"P = 2/6. PGCD(2,6)=2 → 1/3."},
+      {q:"Étape 4 — P(rouge) + P(bleue) + P(verte) = ? (vérification)",
+       opts:["1 ✓","1/2","3/6","2"],ok:0,hint:"1/2 + 1/3 + 1/6 = ?",
+       expl_ok:"3/6+2/6+1/6 = 6/6 = 1 ✓. La somme de toutes les probabilités vaut toujours 1.",
+       expl_ko:"Convertir au dénominateur 6 : 3/6+2/6+1/6 = 6/6 = 1."}
+    ]
+  },
+  { titre:"On tire une carte au hasard dans un jeu de 20 cartes numérotées de 1 à 20.",
+    svg:carteSVG(20, 5, "multiples de 4"),
+    etapes:[
+      {q:"Étape 1 — Combien y a-t-il de multiples de 4 parmi 1 à 20 ?",
+       opts:["5 : {4,8,12,16,20}","4 : {4,8,12,16}","6 : {4,8,12,16,20,24}"],ok:0,hint:"Multiples de 4 : 4×1, 4×2, … jusqu'à 20.",
+       expl_ok:"5 multiples de 4 : 4, 8, 12, 16, 20.",
+       expl_ko:"4×1=4, 4×2=8, 4×3=12, 4×4=16, 4×5=20 → 5 multiples."},
+      {q:"Étape 2 — P(multiple de 4) = ?",
+       opts:["5/20 = 1/4","4/20 = 1/5","5/20 = 1/5","1/4 = 5/20"],ok:0,hint:"5 favorables sur 20 possibles.",
+       expl_ok:"P = 5/20 = 1/4. PGCD(5,20)=5.",
+       expl_ko:"5÷20 = 1/4."},
+      {q:"Étape 3 — P(non multiple de 4) = ?",
+       opts:["3/4","4/5","1/4","2/3"],ok:0,hint:"P(contraire) = 1 − P(multiple de 4).",
+       expl_ok:"P(non multiple de 4) = 1 − 1/4 = 3/4.",
+       expl_ko:"1 − 1/4 = 3/4."}
+    ]
+  },
+  { titre:"On lance un dé. Événement A = 'obtenir un nombre > 4'.",
+    svg:deSVG([5,6]),
+    etapes:[
+      {q:"Étape 1 — Quels résultats sont favorables à A = 'nombre > 4' ?",
+       opts:["{5,6} → 2 résultats","{4,5,6} → 3 résultats","{6} → 1 résultat"],ok:0,hint:"Nombres strictement supérieurs à 4 dans {1,2,3,4,5,6}.",
+       expl_ok:"5 et 6 sont > 4. Donc {5,6} → 2 résultats favorables.",
+       expl_ko:"Strictement supérieur à 4 : 5 et 6 uniquement (4 n'est pas >4)."},
+      {q:"Étape 2 — P(A) = P(nombre > 4) = ?",
+       opts:["2/6 = 1/3","3/6 = 1/2","1/6","2/5"],ok:0,hint:"2 favorables sur 6 possibles.",
+       expl_ok:"P(>4) = 2/6 = 1/3.",
+       expl_ko:"2÷6 = 1/3."},
+      {q:"Étape 3 — P(Ā) = P(nombre ≤ 4) = ?",
+       opts:["2/3","1/3","1/2","4/6"],ok:0,hint:"P(Ā) = 1 − P(A) = 1 − 1/3.",
+       expl_ok:"P(≤4) = 1 − 1/3 = 2/3. Vérif direct : {1,2,3,4} = 4 résultats → 4/6 = 2/3 ✓",
+       expl_ko:"1 − 1/3 = 2/3."}
+    ]
+  }
+];
+
+// ════ GUIDÉ 2 — Saisie (4 variantes) ════
+var G2=[
+  { titre:"Dé à 6 faces. Calcule P(obtenir un multiple de 3).",
+    svg:deSVG([3,6]),
+    etapes:[
+      {q:"Étape 1 — Les multiples de 3 parmi {1,2,3,4,5,6} sont : {3,6}. Combien ?",acc:["2"],hint:"Compte : 3 et 6.",expl_ok:"2 multiples de 3 : 3 et 6.",expl_ko:"3×1=3, 3×2=6. Deux multiples."},
+      {q:"Étape 2 — P(multiple de 3) = 2/6 simplifié = ?",acc:["1/3"],hint:"PGCD(2,6)=2 → 2÷2/6÷2.",expl_ok:"P = 1/3.",expl_ko:"2/6 = 1/3."},
+      {q:"Étape 3 — P(non multiple de 3) = 1 − 1/3 = ?",acc:["2/3"],hint:"1 − 1/3 = ?",expl_ok:"P(non multiple de 3) = 2/3.",expl_ko:"1−1/3 = 2/3."}
+    ]
+  },
+  { titre:"Sac : 4 rouges, 3 bleues, 3 jaunes. Tirage au hasard.",
+    svg:sacSVG([{n:4,couleur:"#dc2626",label:"rouges"},{n:3,couleur:"#2563eb",label:"bleues"},{n:3,couleur:"#d97706",label:"jaunes"}]),
+    etapes:[
+      {q:"Étape 1 — Total de billes = ?",acc:["10"],hint:"4+3+3 = ?",expl_ok:"10 billes au total.",expl_ko:"4+3+3 = 10."},
+      {q:"Étape 2 — P(rouge) = ?",acc:["4/10","2/5"],hint:"4 rouges sur 10.",expl_ok:"P(rouge) = 4/10 = 2/5.",expl_ko:"4÷10 = 2/5."},
+      {q:"Étape 3 — P(non rouge) = 1 − 2/5 = ?",acc:["3/5"],hint:"1 − 2/5 = ?",expl_ok:"P(non rouge) = 3/5.",expl_ko:"1−2/5 = 3/5."},
+      {q:"Étape 4 — P(bleue ou jaune) = P(bleue)+P(jaune) = 3/10+3/10 = ?",acc:["6/10","3/5"],hint:"3/10 + 3/10 = ?",expl_ok:"P(bleue ou jaune) = 6/10 = 3/5. Même résultat que P(non rouge) ✓",expl_ko:"3/10+3/10 = 6/10 = 3/5."}
+    ]
+  },
+  { titre:"Cartes numérotées de 1 à 10. Tirage au hasard.",
+    svg:carteSVG(10, 3, "multiples de 3"),
+    etapes:[
+      {q:"Étape 1 — Multiples de 3 parmi 1 à 10 : combien ?",acc:["3"],hint:"3, 6, 9.",expl_ok:"3 multiples de 3 : 3, 6, 9.",expl_ko:"3×1=3, 3×2=6, 3×3=9. Trois multiples."},
+      {q:"Étape 2 — P(multiple de 3) = ?",acc:["3/10"],hint:"3 favorables sur 10.",expl_ok:"P = 3/10. Déjà irréductible.",expl_ko:"3÷10 = 3/10."},
+      {q:"Étape 3 — Combien de nombres pairs de 1 à 10 ?",acc:["5"],hint:"2,4,6,8,10.",expl_ok:"5 nombres pairs : 2,4,6,8,10.",expl_ko:"2,4,6,8,10 = 5 nombres pairs."},
+      {q:"Étape 4 — P(pair) = ?",acc:["5/10","1/2"],hint:"5 favorables sur 10.",expl_ok:"P(pair) = 5/10 = 1/2.",expl_ko:"5÷10 = 1/2."}
+    ]
+  },
+  { titre:"🎡 Une roue de loterie a 8 secteurs égaux numérotés de 1 à 8.",
+    svg:`<svg viewBox="0 0 220 120" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:10px auto;max-width:220px;background:#faf5ff;border-radius:8px;padding:4px;">
+  <text x="110" y="13" font-size="10" fill="#7c3aed" font-weight="bold" text-anchor="middle">Roue de loterie — 8 secteurs</text>
+  <!-- Cercle principal -->
+  <!-- 8 secteurs de 45° chacun, centrés en (110,70), rayon 45 -->
+  <!-- Secteurs 1-8, les > 5 sont surlignés -->
+  <path d="M110,70 L110,25 A45,45 0 0,1 141.8,47.5 Z" fill="#c4b5fd"/><text x="126" y="50" font-size="9" fill="#7c3aed" font-weight="bold" text-anchor="middle">1</text>
+  <path d="M110,70 L141.8,47.5 A45,45 0 0,1 155,70 Z" fill="#c4b5fd"/><text x="148" y="66" font-size="9" fill="#7c3aed" font-weight="bold" text-anchor="middle">2</text>
+  <path d="M110,70 L155,70 A45,45 0 0,1 141.8,92.5 Z" fill="#c4b5fd"/><text x="148" y="90" font-size="9" fill="#7c3aed" font-weight="bold" text-anchor="middle">3</text>
+  <path d="M110,70 L141.8,92.5 A45,45 0 0,1 110,115 Z" fill="#c4b5fd"/><text x="126" y="107" font-size="9" fill="#7c3aed" font-weight="bold" text-anchor="middle">4</text>
+  <path d="M110,70 L110,115 A45,45 0 0,1 78.2,92.5 Z" fill="#c4b5fd"/><text x="92" y="107" font-size="9" fill="#7c3aed" font-weight="bold" text-anchor="middle">5</text>
+  <path d="M110,70 L78.2,92.5 A45,45 0 0,1 65,70 Z" fill="#7c3aed"/><text x="72" y="90" font-size="9" fill="white" font-weight="bold" text-anchor="middle">6</text>
+  <path d="M110,70 L65,70 A45,45 0 0,1 78.2,47.5 Z" fill="#7c3aed"/><text x="72" y="56" font-size="9" fill="white" font-weight="bold" text-anchor="middle">7</text>
+  <path d="M110,70 L78.2,47.5 A45,45 0 0,1 110,25 Z" fill="#7c3aed"/><text x="92" y="42" font-size="9" fill="white" font-weight="bold" text-anchor="middle">8</text>
+  <circle cx="110" cy="70" r="4" fill="white" stroke="#7c3aed" stroke-width="1.5"/>
+  <!-- Flèche -->
+  <polygon points="110,22 107,30 113,30" fill="#9f1239"/>
+  <!-- Légende -->
+  <rect x="5" y="48" width="10" height="10" fill="#7c3aed" rx="2"/>
+  <text x="18" y="58" font-size="8" fill="#7c3aed">Secteurs >5</text>
+</svg>`,
+    etapes:[
+      {q:"Étape 1 — Combien de secteurs sont > 5 ?",acc:["3"],hint:"Secteurs 6, 7, 8 sont > 5.",expl_ok:"3 secteurs : 6, 7 et 8.",expl_ko:"6>5, 7>5, 8>5 → 3 secteurs."},
+      {q:"Étape 2 — P(secteur > 5) = ?",acc:["3/8"],hint:"3 favorables sur 8 secteurs.",expl_ok:"P(>5) = 3/8.",expl_ko:"3÷8 = 3/8."},
+      {q:"Étape 3 — P(secteur ≤ 5) = ?",acc:["5/8"],hint:"P(contraire) = 1 − 3/8.",expl_ok:"P(≤5) = 1 − 3/8 = 5/8.",expl_ko:"1 − 3/8 = 5/8."}
+    ]
+  }
+];
+
+// ════ POOL EXERCICES LIBRES ════
+var FREE_POOL=[
+  {type:'classify',data:{q:"Dé équilibré. P(obtenir 4) = ?",opts:["1/6","1/3","1/2"],ok:0,expl:"Un seul résultat favorable (4) sur 6 possibles → 1/6."}},
+  {type:'classify',data:{q:"Dé équilibré. P(obtenir un nombre impair) = ?",opts:["1/2","1/3","2/3"],ok:0,expl:"{1,3,5} = 3 résultats impairs sur 6 → 3/6 = 1/2."}},
+  {type:'classify',data:{q:"Sac : 2 rouges + 3 bleues = 5 billes. P(rouge) = ?",opts:["2/5","3/5","1/2"],ok:0,expl:"2 rouges sur 5 total → 2/5."}},
+  {type:'classify',data:{q:"Cartes 1 à 10. P(carte < 4) = ?",opts:["3/10","4/10","2/10"],ok:0,expl:"{1,2,3} sont < 4 → 3 favorables sur 10 → 3/10."}},
+  {type:'saisie',data:{q:"P(A) = 1/4. P(Ā) = ?",acc:["3/4"],expl:"P(Ā) = 1 − 1/4 = 3/4."}},
+  {type:'saisie',data:{q:"P(A) = 2/5. P(Ā) = ?",acc:["3/5"],expl:"P(Ā) = 1 − 2/5 = 3/5."}},
+  {type:'saisie',data:{q:"Dé. P(>2) = ? (sous forme irréductible)",acc:["2/3","4/6"],expl:"{3,4,5,6} = 4 résultats > 2 sur 6 → 4/6 = 2/3."}},
+  {type:'saisie',data:{q:"Sac : 6 rouges, 4 bleues. P(bleue) = ?",acc:["2/5","4/10"],expl:"4 bleues sur 10 total → 4/10 = 2/5."}},
+  {type:'saisie',data:{q:"Cartes 1 à 20. P(multiple de 5) = ?",acc:["1/4","5/20"],expl:"{5,10,15,20} = 4 multiples → 4/20 = 1/4."}},
+  {type:'saisie',data:{q:"Roue 6 secteurs : 2 rouges, 3 bleus, 1 vert. P(rouge ou bleu) = ?",acc:["5/6"],expl:"P(rouge)=2/6, P(bleu)=3/6. Incompatibles → P(rouge ou bleu)=5/6."}},
+  {type:'jugement',data:{consigne:"Laquelle est vraie ?",a:"P(A) peut valoir 1,5 car certains événements sont très probables",b:"P(A) est toujours entre 0 et 1 inclus",ok:"B",expl:"Une probabilité est toujours comprise entre 0 (impossible) et 1 (certain). Une valeur > 1 est impossible."}},
+  {type:'jugement',data:{consigne:"Un dé équilibré : P(obtenir 7) = ?",a:"1/7 car 7 est un chiffre possible",b:"0 car 7 n'est pas dans l'univers {1,2,3,4,5,6}",ok:"B",expl:"7 n'existe pas sur un dé à 6 faces → événement impossible → P = 0."}},
+  {type:'jugement',data:{consigne:"P(A) = 0,3. P(Ā) = ?",a:"0,3 (même probabilité)",b:"0,7 car P(A)+P(Ā)=1",ok:"B",expl:"P(Ā) = 1 − P(A) = 1 − 0,3 = 0,7."}},
+  {type:'saisie',data:{q:"🎰 Une loterie : 1 gain pour 50 billets. P(gagner) = ?",acc:["1/50"],expl:"1 résultat favorable (le billet gagnant) sur 50 possibles → 1/50."}},
+  {type:'saisie',data:{q:"🎲 Dé. P(obtenir 1 ou 2) = ?",acc:["1/3","2/6"],expl:"{1,2} = 2 résultats favorables sur 6 → 2/6 = 1/3. (Incompatibles : P = P(1)+P(2) = 1/6+1/6 = 2/6.)"}},
+  {type:'classify',data:{q:"Événement certain : P = ?",opts:["1","0","1/2"],ok:0,expl:"Un événement certain se produit toujours → P = 1."}},
+  {type:'classify',data:{q:"Sac : 5 billes rouges seulement. P(tirer rouge) = ?",opts:["1 (certain)","5/5","1/5"],ok:0,expl:"Toutes les billes sont rouges → événement certain → P = 1. (5/5=1 aussi, mais la réponse la plus directe est 1.)"}},
+  {type:'saisie',data:{q:"Cartes 1 à 12. P(nombre premier) = ?",acc:["5/12"],expl:"Nombres premiers de 1 à 12 : 2,3,5,7,11 → 5 résultats → P = 5/12."}},
+  {type:'saisie',data:{q:"Dé. P(pair) + P(impair) = ?",acc:["1"],expl:"Pair et impair sont événements contraires → P(pair)+P(impair) = 1/2+1/2 = 1."}},
+  {type:'jugement',data:{consigne:"Laquelle est la bonne formule ?",a:"P(A) = résultats possibles ÷ résultats favorables",b:"P(A) = résultats favorables ÷ résultats possibles",ok:"B",expl:"P(A) = favorables ÷ possibles. Ne pas inverser : mettre les possibles au numérateur donnerait des valeurs > 1."}}
+];
+
+var score=0,g1Idx=0,g2Idx=0,g1Tries=0,g2Tries=0;
+var free1Exs=[],free2Exs=[],free1Done=0,free2Done=0;
+var _cbs={};
+
+function nsP(s){return(s||'').trim().toLowerCase().replace(/\s+/g,'').replace(',','.');}
+function shuffle(arr){var a=arr.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function addScore(){score++;document.getElementById('score-display').textContent=score;}
+
+function updateSteps(active){for(var i=0;i<6;i++){var s=document.getElementById('step-'+i);if(!s)continue;s.classList.remove('active','done');if(i<active)s.classList.add('done');else if(i===active)s.classList.add('active');}}
+
+function goToPhase(ph,si){
+  document.querySelectorAll('.phase').forEach(function(p){p.classList.remove('active');});
+  var el=document.getElementById('phase-'+ph);
+  if(el){el.classList.add('active');setTimeout(function(){el.scrollIntoView({behavior:'smooth',block:'start'});},100);}
+  updateSteps(si);
+  if(ph==='guided1')initGuided1();
+  if(ph==='guided2')initGuided2();
+  if(ph==='free')initFree1();
+  if(ph==='free2')initFree2();
+  if(ph==='bilan')showBilan();
+}
+
+function revealBloc(n){
+  var bloc=document.getElementById('bloc-'+n);if(!bloc)return;
+  var prev=document.getElementById('bloc-'+(n-1));
+  if(prev){var b=prev.querySelector('.btn-compris');if(b){b.textContent='✓ Compris';b.disabled=true;b.style.opacity='.4';}}
+  bloc.classList.add('revealed');
+  setTimeout(function(){var hH=(document.querySelector('.header')||{offsetHeight:0}).offsetHeight;var rect=bloc.getBoundingClientRect();window.scrollTo({top:window.pageYOffset+rect.top-hH-20,behavior:'smooth'});},150);
+}
+
+function initGuided1(){
+  g1Idx=Math.floor(Math.random()*G1.length);g1Tries=0;
+  document.getElementById('g1-reset').classList.remove('show');
+  document.getElementById('btn-to-g2').classList.remove('show');
+  var v=G1[g1Idx],c=document.getElementById('g1-container');c.innerHTML='';
+  var box=document.createElement('div');box.className='guided-problem';
+  box.innerHTML='<div class="guided-problem-title">🎲 '+v.titre+'<span class="tries-left" id="g1-tries">3 essais</span></div>'
+    +(v.svg||'')+'<div class="step-container" id="g1-sc"></div>';
+  c.appendChild(box);
+  var sc=document.getElementById('g1-sc');
+  v.etapes.forEach(function(step,si){
+    var so=shuffle(step.opts.map(function(o,oi){return{t:o,i:oi};}));
+    var sb=document.createElement('div');sb.className='step-box'+(si===0?' active':'');sb.id='g1s'+si;
+    sb.innerHTML='<div class="step-num">Étape '+(si+1)+'/'+v.etapes.length+'</div>'
+      +'<div class="step-question">'+step.q+'</div>'
+      +'<div class="step-hint" id="g1h'+si+'">💡 '+step.hint+'</div>'
+      +'<div class="step-qcm-opts">'+so.map(function(o){return'<button class="step-qcm-opt" onclick="g1Check('+si+','+o.i+',this)">'+o.t+'</button>';}).join('')+'</div>'
+      +'<div class="step-fb" id="g1f'+si+'"></div>';
+    sc.appendChild(sb);
+  });
+  g1Tries=0;updG1();
+}
+function updG1(){var el=document.getElementById('g1-tries');if(el)el.textContent=(3-g1Tries)+' essai'+(3-g1Tries>1?'s':'');}
+function g1Check(si,ci,btn){
+  var v=G1[g1Idx],step=v.etapes[si],sb=document.getElementById('g1s'+si),fb=document.getElementById('g1f'+si);
+  if(sb.classList.contains('correct'))return;
+  if(ci===step.ok){
+    btn.classList.add('opt-correct');sb.querySelectorAll('.step-qcm-opt').forEach(function(b){b.disabled=true;});sb.classList.add('correct');
+    if(g1Tries===0){fb.className='step-fb show fb-ok';fb.innerHTML='✓ '+step.expl_ok+' <span style="color:#065f46;font-size:.78rem">(+1 pt)</span>';addScore();}
+    else{fb.className='step-fb show fb-ok';fb.innerHTML='✓ '+step.expl_ok+' <span style="color:#64748b;font-size:.78rem">(pas de point — réussi après plusieurs essais)</span>';}
+    g1Tries=0;updG1();
+    var nx=document.getElementById('g1s'+(si+1));
+    if(nx){nx.classList.add('active');setTimeout(function(){nx.scrollIntoView({behavior:'smooth',block:'nearest'});},300);}
+    else{setTimeout(function(){document.getElementById('btn-to-g2').classList.add('show');document.getElementById('btn-to-g2').scrollIntoView({behavior:'smooth',block:'nearest'});},500);}
+  }else{
+    btn.classList.add('opt-wrong');btn.disabled=true;g1Tries++;updG1();
+    fb.className='step-fb show fb-ko';
+    if(g1Tries<3){fb.innerHTML='✗ Pas tout à fait. Lis l\'indice ci-dessus et réessaie !';document.getElementById('g1h'+si).classList.add('show');}
+    else{fb.innerHTML='✗ '+step.expl_ko+' On recommence !';setTimeout(function(){document.getElementById('g1-reset').classList.add('show');document.getElementById('g1-container').innerHTML='';document.getElementById('g1-reset').scrollIntoView({behavior:'smooth',block:'start'});},1200);}
+  }
+}
+
+function initGuided2(){
+  g2Idx=Math.floor(Math.random()*G2.length);g2Tries=0;
+  document.getElementById('g2-reset').classList.remove('show');
+  document.getElementById('btn-to-free').classList.remove('show');
+  var v=G2[g2Idx],c=document.getElementById('g2-container');c.innerHTML='';
+  var box=document.createElement('div');box.className='guided-problem';
+  box.innerHTML='<div class="guided-problem-title">✏️ '+v.titre+'<span class="tries-left" id="g2-tries">3 essais</span></div>'
+    +(v.svg||'')+'<div class="step-container" id="g2-sc"></div>';
+  c.appendChild(box);
+  var sc=document.getElementById('g2-sc');
+  v.etapes.forEach(function(step,si){
+    var sb=document.createElement('div');sb.className='step-box'+(si===0?' active':'');sb.id='g2s'+si;
+    sb.innerHTML='<div class="step-num">Étape '+(si+1)+'/'+v.etapes.length+'</div>'
+      +'<div class="step-question">'+step.q+'</div>'
+      +'<div class="step-hint" id="g2h'+si+'">💡 '+step.hint+'</div>'
+      +'<div class="step-input-row"><input class="step-input" id="g2i'+si+'" type="text" placeholder="?" autocomplete="off" spellcheck="false"'+(si>0?' disabled':'')+'><button class="btn-step-check" id="g2b'+si+'" onclick="g2Check('+si+')"'+(si>0?' disabled':'')+'>Vérifier</button></div>'
+      +'<div class="step-fb" id="g2f'+si+'"></div>';
+    sc.appendChild(sb);
+  });
+  g2Tries=0;updG2();
+}
+function updG2(){var el=document.getElementById('g2-tries');if(el)el.textContent=(3-g2Tries)+' essai'+(3-g2Tries>1?'s':'');}
+function g2Check(si){
+  var v=G2[g2Idx],step=v.etapes[si],inp=document.getElementById('g2i'+si),fb=document.getElementById('g2f'+si),sb=document.getElementById('g2s'+si);
+  if(!inp||sb.classList.contains('correct'))return;
+  var val=nsP(inp.value),ok=step.acc.some(function(a){return val===nsP(a);});
+  if(ok){
+    inp.classList.add('input-ok');inp.disabled=true;document.getElementById('g2b'+si).disabled=true;sb.classList.add('correct');
+    if(g2Tries===0){fb.className='step-fb show fb-ok';fb.innerHTML='✓ '+step.expl_ok+' <span style="color:#065f46;font-size:.78rem">(+1 pt)</span>';addScore();}
+    else{fb.className='step-fb show fb-ok';fb.innerHTML='✓ '+step.expl_ok+' <span style="color:#64748b;font-size:.78rem">(pas de point — réussi après plusieurs essais)</span>';}
+    g2Tries=0;updG2();
+    var nxSb=document.getElementById('g2s'+(si+1));
+    if(nxSb){nxSb.classList.add('active');var ni=document.getElementById('g2i'+(si+1)),nb=document.getElementById('g2b'+(si+1));if(ni)ni.disabled=false;if(nb)nb.disabled=false;setTimeout(function(){nxSb.scrollIntoView({behavior:'smooth',block:'nearest'});},300);}
+    else{setTimeout(function(){document.getElementById('btn-to-free').classList.add('show');document.getElementById('btn-to-free').scrollIntoView({behavior:'smooth',block:'nearest'});},500);}
+  }else{
+    inp.classList.add('input-ko');inp.value='';inp.placeholder='Réessaie...';g2Tries++;updG2();
+    fb.className='step-fb show fb-ko';
+    if(g2Tries<3){fb.innerHTML='✗ Pas tout à fait. Lis l\'indice ci-dessus et réessaie !';document.getElementById('g2h'+si).classList.add('show');setTimeout(function(){inp.classList.remove('input-ko');inp.placeholder='?';},1000);}
+    else{fb.innerHTML='✗ '+step.expl_ko+' On recommence !';setTimeout(function(){document.getElementById('g2-reset').classList.add('show');document.getElementById('g2-container').innerHTML='';document.getElementById('g2-reset').scrollIntoView({behavior:'smooth',block:'start'});},1200);}
+  }
+}
+
+function buildFreeCard(ex,i,prefix,onDone){
+  var card=document.createElement('div');card.className='free-ex-card';card.id=prefix+i;
+  if(ex.type==='classify')buildCl(card,ex.data,i,prefix,onDone);
+  else if(ex.type==='saisie')buildSa(card,ex.data,i,prefix,onDone);
+  else if(ex.type==='jugement')buildJu(card,ex.data,i,prefix,onDone);
+  return card;
+}
+function buildCl(card,data,i,prefix,onDone){
+  card.innerHTML='<div class="free-ex-label">Exercice '+(i+1)+'</div><div class="free-ex-question">'+data.q+'</div><div class="free-classify-btns" id="'+prefix+'cl'+i+'"></div><div class="free-fb" id="'+prefix+'fb'+i+'"></div>';
+  var ba=card.querySelector('#'+prefix+'cl'+i);
+  data.opts.forEach(function(opt,oi){
+    var btn=document.createElement('button');btn.className='free-classify-btn';btn.textContent=opt;
+    btn.onclick=function(){
+      if(card.classList.contains('answered'))return;
+      card.classList.add('answered');ba.querySelectorAll('button').forEach(function(b){b.disabled=true;});
+      var fb=document.getElementById(prefix+'fb'+i);
+      if(oi===data.ok){btn.classList.add('ans-correct');fb.className='free-fb show fb-ok';fb.innerHTML='✓ '+data.expl;addScore();}
+      else{btn.classList.add('ans-wrong');ba.querySelectorAll('button').forEach(function(b,bi){if(bi===data.ok)b.classList.add('ans-reveal');});fb.className='free-fb show fb-ko';fb.innerHTML='✗ '+data.expl;}
+      onDone();
+    };ba.appendChild(btn);
+  });
+}
+function buildSa(card,data,i,prefix,onDone){
+  card.innerHTML='<div class="free-ex-label">Exercice '+(i+1)+'</div><div class="free-ex-question">'+data.q+'</div><div class="free-input-row"><input class="free-input" id="'+prefix+'inp'+i+'" type="text" placeholder="?" autocomplete="off" spellcheck="false"><button class="btn-free-check" onclick="checkFS(\''+prefix+'\','+i+')">Vérifier</button></div><div class="free-fb" id="'+prefix+'fb'+i+'"></div>';
+  _cbs[prefix+i]=onDone;
+}
+function checkFS(prefix,i){
+  var card=document.getElementById(prefix+i);if(card.classList.contains('answered'))return;
+  var exs=prefix==='f1'?free1Exs:free2Exs,ex=exs[i],inp=document.getElementById(prefix+'inp'+i),fb=document.getElementById(prefix+'fb'+i);
+  var val=nsP(inp.value),ok=ex.data.acc.some(function(a){return val===nsP(a);});
+  card.classList.add('answered');inp.disabled=true;card.querySelector('.btn-free-check').disabled=true;
+  if(ok){inp.classList.add('free-ok');fb.className='free-fb show fb-ok';fb.innerHTML='✓ '+ex.data.expl;addScore();}
+  else{inp.classList.add('free-ko');fb.className='free-fb show fb-ko';fb.innerHTML='✗ Réponse : <strong>'+ex.data.acc[0]+'</strong>. '+ex.data.expl;}
+  if(_cbs[prefix+i])_cbs[prefix+i]();
+}
+function buildJu(card,data,i,prefix,onDone){
+  card.innerHTML='<div class="free-ex-label">Exercice '+(i+1)+'</div><div class="free-ex-question">'+data.consigne+'</div><div class="jugement-opts"><button class="jugement-opt-btn" onclick="checkFJ(\''+prefix+'\','+i+',\'A\',this)"><strong>A —</strong> '+data.a+'</button><button class="jugement-opt-btn" onclick="checkFJ(\''+prefix+'\','+i+',\'B\',this)"><strong>B —</strong> '+data.b+'</button></div><div class="free-fb" id="'+prefix+'fb'+i+'"></div>';
+  _cbs[prefix+i]=onDone;
+}
+function checkFJ(prefix,i,choice,btn){
+  var card=document.getElementById(prefix+i);if(card.classList.contains('answered'))return;
+  var exs=prefix==='f1'?free1Exs:free2Exs,ex=exs[i],fb=document.getElementById(prefix+'fb'+i);
+  card.classList.add('answered');card.querySelectorAll('.jugement-opt-btn').forEach(function(b){b.disabled=true;});
+  if(choice===ex.data.ok){btn.classList.add('jug-correct');fb.className='free-fb show fb-ok';fb.innerHTML='✓ '+ex.data.expl;addScore();}
+  else{btn.classList.add('jug-wrong');card.querySelectorAll('.jugement-opt-btn')[choice==='A'?1:0].classList.add('jug-correct');fb.className='free-fb show fb-ko';fb.innerHTML='✗ '+ex.data.expl;}
+  if(_cbs[prefix+i])_cbs[prefix+i]();
+}
+
+function initFree1(){
+  free1Exs=shuffle(FREE_POOL.slice()).slice(0,5);free1Done=0;
+  var c=document.getElementById('free1-container');c.innerHTML='';
+  free1Exs.forEach(function(ex,i){
+    _cbs['f1'+i]=function(){free1Done++;if(free1Done>=free1Exs.length)setTimeout(function(){document.getElementById('btn-to-free2').classList.add('show');document.getElementById('btn-to-free2').scrollIntoView({behavior:'smooth',block:'nearest'});},600);};
+    c.appendChild(buildFreeCard(ex,i,'f1',_cbs['f1'+i]));
+  });
+}
+function initFree2(){
+  var used=free1Exs.map(function(e){return e.data.q||e.data.consigne;});
+  var pool=FREE_POOL.filter(function(e){return used.indexOf(e.data.q||e.data.consigne)<0;});
+  free2Exs=shuffle(pool).slice(0,5);free2Done=0;
+  var c=document.getElementById('free2-container');c.innerHTML='';
+  free2Exs.forEach(function(ex,i){
+    _cbs['f2'+i]=function(){free2Done++;if(free2Done>=free2Exs.length)setTimeout(function(){document.getElementById('btn-to-bilan').classList.add('show');document.getElementById('btn-to-bilan').scrollIntoView({behavior:'smooth',block:'nearest'});},600);};
+    c.appendChild(buildFreeCard(ex,i,'f2',_cbs['f2'+i]));
+  });
+}
+
+function showBilan(){
+  var g1Steps=G1[g1Idx]?G1[g1Idx].etapes.length:4,g2Steps=G2[g2Idx]?G2[g2Idx].etapes.length:3,total=g1Steps+g2Steps+10;
+  document.getElementById('bilan-score').textContent=score;
+  document.getElementById('bilan-total-txt').textContent='/ '+total+' pts';
+  var pct=score/total,title,msg;
+  if(pct>=0.8){title='Excellent !';msg='Tu maîtrises les probabilités N1 — univers, calcul P(A), événement contraire et somme des probabilités !';}
+  else if(pct>=0.6){title='Bon travail !';msg='Bonne base ! Revois la formule P(A) = favorables ÷ possibles et le calcul de l\'événement contraire.';}
+  else{title='Continue !';msg='L\'idée clé : compter les résultats favorables et les diviser par le total. P(Ā) = 1 − P(A). Les guidés t\'aident pas à pas !';}
+  document.getElementById('bilan-title').textContent=title;document.getElementById('bilan-msg').textContent=msg;
+  var s=[Math.ceil(total*.4),Math.ceil(total*.7),Math.ceil(total*.9)];
+  ['star1','star2','star3'].forEach(function(id,i){var el=document.getElementById(id);if(score>=s[i]){(function(e,d){setTimeout(function(){e.classList.add('earned');},d);})(el,300+i*400);}else el.style.filter='grayscale(1)';});
+  if(pct>=0.6)lanceConfetti();
+}
+function lanceConfetti(){var cols=['#7c3aed','#c4b5fd','#059669','#d97706','#0369a1'];for(var i=0;i<50;i++){var el=document.createElement('div');el.className='confetti-piece';el.style.cssText='left:'+Math.random()*100+'vw;background:'+cols[Math.floor(Math.random()*5)]+';animation-duration:'+(1.5+Math.random()*2)+'s;animation-delay:'+Math.random()*1.2+'s;width:'+(6+Math.random()*7)+'px;height:'+(6+Math.random()*7)+'px;border-radius:'+(Math.random()>.5?'50%':'2px')+';';document.body.appendChild(el);setTimeout(function(){if(el.parentNode)el.remove();},4000);}}
+</script>
+</body>
+</html>

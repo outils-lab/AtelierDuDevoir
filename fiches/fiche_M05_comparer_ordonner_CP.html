@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>M05 — Comparer et ordonner | L'Atelier du Devoir</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--acc:#0369a1;--acc-pale:#f0f9ff;--acc-mid:#7dd3fc;--acc-dark:#075985;--mint:#059669;--mint-pale:#d1fae5;--mint-deep:#047857;--coral:#dc2626;--coral-pale:#fee2e2;--sun:#d97706;--sun-pale:#fef3c7;--radius:18px;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Fredoka One',cursive;background:#f0f9ff;color:#1e293b;font-size:20px;line-height:1.5;}
+.header{background:white;border-bottom:4px solid var(--acc-pale);position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.1);}
+.header-top{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;}
+.logo{font-size:1.1rem;color:var(--acc);text-decoration:none;}
+.score-badge{background:var(--acc);color:white;font-size:.9rem;padding:6px 16px;border-radius:20px;}
+.steps-wrap{padding:0 16px 8px;}
+.steps{display:flex;gap:5px;}
+.step{flex:1;height:10px;border-radius:10px;background:#bae6fd;transition:all .4s;}
+.step.done{background:#10b981;}.step.active{background:var(--acc);}
+.main{max-width:640px;margin:0 auto;padding:18px 14px 100px;}
+.phase{display:none;}.phase.active{display:block;}
+.accroche{background:white;border-radius:var(--radius);padding:22px 20px;margin-bottom:20px;border:3px solid var(--acc-pale);text-align:center;}
+.accroche .big-icon{font-size:4rem;margin-bottom:10px;}
+.accroche h1{font-size:1.75rem;color:var(--acc);margin-bottom:8px;}
+.accroche p{font-family:'Nunito',sans-serif;font-size:.92rem;color:#64748b;margin-bottom:12px;}
+.meta-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
+.meta-tag{background:var(--acc-pale);border-radius:20px;padding:5px 16px;font-size:.78rem;color:var(--acc);}
+.lecon-card{background:white;border-radius:var(--radius);padding:22px 18px;margin-bottom:18px;border:3px solid var(--acc-pale);}
+.lecon-card h2{font-size:1.25rem;color:var(--acc);margin-bottom:18px;}
+.lecon-block{display:none;}.lecon-block.revealed{display:block;}
+.bloc-titre{font-size:1.15rem;color:var(--acc);margin-bottom:14px;}
+.sep{margin:20px 0;border:none;border-top:3px dashed #bae6fd;}
+.ugo-box{background:white;border:3px solid var(--acc-pale);border-radius:var(--radius);padding:15px 18px;margin:14px 0;display:flex;gap:12px;align-items:flex-start;}
+.ugo-box .ugo{font-size:2.3rem;flex-shrink:0;}
+.ugo-box p{font-family:'Nunito',sans-serif;font-size:.92rem;color:#475569;line-height:1.7;}
+.ugo-box p strong{color:var(--acc);}
+.info-box{background:var(--acc-pale);border-left:6px solid var(--acc);border-radius:0 14px 14px 0;padding:14px 18px;margin:14px 0;font-family:'Nunito',sans-serif;font-size:.92rem;line-height:1.9;}
+.info-box strong{color:var(--acc-dark);}
+.signe-box{display:flex;gap:12px;justify-content:center;margin:16px 0;flex-wrap:wrap;}
+.signe-card{background:white;border:3px solid var(--acc-mid);border-radius:16px;padding:16px 22px;text-align:center;min-width:140px;flex:1;}
+.signe-card .s{font-size:3rem;color:var(--acc);line-height:1;}
+.signe-card .nom{font-size:.85rem;color:#64748b;font-family:'Nunito',sans-serif;margin-top:6px;}
+.signe-card .ex{font-size:1.1rem;color:var(--acc-dark);margin-top:4px;}
+.droite-num{background:var(--acc-pale);border-radius:14px;padding:16px;margin:14px 0;overflow-x:auto;}
+.droite-num svg{display:block;margin:0 auto;}
+.comp-row{display:flex;align-items:center;gap:14px;background:var(--acc-pale);border-radius:14px;padding:14px 16px;margin-bottom:10px;flex-wrap:wrap;}
+.comp-row .nb1{font-size:2rem;color:var(--acc-dark);min-width:48px;}
+.comp-row .signe{font-size:2rem;color:var(--coral);font-family:'Fredoka One';}
+.comp-row .nb2{font-size:2rem;color:var(--acc-dark);min-width:48px;}
+.comp-row .raison{font-family:'Nunito',sans-serif;font-size:.82rem;color:#64748b;flex:1;}
+.btn-compris{margin-top:18px;padding:14px 30px;border-radius:38px;font-size:1.1rem;background:var(--acc);color:white;border:none;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:8px;box-shadow:0 4px 14px rgba(3,105,161,.35);}
+.btn-compris:hover{background:var(--acc-dark);transform:translateY(-2px);}
+.btn-compris:disabled{opacity:.4;cursor:default;transform:none;}
+.guided-box{background:white;border:3px solid var(--acc);border-radius:var(--radius);padding:20px 18px;margin-bottom:16px;}
+.guided-title{font-size:1rem;color:var(--acc);margin-bottom:16px;background:var(--acc-pale);padding:10px 16px;border-radius:12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.tries-b{font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:800;color:var(--coral);background:#fee2e2;padding:3px 12px;border-radius:20px;margin-left:auto;}
+.q-box{border:3px solid #bae6fd;border-radius:14px;padding:16px;margin-bottom:10px;opacity:.5;pointer-events:none;}
+.q-box.active{opacity:1;pointer-events:all;border-color:var(--acc-mid);}
+.q-box.correct{border-color:var(--mint);background:var(--mint-pale);opacity:1;}
+.q-num{font-family:'Nunito',sans-serif;font-size:.65rem;font-weight:800;color:#94a3b8;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;}
+.q-text{font-size:1.05rem;color:var(--acc-dark);margin-bottom:14px;line-height:1.5;}
+.hint-box{font-family:'Nunito',sans-serif;font-size:.86rem;color:#78350f;background:var(--sun-pale);border-radius:10px;padding:10px 14px;margin-bottom:10px;display:none;}
+.hint-box.show{display:block;}
+.opts{display:flex;flex-direction:column;gap:10px;}
+.opt{padding:13px 16px;border-radius:13px;border:3px solid #bae6fd;background:white;font-size:1rem;cursor:pointer;text-align:left;transition:all .2s;}
+.opt:hover:not(:disabled){border-color:var(--acc);background:var(--acc-pale);}
+.opt:disabled{cursor:default;}
+.opt.ok{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.opt.ko{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
+.fb{margin-top:10px;padding:10px 14px;border-radius:12px;font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:800;display:none;}
+.fb.show{display:block;}
+.fb.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.fb.ko{background:var(--coral-pale);color:#b91c1c;}
+.reset-box{background:white;border:3px solid var(--acc);border-radius:var(--radius);padding:22px;text-align:center;margin-bottom:16px;display:none;}
+.reset-box.show{display:block;}
+.reset-box .r-ugo{font-size:3.2rem;margin-bottom:8px;}
+.reset-box h3{font-size:1.2rem;color:var(--acc);margin-bottom:8px;}
+.reset-box p{font-family:'Nunito',sans-serif;font-size:.9rem;color:#64748b;margin-bottom:14px;line-height:1.7;}
+.btn-reset{padding:12px 26px;border-radius:28px;font-size:.95rem;background:var(--acc);color:white;border:none;cursor:pointer;}
+.free-card{background:white;border:3px solid var(--acc-pale);border-radius:var(--radius);padding:18px;margin-bottom:14px;}
+.free-num{font-family:'Nunito',sans-serif;font-size:.7rem;font-weight:800;color:var(--acc);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;}
+.free-q{font-size:1.05rem;color:var(--acc-dark);margin-bottom:14px;background:var(--acc-pale);border-radius:12px;padding:12px 16px;line-height:1.5;}
+.free-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.free-opt{padding:12px;border-radius:13px;font-size:1rem;border:3px solid #bae6fd;background:white;cursor:pointer;transition:all .2s;text-align:center;}
+.free-opt:hover{border-color:var(--acc);background:var(--acc-pale);}
+.free-opt.ok{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.free-opt.ko{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
+.free-opt.reveal{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.free-fb{margin-top:10px;padding:10px 14px;border-radius:12px;font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:800;display:none;}
+.free-fb.show{display:block;}
+.free-fb.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.free-fb.ko{background:var(--coral-pale);color:#b91c1c;}
+.btn-suite{margin-top:16px;padding:13px 26px;border-radius:32px;font-size:1rem;background:var(--acc);color:white;border:none;cursor:pointer;display:none;align-items:center;gap:8px;box-shadow:0 4px 14px rgba(3,105,161,.3);transition:all .2s;}
+.btn-suite.show{display:inline-flex;}
+.btn-suite:hover{background:var(--acc-dark);transform:translateY(-2px);}
+.bilan-card{background:white;border-radius:var(--radius);padding:28px 20px;text-align:center;border:3px solid var(--acc-pale);}
+.bilan-ugo{font-size:4.5rem;margin-bottom:10px;display:block;}
+.bilan-title{font-size:2rem;color:var(--acc);margin-bottom:8px;}
+.bilan-msg{font-family:'Nunito',sans-serif;font-size:.95rem;color:#64748b;margin-bottom:20px;line-height:1.8;}
+.stars-row{display:flex;justify-content:center;gap:14px;margin-bottom:18px;}
+.star-big{font-size:3rem;filter:grayscale(1);transition:all .5s;}
+.star-big.earned{filter:none;animation:starPop .5s ease both;}
+@keyframes starPop{0%{transform:scale(0);}60%{transform:scale(1.3);}100%{transform:scale(1);}}
+.score-circle{width:115px;height:115px;border-radius:50%;background:var(--acc);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 20px;color:white;box-shadow:0 6px 20px rgba(3,105,161,.4);}
+.score-num{font-size:2.2rem;line-height:1;}
+.score-sub{font-family:'Nunito',sans-serif;font-size:.65rem;opacity:.85;}
+.memo{background:var(--acc-pale);border-radius:var(--radius);padding:16px 18px;margin:16px 0;text-align:left;}
+.memo h3{font-size:.9rem;color:var(--acc);margin-bottom:12px;}
+.memo-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media(max-width:400px){.memo-grid{grid-template-columns:1fr;}.free-opts{grid-template-columns:1fr;}}
+.memo-item{background:white;border-radius:12px;padding:11px 13px;border:2px solid var(--acc-pale);}
+.memo-item strong{color:var(--acc);display:block;margin-bottom:3px;}
+.memo-item span{font-family:'Nunito',sans-serif;font-size:.8rem;color:#475569;line-height:1.6;}
+.bilan-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:18px;}
+.btn-bilan{padding:13px 22px;border-radius:30px;font-size:.95rem;cursor:pointer;border:none;transition:all .2s;}
+.btn-bilan.primary{background:var(--acc);color:white;}
+.btn-bilan.secondary{background:var(--acc-pale);color:var(--acc);border:3px solid var(--acc);}
+.btn-bilan:hover{transform:translateY(-2px);}
+.confetti-piece{position:fixed;border-radius:3px;top:-20px;animation:fall linear both;pointer-events:none;z-index:9999;}
+@keyframes fall{0%{transform:translateY(0) rotate(0deg);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
+@media print{body{background:white;}.phase{display:block!important;}.btn-compris,.btn-suite,.bilan-card,.ugo-box{display:none!important;}}
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="header-top">
+    <a href="../6-9ans.html" class="logo">🦉 L'Atelier du Devoir</a>
+    <div class="score-badge">⭐ <span id="score-display">0</span></div>
+  </div>
+  <div class="steps-wrap">
+    <div class="steps">
+      <div class="step active" id="s0"></div>
+      <div class="step" id="s1"></div>
+      <div class="step" id="s2"></div>
+      <div class="step" id="s3"></div>
+      <div class="step" id="s4"></div>
+      <div class="step" id="s5"></div>
+    </div>
+  </div>
+</header>
+
+<main class="main">
+
+<div class="accroche">
+  <div class="big-icon">⚖️</div>
+  <h1>Comparer et ordonner !</h1>
+  <p style="font-family:'Nunito',sans-serif;">Plus grand, plus petit, pareil… Apprends à utiliser les signes &lt;, &gt; et = et à ranger les nombres dans l'ordre ! 🌟</p>
+  <div class="meta-row">
+    <span class="meta-tag">CP / CE1</span>
+    <span class="meta-tag">⭐ Facile</span>
+    <span class="meta-tag">🔢 Maths</span>
+  </div>
+</div>
+
+<div class="phase active" id="phase-lecon">
+  <div class="lecon-card">
+    <h2>📖 La leçon</h2>
+
+    <!-- BLOC 0 : les signes -->
+    <div class="lecon-block revealed" id="bloc-0">
+      <div class="bloc-titre">① Les trois signes</div>
+      <div class="ugo-box">
+        <span class="ugo">🦉</span>
+        <p>Il y a <strong>3 signes</strong> pour comparer deux nombres. Regarde bien leur forme ! 😊</p>
+      </div>
+
+      <div class="signe-box">
+        <div class="signe-card">
+          <div class="s">&lt;</div>
+          <div class="nom">est plus petit que</div>
+          <div class="ex">3 &lt; 7</div>
+        </div>
+        <div class="signe-card" style="border-color:var(--mint);background:var(--mint-pale);">
+          <div class="s" style="color:var(--mint);">=</div>
+          <div class="nom">est égal à</div>
+          <div class="ex">5 = 5</div>
+        </div>
+        <div class="signe-card" style="border-color:var(--coral);background:var(--coral-pale);">
+          <div class="s" style="color:var(--coral);">&gt;</div>
+          <div class="nom">est plus grand que</div>
+          <div class="ex">9 &gt; 4</div>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <strong>L'astuce du crocodile 🐊 :</strong><br>
+        Le signe ressemble à la bouche d'un crocodile.<br>
+        Le crocodile mange <strong>toujours le plus grand</strong> !<br>
+        3 <strong>&lt;</strong> 7 → la bouche s'ouvre vers 7 (le plus grand)<br>
+        9 <strong>&gt;</strong> 4 → la bouche s'ouvre vers 9 (le plus grand)
+      </div>
+
+      <button class="btn-compris" onclick="revealBloc(1)">J'ai compris ! 🎉</button>
+    </div>
+
+    <!-- BLOC 1 : comparer -->
+    <div class="lecon-block" id="bloc-1">
+      <hr class="sep">
+      <div class="bloc-titre">② Comment comparer ?</div>
+      <div class="ugo-box">
+        <span class="ugo">🦉</span>
+        <p>Pour comparer deux nombres, regarde d'abord les <strong>dizaines</strong>. Si c'est pareil, regarde les <strong>unités</strong> ! 👀</p>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:10px;margin:14px 0;">
+        <div class="comp-row">
+          <span class="nb1">24</span>
+          <span class="signe">&lt;</span>
+          <span class="nb2">42</span>
+          <span class="raison">2 dizaines &lt; 4 dizaines ✓</span>
+        </div>
+        <div class="comp-row" style="background:var(--mint-pale);">
+          <span class="nb1" style="color:var(--mint-deep);">67</span>
+          <span class="signe">&gt;</span>
+          <span class="nb2" style="color:var(--mint-deep);">65</span>
+          <span class="raison">Diz. égales (6=6) → unités : 7 &gt; 5</span>
+        </div>
+        <div class="comp-row" style="background:var(--sun-pale);">
+          <span class="nb1" style="color:var(--sun);">33</span>
+          <span class="signe" style="color:var(--mint);">=</span>
+          <span class="nb2" style="color:var(--sun);">33</span>
+          <span class="raison">Même nombre → égal !</span>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <strong>Méthode :</strong><br>
+        1. Regarde les <strong>dizaines</strong> en premier<br>
+        2. Le plus de dizaines = le plus grand<br>
+        3. Si dizaines égales → regarde les <strong>unités</strong>
+      </div>
+
+      <button class="btn-compris" onclick="revealBloc(2)">J'ai compris ! 🎉</button>
+    </div>
+
+    <!-- BLOC 2 : ordonner -->
+    <div class="lecon-block" id="bloc-2">
+      <hr class="sep">
+      <div class="bloc-titre">③ Ranger dans l'ordre</div>
+      <div class="ugo-box">
+        <span class="ugo">🦉</span>
+        <p>Ranger du <strong>plus petit au plus grand</strong> = ordre <strong>croissant</strong> (ça monte ⬆️)<br>Ranger du <strong>plus grand au plus petit</strong> = ordre <strong>décroissant</strong> (ça descend ⬇️)</p>
+      </div>
+
+      <!-- Droite numérique SVG -->
+      <div class="droite-num">
+        <svg viewBox="0 0 300 70" xmlns="http://www.w3.org/2000/svg" style="max-width:300px;width:100%;">
+          <text x="150" y="13" font-size="10" fill="#0369a1" font-weight="bold" text-anchor="middle" font-family="Fredoka One">Plus petits ← → Plus grands</text>
+          <line x1="10" y1="38" x2="290" y2="38" stroke="#0369a1" stroke-width="2.5" stroke-linecap="round"/>
+          <!-- Marques + nombres -->
+          <line x1="10" y1="32" x2="10" y2="44" stroke="#0369a1" stroke-width="2"/>
+          <text x="10" y="56" font-size="9" fill="#0369a1" font-weight="bold" text-anchor="middle">0</text>
+          <line x1="72" y1="32" x2="72" y2="44" stroke="#dc2626" stroke-width="2"/>
+          <circle cx="72" cy="38" r="5" fill="#dc2626"/>
+          <text x="72" y="56" font-size="9" fill="#dc2626" font-weight="bold" text-anchor="middle">15</text>
+          <line x1="150" y1="32" x2="150" y2="44" stroke="#d97706" stroke-width="2"/>
+          <circle cx="150" cy="38" r="5" fill="#d97706"/>
+          <text x="150" y="56" font-size="9" fill="#d97706" font-weight="bold" text-anchor="middle">50</text>
+          <line x1="228" y1="32" x2="228" y2="44" stroke="#059669" stroke-width="2"/>
+          <circle cx="228" cy="38" r="5" fill="#059669"/>
+          <text x="228" y="56" font-size="9" fill="#059669" font-weight="bold" text-anchor="middle">75</text>
+          <line x1="290" y1="32" x2="290" y2="44" stroke="#0369a1" stroke-width="2"/>
+          <text x="290" y="56" font-size="9" fill="#0369a1" font-weight="bold" text-anchor="middle">99</text>
+        </svg>
+      </div>
+
+      <!-- Exemples d'ordre -->
+      <div style="display:flex;flex-direction:column;gap:10px;margin:14px 0;">
+        <div style="background:var(--acc-pale);border:2px solid var(--acc-mid);border-radius:14px;padding:13px 16px;">
+          <div style="font-size:.78rem;font-family:'Nunito',sans-serif;color:#64748b;margin-bottom:6px;">CROISSANT (⬆️ du plus petit au plus grand)</div>
+          <div style="font-size:1.5rem;color:var(--acc-dark);">15 &lt; 50 &lt; 75</div>
+        </div>
+        <div style="background:var(--coral-pale);border:2px solid var(--coral);border-radius:14px;padding:13px 16px;">
+          <div style="font-size:.78rem;font-family:'Nunito',sans-serif;color:#64748b;margin-bottom:6px;">DÉCROISSANT (⬇️ du plus grand au plus petit)</div>
+          <div style="font-size:1.5rem;color:#b91c1c;">75 &gt; 50 &gt; 15</div>
+        </div>
+      </div>
+
+      <button class="btn-compris" onclick="goPhase('g1',1)">On joue ! 🚀</button>
+    </div>
+  </div>
+</div>
+
+<!-- GUIDÉ 1 -->
+<div class="phase" id="phase-g1">
+  <div class="ugo-box">
+    <span class="ugo">🦉</span>
+    <p>Super ! <strong>3 questions</strong> sur les signes &lt;, &gt; et =. <strong>3 essais</strong> ! 💙</p>
+  </div>
+  <div id="g1-reset" class="reset-box">
+    <div class="r-ugo">🦉</div>
+    <h3>On recommence !</h3>
+    <p>La bouche du crocodile s'ouvre vers le plus grand ! 🐊 &lt; mange le plus grand à droite. &gt; mange le plus grand à gauche. 💪</p>
+    <button class="btn-reset" onclick="initG1()">↺ Réessayer !</button>
+  </div>
+  <div id="g1-zone"></div>
+  <button class="btn-suite" id="btn-g1-to-g2" onclick="goPhase('g2',2)">Encore des questions ! 🌟</button>
+</div>
+
+<!-- GUIDÉ 2 -->
+<div class="phase" id="phase-g2">
+  <div class="ugo-box">
+    <span class="ugo">🦉</span>
+    <p>Excellent ! <strong>3 questions</strong> sur l'ordre des nombres. Tu vas y arriver ! 🏆</p>
+  </div>
+  <div id="g2-reset" class="reset-box">
+    <div class="r-ugo">🦉</div>
+    <h3>On recommence !</h3>
+    <p>Croissant = du plus petit au plus grand ⬆️. Décroissant = du plus grand au plus petit ⬇️. 💪</p>
+    <button class="btn-reset" onclick="initG2()">↺ Réessayer !</button>
+  </div>
+  <div id="g2-zone"></div>
+  <button class="btn-suite" id="btn-g2-to-free" onclick="goPhase('free',3)">Super ! Exercices libres 🎯</button>
+</div>
+
+<!-- LIBRES 1 -->
+<div class="phase" id="phase-free">
+  <div class="ugo-box"><span class="ugo">🦉</span><p><strong>5 questions !</strong> Clique sur la bonne réponse ! 💙</p></div>
+  <div id="free1-zone"></div>
+  <button class="btn-suite" id="btn-free-to-free2" onclick="goPhase('free2',4)">5 dernières ! 💪</button>
+</div>
+
+<!-- LIBRES 2 -->
+<div class="phase" id="phase-free2">
+  <div class="ugo-box"><span class="ugo">🦉</span><p>Encore <strong>5 questions</strong> et tu vois ton score ! 🏁</p></div>
+  <div id="free2-zone"></div>
+  <button class="btn-suite" id="btn-free2-to-bilan" onclick="goPhase('bilan',5)">🌟 Mon résultat !</button>
+</div>
+
+<!-- BILAN -->
+<div class="phase" id="phase-bilan">
+  <div class="bilan-card">
+    <span class="bilan-ugo">🦉</span>
+    <h2 class="bilan-title" id="bilan-title">Bravo !</h2>
+    <p class="bilan-msg" id="bilan-msg"></p>
+    <div class="stars-row">
+      <span class="star-big" id="etoile1">⭐</span>
+      <span class="star-big" id="etoile2">⭐</span>
+      <span class="star-big" id="etoile3">⭐</span>
+    </div>
+    <div class="score-circle">
+      <span class="score-num" id="bilan-pts">0</span>
+      <span class="score-sub" id="bilan-sur">/ 0 pts</span>
+    </div>
+    <div class="memo">
+      <h3>📝 Ce que j'ai appris</h3>
+      <div class="memo-grid">
+        <div class="memo-item"><strong>&lt; plus petit</strong><span>3 &lt; 7<br>Bouche vers le grand 🐊</span></div>
+        <div class="memo-item"><strong>&gt; plus grand</strong><span>9 &gt; 4<br>Bouche vers le grand 🐊</span></div>
+        <div class="memo-item"><strong>Croissant ⬆️</strong><span>Du plus petit au plus grand<br>Ex : 15 &lt; 50 &lt; 75</span></div>
+        <div class="memo-item"><strong>Décroissant ⬇️</strong><span>Du plus grand au plus petit<br>Ex : 75 &gt; 50 &gt; 15</span></div>
+      </div>
+    </div>
+    <div class="bilan-btns">
+      <button class="btn-bilan secondary" onclick="location.reload()">↺ Recommencer</button>
+      <button class="btn-bilan primary" onclick="location.href='../6-9ans.html'">← Les fiches</button>
+    </div>
+  </div>
+</div>
+</main>
+
+<script>
+var G1=[
+  {titre:"🐊 Quel signe ?",etapes:[
+    {q:"24 ___ 42 : quel signe ?",opts:["< (24 est plus petit)","= (ils sont égaux)","> (24 est plus grand)"],ok:0,
+     hint:"24 a 2 dizaines. 42 a 4 dizaines. 2 < 4.",
+     expl_ok:"< ! 24 < 42. La bouche du crocodile s'ouvre vers 42. 🐊",
+     expl_ko:"24 a 2 diz., 42 a 4 diz. 2 < 4 → 24 < 42."},
+    {q:"7 ___ 7 : quel signe ?",opts:["= (ils sont égaux)","<",">"],ok:0,
+     hint:"Les deux nombres sont identiques !",
+     expl_ok:"= ! 7 = 7. Quand les nombres sont pareils, on met =. 🌟",
+     expl_ko:"Même nombre des deux côtés → =."},
+    {q:"63 ___ 36 : quel signe ?",opts:["> (63 est plus grand)","< (63 est plus petit)","="],ok:0,
+     hint:"63 a 6 dizaines. 36 a 3 dizaines. 6 > 3.",
+     expl_ok:"> ! 63 > 36. La bouche s'ouvre vers 63. 🎉",
+     expl_ko:"63 a 6 diz., 36 a 3 diz. 6 > 3 → 63 > 36."}
+  ]},
+  {titre:"🐊 Plus grand ou plus petit ?",etapes:[
+    {q:"Lequel est le plus grand : 58 ou 85 ?",opts:["85","58"],ok:0,
+     hint:"85 a 8 dizaines. 58 en a 5. 8 > 5.",
+     expl_ok:"85 ! 8 dizaines > 5 dizaines → 85 est plus grand. 🏆",
+     expl_ko:"85 a 8 diz., 58 a 5 diz. 8 > 5 → 85."},
+    {q:"Lequel est le plus petit : 47 ou 74 ?",opts:["47","74"],ok:0,
+     hint:"47 a 4 dizaines. 74 a 7 dizaines. 4 < 7.",
+     expl_ok:"47 ! 4 dizaines < 7 dizaines → 47 est plus petit. 🌟",
+     expl_ko:"47 a 4 diz., 74 a 7 diz. 4 < 7 → 47 est plus petit."},
+    {q:"55 ___ 55 : quel signe ?",opts:["= (pareils !)","<",">"],ok:0,
+     hint:"Les deux nombres sont exactement pareils.",
+     expl_ok:"= ! 55 = 55. Tout pareil ! 🎉",
+     expl_ko:"55 = 55. Même nombre → signe =."}
+  ]},
+  {titre:"🐊 Dizaines égales",etapes:[
+    {q:"67 ___ 65 : quel signe ?",opts:["> (7 unités > 5 unités)","< (65 est plus grand)","="],ok:0,
+     hint:"Les dizaines sont égales (6=6). Regarde les unités : 7 et 5.",
+     expl_ok:"> ! Dizaines égales, mais 7 unités > 5 unités → 67 > 65. 🌟",
+     expl_ko:"6=6 aux diz. → unités : 7 > 5 → 67 > 65."},
+    {q:"32 ___ 38 : quel signe ?",opts:["< (2 unités < 8 unités)","=",">"],ok:0,
+     hint:"Dizaines 3=3. Regarde les unités.",
+     expl_ok:"< ! 3=3 aux diz., mais 2 unit. < 8 unit. → 32 < 38. 🎉",
+     expl_ko:"3=3 aux diz. → unités : 2 < 8 → 32 < 38."},
+    {q:"Lequel est le plus grand : 91 ou 99 ?",opts:["99","91"],ok:0,
+     hint:"9=9 aux dizaines. Regarde les unités.",
+     expl_ok:"99 ! 9=9 aux diz., mais 9 unit. > 1 unit. → 99 > 91. 🏆",
+     expl_ko:"9=9 aux diz. → unités : 9 > 1 → 99 est plus grand."}
+  ]},
+  {titre:"🐊 Dans la vie",etapes:[
+    {q:"Léa a 34 billes. Tom en a 43. Qui en a le plus ?",opts:["Tom (43 > 34)","Léa (34 > 43)"],ok:0,
+     hint:"43 a 4 diz. 34 a 3 diz. 4 > 3.",
+     expl_ok:"Tom ! 43 > 34. Il a plus de dizaines. 🏆",
+     expl_ko:"43 a 4 diz. > 34 a 3 diz. → Tom."},
+    {q:"Une boîte contient 28 bonbons. Une autre en a 82. Laquelle en a moins ?",opts:["28 bonbons","82 bonbons"],ok:0,
+     hint:"28 a 2 diz. 82 a 8 diz. 2 < 8.",
+     expl_ok:"28 bonbons ! 28 < 82. C'est la plus petite boîte. 🎉",
+     expl_ko:"28 a 2 diz. < 82 a 8 diz. → 28 est plus petit."},
+    {q:"Un livre a 56 pages. Un autre en a 65. Lequel est plus court ?",opts:["56 pages (moins de pages)","65 pages"],ok:0,
+     hint:"56 a 5 diz. 65 a 6 diz. 5 < 6.",
+     expl_ok:"56 pages ! 56 < 65. Moins de pages = plus court. 📖",
+     expl_ko:"56 a 5 diz. < 65 a 6 diz. → 56 est plus petit."}
+  ]}
+];
+
+var G2=[
+  {titre:"⬆️⬇️ Dans quel ordre ?",etapes:[
+    {q:"15, 50, 75 : quel est l'ordre croissant (⬆️ du plus petit au plus grand) ?",opts:["15 < 50 < 75","75 < 50 < 15","50 < 15 < 75"],ok:0,
+     hint:"Croissant = du plus petit au plus grand. 15 < 50 < 75 ?",
+     expl_ok:"15 < 50 < 75 ! C'est l'ordre croissant. Les nombres montent ! ⬆️ 🎉",
+     expl_ko:"Croissant = plus petit → plus grand. 15 < 50 < 75."},
+    {q:"75, 50, 15 : quel est l'ordre décroissant (⬇️) ?",opts:["75 > 50 > 15","15 > 50 > 75","50 > 75 > 15"],ok:0,
+     hint:"Décroissant = du plus grand au plus petit. On descend !",
+     expl_ok:"75 > 50 > 15 ! Ordre décroissant. Les nombres descendent ! ⬇️ 🌟",
+     expl_ko:"Décroissant = plus grand → plus petit. 75 > 50 > 15."},
+    {q:"Range 52, 25, 45 dans l'ordre croissant ⬆️",opts:["25 < 45 < 52","52 < 45 < 25","45 < 25 < 52"],ok:0,
+     hint:"Dizaines : 25 a 2, 45 a 4, 52 a 5. Ordre des dizaines ?",
+     expl_ok:"25 < 45 < 52 ! Dizaines : 2 < 4 < 5. 🎉",
+     expl_ko:"Diz. : 25 a 2, 45 a 4, 52 a 5 → ordre : 25 < 45 < 52."}
+  ]},
+  {titre:"⬆️⬇️ Ranger des nombres",etapes:[
+    {q:"Lequel vient en premier dans l'ordre croissant : 38, 83, 30 ?",opts:["30 (le plus petit)","38","83"],ok:0,
+     hint:"Le premier en ordre croissant = le plus petit.",
+     expl_ok:"30 ! C'est le plus petit (3 diz. < 3 diz. et 8... mais 30 < 38 < 83). 🌟",
+     expl_ko:"Croissant → commence par le plus petit = 30."},
+    {q:"Lequel vient en dernier dans l'ordre croissant : 14, 41, 40 ?",opts:["41 (le plus grand)","40","14"],ok:0,
+     hint:"Le dernier en ordre croissant = le plus grand.",
+     expl_ok:"41 ! 14 < 40 < 41. Le plus grand est en dernier. 🎉",
+     expl_ko:"Diz. : 14 a 1, 40 a 4, 41 a 4. Unités : 40 < 41 → ordre : 14 < 40 < 41."},
+    {q:"Range 71, 17, 70 dans l'ordre décroissant ⬇️",opts:["71 > 70 > 17","17 > 70 > 71","70 > 71 > 17"],ok:0,
+     hint:"Décroissant = du plus grand au plus petit. Lequel est le plus grand ?",
+     expl_ok:"71 > 70 > 17 ! 71 est le plus grand, 17 le plus petit. ⬇️ 🌟",
+     expl_ko:"71 > 70 > 17. Ordre décroissant."}
+  ]},
+  {titre:"⬆️⬇️ Milieu et encadrement",etapes:[
+    {q:"Quel nombre est entre 30 et 40 ?",opts:["35","25","45"],ok:0,
+     hint:"Entre 30 et 40 → un nombre avec 3 dizaines.",
+     expl_ok:"35 ! 30 < 35 < 40. C'est bien entre les deux. 🎉",
+     expl_ko:"35 a 3 diz. → 30 < 35 < 40."},
+    {q:"Range 60, 6, 66 dans l'ordre croissant ⬆️",opts:["6 < 60 < 66","66 < 60 < 6","60 < 6 < 66"],ok:0,
+     hint:"6 a 0 dizaine. 60 a 6 dizaines. 66 a 6 dizaines.",
+     expl_ok:"6 < 60 < 66 ! 6 est tout seul (1 chiffre), puis 60 < 66. 🌟",
+     expl_ko:"6 (0 diz.) < 60 (6 diz.) < 66 (6 diz. et 6 unit.)."},
+    {q:"Quel est le nombre entre 49 et 51 ?",opts:["50","48","52"],ok:0,
+     hint:"49 < ? < 51. Un nombre entre ces deux.",
+     expl_ok:"50 ! 49 < 50 < 51. 🏆",
+     expl_ko:"49 < 50 < 51. Le nombre entre les deux = 50."}
+  ]},
+  {titre:"⬆️⬇️ Le bon signe",etapes:[
+    {q:"22 ___ 20 : quel signe ?",opts:["> (22 est plus grand)","< (22 est plus petit)","="],ok:0,
+     hint:"22 a 2 diz. et 2 unit. 20 a 2 diz. et 0 unit. Unités : 2 > 0.",
+     expl_ok:"> ! Diz. égales, unités : 2 > 0 → 22 > 20. 🎉",
+     expl_ko:"2=2 aux diz. → unités : 2 > 0 → 22 > 20."},
+    {q:"99 ___ 100 : quel signe ?",opts:["< (99 est plus petit)","=",">"],ok:0,
+     hint:"99 a 2 chiffres. 100 a 3 chiffres. Plus de chiffres = plus grand !",
+     expl_ok:"< ! 99 < 100. 100 a plus de chiffres donc c'est plus grand. 🌟",
+     expl_ko:"99 (2 chiffres) < 100 (3 chiffres). Plus de chiffres = plus grand."},
+    {q:"Range 10, 100, 1 dans l'ordre croissant ⬆️",opts:["1 < 10 < 100","100 < 10 < 1","10 < 1 < 100"],ok:0,
+     hint:"1 a 1 chiffre. 10 a 2 chiffres. 100 a 3 chiffres.",
+     expl_ok:"1 < 10 < 100 ! Plus de chiffres = plus grand. 🎉",
+     expl_ko:"1 (1 chiffre) < 10 (2 chiffres) < 100 (3 chiffres)."}
+  ]}
+];
+
+var FREE_POOL=[
+  {q:"15 ___ 51 : quel signe ?",opts:["<",">" ],ok:0,expl:"15 a 1 diz. 51 a 5 diz. 1 < 5 → 15 < 51."},
+  {q:"Lequel est le plus grand : 39 ou 93 ?",opts:["93","39"],ok:0,expl:"93 a 9 diz. 39 a 3 diz. 9 > 3 → 93."},
+  {q:"Lequel est le plus petit : 78 ou 87 ?",opts:["78","87"],ok:0,expl:"78 a 7 diz. 87 a 8 diz. 7 < 8 → 78."},
+  {q:"44 ___ 44 : quel signe ?",opts:["=","<"],ok:0,expl:"Même nombre → =."},
+  {q:"Range 30, 3, 33 : ordre croissant ⬆️",opts:["3 < 30 < 33","33 < 30 < 3"],ok:0,expl:"3 (0 diz.) < 30 (3 diz.) < 33 (3 diz. + 3 unit.)."},
+  {q:"Lequel vient en premier en ordre croissant ?",opts:["12","21","20"],ok:0,expl:"12 a 1 diz. 20 et 21 a 2 diz. → 12 est le plus petit."},
+  {q:"56 ___ 65 : quel signe ?",opts:["<",">" ],ok:0,expl:"56 a 5 diz. 65 a 6 diz. 5 < 6 → 56 < 65."},
+  {q:"Lequel est entre 50 et 60 ?",opts:["55","45"],ok:0,expl:"55 a 5 diz. → 50 < 55 < 60."},
+  {q:"Range 80, 8, 88 : ordre décroissant ⬇️",opts:["88 > 80 > 8","8 > 80 > 88"],ok:0,expl:"88 > 80 > 8. Décroissant = du plus grand au plus petit."},
+  {q:"25 ___ 52 : quel signe ?",opts:["<",">" ],ok:0,expl:"25 a 2 diz. 52 a 5 diz. 2 < 5 → 25 < 52."},
+  {q:"Lequel est le plus grand : 97 ou 79 ?",opts:["97","79"],ok:0,expl:"97 a 9 diz. 79 a 7 diz. 9 > 7 → 97."},
+  {q:"Quel nombre vient juste avant 60 ?",opts:["59","61"],ok:0,expl:"60 - 1 = 59."},
+  {q:"Quel nombre vient juste après 39 ?",opts:["40","38"],ok:0,expl:"39 + 1 = 40."},
+  {q:"Range 45, 54, 50 : ordre croissant ⬆️",opts:["45 < 50 < 54","54 < 50 < 45"],ok:0,expl:"45 < 50 < 54. Diz. : 4 < 5 = 5. Unités de 50 et 54 : 0 < 4."},
+  {q:"17 ___ 71 : quel signe ?",opts:["<",">" ],ok:0,expl:"17 a 1 diz. 71 a 7 diz. 1 < 7 → 17 < 71."},
+  {q:"Lequel est le plus petit : 99 ou 1 ?",opts:["1","99"],ok:0,expl:"1 n'a pas de dizaines. 99 a 9 dizaines. 1 < 99."},
+  {q:"63 ___ 63 : quel signe ?",opts:["=","<"],ok:0,expl:"Même nombre des deux côtés → =."},
+  {q:"Lequel vient en dernier en ordre croissant : 28, 82, 80 ?",opts:["82","80","28"],ok:0,expl:"82 a 8 diz. et 2 unit. 80 a 8 diz. et 0 unit. 82 > 80 → 82 est le plus grand."},
+  {q:"Range 11, 1, 10 : ordre croissant ⬆️",opts:["1 < 10 < 11","11 < 10 < 1"],ok:0,expl:"1 (0 diz.) < 10 (1 diz.) < 11 (1 diz. + 1 unit.)."},
+  {q:"Lequel est entre 20 et 30 ?",opts:["25","35"],ok:0,expl:"25 a 2 diz. → 20 < 25 < 30."}
+];
+
+var score=0,g1Idx=0,g2Idx=0;
+var f1Exs=[],f2Exs=[],f1Done=0,f2Done=0;
+var _cb={};
+var _g1tries=0,_g2tries=0;
+
+function shuffle(a){var b=a.slice();for(var i=b.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=b[i];b[i]=b[j];b[j]=t;}return b;}
+function addPt(){score++;document.getElementById('score-display').textContent=score;}
+function updSteps(n){for(var i=0;i<6;i++){var s=document.getElementById('s'+i);if(!s)return;s.classList.remove('active','done');if(i<n)s.classList.add('done');else if(i===n)s.classList.add('active');}}
+function goPhase(ph,si){
+  document.querySelectorAll('.phase').forEach(function(p){p.classList.remove('active');});
+  var el=document.getElementById('phase-'+ph);
+  if(el){el.classList.add('active');setTimeout(function(){el.scrollIntoView({behavior:'smooth',block:'start'});},100);}
+  updSteps(si);
+  if(ph==='g1')initG1();if(ph==='g2')initG2();
+  if(ph==='free')initFree1();if(ph==='free2')initFree2();
+  if(ph==='bilan')showBilan();
+}
+function revealBloc(n){
+  var b=document.getElementById('bloc-'+n);if(!b)return;
+  var p=document.getElementById('bloc-'+(n-1));
+  if(p){var btn=p.querySelector('.btn-compris');if(btn){btn.textContent='✓ Compris !';btn.disabled=true;btn.style.opacity='.4';}}
+  b.classList.add('revealed');
+  setTimeout(function(){var hH=(document.querySelector('.header')||{offsetHeight:0}).offsetHeight;var r=b.getBoundingClientRect();window.scrollTo({top:window.pageYOffset+r.top-hH-16,behavior:'smooth'});},150);
+}
+function makeQBox(step,si,prefix){
+  var so=shuffle(step.opts.map(function(o,oi){return{t:o,i:oi};}));
+  var sb=document.createElement('div');sb.className='q-box'+(si===0?' active':'');sb.id=prefix+'s'+si;
+  sb.innerHTML='<div class="q-num">Question '+(si+1)+'</div>'
+    +'<div class="q-text">'+step.q+'</div>'
+    +'<div class="hint-box" id="'+prefix+'h'+si+'">💡 '+step.hint+'</div>'
+    +'<div class="opts">'+so.map(function(o){return'<button class="opt" onclick="checkQ(\''+prefix+'\','+si+','+o.i+',this)">'+o.t+'</button>';}).join('')+'</div>'
+    +'<div class="fb" id="'+prefix+'f'+si+'"></div>';
+  return sb;
+}
+function initG1(){
+  g1Idx=Math.floor(Math.random()*G1.length);_g1tries=0;
+  document.getElementById('g1-reset').classList.remove('show');
+  document.getElementById('btn-g1-to-g2').classList.remove('show');
+  var v=G1[g1Idx],z=document.getElementById('g1-zone');z.innerHTML='';
+  var box=document.createElement('div');box.className='guided-box';
+  box.innerHTML='<div class="guided-title">'+v.titre+'<span class="tries-b" id="tries-g1">3 essais</span></div><div id="g1-steps"></div>';
+  z.appendChild(box);
+  v.etapes.forEach(function(step,si){document.getElementById('g1-steps').appendChild(makeQBox(step,si,'g1'));});
+}
+function initG2(){
+  g2Idx=Math.floor(Math.random()*G2.length);_g2tries=0;
+  document.getElementById('g2-reset').classList.remove('show');
+  document.getElementById('btn-g2-to-free').classList.remove('show');
+  var v=G2[g2Idx],z=document.getElementById('g2-zone');z.innerHTML='';
+  var box=document.createElement('div');box.className='guided-box';
+  box.innerHTML='<div class="guided-title">'+v.titre+'<span class="tries-b" id="tries-g2">3 essais</span></div><div id="g2-steps"></div>';
+  z.appendChild(box);
+  v.etapes.forEach(function(step,si){document.getElementById('g2-steps').appendChild(makeQBox(step,si,'g2'));});
+}
+function checkQ(prefix,si,ci,btn){
+  var v=prefix==='g1'?G1[g1Idx]:G2[g2Idx];
+  var step=v.etapes[si],sb=document.getElementById(prefix+'s'+si),fb=document.getElementById(prefix+'f'+si);
+  var triesId=prefix==='g1'?'tries-g1':'tries-g2';
+  var tries=prefix==='g1'?_g1tries:_g2tries;
+  if(sb.classList.contains('correct'))return;
+  if(ci===step.ok){
+    btn.classList.add('ok');sb.querySelectorAll('.opt').forEach(function(b){b.disabled=true;});sb.classList.add('correct');
+    if(tries===0){fb.className='fb show ok';fb.innerHTML='✅ '+step.expl_ok+' <span style="font-size:.75rem;color:#065f46">(+1 pt)</span>';addPt();}
+    else{fb.className='fb show ok';fb.innerHTML='✅ '+step.expl_ok;}
+    if(prefix==='g1')_g1tries=0;else _g2tries=0;
+    var el=document.getElementById(triesId);if(el)el.textContent='3 essais';
+    var nx=document.getElementById(prefix+'s'+(si+1));
+    if(nx){nx.classList.add('active');setTimeout(function(){nx.scrollIntoView({behavior:'smooth',block:'nearest'});},350);}
+    else{var btnId=prefix==='g1'?'btn-g1-to-g2':'btn-g2-to-free';setTimeout(function(){var b=document.getElementById(btnId);b.classList.add('show');b.scrollIntoView({behavior:'smooth',block:'nearest'});},550);}
+  }else{
+    btn.classList.add('ko');btn.disabled=true;
+    if(prefix==='g1')_g1tries++;else _g2tries++;
+    var newTries=prefix==='g1'?_g1tries:_g2tries;
+    var el=document.getElementById(triesId);if(el)el.textContent=(3-newTries)+' essai'+(3-newTries>1?'s':'');
+    fb.className='fb show ko';
+    if(newTries<3){fb.innerHTML='❌ Réessaie ! 💪';document.getElementById(prefix+'h'+si).classList.add('show');}
+    else{
+      fb.innerHTML='❌ '+step.expl_ko;
+      var rid=prefix==='g1'?'g1-reset':'g2-reset',zid=prefix==='g1'?'g1-zone':'g2-zone';
+      setTimeout(function(){document.getElementById(rid).classList.add('show');document.getElementById(zid).innerHTML='';document.getElementById(rid).scrollIntoView({behavior:'smooth',block:'start'});},1400);
+    }
+  }
+}
+function buildFree(ex,i,prefix,cb){
+  var card=document.createElement('div');card.className='free-card';card.id=prefix+'c'+i;
+  var so=shuffle(ex.opts.map(function(o,oi){return{t:o,i:oi};}));
+  card.innerHTML='<div class="free-num">Question '+(i+1)+'</div>'
+    +'<div class="free-q">'+ex.q+'</div>'
+    +'<div class="free-opts" id="'+prefix+'fo'+i+'"></div>'
+    +'<div class="free-fb" id="'+prefix+'ff'+i+'"></div>';
+  setTimeout(function(){
+    var ba=document.getElementById(prefix+'fo'+i);
+    so.forEach(function(o){
+      var btn=document.createElement('button');btn.className='free-opt';btn.textContent=o.t;
+      btn.onclick=function(){
+        if(card.classList.contains('done'))return;card.classList.add('done');ba.querySelectorAll('button').forEach(function(b){b.disabled=true;});
+        var fb=document.getElementById(prefix+'ff'+i);
+        if(o.i===ex.ok){btn.classList.add('ok');fb.className='free-fb show ok';fb.innerHTML='✅ '+ex.expl;addPt();}
+        else{btn.classList.add('ko');ba.querySelectorAll('button').forEach(function(b,bi){if(bi===ex.ok)b.classList.add('reveal');});fb.className='free-fb show ko';fb.innerHTML='❌ '+ex.expl;}
+        cb();
+      };ba.appendChild(btn);
+    });
+  },0);
+  return card;
+}
+function initFree1(){
+  f1Exs=shuffle(FREE_POOL.slice()).slice(0,5);f1Done=0;
+  var z=document.getElementById('free1-zone');z.innerHTML='';
+  f1Exs.forEach(function(ex,i){
+    _cb['f1'+i]=function(){f1Done++;if(f1Done>=5)setTimeout(function(){var b=document.getElementById('btn-free-to-free2');b.classList.add('show');b.scrollIntoView({behavior:'smooth',block:'nearest'});},600);};
+    z.appendChild(buildFree(ex,i,'f1',_cb['f1'+i]));
+  });
+}
+function initFree2(){
+  var used=f1Exs.map(function(e){return e.q;});
+  var pool=FREE_POOL.filter(function(e){return used.indexOf(e.q)<0;});
+  f2Exs=shuffle(pool).slice(0,5);f2Done=0;
+  var z=document.getElementById('free2-zone');z.innerHTML='';
+  f2Exs.forEach(function(ex,i){
+    _cb['f2'+i]=function(){f2Done++;if(f2Done>=5)setTimeout(function(){var b=document.getElementById('btn-free2-to-bilan');b.classList.add('show');b.scrollIntoView({behavior:'smooth',block:'nearest'});},600);};
+    z.appendChild(buildFree(ex,i,'f2',_cb['f2'+i]));
+  });
+}
+function showBilan(){
+  var g1n=G1[g1Idx]?G1[g1Idx].etapes.length:3,g2n=G2[g2Idx]?G2[g2Idx].etapes.length:3,tot=g1n+g2n+10;
+  document.getElementById('bilan-pts').textContent=score;
+  document.getElementById('bilan-sur').textContent='/ '+tot+' pts';
+  var pct=score/tot,t,m;
+  if(pct>=.8){t='BRAVO ! 🎉🎊';m='Tu maîtrises la comparaison et l\'ordre des nombres ! Ugo est fier de toi ! 🦉⭐';}
+  else if(pct>=.5){t='Très bien ! 😊🌟';m:'Tu progresses ! Rappelle-toi le crocodile 🐊 : la bouche s\'ouvre toujours vers le plus grand !';}
+  else{t='Bien essayé ! 💪';m:'< = plus petit, > = plus grand. Le crocodile mange le plus grand ! Tu peux recommencer. 🦉';}
+  document.getElementById('bilan-title').textContent=t;
+  document.getElementById('bilan-msg').textContent=m;
+  var s=[Math.ceil(tot*.33),Math.ceil(tot*.66),Math.ceil(tot*.89)];
+  ['etoile1','etoile2','etoile3'].forEach(function(id,i){var el=document.getElementById(id);if(score>=s[i]){(function(e,d){setTimeout(function(){e.classList.add('earned');},d);})(el,300+i*450);}else el.style.filter='grayscale(1)';});
+  if(pct>=.5)confetti();
+}
+function confetti(){var cols=['#0369a1','#7dd3fc','#059669','#d97706','#dc2626'];for(var i=0;i<65;i++){var el=document.createElement('div');el.className='confetti-piece';el.style.cssText='left:'+Math.random()*100+'vw;background:'+cols[Math.floor(Math.random()*cols.length)]+';animation-duration:'+(1.8+Math.random()*2.2)+'s;animation-delay:'+Math.random()*1.5+'s;width:'+(7+Math.random()*10)+'px;height:'+(7+Math.random()*10)+'px;border-radius:'+(Math.random()>.5?'50%':'4px')+';';document.body.appendChild(el);setTimeout(function(){if(el.parentNode)el.remove();},5000);}}
+</script>
+</body>
+</html>

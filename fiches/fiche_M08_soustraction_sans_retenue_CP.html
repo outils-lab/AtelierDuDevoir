@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>M08 — La soustraction sans retenue | L'Atelier du Devoir</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--acc:#7c3aed;--acc-pale:#f5f3ff;--acc-mid:#c4b5fd;--acc-dark:#5b21b6;--mint:#059669;--mint-pale:#d1fae5;--mint-deep:#047857;--coral:#dc2626;--coral-pale:#fee2e2;--sun:#d97706;--sun-pale:#fef3c7;--radius:18px;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Fredoka One',cursive;background:#f5f3ff;color:#1e293b;font-size:20px;line-height:1.5;}
+.header{background:white;border-bottom:4px solid var(--acc-pale);position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.1);}
+.header-top{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;}
+.logo{font-size:1.1rem;color:var(--acc);text-decoration:none;}
+.score-badge{background:var(--acc);color:white;font-size:.9rem;padding:6px 16px;border-radius:20px;}
+.steps-wrap{padding:0 16px 8px;}
+.steps{display:flex;gap:5px;}
+.step{flex:1;height:10px;border-radius:10px;background:#e9d5ff;transition:all .4s;}
+.step.done{background:#10b981;}.step.active{background:var(--acc);}
+.main{max-width:640px;margin:0 auto;padding:18px 14px 100px;}
+.phase{display:none;}.phase.active{display:block;}
+.accroche{background:white;border-radius:var(--radius);padding:22px 20px;margin-bottom:20px;border:3px solid var(--acc-pale);text-align:center;}
+.accroche .big-icon{font-size:4rem;margin-bottom:10px;}
+.accroche h1{font-size:1.75rem;color:var(--acc);margin-bottom:8px;}
+.accroche p{font-family:'Nunito',sans-serif;font-size:.92rem;color:#64748b;margin-bottom:12px;}
+.meta-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
+.meta-tag{background:var(--acc-pale);border-radius:20px;padding:5px 16px;font-size:.78rem;color:var(--acc);}
+.lecon-card{background:white;border-radius:var(--radius);padding:22px 18px;margin-bottom:18px;border:3px solid var(--acc-pale);}
+.lecon-card h2{font-size:1.25rem;color:var(--acc);margin-bottom:18px;}
+.lecon-block{display:none;}.lecon-block.revealed{display:block;}
+.bloc-titre{font-size:1.15rem;color:var(--acc);margin-bottom:14px;}
+.sep{margin:20px 0;border:none;border-top:3px dashed #e9d5ff;}
+.ugo-box{background:white;border:3px solid var(--acc-pale);border-radius:var(--radius);padding:15px 18px;margin:14px 0;display:flex;gap:12px;align-items:flex-start;}
+.ugo-box .ugo{font-size:2.3rem;flex-shrink:0;}
+.ugo-box p{font-family:'Nunito',sans-serif;font-size:.92rem;color:#475569;line-height:1.7;}
+.ugo-box p strong{color:var(--acc);}
+.info-box{background:var(--acc-pale);border-left:6px solid var(--acc);border-radius:0 14px 14px 0;padding:14px 18px;margin:14px 0;font-family:'Nunito',sans-serif;font-size:.92rem;line-height:1.9;}
+.info-box strong{color:var(--acc-dark);}
+.pose-wrap{text-align:center;margin:14px 0;}
+.pose{display:inline-block;border:3px solid var(--acc);border-radius:16px;padding:16px 28px;background:white;font-size:1.5rem;line-height:2;text-align:right;}
+.pose .ligne{color:#1e293b;}
+.pose .moins{color:var(--coral);}
+.pose .trait{border-top:3px solid #1e293b;margin:4px 0;}
+.pose .res{color:var(--acc-dark);}
+.etapes-list{display:flex;flex-direction:column;gap:10px;margin:14px 0;}
+.etape-row{display:flex;gap:12px;align-items:flex-start;background:var(--acc-pale);border-radius:14px;padding:12px 14px;}
+.etape-num{background:var(--acc);color:white;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;}
+.etape-txt{font-family:'Nunito',sans-serif;font-size:.9rem;color:#475569;line-height:1.7;}
+.etape-txt strong{color:var(--acc-dark);}
+.ex-grille{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0;}
+.ex-card{background:var(--acc-pale);border:2px solid var(--acc-mid);border-radius:14px;padding:12px;text-align:center;}
+.ex-card .op{font-family:'Nunito',sans-serif;font-size:.75rem;color:#64748b;margin-bottom:6px;font-weight:800;}
+.ex-card .pose-mini{font-size:1.2rem;line-height:1.8;text-align:right;display:inline-block;}
+.ex-card .pm-moins{color:var(--coral);}
+.ex-card .pm-trait{border-top:2px solid #1e293b;margin:3px 0;}
+.ex-card .pm-res{color:var(--acc-dark);}
+.btn-compris{margin-top:18px;padding:14px 30px;border-radius:38px;font-size:1.1rem;background:var(--acc);color:white;border:none;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:8px;box-shadow:0 4px 14px rgba(124,58,237,.35);}
+.btn-compris:hover{background:var(--acc-dark);transform:translateY(-2px);}
+.btn-compris:disabled{opacity:.4;cursor:default;transform:none;}
+.guided-box{background:white;border:3px solid var(--acc);border-radius:var(--radius);padding:20px 18px;margin-bottom:16px;}
+.guided-title{font-size:1rem;color:var(--acc);margin-bottom:16px;background:var(--acc-pale);padding:10px 16px;border-radius:12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.tries-b{font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:800;color:var(--coral);background:#fee2e2;padding:3px 12px;border-radius:20px;margin-left:auto;}
+.q-box{border:3px solid #e9d5ff;border-radius:14px;padding:16px;margin-bottom:10px;opacity:.5;pointer-events:none;}
+.q-box.active{opacity:1;pointer-events:all;border-color:var(--acc-mid);}
+.q-box.correct{border-color:var(--mint);background:var(--mint-pale);opacity:1;}
+.q-num{font-family:'Nunito',sans-serif;font-size:.65rem;font-weight:800;color:#94a3b8;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;}
+.q-text{font-size:1.05rem;color:var(--acc-dark);margin-bottom:14px;line-height:1.5;}
+.hint-box{font-family:'Nunito',sans-serif;font-size:.86rem;color:#78350f;background:var(--sun-pale);border-radius:10px;padding:10px 14px;margin-bottom:10px;display:none;}
+.hint-box.show{display:block;}
+.opts{display:flex;flex-direction:column;gap:10px;}
+.opt{padding:13px 16px;border-radius:13px;border:3px solid #e9d5ff;background:white;font-size:1rem;cursor:pointer;text-align:left;transition:all .2s;}
+.opt:hover:not(:disabled){border-color:var(--acc);background:var(--acc-pale);}
+.opt:disabled{cursor:default;}
+.opt.ok{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.opt.ko{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
+.fb{margin-top:10px;padding:10px 14px;border-radius:12px;font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:800;display:none;}
+.fb.show{display:block;}
+.fb.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.fb.ko{background:var(--coral-pale);color:#b91c1c;}
+.reset-box{background:white;border:3px solid var(--acc);border-radius:var(--radius);padding:22px;text-align:center;margin-bottom:16px;display:none;}
+.reset-box.show{display:block;}
+.reset-box .r-ugo{font-size:3.2rem;margin-bottom:8px;}
+.reset-box h3{font-size:1.2rem;color:var(--acc);margin-bottom:8px;}
+.reset-box p{font-family:'Nunito',sans-serif;font-size:.9rem;color:#64748b;margin-bottom:14px;line-height:1.7;}
+.btn-reset{padding:12px 26px;border-radius:28px;font-size:.95rem;background:var(--acc);color:white;border:none;cursor:pointer;}
+.free-card{background:white;border:3px solid var(--acc-pale);border-radius:var(--radius);padding:18px;margin-bottom:14px;}
+.free-num{font-family:'Nunito',sans-serif;font-size:.7rem;font-weight:800;color:var(--acc);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;}
+.free-q{font-size:1.05rem;color:var(--acc-dark);margin-bottom:14px;background:var(--acc-pale);border-radius:12px;padding:12px 16px;line-height:1.5;}
+.free-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.free-opt{padding:12px;border-radius:13px;font-size:1rem;border:3px solid #e9d5ff;background:white;cursor:pointer;transition:all .2s;text-align:center;}
+.free-opt:hover{border-color:var(--acc);background:var(--acc-pale);}
+.free-opt.ok{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.free-opt.ko{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
+.free-opt.reveal{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.free-fb{margin-top:10px;padding:10px 14px;border-radius:12px;font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:800;display:none;}
+.free-fb.show{display:block;}
+.free-fb.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.free-fb.ko{background:var(--coral-pale);color:#b91c1c;}
+.btn-suite{margin-top:16px;padding:13px 26px;border-radius:32px;font-size:1rem;background:var(--acc);color:white;border:none;cursor:pointer;display:none;align-items:center;gap:8px;box-shadow:0 4px 14px rgba(124,58,237,.3);transition:all .2s;}
+.btn-suite.show{display:inline-flex;}
+.btn-suite:hover{background:var(--acc-dark);transform:translateY(-2px);}
+.bilan-card{background:white;border-radius:var(--radius);padding:28px 20px;text-align:center;border:3px solid var(--acc-pale);}
+.bilan-ugo{font-size:4.5rem;margin-bottom:10px;display:block;}
+.bilan-title{font-size:2rem;color:var(--acc);margin-bottom:8px;}
+.bilan-msg{font-family:'Nunito',sans-serif;font-size:.95rem;color:#64748b;margin-bottom:20px;line-height:1.8;}
+.stars-row{display:flex;justify-content:center;gap:14px;margin-bottom:18px;}
+.star-big{font-size:3rem;filter:grayscale(1);transition:all .5s;}
+.star-big.earned{filter:none;animation:starPop .5s ease both;}
+@keyframes starPop{0%{transform:scale(0);}60%{transform:scale(1.3);}100%{transform:scale(1);}}
+.score-circle{width:115px;height:115px;border-radius:50%;background:var(--acc);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 20px;color:white;box-shadow:0 6px 20px rgba(124,58,237,.4);}
+.score-num{font-size:2.2rem;line-height:1;}
+.score-sub{font-family:'Nunito',sans-serif;font-size:.65rem;opacity:.85;}
+.memo{background:var(--acc-pale);border-radius:var(--radius);padding:16px 18px;margin:16px 0;text-align:left;}
+.memo h3{font-size:.9rem;color:var(--acc);margin-bottom:12px;}
+.memo-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media(max-width:400px){.memo-grid{grid-template-columns:1fr;}.free-opts{grid-template-columns:1fr;}.ex-grille{grid-template-columns:1fr;}}
+.memo-item{background:white;border-radius:12px;padding:11px 13px;border:2px solid var(--acc-pale);}
+.memo-item strong{color:var(--acc);display:block;margin-bottom:3px;}
+.memo-item span{font-family:'Nunito',sans-serif;font-size:.8rem;color:#475569;line-height:1.6;}
+.bilan-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:18px;}
+.btn-bilan{padding:13px 22px;border-radius:30px;font-size:.95rem;cursor:pointer;border:none;transition:all .2s;}
+.btn-bilan.primary{background:var(--acc);color:white;}
+.btn-bilan.secondary{background:var(--acc-pale);color:var(--acc);border:3px solid var(--acc);}
+.btn-bilan:hover{transform:translateY(-2px);}
+.confetti-piece{position:fixed;border-radius:3px;top:-20px;animation:fall linear both;pointer-events:none;z-index:9999;}
+@keyframes fall{0%{transform:translateY(0) rotate(0deg);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
+@media print{body{background:white;}.phase{display:block!important;}.btn-compris,.btn-suite,.bilan-card,.ugo-box{display:none!important;}}
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="header-top">
+    <a href="../6-9ans.html" class="logo">🦉 L'Atelier du Devoir</a>
+    <div class="score-badge">⭐ <span id="score-display">0</span></div>
+  </div>
+  <div class="steps-wrap">
+    <div class="steps">
+      <div class="step active" id="s0"></div>
+      <div class="step" id="s1"></div>
+      <div class="step" id="s2"></div>
+      <div class="step" id="s3"></div>
+      <div class="step" id="s4"></div>
+      <div class="step" id="s5"></div>
+    </div>
+  </div>
+</header>
+
+<main class="main">
+
+<div class="accroche">
+  <div class="big-icon">➖</div>
+  <h1>La soustraction posée !</h1>
+  <p style="font-family:'Nunito',sans-serif;">Enlever en colonnes, c'est facile ! Le grand nombre en haut, le petit en bas. 🌟</p>
+  <div class="meta-row">
+    <span class="meta-tag">CP</span>
+    <span class="meta-tag">⭐ Facile</span>
+    <span class="meta-tag">🔢 Maths</span>
+  </div>
+</div>
+
+<div class="phase active" id="phase-lecon">
+  <div class="lecon-card">
+    <h2>📖 La leçon</h2>
+
+    <!-- BLOC 0 -->
+    <div class="lecon-block revealed" id="bloc-0">
+      <div class="bloc-titre">① Poser une soustraction</div>
+      <div class="ugo-box">
+        <span class="ugo">🦉</span>
+        <p>Pour soustraire 77 − 45, on pose comme pour l'addition : <strong>le grand nombre en haut</strong>, le petit en bas. Unités sous unités, dizaines sous dizaines ! 📐</p>
+      </div>
+
+      <div class="pose-wrap">
+        <div class="pose">
+          <div class="ligne">7 7</div>
+          <div class="moins">− 4 5</div>
+          <div class="trait"></div>
+          <div class="res">3 2</div>
+        </div>
+      </div>
+
+      <div class="etapes-list">
+        <div class="etape-row">
+          <div class="etape-num">1</div>
+          <div class="etape-txt"><strong>Le grand nombre en haut</strong>, le petit en bas. Unités sous unités, dizaines sous dizaines.</div>
+        </div>
+        <div class="etape-row">
+          <div class="etape-num">2</div>
+          <div class="etape-txt">Je soustrais les <strong>unités d'abord</strong> : 7 − 5 = <strong>2</strong>. J'écris 2 sous les unités.</div>
+        </div>
+        <div class="etape-row">
+          <div class="etape-num">3</div>
+          <div class="etape-txt">Je soustrais les <strong>dizaines</strong> : 7 − 4 = <strong>3</strong>. J'écris 3 sous les dizaines.</div>
+        </div>
+        <div class="etape-row">
+          <div class="etape-num">4</div>
+          <div class="etape-txt">Résultat : <strong>32</strong>. Vérif : 32 + 45 = 77 ✓</div>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <strong>La règle d'or :</strong><br>
+        🔴 Le <strong>grand nombre EN HAUT</strong> !<br>
+        On commence par les <strong>unités</strong> (à droite).<br>
+        Sans retenue : chaque chiffre du bas est plus petit que celui du haut.
+      </div>
+
+      <button class="btn-compris" onclick="revealBloc(1)">J'ai compris ! 🎉</button>
+    </div>
+
+    <!-- BLOC 1 -->
+    <div class="lecon-block" id="bloc-1">
+      <hr class="sep">
+      <div class="bloc-titre">② D'autres exemples</div>
+      <div class="ugo-box">
+        <span class="ugo">🦉</span>
+        <p>Regarde bien : à chaque fois, on soustrait les <strong>unités</strong> puis les <strong>dizaines</strong>. Le grand nombre est toujours en haut ! 😊</p>
+      </div>
+
+      <div class="ex-grille">
+        <div class="ex-card">
+          <div class="op">59 − 23</div>
+          <div class="pose-mini">
+            <div>5 9</div>
+            <div class="pm-moins">− 2 3</div>
+            <div class="pm-trait"></div>
+            <div class="pm-res">3 6</div>
+          </div>
+          <div style="font-family:'Nunito',sans-serif;font-size:.72rem;color:#64748b;margin-top:6px;">9−3=6 · 5−2=3</div>
+        </div>
+        <div class="ex-card">
+          <div class="op">87 − 54</div>
+          <div class="pose-mini">
+            <div>8 7</div>
+            <div class="pm-moins">− 5 4</div>
+            <div class="pm-trait"></div>
+            <div class="pm-res">3 3</div>
+          </div>
+          <div style="font-family:'Nunito',sans-serif;font-size:.72rem;color:#64748b;margin-top:6px;">7−4=3 · 8−5=3</div>
+        </div>
+        <div class="ex-card">
+          <div class="op">96 − 30</div>
+          <div class="pose-mini">
+            <div>9 6</div>
+            <div class="pm-moins">− 3 0</div>
+            <div class="pm-trait"></div>
+            <div class="pm-res">6 6</div>
+          </div>
+          <div style="font-family:'Nunito',sans-serif;font-size:.72rem;color:#64748b;margin-top:6px;">6−0=6 · 9−3=6</div>
+        </div>
+        <div class="ex-card">
+          <div class="op">78 − 15</div>
+          <div class="pose-mini">
+            <div>7 8</div>
+            <div class="pm-moins">− 1 5</div>
+            <div class="pm-trait"></div>
+            <div class="pm-res">6 3</div>
+          </div>
+          <div style="font-family:'Nunito',sans-serif;font-size:.72rem;color:#64748b;margin-top:6px;">8−5=3 · 7−1=6</div>
+        </div>
+      </div>
+
+      <button class="btn-compris" onclick="revealBloc(2)">J'ai compris ! 🎉</button>
+    </div>
+
+    <!-- BLOC 2 -->
+    <div class="lecon-block" id="bloc-2">
+      <hr class="sep">
+      <div class="bloc-titre">③ Vérifier avec l'addition !</div>
+      <div class="ugo-box">
+        <span class="ugo">🦉</span>
+        <p>Super astuce : pour vérifier une soustraction, tu fais l'<strong>addition à l'envers</strong> ! Si 77 − 45 = 32, alors 32 + 45 doit faire 77. 🔄</p>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:10px;margin:14px 0;">
+        <div style="background:var(--acc-pale);border-radius:14px;padding:14px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:center;">
+          <div style="text-align:center;">
+            <div style="font-family:'Nunito',sans-serif;font-size:.78rem;color:#64748b;margin-bottom:6px;font-weight:800;">SOUSTRACTION</div>
+            <div style="font-size:1.4rem;color:var(--acc-dark);">77 − 45 = 32</div>
+          </div>
+          <div style="font-size:2rem;color:var(--acc);">🔄</div>
+          <div style="text-align:center;">
+            <div style="font-family:'Nunito',sans-serif;font-size:.78rem;color:var(--mint-deep);margin-bottom:6px;font-weight:800;">VÉRIFICATION</div>
+            <div style="font-size:1.4rem;color:var(--mint-deep);">32 + 45 = 77 ✓</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <strong>Pour vérifier :</strong><br>
+        résultat + nombre du bas = nombre du haut<br>
+        Ex : 32 + 45 = 77 ✓ → la soustraction est juste !
+      </div>
+
+      <button class="btn-compris" onclick="goPhase('g1',1)">On joue ! 🚀</button>
+    </div>
+  </div>
+</div>
+
+<!-- GUIDÉ 1 -->
+<div class="phase" id="phase-g1">
+  <div class="ugo-box">
+    <span class="ugo">🦉</span>
+    <p>Super ! <strong>3 questions</strong> sur la soustraction posée. <strong>3 essais</strong> ! 💜</p>
+  </div>
+  <div id="g1-reset" class="reset-box">
+    <div class="r-ugo">🦉</div>
+    <h3>On recommence !</h3>
+    <p>Grand nombre en haut ! Unités d'abord (à droite), puis dizaines. 💪</p>
+    <button class="btn-reset" onclick="initG1()">↺ Réessayer !</button>
+  </div>
+  <div id="g1-zone"></div>
+  <button class="btn-suite" id="btn-g1-to-g2" onclick="goPhase('g2',2)">Encore des questions ! 🌟</button>
+</div>
+
+<!-- GUIDÉ 2 -->
+<div class="phase" id="phase-g2">
+  <div class="ugo-box">
+    <span class="ugo">🦉</span>
+    <p>Excellent ! <strong>3 questions</strong> de calcul. Tu vas y arriver ! 🏆</p>
+  </div>
+  <div id="g2-reset" class="reset-box">
+    <div class="r-ugo">🦉</div>
+    <h3>On recommence !</h3>
+    <p>Unités du haut − unités du bas, puis dizaines du haut − dizaines du bas. 💪</p>
+    <button class="btn-reset" onclick="initG2()">↺ Réessayer !</button>
+  </div>
+  <div id="g2-zone"></div>
+  <button class="btn-suite" id="btn-g2-to-free" onclick="goPhase('free',3)">Super ! Exercices libres 🎯</button>
+</div>
+
+<div class="phase" id="phase-free">
+  <div class="ugo-box"><span class="ugo">🦉</span><p><strong>5 questions !</strong> Clique sur la bonne réponse ! 💜</p></div>
+  <div id="free1-zone"></div>
+  <button class="btn-suite" id="btn-free-to-free2" onclick="goPhase('free2',4)">5 dernières ! 💪</button>
+</div>
+
+<div class="phase" id="phase-free2">
+  <div class="ugo-box"><span class="ugo">🦉</span><p>Encore <strong>5 questions</strong> et tu vois ton score ! 🏁</p></div>
+  <div id="free2-zone"></div>
+  <button class="btn-suite" id="btn-free2-to-bilan" onclick="goPhase('bilan',5)">🌟 Mon résultat !</button>
+</div>
+
+<div class="phase" id="phase-bilan">
+  <div class="bilan-card">
+    <span class="bilan-ugo">🦉</span>
+    <h2 class="bilan-title" id="bilan-title">Bravo !</h2>
+    <p class="bilan-msg" id="bilan-msg"></p>
+    <div class="stars-row">
+      <span class="star-big" id="etoile1">⭐</span>
+      <span class="star-big" id="etoile2">⭐</span>
+      <span class="star-big" id="etoile3">⭐</span>
+    </div>
+    <div class="score-circle">
+      <span class="score-num" id="bilan-pts">0</span>
+      <span class="score-sub" id="bilan-sur">/ 0 pts</span>
+    </div>
+    <div class="memo">
+      <h3>📝 Ce que j'ai appris</h3>
+      <div class="memo-grid">
+        <div class="memo-item"><strong>Grand en haut !</strong><span>Toujours le grand<br>nombre en haut</span></div>
+        <div class="memo-item"><strong>Ordre</strong><span>Unités d'abord<br>puis dizaines</span></div>
+        <div class="memo-item"><strong>Exemple</strong><span>77 − 45 = 32<br>7−5=2 · 7−4=3</span></div>
+        <div class="memo-item"><strong>Vérifier</strong><span>32 + 45 = 77 ✓<br>résultat + bas = haut</span></div>
+      </div>
+    </div>
+    <div class="bilan-btns">
+      <button class="btn-bilan secondary" onclick="location.reload()">↺ Recommencer</button>
+      <button class="btn-bilan primary" onclick="location.href='../6-9ans.html'">← Les fiches</button>
+    </div>
+  </div>
+</div>
+</main>
+
+<script>
+var G1=[
+  {titre:"➖ 77 − 45, étape par étape",etapes:[
+    {q:"Étape 1 — unités : 7 − 5 = ?",opts:["2","3","1","4"],ok:0,
+     hint:"7 − 5 = ? Enlève 5 de 7.",
+     expl_ok:"2 ! 7 − 5 = 2. On écrit 2 sous les unités. 🎉",
+     expl_ko:"7 − 5 = 2."},
+    {q:"Étape 2 — dizaines : 7 − 4 = ?",opts:["3","4","2","5"],ok:0,
+     hint:"7 − 4 = ? Enlève 4 de 7.",
+     expl_ok:"3 ! 7 − 4 = 3. On écrit 3 sous les dizaines. 🌟",
+     expl_ko:"7 − 4 = 3."},
+    {q:"77 − 45 = ?",opts:["32","22","42","33"],ok:0,
+     hint:"Unités=2, dizaines=3 → résultat ?",
+     expl_ok:"32 ! 77 − 45 = 32. Vérifie : 32 + 45 = 77 ✓ 🎉",
+     expl_ko:"Unités=2, dizaines=3 → 32."}
+  ]},
+  {titre:"➖ 59 − 23, étape par étape",etapes:[
+    {q:"Unités : 9 − 3 = ?",opts:["6","7","5","8"],ok:0,
+     hint:"9 − 3 = ?",
+     expl_ok:"6 ! 9 − 3 = 6. 🌟",
+     expl_ko:"9 − 3 = 6."},
+    {q:"Dizaines : 5 − 2 = ?",opts:["3","4","2","5"],ok:0,
+     hint:"5 − 2 = ?",
+     expl_ok:"3 ! 5 − 2 = 3. 🎉",
+     expl_ko:"5 − 2 = 3."},
+    {q:"59 − 23 = ?",opts:["36","46","26","37"],ok:0,
+     hint:"Unités=6, dizaines=3 → ?",
+     expl_ok:"36 ! 59 − 23 = 36. Vérifie : 36 + 23 = 59 ✓ 🌟",
+     expl_ko:"Unités=6, dizaines=3 → 36."}
+  ]},
+  {titre:"➖ Avec le zéro",etapes:[
+    {q:"96 − 30 : unités 6 − 0 = ?",opts:["6","0","3","9"],ok:0,
+     hint:"6 − 0 = ? On enlève 0 !",
+     expl_ok:"6 ! 6 − 0 = 6. Enlever 0 ne change rien. 🎉",
+     expl_ko:"6 − 0 = 6. Enlever zéro ne change rien."},
+    {q:"96 − 30 : dizaines 9 − 3 = ?",opts:["6","7","5","8"],ok:0,
+     hint:"9 − 3 = ?",
+     expl_ok:"6 ! 9 − 3 = 6. 🌟",
+     expl_ko:"9 − 3 = 6."},
+    {q:"96 − 30 = ?",opts:["66","56","76","65"],ok:0,
+     hint:"Unités=6, dizaines=6 → ?",
+     expl_ok:"66 ! 96 − 30 = 66. 🎉",
+     expl_ko:"Unités=6, dizaines=6 → 66."}
+  ]},
+  {titre:"➖ Le grand nombre EN HAUT",etapes:[
+    {q:"On veut calculer 87 − 54. Quel nombre on met en haut ?",opts:["87 (le plus grand)","54 (le plus petit)"],ok:0,
+     hint:"Dans une soustraction posée, le grand nombre est toujours en haut !",
+     expl_ok:"87 ! Toujours le grand nombre en haut. 🌟",
+     expl_ko:"Grand nombre = EN HAUT. Ici 87 est plus grand que 54."},
+    {q:"87 − 54 : unités 7 − 4 = ?",opts:["3","4","2","5"],ok:0,
+     hint:"7 − 4 = ?",
+     expl_ok:"3 ! 7 − 4 = 3. 🎉",
+     expl_ko:"7 − 4 = 3."},
+    {q:"87 − 54 = ?",opts:["33","23","43","34"],ok:0,
+     hint:"Unités=3, dizaines : 8−5=3 → ?",
+     expl_ok:"33 ! 7−4=3, 8−5=3 → 33. 🌟",
+     expl_ko:"Unités 7−4=3, dizaines 8−5=3 → 33."}
+  ]}
+];
+
+var G2=[
+  {titre:"✏️ Calcule ces soustractions",etapes:[
+    {q:"77 − 45 = ?",opts:["32","22","42","33"],ok:0,
+     hint:"Unités : 7−5=2. Dizaines : 7−4=3.",
+     expl_ok:"32 ! 7−5=2, 7−4=3 → 32. 🎉",
+     expl_ko:"7−5=2, 7−4=3 → 32."},
+    {q:"59 − 23 = ?",opts:["36","26","46","37"],ok:0,
+     hint:"Unités : 9−3=6. Dizaines : 5−2=3.",
+     expl_ok:"36 ! 9−3=6, 5−2=3 → 36. 🌟",
+     expl_ko:"9−3=6, 5−2=3 → 36."},
+    {q:"87 − 54 = ?",opts:["33","23","43","34"],ok:0,
+     hint:"Unités : 7−4=3. Dizaines : 8−5=3.",
+     expl_ok:"33 ! 7−4=3, 8−5=3 → 33. 🎉",
+     expl_ko:"7−4=3, 8−5=3 → 33."}
+  ]},
+  {titre:"✏️ Problèmes",etapes:[
+    {q:"Léa a 57 billes. Elle en donne 23. Combien lui reste-t-il ?",opts:["34","44","24","33"],ok:0,
+     hint:"57 − 23 : unités 7−3=4, dizaines 5−2=3.",
+     expl_ok:"34 billes ! 57−23=34. 🌟",
+     expl_ko:"7−3=4, 5−2=3 → 34."},
+    {q:"Un livre a 89 pages. Tom en a lu 45. Combien reste-t-il ?",opts:["44","34","54","43"],ok:0,
+     hint:"89 − 45 : unités 9−5=4, dizaines 8−4=4.",
+     expl_ok:"44 pages ! 89−45=44. 🎉",
+     expl_ko:"9−5=4, 8−4=4 → 44."},
+    {q:"78 − 15 = ?",opts:["63","53","73","62"],ok:0,
+     hint:"Unités : 8−5=3. Dizaines : 7−1=6.",
+     expl_ok:"63 ! 8−5=3, 7−1=6 → 63. 🌟",
+     expl_ko:"8−5=3, 7−1=6 → 63."}
+  ]},
+  {titre:"✏️ Vrai ou faux ?",etapes:[
+    {q:"69 − 34 = 35 ?",opts:["Oui ! C'est juste","Non, ce n'est pas 35"],ok:0,
+     hint:"9−4=5, 6−3=3 → ?",
+     expl_ok:"Oui ! 9−4=5, 6−3=3 → 35. ✓ 🎉",
+     expl_ko:"9−4=5, 6−3=3 → 35. C'est bien juste !"},
+    {q:"58 − 21 = 27 ?",opts:["Non ! La bonne réponse est 37","Oui, c'est 27"],ok:0,
+     hint:"Unités : 8−1=7. Dizaines : 5−2=3. → ?",
+     expl_ok:"Non ! 8−1=7, 5−2=3 → 37 (pas 27). 🌟",
+     expl_ko:"8−1=7, 5−2=3 → 37. Il avait mal calculé les dizaines."},
+    {q:"99 − 44 = ?",opts:["55","45","65","54"],ok:0,
+     hint:"Unités : 9−4=5. Dizaines : 9−4=5.",
+     expl_ok:"55 ! 9−4=5, 9−4=5 → 55. 🎉",
+     expl_ko:"9−4=5, 9−4=5 → 55."}
+  ]},
+  {titre:"✏️ Soustractions variées",etapes:[
+    {q:"85 − 32 = ?",opts:["53","43","63","52"],ok:0,
+     hint:"Unités : 5−2=3. Dizaines : 8−3=5.",
+     expl_ok:"53 ! 5−2=3, 8−3=5 → 53. 🌟",
+     expl_ko:"5−2=3, 8−3=5 → 53."},
+    {q:"76 − 41 = ?",opts:["35","25","45","34"],ok:0,
+     hint:"Unités : 6−1=5. Dizaines : 7−4=3.",
+     expl_ok:"35 ! 6−1=5, 7−4=3 → 35. 🎉",
+     expl_ko:"6−1=5, 7−4=3 → 35."},
+    {q:"Pour vérifier 68 − 25 = 43, on fait ?",opts:["43 + 25 = 68 ✓","25 + 68 = 43"],ok:0,
+     hint:"Résultat + nombre du bas = nombre du haut.",
+     expl_ok:"43 + 25 = 68 ✓ C'est la bonne vérification ! 🌟",
+     expl_ko:"Pour vérifier : résultat + bas = haut → 43 + 25 = 68."}
+  ]}
+];
+
+var FREE_POOL=[
+  {q:"77 − 45 = ?",opts:["32","42"],ok:0,expl:"7−5=2, 7−4=3 → 32."},
+  {q:"59 − 23 = ?",opts:["36","26"],ok:0,expl:"9−3=6, 5−2=3 → 36."},
+  {q:"87 − 54 = ?",opts:["33","43"],ok:0,expl:"7−4=3, 8−5=3 → 33."},
+  {q:"96 − 30 = ?",opts:["66","56"],ok:0,expl:"6−0=6, 9−3=6 → 66."},
+  {q:"78 − 15 = ?",opts:["63","53"],ok:0,expl:"8−5=3, 7−1=6 → 63."},
+  {q:"Dans une soustraction posée, le grand nombre est…",opts:["EN HAUT","en bas"],ok:0,expl:"Toujours le grand nombre en haut !"},
+  {q:"57 − 23 = ?",opts:["34","44"],ok:0,expl:"7−3=4, 5−2=3 → 34."},
+  {q:"89 − 45 = ?",opts:["44","54"],ok:0,expl:"9−5=4, 8−4=4 → 44."},
+  {q:"69 − 34 = ?",opts:["35","25"],ok:0,expl:"9−4=5, 6−3=3 → 35."},
+  {q:"99 − 44 = ?",opts:["55","45"],ok:0,expl:"9−4=5, 9−4=5 → 55."},
+  {q:"Léa a 48 bonbons. Elle en mange 13. Combien reste-t-il ?",opts:["35","25"],ok:0,expl:"48−13 : 8−3=5, 4−1=3 → 35."},
+  {q:"85 − 32 = ?",opts:["53","43"],ok:0,expl:"5−2=3, 8−3=5 → 53."},
+  {q:"76 − 41 = ?",opts:["35","45"],ok:0,expl:"6−1=5, 7−4=3 → 35."},
+  {q:"Pour vérifier 77−45=32, on calcule…",opts:["32+45=77","45+77=32"],ok:0,expl:"On vérifie avec 32+45=77. Résultat + bas = haut."},
+  {q:"68 − 25 = ?",opts:["43","53"],ok:0,expl:"8−5=3, 6−2=4 → 43."},
+  {q:"On commence la soustraction par les…",opts:["unités (à droite)","dizaines (à gauche)"],ok:0,expl:"Toujours les unités (chiffre à droite) en premier !"},
+  {q:"97 − 63 = ?",opts:["34","44"],ok:0,expl:"7−3=4, 9−6=3 → 34."},
+  {q:"55 − 22 = ?",opts:["33","43"],ok:0,expl:"5−2=3, 5−2=3 → 33."},
+  {q:"74 − 31 = ?",opts:["43","53"],ok:0,expl:"4−1=3, 7−3=4 → 43."},
+  {q:"88 − 46 = ?",opts:["42","32"],ok:0,expl:"8−6=2, 8−4=4 → 42."}
+];
+
+var score=0,g1Idx=0,g2Idx=0;
+var f1Exs=[],f2Exs=[],f1Done=0,f2Done=0;
+var _cb={};
+var _g1tries=0,_g2tries=0;
+
+function shuffle(a){var b=a.slice();for(var i=b.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=b[i];b[i]=b[j];b[j]=t;}return b;}
+function addPt(){score++;document.getElementById('score-display').textContent=score;}
+function updSteps(n){for(var i=0;i<6;i++){var s=document.getElementById('s'+i);if(!s)return;s.classList.remove('active','done');if(i<n)s.classList.add('done');else if(i===n)s.classList.add('active');}}
+function goPhase(ph,si){
+  document.querySelectorAll('.phase').forEach(function(p){p.classList.remove('active');});
+  var el=document.getElementById('phase-'+ph);
+  if(el){el.classList.add('active');setTimeout(function(){el.scrollIntoView({behavior:'smooth',block:'start'});},100);}
+  updSteps(si);
+  if(ph==='g1')initG1();if(ph==='g2')initG2();
+  if(ph==='free')initFree1();if(ph==='free2')initFree2();
+  if(ph==='bilan')showBilan();
+}
+function revealBloc(n){
+  var b=document.getElementById('bloc-'+n);if(!b)return;
+  var p=document.getElementById('bloc-'+(n-1));
+  if(p){var btn=p.querySelector('.btn-compris');if(btn){btn.textContent='✓ Compris !';btn.disabled=true;btn.style.opacity='.4';}}
+  b.classList.add('revealed');
+  setTimeout(function(){var hH=(document.querySelector('.header')||{offsetHeight:0}).offsetHeight;var r=b.getBoundingClientRect();window.scrollTo({top:window.pageYOffset+r.top-hH-16,behavior:'smooth'});},150);
+}
+function makeQBox(step,si,prefix){
+  var so=shuffle(step.opts.map(function(o,oi){return{t:o,i:oi};}));
+  var sb=document.createElement('div');sb.className='q-box'+(si===0?' active':'');sb.id=prefix+'s'+si;
+  sb.innerHTML='<div class="q-num">Question '+(si+1)+'</div>'
+    +'<div class="q-text">'+step.q+'</div>'
+    +'<div class="hint-box" id="'+prefix+'h'+si+'">💡 '+step.hint+'</div>'
+    +'<div class="opts">'+so.map(function(o){return'<button class="opt" onclick="checkQ(\''+prefix+'\','+si+','+o.i+',this)">'+o.t+'</button>';}).join('')+'</div>'
+    +'<div class="fb" id="'+prefix+'f'+si+'"></div>';
+  return sb;
+}
+function initG1(){
+  g1Idx=Math.floor(Math.random()*G1.length);_g1tries=0;
+  document.getElementById('g1-reset').classList.remove('show');
+  document.getElementById('btn-g1-to-g2').classList.remove('show');
+  var v=G1[g1Idx],z=document.getElementById('g1-zone');z.innerHTML='';
+  var box=document.createElement('div');box.className='guided-box';
+  box.innerHTML='<div class="guided-title">'+v.titre+'<span class="tries-b" id="tries-g1">3 essais</span></div><div id="g1-steps"></div>';
+  z.appendChild(box);
+  v.etapes.forEach(function(step,si){document.getElementById('g1-steps').appendChild(makeQBox(step,si,'g1'));});
+}
+function initG2(){
+  g2Idx=Math.floor(Math.random()*G2.length);_g2tries=0;
+  document.getElementById('g2-reset').classList.remove('show');
+  document.getElementById('btn-g2-to-free').classList.remove('show');
+  var v=G2[g2Idx],z=document.getElementById('g2-zone');z.innerHTML='';
+  var box=document.createElement('div');box.className='guided-box';
+  box.innerHTML='<div class="guided-title">'+v.titre+'<span class="tries-b" id="tries-g2">3 essais</span></div><div id="g2-steps"></div>';
+  z.appendChild(box);
+  v.etapes.forEach(function(step,si){document.getElementById('g2-steps').appendChild(makeQBox(step,si,'g2'));});
+}
+function checkQ(prefix,si,ci,btn){
+  var v=prefix==='g1'?G1[g1Idx]:G2[g2Idx];
+  var step=v.etapes[si],sb=document.getElementById(prefix+'s'+si),fb=document.getElementById(prefix+'f'+si);
+  var triesId=prefix==='g1'?'tries-g1':'tries-g2';
+  var tries=prefix==='g1'?_g1tries:_g2tries;
+  if(sb.classList.contains('correct'))return;
+  if(ci===step.ok){
+    btn.classList.add('ok');sb.querySelectorAll('.opt').forEach(function(b){b.disabled=true;});sb.classList.add('correct');
+    if(tries===0){fb.className='fb show ok';fb.innerHTML='✅ '+step.expl_ok+' <span style="font-size:.75rem;color:#065f46">(+1 pt)</span>';addPt();}
+    else{fb.className='fb show ok';fb.innerHTML='✅ '+step.expl_ok;}
+    if(prefix==='g1')_g1tries=0;else _g2tries=0;
+    var el=document.getElementById(triesId);if(el)el.textContent='3 essais';
+    var nx=document.getElementById(prefix+'s'+(si+1));
+    if(nx){nx.classList.add('active');setTimeout(function(){nx.scrollIntoView({behavior:'smooth',block:'nearest'});},350);}
+    else{var btnId=prefix==='g1'?'btn-g1-to-g2':'btn-g2-to-free';setTimeout(function(){var b=document.getElementById(btnId);b.classList.add('show');b.scrollIntoView({behavior:'smooth',block:'nearest'});},550);}
+  }else{
+    btn.classList.add('ko');btn.disabled=true;
+    if(prefix==='g1')_g1tries++;else _g2tries++;
+    var newTries=prefix==='g1'?_g1tries:_g2tries;
+    var el=document.getElementById(triesId);if(el)el.textContent=(3-newTries)+' essai'+(3-newTries>1?'s':'');
+    fb.className='fb show ko';
+    if(newTries<3){fb.innerHTML='❌ Réessaie ! 💪';document.getElementById(prefix+'h'+si).classList.add('show');}
+    else{
+      fb.innerHTML='❌ '+step.expl_ko;
+      var rid=prefix==='g1'?'g1-reset':'g2-reset',zid=prefix==='g1'?'g1-zone':'g2-zone';
+      setTimeout(function(){document.getElementById(rid).classList.add('show');document.getElementById(zid).innerHTML='';document.getElementById(rid).scrollIntoView({behavior:'smooth',block:'start'});},1400);
+    }
+  }
+}
+function buildFree(ex,i,prefix,cb){
+  var card=document.createElement('div');card.className='free-card';card.id=prefix+'c'+i;
+  var so=shuffle(ex.opts.map(function(o,oi){return{t:o,i:oi};}));
+  card.innerHTML='<div class="free-num">Question '+(i+1)+'</div>'
+    +'<div class="free-q">'+ex.q+'</div>'
+    +'<div class="free-opts" id="'+prefix+'fo'+i+'"></div>'
+    +'<div class="free-fb" id="'+prefix+'ff'+i+'"></div>';
+  setTimeout(function(){
+    var ba=document.getElementById(prefix+'fo'+i);
+    so.forEach(function(o){
+      var btn=document.createElement('button');btn.className='free-opt';btn.textContent=o.t;
+      btn.onclick=function(){
+        if(card.classList.contains('done'))return;card.classList.add('done');ba.querySelectorAll('button').forEach(function(b){b.disabled=true;});
+        var fb=document.getElementById(prefix+'ff'+i);
+        if(o.i===ex.ok){btn.classList.add('ok');fb.className='free-fb show ok';fb.innerHTML='✅ '+ex.expl;addPt();}
+        else{btn.classList.add('ko');ba.querySelectorAll('button').forEach(function(b,bi){if(bi===ex.ok)b.classList.add('reveal');});fb.className='free-fb show ko';fb.innerHTML='❌ '+ex.expl;}
+        cb();
+      };ba.appendChild(btn);
+    });
+  },0);
+  return card;
+}
+function initFree1(){
+  f1Exs=shuffle(FREE_POOL.slice()).slice(0,5);f1Done=0;
+  var z=document.getElementById('free1-zone');z.innerHTML='';
+  f1Exs.forEach(function(ex,i){
+    _cb['f1'+i]=function(){f1Done++;if(f1Done>=5)setTimeout(function(){var b=document.getElementById('btn-free-to-free2');b.classList.add('show');b.scrollIntoView({behavior:'smooth',block:'nearest'});},600);};
+    z.appendChild(buildFree(ex,i,'f1',_cb['f1'+i]));
+  });
+}
+function initFree2(){
+  var used=f1Exs.map(function(e){return e.q;});
+  var pool=FREE_POOL.filter(function(e){return used.indexOf(e.q)<0;});
+  f2Exs=shuffle(pool).slice(0,5);f2Done=0;
+  var z=document.getElementById('free2-zone');z.innerHTML='';
+  f2Exs.forEach(function(ex,i){
+    _cb['f2'+i]=function(){f2Done++;if(f2Done>=5)setTimeout(function(){var b=document.getElementById('btn-free2-to-bilan');b.classList.add('show');b.scrollIntoView({behavior:'smooth',block:'nearest'});},600);};
+    z.appendChild(buildFree(ex,i,'f2',_cb['f2'+i]));
+  });
+}
+function showBilan(){
+  var g1n=G1[g1Idx]?G1[g1Idx].etapes.length:3,g2n=G2[g2Idx]?G2[g2Idx].etapes.length:3,tot=g1n+g2n+10;
+  document.getElementById('bilan-pts').textContent=score;
+  document.getElementById('bilan-sur').textContent='/ '+tot+' pts';
+  var pct=score/tot,t,m;
+  if(pct>=.8){t='BRAVO ! 🎉🎊';m='Tu maîtrises la soustraction posée ! Ugo est super fier de toi ! 🦉⭐';}
+  else if(pct>=.5){t='Très bien ! 😊🌟';m:'Tu progresses ! Rappelle-toi : grand nombre EN HAUT, unités d\'abord !';}
+  else{t='Bien essayé ! 💪';m:'Grand en haut, unités d\'abord, puis dizaines. Tu peux recommencer ! 🦉';}
+  document.getElementById('bilan-title').textContent=t;
+  document.getElementById('bilan-msg').textContent=m;
+  var s=[Math.ceil(tot*.33),Math.ceil(tot*.66),Math.ceil(tot*.89)];
+  ['etoile1','etoile2','etoile3'].forEach(function(id,i){var el=document.getElementById(id);if(score>=s[i]){(function(e,d){setTimeout(function(){e.classList.add('earned');},d);})(el,300+i*450);}else el.style.filter='grayscale(1)';});
+  if(pct>=.5)confetti();
+}
+function confetti(){var cols=['#7c3aed','#c4b5fd','#059669','#d97706','#dc2626'];for(var i=0;i<65;i++){var el=document.createElement('div');el.className='confetti-piece';el.style.cssText='left:'+Math.random()*100+'vw;background:'+cols[Math.floor(Math.random()*cols.length)]+';animation-duration:'+(1.8+Math.random()*2.2)+'s;animation-delay:'+Math.random()*1.5+'s;width:'+(7+Math.random()*10)+'px;height:'+(7+Math.random()*10)+'px;border-radius:'+(Math.random()>.5?'50%':'4px')+';';document.body.appendChild(el);setTimeout(function(){if(el.parentNode)el.remove();},5000);}}
+</script>
+</body>
+</html>

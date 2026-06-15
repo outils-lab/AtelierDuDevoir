@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>M415 — Fonction linéaire et affine | L'Atelier du Devoir</title>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{--acc:#0f766e;--acc-pale:#f0fdfa;--acc-mid:#5eead4;--mint:#059669;--mint-pale:#d1fae5;--mint-deep:#047857;--coral:#dc2626;--coral-pale:#fee2e2;--text:#1e293b;--text-light:#64748b;--radius:12px;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Lato',sans-serif;background:#f0fdfa;color:var(--text);font-size:16px;line-height:1.65;}
+.print-bar{position:fixed;right:16px;top:50%;transform:translateY(-50%);z-index:200;display:flex;flex-direction:column;gap:8px;}
+.print-btn{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:8px;font-family:'Lato',sans-serif;font-weight:700;font-size:.78rem;border:none;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.15);}
+.print-btn-lecon{background:#d97706;color:white;}.print-btn-eval{background:#9f1239;color:white;}
+@media(max-width:600px){.print-bar{right:6px;}.print-btn{font-size:0;width:40px;height:40px;padding:0;justify-content:center;}.print-btn span.lbl{display:none;}.print-btn span.ico{font-size:1.1rem;}}
+.header{background:white;border-bottom:2px solid var(--acc-pale);position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.06);}
+.header-top{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;}
+.logo{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--acc);text-decoration:none;}
+.score-badge{background:var(--acc);color:white;font-weight:700;font-size:.85rem;padding:5px 14px;border-radius:6px;}
+.steps-wrap{padding:0 20px 8px;}
+.steps{display:flex;gap:3px;}
+.step{flex:1;height:5px;border-radius:4px;background:var(--acc-pale);transition:all .35s;}
+.step.done{background:var(--mint);}.step.active{background:var(--acc);}
+.steps-labels{display:flex;gap:3px;padding-top:3px;}
+.step-lbl{flex:1;font-size:.48rem;font-weight:700;color:var(--text-light);text-align:center;text-transform:uppercase;letter-spacing:.03em;}
+.main{max-width:760px;margin:0 auto;padding:28px 16px 100px;}
+.phase{display:none;}.phase.active{display:block;}
+.accroche{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:22px 24px;margin-bottom:22px;display:flex;gap:16px;align-items:flex-start;}
+.accroche-icon{font-size:2.4rem;flex-shrink:0;}
+.accroche-text h1{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--acc);margin-bottom:6px;}
+.accroche-text p{color:var(--text-light);font-size:.92rem;line-height:1.5;}
+.meta-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+.meta-tag{background:var(--acc-pale);border-radius:4px;padding:3px 10px;font-size:.72rem;font-weight:700;color:var(--acc);text-transform:uppercase;letter-spacing:.04em;}
+.lecon-card{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:22px;margin-bottom:18px;}
+.lecon-card h2{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--acc);margin-bottom:14px;border-bottom:2px solid var(--acc-pale);padding-bottom:8px;}
+.lecon-block{display:none;}.lecon-block.revealed{display:block;}
+.lecon-subtitle{font-weight:900;font-size:1rem;color:var(--acc);margin-bottom:10px;margin-top:6px;}
+.sep{margin:18px 0;border:none;border-top:1px solid var(--acc-pale);}
+.analogie{font-size:.92rem;color:var(--text-light);font-style:italic;margin-bottom:12px;line-height:1.6;background:#f0fdfa;border-radius:8px;padding:10px 14px;border-left:3px solid var(--acc-mid);}
+.def-box{border-left:4px solid var(--acc);background:var(--acc-pale);border-radius:0 var(--radius) var(--radius) 0;padding:14px 16px;margin-bottom:12px;}
+.def-box h4{font-weight:900;color:var(--acc);font-size:.9rem;margin-bottom:6px;}
+.def-box p{font-size:.88rem;color:var(--text);line-height:1.7;}
+.exemple-ligne{background:white;border:1px solid #e2e8f0;border-radius:8px;padding:10px 16px;font-size:.95rem;margin-bottom:6px;line-height:1.8;display:flex;align-items:center;gap:12px;}
+.exemple-ligne .tag{background:var(--acc);color:white;font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:4px;text-transform:uppercase;flex-shrink:0;}
+.hl{background:var(--acc-pale);color:var(--acc);border-radius:4px;padding:1px 6px;font-weight:700;}
+.astuce{background:#fefce8;border:1px solid #fde68a;border-radius:8px;padding:11px 14px;font-size:.85rem;margin-top:8px;color:#78350f;}
+.astuce strong{color:#92400e;}
+.piege{background:#fff1f2;border:1px solid #fecdd3;border-radius:8px;padding:11px 14px;font-size:.85rem;margin-top:8px;color:#9f1239;}
+.piege strong{color:#be123c;}
+.btn-compris{margin-top:18px;padding:11px 26px;border-radius:8px;font-family:'Lato',sans-serif;font-weight:700;font-size:.9rem;background:var(--acc);color:white;border:none;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:8px;}
+.btn-compris:hover{background:#0d6b63;transform:translateY(-1px);}
+.btn-compris:disabled{opacity:.4;cursor:default;transform:none;}
+.mascot-msg{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:13px 16px;margin:14px 0;display:flex;align-items:flex-start;gap:10px;}
+.mascot-msg .emo{font-size:1.6rem;flex-shrink:0;}
+.mascot-msg p{font-size:.88rem;color:var(--text-light);line-height:1.6;}
+.ex-header-box{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:16px 20px;margin-bottom:16px;}
+.ex-header-box h2{font-family:'Playfair Display',serif;font-size:1.15rem;color:var(--acc);margin-bottom:4px;}
+.ex-header-box p{color:var(--text-light);font-size:.85rem;}
+.guided-problem{background:white;border:2px solid var(--acc);border-radius:var(--radius);padding:20px;margin-bottom:16px;}
+.guided-problem-title{font-size:1.05rem;font-weight:900;color:var(--acc);margin-bottom:16px;background:var(--acc-pale);padding:10px 14px;border-radius:8px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.tries-left{font-size:.75rem;font-weight:700;color:var(--coral);background:var(--coral-pale);padding:2px 8px;border-radius:4px;margin-left:auto;}
+.step-container{display:flex;flex-direction:column;gap:10px;}
+.step-box{border:2px solid #e2e8f0;border-radius:10px;padding:14px 16px;transition:all .3s;opacity:.5;pointer-events:none;}
+.step-box.active{opacity:1;pointer-events:all;border-color:var(--acc-mid);}
+.step-box.correct{border-color:var(--mint);background:var(--mint-pale);opacity:1;}
+.step-num{font-size:.65rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;}
+.step-question{font-size:.95rem;font-weight:700;margin-bottom:10px;line-height:1.6;}
+.step-hint{font-size:.83rem;color:#92400e;background:#fef3c7;border-radius:6px;padding:8px 12px;margin-bottom:8px;display:none;}
+.step-hint.show{display:block;}
+.step-qcm-opts{display:flex;flex-direction:column;gap:6px;}
+.step-qcm-opt{padding:9px 14px;border-radius:8px;border:2px solid #e2e8f0;background:white;font-family:'Lato',sans-serif;font-weight:600;font-size:.9rem;cursor:pointer;text-align:left;transition:all .2s;}
+.step-qcm-opt:hover:not(:disabled){border-color:var(--acc);background:var(--acc-pale);}
+.step-qcm-opt:disabled{cursor:default;}
+.step-qcm-opt.opt-correct{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.step-qcm-opt.opt-wrong{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
+.step-input-row{display:flex;gap:8px;align-items:center;}
+.step-input{border:2px solid var(--acc);border-radius:6px;padding:8px 12px;font-family:'Lato',monospace;font-weight:700;font-size:1rem;color:var(--text);background:white;outline:none;min-width:100px;max-width:180px;text-align:center;}
+.step-input:disabled{border-color:#e2e8f0;background:#f8fafc;color:var(--text-light);}
+.step-input.input-ok{border-color:var(--mint);background:var(--mint-pale);}
+.step-input.input-ko{border-color:var(--coral);}
+.btn-step-check{padding:8px 16px;border-radius:6px;font-family:'Lato',sans-serif;font-weight:700;font-size:.85rem;background:var(--acc);color:white;border:none;cursor:pointer;}
+.btn-step-check:disabled{opacity:.4;cursor:not-allowed;}
+.step-fb{margin-top:8px;padding:8px 12px;border-radius:6px;font-size:.83rem;font-weight:700;display:none;}
+.step-fb.show{display:block;}
+.step-fb.fb-ok{background:var(--mint-pale);color:var(--mint-deep);}
+.step-fb.fb-ko{background:var(--coral-pale);color:#b91c1c;}
+.reset-msg{background:#fff;border:2px solid var(--acc);border-radius:var(--radius);padding:22px 24px;text-align:center;margin-bottom:16px;display:none;}
+.reset-msg.show{display:block;}
+.reset-msg .ugo{font-size:2.5rem;margin-bottom:8px;}
+.reset-msg h3{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--acc);margin-bottom:8px;}
+.reset-msg p{color:var(--text-light);font-size:.9rem;margin-bottom:14px;line-height:1.6;}
+.btn-restart{padding:10px 24px;border-radius:8px;font-family:'Lato',sans-serif;font-weight:700;font-size:.9rem;background:var(--acc);color:white;border:none;cursor:pointer;}
+.free-ex-card{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:18px;margin-bottom:14px;}
+.free-ex-label{font-size:.7rem;font-weight:700;color:var(--acc);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;}
+.free-ex-question{font-size:.95rem;font-weight:700;margin-bottom:12px;background:var(--acc-pale);border-radius:8px;padding:11px 14px;line-height:1.8;}
+.free-classify-btns{display:flex;gap:8px;flex-wrap:wrap;}
+.free-classify-btn{padding:9px 16px;border-radius:6px;font-family:'Lato',sans-serif;font-weight:700;font-size:.85rem;border:2px solid #e2e8f0;background:white;cursor:pointer;transition:all .2s;flex:1;text-align:center;}
+.free-classify-btn:hover{border-color:var(--acc);background:var(--acc-pale);}
+.free-classify-btn.ans-correct{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.free-classify-btn.ans-wrong{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
+.free-classify-btn.ans-reveal{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.free-input-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.free-input{border:2px solid var(--acc);border-radius:6px;padding:8px 12px;font-family:'Lato',monospace;font-weight:700;font-size:1rem;color:var(--text);background:white;outline:none;min-width:80px;max-width:140px;text-align:center;}
+.free-input:disabled{border-color:#e2e8f0;background:#f8fafc;}
+.free-input.free-ok{border-color:var(--mint);background:var(--mint-pale);}
+.free-input.free-ko{border-color:var(--coral);background:var(--coral-pale);}
+.btn-free-check{padding:8px 16px;border-radius:6px;font-family:'Lato',sans-serif;font-weight:700;font-size:.85rem;background:var(--acc);color:white;border:none;cursor:pointer;}
+.jugement-opts{display:flex;flex-direction:column;gap:8px;}
+.jugement-opt-btn{padding:11px 16px;border-radius:8px;border:2px solid #e2e8f0;background:white;font-family:'Lato',sans-serif;font-size:.92rem;cursor:pointer;text-align:left;transition:all .2s;line-height:1.6;}
+.jugement-opt-btn:hover{border-color:var(--acc);background:var(--acc-pale);}
+.jugement-opt-btn.jug-correct{border-color:var(--mint);background:var(--mint-pale);}
+.jugement-opt-btn.jug-wrong{border-color:var(--coral);background:var(--coral-pale);}
+.free-fb{margin-top:10px;padding:9px 13px;border-radius:8px;font-size:.84rem;font-weight:700;display:none;}
+.free-fb.show{display:block;}
+.free-fb.fb-ok{background:var(--mint-pale);color:var(--mint-deep);}
+.free-fb.fb-ko{background:var(--coral-pale);color:#b91c1c;}
+.btn-suivant{margin-top:14px;padding:10px 22px;border-radius:8px;font-family:'Lato',sans-serif;font-weight:700;font-size:.88rem;background:var(--acc);color:white;border:none;cursor:pointer;display:none;align-items:center;gap:8px;transition:all .2s;}
+.btn-suivant.show{display:inline-flex;}
+.btn-suivant:hover{background:#0d6b63;}
+.bilan-card{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:28px 24px;text-align:center;}
+.bilan-icon{font-size:3.5rem;margin-bottom:12px;display:block;}
+.bilan-title{font-family:'Playfair Display',serif;font-size:1.8rem;margin-bottom:6px;color:var(--acc);}
+.bilan-msg{color:var(--text-light);font-size:.95rem;margin-bottom:20px;}
+.stars-row{display:flex;justify-content:center;gap:10px;margin-bottom:20px;}
+.star-big{font-size:2.5rem;filter:grayscale(1);transition:all .5s;}
+.star-big.earned{filter:none;animation:starPop .5s ease both;}
+@keyframes starPop{0%{transform:scale(0);}60%{transform:scale(1.2);}100%{transform:scale(1);}}
+.score-circle{width:100px;height:100px;border-radius:50%;background:var(--acc);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 20px;color:white;}
+.score-num{font-family:'Playfair Display',serif;font-size:1.8rem;line-height:1;}
+.score-sub{font-size:.65rem;opacity:.8;}
+.memo-card{background:var(--acc-pale);border-radius:var(--radius);padding:16px 20px;margin:18px 0;text-align:left;}
+.memo-card h3{font-weight:700;font-size:.85rem;color:var(--acc);margin-bottom:10px;text-transform:uppercase;letter-spacing:.04em;}
+.memo-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media(max-width:480px){.memo-grid{grid-template-columns:1fr;}}
+.memo-item{background:white;border-radius:8px;padding:10px 12px;font-size:.82rem;border:1px solid #e2e8f0;}
+.memo-item strong{color:var(--acc);}
+.bilan-btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:16px;}
+.btn-act{padding:10px 20px;border-radius:8px;font-family:'Lato',sans-serif;font-weight:700;font-size:.85rem;cursor:pointer;border:none;transition:all .2s;}
+.btn-act.primary{background:var(--acc);color:white;}
+.btn-act.secondary{background:var(--acc-pale);color:var(--acc);border:2px solid var(--acc);}
+.btn-act:hover{transform:translateY(-1px);}
+.confetti-piece{position:fixed;border-radius:2px;top:-20px;animation:fall linear both;pointer-events:none;z-index:9999;}
+@keyframes fall{0%{transform:translateY(0) rotate(0deg);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
+@media print{.print-bar,.btn-compris,.btn-suivant,.bilan-card,.mascot-msg{display:none!important;}body{background:white;}.phase{display:block!important;}}
+</style>
+</head>
+<body>
+<div class="print-bar">
+  <button class="print-btn print-btn-lecon" onclick="window.print()"><span class="ico">📖</span><span class="lbl">Leçon</span></button>
+  <button class="print-btn print-btn-eval" onclick="window.print()"><span class="ico">📝</span><span class="lbl">Exercices</span></button>
+</div>
+<header class="header">
+  <div class="header-top">
+    <a href="../12-15ans.html" class="logo">🦉 L'Atelier du Devoir</a>
+    <div class="score-badge">⭐ <span id="score-display">0</span> pts</div>
+  </div>
+  <div class="steps-wrap">
+    <div class="steps">
+      <div class="step active" id="step-0"></div><div class="step" id="step-1"></div><div class="step" id="step-2"></div>
+      <div class="step" id="step-3"></div><div class="step" id="step-4"></div><div class="step" id="step-5"></div>
+    </div>
+    <div class="steps-labels">
+      <div class="step-lbl">Leçon</div><div class="step-lbl">Guidé 1</div><div class="step-lbl">Guidé 2</div>
+      <div class="step-lbl">Exercices</div><div class="step-lbl">+ Exercices</div><div class="step-lbl">Bilan</div>
+    </div>
+  </div>
+</header>
+<main class="main">
+
+<div class="accroche">
+  <div class="accroche-icon">📈</div>
+  <div class="accroche-text">
+    <h1>La fonction linéaire et affine</h1>
+    <p>Comprendre, représenter et utiliser les fonctions de la forme f(x) = ax et f(x) = ax + b.</p>
+    <div class="meta-row">
+      <span class="meta-tag">3e</span><span class="meta-tag">~30 min</span>
+      <span class="meta-tag">⭐⭐ Difficulté</span><span class="meta-tag">Mathématiques</span>
+    </div>
+  </div>
+</div>
+
+<!-- LEÇON -->
+<div class="phase active" id="phase-lecon">
+  <div class="lecon-card">
+    <h2>📖 La leçon</h2>
+
+    <div class="lecon-block revealed" id="bloc-0">
+      <div class="lecon-subtitle">① La fonction linéaire f(x) = ax</div>
+      <div class="analogie">🛒 Le prix à payer est proportionnel au nombre d'articles achetés. Si chaque article coûte 3€, alors f(x) = 3x. C'est une fonction linéaire — sa représentation graphique est toujours une droite passant par l'origine.</div>
+
+      <div class="def-box">
+        <h4>Fonction linéaire</h4>
+        <p>Une fonction linéaire est de la forme <strong>f(x) = ax</strong> où a est un nombre réel non nul appelé <strong>coefficient directeur</strong> (ou pente).<br><br>
+        • Si a &gt; 0 : la droite monte de gauche à droite.<br>
+        • Si a &lt; 0 : la droite descend de gauche à droite.<br>
+        • La droite passe <strong>toujours par l'origine O(0,0)</strong>.</p>
+      </div>
+
+      <!-- Graphique SVG fonction linéaire -->
+      <svg viewBox="0 0 280 200" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:12px auto;max-width:280px;background:#f0fdfa;border-radius:10px;padding:6px;">
+        <text x="140" y="14" font-size="10" fill="#0f766e" font-weight="bold" text-anchor="middle">f(x)=2x (bleu) et g(x)=−x (rouge)</text>
+        <!-- Axes -->
+        <line x1="20" y1="100" x2="260" y2="100" stroke="#475569" stroke-width="1.5"/>
+        <line x1="140" y1="10" x2="140" y2="190" stroke="#475569" stroke-width="1.5"/>
+        <polygon points="260,97 268,100 260,103" fill="#475569"/>
+        <polygon points="137,10 140,2 143,10" fill="#475569"/>
+        <text x="265" y="104" font-size="8" fill="#475569">x</text>
+        <text x="143" y="8" font-size="8" fill="#475569">y</text>
+        <!-- Graduations -->
+        <text x="136" y="98" font-size="7" fill="#475569" text-anchor="end">O</text>
+        <text x="180" y="108" font-size="7" fill="#475569" text-anchor="middle">2</text><line x1="180" y1="97" x2="180" y2="103" stroke="#475569" stroke-width="1"/>
+        <text x="100" y="108" font-size="7" fill="#475569" text-anchor="middle">-2</text><line x1="100" y1="97" x2="100" y2="103" stroke="#475569" stroke-width="1"/>
+        <text x="134" y="60" font-size="7" fill="#475569" text-anchor="end">2</text><line x1="137" y1="60" x2="143" y2="60" stroke="#475569" stroke-width="1"/>
+        <text x="134" y="140" font-size="7" fill="#475569" text-anchor="end">-2</text><line x1="137" y1="140" x2="143" y2="140" stroke="#475569" stroke-width="1"/>
+        <!-- f(x)=2x : passe par O et (2,4)→(180,20) et (-2,-4)→(100,180) -->
+        <line x1="100" y1="180" x2="220" y2="20" stroke="#0f766e" stroke-width="2.5" stroke-linecap="round"/>
+        <text x="222" y="20" font-size="9" fill="#0f766e" font-weight="bold">f(x)=2x</text>
+        <!-- Point (2,4) -->
+        <circle cx="180" cy="20" r="3.5" fill="#0f766e"/>
+        <text x="185" y="18" font-size="8" fill="#0f766e">(2,4)</text>
+        <!-- g(x)=-x : passe par O et (2,-2)→(180,140) et (-2,2)→(100,60) -->
+        <line x1="60" y1="60" x2="220" y2="140" stroke="#dc2626" stroke-width="2.5" stroke-linecap="round"/>
+        <text x="222" y="142" font-size="9" fill="#dc2626" font-weight="bold">g(x)=−x</text>
+        <!-- Point O -->
+        <circle cx="140" cy="100" r="4" fill="#475569"/>
+        <!-- Origine -->
+      </svg>
+
+      <div class="exemple-ligne"><span class="tag">Calcul</span> f(x)=3x → f(4) = 3×4 = <span class="hl">12</span> — on remplace x par 4</div>
+      <div class="exemple-ligne"><span class="tag">Inverse</span> f(x)=3x et f(x)=15 → 3x=15 → <span class="hl">x=5</span></div>
+      <div class="astuce"><strong>💡 Vérification :</strong> une fonction linéaire vérifie toujours f(0) = 0 et f(−x) = −f(x). Si f(0) ≠ 0, ce n'est pas une fonction linéaire !</div>
+      <button class="btn-compris" onclick="revealBloc(1)">Bloc suivant →</button>
+    </div>
+
+    <div class="lecon-block" id="bloc-1">
+      <hr class="sep">
+      <div class="lecon-subtitle">② La fonction affine f(x) = ax + b</div>
+      <div class="analogie">🚕 Un taxi coûte 2€/km + 5€ de prise en charge. Le prix est f(x) = 2x + 5. Ce n'est plus linéaire car la droite ne passe plus par l'origine — elle "décolle" à 5€ même pour 0 km.</div>
+
+      <div class="def-box">
+        <h4>Fonction affine</h4>
+        <p>Une fonction affine est de la forme <strong>f(x) = ax + b</strong> où :<br>
+        • <strong>a</strong> = coefficient directeur (pente) — indique la vitesse de variation<br>
+        • <strong>b</strong> = ordonnée à l'origine — valeur de f quand x = 0<br><br>
+        La représentation graphique est une droite qui coupe l'axe des ordonnées en <strong>(0 ; b)</strong>.</p>
+      </div>
+
+      <!-- Graphique SVG fonction affine -->
+      <svg viewBox="0 0 280 210" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:12px auto;max-width:280px;background:#f0fdfa;border-radius:10px;padding:6px;">
+        <text x="140" y="14" font-size="10" fill="#0f766e" font-weight="bold" text-anchor="middle">f(x)=2x+3 — pente=2, ord.orig.=3</text>
+        <!-- Axes -->
+        <line x1="20" y1="120" x2="268" y2="120" stroke="#475569" stroke-width="1.5"/>
+        <line x1="100" y1="10" x2="100" y2="200" stroke="#475569" stroke-width="1.5"/>
+        <polygon points="268,117 276,120 268,123" fill="#475569"/>
+        <polygon points="97,10 100,2 103,10" fill="#475569"/>
+        <text x="273" y="124" font-size="8" fill="#475569">x</text>
+        <text x="103" y="8" font-size="8" fill="#475569">y</text>
+        <!-- Graduations x -->
+        <text x="96" y="118" font-size="7" fill="#475569" text-anchor="end">O</text>
+        <text x="140" y="130" font-size="7" fill="#475569" text-anchor="middle">2</text><line x1="140" y1="117" x2="140" y2="123" stroke="#475569" stroke-width="1"/>
+        <text x="180" y="130" font-size="7" fill="#475569" text-anchor="middle">4</text><line x1="180" y1="117" x2="180" y2="123" stroke="#475569" stroke-width="1"/>
+        <text x="60" y="130" font-size="7" fill="#475569" text-anchor="middle">-2</text><line x1="60" y1="117" x2="60" y2="123" stroke="#475569" stroke-width="1"/>
+        <!-- Graduations y -->
+        <text x="96" y="90" font-size="7" fill="#475569" text-anchor="end">3</text><line x1="97" y1="90" x2="103" y2="90" stroke="#475569" stroke-width="1"/>
+        <text x="96" y="50" font-size="7" fill="#475569" text-anchor="end">7</text><line x1="97" y1="50" x2="103" y2="50" stroke="#475569" stroke-width="1"/>
+        <!-- f(x)=2x+3 : f(0)=3→(100,90), f(2)=7→(140,50), f(-2)=-1→(60,130) -->
+        <line x1="40" y1="150" x2="230" y2="36" stroke="#0f766e" stroke-width="2.5" stroke-linecap="round"/>
+        <text x="232" y="36" font-size="9" fill="#0f766e" font-weight="bold">f(x)=2x+3</text>
+        <!-- Points remarquables -->
+        <circle cx="100" cy="90" r="4" fill="#0f766e"/>
+        <text x="106" y="88" font-size="8" fill="#0f766e">(0;3) — ord. à l'origine</text>
+        <circle cx="140" cy="50" r="4" fill="#0f766e"/>
+        <text x="146" y="48" font-size="8" fill="#0f766e">(2;7)</text>
+        <!-- Flèche pente -->
+        <rect x="140" y="50" width="40" height="1.5" fill="#d97706"/>
+        <rect x="180" y="50" width="1.5" height="30" fill="#d97706"/>
+        <text x="165" y="46" font-size="8" fill="#d97706">Δx=2</text>
+        <text x="184" y="68" font-size="8" fill="#d97706">Δy=4</text>
+        <text x="140" y="202" font-size="8" fill="#d97706" font-weight="bold">Pente a = Δy/Δx = 4/2 = 2 ✓</text>
+      </svg>
+
+      <div class="exemple-ligne"><span class="tag">Calcul</span> f(x)=2x+3 → f(5) = 2×5+3 = <span class="hl">13</span></div>
+      <div class="exemple-ligne"><span class="tag">Inverse</span> f(x)=2x+3=11 → 2x=8 → <span class="hl">x=4</span></div>
+      <div class="exemple-ligne"><span class="tag">Pente</span> Deux points A(1,5) et B(3,9) : a = (9−5)/(3−1) = 4/2 = <span class="hl">2</span></div>
+      <div class="piege"><strong>⚠ Linéaire ≠ Affine :</strong> f(x)=3x est linéaire (b=0), f(x)=3x+2 est affine. Une fonction affine n'est linéaire que si b=0.</div>
+      <button class="btn-compris" onclick="revealBloc(2)">Bloc suivant →</button>
+    </div>
+
+    <div class="lecon-block" id="bloc-2">
+      <hr class="sep">
+      <div class="lecon-subtitle">③ Lire et construire le graphique</div>
+      <div class="analogie">🗺️ Une droite sur un graphique, c'est comme une route : sa pente indique si elle monte ou descend, et son point de départ indique où elle coupe l'axe vertical.</div>
+
+      <div class="def-box">
+        <h4>Lire a et b depuis le graphique</h4>
+        <p>1. <strong>b</strong> = ordonnée du point où la droite coupe l'axe des y (x=0).<br>
+        2. <strong>a</strong> = prendre deux points de la droite A(x₁,y₁) et B(x₂,y₂) :<br>
+        &nbsp;&nbsp;&nbsp;<strong>a = (y₂ − y₁) / (x₂ − x₁)</strong> = Δy / Δx<br><br>
+        Construire la droite f(x)=ax+b :<br>
+        1. Placer le point (0 ; b)<br>
+        2. Utiliser la pente a pour placer un 2e point : à partir de (0;b), avancer de 1 en x → monter de a en y<br>
+        3. Tracer la droite passant par ces deux points</p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0;">
+        <div style="background:#f0fdfa;border-radius:8px;padding:10px;border:2px solid var(--acc-mid);">
+          <div style="font-weight:900;color:#0f766e;font-size:.85rem;margin-bottom:6px;">📐 Trouver a et b</div>
+          <div style="font-size:.82rem;line-height:1.8;">
+            La droite passe par (0,1) et (2,5).<br>
+            b = <strong>1</strong> (ordonnée à l'orig.)<br>
+            a = (5−1)/(2−0) = <strong>2</strong><br>
+            → f(x) = <strong>2x + 1</strong>
+          </div>
+        </div>
+        <div style="background:#f0fdfa;border-radius:8px;padding:10px;border:2px solid var(--acc-mid);">
+          <div style="font-weight:900;color:#0f766e;font-size:.85rem;margin-bottom:6px;">✏️ Construire la droite</div>
+          <div style="font-size:.82rem;line-height:1.8;">
+            f(x) = 3x − 1<br>
+            1) Placer (0 ; −1)<br>
+            2) Pente 3 : +1 en x → +3 en y<br>
+            → placer (1 ; 2)<br>
+            3) Tracer la droite
+          </div>
+        </div>
+      </div>
+
+      <div class="astuce"><strong>💡 Sens de la pente :</strong> a &gt; 0 → droite croissante (monte). a &lt; 0 → droite décroissante (descend). a = 0 → droite horizontale (constante). Plus |a| est grand, plus la droite est "raide".</div>
+      <button class="btn-compris" onclick="goToPhase('guided1',1)">✓ Leçon comprise — À l'entraînement !</button>
+    </div>
+  </div>
+</div>
+
+<!-- GUIDÉ 1 -->
+<div class="phase" id="phase-guided1">
+  <div class="mascot-msg"><span class="emo">🦉</span><p><strong>Exercice guidé 1</strong> — QCM étape par étape. <strong>3 essais</strong> par question. Point uniquement au premier essai correct !</p></div>
+  <div class="ex-header-box"><h2>Identifier et calculer (QCM)</h2><p>Le problème change à chaque recommencement.</p></div>
+  <div id="g1-reset" class="reset-msg">
+    <div class="ugo">🦉</div><h3>On recommence !</h3>
+    <p>Rappelle-toi : f(x)=ax+b. Pour calculer f(x₀) on remplace x par x₀. Pour trouver x sachant f(x), on résout l'équation.</p>
+    <button class="btn-restart" onclick="initGuided1()">↺ Recommencer</button>
+  </div>
+  <div id="g1-container"></div>
+  <button class="btn-suivant" id="btn-to-g2" onclick="goToPhase('guided2',2)">Bien joué ! Exercice suivant →</button>
+</div>
+
+<!-- GUIDÉ 2 -->
+<div class="phase" id="phase-guided2">
+  <div class="mascot-msg"><span class="emo">🦉</span><p><strong>Exercice guidé 2</strong> — Tu écris ta réponse. <strong>3 essais</strong> par étape. Point uniquement au premier essai correct !</p></div>
+  <div class="ex-header-box"><h2>Calculer et analyser (saisie)</h2><p>Réponds avec des nombres entiers ou des fractions simples.</p></div>
+  <div id="g2-reset" class="reset-msg">
+    <div class="ugo">🦉</div><h3>On repart !</h3>
+    <p>a = coefficient directeur = Δy/Δx. b = ordonnée à l'origine = f(0).</p>
+    <button class="btn-restart" onclick="initGuided2()">↺ Recommencer</button>
+  </div>
+  <div id="g2-container"></div>
+  <button class="btn-suivant" id="btn-to-free" onclick="goToPhase('free',3)">Excellent ! Exercices libres →</button>
+</div>
+
+<!-- LIBRES 1 -->
+<div class="phase" id="phase-free">
+  <div class="mascot-msg"><span class="emo">🦉</span><p><strong>Exercices libres</strong> — 5 exercices variés. Chaque bonne réponse compte !</p></div>
+  <div id="free1-container"></div>
+  <button class="btn-suivant" id="btn-to-free2" onclick="goToPhase('free2',4)">Encore des exercices →</button>
+</div>
+
+<!-- LIBRES 2 -->
+<div class="phase" id="phase-free2">
+  <div class="mascot-msg"><span class="emo">🦉</span><p><strong>Entraînement supplémentaire</strong> — 5 exercices de plus. Tu y es presque !</p></div>
+  <div id="free2-container"></div>
+  <button class="btn-suivant" id="btn-to-bilan" onclick="goToPhase('bilan',5)">🌟 Voir mon bilan</button>
+</div>
+
+<!-- BILAN -->
+<div class="phase" id="phase-bilan">
+  <div class="bilan-card">
+    <span class="bilan-icon">📈</span>
+    <h2 class="bilan-title" id="bilan-title">Résultat</h2>
+    <p class="bilan-msg" id="bilan-msg"></p>
+    <div class="stars-row"><span class="star-big" id="star1">⭐</span><span class="star-big" id="star2">⭐</span><span class="star-big" id="star3">⭐</span></div>
+    <div class="score-circle"><span class="score-num" id="bilan-score">0</span><span class="score-sub" id="bilan-total-txt">/ 0 pts</span></div>
+    <div class="memo-card">
+      <h3>Mémo — Fonction linéaire et affine</h3>
+      <div class="memo-grid">
+        <div class="memo-item"><strong>Linéaire</strong><br>f(x) = ax<br>Passe par l'origine O(0,0)</div>
+        <div class="memo-item"><strong>Affine</strong><br>f(x) = ax + b<br>Coupe l'axe y en (0;b)</div>
+        <div class="memo-item"><strong>Pente a</strong><br>a = Δy/Δx = (y₂−y₁)/(x₂−x₁)<br>a&gt;0 : monte, a&lt;0 : descend</div>
+        <div class="memo-item"><strong>Lire le graphique</strong><br>b = ord. à l'orig.<br>a = montée pour Δx=1</div>
+      </div>
+    </div>
+    <div class="bilan-btns">
+      <button class="btn-act secondary" onclick="location.reload()">↺ Recommencer</button>
+      <button class="btn-act primary" onclick="location.href='../12-15ans.html'">← Retour aux fiches</button>
+    </div>
+  </div>
+</div>
+</main>
+
+<script>
+// ════ SVG graphique d'une fonction affine ════
+function graphSVG(a, b, titre, xmin, xmax) {
+  xmin = xmin || -3; xmax = xmax || 4;
+  var W=280, H=200, mx=40, my=20, pw=W-mx-10, ph=H-my-20;
+  // Echelle : pixel par unité
+  var sx=pw/(xmax-xmin), sy=ph/8; // plage y fixée ±4
+  var ymin=-4, ymax=4;
+  var ox=mx+(-xmin)*sx, oy=my+ymax*sy; // origine en pixels
+  function px(x){return mx+(-xmin+x)*sx;}
+  function py(y){return my+(ymax-y)*sy;}
+
+  var s='<svg viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:10px auto;max-width:'+W+'px;background:#f0fdfa;border-radius:8px;padding:4px;">';
+  s+='<text x="'+(W/2)+'" y="12" font-size="9" fill="#0f766e" font-weight="bold" text-anchor="middle">'+titre+'</text>';
+  // Quadrillage léger
+  for(var x=Math.ceil(xmin);x<=Math.floor(xmax);x++){
+    s+='<line x1="'+px(x)+'" y1="'+my+'" x2="'+px(x)+'" y2="'+(H-10)+'" stroke="#e2e8f0" stroke-width="1"/>';
+    if(x!==0)s+='<text x="'+px(x)+'" y="'+(oy+11)+'" font-size="7" fill="#94a3b8" text-anchor="middle">'+x+'</text>';
+  }
+  for(var y=-3;y<=4;y++){
+    s+='<line x1="'+mx+'" y1="'+py(y)+'" x2="'+(W-10)+'" y2="'+py(y)+'" stroke="#e2e8f0" stroke-width="1"/>';
+    if(y!==0)s+='<text x="'+(ox-4)+'" y="'+(py(y)+3)+'" font-size="7" fill="#94a3b8" text-anchor="end">'+y+'</text>';
+  }
+  // Axes
+  s+='<line x1="'+mx+'" y1="'+oy+'" x2="'+(W-5)+'" y2="'+oy+'" stroke="#475569" stroke-width="1.8"/>';
+  s+='<line x1="'+ox+'" y1="'+my+'" x2="'+ox+'" y2="'+(H-10)+'" stroke="#475569" stroke-width="1.8"/>';
+  s+='<polygon points="'+(W-5)+','+(oy-3)+' '+(W+1)+','+oy+' '+(W-5)+','+(oy+3)+'" fill="#475569"/>';
+  s+='<polygon points="'+(ox-3)+','+(my+4)+' '+ox+','+my+' '+(ox+3)+','+(my+4)+'" fill="#475569"/>';
+  s+='<text x="'+ox+'" y="'+(oy+11)+'" font-size="7" fill="#475569" text-anchor="middle">O</text>';
+  s+='<text x="'+(W-4)+'" y="'+(oy+10)+'" font-size="8" fill="#475569">x</text>';
+  s+='<text x="'+(ox+4)+'" y="'+(my+4)+'" font-size="8" fill="#475569">y</text>';
+  // Droite
+  var x1d=xmin, y1d=a*xmin+b, x2d=xmax, y2d=a*xmax+b;
+  // Clipper à la vue
+  y1d=Math.max(ymin,Math.min(ymax,y1d)); y2d=Math.max(ymin,Math.min(ymax,y2d));
+  s+='<line x1="'+px(x1d)+'" y1="'+py(y1d)+'" x2="'+px(x2d)+'" y2="'+py(y2d)+'" stroke="#0f766e" stroke-width="2.8" stroke-linecap="round"/>';
+  // Point ordonnée à l'origine (0,b)
+  if(b>=ymin&&b<=ymax){
+    s+='<circle cx="'+ox+'" cy="'+py(b)+'" r="4" fill="#0f766e"/>';
+    s+='<text x="'+(ox+6)+'" y="'+(py(b)-2)+'" font-size="8" fill="#0f766e" font-weight="bold">(0;'+b+')</text>';
+  }
+  // Point x=1
+  var y1v=a+b;
+  if(1>=xmin&&1<=xmax&&y1v>=ymin&&y1v<=ymax){
+    s+='<circle cx="'+px(1)+'" cy="'+py(y1v)+'" r="3.5" fill="#d97706"/>';
+    s+='<text x="'+(px(1)+5)+'" y="'+(py(y1v)-2)+'" font-size="8" fill="#d97706">(1;'+(a+b)+')</text>';
+  }
+  s+='</svg>';
+  return s;
+}
+
+// ════ GUIDÉ 1 — QCM (4 variantes) ════
+var G1=[
+  { titre:"f(x) = 2x + 3. Analyse cette fonction affine.",
+    svg:graphSVG(2,3,"f(x) = 2x + 3"),
+    etapes:[
+      {q:"Étape 1 — Identifie le coefficient directeur a et l'ordonnée à l'origine b.",
+       opts:["a=2, b=3","a=3, b=2","a=2, b=0"],ok:0,
+       hint:"f(x) = ax+b → a=coefficient de x, b=constante.",
+       expl_ok:"a=2 (coefficient de x) et b=3 (constante).",
+       expl_ko:"Dans f(x)=2x+3 : a=2 (devant x) et b=3 (seul)."},
+      {q:"Étape 2 — Calcule f(4).",
+       opts:["11","14","8","7"],ok:0,
+       hint:"f(4) = 2×4+3 = ?",
+       expl_ok:"f(4) = 8+3 = 11.",
+       expl_ko:"2×4=8, 8+3=11."},
+      {q:"Étape 3 — Résous f(x)=9, c'est-à-dire 2x+3=9.",
+       opts:["x=3","x=6","x=4","x=12"],ok:0,
+       hint:"2x+3=9 → 2x=9−3 → 2x=6 → x=?",
+       expl_ok:"2x=6 → x=3. Vérif : 2×3+3=9 ✓",
+       expl_ko:"2x=9−3=6 → x=3."}
+    ]
+  },
+  { titre:"f(x) = −x + 4. Analyse cette fonction affine.",
+    svg:graphSVG(-1,4,"f(x) = −x + 4"),
+    etapes:[
+      {q:"Étape 1 — Identifie a et b pour f(x) = −x + 4.",
+       opts:["a=−1, b=4","a=1, b=4","a=4, b=−1"],ok:0,
+       hint:"−x = −1×x, donc a=−1.",
+       expl_ok:"a=−1 et b=4. La droite est décroissante (pente négative).",
+       expl_ko:"−x = (−1)×x → a=−1. La constante est b=4."},
+      {q:"Étape 2 — La droite est-elle croissante ou décroissante ?",
+       opts:["Décroissante (a=−1<0)","Croissante (a>0)","Horizontale"],ok:0,
+       hint:"Si a<0, la droite descend.",
+       expl_ok:"a=−1<0 → droite décroissante : elle descend de gauche à droite.",
+       expl_ko:"Pente négative → décroissante."},
+      {q:"Étape 3 — Calcule f(3).",
+       opts:["1","7","−7","4"],ok:0,
+       hint:"f(3)=−3+4=?",
+       expl_ok:"f(3)=−3+4=1.",
+       expl_ko:"−1×3+4=−3+4=1."}
+    ]
+  },
+  { titre:"f(x) = 3x. C'est une fonction linéaire.",
+    svg:graphSVG(3,0,"f(x) = 3x — fonction linéaire"),
+    etapes:[
+      {q:"Étape 1 — Pourquoi f(x)=3x est-elle linéaire et non affine ?",
+       opts:["Car b=0 → la droite passe par l'origine","Car a=3>0","Car x n'a pas d'exposant"],ok:0,
+       hint:"Linéaire = f(x)=ax avec b=0.",
+       expl_ok:"b=0 → l'ordonnée à l'origine est 0 → la droite passe par l'origine O(0,0).",
+       expl_ko:"Linéaire = ax (pas de constante). Affine = ax+b (avec constante éventuellement non nulle)."},
+      {q:"Étape 2 — Calcule f(−2).",
+       opts:["−6","6","−5","1"],ok:0,
+       hint:"f(−2)=3×(−2)=?",
+       expl_ok:"f(−2)=3×(−2)=−6.",
+       expl_ko:"3×(−2)=−6."},
+      {q:"Étape 3 — Pour quelle valeur de x a-t-on f(x)=15 ?",
+       opts:["x=5","x=12","x=45","x=3"],ok:0,
+       hint:"3x=15 → x=15÷3=?",
+       expl_ok:"3x=15 → x=5. Vérif : 3×5=15 ✓",
+       expl_ko:"15÷3=5."}
+    ]
+  },
+  { titre:"Une droite passe par A(0;−2) et B(2;4). Trouve f(x)=ax+b.",
+    svg:(function(){
+      // Droite passant par (0,-2) et (2,4) : a=(4−(−2))/(2−0)=3, b=−2
+      return graphSVG(3,-2,"Droite passant par A(0;−2) et B(2;4)");
+    })(),
+    etapes:[
+      {q:"Étape 1 — b = ordonnée à l'origine. La droite passe par A(0;−2). Donc b = ?",
+       opts:["b=−2","b=2","b=0"],ok:0,
+       hint:"L'ordonnée à l'origine = y quand x=0 = valeur de b.",
+       expl_ok:"b=−2 car la droite coupe l'axe des y en (0;−2).",
+       expl_ko:"Quand x=0, y=−2 → b=−2."},
+      {q:"Étape 2 — a = (y₂−y₁)/(x₂−x₁) = (4−(−2))/(2−0) = ?",
+       opts:["3","2","6","1"],ok:0,
+       hint:"(4−(−2))/(2−0) = 6/2 = ?",
+       expl_ok:"a = 6/2 = 3.",
+       expl_ko:"4−(−2)=6 et 2−0=2 → 6/2=3."},
+      {q:"Étape 3 — Donc l'équation de la droite est ?",
+       opts:["f(x)=3x−2","f(x)=2x+3","f(x)=3x+2","f(x)=−2x+3"],ok:0,
+       hint:"f(x) = ax+b avec a=3 et b=−2.",
+       expl_ok:"f(x)=3x−2. Vérif : f(0)=−2 ✓ et f(2)=6−2=4 ✓",
+       expl_ko:"a=3 et b=−2 → f(x)=3x−2."}
+    ]
+  }
+];
+
+// ════ GUIDÉ 2 — Saisie (4 variantes) ════
+var G2=[
+  { titre:"f(x) = 2x − 1. Calculs et analyse.",
+    svg:graphSVG(2,-1,"f(x) = 2x − 1"),
+    etapes:[
+      {q:"Étape 1 — f(0) = ?",acc:["−1","-1"],hint:"f(0)=2×0−1=?",expl_ok:"f(0)=−1. C'est l'ordonnée à l'origine.",expl_ko:"2×0−1=0−1=−1."},
+      {q:"Étape 2 — f(3) = ?",acc:["5"],hint:"f(3)=2×3−1=?",expl_ok:"f(3)=6−1=5.",expl_ko:"2×3=6, 6−1=5."},
+      {q:"Étape 3 — Résous 2x−1=7. x=?",acc:["4"],hint:"2x=7+1=8 → x=?",expl_ok:"x=4. Vérif : 2×4−1=7 ✓",expl_ko:"2x=8 → x=4."}
+    ]
+  },
+  { titre:"Droite passant par O(0;0) et (3;6). Trouve f(x)=ax.",
+    svg:graphSVG(2,0,"Droite linéaire passant par O et (3;6)"),
+    etapes:[
+      {q:"Étape 1 — La droite passe par O(0;0). Donc b = ?",acc:["0"],hint:"Origine → b=0 → fonction linéaire.",expl_ok:"b=0 → c'est une fonction linéaire : f(x)=ax.",expl_ko:"Passe par l'origine → b=0."},
+      {q:"Étape 2 — a = (6−0)/(3−0) = ?",acc:["2"],hint:"6÷3=?",expl_ok:"a=2. Donc f(x)=2x.",expl_ko:"6/3=2."},
+      {q:"Étape 3 — f(7) = ?",acc:["14"],hint:"f(7)=2×7=?",expl_ok:"f(7)=14.",expl_ko:"2×7=14."},
+      {q:"Étape 4 — Pour quelle valeur de x : f(x)=18 ?",acc:["9"],hint:"2x=18 → x=?",expl_ok:"x=9. Vérif : 2×9=18 ✓",expl_ko:"18÷2=9."}
+    ]
+  },
+  { titre:"f(x) = −2x + 6. Calculs et intersection avec l'axe des x.",
+    svg:graphSVG(-2,6,"f(x) = −2x + 6","−1","4"),
+    etapes:[
+      {q:"Étape 1 — f(0) = ?",acc:["6"],hint:"f(0)=−2×0+6=?",expl_ok:"f(0)=6. La droite coupe l'axe y en (0;6).",expl_ko:"0+6=6."},
+      {q:"Étape 2 — f(2) = ?",acc:["2"],hint:"f(2)=−2×2+6=?",expl_ok:"f(2)=−4+6=2.",expl_ko:"−4+6=2."},
+      {q:"Étape 3 — Pour quelle valeur de x : f(x)=0 ? (intersection axe des x)",acc:["3"],hint:"−2x+6=0 → −2x=−6 → x=?",expl_ok:"x=3. La droite coupe l'axe des x en (3;0).",expl_ko:"−2x=−6 → x=3."}
+    ]
+  },
+  { titre:"🚕 Un taxi : tarif = 1,5€/km + 3€ de prise en charge. f(x) = 1,5x + 3.",
+    svg:graphSVG(1.5,3,"Tarif taxi f(x) = 1,5x + 3 (en €)","0","5"),
+    etapes:[
+      {q:"Étape 1 — Que représente b=3 dans ce contexte ?",acc:["prise en charge","3","fixe"],hint:"b = f(0) = valeur quand x=0 km.",expl_ok:"b=3 = prise en charge fixe de 3€ même pour 0 km.",expl_ko:"f(0)=3 = tarif de départ = prise en charge."},
+      {q:"Étape 2 — Combien coûte un trajet de 10 km ? f(10)=?",acc:["18"],hint:"f(10)=1,5×10+3=?",expl_ok:"f(10)=15+3=18€.",expl_ko:"1,5×10=15, 15+3=18."},
+      {q:"Étape 3 — Pour quel trajet (en km) le tarif est-il de 24€ ?",acc:["14"],hint:"1,5x+3=24 → 1,5x=21 → x=?",expl_ok:"x=14 km. Vérif : 1,5×14+3=21+3=24€ ✓",expl_ko:"1,5x=21 → x=21÷1,5=14."}
+    ]
+  }
+];
+
+// ════ POOL EXERCICES LIBRES ════
+var FREE_POOL=[
+  {type:'classify',data:{q:"f(x)=4x+2. f(3)=?",opts:["14","10","12"],ok:0,expl:"f(3)=4×3+2=12+2=14."}},
+  {type:'classify',data:{q:"f(x)=−3x+1. f(2)=?",opts:["−5","5","7"],ok:0,expl:"f(2)=−6+1=−5."}},
+  {type:'classify',data:{q:"f(x)=5x. f(−3)=?",opts:["−15","15","−8"],ok:0,expl:"f(−3)=5×(−3)=−15. (Linéaire → b=0)"}},
+  {type:'saisie',data:{q:"f(x)=3x+4=16. Trouve x.",acc:["4"],expl:"3x=12 → x=4. Vérif : 3×4+4=16 ✓"}},
+  {type:'saisie',data:{q:"f(x)=2x−5=7. Trouve x.",acc:["6"],expl:"2x=12 → x=6. Vérif : 2×6−5=7 ✓"}},
+  {type:'saisie',data:{q:"Droite passant par (0;4) et (1;6). Coefficient directeur a=?",acc:["2"],expl:"a=(6−4)/(1−0)=2. f(x)=2x+4."}},
+  {type:'saisie',data:{q:"f(x)=ax passe par (3;12). Trouve a.",acc:["4"],expl:"12=a×3 → a=4. f(x)=4x."}},
+  {type:'saisie',data:{q:"f(x)=2x+b passe par (3;11). Trouve b.",acc:["5"],expl:"11=2×3+b → 11=6+b → b=5. f(x)=2x+5."}},
+  {type:'jugement',data:{consigne:"f(x)=3x est-elle affine ou linéaire ?",a:"Affine car elle contient x","b":"Linéaire car b=0 (passe par l'origine)",ok:"B",expl:"f(x)=3x est linéaire : f(x)=ax avec a=3 et b=0. Une fonction affine est f(x)=ax+b avec b≠0."}},
+  {type:'jugement',data:{consigne:"La droite f(x)=−2x+5 est-elle croissante ou décroissante ?",a:"Croissante (pente positive)","b":"Décroissante (a=−2<0)",ok:"B",expl:"a=−2<0 → la droite descend de gauche à droite → décroissante."}},
+  {type:'jugement',data:{consigne:"Laquelle est l'ordonnée à l'origine de f(x)=4x−7 ?",a:"4","b":"−7",ok:"B",expl:"L'ordonnée à l'origine = f(0) = 4×0−7 = −7. C'est la valeur de b dans f(x)=ax+b."}},
+  {type:'saisie',data:{q:"f(x)=x+3. Pour quelle valeur de x a-t-on f(x)=10 ?",acc:["7"],expl:"x+3=10 → x=7."}},
+  {type:'saisie',data:{q:"Droite passant par (0;0) et (4;20). Trouve a et écris f(x).",acc:["5x","f(x)=5x"],expl:"a=20/4=5, b=0 → f(x)=5x."}},
+  {type:'classify',data:{q:"f(x)=2x+1. Quelle est la valeur de f(0) ?",opts:["1","2","3"],ok:0,expl:"f(0)=2×0+1=1. C'est l'ordonnée à l'origine b=1."}},
+  {type:'saisie',data:{q:"🏗️ Un artisan facture 50€/h + 30€ de déplacement. Formule ? Coût pour 4h ?",acc:["230"],expl:"f(x)=50x+30. f(4)=200+30=230€."}},
+  {type:'saisie',data:{q:"f(x)=3x−2. Pour quelle valeur de x f(x)=0 ? (intersection axe des x)",acc:["2/3"],expl:"3x−2=0 → 3x=2 → x=2/3."}},
+  {type:'classify',data:{q:"Quelle droite est la plus 'raide' (pente la plus forte en valeur absolue) ?",opts:["f(x)=5x−1","f(x)=2x+3","f(x)=−3x"],ok:0,expl:"La pente de 5x est 5, plus grande en valeur absolue que 2 et 3."}},
+  {type:'saisie',data:{q:"f(x)=ax+b avec a=3 et f(2)=10. Trouve b.",acc:["4"],expl:"10=3×2+b → 10=6+b → b=4."}},
+  {type:'jugement',data:{consigne:"f(x)=2x+3 et g(x)=2x−1. Ces deux droites sont-elles parallèles ?",a:"Oui, elles ont le même coefficient directeur a=2","b":"Non, elles ont des ordonnées à l'origine différentes",ok:"A",expl:"Deux droites sont parallèles si et seulement si elles ont le même coefficient directeur. a=2 dans les deux cas → droites parallèles."}},
+  {type:'saisie',data:{q:"📱 Forfait mobile : 10€/mois + 0,05€/SMS. Formule ? Coût pour 200 SMS ?",acc:["20"],expl:"f(x)=0,05x+10. f(200)=10+10=20€."}}
+];
+
+var score=0,g1Idx=0,g2Idx=0,g1Tries=0,g2Tries=0;
+var free1Exs=[],free2Exs=[],free1Done=0,free2Done=0;
+var _cbs={};
+
+function nsF(s){return(s||'').trim().toLowerCase().replace(/\s+/g,'').replace(',','.');}
+function shuffle(arr){var a=arr.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function addScore(){score++;document.getElementById('score-display').textContent=score;}
+function updateSteps(active){for(var i=0;i<6;i++){var s=document.getElementById('step-'+i);if(!s)continue;s.classList.remove('active','done');if(i<active)s.classList.add('done');else if(i===active)s.classList.add('active');}}
+
+function goToPhase(ph,si){
+  document.querySelectorAll('.phase').forEach(function(p){p.classList.remove('active');});
+  var el=document.getElementById('phase-'+ph);
+  if(el){el.classList.add('active');setTimeout(function(){el.scrollIntoView({behavior:'smooth',block:'start'});},100);}
+  updateSteps(si);
+  if(ph==='guided1')initGuided1();
+  if(ph==='guided2')initGuided2();
+  if(ph==='free')initFree1();
+  if(ph==='free2')initFree2();
+  if(ph==='bilan')showBilan();
+}
+
+function revealBloc(n){
+  var bloc=document.getElementById('bloc-'+n);if(!bloc)return;
+  var prev=document.getElementById('bloc-'+(n-1));
+  if(prev){var b=prev.querySelector('.btn-compris');if(b){b.textContent='✓ Compris';b.disabled=true;b.style.opacity='.4';}}
+  bloc.classList.add('revealed');
+  setTimeout(function(){var hH=(document.querySelector('.header')||{offsetHeight:0}).offsetHeight;var rect=bloc.getBoundingClientRect();window.scrollTo({top:window.pageYOffset+rect.top-hH-20,behavior:'smooth'});},150);
+}
+
+function initGuided1(){
+  g1Idx=Math.floor(Math.random()*G1.length);g1Tries=0;
+  document.getElementById('g1-reset').classList.remove('show');
+  document.getElementById('btn-to-g2').classList.remove('show');
+  var v=G1[g1Idx],c=document.getElementById('g1-container');c.innerHTML='';
+  var box=document.createElement('div');box.className='guided-problem';
+  box.innerHTML='<div class="guided-problem-title">📈 '+v.titre+'<span class="tries-left" id="g1-tries">3 essais</span></div>'
+    +(v.svg||'')+'<div class="step-container" id="g1-sc"></div>';
+  c.appendChild(box);
+  var sc=document.getElementById('g1-sc');
+  v.etapes.forEach(function(step,si){
+    var so=shuffle(step.opts.map(function(o,oi){return{t:o,i:oi};}));
+    var sb=document.createElement('div');sb.className='step-box'+(si===0?' active':'');sb.id='g1s'+si;
+    sb.innerHTML='<div class="step-num">Étape '+(si+1)+'/'+v.etapes.length+'</div>'
+      +'<div class="step-question">'+step.q+'</div>'
+      +'<div class="step-hint" id="g1h'+si+'">💡 '+step.hint+'</div>'
+      +'<div class="step-qcm-opts">'+so.map(function(o){return'<button class="step-qcm-opt" onclick="g1Check('+si+','+o.i+',this)">'+o.t+'</button>';}).join('')+'</div>'
+      +'<div class="step-fb" id="g1f'+si+'"></div>';
+    sc.appendChild(sb);
+  });
+  g1Tries=0;updG1();
+}
+function updG1(){var el=document.getElementById('g1-tries');if(el)el.textContent=(3-g1Tries)+' essai'+(3-g1Tries>1?'s':'');}
+function g1Check(si,ci,btn){
+  var v=G1[g1Idx],step=v.etapes[si],sb=document.getElementById('g1s'+si),fb=document.getElementById('g1f'+si);
+  if(sb.classList.contains('correct'))return;
+  if(ci===step.ok){
+    btn.classList.add('opt-correct');sb.querySelectorAll('.step-qcm-opt').forEach(function(b){b.disabled=true;});sb.classList.add('correct');
+    if(g1Tries===0){fb.className='step-fb show fb-ok';fb.innerHTML='✓ '+step.expl_ok+' <span style="color:#065f46;font-size:.78rem">(+1 pt)</span>';addScore();}
+    else{fb.className='step-fb show fb-ok';fb.innerHTML='✓ '+step.expl_ok+' <span style="color:#64748b;font-size:.78rem">(pas de point — réussi après plusieurs essais)</span>';}
+    g1Tries=0;updG1();
+    var nx=document.getElementById('g1s'+(si+1));
+    if(nx){nx.classList.add('active');setTimeout(function(){nx.scrollIntoView({behavior:'smooth',block:'nearest'});},300);}
+    else{setTimeout(function(){document.getElementById('btn-to-g2').classList.add('show');document.getElementById('btn-to-g2').scrollIntoView({behavior:'smooth',block:'nearest'});},500);}
+  }else{
+    btn.classList.add('opt-wrong');btn.disabled=true;g1Tries++;updG1();
+    fb.className='step-fb show fb-ko';
+    if(g1Tries<3){fb.innerHTML='✗ Pas tout à fait. Lis l\'indice ci-dessus et réessaie !';document.getElementById('g1h'+si).classList.add('show');}
+    else{fb.innerHTML='✗ '+step.expl_ko+' On recommence !';setTimeout(function(){document.getElementById('g1-reset').classList.add('show');document.getElementById('g1-container').innerHTML='';document.getElementById('g1-reset').scrollIntoView({behavior:'smooth',block:'start'});},1200);}
+  }
+}
+
+function initGuided2(){
+  g2Idx=Math.floor(Math.random()*G2.length);g2Tries=0;
+  document.getElementById('g2-reset').classList.remove('show');
+  document.getElementById('btn-to-free').classList.remove('show');
+  var v=G2[g2Idx],c=document.getElementById('g2-container');c.innerHTML='';
+  var box=document.createElement('div');box.className='guided-problem';
+  box.innerHTML='<div class="guided-problem-title">✏️ '+v.titre+'<span class="tries-left" id="g2-tries">3 essais</span></div>'
+    +(v.svg||'')+'<div class="step-container" id="g2-sc"></div>';
+  c.appendChild(box);
+  var sc=document.getElementById('g2-sc');
+  v.etapes.forEach(function(step,si){
+    var sb=document.createElement('div');sb.className='step-box'+(si===0?' active':'');sb.id='g2s'+si;
+    sb.innerHTML='<div class="step-num">Étape '+(si+1)+'/'+v.etapes.length+'</div>'
+      +'<div class="step-question">'+step.q+'</div>'
+      +'<div class="step-hint" id="g2h'+si+'">💡 '+step.hint+'</div>'
+      +'<div class="step-input-row"><input class="step-input" id="g2i'+si+'" type="text" placeholder="?" autocomplete="off" spellcheck="false"'+(si>0?' disabled':'')+'><button class="btn-step-check" id="g2b'+si+'" onclick="g2Check('+si+')"'+(si>0?' disabled':'')+'>Vérifier</button></div>'
+      +'<div class="step-fb" id="g2f'+si+'"></div>';
+    sc.appendChild(sb);
+  });
+  g2Tries=0;updG2();
+}
+function updG2(){var el=document.getElementById('g2-tries');if(el)el.textContent=(3-g2Tries)+' essai'+(3-g2Tries>1?'s':'');}
+function g2Check(si){
+  var v=G2[g2Idx],step=v.etapes[si],inp=document.getElementById('g2i'+si),fb=document.getElementById('g2f'+si),sb=document.getElementById('g2s'+si);
+  if(!inp||sb.classList.contains('correct'))return;
+  var val=nsF(inp.value),ok=step.acc.some(function(a){return val===nsF(a);});
+  if(ok){
+    inp.classList.add('input-ok');inp.disabled=true;document.getElementById('g2b'+si).disabled=true;sb.classList.add('correct');
+    if(g2Tries===0){fb.className='step-fb show fb-ok';fb.innerHTML='✓ '+step.expl_ok+' <span style="color:#065f46;font-size:.78rem">(+1 pt)</span>';addScore();}
+    else{fb.className='step-fb show fb-ok';fb.innerHTML='✓ '+step.expl_ok+' <span style="color:#64748b;font-size:.78rem">(pas de point — réussi après plusieurs essais)</span>';}
+    g2Tries=0;updG2();
+    var nxSb=document.getElementById('g2s'+(si+1));
+    if(nxSb){nxSb.classList.add('active');var ni=document.getElementById('g2i'+(si+1)),nb=document.getElementById('g2b'+(si+1));if(ni)ni.disabled=false;if(nb)nb.disabled=false;setTimeout(function(){nxSb.scrollIntoView({behavior:'smooth',block:'nearest'});},300);}
+    else{setTimeout(function(){document.getElementById('btn-to-free').classList.add('show');document.getElementById('btn-to-free').scrollIntoView({behavior:'smooth',block:'nearest'});},500);}
+  }else{
+    inp.classList.add('input-ko');inp.value='';inp.placeholder='Réessaie...';g2Tries++;updG2();
+    fb.className='step-fb show fb-ko';
+    if(g2Tries<3){fb.innerHTML='✗ Pas tout à fait. Lis l\'indice ci-dessus et réessaie !';document.getElementById('g2h'+si).classList.add('show');setTimeout(function(){inp.classList.remove('input-ko');inp.placeholder='?';},1000);}
+    else{fb.innerHTML='✗ '+step.expl_ko+' On recommence !';setTimeout(function(){document.getElementById('g2-reset').classList.add('show');document.getElementById('g2-container').innerHTML='';document.getElementById('g2-reset').scrollIntoView({behavior:'smooth',block:'start'});},1200);}
+  }
+}
+
+function buildFreeCard(ex,i,prefix,onDone){
+  var card=document.createElement('div');card.className='free-ex-card';card.id=prefix+i;
+  if(ex.type==='classify')buildCl(card,ex.data,i,prefix,onDone);
+  else if(ex.type==='saisie')buildSa(card,ex.data,i,prefix,onDone);
+  else if(ex.type==='jugement')buildJu(card,ex.data,i,prefix,onDone);
+  return card;
+}
+function buildCl(card,data,i,prefix,onDone){
+  card.innerHTML='<div class="free-ex-label">Exercice '+(i+1)+'</div><div class="free-ex-question">'+data.q+'</div><div class="free-classify-btns" id="'+prefix+'cl'+i+'"></div><div class="free-fb" id="'+prefix+'fb'+i+'"></div>';
+  var ba=card.querySelector('#'+prefix+'cl'+i);
+  data.opts.forEach(function(opt,oi){
+    var btn=document.createElement('button');btn.className='free-classify-btn';btn.textContent=opt;
+    btn.onclick=function(){
+      if(card.classList.contains('answered'))return;card.classList.add('answered');ba.querySelectorAll('button').forEach(function(b){b.disabled=true;});
+      var fb=document.getElementById(prefix+'fb'+i);
+      if(oi===data.ok){btn.classList.add('ans-correct');fb.className='free-fb show fb-ok';fb.innerHTML='✓ '+data.expl;addScore();}
+      else{btn.classList.add('ans-wrong');ba.querySelectorAll('button').forEach(function(b,bi){if(bi===data.ok)b.classList.add('ans-reveal');});fb.className='free-fb show fb-ko';fb.innerHTML='✗ '+data.expl;}
+      onDone();
+    };ba.appendChild(btn);
+  });
+}
+function buildSa(card,data,i,prefix,onDone){
+  card.innerHTML='<div class="free-ex-label">Exercice '+(i+1)+'</div><div class="free-ex-question">'+data.q+'</div><div class="free-input-row"><input class="free-input" id="'+prefix+'inp'+i+'" type="text" placeholder="?" autocomplete="off" spellcheck="false"><button class="btn-free-check" onclick="checkFS(\''+prefix+'\','+i+')">Vérifier</button></div><div class="free-fb" id="'+prefix+'fb'+i+'"></div>';
+  _cbs[prefix+i]=onDone;
+}
+function checkFS(prefix,i){
+  var card=document.getElementById(prefix+i);if(card.classList.contains('answered'))return;
+  var exs=prefix==='f1'?free1Exs:free2Exs,ex=exs[i],inp=document.getElementById(prefix+'inp'+i),fb=document.getElementById(prefix+'fb'+i);
+  var val=nsF(inp.value),ok=ex.data.acc.some(function(a){return val===nsF(a);});
+  card.classList.add('answered');inp.disabled=true;card.querySelector('.btn-free-check').disabled=true;
+  if(ok){inp.classList.add('free-ok');fb.className='free-fb show fb-ok';fb.innerHTML='✓ '+ex.data.expl;addScore();}
+  else{inp.classList.add('free-ko');fb.className='free-fb show fb-ko';fb.innerHTML='✗ Réponse : <strong>'+ex.data.acc[0]+'</strong>. '+ex.data.expl;}
+  if(_cbs[prefix+i])_cbs[prefix+i]();
+}
+function buildJu(card,data,i,prefix,onDone){
+  card.innerHTML='<div class="free-ex-label">Exercice '+(i+1)+'</div><div class="free-ex-question">'+data.consigne+'</div><div class="jugement-opts"><button class="jugement-opt-btn" onclick="checkFJ(\''+prefix+'\','+i+',\'A\',this)"><strong>A —</strong> '+data.a+'</button><button class="jugement-opt-btn" onclick="checkFJ(\''+prefix+'\','+i+',\'B\',this)"><strong>B —</strong> '+data.b+'</button></div><div class="free-fb" id="'+prefix+'fb'+i+'"></div>';
+  _cbs[prefix+i]=onDone;
+}
+function checkFJ(prefix,i,choice,btn){
+  var card=document.getElementById(prefix+i);if(card.classList.contains('answered'))return;
+  var exs=prefix==='f1'?free1Exs:free2Exs,ex=exs[i],fb=document.getElementById(prefix+'fb'+i);
+  card.classList.add('answered');card.querySelectorAll('.jugement-opt-btn').forEach(function(b){b.disabled=true;});
+  if(choice===ex.data.ok){btn.classList.add('jug-correct');fb.className='free-fb show fb-ok';fb.innerHTML='✓ '+ex.data.expl;addScore();}
+  else{btn.classList.add('jug-wrong');card.querySelectorAll('.jugement-opt-btn')[choice==='A'?1:0].classList.add('jug-correct');fb.className='free-fb show fb-ko';fb.innerHTML='✗ '+ex.data.expl;}
+  if(_cbs[prefix+i])_cbs[prefix+i]();
+}
+
+function initFree1(){
+  free1Exs=shuffle(FREE_POOL.slice()).slice(0,5);free1Done=0;
+  var c=document.getElementById('free1-container');c.innerHTML='';
+  free1Exs.forEach(function(ex,i){
+    _cbs['f1'+i]=function(){free1Done++;if(free1Done>=free1Exs.length)setTimeout(function(){document.getElementById('btn-to-free2').classList.add('show');document.getElementById('btn-to-free2').scrollIntoView({behavior:'smooth',block:'nearest'});},600);};
+    c.appendChild(buildFreeCard(ex,i,'f1',_cbs['f1'+i]));
+  });
+}
+function initFree2(){
+  var used=free1Exs.map(function(e){return e.data.q||e.data.consigne;});
+  var pool=FREE_POOL.filter(function(e){return used.indexOf(e.data.q||e.data.consigne)<0;});
+  free2Exs=shuffle(pool).slice(0,5);free2Done=0;
+  var c=document.getElementById('free2-container');c.innerHTML='';
+  free2Exs.forEach(function(ex,i){
+    _cbs['f2'+i]=function(){free2Done++;if(free2Done>=free2Exs.length)setTimeout(function(){document.getElementById('btn-to-bilan').classList.add('show');document.getElementById('btn-to-bilan').scrollIntoView({behavior:'smooth',block:'nearest'});},600);};
+    c.appendChild(buildFreeCard(ex,i,'f2',_cbs['f2'+i]));
+  });
+}
+
+function showBilan(){
+  var g1Steps=G1[g1Idx]?G1[g1Idx].etapes.length:3,g2Steps=G2[g2Idx]?G2[g2Idx].etapes.length:3,total=g1Steps+g2Steps+10;
+  document.getElementById('bilan-score').textContent=score;
+  document.getElementById('bilan-total-txt').textContent='/ '+total+' pts';
+  var pct=score/total,title,msg;
+  if(pct>=0.8){title='Excellent !';msg='Tu maîtrises les fonctions linéaires et affines — calcul, équation, lecture graphique !';}
+  else if(pct>=0.6){title='Bon travail !';msg='Bonne base ! Revois la formule a = Δy/Δx pour lire la pente depuis deux points.';}
+  else{title='Continue !';msg='f(x)=ax+b : a est la pente, b est où la droite coupe l\'axe y. Remplace x pour calculer !';}
+  document.getElementById('bilan-title').textContent=title;document.getElementById('bilan-msg').textContent=msg;
+  var s=[Math.ceil(total*.4),Math.ceil(total*.7),Math.ceil(total*.9)];
+  ['star1','star2','star3'].forEach(function(id,i){var el=document.getElementById(id);if(score>=s[i]){(function(e,d){setTimeout(function(){e.classList.add('earned');},d);})(el,300+i*400);}else el.style.filter='grayscale(1)';});
+  if(pct>=0.6)lanceConfetti();
+}
+function lanceConfetti(){var cols=['#0f766e','#5eead4','#059669','#d97706','#0369a1'];for(var i=0;i<50;i++){var el=document.createElement('div');el.className='confetti-piece';el.style.cssText='left:'+Math.random()*100+'vw;background:'+cols[Math.floor(Math.random()*5)]+';animation-duration:'+(1.5+Math.random()*2)+'s;animation-delay:'+Math.random()*1.2+'s;width:'+(6+Math.random()*7)+'px;height:'+(6+Math.random()*7)+'px;border-radius:'+(Math.random()>.5?'50%':'2px')+';';document.body.appendChild(el);setTimeout(function(){if(el.parentNode)el.remove();},4000);}}
+</script>
+</body>
+</html>

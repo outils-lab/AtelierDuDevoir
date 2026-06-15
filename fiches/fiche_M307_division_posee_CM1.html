@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>M307 — La division posée | L'Atelier du Devoir</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--acc:#7c3aed;--acc-pale:#f5f3ff;--acc-mid:#c4b5fd;--acc-dark:#5b21b6;--mint:#059669;--mint-pale:#d1fae5;--mint-deep:#047857;--coral:#dc2626;--coral-pale:#fee2e2;--sun:#d97706;--sun-pale:#fef3c7;--text:#1e293b;--text-light:#64748b;--radius:14px;--radius-sm:8px;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Nunito',sans-serif;background:#f5f3ff;color:var(--text);font-size:16px;line-height:1.6;}
+.header{background:white;border-bottom:3px solid var(--acc-pale);position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.08);}
+.header-top{display:flex;align-items:center;justify-content:space-between;padding:10px 18px;}
+.logo{font-family:'Fredoka One',cursive;font-size:1.2rem;color:var(--acc);text-decoration:none;}
+.score-badge{background:var(--acc);color:white;font-weight:800;font-size:.88rem;padding:5px 14px;border-radius:20px;}
+.steps-wrap{padding:0 18px 8px;}
+.steps{display:flex;gap:4px;}
+.step{flex:1;height:6px;border-radius:6px;background:#e9d5ff;transition:all .35s;}
+.step.done{background:#10b981;}.step.active{background:var(--acc);}
+.steps-labels{display:flex;gap:4px;padding-top:3px;}
+.step-lbl{flex:1;font-size:.46rem;font-weight:700;color:var(--text-light);text-align:center;text-transform:uppercase;letter-spacing:.04em;}
+.main{max-width:700px;margin:0 auto;padding:22px 14px 100px;}
+.phase{display:none;}.phase.active{display:block;}
+.accroche{background:white;border-radius:var(--radius);padding:20px;margin-bottom:20px;border:2px solid var(--acc-pale);display:flex;gap:14px;align-items:flex-start;}
+.accroche-icon{font-size:2.6rem;flex-shrink:0;}
+.accroche-text h1{font-family:'Fredoka One',cursive;font-size:1.5rem;color:var(--acc);margin-bottom:4px;}
+.accroche-text p{color:var(--text-light);font-size:.9rem;line-height:1.5;}
+.meta-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
+.meta-tag{background:var(--acc-pale);border-radius:20px;padding:3px 12px;font-size:.72rem;font-weight:700;color:var(--acc);}
+.lecon-card{background:white;border-radius:var(--radius);padding:20px;margin-bottom:16px;border:2px solid var(--acc-pale);}
+.lecon-card h2{font-family:'Fredoka One',cursive;font-size:1.2rem;color:var(--acc);margin-bottom:14px;}
+.lecon-block{display:none;}.lecon-block.revealed{display:block;}
+.lecon-subtitle{font-weight:800;font-size:.95rem;color:var(--acc);margin-bottom:8px;margin-top:4px;}
+.sep{margin:16px 0;border:none;border-top:2px dashed #e9d5ff;}
+.analogie{font-size:.9rem;color:var(--text-light);font-style:italic;margin-bottom:10px;line-height:1.6;background:var(--acc-pale);border-radius:var(--radius-sm);padding:10px 14px;border-left:4px solid var(--acc-mid);}
+.def-box{border-left:4px solid var(--acc);background:var(--acc-pale);border-radius:0 var(--radius) var(--radius) 0;padding:12px 16px;margin-bottom:10px;}
+.def-box h4{font-weight:800;color:var(--acc);font-size:.88rem;margin-bottom:6px;}
+.def-box p{font-size:.86rem;color:var(--text);line-height:1.7;}
+.hl{background:var(--sun-pale);color:var(--sun);border-radius:6px;padding:1px 8px;font-weight:800;}
+.hl-g{background:var(--mint-pale);color:var(--mint-deep);border-radius:6px;padding:1px 8px;font-weight:800;}
+.hl-r{background:#fee2e2;color:#9f1239;border-radius:6px;padding:1px 8px;font-weight:800;}
+.exemple-block{background:white;border:2px solid var(--acc-pale);border-radius:var(--radius-sm);padding:10px 14px;margin-bottom:8px;font-size:.9rem;line-height:1.9;}
+.exemple-block .tag{display:inline-block;background:var(--acc);color:white;font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:20px;margin-right:8px;text-transform:uppercase;}
+.astuce{background:var(--sun-pale);border:2px solid #fde68a;border-radius:var(--radius-sm);padding:10px 14px;font-size:.85rem;margin-top:8px;color:#78350f;}
+.astuce strong{color:#92400e;}
+.piege{background:#fff1f2;border:2px solid #fecdd3;border-radius:var(--radius-sm);padding:10px 14px;font-size:.85rem;margin-top:8px;color:#9f1239;}
+.btn-compris{margin-top:16px;padding:12px 28px;border-radius:30px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.95rem;background:var(--acc);color:white;border:none;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:8px;box-shadow:0 4px 12px rgba(124,58,237,.3);}
+.btn-compris:hover{background:var(--acc-dark);transform:translateY(-2px);}
+.btn-compris:disabled{opacity:.4;cursor:default;transform:none;box-shadow:none;}
+.ugo-msg{background:white;border:2px solid var(--acc-pale);border-radius:var(--radius);padding:14px 16px;margin:14px 0;display:flex;align-items:flex-start;gap:12px;}
+.ugo-msg .ugo{font-size:2rem;flex-shrink:0;}
+.ugo-msg p{font-size:.88rem;color:var(--text-light);line-height:1.6;}
+.ugo-msg p strong{color:var(--acc);}
+.ex-header{background:white;border:2px solid var(--acc-pale);border-radius:var(--radius);padding:14px 18px;margin-bottom:14px;}
+.ex-header h2{font-family:'Fredoka One',cursive;font-size:1.1rem;color:var(--acc);margin-bottom:3px;}
+.ex-header p{color:var(--text-light);font-size:.84rem;}
+.guided-box{background:white;border:3px solid var(--acc);border-radius:var(--radius);padding:18px;margin-bottom:14px;}
+.guided-title{font-size:1rem;font-weight:800;color:var(--acc);margin-bottom:14px;background:var(--acc-pale);padding:9px 14px;border-radius:var(--radius-sm);display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.tries-badge{font-size:.72rem;font-weight:700;color:var(--coral);background:var(--coral-pale);padding:2px 10px;border-radius:20px;margin-left:auto;}
+.step-box{border:2px solid #e9d5ff;border-radius:10px;padding:14px;transition:all .3s;opacity:.5;pointer-events:none;margin-bottom:8px;}
+.step-box.active{opacity:1;pointer-events:all;border-color:var(--acc-mid);}
+.step-box.correct{border-color:var(--mint);background:var(--mint-pale);opacity:1;}
+.step-lbl-num{font-size:.62rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;}
+.step-q{font-size:.93rem;font-weight:700;margin-bottom:10px;line-height:1.6;}
+.step-hint{font-size:.82rem;color:#92400e;background:var(--sun-pale);border-radius:6px;padding:8px 12px;margin-bottom:8px;display:none;}
+.step-hint.show{display:block;}
+.qcm-opts{display:flex;flex-direction:column;gap:7px;}
+.qcm-opt{padding:10px 14px;border-radius:10px;border:2px solid #e9d5ff;background:white;font-family:'Nunito',sans-serif;font-weight:700;font-size:.9rem;cursor:pointer;text-align:left;transition:all .2s;}
+.qcm-opt:hover:not(:disabled){border-color:var(--acc);background:var(--acc-pale);}
+.qcm-opt:disabled{cursor:default;}
+.qcm-opt.opt-ok{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.qcm-opt.opt-ko{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
+.step-input-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.step-input{border:2px solid var(--acc);border-radius:10px;padding:9px 14px;font-family:'Nunito',monospace;font-weight:700;font-size:1rem;color:var(--text);background:white;outline:none;min-width:80px;max-width:150px;text-align:center;}
+.step-input:disabled{border-color:#e9d5ff;background:#f8fafc;}
+.step-input.ok{border-color:var(--mint);background:var(--mint-pale);}
+.step-input.ko{border-color:var(--coral);}
+.btn-check{padding:9px 18px;border-radius:20px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.88rem;background:var(--acc);color:white;border:none;cursor:pointer;}
+.btn-check:disabled{opacity:.4;cursor:not-allowed;}
+.step-fb{margin-top:8px;padding:9px 12px;border-radius:8px;font-size:.83rem;font-weight:700;display:none;}
+.step-fb.show{display:block;}
+.step-fb.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.step-fb.ko{background:var(--coral-pale);color:#b91c1c;}
+.reset-box{background:white;border:3px solid var(--acc);border-radius:var(--radius);padding:20px;text-align:center;margin-bottom:14px;display:none;}
+.reset-box.show{display:block;}
+.reset-box .ugo-big{font-size:3rem;margin-bottom:8px;}
+.reset-box h3{font-family:'Fredoka One',cursive;font-size:1.2rem;color:var(--acc);margin-bottom:8px;}
+.reset-box p{color:var(--text-light);font-size:.88rem;margin-bottom:14px;line-height:1.6;}
+.btn-restart{padding:11px 26px;border-radius:30px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.9rem;background:var(--acc);color:white;border:none;cursor:pointer;}
+.free-card{background:white;border:2px solid var(--acc-pale);border-radius:var(--radius);padding:16px;margin-bottom:12px;}
+.free-label{font-size:.68rem;font-weight:700;color:var(--acc);text-transform:uppercase;letter-spacing:.06em;margin-bottom:7px;}
+.free-q{font-size:.93rem;font-weight:700;margin-bottom:11px;background:var(--acc-pale);border-radius:var(--radius-sm);padding:10px 14px;line-height:1.9;}
+.free-opts{display:flex;gap:8px;flex-wrap:wrap;}
+.free-opt{padding:10px 16px;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.88rem;border:2px solid #e9d5ff;background:white;cursor:pointer;transition:all .2s;flex:1;text-align:center;}
+.free-opt:hover{border-color:var(--acc);background:var(--acc-pale);}
+.free-opt.ok{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.free-opt.ko{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
+.free-opt.reveal{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.free-input-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.free-input{border:2px solid var(--acc);border-radius:10px;padding:9px 14px;font-family:'Nunito',monospace;font-weight:700;font-size:1rem;background:white;outline:none;min-width:80px;max-width:150px;text-align:center;}
+.free-input:disabled{border-color:#e9d5ff;background:#f8fafc;}
+.free-input.ok{border-color:var(--mint);background:var(--mint-pale);}
+.free-input.ko{border-color:var(--coral);}
+.btn-free-check{padding:9px 18px;border-radius:20px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.88rem;background:var(--acc);color:white;border:none;cursor:pointer;}
+.jug-opts{display:flex;flex-direction:column;gap:8px;}
+.jug-opt{padding:11px 16px;border-radius:10px;border:2px solid #e9d5ff;background:white;font-family:'Nunito',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;text-align:left;transition:all .2s;line-height:1.6;}
+.jug-opt:hover{border-color:var(--acc);background:var(--acc-pale);}
+.jug-opt.ok{border-color:var(--mint);background:var(--mint-pale);}
+.jug-opt.ko{border-color:var(--coral);background:var(--coral-pale);}
+.free-fb{margin-top:10px;padding:9px 13px;border-radius:8px;font-size:.84rem;font-weight:700;display:none;}
+.free-fb.show{display:block;}
+.free-fb.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.free-fb.ko{background:var(--coral-pale);color:#b91c1c;}
+.btn-suite{margin-top:14px;padding:11px 24px;border-radius:30px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.9rem;background:var(--acc);color:white;border:none;cursor:pointer;display:none;align-items:center;gap:8px;box-shadow:0 4px 12px rgba(124,58,237,.3);transition:all .2s;}
+.btn-suite.show{display:inline-flex;}
+.btn-suite:hover{background:var(--acc-dark);transform:translateY(-2px);}
+.bilan-card{background:white;border-radius:var(--radius);padding:28px 20px;text-align:center;border:3px solid var(--acc-pale);}
+.bilan-ugo{font-size:4rem;margin-bottom:10px;display:block;}
+.bilan-title{font-family:'Fredoka One',cursive;font-size:2rem;margin-bottom:6px;color:var(--acc);}
+.bilan-msg{color:var(--text-light);font-size:.95rem;margin-bottom:20px;line-height:1.6;}
+.stars-row{display:flex;justify-content:center;gap:12px;margin-bottom:18px;}
+.star-big{font-size:2.8rem;filter:grayscale(1);transition:all .5s;}
+.star-big.earned{filter:none;animation:starPop .5s ease both;}
+@keyframes starPop{0%{transform:scale(0);}60%{transform:scale(1.3);}100%{transform:scale(1);}}
+.score-circle{width:110px;height:110px;border-radius:50%;background:var(--acc);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 20px;color:white;box-shadow:0 6px 20px rgba(124,58,237,.4);}
+.score-num{font-family:'Fredoka One',cursive;font-size:2rem;line-height:1;}
+.score-sub{font-size:.65rem;opacity:.85;}
+.memo{background:var(--acc-pale);border-radius:var(--radius);padding:14px 16px;margin:16px 0;text-align:left;}
+.memo h3{font-weight:800;font-size:.85rem;color:var(--acc);margin-bottom:10px;text-transform:uppercase;letter-spacing:.05em;}
+.memo-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+@media(max-width:460px){.memo-grid{grid-template-columns:1fr;}}
+.memo-item{background:white;border-radius:10px;padding:10px 12px;font-size:.82rem;border:2px solid var(--acc-pale);}
+.memo-item strong{color:var(--acc);}
+.bilan-btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:16px;}
+.btn-bilan{padding:11px 22px;border-radius:30px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.88rem;cursor:pointer;border:none;transition:all .2s;}
+.btn-bilan.primary{background:var(--acc);color:white;box-shadow:0 4px 12px rgba(124,58,237,.3);}
+.btn-bilan.secondary{background:var(--acc-pale);color:var(--acc);border:2px solid var(--acc);}
+.btn-bilan:hover{transform:translateY(-2px);}
+.confetti-piece{position:fixed;border-radius:3px;top:-20px;animation:fall linear both;pointer-events:none;z-index:9999;}
+@keyframes fall{0%{transform:translateY(0) rotate(0deg);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
+.print-bar{position:fixed;right:14px;top:50%;transform:translateY(-50%);z-index:200;display:flex;flex-direction:column;gap:8px;}
+.print-btn{display:flex;align-items:center;gap:6px;padding:9px 13px;border-radius:20px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.75rem;border:none;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.15);}
+.print-btn-a{background:#d97706;color:white;}.print-btn-b{background:#0369a1;color:white;}
+@media(max-width:560px){.print-bar{right:6px;}.print-btn{font-size:0;width:38px;height:38px;padding:0;justify-content:center;}.print-btn span.lbl{display:none;}.print-btn span.ico{font-size:1.1rem;}}
+@media print{.print-bar,.btn-compris,.btn-suite,.bilan-card,.ugo-msg{display:none!important;}body{background:white;}.phase{display:block!important;}}
+/* Poser la division - style cahier */
+.div-posee{font-family:'Nunito',monospace;font-size:1.2rem;font-weight:800;background:#f5f3ff;border-radius:12px;padding:14px 20px;display:inline-block;margin:10px auto;border:2px solid var(--acc-mid);}
+.div-posee .dividende{color:var(--acc-dark);}
+.div-posee .diviseur{color:var(--coral);}
+.div-posee .quotient{color:var(--mint-deep);}
+.div-posee .reste{color:var(--sun);}
+</style>
+</head>
+<body>
+<div class="print-bar">
+  <button class="print-btn print-btn-a" onclick="window.print()"><span class="ico">📖</span><span class="lbl">Leçon</span></button>
+  <button class="print-btn print-btn-b" onclick="window.print()"><span class="ico">📝</span><span class="lbl">Exercices</span></button>
+</div>
+<header class="header">
+  <div class="header-top">
+    <a href="../9-12ans.html" class="logo">🦉 L'Atelier du Devoir</a>
+    <div class="score-badge">⭐ <span id="score-display">0</span> pts</div>
+  </div>
+  <div class="steps-wrap">
+    <div class="steps">
+      <div class="step active" id="s0"></div><div class="step" id="s1"></div><div class="step" id="s2"></div>
+      <div class="step" id="s3"></div><div class="step" id="s4"></div><div class="step" id="s5"></div>
+    </div>
+    <div class="steps-labels">
+      <div class="step-lbl">Leçon</div><div class="step-lbl">Guidé 1</div><div class="step-lbl">Guidé 2</div>
+      <div class="step-lbl">Exercices</div><div class="step-lbl">+ Exercices</div><div class="step-lbl">Bilan</div>
+    </div>
+  </div>
+</header>
+<main class="main">
+
+<div class="accroche">
+  <div class="accroche-icon">➗</div>
+  <div class="accroche-text">
+    <h1>La division posée</h1>
+    <p>Partager 84 bonbons en 4 groupes égaux… Apprends l'algorithme de la division pas à pas !</p>
+    <div class="meta-row">
+      <span class="meta-tag">CM1</span><span class="meta-tag">⏱ 25 min</span>
+      <span class="meta-tag">⭐⭐ Difficulté</span><span class="meta-tag">Mathématiques</span>
+    </div>
+  </div>
+</div>
+
+<!-- LEÇON -->
+<div class="phase active" id="phase-lecon">
+  <div class="lecon-card">
+    <h2>📖 La leçon</h2>
+
+    <div class="lecon-block revealed" id="bloc-0">
+      <div class="lecon-subtitle">① Les termes de la division</div>
+      <div class="analogie">🍬 84 bonbons à partager entre 4 enfants. Combien chaque enfant en reçoit-il ? On cherche combien de fois 4 entre dans 84. C'est la division !</div>
+
+      <!-- SVG division posée annotée -->
+      <svg viewBox="0 0 300 120" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:12px auto;max-width:300px;background:#f5f3ff;border-radius:12px;padding:8px;">
+        <!-- Cadre division euclidienne classique -->
+        <!-- 84 ÷ 4 = 21, reste 0 -->
+        <text x="30" y="55" font-size="30" fill="#5b21b6" font-weight="bold" text-anchor="middle">84</text>
+        <line x1="50" y1="30" x2="50" y2="90" stroke="#475569" stroke-width="2"/>
+        <line x1="50" y1="30" x2="110" y2="30" stroke="#475569" stroke-width="2"/>
+        <text x="80" y="55" font-size="30" fill="#dc2626" font-weight="bold" text-anchor="middle">4</text>
+        <line x1="50" y1="65" x2="110" y2="65" stroke="#475569" stroke-width="1.5"/>
+        <text x="80" y="90" font-size="30" fill="#059669" font-weight="bold" text-anchor="middle">21</text>
+        <!-- Labels -->
+        <text x="30" y="20" font-size="10" fill="#5b21b6" font-weight="bold" text-anchor="middle">dividende</text>
+        <text x="80" y="20" font-size="10" fill="#dc2626" font-weight="bold" text-anchor="middle">diviseur</text>
+        <text x="80" y="115" font-size="10" fill="#059669" font-weight="bold" text-anchor="middle">quotient</text>
+        <!-- Reste -->
+        <text x="200" y="55" font-size="16" fill="#475569" text-anchor="middle">reste :</text>
+        <text x="255" y="55" font-size="28" fill="#d97706" font-weight="bold" text-anchor="middle">0</text>
+        <text x="228" y="72" font-size="10" fill="#d97706" text-anchor="middle">(division exacte)</text>
+        <!-- Vérification -->
+        <text x="160" y="100" font-size="10" fill="#475569" text-anchor="middle">Vérif : 21 × 4 = 84 ✓</text>
+      </svg>
+
+      <div class="def-box">
+        <h4>🔑 Les 4 termes</h4>
+        <p>• <strong style="color:#5b21b6">Dividende</strong> : le nombre qu'on divise (84)<br>
+        • <strong style="color:#dc2626">Diviseur</strong> : par quoi on divise (4)<br>
+        • <strong style="color:#059669">Quotient</strong> : le résultat (21)<br>
+        • <strong style="color:#d97706">Reste</strong> : ce qui "dépasse" (0 si division exacte)</p>
+      </div>
+      <div class="exemple-block"><span class="tag">Vérification</span> Quotient × Diviseur + Reste = Dividende<br>21 × 4 + 0 = 84 ✓</div>
+      <div class="astuce"><strong>💡 Astuce :</strong> Pour vérifier une division, on multiplie le quotient par le diviseur et on ajoute le reste. On doit retrouver le dividende !</div>
+      <button class="btn-compris" onclick="revealBloc(1)">J'ai compris ! →</button>
+    </div>
+
+    <div class="lecon-block" id="bloc-1">
+      <hr class="sep">
+      <div class="lecon-subtitle">② L'algorithme pas à pas : 84 ÷ 4</div>
+      <div class="analogie">🏗️ La division posée, c'est comme construire un mur brique par brique. On traite les chiffres du dividende un par un, de gauche à droite.</div>
+
+      <!-- Étapes SVG -->
+      <svg viewBox="0 0 320 220" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:10px auto;max-width:320px;background:#f5f3ff;border-radius:12px;padding:6px;">
+        <text x="160" y="16" font-size="11" fill="#5b21b6" font-weight="bold" text-anchor="middle">Algorithme de 84 ÷ 4</text>
+        <!-- Étape 1 -->
+        <rect x="4" y="22" width="312" height="46" fill="#ede9fe" rx="8"/>
+        <text x="14" y="38" font-size="10" fill="#5b21b6" font-weight="bold">① On prend 8 (1er chiffre). Combien de fois 4 dans 8 ?</text>
+        <text x="14" y="54" font-size="11" fill="#059669" font-weight="bold">8 ÷ 4 = 2 → on écrit 2 au quotient. Reste : 8 − 2×4 = 0</text>
+        <!-- Étape 2 -->
+        <rect x="4" y="74" width="312" height="46" fill="#ddd6fe" rx="8"/>
+        <text x="14" y="90" font-size="10" fill="#5b21b6" font-weight="bold">② On descend le 4. On a maintenant 04.</text>
+        <text x="14" y="106" font-size="11" fill="#059669" font-weight="bold">4 ÷ 4 = 1 → on écrit 1 au quotient. Reste : 4 − 1×4 = 0</text>
+        <!-- Étape 3 -->
+        <rect x="4" y="126" width="312" height="30" fill="#c4b5fd" rx="8"/>
+        <text x="14" y="146" font-size="11" fill="#5b21b6" font-weight="bold">③ Plus de chiffres → Quotient = 21, Reste = 0</text>
+        <!-- Schéma division posée -->
+        <text x="40" y="185" font-size="22" fill="#5b21b6" font-weight="bold">84</text>
+        <line x1="62" y1="165" x2="62" y2="205" stroke="#475569" stroke-width="2"/>
+        <line x1="62" y1="165" x2="110" y2="165" stroke="#475569" stroke-width="2"/>
+        <text x="86" y="185" font-size="22" fill="#dc2626" font-weight="bold">4</text>
+        <line x1="62" y1="195" x2="110" y2="195" stroke="#475569" stroke-width="1.5"/>
+        <text x="86" y="212" font-size="22" fill="#059669" font-weight="bold">21</text>
+        <!-- Détail calcul -->
+        <text x="130" y="178" font-size="11" fill="#475569">8 ÷ 4 = 2</text>
+        <text x="130" y="194" font-size="11" fill="#475569">8 − 8 = 0 → descend 4</text>
+        <text x="130" y="210" font-size="11" fill="#475569">4 ÷ 4 = 1 → reste 0</text>
+      </svg>
+
+      <div class="astuce"><strong>💡 L'ordre :</strong> je prends les chiffres un par un de gauche à droite. À chaque fois : combien de fois le diviseur entre-t-il ? → chiffre du quotient, puis je calcule le reste et je descends le chiffre suivant.</div>
+      <button class="btn-compris" onclick="revealBloc(2)">J'ai compris ! →</button>
+    </div>
+
+    <div class="lecon-block" id="bloc-2">
+      <hr class="sep">
+      <div class="lecon-subtitle">③ Division avec reste : 85 ÷ 4</div>
+      <div class="analogie">🍬 85 bonbons pour 4 enfants : chacun reçoit 21 bonbons, et il reste 1 bonbon qu'on ne peut pas couper (on n'est pas encore au niveau des décimaux). Le reste, c'est ce qui "déborde" !</div>
+
+      <!-- SVG division avec reste -->
+      <svg viewBox="0 0 300 160" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:10px auto;max-width:300px;background:#f5f3ff;border-radius:12px;padding:6px;">
+        <text x="150" y="16" font-size="11" fill="#5b21b6" font-weight="bold" text-anchor="middle">85 ÷ 4 = 21 reste 1</text>
+        <text x="40" y="55" font-size="26" fill="#5b21b6" font-weight="bold">85</text>
+        <line x1="64" y1="32" x2="64" y2="100" stroke="#475569" stroke-width="2"/>
+        <line x1="64" y1="32" x2="120" y2="32" stroke="#475569" stroke-width="2"/>
+        <text x="92" y="55" font-size="26" fill="#dc2626" font-weight="bold">4</text>
+        <line x1="64" y1="68" x2="120" y2="68" stroke="#475569" stroke-width="1.5"/>
+        <text x="92" y="92" font-size="26" fill="#059669" font-weight="bold">21</text>
+        <!-- Reste -->
+        <rect x="140" y="45" width="140" height="70" fill="#fef3c7" rx="8" stroke="#fde68a" stroke-width="2"/>
+        <text x="210" y="64" font-size="10" fill="#92400e" font-weight="bold" text-anchor="middle">Reste = 1</text>
+        <text x="210" y="80" font-size="10" fill="#92400e" text-anchor="middle">85 − 21×4 = 85 − 84 = 1</text>
+        <text x="210" y="98" font-size="10" fill="#047857" text-anchor="middle">Vérif : 21×4+1 = 85 ✓</text>
+        <!-- Règle reste -->
+        <text x="150" y="130" font-size="10" fill="#9f1239" font-weight="bold" text-anchor="middle">⚠ Le reste est toujours &lt; au diviseur !</text>
+        <text x="150" y="148" font-size="9" fill="#64748b" text-anchor="middle">Ici reste=1 &lt; diviseur=4 ✓</text>
+      </svg>
+
+      <div class="def-box">
+        <h4>Règle du reste</h4>
+        <p>Le reste est <strong>toujours strictement inférieur au diviseur</strong>.<br>
+        Si reste ≥ diviseur → on peut encore diviser → le quotient n'est pas assez grand !<br>
+        Ex : si on trouve reste=5 avec diviseur=4 → erreur ! On peut encore mettre un 1 au quotient.</p>
+      </div>
+      <button class="btn-compris" onclick="goPhase('g1',1)">J'ai compris ! Aux exercices 🚀</button>
+    </div>
+  </div>
+</div>
+
+<!-- GUIDÉ 1 -->
+<div class="phase" id="phase-g1">
+  <div class="ugo-msg"><span class="ugo">🦉</span><p><strong>Guidé 1 — QCM !</strong> Questions sur la division posée. <strong>3 essais</strong> par question. Point seulement au premier essai ! 🌟</p></div>
+  <div class="ex-header"><h2>➗ Comprendre et analyser</h2><p>Identifie les termes et les étapes de la division.</p></div>
+  <div id="g1-reset" class="reset-box">
+    <div class="ugo-big">🦉</div><h3>On recommence !</h3>
+    <p>Rappelle-toi : dividende ÷ diviseur = quotient reste r. Et toujours vérifier : quotient × diviseur + reste = dividende !</p>
+    <button class="btn-restart" onclick="initG1()">↺ Recommencer</button>
+  </div>
+  <div id="g1-zone"></div>
+  <button class="btn-suite" id="btn-g1-to-g2" onclick="goPhase('g2',2)">Super ! Exercice suivant →</button>
+</div>
+
+<!-- GUIDÉ 2 -->
+<div class="phase" id="phase-g2">
+  <div class="ugo-msg"><span class="ugo">🦉</span><p><strong>Guidé 2 — Tu calcules !</strong> Pose et effectue les divisions étape par étape. <strong>3 essais</strong> par étape 💪</p></div>
+  <div class="ex-header"><h2>✏️ Calculer le quotient et le reste</h2><p>Tape le quotient ou le reste demandé.</p></div>
+  <div id="g2-reset" class="reset-box">
+    <div class="ugo-big">🦉</div><h3>On repart !</h3>
+    <p>Chiffre par chiffre de gauche à droite ! Et n'oublie pas de vérifier : quotient × diviseur + reste = dividende.</p>
+    <button class="btn-restart" onclick="initG2()">↺ Recommencer</button>
+  </div>
+  <div id="g2-zone"></div>
+  <button class="btn-suite" id="btn-g2-to-free" onclick="goPhase('free',3)">Excellent ! Exercices libres →</button>
+</div>
+
+<!-- LIBRES 1 -->
+<div class="phase" id="phase-free">
+  <div class="ugo-msg"><span class="ugo">🦉</span><p><strong>Exercices libres !</strong> 5 exercices variés. Tu gères tout seul ! 🎯</p></div>
+  <div id="free1-zone"></div>
+  <button class="btn-suite" id="btn-free-to-free2" onclick="goPhase('free2',4)">Encore des exercices ! →</button>
+</div>
+
+<!-- LIBRES 2 -->
+<div class="phase" id="phase-free2">
+  <div class="ugo-msg"><span class="ugo">🦉</span><p><strong>5 exercices de plus !</strong> Tu y es presque ! 💪</p></div>
+  <div id="free2-zone"></div>
+  <button class="btn-suite" id="btn-free2-to-bilan" onclick="goPhase('bilan',5)">🌟 Voir mon résultat !</button>
+</div>
+
+<!-- BILAN -->
+<div class="phase" id="phase-bilan">
+  <div class="bilan-card">
+    <span class="bilan-ugo">🦉</span>
+    <h2 class="bilan-title" id="bilan-title">Bravo !</h2>
+    <p class="bilan-msg" id="bilan-msg"></p>
+    <div class="stars-row"><span class="star-big" id="etoile1">⭐</span><span class="star-big" id="etoile2">⭐</span><span class="star-big" id="etoile3">⭐</span></div>
+    <div class="score-circle"><span class="score-num" id="bilan-pts">0</span><span class="score-sub" id="bilan-sur">/ 0 pts</span></div>
+    <div class="memo">
+      <h3>📝 Ce que j'ai appris</h3>
+      <div class="memo-grid">
+        <div class="memo-item"><strong>Les termes</strong><br>Dividende ÷ Diviseur<br>= Quotient reste R</div>
+        <div class="memo-item"><strong>Vérification</strong><br>Q × D + R = dividende<br>Toujours vérifier !</div>
+        <div class="memo-item"><strong>Reste</strong><br>Toujours &lt; diviseur<br>Sinon : quotient trop petit</div>
+        <div class="memo-item"><strong>Algorithme</strong><br>Chiffre par chiffre<br>de gauche à droite</div>
+      </div>
+    </div>
+    <div class="bilan-btns">
+      <button class="btn-bilan secondary" onclick="location.reload()">↺ Recommencer</button>
+      <button class="btn-bilan primary" onclick="location.href='../9-12ans.html'">← Retour aux fiches</button>
+    </div>
+  </div>
+</div>
+</main>
+
+<script>
+var G1=[
+  {titre:"➗ Analyse : 96 ÷ 3 = 32",etapes:[
+    {q:"Dans 96 ÷ 3 = 32, quel est le dividende ?",opts:["96","3","32","0"],ok:0,
+     hint:"Le dividende = le nombre qu'on partage (avant le ÷).",
+     expl_ok:"96 est le dividende : c'est le nombre qu'on divise.",
+     expl_ko:"Le dividende = ce qu'on divise = 96."},
+    {q:"Quel est le quotient ?",opts:["32","3","96","0"],ok:0,
+     hint:"Le quotient = le résultat de la division.",
+     expl_ok:"32 est le quotient : c'est le résultat !",
+     expl_ko:"Le quotient = résultat = 32."},
+    {q:"Vérifie : 32 × 3 = ?",opts:["96 ✓","99","93","32"],ok:0,
+     hint:"32 × 3 = 30×3 + 2×3 = 90 + 6 = ?",
+     expl_ok:"32 × 3 = 96 ✓ La vérification confirme la division !",
+     expl_ko:"32 × 3 = 96. Vérification : quotient × diviseur = dividende."}
+  ]},
+  {titre:"➗ Analyse : 75 ÷ 4 = 18 reste 3",etapes:[
+    {q:"Quel est le reste de 75 ÷ 4 ?",opts:["3","4","18","75"],ok:0,
+     hint:"Le reste = ce qui reste après la division (après le mot 'reste').",
+     expl_ok:"Le reste est 3 !",
+     expl_ko:"Reste = 3 (le nombre après 'reste 3')."},
+    {q:"Le reste (3) est-il bien inférieur au diviseur (4) ?",opts:["Oui ! 3 < 4 ✓","Non, 3 = 4","Non, 3 > 4"],ok:0,
+     hint:"La règle : reste < diviseur toujours !",
+     expl_ok:"Oui ! 3 < 4 ✓ La règle du reste est respectée.",
+     expl_ko:"3 < 4 : le reste est bien inférieur au diviseur."},
+    {q:"Vérifie : 18 × 4 + 3 = ?",opts:["75 ✓","72","78","75"],ok:0,
+     hint:"18 × 4 = 72, puis 72 + 3 = ?",
+     expl_ok:"18 × 4 + 3 = 72 + 3 = 75 ✓ La vérification fonctionne !",
+     expl_ko:"18×4=72, 72+3=75. Vérif : Q×D+R = dividende."}
+  ]},
+  {titre:"➗ Que remarques-tu dans 56 ÷ 7 ?",etapes:[
+    {q:"Combien de fois 7 entre-t-il dans 56 ?",opts:["8","7","9","6"],ok:0,
+     hint:"Utilise ta table de 7 : 7×8 = 56 !",
+     expl_ok:"8 fois ! 7 × 8 = 56. C'est une division exacte.",
+     expl_ko:"7 × 8 = 56, donc 7 entre 8 fois dans 56."},
+    {q:"Le reste de 56 ÷ 7 est ?",opts:["0","7","1","56"],ok:0,
+     hint:"56 − 8×7 = 56 − 56 = ?",
+     expl_ok:"Le reste est 0 ! C'est une division exacte. 🎉",
+     expl_ko:"56 − 56 = 0. Division exacte → reste = 0."},
+    {q:"Si le reste est 0, la division est dite...",opts:["Exacte","Approximative","Posée","Décimale"],ok:0,
+     hint:"Reste = 0 → le dividende est divisible par le diviseur.",
+     expl_ok:"Division exacte ! Quand le reste = 0, 56 est divisible par 7.",
+     expl_ko:"Reste = 0 → division exacte."}
+  ]},
+  {titre:"➗ Un résultat erroné : 83 ÷ 5 = 15 reste 8. Est-ce correct ?",etapes:[
+    {q:"Le reste (8) est-il inférieur au diviseur (5) ?",opts:["Non ! 8 > 5 → erreur","Oui, 8 < 5","8 = 5, c'est bon"],ok:0,
+     hint:"La règle : reste < diviseur. Est-ce que 8 < 5 ?",
+     expl_ok:"Non ! 8 > 5 → il y a une erreur. Le quotient est trop petit !",
+     expl_ko:"8 > 5 → le reste est trop grand. Le quotient devrait être plus grand."},
+    {q:"Quel est le bon quotient de 83 ÷ 5 ?",opts:["16","15","17","8"],ok:0,
+     hint:"5 × 16 = 80 et 5 × 17 = 85. Lequel est ≤ 83 ?",
+     expl_ok:"16 ! 5 × 16 = 80 ≤ 83 et 5 × 17 = 85 > 83.",
+     expl_ko:"5×16=80 et 83−80=3 < 5 → quotient = 16."},
+    {q:"Donc 83 ÷ 5 = 16 reste ?",opts:["3","8","5","83"],ok:0,
+     hint:"83 − 16×5 = 83 − 80 = ?",
+     expl_ok:"83 ÷ 5 = 16 reste 3 ✓ (83−80=3 et 3<5 ✓) 🌟",
+     expl_ko:"83 − 80 = 3. Reste = 3 < 5 ✓"}
+  ]}
+];
+
+var G2=[
+  {titre:"✏️ Calcule 72 ÷ 6.",etapes:[
+    {q:"Étape 1 — 7 ÷ 6 = ? (1er chiffre du quotient)",acc:["1"],hint:"Combien de fois 6 entre dans 7 ? 6×1=6 ≤ 7 et 6×2=12 > 7.",expl_ok:"1 ! 6×1=6. Reste provisoire : 7−6=1.",expl_ko:"6×1=6 ≤ 7. 1er chiffre du quotient = 1."},
+    {q:"Étape 2 — On descend le 2. On a 12. 12 ÷ 6 = ?",acc:["2"],hint:"6×2=12.",expl_ok:"2 ! 6×2=12 exactement. Reste=0.",expl_ko:"6×2=12. 2e chiffre du quotient = 2."},
+    {q:"Étape 3 — Quotient = ?",acc:["12"],hint:"1er chiffre : 1, 2e chiffre : 2 → quotient = ?",expl_ok:"72 ÷ 6 = 12 ✓ Vérif : 12×6=72 ✓",expl_ko:"Les chiffres du quotient : 1 et 2 → quotient = 12."}
+  ]},
+  {titre:"✏️ Calcule 95 ÷ 4.",etapes:[
+    {q:"Étape 1 — 9 ÷ 4 = ? (1er chiffre du quotient)",acc:["2"],hint:"4×2=8 ≤ 9 et 4×3=12 > 9.",expl_ok:"2 ! Reste provisoire : 9−8=1.",expl_ko:"4×2=8. 1er chiffre = 2."},
+    {q:"Étape 2 — On a 15 (reste 1 + chiffre 5). 15 ÷ 4 = ?",acc:["3"],hint:"4×3=12 ≤ 15 et 4×4=16 > 15.",expl_ok:"3 ! Reste : 15−12=3.",expl_ko:"4×3=12 ≤ 15. 2e chiffre = 3."},
+    {q:"Étape 3 — Reste final = ?",acc:["3"],hint:"15 − 4×3 = 15 − 12 = ?",expl_ok:"95 ÷ 4 = 23 reste 3 ✓ Vérif : 23×4+3=92+3=95 ✓",expl_ko:"15−12=3."}
+  ]},
+  {titre:"✏️ 🍕 78 pizzas à partager entre 6 tables.",etapes:[
+    {q:"Étape 1 — 7 ÷ 6 = ? (pizzas pour commencer)",acc:["1"],hint:"6×1=6 ≤ 7. 1er chiffre = 1.",expl_ok:"1. Reste provisoire : 7−6=1.",expl_ko:"6×1=6. 1er chiffre = 1."},
+    {q:"Étape 2 — On a 18. 18 ÷ 6 = ?",acc:["3"],hint:"6×3=18 exactement !",expl_ok:"3 ! 6×3=18. Reste=0.",expl_ko:"6×3=18. 2e chiffre = 3."},
+    {q:"Étape 3 — Combien de pizzas par table ?",acc:["13"],hint:"Quotient = 13.",expl_ok:"13 pizzas par table ! 78÷6=13. Vérif : 13×6=78 ✓ 🍕",expl_ko:"Quotient = 13."}
+  ]},
+  {titre:"✏️ Calcule 64 ÷ 5.",etapes:[
+    {q:"Étape 1 — 6 ÷ 5 = ?",acc:["1"],hint:"5×1=5 ≤ 6 et 5×2=10 > 6.",expl_ok:"1. Reste provisoire : 6−5=1.",expl_ko:"5×1=5. 1er chiffre = 1."},
+    {q:"Étape 2 — On a 14. 14 ÷ 5 = ?",acc:["2"],hint:"5×2=10 ≤ 14 et 5×3=15 > 14.",expl_ok:"2. Reste : 14−10=4.",expl_ko:"5×2=10. 2e chiffre = 2."},
+    {q:"Étape 3 — Reste final = ?",acc:["4"],hint:"14 − 5×2 = 14 − 10 = ?",expl_ok:"64 ÷ 5 = 12 reste 4 ✓ Vérif : 12×5+4=60+4=64 ✓",expl_ko:"14−10=4."}
+  ]}
+];
+
+var FREE_POOL=[
+  {type:'saisie',data:{q:"42 ÷ 6 = ? (quotient)",acc:["7"],expl:"6×7=42. Division exacte."}},
+  {type:'saisie',data:{q:"50 ÷ 4 = ? reste ? (écris 'quotient r reste', ex: 12 r 2)",acc:["12 r 2","12r2"],expl:"4×12=48, 50−48=2. 50÷4=12 reste 2."}},
+  {type:'qcm',data:{q:"63 ÷ 9 = ?",opts:["7","6","8","9"],ok:0,expl:"9×7=63. Division exacte, quotient=7."}},
+  {type:'saisie',data:{q:"Vérification : si quotient=14, diviseur=5, reste=3, quel est le dividende ?",acc:["73"],expl:"14×5+3=70+3=73."}},
+  {type:'jugement',data:{consigne:"97 ÷ 8 = 12 reste 1. Est-ce correct ?",a:"Non ! 8×12=96, 97−96=1 < 8 ✓ C'est correct !","b":"Oui c'est correct mais le reste devrait être plus grand",ok:"A",expl:"97÷8=12 reste 1 ✓ Vérif : 12×8+1=96+1=97 ✓ et reste 1 < diviseur 8 ✓"}},
+  {type:'saisie',data:{q:"90 ÷ 6 = ? (quotient)",acc:["15"],expl:"6×15=90. Division exacte."}},
+  {type:'qcm',data:{q:"🍬 85 bonbons en sachets de 6. Combien de sachets complets ?",opts:["14 sachets (reste 1)","15 sachets","13 sachets (reste 7)","14 sachets (reste 0)"],ok:0,expl:"6×14=84, 85−84=1. 14 sachets complets et 1 bonbon en reste."}},
+  {type:'jugement',data:{consigne:"Dans une division, le reste peut-il être égal au diviseur ?",a:"Non ! Le reste est toujours STRICTEMENT inférieur au diviseur","b":"Oui, le reste peut être égal au diviseur",ok:"A",expl:"Non ! Si reste = diviseur, on peut encore diviser → le quotient est trop petit. Le reste est TOUJOURS strictement inférieur au diviseur."}},
+  {type:'saisie',data:{q:"78 ÷ 3 = ? (quotient)",acc:["26"],expl:"3×26=78. Division exacte."}},
+  {type:'qcm',data:{q:"Dans 57 ÷ 4, quel est le bon résultat ?",opts:["14 reste 1","13 reste 5","14 reste 0","15 reste 3"],ok:0,expl:"4×14=56, 57−56=1 < 4 ✓. 57÷4=14 reste 1."}},
+  {type:'saisie',data:{q:"🚌 96 élèves en cars de 8. Combien de cars ?",acc:["12"],expl:"96÷8=12. 12 cars complets."}},
+  {type:'qcm',data:{q:"Quelle vérification est correcte pour 47÷6=7 reste 5 ?",opts:["7×6+5=42+5=47 ✓","7×6=42=47","6+7+5=18=47"],ok:0,expl:"7×6+5=42+5=47 ✓ La formule : quotient × diviseur + reste = dividende."}},
+  {type:'saisie',data:{q:"100 ÷ 7 = ? reste ? (écris quotient r reste)",acc:["14 r 2","14r2"],expl:"7×14=98, 100−98=2. 100÷7=14 reste 2."}},
+  {type:'jugement',data:{consigne:"Si 84 ÷ 4 = 21, alors 840 ÷ 4 = 210 ?",a:"Oui ! On a multiplié le dividende par 10, donc le quotient aussi","b":"Non, cela ne change rien",ok:"A",expl:"Oui ! 840÷4=210. Multiplier le dividende par 10 multiplie le quotient par 10."}},
+  {type:'saisie',data:{q:"68 ÷ 5 = ? reste ?",acc:["13 r 3","13r3"],expl:"5×13=65, 68−65=3. 68÷5=13 reste 3."}},
+  {type:'qcm',data:{q:"Quel est le dividende si quotient=15, diviseur=6 et reste=2 ?",opts:["92","90","88","95"],ok:0,expl:"15×6+2=90+2=92. Le dividende est 92."}},
+  {type:'saisie',data:{q:"🍕 56 parts de pizza pour 8 enfants. Combien chacun reçoit-il ?",acc:["7"],expl:"56÷8=7. Chaque enfant reçoit 7 parts."}},
+  {type:'qcm',data:{q:"99 ÷ 9 = ?",opts:["11","10","12","9"],ok:0,expl:"9×11=99. Division exacte, quotient=11."}},
+  {type:'saisie',data:{q:"Dans 83 ÷ 7 : le quotient est 11. Quel est le reste ?",acc:["6"],expl:"83 − 11×7 = 83 − 77 = 6. Et 6 < 7 ✓"}},
+  {type:'jugement',data:{consigne:"La division est l'opération inverse de la multiplication ?",a:"Oui ! 84÷4=21 ↔ 21×4=84","b":"Non, ce sont des opérations indépendantes",ok:"A",expl:"Oui ! Division et multiplication sont inverses. C'est pourquoi on vérifie avec quotient × diviseur = dividende (si reste=0)."}}
+];
+
+var score=0,g1Idx=0,g2Idx=0,g1Tries=0,g2Tries=0;
+var f1Exs=[],f2Exs=[],f1Done=0,f2Done=0;
+var _cb={};
+
+function norm(s){return(s||'').trim().toLowerCase().replace(/\s+/g,'').replace('reste','r');}
+function shuffle(a){var b=a.slice();for(var i=b.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=b[i];b[i]=b[j];b[j]=t;}return b;}
+function addPt(){score++;document.getElementById('score-display').textContent=score;}
+function updSteps(n){for(var i=0;i<6;i++){var s=document.getElementById('s'+i);if(!s)return;s.classList.remove('active','done');if(i<n)s.classList.add('done');else if(i===n)s.classList.add('active');}}
+
+function goPhase(ph,si){
+  document.querySelectorAll('.phase').forEach(function(p){p.classList.remove('active');});
+  var el=document.getElementById('phase-'+ph);
+  if(el){el.classList.add('active');setTimeout(function(){el.scrollIntoView({behavior:'smooth',block:'start'});},100);}
+  updSteps(si);
+  if(ph==='g1')initG1();if(ph==='g2')initG2();
+  if(ph==='free')initFree1();if(ph==='free2')initFree2();
+  if(ph==='bilan')showBilan();
+}
+function revealBloc(n){
+  var b=document.getElementById('bloc-'+n);if(!b)return;
+  var p=document.getElementById('bloc-'+(n-1));
+  if(p){var btn=p.querySelector('.btn-compris');if(btn){btn.textContent='✓ Compris !';btn.disabled=true;btn.style.opacity='.4';}}
+  b.classList.add('revealed');
+  setTimeout(function(){var hH=(document.querySelector('.header')||{offsetHeight:0}).offsetHeight;var r=b.getBoundingClientRect();window.scrollTo({top:window.pageYOffset+r.top-hH-16,behavior:'smooth'});},150);
+}
+
+function initG1(){
+  g1Idx=Math.floor(Math.random()*G1.length);g1Tries=0;
+  document.getElementById('g1-reset').classList.remove('show');
+  document.getElementById('btn-g1-to-g2').classList.remove('show');
+  var v=G1[g1Idx],z=document.getElementById('g1-zone');z.innerHTML='';
+  var box=document.createElement('div');box.className='guided-box';
+  box.innerHTML='<div class="guided-title">'+v.titre+'<span class="tries-badge" id="g1-tries">3 essais</span></div><div id="g1-steps"></div>';
+  z.appendChild(box);
+  var sc=document.getElementById('g1-steps');
+  v.etapes.forEach(function(step,si){
+    var so=shuffle(step.opts.map(function(o,oi){return{t:o,i:oi};}));
+    var sb=document.createElement('div');sb.className='step-box'+(si===0?' active':'');sb.id='g1s'+si;
+    sb.innerHTML='<div class="step-lbl-num">Étape '+(si+1)+'/'+v.etapes.length+'</div>'
+      +'<div class="step-q">'+step.q+'</div>'
+      +'<div class="step-hint" id="g1h'+si+'">💡 '+step.hint+'</div>'
+      +'<div class="qcm-opts">'+so.map(function(o){return'<button class="qcm-opt" onclick="g1Check('+si+','+o.i+',this)">'+o.t+'</button>';}).join('')+'</div>'
+      +'<div class="step-fb" id="g1f'+si+'"></div>';
+    sc.appendChild(sb);
+  });updG1();
+}
+function updG1(){var el=document.getElementById('g1-tries');if(el)el.textContent=(3-g1Tries)+' essai'+(3-g1Tries>1?'s':'');}
+function g1Check(si,ci,btn){
+  var v=G1[g1Idx],step=v.etapes[si],sb=document.getElementById('g1s'+si),fb=document.getElementById('g1f'+si);
+  if(sb.classList.contains('correct'))return;
+  if(ci===step.ok){
+    btn.classList.add('opt-ok');sb.querySelectorAll('.qcm-opt').forEach(function(b){b.disabled=true;});sb.classList.add('correct');
+    if(g1Tries===0){fb.className='step-fb show ok';fb.innerHTML='✅ '+step.expl_ok+' <span style="color:#065f46;font-size:.78rem">(+1 pt)</span>';addPt();}
+    else{fb.className='step-fb show ok';fb.innerHTML='✅ '+step.expl_ok+' <span style="color:#64748b;font-size:.78rem">(pas de point)</span>';}
+    g1Tries=0;updG1();
+    var nx=document.getElementById('g1s'+(si+1));
+    if(nx){nx.classList.add('active');setTimeout(function(){nx.scrollIntoView({behavior:'smooth',block:'nearest'});},300);}
+    else{setTimeout(function(){var b=document.getElementById('btn-g1-to-g2');b.classList.add('show');b.scrollIntoView({behavior:'smooth',block:'nearest'});},500);}
+  }else{
+    btn.classList.add('opt-ko');btn.disabled=true;g1Tries++;updG1();
+    fb.className='step-fb show ko';
+    if(g1Tries<3){fb.innerHTML='❌ Pas tout à fait ! Lis l\'indice et réessaie 💪';document.getElementById('g1h'+si).classList.add('show');}
+    else{fb.innerHTML='❌ '+step.expl_ko+' On recommence !';setTimeout(function(){document.getElementById('g1-reset').classList.add('show');document.getElementById('g1-zone').innerHTML='';document.getElementById('g1-reset').scrollIntoView({behavior:'smooth',block:'start'});},1200);}
+  }
+}
+
+function initG2(){
+  g2Idx=Math.floor(Math.random()*G2.length);g2Tries=0;
+  document.getElementById('g2-reset').classList.remove('show');
+  document.getElementById('btn-g2-to-free').classList.remove('show');
+  var v=G2[g2Idx],z=document.getElementById('g2-zone');z.innerHTML='';
+  var box=document.createElement('div');box.className='guided-box';
+  box.innerHTML='<div class="guided-title">'+v.titre+'<span class="tries-badge" id="g2-tries">3 essais</span></div><div id="g2-steps"></div>';
+  z.appendChild(box);
+  var sc=document.getElementById('g2-steps');
+  v.etapes.forEach(function(step,si){
+    var sb=document.createElement('div');sb.className='step-box'+(si===0?' active':'');sb.id='g2s'+si;
+    sb.innerHTML='<div class="step-lbl-num">Étape '+(si+1)+'/'+v.etapes.length+'</div>'
+      +'<div class="step-q">'+step.q+'</div>'
+      +'<div class="step-hint" id="g2h'+si+'">💡 '+step.hint+'</div>'
+      +'<div class="step-input-row"><input class="step-input" id="g2i'+si+'" type="text" placeholder="écris ici…" autocomplete="off" spellcheck="false"'+(si>0?' disabled':'')+'>'
+      +'<button class="btn-check" id="g2b'+si+'" onclick="g2Check('+si+')"'+(si>0?' disabled':'')+'>Vérifier</button></div>'
+      +'<div class="step-fb" id="g2f'+si+'"></div>';
+    sc.appendChild(sb);
+  });updG2();
+}
+function updG2(){var el=document.getElementById('g2-tries');if(el)el.textContent=(3-g2Tries)+' essai'+(3-g2Tries>1?'s':'');}
+function g2Check(si){
+  var v=G2[g2Idx],step=v.etapes[si],inp=document.getElementById('g2i'+si),fb=document.getElementById('g2f'+si),sb=document.getElementById('g2s'+si);
+  if(!inp||sb.classList.contains('correct'))return;
+  var ok=step.acc.some(function(a){return norm(inp.value)===norm(a);});
+  if(ok){
+    inp.classList.add('ok');inp.disabled=true;document.getElementById('g2b'+si).disabled=true;sb.classList.add('correct');
+    if(g2Tries===0){fb.className='step-fb show ok';fb.innerHTML='✅ '+step.expl_ok+' <span style="color:#065f46;font-size:.78rem">(+1 pt)</span>';addPt();}
+    else{fb.className='step-fb show ok';fb.innerHTML='✅ '+step.expl_ok+' <span style="color:#64748b;font-size:.78rem">(pas de point)</span>';}
+    g2Tries=0;updG2();
+    var nxSb=document.getElementById('g2s'+(si+1));
+    if(nxSb){nxSb.classList.add('active');var ni=document.getElementById('g2i'+(si+1)),nb=document.getElementById('g2b'+(si+1));if(ni)ni.disabled=false;if(nb)nb.disabled=false;setTimeout(function(){nxSb.scrollIntoView({behavior:'smooth',block:'nearest'});},300);}
+    else{setTimeout(function(){var b=document.getElementById('btn-g2-to-free');b.classList.add('show');b.scrollIntoView({behavior:'smooth',block:'nearest'});},500);}
+  }else{
+    inp.classList.add('ko');inp.value='';inp.placeholder='Réessaie…';g2Tries++;updG2();
+    fb.className='step-fb show ko';
+    if(g2Tries<3){fb.innerHTML='❌ Pas tout à fait ! Lis l\'indice 💪';document.getElementById('g2h'+si).classList.add('show');setTimeout(function(){inp.classList.remove('ko');inp.placeholder='écris ici…';},900);}
+    else{fb.innerHTML='❌ '+step.expl_ko+' On recommence !';setTimeout(function(){document.getElementById('g2-reset').classList.add('show');document.getElementById('g2-zone').innerHTML='';document.getElementById('g2-reset').scrollIntoView({behavior:'smooth',block:'start'});},1200);}
+  }
+}
+
+function buildFree(ex,i,prefix,cb){
+  var card=document.createElement('div');card.className='free-card';card.id=prefix+'c'+i;
+  if(ex.type==='qcm'){
+    card.innerHTML='<div class="free-label">Exercice '+(i+1)+'</div><div class="free-q">'+ex.data.q+'</div><div class="free-opts" id="'+prefix+'opts'+i+'"></div><div class="free-fb" id="'+prefix+'fb'+i+'"></div>';
+    setTimeout(function(){
+      var ba=document.getElementById(prefix+'opts'+i);
+      ex.data.opts.forEach(function(opt,oi){
+        var btn=document.createElement('button');btn.className='free-opt';btn.textContent=opt;
+        btn.onclick=function(){
+          if(card.classList.contains('done'))return;card.classList.add('done');ba.querySelectorAll('button').forEach(function(b){b.disabled=true;});
+          var fb=document.getElementById(prefix+'fb'+i);
+          if(oi===ex.data.ok){btn.classList.add('ok');fb.className='free-fb show ok';fb.innerHTML='✅ '+ex.data.expl;addPt();}
+          else{btn.classList.add('ko');ba.querySelectorAll('button').forEach(function(b,bi){if(bi===ex.data.ok)b.classList.add('reveal');});fb.className='free-fb show ko';fb.innerHTML='❌ '+ex.data.expl;}
+          cb();
+        };ba.appendChild(btn);
+      });
+    },0);
+  }else if(ex.type==='saisie'){
+    card.innerHTML='<div class="free-label">Exercice '+(i+1)+'</div><div class="free-q">'+ex.data.q+'</div><div class="free-input-row"><input class="free-input" id="'+prefix+'i'+i+'" type="text" placeholder="écris ici…" autocomplete="off" spellcheck="false"><button class="btn-free-check" onclick="chkFree(\''+prefix+'\','+i+')">Vérifier</button></div><div class="free-fb" id="'+prefix+'fb'+i+'"></div>';
+    _cb[prefix+i]=cb;
+  }else if(ex.type==='jugement'){
+    card.innerHTML='<div class="free-label">Exercice '+(i+1)+'</div><div class="free-q">'+ex.data.consigne+'</div><div class="jug-opts"><button class="jug-opt" onclick="chkJug(\''+prefix+'\','+i+',\'A\',this)"><strong>A —</strong> '+ex.data.a+'</button><button class="jug-opt" onclick="chkJug(\''+prefix+'\','+i+',\'B\',this)"><strong>B —</strong> '+ex.data.b+'</button></div><div class="free-fb" id="'+prefix+'fb'+i+'"></div>';
+    _cb[prefix+i]=cb;
+  }
+  return card;
+}
+function chkFree(p,i){
+  var card=document.getElementById(p+'c'+i);if(card.classList.contains('done'))return;
+  var exs=p==='f1'?f1Exs:f2Exs,ex=exs[i],inp=document.getElementById(p+'i'+i),fb=document.getElementById(p+'fb'+i);
+  var ok=ex.data.acc.some(function(a){return norm(inp.value)===norm(a);});
+  card.classList.add('done');inp.disabled=true;card.querySelector('.btn-free-check').disabled=true;
+  if(ok){inp.classList.add('ok');fb.className='free-fb show ok';fb.innerHTML='✅ '+ex.data.expl;addPt();}
+  else{inp.classList.add('ko');fb.className='free-fb show ko';fb.innerHTML='❌ Réponse : <strong>'+ex.data.acc[0]+'</strong>. '+ex.data.expl;}
+  if(_cb[p+i])_cb[p+i]();
+}
+function chkJug(p,i,ch,btn){
+  var card=document.getElementById(p+'c'+i);if(card.classList.contains('done'))return;
+  var exs=p==='f1'?f1Exs:f2Exs,ex=exs[i],fb=document.getElementById(p+'fb'+i);
+  card.classList.add('done');card.querySelectorAll('.jug-opt').forEach(function(b){b.disabled=true;});
+  if(ch===ex.data.ok){btn.classList.add('ok');fb.className='free-fb show ok';fb.innerHTML='✅ '+ex.data.expl;addPt();}
+  else{btn.classList.add('ko');card.querySelectorAll('.jug-opt')[ch==='A'?1:0].classList.add('ok');fb.className='free-fb show ko';fb.innerHTML='❌ '+ex.data.expl;}
+  if(_cb[p+i])_cb[p+i]();
+}
+
+function initFree1(){
+  f1Exs=shuffle(FREE_POOL.slice()).slice(0,5);f1Done=0;
+  var z=document.getElementById('free1-zone');z.innerHTML='';
+  f1Exs.forEach(function(ex,i){
+    _cb['f1'+i]=function(){f1Done++;if(f1Done>=5)setTimeout(function(){var b=document.getElementById('btn-free-to-free2');b.classList.add('show');b.scrollIntoView({behavior:'smooth',block:'nearest'});},600);};
+    z.appendChild(buildFree(ex,i,'f1',_cb['f1'+i]));
+  });
+}
+function initFree2(){
+  var used=f1Exs.map(function(e){return e.data.q||e.data.consigne;});
+  var pool=FREE_POOL.filter(function(e){return used.indexOf(e.data.q||e.data.consigne)<0;});
+  f2Exs=shuffle(pool).slice(0,5);f2Done=0;
+  var z=document.getElementById('free2-zone');z.innerHTML='';
+  f2Exs.forEach(function(ex,i){
+    _cb['f2'+i]=function(){f2Done++;if(f2Done>=5)setTimeout(function(){var b=document.getElementById('btn-free2-to-bilan');b.classList.add('show');b.scrollIntoView({behavior:'smooth',block:'nearest'});},600);};
+    z.appendChild(buildFree(ex,i,'f2',_cb['f2'+i]));
+  });
+}
+
+function showBilan(){
+  var g1n=G1[g1Idx]?G1[g1Idx].etapes.length:3,g2n=G2[g2Idx]?G2[g2Idx].etapes.length:3,tot=g1n+g2n+10;
+  document.getElementById('bilan-pts').textContent=score;
+  document.getElementById('bilan-sur').textContent='/ '+tot+' pts';
+  var pct=score/tot,t,m;
+  if(pct>=.8){t='Fantastique ! 🎉';m='Tu maîtrises la division posée ! Algorithme, reste, vérification… Bravo !';}
+  else if(pct>=.6){t='Très bien ! 😊';m='Belle progression ! Revois la vérification : quotient × diviseur + reste = dividende !';}
+  else{t='Continue ! 💪';m:'Rappelle-toi les étapes : chiffre par chiffre de gauche à droite. Et toujours vérifier que le reste est inférieur au diviseur !';}
+  document.getElementById('bilan-title').textContent=t;
+  document.getElementById('bilan-msg').textContent=m;
+  var s=[Math.ceil(tot*.33),Math.ceil(tot*.66),Math.ceil(tot*.89)];
+  ['etoile1','etoile2','etoile3'].forEach(function(id,i){var el=document.getElementById(id);if(score>=s[i]){(function(e,d){setTimeout(function(){e.classList.add('earned');},d);})(el,300+i*400);}else el.style.filter='grayscale(1)';});
+  if(pct>=.5)confetti();
+}
+function confetti(){var cols=['#7c3aed','#c4b5fd','#059669','#d97706','#dc2626'];for(var i=0;i<55;i++){var el=document.createElement('div');el.className='confetti-piece';el.style.cssText='left:'+Math.random()*100+'vw;background:'+cols[Math.floor(Math.random()*5)]+';animation-duration:'+(1.5+Math.random()*2)+'s;animation-delay:'+Math.random()*1.2+'s;width:'+(6+Math.random()*8)+'px;height:'+(6+Math.random()*8)+'px;border-radius:'+(Math.random()>.5?'50%':'3px')+';';document.body.appendChild(el);setTimeout(function(){if(el.parentNode)el.remove();},4000);}}
+</script>
+</body>
+</html>

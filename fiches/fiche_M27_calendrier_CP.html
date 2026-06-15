@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>M27 — Le calendrier | L'Atelier du Devoir</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--acc:#d97706;--acc-pale:#fffbeb;--acc-mid:#fcd34d;--acc-dark:#b45309;--mint:#059669;--mint-pale:#d1fae5;--mint-deep:#047857;--coral:#dc2626;--coral-pale:#fee2e2;--sun:#d97706;--sun-pale:#fef3c7;--radius:18px;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Fredoka One',cursive;background:#fffbeb;color:#1e293b;font-size:20px;line-height:1.5;}
+.header{background:white;border-bottom:4px solid var(--acc-pale);position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.1);}
+.header-top{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;}
+.logo{font-size:1.1rem;color:var(--acc);text-decoration:none;}
+.score-badge{background:var(--acc);color:white;font-size:.9rem;padding:6px 16px;border-radius:20px;}
+.steps-wrap{padding:0 16px 8px;}
+.steps{display:flex;gap:5px;}
+.step{flex:1;height:10px;border-radius:10px;background:#fde68a;transition:all .4s;}
+.step.done{background:#10b981;}.step.active{background:var(--acc);}
+.main{max-width:640px;margin:0 auto;padding:18px 14px 100px;}
+.phase{display:none;}.phase.active{display:block;}
+.accroche{background:white;border-radius:var(--radius);padding:22px 20px;margin-bottom:20px;border:3px solid var(--acc-pale);text-align:center;}
+.accroche .big-icon{font-size:4rem;margin-bottom:10px;}
+.accroche h1{font-size:1.75rem;color:var(--acc);margin-bottom:8px;}
+.accroche p{font-family:'Nunito',sans-serif;font-size:.92rem;color:#64748b;margin-bottom:12px;}
+.meta-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
+.meta-tag{background:var(--acc-pale);border-radius:20px;padding:5px 16px;font-size:.78rem;color:var(--acc);}
+.lecon-card{background:white;border-radius:var(--radius);padding:22px 18px;margin-bottom:18px;border:3px solid var(--acc-pale);}
+.lecon-card h2{font-size:1.25rem;color:var(--acc);margin-bottom:18px;}
+.lecon-block{display:none;}.lecon-block.revealed{display:block;}
+.bloc-titre{font-size:1.15rem;color:var(--acc);margin-bottom:14px;}
+.sep{margin:20px 0;border:none;border-top:3px dashed #fde68a;}
+.ugo-box{background:white;border:3px solid var(--acc-pale);border-radius:var(--radius);padding:15px 18px;margin:14px 0;display:flex;gap:12px;align-items:flex-start;}
+.ugo-box .ugo{font-size:2.3rem;flex-shrink:0;}
+.ugo-box p{font-family:'Nunito',sans-serif;font-size:.92rem;color:#475569;line-height:1.7;}
+.ugo-box p strong{color:var(--acc);}
+.info-box{background:var(--acc-pale);border-left:6px solid var(--acc);border-radius:0 14px 14px 0;padding:14px 18px;margin:14px 0;font-family:'Nunito',sans-serif;font-size:.92rem;line-height:1.9;}
+.info-box strong{color:var(--acc-dark);}
+/* Jours de la semaine */
+.jours-semaine{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0;}
+.jour{flex:1;min-width:70px;background:var(--acc-pale);border:2px solid var(--acc-mid);border-radius:10px;padding:8px 4px;text-align:center;font-size:.82rem;}
+.jour.we{background:#f0fdf4;border-color:#6ee7b7;color:#047857;}
+.jour .num{font-size:1.1rem;color:var(--acc-dark);}
+/* Mini calendrier */
+.mini-cal{border-radius:14px;overflow:hidden;border:2px solid var(--acc-mid);margin:14px 0;}
+.mini-cal .cal-header{background:var(--acc);color:white;padding:10px;text-align:center;font-size:1rem;}
+.mini-cal table{width:100%;border-collapse:collapse;font-family:'Nunito',sans-serif;font-size:.85rem;}
+.mini-cal th{background:var(--acc-pale);padding:6px;text-align:center;font-weight:800;color:var(--acc-dark);}
+.mini-cal td{padding:7px;text-align:center;border-top:1px solid #fde68a;}
+.mini-cal td.we{color:#059669;font-weight:800;}
+.mini-cal td.today{background:var(--acc);color:white;border-radius:50%;font-weight:800;}
+.mini-cal td.vide{color:#e2e8f0;}
+/* Mois de l'année */
+.mois-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0;}
+.mois-card{background:var(--acc-pale);border:2px solid var(--acc-mid);border-radius:10px;padding:8px;text-align:center;}
+.mois-card .mois-nom{font-size:.9rem;color:var(--acc-dark);}
+.mois-card .mois-num{font-family:'Nunito',sans-serif;font-size:.7rem;color:#94a3b8;}
+.mois-card.hiver{background:#eff6ff;border-color:#93c5fd;}
+.mois-card.printemps{background:#f0fdf4;border-color:#6ee7b7;}
+.mois-card.ete{background:#fef3c7;border-color:#fcd34d;}
+.mois-card.automne{background:#fff7ed;border-color:#fdba74;}
+.btn-compris{margin-top:18px;padding:14px 30px;border-radius:38px;font-size:1.1rem;background:var(--acc);color:white;border:none;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:8px;box-shadow:0 4px 14px rgba(217,119,6,.35);}
+.btn-compris:hover{background:var(--acc-dark);transform:translateY(-2px);}
+.btn-compris:disabled{opacity:.4;cursor:default;transform:none;}
+.guided-box{background:white;border:3px solid var(--acc);border-radius:var(--radius);padding:20px 18px;margin-bottom:16px;}
+.guided-title{font-size:1rem;color:var(--acc);margin-bottom:16px;background:var(--acc-pale);padding:10px 16px;border-radius:12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.tries-b{font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:800;color:var(--coral);background:#fee2e2;padding:3px 12px;border-radius:20px;margin-left:auto;}
+.q-box{border:3px solid #fde68a;border-radius:14px;padding:16px;margin-bottom:10px;opacity:.5;pointer-events:none;}
+.q-box.active{opacity:1;pointer-events:all;border-color:var(--acc-mid);}
+.q-box.correct{border-color:var(--mint);background:var(--mint-pale);opacity:1;}
+.q-num{font-family:'Nunito',sans-serif;font-size:.65rem;font-weight:800;color:#94a3b8;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;}
+.q-text{font-size:1.05rem;color:var(--acc-dark);margin-bottom:14px;line-height:1.5;}
+.hint-box{font-family:'Nunito',sans-serif;font-size:.86rem;color:#78350f;background:var(--sun-pale);border-radius:10px;padding:10px 14px;margin-bottom:10px;display:none;}
+.hint-box.show{display:block;}
+.opts{display:flex;flex-direction:column;gap:10px;}
+.opt{padding:13px 16px;border-radius:13px;border:3px solid #fde68a;background:white;font-size:1rem;cursor:pointer;text-align:left;transition:all .2s;}
+.opt:hover:not(:disabled){border-color:var(--acc);background:var(--acc-pale);}
+.opt:disabled{cursor:default;}
+.opt.ok{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.opt.ko{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
+.fb{margin-top:10px;padding:10px 14px;border-radius:12px;font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:800;display:none;}
+.fb.show{display:block;}
+.fb.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.fb.ko{background:var(--coral-pale);color:#b91c1c;}
+.reset-box{background:white;border:3px solid var(--acc);border-radius:var(--radius);padding:22px;text-align:center;margin-bottom:16px;display:none;}
+.reset-box.show{display:block;}
+.reset-box .r-ugo{font-size:3.2rem;margin-bottom:8px;}
+.reset-box h3{font-size:1.2rem;color:var(--acc);margin-bottom:8px;}
+.reset-box p{font-family:'Nunito',sans-serif;font-size:.9rem;color:#64748b;margin-bottom:14px;line-height:1.7;}
+.btn-reset{padding:12px 26px;border-radius:28px;font-size:.95rem;background:var(--acc);color:white;border:none;cursor:pointer;}
+.free-card{background:white;border:3px solid var(--acc-pale);border-radius:var(--radius);padding:18px;margin-bottom:14px;}
+.free-num{font-family:'Nunito',sans-serif;font-size:.7rem;font-weight:800;color:var(--acc);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;}
+.free-q{font-size:1.05rem;color:var(--acc-dark);margin-bottom:14px;background:var(--acc-pale);border-radius:12px;padding:12px 16px;line-height:1.5;}
+.free-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.free-opt{padding:12px;border-radius:13px;font-size:1rem;border:3px solid #fde68a;background:white;cursor:pointer;transition:all .2s;text-align:center;}
+.free-opt:hover{border-color:var(--acc);background:var(--acc-pale);}
+.free-opt.ok{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.free-opt.ko{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
+.free-opt.reveal{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.free-fb{margin-top:10px;padding:10px 14px;border-radius:12px;font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:800;display:none;}
+.free-fb.show{display:block;}
+.free-fb.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.free-fb.ko{background:var(--coral-pale);color:#b91c1c;}
+.btn-suite{margin-top:16px;padding:13px 26px;border-radius:32px;font-size:1rem;background:var(--acc);color:white;border:none;cursor:pointer;display:none;align-items:center;gap:8px;box-shadow:0 4px 14px rgba(217,119,6,.3);transition:all .2s;}
+.btn-suite.show{display:inline-flex;}
+.btn-suite:hover{background:var(--acc-dark);transform:translateY(-2px);}
+.bilan-card{background:white;border-radius:var(--radius);padding:28px 20px;text-align:center;border:3px solid var(--acc-pale);}
+.bilan-ugo{font-size:4.5rem;margin-bottom:10px;display:block;}
+.bilan-title{font-size:2rem;color:var(--acc);margin-bottom:8px;}
+.bilan-msg{font-family:'Nunito',sans-serif;font-size:.95rem;color:#64748b;margin-bottom:20px;line-height:1.8;}
+.stars-row{display:flex;justify-content:center;gap:14px;margin-bottom:18px;}
+.star-big{font-size:3rem;filter:grayscale(1);transition:all .5s;}
+.star-big.earned{filter:none;animation:starPop .5s ease both;}
+@keyframes starPop{0%{transform:scale(0);}60%{transform:scale(1.3);}100%{transform:scale(1);}}
+.score-circle{width:115px;height:115px;border-radius:50%;background:var(--acc);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 20px;color:white;box-shadow:0 6px 20px rgba(217,119,6,.4);}
+.score-num{font-size:2.2rem;line-height:1;}
+.score-sub{font-family:'Nunito',sans-serif;font-size:.65rem;opacity:.85;}
+.memo{background:var(--acc-pale);border-radius:var(--radius);padding:16px 18px;margin:16px 0;text-align:left;}
+.memo h3{font-size:.9rem;color:var(--acc);margin-bottom:12px;}
+.memo-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media(max-width:400px){.memo-grid{grid-template-columns:1fr;}.free-opts{grid-template-columns:1fr;}.mois-grid{grid-template-columns:repeat(2,1fr);}}
+.memo-item{background:white;border-radius:12px;padding:11px 13px;border:2px solid var(--acc-pale);}
+.memo-item strong{color:var(--acc);display:block;margin-bottom:3px;}
+.memo-item span{font-family:'Nunito',sans-serif;font-size:.8rem;color:#475569;line-height:1.6;}
+.bilan-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:18px;}
+.btn-bilan{padding:13px 22px;border-radius:30px;font-size:.95rem;cursor:pointer;border:none;transition:all .2s;}
+.btn-bilan.primary{background:var(--acc);color:white;}
+.btn-bilan.secondary{background:var(--acc-pale);color:var(--acc);border:3px solid var(--acc);}
+.btn-bilan:hover{transform:translateY(-2px);}
+.confetti-piece{position:fixed;border-radius:3px;top:-20px;animation:fall linear both;pointer-events:none;z-index:9999;}
+@keyframes fall{0%{transform:translateY(0) rotate(0deg);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="header-top">
+    <a href="../6-9ans.html" class="logo">🦉 L'Atelier du Devoir</a>
+    <div class="score-badge">⭐ <span id="score-display">0</span></div>
+  </div>
+  <div class="steps-wrap"><div class="steps">
+    <div class="step active" id="s0"></div><div class="step" id="s1"></div><div class="step" id="s2"></div>
+    <div class="step" id="s3"></div><div class="step" id="s4"></div><div class="step" id="s5"></div>
+  </div></div>
+</header>
+<main class="main">
+<div class="accroche">
+  <div class="big-icon">📅</div>
+  <h1>Le calendrier !</h1>
+  <p style="font-family:'Nunito',sans-serif;">Jours de la semaine, mois de l'année, se repérer dans le temps 🌟</p>
+  <div class="meta-row">
+    <span class="meta-tag">CP / CE1</span><span class="meta-tag">⭐ Facile</span><span class="meta-tag">📅 Temps</span>
+  </div>
+</div>
+<div class="phase active" id="phase-lecon">
+  <div class="lecon-card">
+    <h2>📖 La leçon</h2>
+    <div class="lecon-block revealed" id="bloc-0">
+      <div class="bloc-titre">① Les 7 jours de la semaine</div>
+      <div class="ugo-box"><span class="ugo">🦉</span>
+        <p>Une semaine a <strong>7 jours</strong>. Les 5 premiers sont les jours d'école, puis vient le <strong>week-end</strong> (samedi et dimanche). 😊</p>
+      </div>
+      <div class="jours-semaine">
+        <div class="jour"><div class="num">1</div>Lundi</div>
+        <div class="jour"><div class="num">2</div>Mardi</div>
+        <div class="jour"><div class="num">3</div>Mercredi</div>
+        <div class="jour"><div class="num">4</div>Jeudi</div>
+        <div class="jour"><div class="num">5</div>Vendredi</div>
+        <div class="jour we"><div class="num">6</div>Samedi</div>
+        <div class="jour we"><div class="num">7</div>Dimanche</div>
+      </div>
+      <div class="info-box">
+        <strong>1 semaine = 7 jours</strong><br>
+        Jours d'école (lundi→vendredi) = <strong>5 jours</strong><br>
+        Week-end (samedi + dimanche) = <strong>2 jours</strong><br>
+        Astuce : "La Maison De Jeanne Veut Souvent Dormir" 🏠
+      </div>
+      <button class="btn-compris" onclick="revealBloc(1)">J'ai compris ! 🎉</button>
+    </div>
+    <div class="lecon-block" id="bloc-1">
+      <hr class="sep">
+      <div class="bloc-titre">② Lire un calendrier</div>
+      <div class="ugo-box"><span class="ugo">🦉</span>
+        <p>Un calendrier montre les jours du mois. Voici le mois de <strong>mars</strong> ! Chaque ligne = une semaine. 📅</p>
+      </div>
+      <div class="mini-cal">
+        <div class="cal-header">🌸 Mars</div>
+        <table>
+          <tr><th>Lun</th><th>Mar</th><th>Mer</th><th>Jeu</th><th>Ven</th><th class="we">Sam</th><th class="we">Dim</th></tr>
+          <tr><td></td><td></td><td></td><td></td><td>1</td><td class="we">2</td><td class="we">3</td></tr>
+          <tr><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td class="we">9</td><td class="we">10</td></tr>
+          <tr><td>11</td><td>12</td><td class="today">13</td><td>14</td><td>15</td><td class="we">16</td><td class="we">17</td></tr>
+          <tr><td>18</td><td>19</td><td>20</td><td>21</td><td>22</td><td class="we">23</td><td class="we">24</td></tr>
+          <tr><td>25</td><td>26</td><td>27</td><td>28</td><td>29</td><td class="we">30</td><td class="we">31</td></tr>
+        </table>
+      </div>
+      <div style="font-family:'Nunito',sans-serif;font-size:.88rem;color:#475569;margin:10px 0;line-height:1.8;background:var(--acc-pale);border-radius:12px;padding:12px 14px;">
+        Le <span style="background:var(--acc);color:white;border-radius:50%;padding:1px 6px;">13</span> est un mercredi.<br>
+        Le 1er mars est un vendredi. Le 31 mars est un dimanche.<br>
+        Ce mois a <strong>31 jours</strong> et <strong>5 semaines</strong> (incomplètes).
+      </div>
+      <button class="btn-compris" onclick="revealBloc(2)">J'ai compris ! 🎉</button>
+    </div>
+    <div class="lecon-block" id="bloc-2">
+      <hr class="sep">
+      <div class="bloc-titre">③ Les 12 mois de l'année</div>
+      <div class="ugo-box"><span class="ugo">🦉</span>
+        <p>Une année a <strong>12 mois</strong> et <strong>365 jours</strong> (366 les années bissextiles !). Chaque saison a 3 mois. 🌍</p>
+      </div>
+      <div class="mois-grid">
+        <div class="mois-card hiver"><div class="mois-nom">❄️ Janvier</div><div class="mois-num">31 jours</div></div>
+        <div class="mois-card hiver"><div class="mois-nom">❄️ Février</div><div class="mois-num">28 ou 29 j.</div></div>
+        <div class="mois-card printemps"><div class="mois-nom">🌸 Mars</div><div class="mois-num">31 jours</div></div>
+        <div class="mois-card printemps"><div class="mois-nom">🌸 Avril</div><div class="mois-num">30 jours</div></div>
+        <div class="mois-card printemps"><div class="mois-nom">🌸 Mai</div><div class="mois-num">31 jours</div></div>
+        <div class="mois-card ete"><div class="mois-nom">☀️ Juin</div><div class="mois-num">30 jours</div></div>
+        <div class="mois-card ete"><div class="mois-nom">☀️ Juillet</div><div class="mois-num">31 jours</div></div>
+        <div class="mois-card ete"><div class="mois-nom">☀️ Août</div><div class="mois-num">31 jours</div></div>
+        <div class="mois-card automne"><div class="mois-nom">🍂 Septembre</div><div class="mois-num">30 jours</div></div>
+        <div class="mois-card automne"><div class="mois-nom">🍂 Octobre</div><div class="mois-num">31 jours</div></div>
+        <div class="mois-card automne"><div class="mois-nom">🍂 Novembre</div><div class="mois-num">30 jours</div></div>
+        <div class="mois-card hiver"><div class="mois-nom">❄️ Décembre</div><div class="mois-num">31 jours</div></div>
+      </div>
+      <div class="info-box">
+        <strong>Astuce des knuckles :</strong> Les mois sur les jointures = 31 jours. Les creux = 28/29/30 jours.<br>
+        <strong>1 an = 12 mois = 52 semaines = 365 jours</strong>
+      </div>
+      <button class="btn-compris" onclick="goPhase('g1',1)">On joue ! 🚀</button>
+    </div>
+  </div>
+</div>
+<div class="phase" id="phase-g1">
+  <div class="ugo-box"><span class="ugo">🦉</span><p>Super ! <strong>3 questions</strong>. <strong>3 essais</strong> ! 🧡</p></div>
+  <div id="g1-reset" class="reset-box"><div class="r-ugo">🦉</div><h3>On recommence !</h3><p>7 jours/semaine · 12 mois/an · 365 jours/an · Lundi=1er jour · Samedi+Dimanche=week-end. 💪</p><button class="btn-reset" onclick="initG1()">↺ Réessayer !</button></div>
+  <div id="g1-zone"></div>
+  <button class="btn-suite" id="btn-g1-to-g2" onclick="goPhase('g2',2)">Encore des questions ! 🌟</button>
+</div>
+<div class="phase" id="phase-g2">
+  <div class="ugo-box"><span class="ugo">🦉</span><p>Excellent ! <strong>3 questions</strong> de plus ! 🏆</p></div>
+  <div id="g2-reset" class="reset-box"><div class="r-ugo">🦉</div><h3>On recommence !</h3><p>Rappelle les mois et leurs saisons ! 💪</p><button class="btn-reset" onclick="initG2()">↺ Réessayer !</button></div>
+  <div id="g2-zone"></div>
+  <button class="btn-suite" id="btn-g2-to-free" onclick="goPhase('free',3)">Exercices libres 🎯</button>
+</div>
+<div class="phase" id="phase-free">
+  <div class="ugo-box"><span class="ugo">🦉</span><p><strong>5 questions !</strong> 📅</p></div>
+  <div id="free1-zone"></div>
+  <button class="btn-suite" id="btn-free-to-free2" onclick="goPhase('free2',4)">5 dernières ! 💪</button>
+</div>
+<div class="phase" id="phase-free2">
+  <div class="ugo-box"><span class="ugo">🦉</span><p>Encore <strong>5 questions</strong> ! 🏁</p></div>
+  <div id="free2-zone"></div>
+  <button class="btn-suite" id="btn-free2-to-bilan" onclick="goPhase('bilan',5)">🌟 Mon résultat !</button>
+</div>
+<div class="phase" id="phase-bilan">
+  <div class="bilan-card">
+    <span class="bilan-ugo">🦉</span>
+    <h2 class="bilan-title" id="bilan-title"></h2>
+    <p class="bilan-msg" id="bilan-msg"></p>
+    <div class="stars-row"><span class="star-big" id="etoile1">⭐</span><span class="star-big" id="etoile2">⭐</span><span class="star-big" id="etoile3">⭐</span></div>
+    <div class="score-circle"><span class="score-num" id="bilan-pts">0</span><span class="score-sub" id="bilan-sur">/0</span></div>
+    <div class="memo"><h3>📝 Ce que j'ai appris</h3>
+      <div class="memo-grid">
+        <div class="memo-item"><strong>Semaine</strong><span>7 jours<br>Lundi → Dimanche</span></div>
+        <div class="memo-item"><strong>Week-end</strong><span>Samedi + Dimanche<br>2 jours</span></div>
+        <div class="memo-item"><strong>Année</strong><span>12 mois · 365 jours<br>52 semaines</span></div>
+        <div class="memo-item"><strong>Février</strong><span>28 jours (29 si<br>année bissextile)</span></div>
+      </div>
+    </div>
+    <div class="bilan-btns">
+      <button class="btn-bilan secondary" onclick="location.reload()">↺ Recommencer</button>
+      <button class="btn-bilan primary" onclick="location.href='../6-9ans.html'">← Les fiches</button>
+    </div>
+  </div>
+</div>
+</main>
+<script>
+var G1=[
+  {titre:"📅 Les jours de la semaine",etapes:[
+    {q:"Combien y a-t-il de jours dans une semaine ?",opts:["7","5","6","8"],ok:0,hint:"Lundi, mardi, mercredi, jeudi, vendredi, samedi, dimanche = ?",expl_ok:"7 jours ! Lundi à dimanche. 🎉",expl_ko:"Lundi, mardi, mercredi, jeudi, vendredi, samedi, dimanche = 7 jours."},
+    {q:"Quels sont les jours du week-end ?",opts:["Samedi et dimanche","Vendredi et samedi","Samedi seulement","Dimanche et lundi"],ok:0,hint:"Le week-end, il n'y a pas d'école.",expl_ok:"Samedi et dimanche ! C'est le week-end. 🌟",expl_ko:"Le week-end = samedi + dimanche."},
+    {q:"Quel jour vient APRÈS le mercredi ?",opts:["Jeudi","Mardi","Lundi","Vendredi"],ok:0,hint:"Lundi, mardi, mercredi, JEUDI…",expl_ok:"Jeudi ! Mercredi → jeudi. 🎉",expl_ko:"L'ordre : lundi, mardi, mercredi, JEUDI, vendredi."}
+  ]},
+  {titre:"📅 Les mois de l'année",etapes:[
+    {q:"Combien y a-t-il de mois dans une année ?",opts:["12","10","7","24"],ok:0,hint:"De janvier à décembre…",expl_ok:"12 mois ! De janvier à décembre. 🌟",expl_ko:"Janvier, février, mars... décembre = 12 mois."},
+    {q:"Quel est le premier mois de l'année ?",opts:["Janvier","Mars","Décembre","Février"],ok:0,hint:"Bonne année en… ?",expl_ok:"Janvier ! Le 1er janvier est le Jour de l'An. 🎉",expl_ko:"Le premier mois = janvier."},
+    {q:"Quel est le dernier mois de l'année ?",opts:["Décembre","Novembre","Janvier","Octobre"],ok:0,hint:"Noël est en… ?",expl_ok:"Décembre ! Le 25 décembre c'est Noël. 🌟",expl_ko:"Le dernier mois = décembre."}
+  ]},
+  {titre:"📅 Jours et semaines",etapes:[
+    {q:"Combien de jours dans une année ?",opts:["365","360","366","52"],ok:0,hint:"365 jours, sauf les années bissextiles (366).",expl_ok:"365 jours ! (366 les années bissextiles). 🎉",expl_ko:"1 an = 365 jours (366 si bissextile)."},
+    {q:"Combien de semaines dans une année ?",opts:["52","12","7","365"],ok:0,hint:"365 ÷ 7 ≈ 52 semaines.",expl_ok:"52 semaines ! 365 ÷ 7 = 52 semaines et 1 jour. 🌟",expl_ko:"1 an ≈ 52 semaines."},
+    {q:"Le mardi vient AVANT quel jour ?",opts:["Mercredi","Lundi","Jeudi","Vendredi"],ok:0,hint:"Lundi, MARDI, mercredi…",expl_ok:"Mercredi ! Mardi → mercredi. 🎉",expl_ko:"Lundi, mardi, MERCREDI. Après mardi vient mercredi."}
+  ]},
+  {titre:"📅 Lire un calendrier",etapes:[
+    {q:"Dans un calendrier, une ligne représente… ?",opts:["Une semaine","Un mois","Un jour","Une année"],ok:0,hint:"Chaque ligne va du lundi au dimanche.",expl_ok:"Une semaine ! Chaque ligne = lundi à dimanche. 🌟",expl_ko:"Une ligne de calendrier = une semaine (lundi→dimanche)."},
+    {q:"Février a combien de jours d'habitude ?",opts:["28","29","30","31"],ok:0,hint:"Février est le mois le plus court.",expl_ok:"28 jours ! (29 lors d'une année bissextile). 🎉",expl_ko:"Février = 28 jours. (29 si bissextile)."},
+    {q:"Quel mois vient APRÈS avril ?",opts:["Mai","Mars","Juin","Juillet"],ok:0,hint:"Janvier, février, mars, avril, MAI…",expl_ok:"Mai ! Après avril vient mai. 🌟",expl_ko:"Janvier, février, mars, avril, MAI."}
+  ]}
+];
+var G2=[
+  {titre:"✏️ Les saisons",etapes:[
+    {q:"Quels mois sont en été ?",opts:["Juin, juillet, août","Mars, avril, mai","Septembre, octobre, novembre","Décembre, janvier, février"],ok:0,hint:"L'été c'est les grandes vacances scolaires.",expl_ok:"Juin, juillet, août ! C'est l'été ☀️ 🎉",expl_ko:"Été = juin, juillet, août."},
+    {q:"En quelle saison est décembre ?",opts:["En hiver ❄️","Au printemps 🌸","En automne 🍂","En été ☀️"],ok:0,hint:"Il fait froid et il y a Noël en décembre.",expl_ok:"En hiver ! Décembre → hiver ❄️ 🌟",expl_ko:"Décembre est en hiver."},
+    {q:"Quel mois marque le début du printemps (en France) ?",opts:["Mars","Juin","Septembre","Janvier"],ok:0,hint:"Le printemps commence vers le 21 mars.",expl_ok:"Mars ! Le printemps commence en mars 🌸 🎉",expl_ko:"Le printemps commence en mars."}
+  ]},
+  {titre:"✏️ Calculs de temps",etapes:[
+    {q:"Si aujourd'hui c'est lundi, dans 7 jours c'est ?",opts:["Lundi","Mardi","Dimanche","Mercredi"],ok:0,hint:"7 jours = 1 semaine complète → même jour.",expl_ok:"Lundi ! 7 jours = 1 semaine → on revient au même jour. 🌟",expl_ko:"7 jours = 1 semaine → même jour → lundi."},
+    {q:"Si on est le 3 mars (lundi), quel jour sera le 10 mars ?",opts:["Lundi","Mardi","Dimanche","Samedi"],ok:0,hint:"Du 3 au 10 = 7 jours = 1 semaine.",expl_ok:"Lundi ! Du 3 au 10 = 7 jours = même jour. 🎉",expl_ko:"3 mars → 10 mars = 7 jours = 1 semaine = même jour."},
+    {q:"Combien y a-t-il de jours du lundi au vendredi (inclus) ?",opts:["5","7","4","6"],ok:0,hint:"Lundi, mardi, mercredi, jeudi, vendredi.",expl_ok:"5 jours ! Lundi à vendredi = 5 jours d'école. 🌟",expl_ko:"Lundi, mardi, mercredi, jeudi, vendredi = 5 jours."}
+  ]},
+  {titre:"✏️ Vrai ou faux ?",etapes:[
+    {q:"Novembre a 31 jours.",opts:["Faux ! Novembre a 30 jours","Vrai, novembre = 31 jours"],ok:0,hint:"Les mois à 30 jours : avril, juin, sept, nov.",expl_ok:"Faux ! Novembre a 30 jours. 🎉",expl_ko:"Faux. Novembre a 30 jours (comme avril, juin, septembre)."},
+    {q:"Le samedi est un jour de la semaine.",opts:["Vrai ! Samedi est le 6e jour","Faux, samedi n'est pas un jour"],ok:0,hint:"Les 7 jours : lundi, mardi, mercredi, jeudi, vendredi, SAMEDI, dimanche.",expl_ok:"Vrai ! Samedi est bien le 6e jour de la semaine. 🌟",expl_ko:"Vrai. Samedi est le 6e jour de la semaine."},
+    {q:"Décembre est le 12e mois de l'année.",opts:["Vrai !","Faux, c'est le 11e"],ok:0,hint:"…octobre (10), novembre (11), décembre (12).",expl_ok:"Vrai ! Décembre = le 12e mois. 🎉",expl_ko:"Vrai. Décembre est bien le 12e (dernier) mois."}
+  ]},
+  {titre:"✏️ Questions variées",etapes:[
+    {q:"Quel est le 6e mois de l'année ?",opts:["Juin","Juillet","Mai","Août"],ok:0,hint:"Jan(1), Fév(2), Mar(3), Avr(4), Mai(5), JUN(6)…",expl_ok:"Juin ! C'est le 6e mois. 🌟",expl_ko:"Janvier=1, février=2, mars=3, avril=4, mai=5, JUIN=6."},
+    {q:"Combien de jours dans le mois de mars ?",opts:["31","30","28","29"],ok:0,hint:"Mars est un mois long (jointure).",expl_ok:"31 jours ! Mars a 31 jours. 🎉",expl_ko:"Mars a 31 jours."},
+    {q:"Quel jour vient AVANT jeudi ?",opts:["Mercredi","Vendredi","Mardi","Lundi"],ok:0,hint:"…mardi, mercredi, JEUDI…",expl_ok:"Mercredi ! Mercredi → jeudi. 🌟",expl_ko:"Avant jeudi vient mercredi."}
+  ]}
+];
+var FREE_POOL=[
+  {q:"Combien de jours dans une semaine ?",opts:["7","5"],ok:0,expl:"1 semaine = 7 jours (lundi à dimanche)."},
+  {q:"Combien de mois dans une année ?",opts:["12","10"],ok:0,expl:"1 an = 12 mois (janvier à décembre)."},
+  {q:"Quel jour vient après mardi ?",opts:["Mercredi","Lundi"],ok:0,expl:"Lundi, mardi, MERCREDI…"},
+  {q:"Quels jours forment le week-end ?",opts:["Sam. et dim.","Ven. et sam."],ok:0,expl:"Week-end = samedi + dimanche."},
+  {q:"Quel est le premier mois de l'année ?",opts:["Janvier","Mars"],ok:0,expl:"Le 1er janvier = début de l'année."},
+  {q:"Quel est le dernier mois de l'année ?",opts:["Décembre","Novembre"],ok:0,expl:"Décembre = 12e et dernier mois."},
+  {q:"Combien de jours dans une année (normale) ?",opts:["365","360"],ok:0,expl:"1 an = 365 jours (366 si bissextile)."},
+  {q:"Février a combien de jours d'habitude ?",opts:["28","30"],ok:0,expl:"Février = 28 jours (29 si bissextile)."},
+  {q:"Quel mois vient après mars ?",opts:["Avril","Mai"],ok:0,expl:"Janvier, février, mars, AVRIL."},
+  {q:"En quelle saison est juillet ?",opts:["Été ☀️","Hiver ❄️"],ok:0,expl:"Juillet est en été."},
+  {q:"Quel jour vient avant vendredi ?",opts:["Jeudi","Samedi"],ok:0,expl:"Jeudi, VENDREDI, samedi."},
+  {q:"Combien de jours d'école dans une semaine ?",opts:["5","7"],ok:0,expl:"Lundi à vendredi = 5 jours d'école."},
+  {q:"En quelle saison est décembre ?",opts:["Hiver ❄️","Automne 🍂"],ok:0,expl:"Décembre, janvier, février = hiver."},
+  {q:"Quel est le 3e mois de l'année ?",opts:["Mars","Avril"],ok:0,expl:"Jan=1, fév=2, MARS=3."},
+  {q:"Combien de semaines dans une année ?",opts:["52","12"],ok:0,expl:"1 an ≈ 52 semaines."},
+  {q:"Novembre a combien de jours ?",opts:["30","31"],ok:0,expl:"Novembre = 30 jours."},
+  {q:"Quel mois vient avant juin ?",opts:["Mai","Juillet"],ok:0,expl:"Avril, MAI, juin, juillet."},
+  {q:"Quel jour vient après dimanche ?",opts:["Lundi","Samedi"],ok:0,expl:"…dimanche, puis LUNDI (semaine suivante)."},
+  {q:"En quelle saison est octobre ?",opts:["Automne 🍂","Printemps 🌸"],ok:0,expl:"Septembre, octobre, novembre = automne."},
+  {q:"Quel est le 9e mois de l'année ?",opts:["Septembre","Octobre"],ok:0,expl:"…août=8, SEPTEMBRE=9, octobre=10."}
+];
+var score=0,g1Idx=0,g2Idx=0,f1Exs=[],f2Exs=[],f1Done=0,f2Done=0,_cb={},_g1tries=0,_g2tries=0;
+function shuffle(a){var b=a.slice();for(var i=b.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=b[i];b[i]=b[j];b[j]=t;}return b;}
+function addPt(){score++;document.getElementById('score-display').textContent=score;}
+function updSteps(n){for(var i=0;i<6;i++){var s=document.getElementById('s'+i);if(!s)return;s.classList.remove('active','done');if(i<n)s.classList.add('done');else if(i===n)s.classList.add('active');}}
+function goPhase(ph,si){document.querySelectorAll('.phase').forEach(function(p){p.classList.remove('active');});var el=document.getElementById('phase-'+ph);if(el){el.classList.add('active');setTimeout(function(){el.scrollIntoView({behavior:'smooth',block:'start'});},100);}updSteps(si);if(ph==='g1')initG1();if(ph==='g2')initG2();if(ph==='free')initFree1();if(ph==='free2')initFree2();if(ph==='bilan')showBilan();}
+function revealBloc(n){var b=document.getElementById('bloc-'+n);if(!b)return;var p=document.getElementById('bloc-'+(n-1));if(p){var btn=p.querySelector('.btn-compris');if(btn){btn.textContent='✓ Compris !';btn.disabled=true;btn.style.opacity='.4';}}b.classList.add('revealed');setTimeout(function(){var hH=(document.querySelector('.header')||{offsetHeight:0}).offsetHeight;var r=b.getBoundingClientRect();window.scrollTo({top:window.pageYOffset+r.top-hH-16,behavior:'smooth'});},150);}
+function makeQBox(step,si,prefix){var so=shuffle(step.opts.map(function(o,oi){return{t:o,i:oi};}));var sb=document.createElement('div');sb.className='q-box'+(si===0?' active':'');sb.id=prefix+'s'+si;sb.innerHTML='<div class="q-num">Question '+(si+1)+'</div><div class="q-text">'+step.q+'</div><div class="hint-box" id="'+prefix+'h'+si+'">💡 '+step.hint+'</div><div class="opts">'+so.map(function(o){return'<button class="opt" onclick="checkQ(\''+prefix+'\','+si+','+o.i+',this)">'+o.t+'</button>';}).join('')+'</div><div class="fb" id="'+prefix+'f'+si+'"></div>';return sb;}
+function checkQ(prefix,si,ci,btn){var v=prefix==='g1'?G1[g1Idx]:G2[g2Idx];var step=v.etapes[si];var sb=document.getElementById(prefix+'s'+si);var fb=document.getElementById(prefix+'f'+si);var triesId=prefix==='g1'?'tries-g1':'tries-g2';var tries=prefix==='g1'?_g1tries:_g2tries;if(sb.classList.contains('correct'))return;if(ci===step.ok){btn.classList.add('ok');sb.querySelectorAll('.opt').forEach(function(b){b.disabled=true;});sb.classList.add('correct');if(tries===0){fb.className='fb show ok';fb.innerHTML='✅ '+step.expl_ok+' <span style="font-size:.75rem;color:#065f46">(+1 pt)</span>';addPt();}else{fb.className='fb show ok';fb.innerHTML='✅ '+step.expl_ok;}if(prefix==='g1')_g1tries=0;else _g2tries=0;var el=document.getElementById(triesId);if(el)el.textContent='3 essais';var nx=document.getElementById(prefix+'s'+(si+1));if(nx){nx.classList.add('active');setTimeout(function(){nx.scrollIntoView({behavior:'smooth',block:'nearest'});},350);}else{var btnId=prefix==='g1'?'btn-g1-to-g2':'btn-g2-to-free';setTimeout(function(){var b=document.getElementById(btnId);b.classList.add('show');b.scrollIntoView({behavior:'smooth',block:'nearest'});},550);}}else{btn.classList.add('ko');btn.disabled=true;if(prefix==='g1')_g1tries++;else _g2tries++;var newTries=prefix==='g1'?_g1tries:_g2tries;var el=document.getElementById(triesId);if(el)el.textContent=(3-newTries)+' essai'+(3-newTries>1?'s':'');fb.className='fb show ko';if(newTries<3){fb.innerHTML='❌ Réessaie ! 💪';document.getElementById(prefix+'h'+si).classList.add('show');}else{fb.innerHTML='❌ '+step.expl_ko;var rid=prefix==='g1'?'g1-reset':'g2-reset',zid=prefix==='g1'?'g1-zone':'g2-zone';setTimeout(function(){document.getElementById(rid).classList.add('show');document.getElementById(zid).innerHTML='';document.getElementById(rid).scrollIntoView({behavior:'smooth',block:'start'});},1400);}}}
+function initG(which){var isG1=which==='g1';if(isG1){g1Idx=Math.floor(Math.random()*G1.length);_g1tries=0;}else{g2Idx=Math.floor(Math.random()*G2.length);_g2tries=0;}var v=isG1?G1[g1Idx]:G2[g2Idx];document.getElementById(which+'-reset').classList.remove('show');document.getElementById('btn-'+which+'-to-'+(isG1?'g2':'free')).classList.remove('show');var z=document.getElementById(which+'-zone');z.innerHTML='';var box=document.createElement('div');box.className='guided-box';box.innerHTML='<div class="guided-title">'+v.titre+'<span class="tries-b" id="tries-'+which+'">3 essais</span></div><div id="'+which+'-steps"></div>';z.appendChild(box);v.etapes.forEach(function(step,si){document.getElementById(which+'-steps').appendChild(makeQBox(step,si,which));});}
+function initG1(){initG('g1');}function initG2(){initG('g2');}
+function buildFree(ex,i,prefix,cb){var card=document.createElement('div');card.className='free-card';card.id=prefix+'c'+i;var so=shuffle(ex.opts.map(function(o,oi){return{t:o,i:oi};}));card.innerHTML='<div class="free-num">Question '+(i+1)+'</div><div class="free-q">'+ex.q+'</div><div class="free-opts" id="'+prefix+'fo'+i+'"></div><div class="free-fb" id="'+prefix+'ff'+i+'"></div>';setTimeout(function(){var ba=document.getElementById(prefix+'fo'+i);so.forEach(function(o){var btn=document.createElement('button');btn.className='free-opt';btn.textContent=o.t;btn.onclick=function(){if(card.classList.contains('done'))return;card.classList.add('done');ba.querySelectorAll('button').forEach(function(b){b.disabled=true;});var fb=document.getElementById(prefix+'ff'+i);if(o.i===ex.ok){btn.classList.add('ok');fb.className='free-fb show ok';fb.innerHTML='✅ '+ex.expl;addPt();}else{btn.classList.add('ko');ba.querySelectorAll('button').forEach(function(b,bi){if(bi===ex.ok)b.classList.add('reveal');});fb.className='free-fb show ko';fb.innerHTML='❌ '+ex.expl;}cb();};ba.appendChild(btn);});},0);return card;}
+function initFree1(){f1Exs=shuffle(FREE_POOL.slice()).slice(0,5);f1Done=0;var z=document.getElementById('free1-zone');z.innerHTML='';f1Exs.forEach(function(ex,i){_cb['f1'+i]=function(){f1Done++;if(f1Done>=5)setTimeout(function(){var b=document.getElementById('btn-free-to-free2');b.classList.add('show');b.scrollIntoView({behavior:'smooth',block:'nearest'});},600);};z.appendChild(buildFree(ex,i,'f1',_cb['f1'+i]));});}
+function initFree2(){var used=f1Exs.map(function(e){return e.q;});var pool=FREE_POOL.filter(function(e){return used.indexOf(e.q)<0;});f2Exs=shuffle(pool).slice(0,5);f2Done=0;var z=document.getElementById('free2-zone');z.innerHTML='';f2Exs.forEach(function(ex,i){_cb['f2'+i]=function(){f2Done++;if(f2Done>=5)setTimeout(function(){var b=document.getElementById('btn-free2-to-bilan');b.classList.add('show');b.scrollIntoView({behavior:'smooth',block:'nearest'});},600);};z.appendChild(buildFree(ex,i,'f2',_cb['f2'+i]));});}
+function showBilan(){var g1n=G1[g1Idx]?G1[g1Idx].etapes.length:3,g2n=G2[g2Idx]?G2[g2Idx].etapes.length:3,tot=g1n+g2n+10;document.getElementById('bilan-pts').textContent=score;document.getElementById('bilan-sur').textContent='/ '+tot+' pts';var pct=score/tot,t,m;if(pct>=.8){t='BRAVO ! 🎉🎊';m='Tu maîtrises le calendrier ! Ugo est super fier de toi ! 🦉⭐';}else if(pct>=.5){t='Très bien ! 😊🌟';m='7 jours/semaine · 12 mois/an · 365 jours. Continue !';}else{t='Bien essayé ! 💪';m='Rappelle : 7 jours, 12 mois, 365 jours. Recommence ! 🦉';}document.getElementById('bilan-title').textContent=t;document.getElementById('bilan-msg').textContent=m;var s=[Math.ceil(tot*.33),Math.ceil(tot*.66),Math.ceil(tot*.89)];['etoile1','etoile2','etoile3'].forEach(function(id,i){var el=document.getElementById(id);if(score>=s[i]){(function(e,d){setTimeout(function(){e.classList.add('earned');},d);})(el,300+i*450);}else el.style.filter='grayscale(1)';});if(pct>=.5)confetti();}
+function confetti(){var cols=['#d97706','#fcd34d','#059669','#0369a1','#7c3aed'];for(var i=0;i<65;i++){var el=document.createElement('div');el.className='confetti-piece';el.style.cssText='left:'+Math.random()*100+'vw;background:'+cols[Math.floor(Math.random()*cols.length)]+';animation-duration:'+(1.8+Math.random()*2.2)+'s;animation-delay:'+Math.random()*1.5+'s;width:'+(7+Math.random()*10)+'px;height:'+(7+Math.random()*10)+'px;border-radius:'+(Math.random()>.5?'50%':'4px')+';';document.body.appendChild(el);setTimeout(function(){if(el.parentNode)el.remove();},5000);}}
+</script>
+</body>
+</html>

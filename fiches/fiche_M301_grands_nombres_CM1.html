@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>M301 — Les grands nombres | L'Atelier du Devoir</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--acc:#7c3aed;--acc-pale:#f5f3ff;--acc-mid:#c4b5fd;--acc-dark:#5b21b6;--mint:#059669;--mint-pale:#d1fae5;--mint-deep:#047857;--coral:#dc2626;--coral-pale:#fee2e2;--sun:#d97706;--sun-pale:#fef3c7;--text:#1e293b;--text-light:#64748b;--radius:14px;--radius-sm:8px;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Nunito',sans-serif;background:#f5f3ff;color:var(--text);font-size:16px;line-height:1.6;}
+.header{background:white;border-bottom:3px solid var(--acc-pale);position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.08);}
+.header-top{display:flex;align-items:center;justify-content:space-between;padding:10px 18px;}
+.logo{font-family:'Fredoka One',cursive;font-size:1.2rem;color:var(--acc);text-decoration:none;}
+.score-badge{background:var(--acc);color:white;font-weight:800;font-size:.88rem;padding:5px 14px;border-radius:20px;display:flex;align-items:center;gap:5px;}
+.steps-wrap{padding:0 18px 8px;}
+.steps{display:flex;gap:4px;}
+.step{flex:1;height:6px;border-radius:6px;background:#e9d5ff;transition:all .35s;}
+.step.done{background:var(--mint);}.step.active{background:var(--acc);}
+.steps-labels{display:flex;gap:4px;padding-top:3px;}
+.step-lbl{flex:1;font-size:.46rem;font-weight:700;color:var(--text-light);text-align:center;text-transform:uppercase;letter-spacing:.04em;}
+.main{max-width:700px;margin:0 auto;padding:22px 14px 100px;}
+.phase{display:none;}.phase.active{display:block;}
+.accroche{background:white;border-radius:var(--radius);padding:20px;margin-bottom:20px;border:2px solid var(--acc-pale);display:flex;gap:14px;align-items:flex-start;}
+.accroche-icon{font-size:2.6rem;flex-shrink:0;}
+.accroche-text h1{font-family:'Fredoka One',cursive;font-size:1.5rem;color:var(--acc);margin-bottom:4px;}
+.accroche-text p{color:var(--text-light);font-size:.9rem;line-height:1.5;}
+.meta-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
+.meta-tag{background:var(--acc-pale);border-radius:20px;padding:3px 12px;font-size:.72rem;font-weight:700;color:var(--acc);}
+.lecon-card{background:white;border-radius:var(--radius);padding:20px;margin-bottom:16px;border:2px solid var(--acc-pale);}
+.lecon-card h2{font-family:'Fredoka One',cursive;font-size:1.2rem;color:var(--acc);margin-bottom:14px;}
+.lecon-block{display:none;}.lecon-block.revealed{display:block;}
+.lecon-subtitle{font-weight:800;font-size:.95rem;color:var(--acc);margin-bottom:8px;margin-top:4px;}
+.sep{margin:16px 0;border:none;border-top:2px dashed var(--acc-pale);}
+.analogie{font-size:.9rem;color:var(--text-light);font-style:italic;margin-bottom:10px;line-height:1.6;background:var(--acc-pale);border-radius:var(--radius-sm);padding:10px 14px;border-left:4px solid var(--acc-mid);}
+.def-box{border-left:4px solid var(--acc);background:var(--acc-pale);border-radius:0 var(--radius) var(--radius) 0;padding:12px 16px;margin-bottom:10px;}
+.def-box h4{font-weight:800;color:var(--acc);font-size:.88rem;margin-bottom:6px;}
+.def-box p{font-size:.86rem;color:var(--text);line-height:1.7;}
+.tableau{width:100%;border-collapse:collapse;margin:10px 0;font-size:.88rem;border-radius:8px;overflow:hidden;}
+.tableau th{padding:9px 12px;text-align:center;font-weight:800;background:var(--acc);color:white;font-size:.8rem;}
+.tableau td{padding:8px 12px;border:1px solid #e9d5ff;text-align:center;}
+.tableau tr:nth-child(even) td{background:var(--acc-pale);}
+.tableau td.big{font-weight:800;font-size:1rem;color:var(--acc-dark);}
+.exemple-block{background:white;border:2px solid var(--acc-pale);border-radius:var(--radius-sm);padding:10px 14px;margin-bottom:8px;font-size:.9rem;line-height:1.8;}
+.exemple-block .tag{display:inline-block;background:var(--acc);color:white;font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:20px;margin-right:8px;text-transform:uppercase;}
+.hl{background:var(--sun-pale);color:var(--sun);border-radius:6px;padding:1px 8px;font-weight:800;}
+.astuce{background:var(--sun-pale);border:2px solid #fde68a;border-radius:var(--radius-sm);padding:10px 14px;font-size:.85rem;margin-top:8px;color:#78350f;}
+.astuce strong{color:#92400e;}
+.btn-compris{margin-top:16px;padding:12px 28px;border-radius:30px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.95rem;background:var(--acc);color:white;border:none;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:8px;box-shadow:0 4px 12px rgba(124,58,237,.3);}
+.btn-compris:hover{background:var(--acc-dark);transform:translateY(-2px);}
+.btn-compris:disabled{opacity:.4;cursor:default;transform:none;box-shadow:none;}
+.ugo-msg{background:white;border:2px solid var(--acc-pale);border-radius:var(--radius);padding:14px 16px;margin:14px 0;display:flex;align-items:flex-start;gap:12px;}
+.ugo-msg .ugo{font-size:2rem;flex-shrink:0;}
+.ugo-msg p{font-size:.88rem;color:var(--text-light);line-height:1.6;}
+.ugo-msg p strong{color:var(--acc);}
+.ex-header{background:white;border:2px solid var(--acc-pale);border-radius:var(--radius);padding:14px 18px;margin-bottom:14px;}
+.ex-header h2{font-family:'Fredoka One',cursive;font-size:1.1rem;color:var(--acc);margin-bottom:3px;}
+.ex-header p{color:var(--text-light);font-size:.84rem;}
+.guided-box{background:white;border:3px solid var(--acc);border-radius:var(--radius);padding:18px;margin-bottom:14px;}
+.guided-title{font-size:1rem;font-weight:800;color:var(--acc);margin-bottom:14px;background:var(--acc-pale);padding:9px 14px;border-radius:var(--radius-sm);display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.tries-badge{font-size:.72rem;font-weight:700;color:var(--coral);background:var(--coral-pale);padding:2px 10px;border-radius:20px;margin-left:auto;}
+.step-box{border:2px solid #e9d5ff;border-radius:10px;padding:14px;transition:all .3s;opacity:.5;pointer-events:none;margin-bottom:8px;}
+.step-box.active{opacity:1;pointer-events:all;border-color:var(--acc-mid);}
+.step-box.correct{border-color:var(--mint);background:var(--mint-pale);opacity:1;}
+.step-lbl-num{font-size:.62rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;}
+.step-q{font-size:.93rem;font-weight:700;margin-bottom:10px;line-height:1.6;}
+.step-hint{font-size:.82rem;color:#92400e;background:var(--sun-pale);border-radius:6px;padding:8px 12px;margin-bottom:8px;display:none;}
+.step-hint.show{display:block;}
+.qcm-opts{display:flex;flex-direction:column;gap:7px;}
+.qcm-opt{padding:10px 14px;border-radius:10px;border:2px solid #e9d5ff;background:white;font-family:'Nunito',sans-serif;font-weight:700;font-size:.9rem;cursor:pointer;text-align:left;transition:all .2s;}
+.qcm-opt:hover:not(:disabled){border-color:var(--acc);background:var(--acc-pale);}
+.qcm-opt:disabled{cursor:default;}
+.qcm-opt.opt-ok{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.qcm-opt.opt-ko{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
+.step-input-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.step-input{border:2px solid var(--acc);border-radius:10px;padding:9px 14px;font-family:'Nunito',sans-serif;font-weight:700;font-size:1rem;color:var(--text);background:white;outline:none;min-width:120px;max-width:220px;text-align:center;}
+.step-input:disabled{border-color:#e9d5ff;background:#f8fafc;}
+.step-input.ok{border-color:var(--mint);background:var(--mint-pale);}
+.step-input.ko{border-color:var(--coral);}
+.btn-check{padding:9px 18px;border-radius:20px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.88rem;background:var(--acc);color:white;border:none;cursor:pointer;}
+.btn-check:disabled{opacity:.4;cursor:not-allowed;}
+.step-fb{margin-top:8px;padding:9px 12px;border-radius:8px;font-size:.83rem;font-weight:700;display:none;}
+.step-fb.show{display:block;}
+.step-fb.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.step-fb.ko{background:var(--coral-pale);color:#b91c1c;}
+.reset-box{background:white;border:3px solid var(--acc);border-radius:var(--radius);padding:20px;text-align:center;margin-bottom:14px;display:none;}
+.reset-box.show{display:block;}
+.reset-box .ugo-big{font-size:3rem;margin-bottom:8px;}
+.reset-box h3{font-family:'Fredoka One',cursive;font-size:1.2rem;color:var(--acc);margin-bottom:8px;}
+.reset-box p{color:var(--text-light);font-size:.88rem;margin-bottom:14px;line-height:1.6;}
+.btn-restart{padding:11px 26px;border-radius:30px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.9rem;background:var(--acc);color:white;border:none;cursor:pointer;box-shadow:0 4px 12px rgba(124,58,237,.3);}
+.free-card{background:white;border:2px solid var(--acc-pale);border-radius:var(--radius);padding:16px;margin-bottom:12px;}
+.free-label{font-size:.68rem;font-weight:700;color:var(--acc);text-transform:uppercase;letter-spacing:.06em;margin-bottom:7px;}
+.free-q{font-size:.93rem;font-weight:700;margin-bottom:11px;background:var(--acc-pale);border-radius:var(--radius-sm);padding:10px 14px;line-height:1.8;}
+.free-opts{display:flex;gap:8px;flex-wrap:wrap;}
+.free-opt{padding:10px 16px;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.88rem;border:2px solid #e9d5ff;background:white;cursor:pointer;transition:all .2s;flex:1;text-align:center;}
+.free-opt:hover{border-color:var(--acc);background:var(--acc-pale);}
+.free-opt.ok{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.free-opt.ko{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
+.free-opt.reveal{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.free-input-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.free-input{border:2px solid var(--acc);border-radius:10px;padding:9px 14px;font-family:'Nunito',sans-serif;font-weight:700;font-size:1rem;background:white;outline:none;min-width:100px;max-width:200px;text-align:center;}
+.free-input:disabled{border-color:#e9d5ff;background:#f8fafc;}
+.free-input.ok{border-color:var(--mint);background:var(--mint-pale);}
+.free-input.ko{border-color:var(--coral);}
+.btn-free-check{padding:9px 18px;border-radius:20px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.88rem;background:var(--acc);color:white;border:none;cursor:pointer;}
+.jug-opts{display:flex;flex-direction:column;gap:8px;}
+.jug-opt{padding:11px 16px;border-radius:10px;border:2px solid #e9d5ff;background:white;font-family:'Nunito',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;text-align:left;transition:all .2s;line-height:1.6;}
+.jug-opt:hover{border-color:var(--acc);background:var(--acc-pale);}
+.jug-opt.ok{border-color:var(--mint);background:var(--mint-pale);}
+.jug-opt.ko{border-color:var(--coral);background:var(--coral-pale);}
+.free-fb{margin-top:10px;padding:9px 13px;border-radius:8px;font-size:.84rem;font-weight:700;display:none;}
+.free-fb.show{display:block;}
+.free-fb.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.free-fb.ko{background:var(--coral-pale);color:#b91c1c;}
+.btn-suite{margin-top:14px;padding:11px 24px;border-radius:30px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.9rem;background:var(--acc);color:white;border:none;cursor:pointer;display:none;align-items:center;gap:8px;box-shadow:0 4px 12px rgba(124,58,237,.3);transition:all .2s;}
+.btn-suite.show{display:inline-flex;}
+.btn-suite:hover{background:var(--acc-dark);transform:translateY(-2px);}
+.bilan-card{background:white;border-radius:var(--radius);padding:28px 20px;text-align:center;border:3px solid var(--acc-pale);}
+.bilan-ugo{font-size:4rem;margin-bottom:10px;display:block;}
+.bilan-title{font-family:'Fredoka One',cursive;font-size:2rem;margin-bottom:6px;color:var(--acc);}
+.bilan-msg{color:var(--text-light);font-size:.95rem;margin-bottom:20px;line-height:1.6;}
+.stars-row{display:flex;justify-content:center;gap:12px;margin-bottom:18px;}
+.star-big{font-size:2.8rem;filter:grayscale(1);transition:all .5s;}
+.star-big.earned{filter:none;animation:starPop .5s ease both;}
+@keyframes starPop{0%{transform:scale(0);}60%{transform:scale(1.3);}100%{transform:scale(1);}}
+.score-circle{width:110px;height:110px;border-radius:50%;background:var(--acc);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 20px;color:white;box-shadow:0 6px 20px rgba(124,58,237,.4);}
+.score-num{font-family:'Fredoka One',cursive;font-size:2rem;line-height:1;}
+.score-sub{font-size:.65rem;opacity:.85;}
+.memo{background:var(--acc-pale);border-radius:var(--radius);padding:14px 16px;margin:16px 0;text-align:left;}
+.memo h3{font-weight:800;font-size:.85rem;color:var(--acc);margin-bottom:10px;text-transform:uppercase;letter-spacing:.05em;}
+.memo-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+@media(max-width:460px){.memo-grid{grid-template-columns:1fr;}}
+.memo-item{background:white;border-radius:10px;padding:10px 12px;font-size:.82rem;border:2px solid var(--acc-pale);}
+.memo-item strong{color:var(--acc);}
+.bilan-btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:16px;}
+.btn-bilan{padding:11px 22px;border-radius:30px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.88rem;cursor:pointer;border:none;transition:all .2s;}
+.btn-bilan.primary{background:var(--acc);color:white;box-shadow:0 4px 12px rgba(124,58,237,.3);}
+.btn-bilan.secondary{background:var(--acc-pale);color:var(--acc);border:2px solid var(--acc);}
+.btn-bilan:hover{transform:translateY(-2px);}
+.confetti-piece{position:fixed;border-radius:3px;top:-20px;animation:fall linear both;pointer-events:none;z-index:9999;}
+@keyframes fall{0%{transform:translateY(0) rotate(0deg);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
+.print-bar{position:fixed;right:14px;top:50%;transform:translateY(-50%);z-index:200;display:flex;flex-direction:column;gap:8px;}
+.print-btn{display:flex;align-items:center;gap:6px;padding:9px 13px;border-radius:20px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.75rem;border:none;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.15);}
+.print-btn-a{background:#d97706;color:white;}
+.print-btn-b{background:#0369a1;color:white;}
+@media(max-width:560px){.print-bar{right:6px;}.print-btn{font-size:0;width:38px;height:38px;padding:0;justify-content:center;}.print-btn span.lbl{display:none;}.print-btn span.ico{font-size:1.1rem;}}
+@media print{.print-bar,.btn-compris,.btn-suite,.bilan-card,.ugo-msg{display:none!important;}body{background:white;}.phase{display:block!important;}}
+</style>
+</head>
+<body>
+<div class="print-bar">
+  <button class="print-btn print-btn-a" onclick="window.print()"><span class="ico">📖</span><span class="lbl">Leçon</span></button>
+  <button class="print-btn print-btn-b" onclick="window.print()"><span class="ico">📝</span><span class="lbl">Exercices</span></button>
+</div>
+<header class="header">
+  <div class="header-top">
+    <a href="../9-12ans.html" class="logo">🦉 L'Atelier du Devoir</a>
+    <div class="score-badge">⭐ <span id="score-display">0</span> pts</div>
+  </div>
+  <div class="steps-wrap">
+    <div class="steps">
+      <div class="step active" id="s0"></div><div class="step" id="s1"></div><div class="step" id="s2"></div>
+      <div class="step" id="s3"></div><div class="step" id="s4"></div><div class="step" id="s5"></div>
+    </div>
+    <div class="steps-labels">
+      <div class="step-lbl">Leçon</div><div class="step-lbl">Guidé 1</div><div class="step-lbl">Guidé 2</div>
+      <div class="step-lbl">Exercices</div><div class="step-lbl">+ Exercices</div><div class="step-lbl">Bilan</div>
+    </div>
+  </div>
+</header>
+<main class="main">
+
+<div class="accroche">
+  <div class="accroche-icon">🔢</div>
+  <div class="accroche-text">
+    <h1>Les grands nombres</h1>
+    <p>Apprends à lire et écrire des nombres jusqu'aux millions et aux milliards !</p>
+    <div class="meta-row">
+      <span class="meta-tag">CM1</span><span class="meta-tag">⏱ 20 min</span>
+      <span class="meta-tag">⭐⭐ Difficulté</span><span class="meta-tag">Mathématiques</span>
+    </div>
+  </div>
+</div>
+
+<!-- LEÇON -->
+<div class="phase active" id="phase-lecon">
+  <div class="lecon-card">
+    <h2>📖 La leçon</h2>
+
+    <div class="lecon-block revealed" id="bloc-0">
+      <div class="lecon-subtitle">① Les classes de nombres</div>
+      <div class="analogie">🏙️ Imagine que les chiffres vivent dans des quartiers ! Les unités (0-9) sont dans le quartier des unités, puis vient la dizaine, la centaine… On regroupe les chiffres par groupes de 3 : ce sont les <strong>classes</strong>.</div>
+
+      <!-- Tableau de numération SVG -->
+      <svg viewBox="0 0 320 130" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:12px auto;max-width:320px;background:#faf5ff;border-radius:12px;padding:6px;">
+        <!-- En-têtes classes -->
+        <rect x="4" y="4" width="98" height="22" fill="#7c3aed" rx="6"/>
+        <text x="53" y="19" font-size="10" fill="white" font-weight="bold" text-anchor="middle">Milliards</text>
+        <rect x="108" y="4" width="98" height="22" fill="#0369a1" rx="6"/>
+        <text x="157" y="19" font-size="10" fill="white" font-weight="bold" text-anchor="middle">Millions</text>
+        <rect x="212" y="4" width="104" height="22" fill="#059669" rx="6"/>
+        <text x="264" y="19" font-size="10" fill="white" font-weight="bold" text-anchor="middle">Unités simples</text>
+        <!-- Sous-colonnes -->
+        <!-- Milliards : C M1, D M1, U M1 -->
+        <rect x="4" y="30" width="30" height="20" fill="#c4b5fd" rx="2"/><text x="19" y="44" font-size="9" fill="#5b21b6" font-weight="bold" text-anchor="middle">C</text>
+        <rect x="37" y="30" width="30" height="20" fill="#c4b5fd" rx="2"/><text x="52" y="44" font-size="9" fill="#5b21b6" font-weight="bold" text-anchor="middle">D</text>
+        <rect x="70" y="30" width="30" height="20" fill="#c4b5fd" rx="2"/><text x="85" y="44" font-size="9" fill="#5b21b6" font-weight="bold" text-anchor="middle">U Md</text>
+        <!-- Millions -->
+        <rect x="108" y="30" width="30" height="20" fill="#bfdbfe" rx="2"/><text x="123" y="44" font-size="9" fill="#1e40af" font-weight="bold" text-anchor="middle">C</text>
+        <rect x="141" y="30" width="30" height="20" fill="#bfdbfe" rx="2"/><text x="156" y="44" font-size="9" fill="#1e40af" font-weight="bold" text-anchor="middle">D</text>
+        <rect x="174" y="30" width="30" height="20" fill="#bfdbfe" rx="2"/><text x="189" y="44" font-size="9" fill="#1e40af" font-weight="bold" text-anchor="middle">U M</text>
+        <!-- Unités simples -->
+        <rect x="212" y="30" width="30" height="20" fill="#a7f3d0" rx="2"/><text x="227" y="44" font-size="9" fill="#047857" font-weight="bold" text-anchor="middle">C</text>
+        <rect x="245" y="30" width="30" height="20" fill="#a7f3d0" rx="2"/><text x="260" y="44" font-size="9" fill="#047857" font-weight="bold" text-anchor="middle">D</text>
+        <rect x="278" y="30" width="38" height="20" fill="#a7f3d0" rx="2"/><text x="297" y="44" font-size="9" fill="#047857" font-weight="bold" text-anchor="middle">U</text>
+        <!-- Exemple : 3 245 678 -->
+        <text x="53" y="80" font-size="22" fill="#7c3aed" font-weight="bold" text-anchor="middle" opacity=".3">-</text>
+        <text x="123" y="80" font-size="22" fill="#0369a1" font-weight="bold" text-anchor="middle">3</text>
+        <text x="156" y="80" font-size="22" fill="#0369a1" font-weight="bold" text-anchor="middle">2</text>
+        <text x="189" y="80" font-size="22" fill="#0369a1" font-weight="bold" text-anchor="middle">4</text>
+        <text x="227" y="80" font-size="22" fill="#059669" font-weight="bold" text-anchor="middle">5</text>
+        <text x="260" y="80" font-size="22" fill="#059669" font-weight="bold" text-anchor="middle">6</text>
+        <text x="297" y="80" font-size="22" fill="#059669" font-weight="bold" text-anchor="middle">7</text>
+        <!-- Lecture -->
+        <text x="160" y="110" font-size="10" fill="#7c3aed" font-weight="bold" text-anchor="middle">→ 3 245 678 = trois millions deux cent quarante-cinq mille six cent soixante-dix-sept</text>
+        <text x="160" y="124" font-size="9" fill="#64748b" text-anchor="middle">On espace les groupes de 3 chiffres pour faciliter la lecture</text>
+      </svg>
+
+      <div class="def-box">
+        <h4>🔑 Les classes de numération</h4>
+        <p>On regroupe les chiffres par <strong>groupes de 3</strong> en partant de la droite :<br>
+        • <strong>Unités simples</strong> : centaines (C), dizaines (D), unités (U)<br>
+        • <strong>Millions</strong> : centaines de millions, dizaines de millions, unités de millions<br>
+        • <strong>Milliards</strong> : centaines de milliards, dizaines de milliards, unités de milliards</p>
+      </div>
+      <div class="exemple-block"><span class="tag">Exemple</span> <strong>7 034 500</strong> = sept <span class="hl">millions</span> trente-quatre mille cinq cents</div>
+      <div class="exemple-block"><span class="tag">Exemple</span> <strong>2 000 000 000</strong> = deux <span class="hl">milliards</span></div>
+      <div class="astuce"><strong>💡 Astuce :</strong> Pour écrire un grand nombre dicté à l'oral, commence par les milliards, puis les millions, puis les milliers, puis les unités.</div>
+      <button class="btn-compris" onclick="revealBloc(1)">J'ai compris ! →</button>
+    </div>
+
+    <div class="lecon-block" id="bloc-1">
+      <hr class="sep">
+      <div class="lecon-subtitle">② Lire et écrire un grand nombre</div>
+      <div class="analogie">📖 Lire 5 384 217, c'est comme lire un texte en groupes : "cinq millions" — pause — "trois cent quatre-vingt-quatre mille" — pause — "deux cent dix-sept".</div>
+      <table class="tableau">
+        <tr><th>Nombre</th><th>Décomposition</th><th>Lecture</th></tr>
+        <tr><td class="big">1 000 000</td><td>1 × 1 000 000</td><td>un million</td></tr>
+        <tr><td class="big">15 400 000</td><td>15 × 1 000 000 + 400 × 1 000</td><td>quinze millions quatre cent mille</td></tr>
+        <tr><td class="big">1 000 000 000</td><td>1 × 1 000 000 000</td><td>un milliard</td></tr>
+        <tr><td class="big">3 200 000 000</td><td>3 × 1 000 000 000 + 2 × 100 000 000</td><td>trois milliards deux cents millions</td></tr>
+      </table>
+      <div class="astuce"><strong>💡 Équivalences à retenir :</strong><br>
+      1 million = 1 000 000 = 1 000 × 1 000<br>
+      1 milliard = 1 000 000 000 = 1 000 × 1 000 000</div>
+      <button class="btn-compris" onclick="revealBloc(2)">J'ai compris ! →</button>
+    </div>
+
+    <div class="lecon-block" id="bloc-2">
+      <hr class="sep">
+      <div class="lecon-subtitle">③ Comparer et ordonner les grands nombres</div>
+      <div class="analogie">🏆 Pour comparer deux grands nombres, on regarde d'abord combien de chiffres ils ont. Plus il y a de chiffres, plus le nombre est grand ! Si même nombre de chiffres, on compare chiffre par chiffre de gauche à droite.</div>
+      <div class="def-box">
+        <h4>Méthode de comparaison</h4>
+        <p>1. Comparer le <strong>nombre de chiffres</strong> → plus de chiffres = plus grand<br>
+        2. Si même nombre de chiffres, comparer le <strong>chiffre de gauche</strong><br>
+        3. Si égaux, passer au chiffre suivant…</p>
+      </div>
+      <div class="exemple-block"><span class="tag">Exemple</span> 4 720 000 <span class="hl">&gt;</span> 980 000 car 7 chiffres > 6 chiffres</div>
+      <div class="exemple-block"><span class="tag">Exemple</span> 3 450 000 <span class="hl">&lt;</span> 3 920 000 car 3=3 puis 4&lt;9</div>
+      <button class="btn-compris" onclick="goPhase('g1',1)">J'ai compris ! Aux exercices 🚀</button>
+    </div>
+  </div>
+</div>
+
+<!-- GUIDÉ 1 -->
+<div class="phase" id="phase-g1">
+  <div class="ugo-msg"><span class="ugo">🦉</span><p><strong>Guidé 1 — QCM !</strong> Je te pose des questions une par une. Tu as <strong>3 essais</strong> par question. Un point seulement si tu réussis du premier coup ! 🌟</p></div>
+  <div class="ex-header"><h2>🔢 Lire et identifier</h2><p>Réponds aux questions sur les grands nombres.</p></div>
+  <div id="g1-reset" class="reset-box">
+    <div class="ugo-big">🦉</div><h3>Oups, on recommence !</h3>
+    <p>Souviens-toi : regroupe les chiffres par 3 depuis la droite. Les millions sont au milieu, les milliards à gauche !</p>
+    <button class="btn-restart" onclick="initG1()">↺ Recommencer</button>
+  </div>
+  <div id="g1-zone"></div>
+  <button class="btn-suite" id="btn-g1-to-g2" onclick="goPhase('g2',2)">Super ! Exercice suivant →</button>
+</div>
+
+<!-- GUIDÉ 2 -->
+<div class="phase" id="phase-g2">
+  <div class="ugo-msg"><span class="ugo">🦉</span><p><strong>Guidé 2 — Tu écris !</strong> Cette fois, tape ta réponse. <strong>3 essais</strong> par étape. Point seulement au premier essai ! ✏️</p></div>
+  <div class="ex-header"><h2>✏️ Écrire les grands nombres</h2><p>Écris les chiffres ou les nombres demandés.</p></div>
+  <div id="g2-reset" class="reset-box">
+    <div class="ugo-big">🦉</div><h3>On repart !</h3>
+    <p>Astuce : écris les groupes de 3 chiffres séparément, puis colle-les. Pense aux zéros qui comblent les classes vides !</p>
+    <button class="btn-restart" onclick="initG2()">↺ Recommencer</button>
+  </div>
+  <div id="g2-zone"></div>
+  <button class="btn-suite" id="btn-g2-to-free" onclick="goPhase('free',3)">Excellent ! Exercices libres →</button>
+</div>
+
+<!-- LIBRES 1 -->
+<div class="phase" id="phase-free">
+  <div class="ugo-msg"><span class="ugo">🦉</span><p><strong>Exercices libres !</strong> 5 exercices variés. Tu gères tout seul maintenant ! Chaque bonne réponse = 1 point 🎯</p></div>
+  <div id="free1-zone"></div>
+  <button class="btn-suite" id="btn-free-to-free2" onclick="goPhase('free2',4)">Encore des exercices ! →</button>
+</div>
+
+<!-- LIBRES 2 -->
+<div class="phase" id="phase-free2">
+  <div class="ugo-msg"><span class="ugo">🦉</span><p><strong>5 exercices de plus !</strong> Tu y es presque ! 💪</p></div>
+  <div id="free2-zone"></div>
+  <button class="btn-suite" id="btn-free2-to-bilan" onclick="goPhase('bilan',5)">🌟 Voir mon résultat !</button>
+</div>
+
+<!-- BILAN -->
+<div class="phase" id="phase-bilan">
+  <div class="bilan-card">
+    <span class="bilan-ugo">🦉</span>
+    <h2 class="bilan-title" id="bilan-title">Bravo !</h2>
+    <p class="bilan-msg" id="bilan-msg"></p>
+    <div class="stars-row"><span class="star-big" id="etoile1">⭐</span><span class="star-big" id="etoile2">⭐</span><span class="star-big" id="etoile3">⭐</span></div>
+    <div class="score-circle"><span class="score-num" id="bilan-pts">0</span><span class="score-sub" id="bilan-sur">/ 0 pts</span></div>
+    <div class="memo">
+      <h3>📝 Ce que j'ai appris</h3>
+      <div class="memo-grid">
+        <div class="memo-item"><strong>Classes</strong><br>Groupes de 3 chiffres<br>depuis la droite</div>
+        <div class="memo-item"><strong>1 million</strong><br>= 1 000 000<br>(6 zéros)</div>
+        <div class="memo-item"><strong>1 milliard</strong><br>= 1 000 000 000<br>(9 zéros)</div>
+        <div class="memo-item"><strong>Comparer</strong><br>Plus de chiffres<br>= plus grand nombre</div>
+      </div>
+    </div>
+    <div class="bilan-btns">
+      <button class="btn-bilan secondary" onclick="location.reload()">↺ Recommencer</button>
+      <button class="btn-bilan primary" onclick="location.href='../9-12ans.html'">← Retour aux fiches</button>
+    </div>
+  </div>
+</div>
+</main>
+
+<script>
+// ════ GUIDÉ 1 — QCM 4 variantes ════
+var G1=[
+  {titre:"🔢 Quel est ce nombre ? 5 034 200",etapes:[
+    {q:"Ce nombre a combien de chiffres ?",opts:["7","6","8","5"],ok:0,
+     hint:"Compte tous les chiffres : 5-0-3-4-2-0-0.",
+     expl_ok:"7 chiffres ! C'est un nombre de 7 chiffres, dans la classe des millions.",
+     expl_ko:"Compte chiffre par chiffre : 5,0,3,4,2,0,0 = 7 chiffres."},
+    {q:"Le chiffre 5 est à la position des...",opts:["Millions","Dizaines de millions","Centaines de milliers","Milliards"],ok:0,
+     hint:"Regroupe par 3 depuis la droite : 200 | 034 | 5",
+     expl_ok:"5 est à la position des unités de millions. Le nombre vaut 5 millions trente-quatre mille deux cents.",
+     expl_ko:"En regroupant : ...| 5 | 034 | 200. Le 5 est dans la classe des millions, position unités."},
+    {q:"Comment lit-on ce nombre ?",opts:["Cinq millions trente-quatre mille deux cents","Cinq milliards trente-quatre mille deux cents","Cinq cent trente-quatre mille deux cents","Cinq millions trois cent quarante-deux mille"],ok:0,
+     hint:"5 millions | 034 mille | 200",
+     expl_ok:"5 034 200 = cinq millions trente-quatre mille deux cents. 🎉",
+     expl_ko:"5 | 034 | 200 → cinq millions, trente-quatre mille, deux cents."}
+  ]},
+  {titre:"🔢 Quel est ce nombre ? 12 000 000",etapes:[
+    {q:"Ce nombre contient combien de zéros ?",opts:["6","7","5","8"],ok:0,
+     hint:"1-2-0-0-0-0-0-0 → compte les zéros.",
+     expl_ok:"6 zéros ! 12 000 000 = douze millions.",
+     expl_ko:"Compte les 0 : 12 suivi de 6 zéros = six zéros."},
+    {q:"Ce nombre vaut...",opts:["Douze millions","Douze milliards","Un million deux cents","Cent vingt mille"],ok:0,
+     hint:"1 million = 1 000 000. Donc 12 millions = 12 × 1 000 000.",
+     expl_ok:"12 000 000 = douze millions. 🌟",
+     expl_ko:"12 millions = 12 × 1 000 000 = 12 000 000."},
+    {q:"12 000 000 > ou < 9 000 000 ?",opts:["12 000 000 > 9 000 000","12 000 000 < 9 000 000","Ils sont égaux"],ok:0,
+     hint:"12 millions est plus grand que 9 millions !",
+     expl_ok:"12 000 000 > 9 000 000. 12 > 9, donc douze millions > neuf millions ✓",
+     expl_ko:"12 > 9 → 12 millions > 9 millions."}
+  ]},
+  {titre:"🔢 Quel est ce nombre ? 300 000 000",etapes:[
+    {q:"Ce nombre vaut...",opts:["Trois cents millions","Trois milliards","Trente millions","Trois millions"],ok:0,
+     hint:"300 000 000 : regroupe → 300 | 000 | 000. C'est 300 dans la classe des millions.",
+     expl_ok:"300 000 000 = trois cents millions. C'est aussi 3 × 100 000 000.",
+     expl_ko:"300 | 000 | 000 → 300 millions = trois cents millions."},
+    {q:"1 milliard = 1 000 000 000. Donc 300 000 000 par rapport à 1 milliard c'est...",opts:["3/10 d'un milliard","3 milliards","1/3 d'un milliard","30 milliards"],ok:0,
+     hint:"300 000 000 ÷ 1 000 000 000 = 300/1000 = 3/10.",
+     expl_ok:"300 millions = 3/10 de milliard. Il en faudrait 10 pour faire 3 milliards !",
+     expl_ko:"300 000 000 / 1 000 000 000 = 0,3 = 3/10."},
+    {q:"Quel nombre est le plus grand ?",opts:["300 000 000","29 999 999","3 000 000","999 999"],ok:0,
+     hint:"Compare le nombre de chiffres : 9 chiffres vs 8 chiffres vs 7 vs 6.",
+     expl_ok:"300 000 000 a 9 chiffres, c'est le plus grand ! ✓",
+     expl_ko:"Plus de chiffres = plus grand. 9 chiffres > 8 chiffres > 7 > 6."}
+  ]},
+  {titre:"🔢 Quel est ce nombre ? 2 500 000 000",etapes:[
+    {q:"Ce nombre est dans la classe des...",opts:["Milliards","Millions","Milliers","Unités simples"],ok:0,
+     hint:"Il a 10 chiffres → c'est un milliard !",
+     expl_ok:"2 500 000 000 est dans la classe des milliards (10 chiffres).",
+     expl_ko:"10 chiffres → classe des milliards. Regroupe : 2 | 500 | 000 | 000."},
+    {q:"Comment lit-on ce nombre ?",opts:["Deux milliards cinq cents millions","Deux millions cinq cents mille","Vingt-cinq milliards","Deux milliards cinq mille"],ok:0,
+     hint:"2 | 500 | 000 | 000 → 2 milliards et 500 millions.",
+     expl_ok:"2 500 000 000 = deux milliards cinq cents millions. 🌟",
+     expl_ko:"2 | 500 | 000 | 000 → 2 milliards, 500 millions."},
+    {q:"2 500 000 000 et 2 800 000 000, lequel est plus grand ?",opts:["2 800 000 000","2 500 000 000","Ils sont égaux"],ok:0,
+     hint:"Même nombre de chiffres, compare chiffre par chiffre : 2=2, puis 5 vs 8.",
+     expl_ok:"2 800 000 000 > 2 500 000 000 car 8 > 5 à la même position. ✓",
+     expl_ko:"2=2, puis 8 > 5 → 2 800 000 000 est plus grand."}
+  ]}
+];
+
+// ════ GUIDÉ 2 — Saisie 4 variantes ════
+var G2=[
+  {titre:"✏️ Écris le nombre : sept millions quatre cent mille",etapes:[
+    {q:"Étape 1 — Combien y a-t-il de millions ?",acc:["7"],hint:"Sept millions → 7 dans la classe des millions.",expl_ok:"7 millions.",expl_ko:"Sept = 7."},
+    {q:"Étape 2 — Combien y a-t-il de milliers ?",acc:["400","400000"],hint:"Quatre cent mille → 400 dans la classe des milliers.",expl_ok:"400 milliers.",expl_ko:"Quatre cent mille = 400 000."},
+    {q:"Étape 3 — Écris le nombre complet (sans espaces).",acc:["7400000","07400000"],hint:"7 millions + 400 000 = 7 suivi de 400 000.",expl_ok:"7 400 000 ! ✓ Sept millions quatre cent mille.",expl_ko:"7 millions = 7 000 000. +400 000 = 7 400 000."}
+  ]},
+  {titre:"✏️ Décompose : 45 300 000",etapes:[
+    {q:"Étape 1 — Combien de millions dans 45 300 000 ?",acc:["45"],hint:"Regroupe : 45 | 300 | 000 → 45 dans la classe des millions.",expl_ok:"45 millions !",expl_ko:"45 | 300 | 000 → 45 est dans la classe des millions."},
+    {q:"Étape 2 — Combien de milliers ?",acc:["300"],hint:"45 | 300 | 000 → 300 dans la classe des milliers.",expl_ok:"300 milliers (= 300 000).",expl_ko:"300 dans la classe des milliers."},
+    {q:"Étape 3 — Comment lit-on ce nombre ? (écris les mots clés : ... millions ... mille)",acc:["quarante-cinq millions trois cent mille","45 millions 300 mille","quarante cinq millions trois cents mille"],hint:"45 millions + 300 mille = quarante-cinq millions trois cent mille.",expl_ok:"Quarante-cinq millions trois cent mille ! 🎉",expl_ko:"45 millions trois cent mille."}
+  ]},
+  {titre:"✏️ Écris le nombre : trois milliards deux cents millions",etapes:[
+    {q:"Étape 1 — Combien de milliards ?",acc:["3"],hint:"Trois milliards → 3.",expl_ok:"3 milliards.",expl_ko:"Trois = 3."},
+    {q:"Étape 2 — Combien de millions supplémentaires ?",acc:["200"],hint:"Deux cents millions → 200 millions.",expl_ok:"200 millions = 200 000 000.",expl_ko:"Deux cents millions = 200."},
+    {q:"Étape 3 — Écris le nombre complet.",acc:["3200000000","3 200 000 000"],hint:"3 milliards = 3 000 000 000. +200 millions = 200 000 000.",expl_ok:"3 200 000 000 ✓",expl_ko:"3 000 000 000 + 200 000 000 = 3 200 000 000."}
+  ]},
+  {titre:"✏️ Range ces nombres dans l'ordre croissant",etapes:[
+    {q:"Étape 1 — 850 000 et 1 200 000 : lequel est plus petit ?",acc:["850000","850 000"],hint:"850 000 a 6 chiffres, 1 200 000 a 7 chiffres.",expl_ok:"850 000 est plus petit (6 chiffres < 7 chiffres).",expl_ko:"Moins de chiffres = plus petit."},
+    {q:"Étape 2 — 3 400 000 et 3 100 000 : lequel est plus petit ?",acc:["3100000","3 100 000"],hint:"Même nombre de chiffres. Compare : 3=3, puis 4 vs 1.",expl_ok:"3 100 000 est plus petit car 1 < 4 à la même position.",expl_ko:"3=3, puis 1 < 4 → 3 100 000 < 3 400 000."},
+    {q:"Étape 3 — Combien vaut 1 million en chiffres ? (sans espaces)",acc:["1000000"],hint:"Un million = 1 suivi de 6 zéros.",expl_ok:"1 000 000 ✓ Six zéros !",expl_ko:"1 000 000 = un million."}
+  ]}
+];
+
+// ════ POOL EXERCICES LIBRES ════
+var FREE_POOL=[
+  {type:'qcm',data:{q:"Comment s'écrit 'six millions cinq cents mille' en chiffres ?",opts:["6 500 000","6 005 000","650 000"],ok:0,expl:"6 millions + 500 000 = 6 500 000."}},
+  {type:'qcm',data:{q:"Combien vaut 1 milliard ?",opts:["1 000 000 000","1 000 000","100 000 000"],ok:0,expl:"1 milliard = 1 000 000 000 (neuf zéros)."}},
+  {type:'qcm',data:{q:"Quel est le plus grand nombre ?",opts:["12 500 000","9 999 999","8 000 001"],ok:0,expl:"12 500 000 a 8 chiffres, les autres en ont 7."}},
+  {type:'qcm',data:{q:"Comment lit-on 9 000 000 ?",opts:["Neuf millions","Neuf milliards","Neuf cents mille"],ok:0,expl:"9 000 000 = neuf millions (7 chiffres, 6 zéros)."}},
+  {type:'saisie',data:{q:"Écris en chiffres : deux millions (sans espaces)",acc:["2000000"],expl:"2 000 000 (2 suivi de 6 zéros)."}},
+  {type:'saisie',data:{q:"Combien de zéros y a-t-il dans 1 million ?",acc:["6"],expl:"1 000 000 → six zéros."}},
+  {type:'saisie',data:{q:"Quel chiffre est à la position des millions dans 8 342 000 ?",acc:["8"],expl:"8 | 342 | 000 → 8 est dans la position des millions."}},
+  {type:'qcm',data:{q:"4 000 000 000 se lit...",opts:["Quatre milliards","Quatre cents millions","Quarante milliards"],ok:0,expl:"4 000 000 000 = quatre milliards (10 chiffres, 9 zéros)."}},
+  {type:'jugement',data:{consigne:"Est-ce que 999 999 est plus grand que 1 000 000 ?",a:"Oui, car 9 est le plus grand chiffre","b":"Non, car 1 000 000 a plus de chiffres",ok:"B",expl:"999 999 a 6 chiffres, 1 000 000 a 7 chiffres → 1 000 000 est plus grand."}},
+  {type:'jugement',data:{consigne:"Est-ce que 5 000 000 = 5 millions ?",a:"Oui, 5 millions = 5 000 000","b":"Non, 5 millions = 5 000",ok:"A",expl:"5 millions = 5 × 1 000 000 = 5 000 000. Correct !"}},
+  {type:'qcm',data:{q:"Quelle est la valeur du 3 dans 3 700 000 ?",opts:["3 millions","3 cents","3 milliers"],ok:0,expl:"3 | 700 | 000 → le 3 est dans la classe des millions."}},
+  {type:'saisie',data:{q:"🌍 La Terre est à 150 000 000 km du Soleil. C'est combien de millions de km ?",acc:["150"],expl:"150 000 000 = 150 millions. (150 × 1 000 000)"}},
+  {type:'saisie',data:{q:"Écris en chiffres : dix millions (sans espaces)",acc:["10000000"],expl:"10 000 000 (1 suivi de 7 zéros)."}},
+  {type:'qcm',data:{q:"Quel est le plus petit nombre ?",opts:["100 000","1 000 000","10 000 000"],ok:0,expl:"100 000 a 6 chiffres, les autres en ont plus."}},
+  {type:'jugement',data:{consigne:"3 000 000 + 500 000 = 3 500 000 ?",a:"Oui ! 3 millions + 500 mille = 3 millions 500 mille","b":"Non, ça fait 35 000 000",ok:"A",expl:"3 000 000 + 500 000 = 3 500 000. Correct !"}},
+  {type:'saisie',data:{q:"🏙️ Paris compte environ 2 000 000 habitants. Combien de millions ?",acc:["2"],expl:"2 000 000 = 2 millions."}},
+  {type:'qcm',data:{q:"Range dans l'ordre croissant : 2 000 000 / 20 000 000 / 200 000",opts:["200 000 < 2 000 000 < 20 000 000","2 000 000 < 200 000 < 20 000 000","20 000 000 < 200 000 < 2 000 000"],ok:0,expl:"6 chiffres < 7 chiffres < 8 chiffres."}},
+  {type:'saisie',data:{q:"Combien de chiffres a 1 milliard ?",acc:["10"],expl:"1 000 000 000 a 10 chiffres (1 suivi de 9 zéros)."}},
+  {type:'qcm',data:{q:"8 500 000 s'écrit en lettres...",opts:["Huit millions cinq cents mille","Huit milliards cinq cents","Huit cent cinquante mille"],ok:0,expl:"8 | 500 | 000 = huit millions cinq cents mille."}},
+  {type:'saisie',data:{q:"🚀 Une fusée parcourt 28 000 km/h. Combien de milliers de km/h ?",acc:["28"],expl:"28 000 = 28 milliers. (28 × 1 000)"}}
+];
+
+var score=0,g1Idx=0,g2Idx=0,g1Tries=0,g2Tries=0;
+var f1Exs=[],f2Exs=[],f1Done=0,f2Done=0;
+var _cb={};
+
+function norm(s){return(s||'').trim().toLowerCase().replace(/\s+/g,'').replace(/[-–]/g,'-');}
+function shuffle(a){var b=a.slice();for(var i=b.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=b[i];b[i]=b[j];b[j]=t;}return b;}
+function addPt(){score++;document.getElementById('score-display').textContent=score;}
+
+function updSteps(n){for(var i=0;i<6;i++){var s=document.getElementById('s'+i);if(!s)return;s.classList.remove('active','done');if(i<n)s.classList.add('done');else if(i===n)s.classList.add('active');}}
+
+function goPhase(ph,si){
+  document.querySelectorAll('.phase').forEach(function(p){p.classList.remove('active');});
+  var el=document.getElementById('phase-'+ph);
+  if(el){el.classList.add('active');setTimeout(function(){el.scrollIntoView({behavior:'smooth',block:'start'});},100);}
+  updSteps(si);
+  if(ph==='g1')initG1();
+  if(ph==='g2')initG2();
+  if(ph==='free')initFree1();
+  if(ph==='free2')initFree2();
+  if(ph==='bilan')showBilan();
+}
+
+function revealBloc(n){
+  var b=document.getElementById('bloc-'+n);if(!b)return;
+  var p=document.getElementById('bloc-'+(n-1));
+  if(p){var btn=p.querySelector('.btn-compris');if(btn){btn.textContent='✓ Compris !';btn.disabled=true;btn.style.opacity='.4';}}
+  b.classList.add('revealed');
+  setTimeout(function(){var hH=(document.querySelector('.header')||{offsetHeight:0}).offsetHeight;var r=b.getBoundingClientRect();window.scrollTo({top:window.pageYOffset+r.top-hH-16,behavior:'smooth'});},150);
+}
+
+function initG1(){
+  g1Idx=Math.floor(Math.random()*G1.length);g1Tries=0;
+  document.getElementById('g1-reset').classList.remove('show');
+  document.getElementById('btn-g1-to-g2').classList.remove('show');
+  var v=G1[g1Idx],z=document.getElementById('g1-zone');z.innerHTML='';
+  var box=document.createElement('div');box.className='guided-box';
+  box.innerHTML='<div class="guided-title">'+v.titre+'<span class="tries-badge" id="g1-tries">3 essais</span></div><div id="g1-steps"></div>';
+  z.appendChild(box);
+  var sc=document.getElementById('g1-steps');
+  v.etapes.forEach(function(step,si){
+    var so=shuffle(step.opts.map(function(o,oi){return{t:o,i:oi};}));
+    var sb=document.createElement('div');sb.className='step-box'+(si===0?' active':'');sb.id='g1s'+si;
+    sb.innerHTML='<div class="step-lbl-num">Étape '+(si+1)+'/'+v.etapes.length+'</div>'
+      +'<div class="step-q">'+step.q+'</div>'
+      +'<div class="step-hint" id="g1h'+si+'">💡 '+step.hint+'</div>'
+      +'<div class="qcm-opts">'+so.map(function(o){return'<button class="qcm-opt" onclick="g1Check('+si+','+o.i+',this)">'+o.t+'</button>';}).join('')+'</div>'
+      +'<div class="step-fb" id="g1f'+si+'"></div>';
+    sc.appendChild(sb);
+  });
+  updG1();
+}
+function updG1(){var el=document.getElementById('g1-tries');if(el)el.textContent=(3-g1Tries)+' essai'+(3-g1Tries>1?'s':'');}
+function g1Check(si,ci,btn){
+  var v=G1[g1Idx],step=v.etapes[si],sb=document.getElementById('g1s'+si),fb=document.getElementById('g1f'+si);
+  if(sb.classList.contains('correct'))return;
+  if(ci===step.ok){
+    btn.classList.add('opt-ok');sb.querySelectorAll('.qcm-opt').forEach(function(b){b.disabled=true;});sb.classList.add('correct');
+    if(g1Tries===0){fb.className='step-fb show ok';fb.innerHTML='✅ '+step.expl_ok+' <span style="color:#065f46;font-size:.78rem">(+1 pt)</span>';addPt();}
+    else{fb.className='step-fb show ok';fb.innerHTML='✅ '+step.expl_ok+' <span style="color:#64748b;font-size:.78rem">(pas de point)</span>';}
+    g1Tries=0;updG1();
+    var nx=document.getElementById('g1s'+(si+1));
+    if(nx){nx.classList.add('active');setTimeout(function(){nx.scrollIntoView({behavior:'smooth',block:'nearest'});},300);}
+    else{setTimeout(function(){var b=document.getElementById('btn-g1-to-g2');b.classList.add('show');b.scrollIntoView({behavior:'smooth',block:'nearest'});},500);}
+  }else{
+    btn.classList.add('opt-ko');btn.disabled=true;g1Tries++;updG1();
+    fb.className='step-fb show ko';
+    if(g1Tries<3){fb.innerHTML='❌ Pas tout à fait ! Lis l\'indice et réessaie 💪';document.getElementById('g1h'+si).classList.add('show');}
+    else{fb.innerHTML='❌ '+step.expl_ko+' On recommence !';setTimeout(function(){document.getElementById('g1-reset').classList.add('show');document.getElementById('g1-zone').innerHTML='';document.getElementById('g1-reset').scrollIntoView({behavior:'smooth',block:'start'});},1200);}
+  }
+}
+
+function initG2(){
+  g2Idx=Math.floor(Math.random()*G2.length);g2Tries=0;
+  document.getElementById('g2-reset').classList.remove('show');
+  document.getElementById('btn-g2-to-free').classList.remove('show');
+  var v=G2[g2Idx],z=document.getElementById('g2-zone');z.innerHTML='';
+  var box=document.createElement('div');box.className='guided-box';
+  box.innerHTML='<div class="guided-title">'+v.titre+'<span class="tries-badge" id="g2-tries">3 essais</span></div><div id="g2-steps"></div>';
+  z.appendChild(box);
+  var sc=document.getElementById('g2-steps');
+  v.etapes.forEach(function(step,si){
+    var sb=document.createElement('div');sb.className='step-box'+(si===0?' active':'');sb.id='g2s'+si;
+    sb.innerHTML='<div class="step-lbl-num">Étape '+(si+1)+'/'+v.etapes.length+'</div>'
+      +'<div class="step-q">'+step.q+'</div>'
+      +'<div class="step-hint" id="g2h'+si+'">💡 '+step.hint+'</div>'
+      +'<div class="step-input-row"><input class="step-input" id="g2i'+si+'" type="text" placeholder="écris ici…" autocomplete="off" spellcheck="false"'+(si>0?' disabled':'')+'>'
+      +'<button class="btn-check" id="g2b'+si+'" onclick="g2Check('+si+')"'+(si>0?' disabled':'')+'>Vérifier</button></div>'
+      +'<div class="step-fb" id="g2f'+si+'"></div>';
+    sc.appendChild(sb);
+  });
+  updG2();
+}
+function updG2(){var el=document.getElementById('g2-tries');if(el)el.textContent=(3-g2Tries)+' essai'+(3-g2Tries>1?'s':'');}
+function g2Check(si){
+  var v=G2[g2Idx],step=v.etapes[si],inp=document.getElementById('g2i'+si),fb=document.getElementById('g2f'+si),sb=document.getElementById('g2s'+si);
+  if(!inp||sb.classList.contains('correct'))return;
+  var val=norm(inp.value),ok=step.acc.some(function(a){return val===norm(a);});
+  if(ok){
+    inp.classList.add('ok');inp.disabled=true;document.getElementById('g2b'+si).disabled=true;sb.classList.add('correct');
+    if(g2Tries===0){fb.className='step-fb show ok';fb.innerHTML='✅ '+step.expl_ok+' <span style="color:#065f46;font-size:.78rem">(+1 pt)</span>';addPt();}
+    else{fb.className='step-fb show ok';fb.innerHTML='✅ '+step.expl_ok+' <span style="color:#64748b;font-size:.78rem">(pas de point)</span>';}
+    g2Tries=0;updG2();
+    var nxSb=document.getElementById('g2s'+(si+1));
+    if(nxSb){nxSb.classList.add('active');var ni=document.getElementById('g2i'+(si+1)),nb=document.getElementById('g2b'+(si+1));if(ni)ni.disabled=false;if(nb)nb.disabled=false;setTimeout(function(){nxSb.scrollIntoView({behavior:'smooth',block:'nearest'});},300);}
+    else{setTimeout(function(){var b=document.getElementById('btn-g2-to-free');b.classList.add('show');b.scrollIntoView({behavior:'smooth',block:'nearest'});},500);}
+  }else{
+    inp.classList.add('ko');inp.value='';inp.placeholder='Réessaie…';g2Tries++;updG2();
+    fb.className='step-fb show ko';
+    if(g2Tries<3){fb.innerHTML='❌ Pas tout à fait ! Lis l\'indice 💪';document.getElementById('g2h'+si).classList.add('show');setTimeout(function(){inp.classList.remove('ko');inp.placeholder='écris ici…';},900);}
+    else{fb.innerHTML='❌ '+step.expl_ko+' On recommence !';setTimeout(function(){document.getElementById('g2-reset').classList.add('show');document.getElementById('g2-zone').innerHTML='';document.getElementById('g2-reset').scrollIntoView({behavior:'smooth',block:'start'});},1200);}
+  }
+}
+
+function buildFree(ex,i,prefix,cb){
+  var card=document.createElement('div');card.className='free-card';card.id=prefix+'c'+i;
+  if(ex.type==='qcm'){
+    card.innerHTML='<div class="free-label">Exercice '+(i+1)+'</div><div class="free-q">'+ex.data.q+'</div><div class="free-opts" id="'+prefix+'opts'+i+'"></div><div class="free-fb" id="'+prefix+'fb'+i+'"></div>';
+    setTimeout(function(){
+      var ba=document.getElementById(prefix+'opts'+i);
+      ex.data.opts.forEach(function(opt,oi){
+        var btn=document.createElement('button');btn.className='free-opt';btn.textContent=opt;
+        btn.onclick=function(){
+          if(card.classList.contains('done'))return;card.classList.add('done');ba.querySelectorAll('button').forEach(function(b){b.disabled=true;});
+          var fb=document.getElementById(prefix+'fb'+i);
+          if(oi===ex.data.ok){btn.classList.add('ok');fb.className='free-fb show ok';fb.innerHTML='✅ '+ex.data.expl;addPt();}
+          else{btn.classList.add('ko');ba.querySelectorAll('button').forEach(function(b,bi){if(bi===ex.data.ok)b.classList.add('reveal');});fb.className='free-fb show ko';fb.innerHTML='❌ '+ex.data.expl;}
+          cb();
+        };ba.appendChild(btn);
+      });
+    },0);
+  }else if(ex.type==='saisie'){
+    card.innerHTML='<div class="free-label">Exercice '+(i+1)+'</div><div class="free-q">'+ex.data.q+'</div><div class="free-input-row"><input class="free-input" id="'+prefix+'i'+i+'" type="text" placeholder="écris ici…" autocomplete="off" spellcheck="false"><button class="btn-free-check" onclick="chkFree(\''+prefix+'\','+i+')">Vérifier</button></div><div class="free-fb" id="'+prefix+'fb'+i+'"></div>';
+    _cb[prefix+i]=cb;
+  }else if(ex.type==='jugement'){
+    card.innerHTML='<div class="free-label">Exercice '+(i+1)+'</div><div class="free-q">'+ex.data.consigne+'</div><div class="jug-opts"><button class="jug-opt" onclick="chkJug(\''+prefix+'\','+i+',\'A\',this)"><strong>A —</strong> '+ex.data.a+'</button><button class="jug-opt" onclick="chkJug(\''+prefix+'\','+i+',\'B\',this)"><strong>B —</strong> '+ex.data.b+'</button></div><div class="free-fb" id="'+prefix+'fb'+i+'"></div>';
+    _cb[prefix+i]=cb;
+  }
+  return card;
+}
+function chkFree(p,i){
+  var card=document.getElementById(p+'c'+i);if(card.classList.contains('done'))return;
+  var exs=p==='f1'?f1Exs:f2Exs,ex=exs[i],inp=document.getElementById(p+'i'+i),fb=document.getElementById(p+'fb'+i);
+  var ok=ex.data.acc.some(function(a){return norm(inp.value)===norm(a);});
+  card.classList.add('done');inp.disabled=true;card.querySelector('.btn-free-check').disabled=true;
+  if(ok){inp.classList.add('ok');fb.className='free-fb show ok';fb.innerHTML='✅ '+ex.data.expl;addPt();}
+  else{inp.classList.add('ko');fb.className='free-fb show ko';fb.innerHTML='❌ Réponse : <strong>'+ex.data.acc[0]+'</strong>. '+ex.data.expl;}
+  if(_cb[p+i])_cb[p+i]();
+}
+function chkJug(p,i,ch,btn){
+  var card=document.getElementById(p+'c'+i);if(card.classList.contains('done'))return;
+  var exs=p==='f1'?f1Exs:f2Exs,ex=exs[i],fb=document.getElementById(p+'fb'+i);
+  card.classList.add('done');card.querySelectorAll('.jug-opt').forEach(function(b){b.disabled=true;});
+  if(ch===ex.data.ok){btn.classList.add('ok');fb.className='free-fb show ok';fb.innerHTML='✅ '+ex.data.expl;addPt();}
+  else{btn.classList.add('ko');card.querySelectorAll('.jug-opt')[ch==='A'?1:0].classList.add('ok');fb.className='free-fb show ko';fb.innerHTML='❌ '+ex.data.expl;}
+  if(_cb[p+i])_cb[p+i]();
+}
+
+function initFree1(){
+  f1Exs=shuffle(FREE_POOL.slice()).slice(0,5);f1Done=0;
+  var z=document.getElementById('free1-zone');z.innerHTML='';
+  f1Exs.forEach(function(ex,i){
+    _cb['f1'+i]=function(){f1Done++;if(f1Done>=5)setTimeout(function(){var b=document.getElementById('btn-free-to-free2');b.classList.add('show');b.scrollIntoView({behavior:'smooth',block:'nearest'});},600);};
+    z.appendChild(buildFree(ex,i,'f1',_cb['f1'+i]));
+  });
+}
+function initFree2(){
+  var used=f1Exs.map(function(e){return e.data.q||e.data.consigne;});
+  var pool=FREE_POOL.filter(function(e){return used.indexOf(e.data.q||e.data.consigne)<0;});
+  f2Exs=shuffle(pool).slice(0,5);f2Done=0;
+  var z=document.getElementById('free2-zone');z.innerHTML='';
+  f2Exs.forEach(function(ex,i){
+    _cb['f2'+i]=function(){f2Done++;if(f2Done>=5)setTimeout(function(){var b=document.getElementById('btn-free2-to-bilan');b.classList.add('show');b.scrollIntoView({behavior:'smooth',block:'nearest'});},600);};
+    z.appendChild(buildFree(ex,i,'f2',_cb['f2'+i]));
+  });
+}
+
+function showBilan(){
+  var g1n=G1[g1Idx]?G1[g1Idx].etapes.length:3,g2n=G2[g2Idx]?G2[g2Idx].etapes.length:3,tot=g1n+g2n+10;
+  document.getElementById('bilan-pts').textContent=score;
+  document.getElementById('bilan-sur').textContent='/ '+tot+' pts';
+  var pct=score/tot;
+  var t,m;
+  if(pct>=.8){t='Fantastique ! 🎉';m='Tu es un champion des grands nombres ! Millions et milliards n\'ont plus de secrets pour toi !';}
+  else if(pct>=.6){t='Très bien ! 😊';m='Tu maîtrises bien les grands nombres. Revois juste les équivalences millions/milliards !';}
+  else{t='Continue ! 💪';m='Les grands nombres, c\'est comme un quartier : regroupe par 3 depuis la droite ! Relis la leçon et réessaie.';}
+  document.getElementById('bilan-title').textContent=t;
+  document.getElementById('bilan-msg').textContent=m;
+  var s=[Math.ceil(tot*.33),Math.ceil(tot*.66),Math.ceil(tot*.89)];
+  ['etoile1','etoile2','etoile3'].forEach(function(id,i){var el=document.getElementById(id);if(score>=s[i]){(function(e,d){setTimeout(function(){e.classList.add('earned');},d);})(el,300+i*400);}else el.style.filter='grayscale(1)';});
+  if(pct>=.5)confetti();
+}
+function confetti(){var cols=['#7c3aed','#c4b5fd','#059669','#d97706','#0369a1'];for(var i=0;i<55;i++){var el=document.createElement('div');el.className='confetti-piece';el.style.cssText='left:'+Math.random()*100+'vw;background:'+cols[Math.floor(Math.random()*5)]+';animation-duration:'+(1.5+Math.random()*2)+'s;animation-delay:'+Math.random()*1.2+'s;width:'+(6+Math.random()*8)+'px;height:'+(6+Math.random()*8)+'px;border-radius:'+(Math.random()>.5?'50%':'3px')+';';document.body.appendChild(el);setTimeout(function(){if(el.parentNode)el.remove();},4000);}}
+</script>
+</body>
+</html>

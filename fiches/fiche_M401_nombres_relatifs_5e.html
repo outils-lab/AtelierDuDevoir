@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>M401 — Les nombres relatifs | L'Atelier du Devoir</title>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --acc:#b45309;--acc-pale:#fffbeb;--acc-mid:#fcd34d;
+  --mint:#059669;--mint-pale:#d1fae5;--mint-deep:#047857;
+  --coral:#dc2626;--coral-pale:#fee2e2;
+  --sky:#0369a1;--sky-pale:#e0f2fe;
+  --text:#1e293b;--text-light:#64748b;
+  --radius:12px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Lato',sans-serif;background:#fffbeb;color:var(--text);font-size:16px;line-height:1.65;}
+.print-bar{position:fixed;right:16px;top:50%;transform:translateY(-50%);z-index:200;display:flex;flex-direction:column;gap:8px;}
+.print-btn{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:8px;font-family:'Lato',sans-serif;font-weight:700;font-size:.78rem;border:none;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.15);}
+.print-btn-lecon{background:#0369a1;color:white;}.print-btn-eval{background:#dc2626;color:white;}
+@media(max-width:600px){.print-bar{right:6px;}.print-btn{font-size:0;width:40px;height:40px;padding:0;justify-content:center;}.print-btn span.lbl{display:none;}.print-btn span.ico{font-size:1.1rem;}}
+.header{background:white;border-bottom:2px solid var(--acc-pale);position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.06);}
+.header-top{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;}
+.logo{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--acc);text-decoration:none;}
+.score-badge{background:var(--acc);color:white;font-weight:700;font-size:.85rem;padding:5px 14px;border-radius:6px;}
+.steps-wrap{padding:0 20px 8px;}
+.steps{display:flex;gap:3px;}
+.step{flex:1;height:5px;border-radius:4px;background:var(--acc-pale);transition:all .35s;}
+.step.done{background:var(--mint);}.step.active{background:var(--acc);}
+.steps-labels{display:flex;gap:3px;padding-top:3px;}
+.step-lbl{flex:1;font-size:.48rem;font-weight:700;color:var(--text-light);text-align:center;text-transform:uppercase;letter-spacing:.03em;}
+.main{max-width:760px;margin:0 auto;padding:28px 16px 100px;}
+.phase{display:none;}.phase.active{display:block;}
+.accroche{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:22px 24px;margin-bottom:22px;display:flex;gap:16px;align-items:flex-start;}
+.accroche-icon{font-size:2.4rem;flex-shrink:0;}
+.accroche-text h1{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--acc);margin-bottom:6px;}
+.accroche-text p{color:var(--text-light);font-size:.92rem;line-height:1.5;}
+.meta-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+.meta-tag{background:var(--acc-pale);border-radius:4px;padding:3px 10px;font-size:.72rem;font-weight:700;color:var(--acc);text-transform:uppercase;letter-spacing:.04em;}
+.lecon-card{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:22px;margin-bottom:18px;}
+.lecon-card h2{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--acc);margin-bottom:14px;border-bottom:2px solid var(--acc-pale);padding-bottom:8px;}
+.lecon-block{display:none;}.lecon-block.revealed{display:block;}
+.lecon-subtitle{font-weight:900;font-size:1rem;color:var(--acc);margin-bottom:10px;margin-top:6px;}
+.sep{margin:18px 0;border:none;border-top:1px solid var(--acc-pale);}
+.analogie{font-size:.92rem;color:var(--text-light);font-style:italic;margin-bottom:12px;line-height:1.6;background:#fef9ee;border-radius:8px;padding:10px 14px;border-left:3px solid var(--acc-mid);}
+.def-box{border-left:4px solid var(--acc);background:var(--acc-pale);border-radius:0 var(--radius) var(--radius) 0;padding:14px 16px;margin-bottom:12px;}
+.def-box h4{font-weight:900;color:var(--acc);font-size:.9rem;margin-bottom:6px;}
+.def-box p{font-size:.88rem;color:var(--text);line-height:1.6;}
+.exemple-ligne{background:white;border:1px solid #e2e8f0;border-radius:8px;padding:10px 16px;font-size:.95rem;margin-bottom:6px;line-height:1.8;display:flex;align-items:center;gap:12px;}
+.exemple-ligne .tag{background:var(--acc);color:white;font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:4px;text-transform:uppercase;flex-shrink:0;}
+.hl{background:var(--acc-pale);color:var(--acc);border-radius:4px;padding:1px 6px;font-weight:700;}
+.tableau{width:100%;border-collapse:collapse;margin:10px 0;font-size:.9rem;}
+.tableau th{padding:9px 12px;text-align:center;font-weight:700;background:var(--acc);color:white;}
+.tableau td{padding:8px 12px;border:1px solid #e2e8f0;text-align:center;}
+.tableau tr:nth-child(even) td{background:var(--acc-pale);}
+.astuce{background:#fefce8;border:1px solid #fde68a;border-radius:8px;padding:11px 14px;font-size:.85rem;margin-top:8px;color:#78350f;}
+.astuce strong{color:#92400e;}
+.piege{background:#fff1f2;border:1px solid #fecdd3;border-radius:8px;padding:11px 14px;font-size:.85rem;margin-top:8px;color:#9f1239;}
+.piege strong{color:#be123c;}
+.btn-compris{margin-top:18px;padding:11px 26px;border-radius:8px;font-family:'Lato',sans-serif;font-weight:700;font-size:.9rem;background:var(--acc);color:white;border:none;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:8px;}
+.btn-compris:hover{background:#92400e;transform:translateY(-1px);}
+.btn-compris:disabled{opacity:.4;cursor:default;transform:none;}
+.mascot-msg{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:13px 16px;margin:14px 0;display:flex;align-items:flex-start;gap:10px;}
+.mascot-msg .emo{font-size:1.6rem;flex-shrink:0;}
+.mascot-msg p{font-size:.88rem;color:var(--text-light);line-height:1.6;}
+.ex-header-box{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:16px 20px;margin-bottom:16px;}
+.ex-header-box h2{font-family:'Playfair Display',serif;font-size:1.15rem;color:var(--acc);margin-bottom:4px;}
+.ex-header-box p{color:var(--text-light);font-size:.85rem;}
+.guided-problem{background:white;border:2px solid var(--acc);border-radius:var(--radius);padding:20px;margin-bottom:16px;}
+.guided-problem-title{font-size:1.05rem;font-weight:900;color:var(--acc);margin-bottom:16px;background:var(--acc-pale);padding:10px 14px;border-radius:8px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.tries-left{font-size:.75rem;font-weight:700;color:var(--coral);background:var(--coral-pale);padding:2px 8px;border-radius:4px;margin-left:auto;}
+.step-container{display:flex;flex-direction:column;gap:10px;}
+.step-box{border:2px solid #e2e8f0;border-radius:10px;padding:14px 16px;transition:all .3s;opacity:.5;pointer-events:none;}
+.step-box.active{opacity:1;pointer-events:all;border-color:var(--acc-mid);}
+.step-box.correct{border-color:var(--mint);background:var(--mint-pale);opacity:1;}
+.step-num{font-size:.65rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;}
+.step-question{font-size:.95rem;font-weight:700;margin-bottom:10px;line-height:1.6;}
+.step-hint{font-size:.83rem;color:#92400e;background:#fef3c7;border-radius:6px;padding:8px 12px;margin-bottom:8px;display:none;}
+.step-hint.show{display:block;}
+.step-qcm-opts{display:flex;flex-direction:column;gap:6px;}
+.step-qcm-opt{padding:9px 14px;border-radius:8px;border:2px solid #e2e8f0;background:white;font-family:'Lato',sans-serif;font-weight:600;font-size:.9rem;cursor:pointer;text-align:left;transition:all .2s;}
+.step-qcm-opt:hover:not(:disabled){border-color:var(--acc);background:var(--acc-pale);}
+.step-qcm-opt:disabled{cursor:default;}
+.step-qcm-opt.opt-correct{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.step-qcm-opt.opt-wrong{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
+.step-input-row{display:flex;gap:8px;align-items:center;}
+.step-input{border:2px solid var(--acc);border-radius:6px;padding:8px 12px;font-family:'Lato',monospace;font-weight:700;font-size:1rem;color:var(--text);background:white;outline:none;min-width:100px;max-width:160px;text-align:center;}
+.step-input:disabled{border-color:#e2e8f0;background:#f8fafc;color:var(--text-light);}
+.step-input.input-ok{border-color:var(--mint);background:var(--mint-pale);}
+.step-input.input-ko{border-color:var(--coral);}
+.btn-step-check{padding:8px 16px;border-radius:6px;font-family:'Lato',sans-serif;font-weight:700;font-size:.85rem;background:var(--acc);color:white;border:none;cursor:pointer;}
+.btn-step-check:disabled{opacity:.4;cursor:not-allowed;}
+.step-fb{margin-top:8px;padding:8px 12px;border-radius:6px;font-size:.83rem;font-weight:700;display:none;}
+.step-fb.show{display:block;}
+.step-fb.fb-ok{background:var(--mint-pale);color:var(--mint-deep);}
+.step-fb.fb-ko{background:var(--coral-pale);color:#b91c1c;}
+.reset-msg{background:#fff;border:2px solid var(--acc);border-radius:var(--radius);padding:22px 24px;text-align:center;margin-bottom:16px;display:none;}
+.reset-msg.show{display:block;}
+.reset-msg .ugo{font-size:2.5rem;margin-bottom:8px;}
+.reset-msg h3{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--acc);margin-bottom:8px;}
+.reset-msg p{color:var(--text-light);font-size:.9rem;margin-bottom:14px;line-height:1.6;}
+.btn-restart{padding:10px 24px;border-radius:8px;font-family:'Lato',sans-serif;font-weight:700;font-size:.9rem;background:var(--acc);color:white;border:none;cursor:pointer;}
+.free-ex-card{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:18px;margin-bottom:14px;}
+.free-ex-label{font-size:.7rem;font-weight:700;color:var(--acc);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;}
+.free-ex-question{font-size:.95rem;font-weight:700;margin-bottom:12px;background:var(--acc-pale);border-radius:8px;padding:11px 14px;line-height:1.7;}
+.free-classify-btns{display:flex;gap:8px;flex-wrap:wrap;}
+.free-classify-btn{padding:9px 16px;border-radius:6px;font-family:'Lato',sans-serif;font-weight:700;font-size:.85rem;border:2px solid #e2e8f0;background:white;cursor:pointer;transition:all .2s;flex:1;text-align:center;}
+.free-classify-btn:hover{border-color:var(--acc);background:var(--acc-pale);}
+.free-classify-btn.ans-correct{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.free-classify-btn.ans-wrong{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
+.free-classify-btn.ans-reveal{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.free-input-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.free-input{border:2px solid var(--acc);border-radius:6px;padding:8px 12px;font-family:'Lato',monospace;font-weight:700;font-size:1rem;color:var(--text);background:white;outline:none;min-width:100px;max-width:140px;text-align:center;}
+.free-input:disabled{border-color:#e2e8f0;background:#f8fafc;}
+.free-input.free-ok{border-color:var(--mint);background:var(--mint-pale);}
+.free-input.free-ko{border-color:var(--coral);background:var(--coral-pale);}
+.btn-free-check{padding:8px 16px;border-radius:6px;font-family:'Lato',sans-serif;font-weight:700;font-size:.85rem;background:var(--acc);color:white;border:none;cursor:pointer;}
+.btn-free-check:disabled{opacity:.4;cursor:not-allowed;}
+.jugement-opts{display:flex;flex-direction:column;gap:8px;}
+.jugement-opt-btn{padding:11px 16px;border-radius:8px;border:2px solid #e2e8f0;background:white;font-family:'Lato',sans-serif;font-size:.92rem;cursor:pointer;text-align:left;transition:all .2s;line-height:1.6;}
+.jugement-opt-btn:hover{border-color:var(--acc);background:var(--acc-pale);}
+.jugement-opt-btn.jug-correct{border-color:var(--mint);background:var(--mint-pale);}
+.jugement-opt-btn.jug-wrong{border-color:var(--coral);background:var(--coral-pale);}
+.free-fb{margin-top:10px;padding:9px 13px;border-radius:8px;font-size:.84rem;font-weight:700;display:none;}
+.free-fb.show{display:block;}
+.free-fb.fb-ok{background:var(--mint-pale);color:var(--mint-deep);}
+.free-fb.fb-ko{background:var(--coral-pale);color:#b91c1c;}
+.btn-suivant{margin-top:14px;padding:10px 22px;border-radius:8px;font-family:'Lato',sans-serif;font-weight:700;font-size:.88rem;background:var(--acc);color:white;border:none;cursor:pointer;display:none;align-items:center;gap:8px;transition:all .2s;}
+.btn-suivant.show{display:inline-flex;}
+.btn-suivant:hover{background:#92400e;}
+.bilan-card{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:28px 24px;text-align:center;}
+.bilan-icon{font-size:3.5rem;margin-bottom:12px;display:block;}
+.bilan-title{font-family:'Playfair Display',serif;font-size:1.8rem;margin-bottom:6px;color:var(--acc);}
+.bilan-msg{color:var(--text-light);font-size:.95rem;margin-bottom:20px;}
+.stars-row{display:flex;justify-content:center;gap:10px;margin-bottom:20px;}
+.star-big{font-size:2.5rem;filter:grayscale(1);transition:all .5s;}
+.star-big.earned{filter:none;animation:starPop .5s ease both;}
+@keyframes starPop{0%{transform:scale(0);}60%{transform:scale(1.2);}100%{transform:scale(1);}}
+.score-circle{width:100px;height:100px;border-radius:50%;background:var(--acc);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 20px;color:white;}
+.score-num{font-family:'Playfair Display',serif;font-size:1.8rem;line-height:1;}
+.score-sub{font-size:.65rem;opacity:.8;}
+.memo-card{background:var(--acc-pale);border-radius:var(--radius);padding:16px 20px;margin:18px 0;text-align:left;}
+.memo-card h3{font-weight:700;font-size:.85rem;color:var(--acc);margin-bottom:10px;text-transform:uppercase;letter-spacing:.04em;}
+.memo-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media(max-width:480px){.memo-grid{grid-template-columns:1fr;}}
+.memo-item{background:white;border-radius:8px;padding:10px 12px;font-size:.82rem;border:1px solid #e2e8f0;}
+.memo-item strong{color:var(--acc);}
+.bilan-btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:16px;}
+.btn-act{padding:10px 20px;border-radius:8px;font-family:'Lato',sans-serif;font-weight:700;font-size:.85rem;cursor:pointer;border:none;transition:all .2s;}
+.btn-act.primary{background:var(--acc);color:white;}
+.btn-act.secondary{background:var(--acc-pale);color:var(--acc);border:2px solid var(--acc);}
+.btn-act:hover{transform:translateY(-1px);}
+.confetti-piece{position:fixed;border-radius:2px;top:-20px;animation:fall linear both;pointer-events:none;z-index:9999;}
+@keyframes fall{0%{transform:translateY(0) rotate(0deg);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
+@media print{.print-bar,.btn-compris,.btn-suivant,.bilan-card,.mascot-msg{display:none!important;}body{background:white;}.phase{display:block!important;}}
+</style>
+</head>
+<body>
+<div class="print-bar">
+  <button class="print-btn print-btn-lecon" onclick="window.print()"><span class="ico">📖</span><span class="lbl">Leçon</span></button>
+  <button class="print-btn print-btn-eval" onclick="window.print()"><span class="ico">📝</span><span class="lbl">Exercices</span></button>
+</div>
+<header class="header">
+  <div class="header-top">
+    <a href="../12-15ans.html" class="logo">🦉 L'Atelier du Devoir</a>
+    <div class="score-badge">⭐ <span id="score-display">0</span> pts</div>
+  </div>
+  <div class="steps-wrap">
+    <div class="steps">
+      <div class="step active" id="step-0"></div><div class="step" id="step-1"></div><div class="step" id="step-2"></div>
+      <div class="step" id="step-3"></div><div class="step" id="step-4"></div><div class="step" id="step-5"></div>
+    </div>
+    <div class="steps-labels">
+      <div class="step-lbl">Leçon</div><div class="step-lbl">Guidé 1</div><div class="step-lbl">Guidé 2</div>
+      <div class="step-lbl">Exercices</div><div class="step-lbl">+ Exercices</div><div class="step-lbl">Bilan</div>
+    </div>
+  </div>
+</header>
+<main class="main">
+
+<div class="accroche">
+  <div class="accroche-icon">🌡️</div>
+  <div class="accroche-text">
+    <h1>Les nombres relatifs</h1>
+    <p>Comprendre, comparer et calculer avec les nombres positifs et négatifs.</p>
+    <div class="meta-row">
+      <span class="meta-tag">5e</span><span class="meta-tag">~30 min</span>
+      <span class="meta-tag">⭐⭐ Difficulté</span><span class="meta-tag">Mathématiques</span>
+    </div>
+  </div>
+</div>
+
+<!-- LEÇON -->
+<div class="phase active" id="phase-lecon">
+  <div class="lecon-card">
+    <h2>📖 La leçon</h2>
+    <div class="lecon-block revealed" id="bloc-0">
+      <div class="lecon-subtitle">① C'est quoi un nombre relatif ?</div>
+      <div class="analogie">🌡️ En hiver, le thermomètre peut descendre sous zéro. En montagne, certains lacs sont sous le niveau de la mer. Ton compte en banque peut être négatif si tu dépenses plus que tu n'as. Les nombres relatifs, c'est ça : des nombres qui peuvent être en dessous de zéro.</div>
+      <div class="def-box">
+        <h4>Définition</h4>
+        <p>Un <strong>nombre relatif</strong> a un signe : <strong>positif (+)</strong> si supérieur à zéro, <strong>négatif (−)</strong> si inférieur à zéro. Zéro n'est ni positif ni négatif.<br>
+        La <strong>valeur absolue</strong> d'un nombre, c'est sa distance à zéro — toujours positive. |−7| = 7, |+7| = 7.</p>
+      </div>
+      <div class="exemple-ligne"><span class="tag">Concret</span> −3 °C = <span class="hl">3 degrés en dessous de zéro</span></div>
+      <div class="exemple-ligne"><span class="tag">Concret</span> Gain de 5 € → <span class="hl">+5</span> | Perte de 5 € → <span class="hl">−5</span></div>
+      <button class="btn-compris" onclick="revealBloc(1)">Bloc suivant →</button>
+    </div>
+    <div class="lecon-block" id="bloc-1">
+      <hr class="sep">
+      <div class="lecon-subtitle">② Comparer des nombres relatifs</div>
+      <div class="analogie">📏 Sur une droite numérique : tout ce qui est à droite est plus grand. Plus tu vas à gauche, plus les nombres sont petits — même s'ils paraissent "grands" en valeur absolue.</div>
+      <div class="def-box">
+        <h4>Règle</h4>
+        <p>À droite = plus grand. Donc : tout positif &gt; zéro &gt; tout négatif.<br>
+        Entre deux négatifs : le plus grand est celui dont la valeur absolue est la <strong>plus petite</strong>.</p>
+      </div>
+      <div class="exemple-ligne"><span class="tag">Ok</span> +5 &gt; 0 &gt; −3 &gt; −8</div>
+      <div class="exemple-ligne"><span class="tag">Piège</span> −2 &gt; −7 car |−2| = 2 &lt; |−7| = 7</div>
+      <div class="piege"><strong>⚠ Attention :</strong> −10 est plus petit que −2, même si 10 est plus grand que 2. Les négatifs s'inversent !</div>
+      <button class="btn-compris" onclick="revealBloc(2)">Bloc suivant →</button>
+    </div>
+    <div class="lecon-block" id="bloc-2">
+      <hr class="sep">
+      <div class="lecon-subtitle">③ Additionner et soustraire</div>
+      <div class="analogie">🎮 Pense à un score de jeu : tu peux gagner des points (+) ou en perdre (−). Additionner un négatif, c'est reculer. Soustraire un négatif, c'est avancer — comme enlever une pénalité !</div>
+      <table class="tableau">
+        <tr><th>Situation</th><th>Règle</th><th>Exemple</th></tr>
+        <tr><td><strong>Même signe</strong></td><td>Additionner les VA, garder le signe</td><td>(+4)+(+3) = +7<br>(−4)+(−3) = −7</td></tr>
+        <tr><td><strong>Signes différents</strong></td><td>Soustraire les VA, signe du plus grand</td><td>(+7)+(−3) = +4<br>(+3)+(−7) = −4</td></tr>
+        <tr><td><strong>Moins un négatif</strong></td><td>= Ajouter son opposé</td><td>(+5)−(−3) = +5+3 = +8</td></tr>
+      </table>
+      <div class="astuce"><strong>💡 Astuce :</strong> transforme toujours une soustraction en addition de l'opposé. (+2)−(−5) = (+2)+(+5) = +7.</div>
+      <button class="btn-compris" onclick="goToPhase('guided1',1)">✓ Leçon comprise — À l'entraînement !</button>
+    </div>
+  </div>
+</div>
+
+<!-- GUIDÉ 1 : QCM par étape -->
+<div class="phase" id="phase-guided1">
+  <div class="mascot-msg"><span class="emo">🦉</span><p><strong>Exercice guidé 1</strong> — QCM étape par étape. <strong>3 essais</strong> par question. Chaque bonne réponse rapporte un point. Si tu bloques 3 fois, on recommence !</p></div>
+  <div class="ex-header-box"><h2>Résoudre pas à pas (QCM)</h2><p>Le problème change à chaque recommencement.</p></div>
+  <div id="g1-reset" class="reset-msg">
+    <div class="ugo">🦉</div><h3>Pas grave, on recommence !</h3>
+    <p>Les erreurs font partie de l'apprentissage. Relis chaque étape attentivement avant de répondre !</p>
+    <button class="btn-restart" onclick="initGuided1()">↺ Recommencer</button>
+  </div>
+  <div id="g1-container"></div>
+  <button class="btn-suivant" id="btn-to-g2" onclick="goToPhase('guided2',2)">Bien joué ! Exercice suivant →</button>
+</div>
+
+<!-- GUIDÉ 2 : Saisie par étape -->
+<div class="phase" id="phase-guided2">
+  <div class="mascot-msg"><span class="emo">🦉</span><p><strong>Exercice guidé 2</strong> — Cette fois tu écris ta réponse. <strong>3 essais</strong> par étape. Chaque bonne réponse rapporte un point !</p></div>
+  <div class="ex-header-box"><h2>Résoudre pas à pas (saisie)</h2><p>Pense à mettre le signe + ou − !</p></div>
+  <div id="g2-reset" class="reset-msg">
+    <div class="ugo">🦉</div><h3>On repart de zéro !</h3>
+    <p>Chaque tentative renforce ta mémoire. Pense à transformer les soustractions en additions !</p>
+    <button class="btn-restart" onclick="initGuided2()">↺ Recommencer</button>
+  </div>
+  <div id="g2-container"></div>
+  <button class="btn-suivant" id="btn-to-free" onclick="goToPhase('free',3)">Excellent ! Exercices libres →</button>
+</div>
+
+<!-- LIBRES 1 -->
+<div class="phase" id="phase-free">
+  <div class="mascot-msg"><span class="emo">🦉</span><p><strong>Exercices libres</strong> — 5 exercices variés, sans aide. Chaque bonne réponse compte pour ton score !</p></div>
+  <div id="free1-container"></div>
+  <button class="btn-suivant" id="btn-to-free2" onclick="goToPhase('free2',4)">Encore des exercices →</button>
+</div>
+
+<!-- LIBRES 2 -->
+<div class="phase" id="phase-free2">
+  <div class="mascot-msg"><span class="emo">🦉</span><p><strong>Entraînement supplémentaire</strong> — 5 exercices de plus, tirés aléatoirement. Tu y es presque !</p></div>
+  <div id="free2-container"></div>
+  <button class="btn-suivant" id="btn-to-bilan" onclick="goToPhase('bilan',5)">🌟 Voir mon bilan</button>
+</div>
+
+<!-- BILAN -->
+<div class="phase" id="phase-bilan">
+  <div class="bilan-card">
+    <span class="bilan-icon">🌡️</span>
+    <h2 class="bilan-title" id="bilan-title">Résultat</h2>
+    <p class="bilan-msg" id="bilan-msg"></p>
+    <div class="stars-row"><span class="star-big" id="star1">⭐</span><span class="star-big" id="star2">⭐</span><span class="star-big" id="star3">⭐</span></div>
+    <div class="score-circle"><span class="score-num" id="bilan-score">0</span><span class="score-sub" id="bilan-total-txt">/ 0 pts</span></div>
+    <div class="memo-card">
+      <h3>Mémo — Nombres relatifs</h3>
+      <div class="memo-grid">
+        <div class="memo-item"><strong>Comparer</strong><br>À droite = plus grand.<br>−2 &gt; −5 car |−2| &lt; |−5|</div>
+        <div class="memo-item"><strong>Même signe</strong><br>Additionner les VA, garder le signe.<br>(−3)+(−5) = −8</div>
+        <div class="memo-item"><strong>Signes différents</strong><br>Soustraire les VA, signe du plus grand.<br>(+7)+(−3) = +4</div>
+        <div class="memo-item"><strong>Soustraire un négatif</strong><br>= ajouter son opposé.<br>(+5)−(−3) = +8</div>
+      </div>
+    </div>
+    <div class="bilan-btns">
+      <button class="btn-act secondary" onclick="location.reload()">↺ Recommencer</button>
+      <button class="btn-act primary" onclick="location.href='../12-15ans.html'">← Retour aux fiches</button>
+    </div>
+  </div>
+</div>
+</main>
+
+<script>
+// ════════════════════════════════════════════════
+// DONNÉES GUIDÉ 1 — QCM par étape (4 variantes)
+// ════════════════════════════════════════════════
+var G1 = [
+  { titre:"Calcule : (+8) + (−5)",svg:'<svg viewBox="0 0 260 70" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:8px auto;max-width:260px;background:#fffbeb;border-radius:6px;padding:2px;">  <line x1="10" y1="34" x2="250" y2="34" stroke="#94a3b8" stroke-width="2"/>  <polygon points="250,30 260,34 250,38" fill="#94a3b8"/>  <line x1="20" y1="30" x2="20" y2="38" stroke="#94a3b8" stroke-width="1"/><text x="20" y="50" font-size="8" fill="#94a3b8" text-anchor="middle">-10</text><line x1="31" y1="30" x2="31" y2="38" stroke="#94a3b8" stroke-width="1"/><line x1="42" y1="30" x2="42" y2="38" stroke="#94a3b8" stroke-width="1"/><text x="42" y="50" font-size="8" fill="#94a3b8" text-anchor="middle">-8</text><line x1="53" y1="30" x2="53" y2="38" stroke="#94a3b8" stroke-width="1"/><line x1="64" y1="30" x2="64" y2="38" stroke="#94a3b8" stroke-width="1"/><text x="64" y="50" font-size="8" fill="#94a3b8" text-anchor="middle">-6</text><line x1="75" y1="30" x2="75" y2="38" stroke="#94a3b8" stroke-width="1"/><line x1="86" y1="30" x2="86" y2="38" stroke="#94a3b8" stroke-width="1"/><text x="86" y="50" font-size="8" fill="#94a3b8" text-anchor="middle">-4</text><line x1="97" y1="30" x2="97" y2="38" stroke="#94a3b8" stroke-width="1"/><line x1="108" y1="30" x2="108" y2="38" stroke="#94a3b8" stroke-width="1"/><text x="108" y="50" font-size="8" fill="#94a3b8" text-anchor="middle">-2</text><line x1="119" y1="30" x2="119" y2="38" stroke="#94a3b8" stroke-width="1"/><line x1="130" y1="30" x2="130" y2="38" stroke="#94a3b8" stroke-width="1"/><text x="130" y="50" font-size="8" fill="#94a3b8" text-anchor="middle">0</text><line x1="141" y1="30" x2="141" y2="38" stroke="#94a3b8" stroke-width="1"/><line x1="152" y1="30" x2="152" y2="38" stroke="#94a3b8" stroke-width="1"/><text x="152" y="50" font-size="8" fill="#94a3b8" text-anchor="middle">2</text><line x1="163" y1="30" x2="163" y2="38" stroke="#94a3b8" stroke-width="1"/><line x1="174" y1="30" x2="174" y2="38" stroke="#94a3b8" stroke-width="1"/><text x="174" y="50" font-size="8" fill="#94a3b8" text-anchor="middle">4</text><line x1="185" y1="30" x2="185" y2="38" stroke="#94a3b8" stroke-width="1"/><line x1="196" y1="30" x2="196" y2="38" stroke="#94a3b8" stroke-width="1"/><text x="196" y="50" font-size="8" fill="#94a3b8" text-anchor="middle">6</text><line x1="207" y1="30" x2="207" y2="38" stroke="#94a3b8" stroke-width="1"/><line x1="218" y1="30" x2="218" y2="38" stroke="#94a3b8" stroke-width="1"/><text x="218" y="50" font-size="8" fill="#94a3b8" text-anchor="middle">8</text><line x1="229" y1="30" x2="229" y2="38" stroke="#94a3b8" stroke-width="1"/><line x1="240" y1="30" x2="240" y2="38" stroke="#94a3b8" stroke-width="1"/><text x="240" y="50" font-size="8" fill="#94a3b8" text-anchor="middle">10</text>  <circle cx="218" cy="34" r="5" fill="#0369a1" stroke="white" stroke-width="1.5"/><text x="218" y="18" font-size="10" fill="#0369a1" font-weight="bold" text-anchor="middle">+8</text><circle cx="75" cy="34" r="5" fill="#9f1239" stroke="white" stroke-width="1.5"/><text x="75" y="18" font-size="10" fill="#9f1239" font-weight="bold" text-anchor="middle">−5</text></svg>',
+    etapes:[
+      { q:"Étape 1 — Les signes sont-ils identiques ou différents ?",
+        opts:["Même signe","Signes différents","Il n'y a pas de signe"],
+        ok:1, hint:"Regarde : +8 est positif, −5 est négatif.",
+        expl_ok:"Signes différents : un positif, un négatif → règle : soustraire les VA, signe du plus grand.",
+        expl_ko:"Regarde le signe de chaque nombre séparément : + ou − ?" },
+      { q:"Étape 2 — Quelle valeur absolue est la plus grande ?",
+        opts:["|+8| = 8 est plus grande","|−5| = 5 est plus grande","Elles sont égales"],
+        ok:0, hint:"La VA ignore le signe : compare juste 8 et 5.",
+        expl_ok:"|+8| = 8 > |−5| = 5. Le résultat prendra donc le signe de +8.",
+        expl_ko:"La valeur absolue, c'est juste le nombre sans son signe : 8 vs 5." },
+      { q:"Étape 3 — Le résultat aura quel signe ?",
+        opts:["Positif (+)","Négatif (−)","Zéro"],
+        ok:0, hint:"Le signe du résultat est celui du nombre avec la plus grande VA. Ici, c'est +8.",
+        expl_ok:"Signe positif, car +8 a la plus grande valeur absolue.",
+        expl_ko:"Le signe du résultat suit celui du nombre avec la plus grande VA." },
+      { q:"Étape 4 — Calcule la différence des VA : 8 − 5 = ?",
+        opts:["3","13","4","2"],
+        ok:0, hint:"8 − 5 = ?",
+        expl_ok:"8 − 5 = 3. C'est la valeur absolue du résultat.",
+        expl_ko:"Soustraire les valeurs absolues : 8 − 5 = 3." },
+      { q:"Étape 5 — Résultat final de (+8) + (−5) ?",
+        opts:["+3","−3","+13","−13"],
+        ok:0, hint:"Signe positif + valeur 3.",
+        expl_ok:"(+8)+(−5) = +3. ✓",
+        expl_ko:"Signe positif, différence = 3 → +3." }
+    ]
+  },
+  { titre:"Calcule : (−6) + (+2)",svg:'<svg viewBox="0 0 260 70" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:8px auto;max-width:260px;background:#fffbeb;border-radius:6px;padding:2px;">  <line x1="10" y1="34" x2="250" y2="34" stroke="#94a3b8" stroke-width="2"/>  <polygon points="250,30 260,34 250,38" fill="#94a3b8"/>  <line x1="20" y1="30" x2="20" y2="38" stroke="#94a3b8" stroke-width="1"/><text x="20" y="50" font-size="8" fill="#94a3b8" text-anchor="middle">-10</text><line x1="31" y1="30" x2="31" y2="38" stroke="#94a3b8" stroke-width="1"/><line x1="42" y1="30" x2="42" y2="38" stroke="#94a3b8" stroke-width="1"/><text x="42" y="50" font-size="8" fill="#94a3b8" text-anchor="middle">-8</text><line x1="53" y1="30" x2="53" y2="38" stroke="#94a3b8" stroke-width="1"/><line x1="64" y1="30" x2="64" y2="38" stroke="#94a3b8" stroke-width="1"/><text x="64" y="50" font-size="8" fill="#94a3b8" text-anchor="middle">-6</text><line x1="75" y1="30" x2="75" y2="38" stroke="#94a3b8" stroke-width="1"/><line x1="86" y1="30" x2="86" y2="38" stroke="#94a3b8" stroke-width="1"/><text x="86" y="50" font-size="8" fill="#94a3b8" text-anchor="middle">-4</text><line x1="97" y1="30" x2="97" y2="38" stroke="#94a3b8" stroke-width="1"/><line x1="108" y1="30" x2="108" y2="38" stroke="#94a3b8" stroke-width="1"/><text x="108" y="50" font-size="8" fill="#94a3b8" text-anchor="middle">-2</text><line x1="119" y1="30" x2="119" y2="38" stroke="#94a3b8" stroke-width="1"/><line x1="130" y1="30" x2="130" y2="38" stroke="#94a3b8" stroke-width="1"/><text x="130" y="50" font-size="8" fill="#94a3b8" text-anchor="middle">0</text><line x1="141" y1="30" x2="141" y2="38" stroke="#94a3b8" stroke-width="1"/><line x1="152" y1="30" x2="152" y2="38" stroke="#94a3b8" stroke-width="1"/><text x="152" y="50" font-size="8" fill="#94a3b8" text-anchor="middle">2</text><line x1="163" y1="30" x2="163" y2="38" stroke="#94a3b8" stroke-width="1"/><line x1="174" y1="30" x2="174" y2="38" stroke="#94a3b8" stroke-width="1"/><text x="174" y="50" font-size="8" fill="#94a3b8" text-anchor="middle">4</text><line x1="185" y1="30" x2="185" y2="38" stroke="#94a3b8" stroke-width="1"/><line x1="196" y1="30" x2="196" y2="38" stroke="#94a3b8" stroke-width="1"/><text x="196" y="50" font-size="8" fill="#94a3b8" text-anchor="middle">6</text><line x1="207" y1="30" x2="207" y2="38" stroke="#94a3b8" stroke-width="1"/><line x1="218" y1="30" x2="218" y2="38" stroke="#94a3b8" stroke-width="1"/><text x="218" y="50" font-size="8" fill="#94a3b8" text-anchor="middle">8</text><line x1="229" y1="30" x2="229" y2="38" stroke="#94a3b8" stroke-width="1"/><line x1="240" y1="30" x2="240" y2="38" stroke="#94a3b8" stroke-width="1"/><text x="240" y="50" font-size="8" fill="#94a3b8" text-anchor="middle">10</text>  <circle cx="64" cy="34" r="5" fill="#9f1239" stroke="white" stroke-width="1.5"/><text x="64" y="18" font-size="10" fill="#9f1239" font-weight="bold" text-anchor="middle">−6</text><circle cx="152" cy="34" r="5" fill="#0369a1" stroke="white" stroke-width="1.5"/><text x="152" y="18" font-size="10" fill="#0369a1" font-weight="bold" text-anchor="middle">+2</text></svg>',
+    etapes:[
+      { q:"Étape 1 — Les signes sont-ils identiques ou différents ?",
+        opts:["Même signe","Signes différents"],
+        ok:1, hint:"−6 est négatif, +2 est positif.",
+        expl_ok:"Signes différents : règle soustraire les VA, signe du plus grand.",
+        expl_ko:"−6 et +2 n'ont pas le même signe." },
+      { q:"Étape 2 — Quelle est la plus grande valeur absolue ?",
+        opts:["|−6| = 6 est plus grande","|+2| = 2 est plus grande","Elles sont égales"],
+        ok:0, hint:"|−6| = 6 et |+2| = 2.",
+        expl_ok:"|−6| = 6 > 2. Le résultat prendra le signe de −6.",
+        expl_ko:"Compare 6 et 2 : 6 est plus grand." },
+      { q:"Étape 3 — Quel sera le signe du résultat ?",
+        opts:["Positif (+)","Négatif (−)"],
+        ok:1, hint:"Le signe suit celui du nombre avec la plus grande VA, ici −6.",
+        expl_ok:"Signe négatif, car −6 a la plus grande VA.",
+        expl_ko:"Le plus grand en VA est −6, son signe est négatif." },
+      { q:"Étape 4 — Calcule 6 − 2 = ?",
+        opts:["4","8","3","12"],
+        ok:0, hint:"6 − 2 = ?",
+        expl_ok:"6 − 2 = 4.",
+        expl_ko:"6 − 2 = 4, pas 8." },
+      { q:"Étape 5 — Résultat final de (−6) + (+2) ?",
+        opts:["−4","+4","−8","+8"],
+        ok:0, hint:"Signe négatif + valeur 4.",
+        expl_ok:"(−6)+(+2) = −4. ✓",
+        expl_ko:"Signe négatif, valeur 4 → −4." }
+    ]
+  },
+  { titre:"Calcule : (−3) + (−7)",svg:'<svg viewBox="0 0 260 70" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:8px auto;max-width:260px;background:#fffbeb;border-radius:6px;padding:2px;">  <line x1="10" y1="34" x2="250" y2="34" stroke="#94a3b8" stroke-width="2"/>  <polygon points="250,30 260,34 250,38" fill="#94a3b8"/>  <line x1="20" y1="30" x2="20" y2="38" stroke="#94a3b8" stroke-width="1"/><text x="20" y="50" font-size="8" fill="#94a3b8" text-anchor="middle">-10</text><line x1="31" y1="30" x2="31" y2="38" stroke="#94a3b8" stroke-width="1"/><line x1="42" y1="30" x2="42" y2="38" stroke="#94a3b8" stroke-width="1"/><text x="42" y="50" font-size="8" fill="#94a3b8" text-anchor="middle">-8</text><line x1="53" y1="30" x2="53" y2="38" stroke="#94a3b8" stroke-width="1"/><line x1="64" y1="30" x2="64" y2="38" stroke="#94a3b8" stroke-width="1"/><text x="64" y="50" font-size="8" fill="#94a3b8" text-anchor="middle">-6</text><line x1="75" y1="30" x2="75" y2="38" stroke="#94a3b8" stroke-width="1"/><line x1="86" y1="30" x2="86" y2="38" stroke="#94a3b8" stroke-width="1"/><text x="86" y="50" font-size="8" fill="#94a3b8" text-anchor="middle">-4</text><line x1="97" y1="30" x2="97" y2="38" stroke="#94a3b8" stroke-width="1"/><line x1="108" y1="30" x2="108" y2="38" stroke="#94a3b8" stroke-width="1"/><text x="108" y="50" font-size="8" fill="#94a3b8" text-anchor="middle">-2</text><line x1="119" y1="30" x2="119" y2="38" stroke="#94a3b8" stroke-width="1"/><line x1="130" y1="30" x2="130" y2="38" stroke="#94a3b8" stroke-width="1"/><text x="130" y="50" font-size="8" fill="#94a3b8" text-anchor="middle">0</text><line x1="141" y1="30" x2="141" y2="38" stroke="#94a3b8" stroke-width="1"/><line x1="152" y1="30" x2="152" y2="38" stroke="#94a3b8" stroke-width="1"/><text x="152" y="50" font-size="8" fill="#94a3b8" text-anchor="middle">2</text><line x1="163" y1="30" x2="163" y2="38" stroke="#94a3b8" stroke-width="1"/><line x1="174" y1="30" x2="174" y2="38" stroke="#94a3b8" stroke-width="1"/><text x="174" y="50" font-size="8" fill="#94a3b8" text-anchor="middle">4</text><line x1="185" y1="30" x2="185" y2="38" stroke="#94a3b8" stroke-width="1"/><line x1="196" y1="30" x2="196" y2="38" stroke="#94a3b8" stroke-width="1"/><text x="196" y="50" font-size="8" fill="#94a3b8" text-anchor="middle">6</text><line x1="207" y1="30" x2="207" y2="38" stroke="#94a3b8" stroke-width="1"/><line x1="218" y1="30" x2="218" y2="38" stroke="#94a3b8" stroke-width="1"/><text x="218" y="50" font-size="8" fill="#94a3b8" text-anchor="middle">8</text><line x1="229" y1="30" x2="229" y2="38" stroke="#94a3b8" stroke-width="1"/><line x1="240" y1="30" x2="240" y2="38" stroke="#94a3b8" stroke-width="1"/><text x="240" y="50" font-size="8" fill="#94a3b8" text-anchor="middle">10</text>  <circle cx="97" cy="34" r="5" fill="#9f1239" stroke="white" stroke-width="1.5"/><text x="97" y="18" font-size="10" fill="#9f1239" font-weight="bold" text-anchor="middle">−3</text><circle cx="53" cy="34" r="5" fill="#dc2626" stroke="white" stroke-width="1.5"/><text x="53" y="18" font-size="10" fill="#dc2626" font-weight="bold" text-anchor="middle">−7</text></svg>',
+    etapes:[
+      { q:"Étape 1 — Les deux nombres ont-ils le même signe ?",
+        opts:["Oui, même signe (tous les deux négatifs)","Non, signes différents"],
+        ok:0, hint:"−3 et −7 : regardez le signe de chacun.",
+        expl_ok:"Oui, les deux sont négatifs → même signe. Règle : additionner les VA, garder le signe.",
+        expl_ko:"−3 et −7 ont le même signe : tous les deux négatifs." },
+      { q:"Étape 2 — Même signe → on additionne ou soustrait les VA ?",
+        opts:["On additionne : 3 + 7","On soustrait : 7 − 3","On multiplie"],
+        ok:0, hint:"Règle même signe : additionner les valeurs absolues.",
+        expl_ok:"Même signe → additionner les VA : 3 + 7 = 10.",
+        expl_ko:"Même signe → on additionne les VA, pas on les soustrait." },
+      { q:"Étape 3 — 3 + 7 = ?",
+        opts:["10","4","21","11"],
+        ok:0, hint:"Addition simple.",
+        expl_ok:"3 + 7 = 10. La valeur absolue du résultat est 10.",
+        expl_ko:"3 + 7 = 10." },
+      { q:"Étape 4 — Quel signe garde-t-on pour le résultat ?",
+        opts:["Négatif (−)","Positif (+)"],
+        ok:0, hint:"Même signe négatif → le résultat garde ce signe.",
+        expl_ok:"On garde le signe commun des deux nombres : négatif.",
+        expl_ko:"Les deux nombres sont négatifs → résultat négatif." },
+      { q:"Étape 5 — Résultat final de (−3) + (−7) ?",
+        opts:["−10","+10","−4","+4"],
+        ok:0, hint:"Valeur absolue 10, signe négatif.",
+        expl_ok:"(−3)+(−7) = −10. ✓",
+        expl_ko:"VA = 10, signe négatif → −10." }
+    ]
+  },
+  { titre:"Calcule : (+5) − (−4)",svg:'<svg viewBox="0 0 260 70" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:8px auto;max-width:260px;background:#fffbeb;border-radius:6px;padding:2px;">  <line x1="10" y1="34" x2="250" y2="34" stroke="#94a3b8" stroke-width="2"/>  <polygon points="250,30 260,34 250,38" fill="#94a3b8"/>  <line x1="20" y1="30" x2="20" y2="38" stroke="#94a3b8" stroke-width="1"/><text x="20" y="50" font-size="8" fill="#94a3b8" text-anchor="middle">-10</text><line x1="31" y1="30" x2="31" y2="38" stroke="#94a3b8" stroke-width="1"/><line x1="42" y1="30" x2="42" y2="38" stroke="#94a3b8" stroke-width="1"/><text x="42" y="50" font-size="8" fill="#94a3b8" text-anchor="middle">-8</text><line x1="53" y1="30" x2="53" y2="38" stroke="#94a3b8" stroke-width="1"/><line x1="64" y1="30" x2="64" y2="38" stroke="#94a3b8" stroke-width="1"/><text x="64" y="50" font-size="8" fill="#94a3b8" text-anchor="middle">-6</text><line x1="75" y1="30" x2="75" y2="38" stroke="#94a3b8" stroke-width="1"/><line x1="86" y1="30" x2="86" y2="38" stroke="#94a3b8" stroke-width="1"/><text x="86" y="50" font-size="8" fill="#94a3b8" text-anchor="middle">-4</text><line x1="97" y1="30" x2="97" y2="38" stroke="#94a3b8" stroke-width="1"/><line x1="108" y1="30" x2="108" y2="38" stroke="#94a3b8" stroke-width="1"/><text x="108" y="50" font-size="8" fill="#94a3b8" text-anchor="middle">-2</text><line x1="119" y1="30" x2="119" y2="38" stroke="#94a3b8" stroke-width="1"/><line x1="130" y1="30" x2="130" y2="38" stroke="#94a3b8" stroke-width="1"/><text x="130" y="50" font-size="8" fill="#94a3b8" text-anchor="middle">0</text><line x1="141" y1="30" x2="141" y2="38" stroke="#94a3b8" stroke-width="1"/><line x1="152" y1="30" x2="152" y2="38" stroke="#94a3b8" stroke-width="1"/><text x="152" y="50" font-size="8" fill="#94a3b8" text-anchor="middle">2</text><line x1="163" y1="30" x2="163" y2="38" stroke="#94a3b8" stroke-width="1"/><line x1="174" y1="30" x2="174" y2="38" stroke="#94a3b8" stroke-width="1"/><text x="174" y="50" font-size="8" fill="#94a3b8" text-anchor="middle">4</text><line x1="185" y1="30" x2="185" y2="38" stroke="#94a3b8" stroke-width="1"/><line x1="196" y1="30" x2="196" y2="38" stroke="#94a3b8" stroke-width="1"/><text x="196" y="50" font-size="8" fill="#94a3b8" text-anchor="middle">6</text><line x1="207" y1="30" x2="207" y2="38" stroke="#94a3b8" stroke-width="1"/><line x1="218" y1="30" x2="218" y2="38" stroke="#94a3b8" stroke-width="1"/><text x="218" y="50" font-size="8" fill="#94a3b8" text-anchor="middle">8</text><line x1="229" y1="30" x2="229" y2="38" stroke="#94a3b8" stroke-width="1"/><line x1="240" y1="30" x2="240" y2="38" stroke="#94a3b8" stroke-width="1"/><text x="240" y="50" font-size="8" fill="#94a3b8" text-anchor="middle">10</text>  <circle cx="185" cy="34" r="5" fill="#0369a1" stroke="white" stroke-width="1.5"/><text x="185" y="18" font-size="10" fill="#0369a1" font-weight="bold" text-anchor="middle">+5</text><circle cx="86" cy="34" r="5" fill="#9f1239" stroke="white" stroke-width="1.5"/><text x="86" y="18" font-size="10" fill="#9f1239" font-weight="bold" text-anchor="middle">−4</text></svg>',
+    etapes:[
+      { q:"Étape 1 — Soustraire un nombre négatif, c'est la même chose que…",
+        opts:["Ajouter son opposé","Soustraire quand même","Diviser"],
+        ok:0, hint:"Règle : − (−4) = + 4.",
+        expl_ok:"Exact ! Soustraire un négatif = ajouter son opposé. − (−4) = + 4.",
+        expl_ko:"Règle fondamentale : − (négatif) = + (son opposé)." },
+      { q:"Étape 2 — L'opposé de −4 est ?",
+        opts:["+4","−4","1/4"],
+        ok:0, hint:"L'opposé change le signe.",
+        expl_ok:"L'opposé de −4 est +4. Même valeur absolue, signe contraire.",
+        expl_ko:"L'opposé d'un négatif est positif : opposé de −4 = +4." },
+      { q:"Étape 3 — (+5) − (−4) devient…",
+        opts:["(+5) + (+4)","(+5) + (−4)","(+5) − (+4)"],
+        ok:0, hint:"On remplace − (−4) par + 4.",
+        expl_ok:"(+5) − (−4) = (+5) + (+4). L'opération est maintenant une addition simple.",
+        expl_ko:"On remplace − (−4) par + (+4)." },
+      { q:"Étape 4 — Calcule 5 + 4 = ?",
+        opts:["9","1","20","−1"],
+        ok:0, hint:"Addition de deux positifs.",
+        expl_ok:"5 + 4 = 9.",
+        expl_ko:"5 + 4 = 9." },
+      { q:"Étape 5 — Résultat final de (+5) − (−4) ?",
+        opts:["+9","−9","+1","−1"],
+        ok:0, hint:"Deux positifs additionnés → résultat positif, valeur 9.",
+        expl_ok:"(+5)−(−4) = +9. Vérifie : +5+4 = +9 ✓",
+        expl_ko:"Signe positif, valeur 9 → +9." }
+    ]
+  }
+];
+
+// ════════════════════════════════════════════════
+// DONNÉES GUIDÉ 2 — Saisie par étape (4 variantes)
+// ════════════════════════════════════════════════
+var G2 = [
+  { titre:"Calcule : (+9) + (−4) − (−2)",
+    etapes:[
+      { q:"Étape 1 — Transforme − (−2). L'opposé de −2 est ?", acc:["2","+2"],
+        hint:"Soustraire un négatif = ajouter son opposé. Opposé de −2 = ?",
+        expl_ok:"− (−2) = + 2. L'expression devient (+9) + (−4) + (+2).",
+        expl_ko:"L'opposé de −2 est +2. On change le signe." },
+      { q:"Étape 2 — Calcule (+9) + (−4). Signes différents : 9−4, signe de +9.", acc:["5","+5"],
+        hint:"|9|>|4|, signe de +9 → ?",
+        expl_ok:"(+9)+(−4) = +5. |9|−|4|=5, signe de +9.",
+        expl_ko:"Signes différents : soustraire les VA, signer avec celui du plus grand (+9)." },
+      { q:"Étape 3 — Il reste (+5) + (+2). Même signe positif : additionne.", acc:["7","+7"],
+        hint:"5 + 2 = ?",
+        expl_ok:"(+5)+(+2) = +7.",
+        expl_ko:"Même signe positif → additionner : 5 + 2 = 7." },
+      { q:"Étape 4 — Résultat final de (+9) + (−4) − (−2) ?", acc:["7","+7"],
+        hint:"C'est ce que tu viens de calculer.",
+        expl_ok:"(+9)+(−4)−(−2) = +7. ✓",
+        expl_ko:"Tu as calculé +5 + 2 = +7." }
+    ]
+  },
+  { titre:"Calcule : (−8) + (+3) + (−1)",
+    etapes:[
+      { q:"Étape 1 — (−8)+(+3) : quelle VA est la plus grande ? Écris ce nombre.", acc:["8"],
+        hint:"|−8|=8 et |+3|=3.",
+        expl_ok:"|−8| = 8 est la plus grande. Le résultat prendra le signe de −8.",
+        expl_ko:"Compare 8 et 3 : 8 est plus grand." },
+      { q:"Étape 2 — Calcule la différence : 8 − 3 = ?", acc:["5"],
+        hint:"8 − 3 = ?",
+        expl_ok:"8 − 3 = 5.",
+        expl_ko:"8 − 3 = 5." },
+      { q:"Étape 3 — Écris le résultat de (−8)+(+3) avec son signe.", acc:["-5","−5"],
+        hint:"VA = 5, signe de −8 = négatif.",
+        expl_ok:"(−8)+(+3) = −5.",
+        expl_ko:"Valeur absolue 5, signe négatif (celui de −8) → −5." },
+      { q:"Étape 4 — Il reste (−5)+(−1). Même signe → additionne les VA et garde le signe. Résultat ?", acc:["-6","−6"],
+        hint:"5+1=6, signe négatif.",
+        expl_ok:"(−5)+(−1) = −6. ✓",
+        expl_ko:"Même signe négatif : −(5+1) = −6." }
+    ]
+  },
+  { titre:"Calcule : (+3) − (+10) + (+4)",
+    etapes:[
+      { q:"Étape 1 — Commence par (+3) − (+10). Résultat ?", acc:["-7","−7"],
+        hint:"3 − 10 = ? Le résultat est négatif car 10 > 3.",
+        expl_ok:"3 − 10 = −7.",
+        expl_ko:"10 > 3 → résultat négatif : −(10−3) = −7." },
+      { q:"Étape 2 — Il reste (−7)+(+4). Quelle est la plus grande VA ? Écris-la.", acc:["7"],
+        hint:"|−7|=7 et |+4|=4.",
+        expl_ok:"|−7| = 7 est la plus grande.",
+        expl_ko:"7 > 4, donc |−7| est la plus grande VA." },
+      { q:"Étape 3 — Calcule 7 − 4 = ?", acc:["3"],
+        hint:"7 − 4 = ?",
+        expl_ok:"7 − 4 = 3.",
+        expl_ko:"7 − 4 = 3." },
+      { q:"Étape 4 — Résultat final avec signe (signe de −7) ?", acc:["-3","−3"],
+        hint:"Valeur 3, signe de −7 = négatif.",
+        expl_ok:"(+3)−(+10)+(+4) = −3. ✓",
+        expl_ko:"VA = 3, signe négatif (celui de −7) → −3." }
+    ]
+  },
+  { titre:"Calcule : (−5) − (−8) + (−3)",
+    etapes:[
+      { q:"Étape 1 — L'opposé de −8 est ?", acc:["+8","8"],
+        hint:"Opposé = même valeur, signe contraire.",
+        expl_ok:"Opposé de −8 = +8. L'expression devient (−5)+(+8)+(−3).",
+        expl_ko:"L'opposé de −8 est +8." },
+      { q:"Étape 2 — (−5)+(+8) : signes différents. |8|>|5|. Résultat ?", acc:["+3","3"],
+        hint:"8−5=3, signe de +8.",
+        expl_ok:"(−5)+(+8) = +3.",
+        expl_ko:"|8|−|5|=3, signe de +8 → +3." },
+      { q:"Étape 3 — (+3)+(−3) = ?", acc:["0"],
+        hint:"+3 et −3 sont opposés.",
+        expl_ok:"+3 et −3 sont opposés → leur somme = 0.",
+        expl_ko:"Deux nombres opposés s'annulent toujours." },
+      { q:"Étape 4 — Résultat final de (−5)−(−8)+(−3) ?", acc:["0"],
+        hint:"Tu viens de calculer (+3)+(−3).",
+        expl_ok:"(−5)−(−8)+(−3) = 0. ✓",
+        expl_ko:"(+3)+(−3) = 0." }
+    ]
+  }
+];
+
+// ════════════════════════════════════════════════
+// POOL EXERCICES LIBRES
+// ════════════════════════════════════════════════
+var FREE_POOL = [
+  { type:'classify', data:{ q:"(−4)+(−9) : résultat positif, négatif ou nul ?", opts:["Positif","Négatif","Nul"], ok:1, expl:"Même signe négatif → −(4+9) = −13, négatif." } },
+  { type:'classify', data:{ q:"(+8)+(−8) : résultat positif, négatif ou nul ?", opts:["Positif","Négatif","Nul"], ok:2, expl:"Opposés → somme = 0." } },
+  { type:'classify', data:{ q:"(+2)−(−5) : résultat positif, négatif ou nul ?", opts:["Positif","Négatif","Nul"], ok:0, expl:"(+2)+(+5) = +7, positif." } },
+  { type:'classify', data:{ q:"(−3)+(+3)−(+1) : résultat positif, négatif ou nul ?", opts:["Positif","Négatif","Nul"], ok:1, expl:"(−3)+(+3)=0, puis 0+(−1) = −1, négatif." } },
+  { type:'saisie', data:{ q:"(+6)+(−9) = ?", acc:["-3","−3"], expl:"Signes différents, |9|>|6|, signe de −9 → −3." } },
+  { type:'saisie', data:{ q:"(−4)−(−7) = ?", acc:["3","+3"], expl:"−(−7)=+7 → (−4)+(+7) = +3." } },
+  { type:'saisie', data:{ q:"(+8)−(+12) = ?", acc:["-4","−4"], expl:"8−12 = −4." } },
+  { type:'saisie', data:{ q:"(−5)−(−5) = ?", acc:["0"], expl:"−(−5)=+5 → (−5)+(+5) = 0." } },
+  { type:'saisie', data:{ q:"(−2)+(−6)+(+5) = ?", acc:["-3","−3"], expl:"(−2)+(−6)=−8, puis −8+(+5) = −3." } },
+  { type:'saisie', data:{ q:"(+10)−(+15) = ?", acc:["-5","−5"], expl:"10−15 = −5." } },
+  { type:'jugement', data:{ consigne:"Laquelle est correcte ?", a:"−7 < −3", b:"−7 > −3", ok:"A", expl:"−7 est plus à gauche sur la droite numérique → −7 < −3." } },
+  { type:'jugement', data:{ consigne:"Laquelle est correcte ?", a:"(+4)+(−6) = −2", b:"(+4)+(−6) = +2", ok:"A", expl:"Signes différents, |6|>|4|, signe de −6 → −2." } },
+  { type:'jugement', data:{ consigne:"Laquelle est correcte ?", a:"(−4)+(−3) = +7", b:"(−4)+(−3) = −7", ok:"B", expl:"Même signe négatif → −(4+3) = −7." } },
+  { type:'saisie', data:{ q:"? + (+6) = −1. Nombre manquant ?", acc:["-7","−7"], expl:"? = −1−6 = −7." } },
+  { type:'saisie', data:{ q:"(−8) + ? = +2. Nombre manquant ?", acc:["10","+10"], expl:"? = +2−(−8) = +2+8 = +10." } },
+  { type:'saisie', data:{ q:"🌡️ Il fait −4°C. La température monte de 11°C. Résultat ?", acc:["7","+7"], expl:"(−4)+(+11) = +7°C." } },
+  { type:'saisie', data:{ q:"🤿 Plongeur à −45 m, plonge encore de 12 m. Profondeur ?", acc:["-57","−57"], expl:"(−45)+(−12) = −57 m." } },
+  { type:'saisie', data:{ q:"💳 Solde −15 €. Reçoit 20 €. Nouveau solde ?", acc:["5","+5"], expl:"(−15)+(+20) = +5 €." } },
+  { type:'classify', data:{ q:"(+3)−(−8) : résultat positif, négatif ou nul ?", opts:["Positif","Négatif","Nul"], ok:0, expl:"(+3)+(+8) = +11, positif." } },
+  { type:'jugement', data:{ consigne:"Laquelle est correcte ?", a:"−1 > −10", b:"−1 < −10", ok:"A", expl:"−1 est plus à droite que −10 sur la droite numérique → −1 > −10." } }
+];
+
+// ════════════════════════════════════════════════
+// ÉTAT
+// ════════════════════════════════════════════════
+var score = 0;
+var g1Idx = 0, g2Idx = 0, g1Tries = 0, g2Tries = 0;
+var free1Exs = [], free2Exs = [];
+var free1Done = 0, free2Done = 0;
+var totalPossible = 0;
+
+function ns(s){ return (s||'').trim().toLowerCase().replace(/\s+/g,'').replace('−','-'); }
+function shuffle(arr){ var a=arr.slice(); for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;} return a; }
+function addScore(){ score++; document.getElementById('score-display').textContent=score; }
+
+// ════════════════════════════════════════════════
+// NAVIGATION
+// ════════════════════════════════════════════════
+function updateSteps(active){
+  for(var i=0;i<6;i++){
+    var s=document.getElementById('step-'+i); if(!s) continue;
+    s.classList.remove('active','done');
+    if(i<active) s.classList.add('done'); else if(i===active) s.classList.add('active');
+  }
+}
+
+function goToPhase(ph, si){
+  document.querySelectorAll('.phase').forEach(function(p){ p.classList.remove('active'); });
+  var el=document.getElementById('phase-'+ph);
+  if(el){ el.classList.add('active'); setTimeout(function(){ el.scrollIntoView({behavior:'smooth',block:'start'}); },100); }
+  updateSteps(si);
+  if(ph==='guided1') initGuided1();
+  if(ph==='guided2') initGuided2();
+  if(ph==='free') initFree1();
+  if(ph==='free2') initFree2();
+  if(ph==='bilan') showBilan();
+}
+
+function revealBloc(n){
+  var bloc=document.getElementById('bloc-'+n); if(!bloc) return;
+  var prev=document.getElementById('bloc-'+(n-1));
+  if(prev){ var b=prev.querySelector('.btn-compris'); if(b){b.textContent='✓ Compris';b.disabled=true;b.style.opacity='.4';} }
+  bloc.classList.add('revealed');
+  setTimeout(function(){
+    var hH=(document.querySelector('.header')||{offsetHeight:0}).offsetHeight;
+    var rect=bloc.getBoundingClientRect();
+    window.scrollTo({top:window.pageYOffset+rect.top-hH-20,behavior:'smooth'});
+  },150);
+}
+
+// ════════════════════════════════════════════════
+// GUIDÉ 1
+// ════════════════════════════════════════════════
+function initGuided1(){
+  g1Idx=Math.floor(Math.random()*G1.length); g1Tries=0;
+  document.getElementById('g1-reset').classList.remove('show');
+  document.getElementById('btn-to-g2').classList.remove('show');
+  renderGuided1();
+}
+
+function renderGuided1(){
+  var v=G1[g1Idx], c=document.getElementById('g1-container'); c.innerHTML='';
+  var box=document.createElement('div'); box.className='guided-problem';
+  box.innerHTML='<div class="guided-problem-title">🧮 '+v.titre
+    +'<span class="tries-left" id="g1-tries">3 essais</span></div>'
+    +'<div class="step-container" id="g1-sc"></div>';
+  c.appendChild(box);
+  var sc=document.getElementById('g1-sc');
+  v.etapes.forEach(function(step,si){
+    var so=shuffle(step.opts.map(function(o,oi){return{t:o,i:oi};}));
+    var sb=document.createElement('div');
+    sb.className='step-box'+(si===0?' active':''); sb.id='g1s'+si;
+    sb.innerHTML='<div class="step-num">Étape '+(si+1)+'/'+v.etapes.length+'</div>'
+      +'<div class="step-question">'+step.q+'</div>'
+      +'<div class="step-hint" id="g1h'+si+'">💡 '+step.hint+'</div>'
+      +'<div class="step-qcm-opts">'
+        +so.map(function(o){ return '<button class="step-qcm-opt" onclick="g1Check('+si+','+o.i+',this)">'+o.t+'</button>'; }).join('')
+      +'</div>'
+      +'<div class="step-fb" id="g1f'+si+'"></div>';
+    sc.appendChild(sb);
+  });
+  g1Tries=0; updG1();
+}
+
+function updG1(){ var el=document.getElementById('g1-tries'); if(el) el.textContent=(3-g1Tries)+' essai'+(3-g1Tries>1?'s':''); }
+
+function g1Check(si,ci,btn){
+  var v=G1[g1Idx], step=v.etapes[si];
+  var sb=document.getElementById('g1s'+si), fb=document.getElementById('g1f'+si);
+  if(sb.classList.contains('correct')) return;
+  if(ci===step.ok){
+    btn.classList.add('opt-correct');
+    sb.querySelectorAll('.step-qcm-opt').forEach(function(b){b.disabled=true;});
+    sb.classList.add('correct');
+    if(g1Tries===0){ fb.className='step-fb show fb-ok'; fb.innerHTML='✓ '+step.expl_ok+' <span style="color:#065f46;font-size:.78rem">(+1 pt)</span>'; addScore(); }
+    else { fb.className='step-fb show fb-ok'; fb.innerHTML='✓ '+step.expl_ok+' <span style="color:#64748b;font-size:.78rem">(pas de point — réussi après plusieurs essais)</span>'; }
+    g1Tries=0; updG1();
+    var nx=document.getElementById('g1s'+(si+1));
+    if(nx){ nx.classList.add('active'); setTimeout(function(){nx.scrollIntoView({behavior:'smooth',block:'nearest'});},300); }
+    else { setTimeout(function(){ document.getElementById('btn-to-g2').classList.add('show'); document.getElementById('btn-to-g2').scrollIntoView({behavior:'smooth',block:'nearest'}); },500); }
+  } else {
+    btn.classList.add('opt-wrong'); btn.disabled=true;
+    g1Tries++; updG1();
+    fb.className='step-fb show fb-ko';
+    if(g1Tries<3){
+      fb.innerHTML='✗ Pas tout à fait. Lis l\'indice ci-dessus et réessaie !';
+      document.getElementById('g1h'+si).classList.add('show');
+    } else {
+      fb.innerHTML='✗ '+step.expl_ko+' On recommence depuis le début !';
+      setTimeout(function(){
+        document.getElementById('g1-reset').classList.add('show');
+        document.getElementById('g1-container').innerHTML='';
+        document.getElementById('g1-reset').scrollIntoView({behavior:'smooth',block:'start'});
+      },1200);
+    }
+  }
+}
+
+// ════════════════════════════════════════════════
+// GUIDÉ 2
+// ════════════════════════════════════════════════
+function initGuided2(){
+  g2Idx=Math.floor(Math.random()*G2.length); g2Tries=0;
+  document.getElementById('g2-reset').classList.remove('show');
+  document.getElementById('btn-to-free').classList.remove('show');
+  renderGuided2();
+}
+
+function renderGuided2(){
+  var v=G2[g2Idx], c=document.getElementById('g2-container'); c.innerHTML='';
+  var box=document.createElement('div'); box.className='guided-problem';
+  box.innerHTML='<div class="guided-problem-title">✏️ '+v.titre
+    +'<span class="tries-left" id="g2-tries">3 essais</span></div>'
+    +'<div class="step-container" id="g2-sc"></div>';
+  c.appendChild(box);
+  var sc=document.getElementById('g2-sc');
+  v.etapes.forEach(function(step,si){
+    var sb=document.createElement('div');
+    sb.className='step-box'+(si===0?' active':''); sb.id='g2s'+si;
+    sb.innerHTML='<div class="step-num">Étape '+(si+1)+'/'+v.etapes.length+'</div>'
+      +'<div class="step-question">'+step.q+'</div>'
+      +'<div class="step-hint" id="g2h'+si+'">💡 '+step.hint+'</div>'
+      +'<div class="step-input-row">'
+        +'<input class="step-input" id="g2i'+si+'" type="text" placeholder="?" autocomplete="off" spellcheck="false"'+(si>0?' disabled':'')+'>'
+        +'<button class="btn-step-check" id="g2b'+si+'" onclick="g2Check('+si+')"'+(si>0?' disabled':'')+'>Vérifier</button>'
+      +'</div>'
+      +'<div class="step-fb" id="g2f'+si+'"></div>';
+    sc.appendChild(sb);
+  });
+  g2Tries=0; updG2();
+}
+
+function updG2(){ var el=document.getElementById('g2-tries'); if(el) el.textContent=(3-g2Tries)+' essai'+(3-g2Tries>1?'s':''); }
+
+function g2Check(si){
+  var v=G2[g2Idx], step=v.etapes[si];
+  var inp=document.getElementById('g2i'+si), fb=document.getElementById('g2f'+si), sb=document.getElementById('g2s'+si);
+  if(!inp||sb.classList.contains('correct')) return;
+  var val=ns(inp.value), ok=step.acc.some(function(a){return val===ns(a);});
+  if(ok){
+    inp.classList.add('input-ok'); inp.disabled=true;
+    document.getElementById('g2b'+si).disabled=true;
+    sb.classList.add('correct');
+    if(g2Tries===0){ fb.className='step-fb show fb-ok'; fb.innerHTML='✓ '+step.expl_ok+' <span style="color:#065f46;font-size:.78rem">(+1 pt)</span>'; addScore(); }
+    else { fb.className='step-fb show fb-ok'; fb.innerHTML='✓ '+step.expl_ok+' <span style="color:#64748b;font-size:.78rem">(pas de point — réussi après plusieurs essais)</span>'; }
+    g2Tries=0; updG2();
+    var nxSb=document.getElementById('g2s'+(si+1));
+    if(nxSb){
+      nxSb.classList.add('active');
+      var ni=document.getElementById('g2i'+(si+1)), nb=document.getElementById('g2b'+(si+1));
+      if(ni) ni.disabled=false; if(nb) nb.disabled=false;
+      setTimeout(function(){nxSb.scrollIntoView({behavior:'smooth',block:'nearest'});},300);
+    } else {
+      setTimeout(function(){ document.getElementById('btn-to-free').classList.add('show'); document.getElementById('btn-to-free').scrollIntoView({behavior:'smooth',block:'nearest'}); },500);
+    }
+  } else {
+    inp.classList.add('input-ko'); inp.value=''; inp.placeholder='Réessaie...';
+    g2Tries++; updG2();
+    fb.className='step-fb show fb-ko';
+    if(g2Tries<3){
+      fb.innerHTML='✗ Pas tout à fait. Lis l\'indice ci-dessus et réessaie !';
+      document.getElementById('g2h'+si).classList.add('show');
+      setTimeout(function(){inp.classList.remove('input-ko');inp.placeholder='?';},1000);
+    } else {
+      fb.innerHTML='✗ '+step.expl_ko+' On recommence !';
+      setTimeout(function(){
+        document.getElementById('g2-reset').classList.add('show');
+        document.getElementById('g2-container').innerHTML='';
+        document.getElementById('g2-reset').scrollIntoView({behavior:'smooth',block:'start'});
+      },1200);
+    }
+  }
+}
+
+// ════════════════════════════════════════════════
+// EXERCICES LIBRES — moteur commun
+// ════════════════════════════════════════════════
+function pickExercises(n){
+  var pool = shuffle(FREE_POOL.slice());
+  return pool.slice(0, n);
+}
+
+function buildFreeCard(ex, i, prefix, onDone){
+  var card=document.createElement('div'); card.className='free-ex-card'; card.id=prefix+i;
+  if(ex.type==='classify') buildClassify(card, ex.data, i, prefix, onDone);
+  else if(ex.type==='saisie') buildSaisie(card, ex.data, i, prefix, onDone);
+  else if(ex.type==='jugement') buildJugement(card, ex.data, i, prefix, onDone);
+  return card;
+}
+
+function buildClassify(card, data, i, prefix, onDone){
+  card.innerHTML='<div class="free-ex-label">Exercice '+(i+1)+'</div>'
+    +'<div class="free-ex-question">'+data.q+'</div>'
+    +'<div class="free-classify-btns" id="'+prefix+'cl'+i+'"></div>'
+    +'<div class="free-fb" id="'+prefix+'fb'+i+'"></div>';
+  var ba=card.querySelector('#'+prefix+'cl'+i);
+  data.opts.forEach(function(opt,oi){
+    var btn=document.createElement('button'); btn.className='free-classify-btn'; btn.textContent=opt;
+    btn.onclick=function(){
+      if(card.classList.contains('answered')) return;
+      card.classList.add('answered'); ba.querySelectorAll('button').forEach(function(b){b.disabled=true;});
+      var fb=document.getElementById(prefix+'fb'+i);
+      if(oi===data.ok){ btn.classList.add('ans-correct'); fb.className='free-fb show fb-ok'; fb.innerHTML='✓ '+data.expl; addScore(); }
+      else { btn.classList.add('ans-wrong'); ba.querySelectorAll('button').forEach(function(b,bi){if(bi===data.ok)b.classList.add('ans-reveal');}); fb.className='free-fb show fb-ko'; fb.innerHTML='✗ '+data.expl; }
+      onDone();
+    };
+    ba.appendChild(btn);
+  });
+}
+
+function buildSaisie(card, data, i, prefix, onDone){
+  card.innerHTML='<div class="free-ex-label">Exercice '+(i+1)+'</div>'
+    +'<div class="free-ex-question">'+data.q+'</div>'
+    +'<div class="free-input-row"><input class="free-input" id="'+prefix+'inp'+i+'" type="text" placeholder="?" autocomplete="off" spellcheck="false">'
+    +'<button class="btn-free-check" onclick="checkFreeS(\''+prefix+'\','+i+')">Vérifier</button></div>'
+    +'<div class="free-fb" id="'+prefix+'fb'+i+'"></div>';
+}
+
+function checkFreeS(prefix, i){
+  var card=document.getElementById(prefix+i); if(card.classList.contains('answered')) return;
+  var exs = prefix==='f1'?free1Exs:free2Exs;
+  var ex=exs[i], inp=document.getElementById(prefix+'inp'+i), fb=document.getElementById(prefix+'fb'+i);
+  var val=ns(inp.value), ok=ex.data.acc.some(function(a){return val===ns(a);});
+  card.classList.add('answered'); inp.disabled=true; card.querySelector('.btn-free-check').disabled=true;
+  if(ok){ inp.classList.add('free-ok'); fb.className='free-fb show fb-ok'; fb.innerHTML='✓ '+ex.data.expl; addScore(); }
+  else { inp.classList.add('free-ko'); fb.className='free-fb show fb-ko'; fb.innerHTML='✗ Réponse : <strong>'+ex.data.acc[0]+'</strong>. '+ex.data.expl; }
+  if(prefix==='f1'){ free1Done++; if(free1Done>=free1Exs.length) setTimeout(function(){document.getElementById('btn-to-free2').classList.add('show');document.getElementById('btn-to-free2').scrollIntoView({behavior:'smooth',block:'nearest'});},600); }
+  else { free2Done++; if(free2Done>=free2Exs.length) setTimeout(function(){document.getElementById('btn-to-bilan').classList.add('show');document.getElementById('btn-to-bilan').scrollIntoView({behavior:'smooth',block:'nearest'});},600); }
+}
+
+function buildJugement(card, data, i, prefix, onDone){
+  card.innerHTML='<div class="free-ex-label">Exercice '+(i+1)+'</div>'
+    +'<div class="free-ex-question">'+data.consigne+'</div>'
+    +'<div class="jugement-opts">'
+      +'<button class="jugement-opt-btn" onclick="checkFreeJ(\''+prefix+'\','+i+',\'A\',this)"><strong>A —</strong> '+data.a+'</button>'
+      +'<button class="jugement-opt-btn" onclick="checkFreeJ(\''+prefix+'\','+i+',\'B\',this)"><strong>B —</strong> '+data.b+'</button>'
+    +'</div><div class="free-fb" id="'+prefix+'fb'+i+'"></div>';
+}
+
+function checkFreeJ(prefix, i, choice, btn){
+  var card=document.getElementById(prefix+i); if(card.classList.contains('answered')) return;
+  var exs=prefix==='f1'?free1Exs:free2Exs;
+  var ex=exs[i], fb=document.getElementById(prefix+'fb'+i);
+  card.classList.add('answered'); card.querySelectorAll('.jugement-opt-btn').forEach(function(b){b.disabled=true;});
+  if(choice===ex.data.ok){ btn.classList.add('jug-correct'); fb.className='free-fb show fb-ok'; fb.innerHTML='✓ '+ex.data.expl; addScore(); }
+  else { btn.classList.add('jug-wrong'); card.querySelectorAll('.jugement-opt-btn')[choice==='A'?1:0].classList.add('jug-correct'); fb.className='free-fb show fb-ko'; fb.innerHTML='✗ '+ex.data.expl; }
+  if(prefix==='f1'){ free1Done++; if(free1Done>=free1Exs.length) setTimeout(function(){document.getElementById('btn-to-free2').classList.add('show');document.getElementById('btn-to-free2').scrollIntoView({behavior:'smooth',block:'nearest'});},600); }
+  else { free2Done++; if(free2Done>=free2Exs.length) setTimeout(function(){document.getElementById('btn-to-bilan').classList.add('show');document.getElementById('btn-to-bilan').scrollIntoView({behavior:'smooth',block:'nearest'});},600); }
+}
+
+function initFree1(){
+  free1Exs=pickExercises(5); free1Done=0;
+  var c=document.getElementById('free1-container'); c.innerHTML='';
+  free1Exs.forEach(function(ex,i){
+    var done=function(){ free1Done++; if(free1Done>=free1Exs.length) setTimeout(function(){document.getElementById('btn-to-free2').classList.add('show');document.getElementById('btn-to-free2').scrollIntoView({behavior:'smooth',block:'nearest'});},600); };
+    c.appendChild(buildFreeCard(ex,i,'f1',done));
+  });
+}
+
+function initFree2(){
+  // Choisir des exercices différents de free1
+  var usedQ=free1Exs.map(function(e){return e.data.q||e.data.consigne;});
+  var pool=FREE_POOL.filter(function(e){return usedQ.indexOf(e.data.q||e.data.consigne)<0;});
+  free2Exs=shuffle(pool).slice(0,5); free2Done=0;
+  var c=document.getElementById('free2-container'); c.innerHTML='';
+  free2Exs.forEach(function(ex,i){
+    var done=function(){ free2Done++; if(free2Done>=free2Exs.length) setTimeout(function(){document.getElementById('btn-to-bilan').classList.add('show');document.getElementById('btn-to-bilan').scrollIntoView({behavior:'smooth',block:'nearest'});},600); };
+    c.appendChild(buildFreeCard(ex,i,'f2',done));
+  });
+}
+
+// ════════════════════════════════════════════════
+// BILAN
+// ════════════════════════════════════════════════
+function showBilan(){
+  // Total possible = étapes guidé1 + étapes guidé2 + libres1 + libres2
+  var g1Steps = G1[g1Idx] ? G1[g1Idx].etapes.length : 5;
+  var g2Steps = G2[g2Idx] ? G2[g2Idx].etapes.length : 4;
+  var total = g1Steps + g2Steps + 10;
+  document.getElementById('bilan-score').textContent = score;
+  document.getElementById('bilan-total-txt').textContent = '/ '+total+' pts';
+  var pct = score/total;
+  var title, msg;
+  if(pct>=0.8){ title='Excellent !'; msg='Maîtrise complète des nombres relatifs — guidés et exercices libres réussis haut la main !'; }
+  else if(pct>=0.6){ title='Bon travail !'; msg='Bonne compréhension. Revois les cas où les signes sont différents et la règle de la soustraction d\'un négatif.'; }
+  else { title='Continue !'; msg='Les nombres relatifs demandent de la pratique. Relis la leçon et refais les guidés — chaque essai compte !'; }
+  document.getElementById('bilan-title').textContent=title;
+  document.getElementById('bilan-msg').textContent=msg;
+  var s=[Math.ceil(total*.4),Math.ceil(total*.7),Math.ceil(total*.9)];
+  ['star1','star2','star3'].forEach(function(id,i){
+    var el=document.getElementById(id);
+    if(score>=s[i]){(function(e,d){setTimeout(function(){e.classList.add('earned');},d);})(el,300+i*400);}
+    else el.style.filter='grayscale(1)';
+  });
+  if(pct>=0.6) lanceConfetti();
+}
+
+function lanceConfetti(){
+  var cols=['#b45309','#fcd34d','#059669','#0369a1','#dc2626'];
+  for(var i=0;i<50;i++){
+    var el=document.createElement('div'); el.className='confetti-piece';
+    el.style.cssText='left:'+Math.random()*100+'vw;background:'+cols[Math.floor(Math.random()*5)]
+      +';animation-duration:'+(1.5+Math.random()*2)+'s;animation-delay:'+Math.random()*1.2
+      +'s;width:'+(6+Math.random()*7)+'px;height:'+(6+Math.random()*7)+'px;border-radius:'+(Math.random()>.5?'50%':'2px')+';';
+    document.body.appendChild(el); setTimeout(function(){if(el.parentNode)el.remove();},4000);
+  }
+}
+</script>
+</body>
+</html>

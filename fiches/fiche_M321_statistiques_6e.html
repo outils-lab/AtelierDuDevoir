@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>M321 — Statistiques : moyenne et médiane | L'Atelier du Devoir</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--acc:#dc2626;--acc-pale:#fff1f2;--acc-mid:#fda4af;--acc-dark:#b91c1c;--mint:#059669;--mint-pale:#d1fae5;--mint-deep:#047857;--coral:#dc2626;--coral-pale:#fee2e2;--sun:#d97706;--sun-pale:#fef3c7;--text:#1e293b;--text-light:#64748b;--radius:14px;--radius-sm:8px;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Nunito',sans-serif;background:#fff1f2;color:var(--text);font-size:16px;line-height:1.6;}
+.header{background:white;border-bottom:3px solid var(--acc-pale);position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.08);}
+.header-top{display:flex;align-items:center;justify-content:space-between;padding:10px 18px;}
+.logo{font-family:'Fredoka One',cursive;font-size:1.2rem;color:var(--acc);text-decoration:none;}
+.score-badge{background:var(--acc);color:white;font-weight:800;font-size:.88rem;padding:5px 14px;border-radius:20px;}
+.steps-wrap{padding:0 18px 8px;}
+.steps{display:flex;gap:4px;}
+.step{flex:1;height:6px;border-radius:6px;background:#fecdd3;transition:all .35s;}
+.step.done{background:#10b981;}.step.active{background:var(--acc);}
+.steps-labels{display:flex;gap:4px;padding-top:3px;}
+.step-lbl{flex:1;font-size:.46rem;font-weight:700;color:var(--text-light);text-align:center;text-transform:uppercase;letter-spacing:.04em;}
+.main{max-width:700px;margin:0 auto;padding:22px 14px 100px;}
+.phase{display:none;}.phase.active{display:block;}
+.accroche{background:white;border-radius:var(--radius);padding:20px;margin-bottom:20px;border:2px solid var(--acc-pale);display:flex;gap:14px;align-items:flex-start;}
+.accroche-icon{font-size:2.6rem;flex-shrink:0;}
+.accroche-text h1{font-family:'Fredoka One',cursive;font-size:1.5rem;color:var(--acc);margin-bottom:4px;}
+.accroche-text p{color:var(--text-light);font-size:.9rem;line-height:1.5;}
+.meta-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
+.meta-tag{background:var(--acc-pale);border-radius:20px;padding:3px 12px;font-size:.72rem;font-weight:700;color:var(--acc);}
+.lecon-card{background:white;border-radius:var(--radius);padding:20px;margin-bottom:16px;border:2px solid var(--acc-pale);}
+.lecon-card h2{font-family:'Fredoka One',cursive;font-size:1.2rem;color:var(--acc);margin-bottom:14px;}
+.lecon-block{display:none;}.lecon-block.revealed{display:block;}
+.lecon-subtitle{font-weight:800;font-size:.95rem;color:var(--acc);margin-bottom:8px;margin-top:4px;}
+.sep{margin:16px 0;border:none;border-top:2px dashed #fecdd3;}
+.analogie{font-size:.9rem;color:var(--text-light);font-style:italic;margin-bottom:10px;line-height:1.6;background:var(--acc-pale);border-radius:var(--radius-sm);padding:10px 14px;border-left:4px solid var(--acc-mid);}
+.def-box{border-left:4px solid var(--acc);background:var(--acc-pale);border-radius:0 var(--radius) var(--radius) 0;padding:12px 16px;margin-bottom:10px;}
+.def-box h4{font-weight:800;color:var(--acc);font-size:.88rem;margin-bottom:6px;}
+.def-box p{font-size:.86rem;color:var(--text);line-height:1.7;}
+.hl{background:var(--sun-pale);color:var(--sun);border-radius:6px;padding:1px 8px;font-weight:800;}
+.hl-g{background:var(--mint-pale);color:var(--mint-deep);border-radius:6px;padding:1px 8px;font-weight:800;}
+.exemple-block{background:white;border:2px solid var(--acc-pale);border-radius:var(--radius-sm);padding:10px 14px;margin-bottom:8px;font-size:.9rem;line-height:1.9;}
+.exemple-block .tag{display:inline-block;background:var(--acc);color:white;font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:20px;margin-right:8px;text-transform:uppercase;}
+.astuce{background:var(--sun-pale);border:2px solid #fde68a;border-radius:var(--radius-sm);padding:10px 14px;font-size:.85rem;margin-top:8px;color:#78350f;}
+.astuce strong{color:#92400e;}
+.piege{background:#fff1f2;border:2px solid #fecdd3;border-radius:var(--radius-sm);padding:10px 14px;font-size:.85rem;margin-top:8px;color:#9f1239;}
+.btn-compris{margin-top:16px;padding:12px 28px;border-radius:30px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.95rem;background:var(--acc);color:white;border:none;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:8px;box-shadow:0 4px 12px rgba(220,38,38,.3);}
+.btn-compris:hover{background:var(--acc-dark);transform:translateY(-2px);}
+.btn-compris:disabled{opacity:.4;cursor:default;transform:none;box-shadow:none;}
+.ugo-msg{background:white;border:2px solid var(--acc-pale);border-radius:var(--radius);padding:14px 16px;margin:14px 0;display:flex;align-items:flex-start;gap:12px;}
+.ugo-msg .ugo{font-size:2rem;flex-shrink:0;}
+.ugo-msg p{font-size:.88rem;color:var(--text-light);line-height:1.6;}
+.ugo-msg p strong{color:var(--acc);}
+.ex-header{background:white;border:2px solid var(--acc-pale);border-radius:var(--radius);padding:14px 18px;margin-bottom:14px;}
+.ex-header h2{font-family:'Fredoka One',cursive;font-size:1.1rem;color:var(--acc);margin-bottom:3px;}
+.ex-header p{color:var(--text-light);font-size:.84rem;}
+.guided-box{background:white;border:3px solid var(--acc);border-radius:var(--radius);padding:18px;margin-bottom:14px;}
+.guided-title{font-size:1rem;font-weight:800;color:var(--acc);margin-bottom:14px;background:var(--acc-pale);padding:9px 14px;border-radius:var(--radius-sm);display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.tries-badge{font-size:.72rem;font-weight:700;color:var(--coral);background:var(--coral-pale);padding:2px 10px;border-radius:20px;margin-left:auto;}
+.step-box{border:2px solid #fecdd3;border-radius:10px;padding:14px;transition:all .3s;opacity:.5;pointer-events:none;margin-bottom:8px;}
+.step-box.active{opacity:1;pointer-events:all;border-color:var(--acc-mid);}
+.step-box.correct{border-color:var(--mint);background:var(--mint-pale);opacity:1;}
+.step-lbl-num{font-size:.62rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;}
+.step-q{font-size:.93rem;font-weight:700;margin-bottom:10px;line-height:1.6;}
+.step-hint{font-size:.82rem;color:#92400e;background:var(--sun-pale);border-radius:6px;padding:8px 12px;margin-bottom:8px;display:none;}
+.step-hint.show{display:block;}
+.qcm-opts{display:flex;flex-direction:column;gap:7px;}
+.qcm-opt{padding:10px 14px;border-radius:10px;border:2px solid #fecdd3;background:white;font-family:'Nunito',sans-serif;font-weight:700;font-size:.9rem;cursor:pointer;text-align:left;transition:all .2s;}
+.qcm-opt:hover:not(:disabled){border-color:var(--acc);background:var(--acc-pale);}
+.qcm-opt:disabled{cursor:default;}
+.qcm-opt.opt-ok{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.qcm-opt.opt-ko{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
+.step-input-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.step-input{border:2px solid var(--acc);border-radius:10px;padding:9px 14px;font-family:'Nunito',sans-serif;font-weight:700;font-size:1rem;color:var(--text);background:white;outline:none;min-width:90px;max-width:170px;text-align:center;}
+.step-input:disabled{border-color:#fecdd3;background:#f8fafc;}
+.step-input.ok{border-color:var(--mint);background:var(--mint-pale);}
+.step-input.ko{border-color:var(--coral);}
+.btn-check{padding:9px 18px;border-radius:20px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.88rem;background:var(--acc);color:white;border:none;cursor:pointer;}
+.btn-check:disabled{opacity:.4;cursor:not-allowed;}
+.step-fb{margin-top:8px;padding:9px 12px;border-radius:8px;font-size:.83rem;font-weight:700;display:none;}
+.step-fb.show{display:block;}
+.step-fb.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.step-fb.ko{background:var(--coral-pale);color:#b91c1c;}
+.reset-box{background:white;border:3px solid var(--acc);border-radius:var(--radius);padding:20px;text-align:center;margin-bottom:14px;display:none;}
+.reset-box.show{display:block;}
+.reset-box .ugo-big{font-size:3rem;margin-bottom:8px;}
+.reset-box h3{font-family:'Fredoka One',cursive;font-size:1.2rem;color:var(--acc);margin-bottom:8px;}
+.reset-box p{color:var(--text-light);font-size:.88rem;margin-bottom:14px;line-height:1.6;}
+.btn-restart{padding:11px 26px;border-radius:30px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.9rem;background:var(--acc);color:white;border:none;cursor:pointer;}
+.free-card{background:white;border:2px solid var(--acc-pale);border-radius:var(--radius);padding:16px;margin-bottom:12px;}
+.free-label{font-size:.68rem;font-weight:700;color:var(--acc);text-transform:uppercase;letter-spacing:.06em;margin-bottom:7px;}
+.free-q{font-size:.93rem;font-weight:700;margin-bottom:11px;background:var(--acc-pale);border-radius:var(--radius-sm);padding:10px 14px;line-height:1.9;}
+.free-opts{display:flex;gap:8px;flex-wrap:wrap;}
+.free-opt{padding:10px 16px;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.88rem;border:2px solid #fecdd3;background:white;cursor:pointer;transition:all .2s;flex:1;text-align:center;}
+.free-opt:hover{border-color:var(--acc);background:var(--acc-pale);}
+.free-opt.ok{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.free-opt.ko{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
+.free-opt.reveal{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.jug-opts{display:flex;flex-direction:column;gap:8px;}
+.jug-opt{padding:11px 16px;border-radius:10px;border:2px solid #fecdd3;background:white;font-family:'Nunito',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;text-align:left;transition:all .2s;line-height:1.6;}
+.jug-opt:hover{border-color:var(--acc);background:var(--acc-pale);}
+.jug-opt.ok{border-color:var(--mint);background:var(--mint-pale);}
+.jug-opt.ko{border-color:var(--coral);background:var(--coral-pale);}
+.free-fb{margin-top:10px;padding:9px 13px;border-radius:8px;font-size:.84rem;font-weight:700;display:none;}
+.free-fb.show{display:block;}
+.free-fb.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.free-fb.ko{background:var(--coral-pale);color:#b91c1c;}
+.btn-suite{margin-top:14px;padding:11px 24px;border-radius:30px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.9rem;background:var(--acc);color:white;border:none;cursor:pointer;display:none;align-items:center;gap:8px;box-shadow:0 4px 12px rgba(220,38,38,.3);transition:all .2s;}
+.btn-suite.show{display:inline-flex;}
+.btn-suite:hover{background:var(--acc-dark);transform:translateY(-2px);}
+.bilan-card{background:white;border-radius:var(--radius);padding:28px 20px;text-align:center;border:3px solid var(--acc-pale);}
+.bilan-ugo{font-size:4rem;margin-bottom:10px;display:block;}
+.bilan-title{font-family:'Fredoka One',cursive;font-size:2rem;margin-bottom:6px;color:var(--acc);}
+.bilan-msg{color:var(--text-light);font-size:.95rem;margin-bottom:20px;line-height:1.6;}
+.stars-row{display:flex;justify-content:center;gap:12px;margin-bottom:18px;}
+.star-big{font-size:2.8rem;filter:grayscale(1);transition:all .5s;}
+.star-big.earned{filter:none;animation:starPop .5s ease both;}
+@keyframes starPop{0%{transform:scale(0);}60%{transform:scale(1.3);}100%{transform:scale(1);}}
+.score-circle{width:110px;height:110px;border-radius:50%;background:var(--acc);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 20px;color:white;box-shadow:0 6px 20px rgba(220,38,38,.4);}
+.score-num{font-family:'Fredoka One',cursive;font-size:2rem;line-height:1;}
+.score-sub{font-size:.65rem;opacity:.85;}
+.memo{background:var(--acc-pale);border-radius:var(--radius);padding:14px 16px;margin:16px 0;text-align:left;}
+.memo h3{font-weight:800;font-size:.85rem;color:var(--acc);margin-bottom:10px;text-transform:uppercase;letter-spacing:.05em;}
+.memo-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+@media(max-width:460px){.memo-grid{grid-template-columns:1fr;}}
+.memo-item{background:white;border-radius:10px;padding:10px 12px;font-size:.82rem;border:2px solid var(--acc-pale);}
+.memo-item strong{color:var(--acc);}
+.bilan-btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:16px;}
+.btn-bilan{padding:11px 22px;border-radius:30px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.88rem;cursor:pointer;border:none;transition:all .2s;}
+.btn-bilan.primary{background:var(--acc);color:white;}
+.btn-bilan.secondary{background:var(--acc-pale);color:var(--acc);border:2px solid var(--acc);}
+.btn-bilan:hover{transform:translateY(-2px);}
+.confetti-piece{position:fixed;border-radius:3px;top:-20px;animation:fall linear both;pointer-events:none;z-index:9999;}
+@keyframes fall{0%{transform:translateY(0) rotate(0deg);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
+.print-bar{position:fixed;right:14px;top:50%;transform:translateY(-50%);z-index:200;display:flex;flex-direction:column;gap:8px;}
+.print-btn{display:flex;align-items:center;gap:6px;padding:9px 13px;border-radius:20px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.75rem;border:none;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.15);}
+.print-btn-a{background:#d97706;color:white;}.print-btn-b{background:#0369a1;color:white;}
+@media(max-width:560px){.print-bar{right:6px;}.print-btn{font-size:0;width:38px;height:38px;padding:0;justify-content:center;}.print-btn span.lbl{display:none;}.print-btn span.ico{font-size:1.1rem;}}
+@media print{.print-bar,.btn-compris,.btn-suite,.bilan-card,.ugo-msg{display:none!important;}body{background:white;}.phase{display:block!important;}}
+</style>
+</head>
+<body>
+<div class="print-bar">
+  <button class="print-btn print-btn-a" onclick="window.print()"><span class="ico">📖</span><span class="lbl">Leçon</span></button>
+  <button class="print-btn print-btn-b" onclick="window.print()"><span class="ico">📝</span><span class="lbl">Exercices</span></button>
+</div>
+<header class="header">
+  <div class="header-top">
+    <a href="../9-12ans.html" class="logo">🦉 L'Atelier du Devoir</a>
+    <div class="score-badge">⭐ <span id="score-display">0</span> pts</div>
+  </div>
+  <div class="steps-wrap">
+    <div class="steps">
+      <div class="step active" id="s0"></div><div class="step" id="s1"></div><div class="step" id="s2"></div>
+      <div class="step" id="s3"></div><div class="step" id="s4"></div><div class="step" id="s5"></div>
+    </div>
+    <div class="steps-labels">
+      <div class="step-lbl">Leçon</div><div class="step-lbl">Guidé 1</div><div class="step-lbl">Guidé 2</div>
+      <div class="step-lbl">Exercices</div><div class="step-lbl">+ Exercices</div><div class="step-lbl">Bilan</div>
+    </div>
+  </div>
+</header>
+<main class="main">
+
+<div class="accroche">
+  <div class="accroche-icon">📊</div>
+  <div class="accroche-text">
+    <h1>Statistiques : moyenne et médiane</h1>
+    <p>Note moyenne d'une classe, salaire médian d'un pays… Ces deux indicateurs donnent une idée du "centre" d'une série de données !</p>
+    <div class="meta-row">
+      <span class="meta-tag">6e</span><span class="meta-tag">⏱ 25 min</span>
+      <span class="meta-tag">⭐⭐ Difficulté</span><span class="meta-tag">Mathématiques</span>
+    </div>
+  </div>
+</div>
+
+<div class="phase active" id="phase-lecon">
+  <div class="lecon-card">
+    <h2>📖 La leçon</h2>
+
+    <div class="lecon-block revealed" id="bloc-0">
+      <div class="lecon-subtitle">① La moyenne</div>
+      <div class="analogie">🎯 5 amis ont marqué 3, 5, 7, 4, 6 points. Pour comparer équitablement, on "redistribue" les points également entre eux. Si on divise la somme totale par le nombre de joueurs, on obtient la moyenne : c'est comme si chacun avait marqué exactement ce nombre !</div>
+
+      <div class="def-box">
+        <h4>🔑 Calcul de la moyenne</h4>
+        <p style="font-size:.95rem;text-align:center;font-weight:800;color:#b91c1c;margin-bottom:8px;">Moyenne = somme de toutes les valeurs ÷ nombre de valeurs</p>
+        <p><strong>Exemple :</strong> Notes 12, 15, 8, 17, 13<br>
+        Somme = 12+15+8+17+13 = <span class="hl">65</span><br>
+        Nombre de valeurs = 5<br>
+        Moyenne = 65 ÷ 5 = <span class="hl-g">13</span></p>
+      </div>
+
+      <!-- SVG illustration moyenne -->
+      <svg viewBox="0 0 300 100" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:10px auto;max-width:300px;background:#fff1f2;border-radius:12px;padding:8px;">
+        <text x="150" y="14" font-size="10" fill="#dc2626" font-weight="bold" text-anchor="middle">La moyenne : redistribuer équitablement</text>
+        <!-- Barres originales -->
+        <rect x="18" y="55" width="22" height="30" fill="#fda4af" stroke="#dc2626" stroke-width="1.5" rx="3"/>
+        <text x="29" y="52" font-size="9" fill="#dc2626" font-weight="bold" text-anchor="middle">12</text>
+        <rect x="48" y="40" width="22" height="45" fill="#fda4af" stroke="#dc2626" stroke-width="1.5" rx="3"/>
+        <text x="59" y="37" font-size="9" fill="#dc2626" font-weight="bold" text-anchor="middle">15</text>
+        <rect x="78" y="65" width="22" height="20" fill="#fda4af" stroke="#dc2626" stroke-width="1.5" rx="3"/>
+        <text x="89" y="62" font-size="9" fill="#dc2626" font-weight="bold" text-anchor="middle">8</text>
+        <rect x="108" y="30" width="22" height="55" fill="#fda4af" stroke="#dc2626" stroke-width="1.5" rx="3"/>
+        <text x="119" y="27" font-size="9" fill="#dc2626" font-weight="bold" text-anchor="middle">17</text>
+        <rect x="138" y="50" width="22" height="35" fill="#fda4af" stroke="#dc2626" stroke-width="1.5" rx="3"/>
+        <text x="149" y="47" font-size="9" fill="#dc2626" font-weight="bold" text-anchor="middle">13</text>
+        <!-- Flèche -->
+        <text x="178" y="52" font-size="18" fill="#dc2626">→</text>
+        <!-- Barres égalisées (13 chacune) -->
+        <rect x="202" y="52" width="18" height="33" fill="#a7f3d0" stroke="#059669" stroke-width="1.5" rx="3"/>
+        <rect x="225" y="52" width="18" height="33" fill="#a7f3d0" stroke="#059669" stroke-width="1.5" rx="3"/>
+        <rect x="248" y="52" width="18" height="33" fill="#a7f3d0" stroke="#059669" stroke-width="1.5" rx="3"/>
+        <text x="228" y="47" font-size="8" fill="#059669" font-weight="bold" text-anchor="middle">moy=13</text>
+        <!-- Axe bas -->
+        <line x1="10" y1="87" x2="280" y2="87" stroke="#e2e8f0" stroke-width="1"/>
+      </svg>
+
+      <div class="exemple-block"><span class="tag">Attention</span> La moyenne peut ne correspondre à aucune valeur réelle de la série. Ex : moyenne de 2 et 4 = 3, mais 3 n'est pas dans la série !</div>
+      <div class="astuce"><strong>💡 Vérification :</strong> Moyenne × nombre de valeurs = somme. 13 × 5 = 65 ✓</div>
+      <button class="btn-compris" onclick="revealBloc(1)">J'ai compris ! →</button>
+    </div>
+
+    <div class="lecon-block" id="bloc-1">
+      <hr class="sep">
+      <div class="lecon-subtitle">② La médiane</div>
+      <div class="analogie">📏 Imagine 5 personnes alignées du plus petit au plus grand. La personne au milieu, c'est la médiane ! La médiane partage la série en deux : autant de valeurs en dessous qu'au-dessus.</div>
+
+      <div class="def-box">
+        <h4>🔑 Calcul de la médiane</h4>
+        <p><strong>Étape 1 :</strong> Trier les valeurs dans l'ordre croissant<br>
+        <strong>Étape 2 :</strong> Trouver la valeur du milieu<br>
+        • Si n est <strong>impair</strong> : médiane = valeur centrale (rang (n+1)/2)<br>
+        • Si n est <strong>pair</strong> : médiane = moyenne des 2 valeurs centrales</p>
+      </div>
+
+      <!-- SVG médiane série impaire et paire -->
+      <svg viewBox="0 0 300 120" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:10px auto;max-width:300px;background:#fff1f2;border-radius:12px;padding:8px;">
+        <text x="150" y="13" font-size="10" fill="#dc2626" font-weight="bold" text-anchor="middle">Trouver la médiane</text>
+        <!-- Série impaire n=5 : 3,5,7,9,11 -->
+        <text x="10" y="30" font-size="9" fill="#475569" font-weight="bold">Série impaire (n=5) :</text>
+        <text x="18" y="50" font-size="14" fill="#475569" font-weight="bold">3</text>
+        <text x="48" y="50" font-size="14" fill="#475569" font-weight="bold">5</text>
+        <rect x="70" y="35" width="24" height="20" fill="#fda4af" rx="4"/>
+        <text x="82" y="50" font-size="14" fill="#dc2626" font-weight="bold" text-anchor="middle">7</text>
+        <text x="108" y="50" font-size="14" fill="#475569" font-weight="bold">9</text>
+        <text x="138" y="50" font-size="14" fill="#475569" font-weight="bold">11</text>
+        <text x="175" y="50" font-size="9" fill="#dc2626" font-weight="bold">→ médiane = 7</text>
+        <!-- Série paire n=4 : 4,6,8,10 -->
+        <text x="10" y="73" font-size="9" fill="#475569" font-weight="bold">Série paire (n=4) :</text>
+        <text x="18" y="95" font-size="14" fill="#475569" font-weight="bold">4</text>
+        <rect x="42" y="80" width="24" height="20" fill="#fda4af" rx="4"/>
+        <text x="54" y="95" font-size="14" fill="#dc2626" font-weight="bold" text-anchor="middle">6</text>
+        <rect x="72" y="80" width="24" height="20" fill="#fda4af" rx="4"/>
+        <text x="84" y="95" font-size="14" fill="#dc2626" font-weight="bold" text-anchor="middle">8</text>
+        <text x="108" y="95" font-size="14" fill="#475569" font-weight="bold">10</text>
+        <text x="140" y="88" font-size="9" fill="#dc2626" font-weight="bold">→ moy. des 2</text>
+        <text x="140" y="100" font-size="9" fill="#dc2626" font-weight="bold">médiane=(6+8)/2=7</text>
+      </svg>
+
+      <div class="exemple-block"><span class="tag">n=5</span> Série triée : 8, 12, 13, 15, 17 → médiane = <span class="hl-g">13</span> (3e valeur)</div>
+      <div class="exemple-block"><span class="tag">n=6</span> Série triée : 4, 7, 9, 11, 14, 18 → médiane = (9+11)÷2 = <span class="hl-g">10</span></div>
+      <div class="piege"><strong>⚠ Toujours trier d'abord !</strong> Si la série n'est pas triée, on ne peut pas trouver la médiane directement.</div>
+      <button class="btn-compris" onclick="revealBloc(2)">J'ai compris ! →</button>
+    </div>
+
+    <div class="lecon-block" id="bloc-2">
+      <hr class="sep">
+      <div class="lecon-subtitle">③ Moyenne vs Médiane : quand utiliser laquelle ?</div>
+      <div class="analogie">💰 Le salaire moyen en France peut être tiré vers le haut par quelques très hauts salaires. Le salaire médian est plus représentatif : 50% des gens gagnent moins et 50% gagnent plus. Chaque indicateur a ses avantages !</div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0;">
+        <div style="background:var(--acc-pale);border:2px solid var(--acc-mid);border-radius:10px;padding:12px;">
+          <div style="font-weight:800;color:var(--acc);margin-bottom:8px;font-size:.9rem;">📐 Moyenne</div>
+          <div style="font-size:.82rem;line-height:1.7;">
+            Utilise TOUTES les valeurs<br>
+            Sensible aux valeurs extrêmes<br>
+            Ex: notes, températures<br>
+            Facile à calculer
+          </div>
+        </div>
+        <div style="background:var(--mint-pale);border:2px solid var(--mint);border-radius:10px;padding:12px;">
+          <div style="font-weight:800;color:var(--mint-deep);margin-bottom:8px;font-size:.9rem;">📍 Médiane</div>
+          <div style="font-size:.82rem;line-height:1.7;">
+            Valeur centrale (50%/50%)<br>
+            Résistante aux extrêmes<br>
+            Ex: salaires, prix immobilier<br>
+            Nécessite de trier
+          </div>
+        </div>
+      </div>
+
+      <div class="exemple-block"><span class="tag">Exemple</span> Série : 10, 10, 10, 10, 100. Moyenne = (10×4+100)÷5 = 140÷5 = <span class="hl-r">28</span> (faussée par 100 !). Médiane = <span class="hl-g">10</span> (bien plus représentative !)</div>
+      <button class="btn-compris" onclick="goPhase('g1',1)">J'ai compris ! Aux exercices 🚀</button>
+    </div>
+  </div>
+</div>
+
+<div class="phase" id="phase-g1">
+  <div class="ugo-msg"><span class="ugo">🦉</span><p><strong>Guidé 1 — QCM !</strong> Moyenne et médiane pas à pas. <strong>3 essais</strong> par question. 🌟</p></div>
+  <div class="ex-header"><h2>📊 Calculer moyenne et médiane</h2><p>Somme ÷ n pour la moyenne. Valeur centrale (triée) pour la médiane.</p></div>
+  <div id="g1-reset" class="reset-box">
+    <div class="ugo-big">🦉</div><h3>On recommence !</h3>
+    <p>Moyenne = somme ÷ n. Médiane : trier, puis valeur centrale (n impair) ou moyenne des 2 centrales (n pair).</p>
+    <button class="btn-restart" onclick="initG1()">↺ Recommencer</button>
+  </div>
+  <div id="g1-zone"></div>
+  <button class="btn-suite" id="btn-g1-to-g2" onclick="goPhase('g2',2)">Super ! →</button>
+</div>
+
+<div class="phase" id="phase-g2">
+  <div class="ugo-msg"><span class="ugo">🦉</span><p><strong>Guidé 2 — Tu calcules !</strong> Moyenne et médiane sur des séries. <strong>3 essais</strong> 💪</p></div>
+  <div class="ex-header"><h2>✏️ Calculer</h2><p>Tape le résultat exact.</p></div>
+  <div id="g2-reset" class="reset-box">
+    <div class="ugo-big">🦉</div><h3>On repart !</h3>
+    <p>Trier la série avant de chercher la médiane ! Et pour la moyenne : somme ÷ nombre de valeurs.</p>
+    <button class="btn-restart" onclick="initG2()">↺ Recommencer</button>
+  </div>
+  <div id="g2-zone"></div>
+  <button class="btn-suite" id="btn-g2-to-free" onclick="goPhase('free',3)">Excellent ! →</button>
+</div>
+
+<div class="phase" id="phase-free">
+  <div class="ugo-msg"><span class="ugo">🦉</span><p><strong>Exercices libres !</strong> 5 exercices variés. 🎯</p></div>
+  <div id="free1-zone"></div>
+  <button class="btn-suite" id="btn-free-to-free2" onclick="goPhase('free2',4)">Encore ! →</button>
+</div>
+
+<div class="phase" id="phase-free2">
+  <div class="ugo-msg"><span class="ugo">🦉</span><p><strong>5 exercices de plus !</strong> 💪</p></div>
+  <div id="free2-zone"></div>
+  <button class="btn-suite" id="btn-free2-to-bilan" onclick="goPhase('bilan',5)">🌟 Résultat !</button>
+</div>
+
+<div class="phase" id="phase-bilan">
+  <div class="bilan-card">
+    <span class="bilan-ugo">🦉</span>
+    <h2 class="bilan-title" id="bilan-title">Bravo !</h2>
+    <p class="bilan-msg" id="bilan-msg"></p>
+    <div class="stars-row"><span class="star-big" id="etoile1">⭐</span><span class="star-big" id="etoile2">⭐</span><span class="star-big" id="etoile3">⭐</span></div>
+    <div class="score-circle"><span class="score-num" id="bilan-pts">0</span><span class="score-sub" id="bilan-sur">/ 0 pts</span></div>
+    <div class="memo">
+      <h3>📝 Ce que j'ai appris</h3>
+      <div class="memo-grid">
+        <div class="memo-item"><strong>Moyenne</strong><br>Somme ÷ n<br>Sensible aux extrêmes</div>
+        <div class="memo-item"><strong>Médiane</strong><br>Valeur centrale triée<br>Résistante aux extrêmes</div>
+        <div class="memo-item"><strong>n impair</strong><br>Médiane = rang (n+1)/2<br>valeur du milieu</div>
+        <div class="memo-item"><strong>n pair</strong><br>Médiane = moy. des 2<br>valeurs centrales</div>
+      </div>
+    </div>
+    <div class="bilan-btns">
+      <button class="btn-bilan secondary" onclick="location.reload()">↺ Recommencer</button>
+      <button class="btn-bilan primary" onclick="location.href='../9-12ans.html'">← Retour</button>
+    </div>
+  </div>
+</div>
+</main>
+
+<script>
+var G1=[
+  {titre:"📊 Notes : 12, 15, 8, 17, 13. Moyenne ?",etapes:[
+    {q:"Somme des notes = 12+15+8+17+13 = ?",opts:["65","60","67","70"],ok:0,
+     hint:"12+15=27, 27+8=35, 35+17=52, 52+13=?",
+     expl_ok:"65 ! 12+15+8+17+13=65.",
+     expl_ko:"12+15+8+17+13=65."},
+    {q:"Nombre de notes = ?",opts:["5","4","6","65"],ok:0,
+     hint:"Compte les valeurs : 12, 15, 8, 17, 13 → combien ?",
+     expl_ok:"5 notes !",
+     expl_ko:"5 valeurs dans la série."},
+    {q:"Moyenne = 65 ÷ 5 = ?",opts:["13","12","15","11"],ok:0,
+     hint:"65 ÷ 5 = ?",
+     expl_ok:"13 ! Moyenne = 13. Vérif : 13×5=65 ✓ 🌟",
+     expl_ko:"65÷5=13."}
+  ]},
+  {titre:"📊 Notes triées : 8, 12, 13, 15, 17. Médiane ?",etapes:[
+    {q:"La série est-elle bien triée dans l'ordre croissant ?",opts:["Oui : 8 < 12 < 13 < 15 < 17","Non, il faut encore trier","On n'a pas besoin de trier"],ok:0,
+     hint:"Vérifier : chaque valeur est-elle plus grande que la précédente ?",
+     expl_ok:"Oui, déjà triée en ordre croissant !",
+     expl_ko:"8<12<13<15<17 → bien triée."},
+    {q:"Combien de valeurs ? La médiane est à quelle position ?",opts:["5 valeurs → position 3 ((5+1)/2=3)","5 valeurs → position 2","5 valeurs → position 2,5"],ok:0,
+     hint:"n=5 (impair) → rang médiane = (5+1)/2 = 3.",
+     expl_ok:"Position 3 ! Avec 5 valeurs, la médiane est la 3e valeur.",
+     expl_ko:"n=5 impair → (n+1)/2=3e valeur."},
+    {q:"La 3e valeur de la série triée (8, 12, 13, 15, 17) est ?",opts:["13","12","15","8"],ok:0,
+     hint:"1er=8, 2e=12, 3e=?",
+     expl_ok:"13 ! La médiane est 13. (Coïncide avec la moyenne ici !) 🌟",
+     expl_ko:"3e valeur = 13 → médiane = 13."}
+  ]},
+  {titre:"📊 Série paire : 4, 9, 11, 14. Médiane ?",etapes:[
+    {q:"n = 4 (pair). Les 2 valeurs centrales sont ?",opts:["9 et 11 (2e et 3e)","4 et 14 (1re et 4e)","9 et 14"],ok:0,
+     hint:"n=4 pair → positions n/2=2 et n/2+1=3 → 2e et 3e valeurs.",
+     expl_ok:"9 et 11 ! Les 2 valeurs centrales d'une série de 4.",
+     expl_ko:"n=4 pair → 2e et 3e = 9 et 11."},
+    {q:"Médiane = moyenne des 2 centrales = (9+11) ÷ 2 = ?",opts:["10","9,5","11","20"],ok:0,
+     hint:"(9+11)÷2=20÷2=?",
+     expl_ok:"10 ! Médiane = (9+11)/2 = 10.",
+     expl_ko:"(9+11)÷2=10."},
+    {q:"La médiane 10 est-elle dans la série initiale ?",opts:["Non ! 10 n'est pas dans la série (4,9,11,14)","Oui, elle y est","Parfois oui, parfois non"],ok:0,
+     hint:"La série est 4,9,11,14. Y a-t-il un 10 ?",
+     expl_ok:"Non ! La médiane peut ne pas être dans la série (cas n pair). C'est normal. 🎉",
+     expl_ko:"4,9,11,14 → pas de 10 → médiane pas dans la série."}
+  ]},
+  {titre:"📊 Série : 10, 10, 10, 10, 100. Moyenne vs médiane.",etapes:[
+    {q:"Somme = 10+10+10+10+100 = ?",opts:["140","50","100","150"],ok:0,
+     hint:"4×10+100=?",
+     expl_ok:"140 ! 40+100=140.",
+     expl_ko:"4×10+100=140."},
+    {q:"Moyenne = 140÷5 = ?",opts:["28","10","100","20"],ok:0,
+     hint:"140÷5=?",
+     expl_ok:"28 ! Mais 28 ne reflète pas vraiment la série…",
+     expl_ko:"140÷5=28."},
+    {q:"Médiane ? Série triée : 10, 10, 10, 10, 100. 3e valeur = ?",opts:["10 (bien plus représentatif !)","28","100","50"],ok:0,
+     hint:"Série de 5 valeurs → 3e valeur = médiane.",
+     expl_ok:"10 ! La médiane (10) est bien plus représentative que la moyenne (28) ici. La valeur 100 tire la moyenne vers le haut ! 🌟",
+     expl_ko:"3e valeur de la série triée = 10."}
+  ]}
+];
+
+var G2=[
+  {titre:"✏️ Températures : 18, 22, 15, 25, 20 °C",etapes:[
+    {q:"Étape 1 — Somme = 18+22+15+25+20 = ?",acc:["100"],hint:"18+22=40, +15=55, +25=80, +20=?",expl_ok:"100° !",expl_ko:"18+22+15+25+20=100."},
+    {q:"Étape 2 — Moyenne = 100÷5 = ?",acc:["20"],hint:"100÷5=?",expl_ok:"20°C de moyenne !",expl_ko:"100÷5=20°C."},
+    {q:"Étape 3 — Série triée : 15, 18, 20, 22, 25. Médiane = ?",acc:["20"],hint:"5 valeurs → 3e valeur = médiane.",expl_ok:"20°C ! Médiane = 3e valeur = 20. Coïncide avec la moyenne ici ✓",expl_ko:"3e valeur de 5 = 20°C."}
+  ]},
+  {titre:"✏️ Tailles (cm) : 158, 165, 172, 160, 175, 163",etapes:[
+    {q:"Étape 1 — Somme = 158+165+172+160+175+163 = ?",acc:["993"],hint:"158+165=323, +172=495, +160=655, +175=830, +163=?",expl_ok:"993 cm !",expl_ko:"158+165+172+160+175+163=993."},
+    {q:"Étape 2 — Moyenne = 993÷6 = ? cm",acc:["165.5","165,5"],hint:"993÷6=?",expl_ok:"165,5 cm de moyenne !",expl_ko:"993÷6=165,5 cm."},
+    {q:"Étape 3 — Série triée : 158,160,163,165,172,175. Médiane = (163+165)÷2 = ?",acc:["164"],hint:"(163+165)÷2=328÷2=?",expl_ok:"164 cm ! Médiane = (163+165)/2 = 164 cm ✓",expl_ko:"(163+165)÷2=164 cm."}
+  ]},
+  {titre:"✏️ Points au basket : 8, 12, 5, 20, 10, 15, 7",etapes:[
+    {q:"Étape 1 — Série triée = ? (trier mentalement, puis écrire le nombre de valeurs)",acc:["7"],hint:"Compte : 8,12,5,20,10,15,7 → combien de valeurs ?",expl_ok:"7 valeurs ! Série triée : 5,7,8,10,12,15,20.",expl_ko:"7 valeurs dans la série."},
+    {q:"Étape 2 — n=7 impair → médiane = 4e valeur. Série triée : 5,7,8,10,12,15,20. 4e valeur = ?",acc:["10"],hint:"1=5, 2=7, 3=8, 4=?",expl_ok:"10 ! La médiane est 10.",expl_ko:"4e valeur = 10."},
+    {q:"Étape 3 — Somme = 5+7+8+10+12+15+20 = ? Puis moyenne = ?÷7",acc:["11"],hint:"5+7+8+10+12+15+20=77. 77÷7=?",expl_ok:"77÷7=11 de moyenne ! (Médiane=10, Moyenne=11, proches.)",expl_ko:"77÷7=11."}
+  ]},
+  {titre:"✏️ Revenus (€) : 1200, 1500, 1800, 1400, 5000",etapes:[
+    {q:"Étape 1 — Somme = 1200+1500+1800+1400+5000 = ?",acc:["10900"],hint:"1200+1500=2700, +1800=4500, +1400=5900, +5000=?",expl_ok:"10 900€ !",expl_ko:"Total=10 900€."},
+    {q:"Étape 2 — Moyenne = 10900÷5 = ?",acc:["2180"],hint:"10900÷5=?",expl_ok:"2 180€ de moyenne !",expl_ko:"10900÷5=2180€."},
+    {q:"Étape 3 — Série triée : 1200,1400,1500,1800,5000. Médiane (3e) = ?",acc:["1500"],hint:"1er=1200, 2e=1400, 3e=?",expl_ok:"1 500€ ! La médiane (1500€) est bien plus représentative que la moyenne (2180€) tirée par 5000€. 🌟",expl_ko:"3e valeur = 1500€."}
+  ]}
+];
+
+var FREE_POOL=[
+  {type:'qcm',data:{q:"Moyenne de 6, 8, 10, 12, 4 = ?",opts:["8","10","6","40"],ok:0,expl:"Somme=6+8+10+12+4=40. Moyenne=40÷5=8."}},
+  {type:'qcm',data:{q:"Série triée : 3, 7, 9, 12, 15. Médiane = ?",opts:["9 (3e valeur sur 5)","7","12","6"],ok:0,expl:"n=5 impair → médiane = 3e valeur = 9."}},
+  {type:'qcm',data:{q:"Série : 2, 4, 6, 8. Médiane = ?",opts:["5 ((4+6)÷2)","4","6","5,5"],ok:0,expl:"n=4 pair → 2e et 3e valeurs = 4 et 6. Médiane=(4+6)÷2=5."}},
+  {type:'qcm',data:{q:"Moyenne de 10, 10, 10, 10, 50 = ?",opts:["18","10","50","30"],ok:0,expl:"Somme=90. Moyenne=90÷5=18. La valeur 50 tire la moyenne vers le haut !"}},
+  {type:'jugement',data:{consigne:"La médiane partage la série en 2 parties égales (50% de valeurs de chaque côté) ?",a:"Oui ! La médiane a autant de valeurs en dessous qu'au dessus","b":"Non, la médiane c'est la moyenne",ok:"A",expl:"Oui ! La médiane divise la série en deux : 50% des valeurs sont inférieures, 50% sont supérieures."}},
+  {type:'qcm',data:{q:"Notes : 14, 16, 8, 18, 14. Moyenne = ?",opts:["14","16","70","12"],ok:0,expl:"Somme=14+16+8+18+14=70. Moyenne=70÷5=14."}},
+  {type:'qcm',data:{q:"Série : 5, 8, 12, 3, 7. Médiane = ? (trier d'abord !)",opts:["7 (série triée : 3,5,7,8,12)","8","5","12"],ok:0,expl:"Triée : 3,5,7,8,12. n=5 → 3e valeur = 7."}},
+  {type:'jugement',data:{consigne:"La moyenne est toujours égale à une des valeurs de la série ?",a:"Non ! La moyenne peut valoir un nombre qui n'est pas dans la série","b":"Oui, la moyenne est toujours dans la série",ok:"A",expl:"Non ! Ex : moyenne de 2 et 4 = 3, mais 3 n'est pas dans la série. La moyenne peut être n'importe quel nombre."}},
+  {type:'qcm',data:{q:"Salaires : 1000, 1200, 1500, 2000, 20000. Quel indicateur est le plus représentatif ?",opts:["La médiane (résistante au salaire extrême de 20000€)","La moyenne (tirée par 20000€)","Les deux sont équivalents"],ok:0,expl:"La médiane ! La valeur extrême de 20000€ tire la moyenne vers le haut. La médiane (1500€) est plus représentative de la réalité."}},
+  {type:'qcm',data:{q:"5 élèves : 10, 14, 16, 12, 18. Moyenne = ? Médiane = ?",opts:["Moy=14, Méd=14","Moy=14, Méd=12","Moy=12, Méd=14","Moy=16, Méd=14"],ok:0,expl:"Somme=70, moy=14. Triée: 10,12,14,16,18 → médiane=14 (3e valeur)."}},
+  {type:'qcm',data:{q:"Série : 1, 3, 5, 7. Médiane = ?",opts:["4 ((3+5)÷2)","3","5","3,5"],ok:0,expl:"n=4 pair → 2e et 3e = 3 et 5. Médiane=(3+5)÷2=4."}},
+  {type:'jugement',data:{consigne:"Pour une série de 7 valeurs triées, la médiane est la 4e valeur ?",a:"Oui ! (7+1)÷2 = 4e valeur","b":"Non, c'est la 3e valeur",ok:"A",expl:"Oui ! Pour n=7 impair : rang médiane = (n+1)/2 = (7+1)/2 = 4e valeur."}},
+  {type:'qcm',data:{q:"Temps de trajet (min) : 20, 35, 25, 30, 20, 40. Médiane = ?",opts:["27,5 ((25+30)÷2)","25","30","28"],ok:0,expl:"Triée : 20,20,25,30,35,40. n=6 pair → 3e et 4e = 25 et 30. Médiane=(25+30)÷2=27,5."}},
+  {type:'qcm',data:{q:"Moyenne de 0, 0, 0, 0, 100 = ?",opts:["20","0","100","50"],ok:0,expl:"Somme=100. Moyenne=100÷5=20. La médiane est 0 (3e valeur de 0,0,0,0,100)."}},
+  {type:'jugement',data:{consigne:"Si on ajoute une valeur très grande à une série, la médiane change beaucoup ?",a:"Non ! La médiane est robuste aux valeurs extrêmes. C'est la moyenne qui change beaucoup","b":"Oui, la médiane est très sensible aux extrêmes",ok:"A",expl:"Non ! La médiane change peu car elle ne dépend que de la valeur centrale, pas de toutes les valeurs. C'est la moyenne qui est très sensible aux valeurs extrêmes."}},
+  {type:'qcm',data:{q:"Notes : 8, 10, 12, 14, 16, 18. Médiane = ?",opts:["13 ((12+14)÷2)","12","14","13,5"],ok:0,expl:"n=6 pair → 3e et 4e = 12 et 14. Médiane=(12+14)÷2=13."}},
+  {type:'qcm',data:{q:"Série de 9 valeurs triées. La médiane est à quel rang ?",opts:["5e rang ((9+1)÷2=5)","4e rang","6e rang","Rang 4,5"],ok:0,expl:"n=9 impair → rang = (9+1)/2 = 5e valeur."}},
+  {type:'jugement',data:{consigne:"La médiane nécessite de trier la série avant de la calculer ?",a:"Oui ! On doit toujours trier les valeurs dans l'ordre croissant d'abord","b":"Non, on peut la trouver directement sans trier",ok:"A",expl:"Oui ! Sans trier, on ne peut pas identifier la valeur centrale. Le tri dans l'ordre croissant (ou décroissant) est la première étape indispensable."}},
+  {type:'qcm',data:{q:"7 valeurs : 15, 18, 12, 20, 17, 11, 14. Médiane = ?",opts:["15 (série triée : 11,12,14,15,17,18,20)","17","14","16"],ok:0,expl:"Triée: 11,12,14,15,17,18,20. n=7→4e valeur=15."}},
+  {type:'qcm',data:{q:"Quelle propriété distingue la médiane de la moyenne ?",opts:["La médiane divise la série en 2 moitiés égales","La médiane utilise toutes les valeurs","La médiane est toujours plus grande"],ok:0,expl:"La médiane partage la série en 2 parties égales : 50% des valeurs sont inférieures, 50% sont supérieures. La moyenne elle utilise toutes les valeurs."}}
+];
+
+var score=0,g1Idx=0,g2Idx=0,g1Tries=0,g2Tries=0;
+var f1Exs=[],f2Exs=[],f1Done=0,f2Done=0;
+var _cb={};
+
+function norm(s){return(s||'').trim().toLowerCase().replace(',','.');}
+function shuffle(a){var b=a.slice();for(var i=b.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=b[i];b[i]=b[j];b[j]=t;}return b;}
+function addPt(){score++;document.getElementById('score-display').textContent=score;}
+function updSteps(n){for(var i=0;i<6;i++){var s=document.getElementById('s'+i);if(!s)return;s.classList.remove('active','done');if(i<n)s.classList.add('done');else if(i===n)s.classList.add('active');}}
+
+function goPhase(ph,si){
+  document.querySelectorAll('.phase').forEach(function(p){p.classList.remove('active');});
+  var el=document.getElementById('phase-'+ph);
+  if(el){el.classList.add('active');setTimeout(function(){el.scrollIntoView({behavior:'smooth',block:'start'});},100);}
+  updSteps(si);
+  if(ph==='g1')initG1();if(ph==='g2')initG2();
+  if(ph==='free')initFree1();if(ph==='free2')initFree2();
+  if(ph==='bilan')showBilan();
+}
+function revealBloc(n){
+  var b=document.getElementById('bloc-'+n);if(!b)return;
+  var p=document.getElementById('bloc-'+(n-1));
+  if(p){var btn=p.querySelector('.btn-compris');if(btn){btn.textContent='✓ Compris !';btn.disabled=true;btn.style.opacity='.4';}}
+  b.classList.add('revealed');
+  setTimeout(function(){var hH=(document.querySelector('.header')||{offsetHeight:0}).offsetHeight;var r=b.getBoundingClientRect();window.scrollTo({top:window.pageYOffset+r.top-hH-16,behavior:'smooth'});},150);
+}
+
+function initG1(){
+  g1Idx=Math.floor(Math.random()*G1.length);g1Tries=0;
+  document.getElementById('g1-reset').classList.remove('show');
+  document.getElementById('btn-g1-to-g2').classList.remove('show');
+  var v=G1[g1Idx],z=document.getElementById('g1-zone');z.innerHTML='';
+  var box=document.createElement('div');box.className='guided-box';
+  box.innerHTML='<div class="guided-title">'+v.titre+'<span class="tries-badge" id="g1-tries">3 essais</span></div><div id="g1-steps"></div>';
+  z.appendChild(box);
+  var sc=document.getElementById('g1-steps');
+  v.etapes.forEach(function(step,si){
+    var so=shuffle(step.opts.map(function(o,oi){return{t:o,i:oi};}));
+    var sb=document.createElement('div');sb.className='step-box'+(si===0?' active':'');sb.id='g1s'+si;
+    sb.innerHTML='<div class="step-lbl-num">Étape '+(si+1)+'/'+v.etapes.length+'</div>'
+      +'<div class="step-q">'+step.q+'</div>'
+      +'<div class="step-hint" id="g1h'+si+'">💡 '+step.hint+'</div>'
+      +'<div class="qcm-opts">'+so.map(function(o){return'<button class="qcm-opt" onclick="g1Check('+si+','+o.i+',this)">'+o.t+'</button>';}).join('')+'</div>'
+      +'<div class="step-fb" id="g1f'+si+'"></div>';
+    sc.appendChild(sb);
+  });updG1();
+}
+function updG1(){var el=document.getElementById('g1-tries');if(el)el.textContent=(3-g1Tries)+' essai'+(3-g1Tries>1?'s':'');}
+function g1Check(si,ci,btn){
+  var v=G1[g1Idx],step=v.etapes[si],sb=document.getElementById('g1s'+si),fb=document.getElementById('g1f'+si);
+  if(sb.classList.contains('correct'))return;
+  if(ci===step.ok){
+    btn.classList.add('opt-ok');sb.querySelectorAll('.qcm-opt').forEach(function(b){b.disabled=true;});sb.classList.add('correct');
+    if(g1Tries===0){fb.className='step-fb show ok';fb.innerHTML='✅ '+step.expl_ok+' <span style="color:#065f46;font-size:.78rem">(+1 pt)</span>';addPt();}
+    else{fb.className='step-fb show ok';fb.innerHTML='✅ '+step.expl_ok;}
+    g1Tries=0;updG1();
+    var nx=document.getElementById('g1s'+(si+1));
+    if(nx){nx.classList.add('active');setTimeout(function(){nx.scrollIntoView({behavior:'smooth',block:'nearest'});},300);}
+    else{setTimeout(function(){var b=document.getElementById('btn-g1-to-g2');b.classList.add('show');b.scrollIntoView({behavior:'smooth',block:'nearest'});},500);}
+  }else{
+    btn.classList.add('opt-ko');btn.disabled=true;g1Tries++;updG1();
+    fb.className='step-fb show ko';
+    if(g1Tries<3){fb.innerHTML='❌ Lis l\'indice 💪';document.getElementById('g1h'+si).classList.add('show');}
+    else{fb.innerHTML='❌ '+step.expl_ko+' On recommence !';setTimeout(function(){document.getElementById('g1-reset').classList.add('show');document.getElementById('g1-zone').innerHTML='';document.getElementById('g1-reset').scrollIntoView({behavior:'smooth',block:'start'});},1200);}
+  }
+}
+
+function initG2(){
+  g2Idx=Math.floor(Math.random()*G2.length);g2Tries=0;
+  document.getElementById('g2-reset').classList.remove('show');
+  document.getElementById('btn-g2-to-free').classList.remove('show');
+  var v=G2[g2Idx],z=document.getElementById('g2-zone');z.innerHTML='';
+  var box=document.createElement('div');box.className='guided-box';
+  box.innerHTML='<div class="guided-title">'+v.titre+'<span class="tries-badge" id="g2-tries">3 essais</span></div><div id="g2-steps"></div>';
+  z.appendChild(box);
+  var sc=document.getElementById('g2-steps');
+  v.etapes.forEach(function(step,si){
+    var sb=document.createElement('div');sb.className='step-box'+(si===0?' active':'');sb.id='g2s'+si;
+    sb.innerHTML='<div class="step-lbl-num">Étape '+(si+1)+'/'+v.etapes.length+'</div>'
+      +'<div class="step-q">'+step.q+'</div>'
+      +'<div class="step-hint" id="g2h'+si+'">💡 '+step.hint+'</div>'
+      +'<div class="step-input-row"><input class="step-input" id="g2i'+si+'" type="text" placeholder="écris ici…" autocomplete="off" spellcheck="false"'+(si>0?' disabled':'')+'>'
+      +'<button class="btn-check" id="g2b'+si+'" onclick="g2Check('+si+')"'+(si>0?' disabled':'')+'>Vérifier</button></div>'
+      +'<div class="step-fb" id="g2f'+si+'"></div>';
+    sc.appendChild(sb);
+  });updG2();
+}
+function updG2(){var el=document.getElementById('g2-tries');if(el)el.textContent=(3-g2Tries)+' essai'+(3-g2Tries>1?'s':'');}
+function g2Check(si){
+  var v=G2[g2Idx],step=v.etapes[si],inp=document.getElementById('g2i'+si),fb=document.getElementById('g2f'+si),sb=document.getElementById('g2s'+si);
+  if(!inp||sb.classList.contains('correct'))return;
+  var ok=step.acc.some(function(a){return norm(inp.value)===norm(a);});
+  if(ok){
+    inp.classList.add('ok');inp.disabled=true;document.getElementById('g2b'+si).disabled=true;sb.classList.add('correct');
+    if(g2Tries===0){fb.className='step-fb show ok';fb.innerHTML='✅ '+step.expl_ok+' <span style="color:#065f46;font-size:.78rem">(+1 pt)</span>';addPt();}
+    else{fb.className='step-fb show ok';fb.innerHTML='✅ '+step.expl_ok;}
+    g2Tries=0;updG2();
+    var nxSb=document.getElementById('g2s'+(si+1));
+    if(nxSb){nxSb.classList.add('active');var ni=document.getElementById('g2i'+(si+1)),nb=document.getElementById('g2b'+(si+1));if(ni)ni.disabled=false;if(nb)nb.disabled=false;setTimeout(function(){nxSb.scrollIntoView({behavior:'smooth',block:'nearest'});},300);}
+    else{setTimeout(function(){var b=document.getElementById('btn-g2-to-free');b.classList.add('show');b.scrollIntoView({behavior:'smooth',block:'nearest'});},500);}
+  }else{
+    inp.classList.add('ko');inp.value='';inp.placeholder='Réessaie…';g2Tries++;updG2();
+    fb.className='step-fb show ko';
+    if(g2Tries<3){fb.innerHTML='❌ Lis l\'indice 💪';document.getElementById('g2h'+si).classList.add('show');setTimeout(function(){inp.classList.remove('ko');inp.placeholder='écris ici…';},900);}
+    else{fb.innerHTML='❌ '+step.expl_ko+' On recommence !';setTimeout(function(){document.getElementById('g2-reset').classList.add('show');document.getElementById('g2-zone').innerHTML='';document.getElementById('g2-reset').scrollIntoView({behavior:'smooth',block:'start'});},1200);}
+  }
+}
+
+function buildFree(ex,i,prefix,cb){
+  var card=document.createElement('div');card.className='free-card';card.id=prefix+'c'+i;
+  if(ex.type==='qcm'){
+    card.innerHTML='<div class="free-label">Exercice '+(i+1)+'</div><div class="free-q">'+ex.data.q+'</div><div class="free-opts" id="'+prefix+'opts'+i+'"></div><div class="free-fb" id="'+prefix+'fb'+i+'"></div>';
+    setTimeout(function(){
+      var ba=document.getElementById(prefix+'opts'+i);
+      ex.data.opts.forEach(function(opt,oi){
+        var btn=document.createElement('button');btn.className='free-opt';btn.textContent=opt;
+        btn.onclick=function(){
+          if(card.classList.contains('done'))return;card.classList.add('done');ba.querySelectorAll('button').forEach(function(b){b.disabled=true;});
+          var fb=document.getElementById(prefix+'fb'+i);
+          if(oi===ex.data.ok){btn.classList.add('ok');fb.className='free-fb show ok';fb.innerHTML='✅ '+ex.data.expl;addPt();}
+          else{btn.classList.add('ko');ba.querySelectorAll('button').forEach(function(b,bi){if(bi===ex.data.ok)b.classList.add('reveal');});fb.className='free-fb show ko';fb.innerHTML='❌ '+ex.data.expl;}
+          cb();
+        };ba.appendChild(btn);
+      });
+    },0);
+  }else if(ex.type==='jugement'){
+    card.innerHTML='<div class="free-label">Exercice '+(i+1)+'</div><div class="free-q">'+ex.data.consigne+'</div><div class="jug-opts"><button class="jug-opt" onclick="chkJug(\''+prefix+'\','+i+',\'A\',this)"><strong>A —</strong> '+ex.data.a+'</button><button class="jug-opt" onclick="chkJug(\''+prefix+'\','+i+',\'B\',this)"><strong>B —</strong> '+ex.data.b+'</button></div><div class="free-fb" id="'+prefix+'fb'+i+'"></div>';
+    _cb[prefix+i]=cb;
+  }
+  return card;
+}
+function chkJug(p,i,ch,btn){
+  var card=document.getElementById(p+'c'+i);if(card.classList.contains('done'))return;
+  var exs=p==='f1'?f1Exs:f2Exs,ex=exs[i],fb=document.getElementById(p+'fb'+i);
+  card.classList.add('done');card.querySelectorAll('.jug-opt').forEach(function(b){b.disabled=true;});
+  if(ch===ex.data.ok){btn.classList.add('ok');fb.className='free-fb show ok';fb.innerHTML='✅ '+ex.data.expl;addPt();}
+  else{btn.classList.add('ko');card.querySelectorAll('.jug-opt')[ch==='A'?1:0].classList.add('ok');fb.className='free-fb show ko';fb.innerHTML='❌ '+ex.data.expl;}
+  if(_cb[p+i])_cb[p+i]();
+}
+
+function initFree1(){
+  f1Exs=shuffle(FREE_POOL.slice()).slice(0,5);f1Done=0;
+  var z=document.getElementById('free1-zone');z.innerHTML='';
+  f1Exs.forEach(function(ex,i){
+    _cb['f1'+i]=function(){f1Done++;if(f1Done>=5)setTimeout(function(){var b=document.getElementById('btn-free-to-free2');b.classList.add('show');b.scrollIntoView({behavior:'smooth',block:'nearest'});},600);};
+    z.appendChild(buildFree(ex,i,'f1',_cb['f1'+i]));
+  });
+}
+function initFree2(){
+  var used=f1Exs.map(function(e){return e.data.q||e.data.consigne;});
+  var pool=FREE_POOL.filter(function(e){return used.indexOf(e.data.q||e.data.consigne)<0;});
+  f2Exs=shuffle(pool).slice(0,5);f2Done=0;
+  var z=document.getElementById('free2-zone');z.innerHTML='';
+  f2Exs.forEach(function(ex,i){
+    _cb['f2'+i]=function(){f2Done++;if(f2Done>=5)setTimeout(function(){var b=document.getElementById('btn-free2-to-bilan');b.classList.add('show');b.scrollIntoView({behavior:'smooth',block:'nearest'});},600);};
+    z.appendChild(buildFree(ex,i,'f2',_cb['f2'+i]));
+  });
+}
+
+function showBilan(){
+  var g1n=G1[g1Idx]?G1[g1Idx].etapes.length:3,g2n=G2[g2Idx]?G2[g2Idx].etapes.length:3,tot=g1n+g2n+10;
+  document.getElementById('bilan-pts').textContent=score;
+  document.getElementById('bilan-sur').textContent='/ '+tot+' pts';
+  var pct=score/tot,t,m;
+  if(pct>=.8){t='Fantastique ! 🎉';m='Tu maîtrises la moyenne et la médiane ! Calcul, interprétation, choix du bon indicateur… Bravo !';}
+  else if(pct>=.6){t='Très bien ! 😊';m:'Belle progression ! Rappelle-toi : TOUJOURS trier avant la médiane. Et la médiane résiste mieux aux valeurs extrêmes que la moyenne !';}
+  else{t='Continue ! 💪';m:'Mémo : Moyenne = somme÷n. Médiane : trier puis valeur centrale (n impair) ou moyenne des 2 centrales (n pair).';}
+  document.getElementById('bilan-title').textContent=t;
+  document.getElementById('bilan-msg').textContent=m;
+  var s=[Math.ceil(tot*.33),Math.ceil(tot*.66),Math.ceil(tot*.89)];
+  ['etoile1','etoile2','etoile3'].forEach(function(id,i){var el=document.getElementById(id);if(score>=s[i]){(function(e,d){setTimeout(function(){e.classList.add('earned');},d);})(el,300+i*400);}else el.style.filter='grayscale(1)';});
+  if(pct>=.5)confetti();
+}
+function confetti(){var cols=['#dc2626','#fda4af','#059669','#d97706','#0369a1'];for(var i=0;i<55;i++){var el=document.createElement('div');el.className='confetti-piece';el.style.cssText='left:'+Math.random()*100+'vw;background:'+cols[Math.floor(Math.random()*5)]+';animation-duration:'+(1.5+Math.random()*2)+'s;animation-delay:'+Math.random()*1.2+'s;width:'+(6+Math.random()*8)+'px;height:'+(6+Math.random()*8)+'px;border-radius:'+(Math.random()>.5?'50%':'3px')+';';document.body.appendChild(el);setTimeout(function(){if(el.parentNode)el.remove();},4000);}}
+</script>
+</body>
+</html>

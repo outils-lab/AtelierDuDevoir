@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>M414 — Les fonctions : notion et représentation | L'Atelier du Devoir</title>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{--acc:#0f766e;--acc-pale:#f0fdfa;--acc-mid:#5eead4;--mint:#059669;--mint-pale:#d1fae5;--mint-deep:#047857;--coral:#dc2626;--coral-pale:#fee2e2;--text:#1e293b;--text-light:#64748b;--radius:12px;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Lato',sans-serif;background:#f0fdfa;color:var(--text);font-size:16px;line-height:1.65;}
+.print-bar{position:fixed;right:16px;top:50%;transform:translateY(-50%);z-index:200;display:flex;flex-direction:column;gap:8px;}
+.print-btn{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:8px;font-family:'Lato',sans-serif;font-weight:700;font-size:.78rem;border:none;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.15);}
+.print-btn-lecon{background:#d97706;color:white;}.print-btn-eval{background:#9f1239;color:white;}
+@media(max-width:600px){.print-bar{right:6px;}.print-btn{font-size:0;width:40px;height:40px;padding:0;justify-content:center;}.print-btn span.lbl{display:none;}.print-btn span.ico{font-size:1.1rem;}}
+.header{background:white;border-bottom:2px solid var(--acc-pale);position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.06);}
+.header-top{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;}
+.logo{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--acc);text-decoration:none;}
+.score-badge{background:var(--acc);color:white;font-weight:700;font-size:.85rem;padding:5px 14px;border-radius:6px;}
+.steps-wrap{padding:0 20px 8px;}
+.steps{display:flex;gap:3px;}
+.step{flex:1;height:5px;border-radius:4px;background:var(--acc-pale);transition:all .35s;}
+.step.done{background:var(--mint);}.step.active{background:var(--acc);}
+.steps-labels{display:flex;gap:3px;padding-top:3px;}
+.step-lbl{flex:1;font-size:.48rem;font-weight:700;color:var(--text-light);text-align:center;text-transform:uppercase;letter-spacing:.03em;}
+.main{max-width:760px;margin:0 auto;padding:28px 16px 100px;}
+.phase{display:none;}.phase.active{display:block;}
+.accroche{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:22px 24px;margin-bottom:22px;display:flex;gap:16px;align-items:flex-start;}
+.accroche-icon{font-size:2.4rem;flex-shrink:0;}
+.accroche-text h1{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--acc);margin-bottom:6px;}
+.accroche-text p{color:var(--text-light);font-size:.92rem;line-height:1.5;}
+.meta-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+.meta-tag{background:var(--acc-pale);border-radius:4px;padding:3px 10px;font-size:.72rem;font-weight:700;color:var(--acc);text-transform:uppercase;letter-spacing:.04em;}
+.lecon-card{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:22px;margin-bottom:18px;}
+.lecon-card h2{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--acc);margin-bottom:14px;border-bottom:2px solid var(--acc-pale);padding-bottom:8px;}
+.lecon-block{display:none;}.lecon-block.revealed{display:block;}
+.lecon-subtitle{font-weight:900;font-size:1rem;color:var(--acc);margin-bottom:10px;margin-top:6px;}
+.sep{margin:18px 0;border:none;border-top:1px solid var(--acc-pale);}
+.analogie{font-size:.92rem;color:var(--text-light);font-style:italic;margin-bottom:12px;line-height:1.6;background:#f0fdfa;border-radius:8px;padding:10px 14px;border-left:3px solid var(--acc-mid);}
+.def-box{border-left:4px solid var(--acc);background:var(--acc-pale);border-radius:0 var(--radius) var(--radius) 0;padding:14px 16px;margin-bottom:12px;}
+.def-box h4{font-weight:900;color:var(--acc);font-size:.9rem;margin-bottom:6px;}
+.def-box p{font-size:.88rem;color:var(--text);line-height:1.7;}
+.exemple-ligne{background:white;border:1px solid #e2e8f0;border-radius:8px;padding:10px 16px;font-size:.95rem;margin-bottom:6px;line-height:1.8;display:flex;align-items:center;gap:12px;}
+.exemple-ligne .tag{background:var(--acc);color:white;font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:4px;text-transform:uppercase;flex-shrink:0;}
+.hl{background:var(--acc-pale);color:var(--acc);border-radius:4px;padding:1px 6px;font-weight:700;}
+.astuce{background:#fefce8;border:1px solid #fde68a;border-radius:8px;padding:11px 14px;font-size:.85rem;margin-top:8px;color:#78350f;}
+.astuce strong{color:#92400e;}
+.piege{background:#fff1f2;border:1px solid #fecdd3;border-radius:8px;padding:11px 14px;font-size:.85rem;margin-top:8px;color:#9f1239;}
+.piege strong{color:#be123c;}
+.btn-compris{margin-top:18px;padding:11px 26px;border-radius:8px;font-family:'Lato',sans-serif;font-weight:700;font-size:.9rem;background:var(--acc);color:white;border:none;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:8px;}
+.btn-compris:hover{background:#0d6b63;transform:translateY(-1px);}
+.btn-compris:disabled{opacity:.4;cursor:default;transform:none;}
+.mascot-msg{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:13px 16px;margin:14px 0;display:flex;align-items:flex-start;gap:10px;}
+.mascot-msg .emo{font-size:1.6rem;flex-shrink:0;}
+.mascot-msg p{font-size:.88rem;color:var(--text-light);line-height:1.6;}
+.ex-header-box{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:16px 20px;margin-bottom:16px;}
+.ex-header-box h2{font-family:'Playfair Display',serif;font-size:1.15rem;color:var(--acc);margin-bottom:4px;}
+.ex-header-box p{color:var(--text-light);font-size:.85rem;}
+.guided-problem{background:white;border:2px solid var(--acc);border-radius:var(--radius);padding:20px;margin-bottom:16px;}
+.guided-problem-title{font-size:1.05rem;font-weight:900;color:var(--acc);margin-bottom:16px;background:var(--acc-pale);padding:10px 14px;border-radius:8px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.tries-left{font-size:.75rem;font-weight:700;color:var(--coral);background:var(--coral-pale);padding:2px 8px;border-radius:4px;margin-left:auto;}
+.step-container{display:flex;flex-direction:column;gap:10px;}
+.step-box{border:2px solid #e2e8f0;border-radius:10px;padding:14px 16px;transition:all .3s;opacity:.5;pointer-events:none;}
+.step-box.active{opacity:1;pointer-events:all;border-color:var(--acc-mid);}
+.step-box.correct{border-color:var(--mint);background:var(--mint-pale);opacity:1;}
+.step-num{font-size:.65rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;}
+.step-question{font-size:.95rem;font-weight:700;margin-bottom:10px;line-height:1.6;}
+.step-hint{font-size:.83rem;color:#92400e;background:#fef3c7;border-radius:6px;padding:8px 12px;margin-bottom:8px;display:none;}
+.step-hint.show{display:block;}
+.step-qcm-opts{display:flex;flex-direction:column;gap:6px;}
+.step-qcm-opt{padding:9px 14px;border-radius:8px;border:2px solid #e2e8f0;background:white;font-family:'Lato',sans-serif;font-weight:600;font-size:.9rem;cursor:pointer;text-align:left;transition:all .2s;}
+.step-qcm-opt:hover:not(:disabled){border-color:var(--acc);background:var(--acc-pale);}
+.step-qcm-opt:disabled{cursor:default;}
+.step-qcm-opt.opt-correct{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.step-qcm-opt.opt-wrong{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
+.step-input-row{display:flex;gap:8px;align-items:center;}
+.step-input{border:2px solid var(--acc);border-radius:6px;padding:8px 12px;font-family:'Lato',monospace;font-weight:700;font-size:1rem;color:var(--text);background:white;outline:none;min-width:100px;max-width:160px;text-align:center;}
+.step-input:disabled{border-color:#e2e8f0;background:#f8fafc;color:var(--text-light);}
+.step-input.input-ok{border-color:var(--mint);background:var(--mint-pale);}
+.step-input.input-ko{border-color:var(--coral);}
+.btn-step-check{padding:8px 16px;border-radius:6px;font-family:'Lato',sans-serif;font-weight:700;font-size:.85rem;background:var(--acc);color:white;border:none;cursor:pointer;}
+.btn-step-check:disabled{opacity:.4;cursor:not-allowed;}
+.step-fb{margin-top:8px;padding:8px 12px;border-radius:6px;font-size:.83rem;font-weight:700;display:none;}
+.step-fb.show{display:block;}
+.step-fb.fb-ok{background:var(--mint-pale);color:var(--mint-deep);}
+.step-fb.fb-ko{background:var(--coral-pale);color:#b91c1c;}
+.reset-msg{background:#fff;border:2px solid var(--acc);border-radius:var(--radius);padding:22px 24px;text-align:center;margin-bottom:16px;display:none;}
+.reset-msg.show{display:block;}
+.reset-msg .ugo{font-size:2.5rem;margin-bottom:8px;}
+.reset-msg h3{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--acc);margin-bottom:8px;}
+.reset-msg p{color:var(--text-light);font-size:.9rem;margin-bottom:14px;line-height:1.6;}
+.btn-restart{padding:10px 24px;border-radius:8px;font-family:'Lato',sans-serif;font-weight:700;font-size:.9rem;background:var(--acc);color:white;border:none;cursor:pointer;}
+.free-ex-card{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:18px;margin-bottom:14px;}
+.free-ex-label{font-size:.7rem;font-weight:700;color:var(--acc);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;}
+.free-ex-question{font-size:.95rem;font-weight:700;margin-bottom:12px;background:var(--acc-pale);border-radius:8px;padding:11px 14px;line-height:1.8;}
+.free-classify-btns{display:flex;gap:8px;flex-wrap:wrap;}
+.free-classify-btn{padding:9px 16px;border-radius:6px;font-family:'Lato',sans-serif;font-weight:700;font-size:.85rem;border:2px solid #e2e8f0;background:white;cursor:pointer;transition:all .2s;flex:1;text-align:center;}
+.free-classify-btn:hover{border-color:var(--acc);background:var(--acc-pale);}
+.free-classify-btn.ans-correct{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.free-classify-btn.ans-wrong{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
+.free-classify-btn.ans-reveal{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.free-input-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.free-input{border:2px solid var(--acc);border-radius:6px;padding:8px 12px;font-family:'Lato',monospace;font-weight:700;font-size:1rem;color:var(--text);background:white;outline:none;min-width:80px;max-width:160px;text-align:center;}
+.free-input:disabled{border-color:#e2e8f0;background:#f8fafc;}
+.free-input.free-ok{border-color:var(--mint);background:var(--mint-pale);}
+.free-input.free-ko{border-color:var(--coral);background:var(--coral-pale);}
+.btn-free-check{padding:8px 16px;border-radius:6px;font-family:'Lato',sans-serif;font-weight:700;font-size:.85rem;background:var(--acc);color:white;border:none;cursor:pointer;}
+.jugement-opts{display:flex;flex-direction:column;gap:8px;}
+.jugement-opt-btn{padding:11px 16px;border-radius:8px;border:2px solid #e2e8f0;background:white;font-family:'Lato',sans-serif;font-size:.92rem;cursor:pointer;text-align:left;transition:all .2s;line-height:1.6;}
+.jugement-opt-btn:hover{border-color:var(--acc);background:var(--acc-pale);}
+.jugement-opt-btn.jug-correct{border-color:var(--mint);background:var(--mint-pale);}
+.jugement-opt-btn.jug-wrong{border-color:var(--coral);background:var(--coral-pale);}
+.free-fb{margin-top:10px;padding:9px 13px;border-radius:8px;font-size:.84rem;font-weight:700;display:none;}
+.free-fb.show{display:block;}
+.free-fb.fb-ok{background:var(--mint-pale);color:var(--mint-deep);}
+.free-fb.fb-ko{background:var(--coral-pale);color:#b91c1c;}
+.btn-suivant{margin-top:14px;padding:10px 22px;border-radius:8px;font-family:'Lato',sans-serif;font-weight:700;font-size:.88rem;background:var(--acc);color:white;border:none;cursor:pointer;display:none;align-items:center;gap:8px;transition:all .2s;}
+.btn-suivant.show{display:inline-flex;}
+.btn-suivant:hover{background:#0d6b63;}
+.bilan-card{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:28px 24px;text-align:center;}
+.bilan-icon{font-size:3.5rem;margin-bottom:12px;display:block;}
+.bilan-title{font-family:'Playfair Display',serif;font-size:1.8rem;margin-bottom:6px;color:var(--acc);}
+.bilan-msg{color:var(--text-light);font-size:.95rem;margin-bottom:20px;}
+.stars-row{display:flex;justify-content:center;gap:10px;margin-bottom:20px;}
+.star-big{font-size:2.5rem;filter:grayscale(1);transition:all .5s;}
+.star-big.earned{filter:none;animation:starPop .5s ease both;}
+@keyframes starPop{0%{transform:scale(0);}60%{transform:scale(1.2);}100%{transform:scale(1);}}
+.score-circle{width:100px;height:100px;border-radius:50%;background:var(--acc);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 20px;color:white;}
+.score-num{font-family:'Playfair Display',serif;font-size:1.8rem;line-height:1;}
+.score-sub{font-size:.65rem;opacity:.8;}
+.memo-card{background:var(--acc-pale);border-radius:var(--radius);padding:16px 20px;margin:18px 0;text-align:left;}
+.memo-card h3{font-weight:700;font-size:.85rem;color:var(--acc);margin-bottom:10px;text-transform:uppercase;letter-spacing:.04em;}
+.memo-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media(max-width:480px){.memo-grid{grid-template-columns:1fr;}}
+.memo-item{background:white;border-radius:8px;padding:10px 12px;font-size:.82rem;border:1px solid #e2e8f0;}
+.memo-item strong{color:var(--acc);}
+.bilan-btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:16px;}
+.btn-act{padding:10px 20px;border-radius:8px;font-family:'Lato',sans-serif;font-weight:700;font-size:.85rem;cursor:pointer;border:none;transition:all .2s;}
+.btn-act.primary{background:var(--acc);color:white;}
+.btn-act.secondary{background:var(--acc-pale);color:var(--acc);border:2px solid var(--acc);}
+.btn-act:hover{transform:translateY(-1px);}
+.confetti-piece{position:fixed;border-radius:2px;top:-20px;animation:fall linear both;pointer-events:none;z-index:9999;}
+@keyframes fall{0%{transform:translateY(0) rotate(0deg);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
+@media print{.print-bar,.btn-compris,.btn-suivant,.bilan-card,.mascot-msg{display:none!important;}body{background:white;}.phase{display:block!important;}}
+</style>
+</head>
+<body>
+<div class="print-bar">
+  <button class="print-btn print-btn-lecon" onclick="window.print()"><span class="ico">📖</span><span class="lbl">Leçon</span></button>
+  <button class="print-btn print-btn-eval" onclick="window.print()"><span class="ico">📝</span><span class="lbl">Exercices</span></button>
+</div>
+<header class="header">
+  <div class="header-top">
+    <a href="../12-15ans.html" class="logo">🦉 L'Atelier du Devoir</a>
+    <div class="score-badge">⭐ <span id="score-display">0</span> pts</div>
+  </div>
+  <div class="steps-wrap">
+    <div class="steps">
+      <div class="step active" id="step-0"></div><div class="step" id="step-1"></div><div class="step" id="step-2"></div>
+      <div class="step" id="step-3"></div><div class="step" id="step-4"></div><div class="step" id="step-5"></div>
+    </div>
+    <div class="steps-labels">
+      <div class="step-lbl">Leçon</div><div class="step-lbl">Guidé 1</div><div class="step-lbl">Guidé 2</div>
+      <div class="step-lbl">Exercices</div><div class="step-lbl">+ Exercices</div><div class="step-lbl">Bilan</div>
+    </div>
+  </div>
+</header>
+<main class="main">
+
+<div class="accroche">
+  <div class="accroche-icon">📈</div>
+  <div class="accroche-text">
+    <h1>Les fonctions : notion et représentation</h1>
+    <p>Comprendre ce qu'est une fonction, calculer des images et antécédents, et lire une courbe représentative.</p>
+    <div class="meta-row">
+      <span class="meta-tag">3e</span><span class="meta-tag">~30 min</span>
+      <span class="meta-tag">⭐⭐ Difficulté</span><span class="meta-tag">Mathématiques</span>
+    </div>
+  </div>
+</div>
+
+<!-- LEÇON -->
+<div class="phase active" id="phase-lecon">
+  <div class="lecon-card">
+    <h2>📖 La leçon</h2>
+
+    <div class="lecon-block revealed" id="bloc-0">
+      <div class="lecon-subtitle">① Qu'est-ce qu'une fonction ?</div>
+      <div class="analogie">🏭 Une fonction, c'est comme une machine : tu mets un nombre dans l'entrée, la machine le transforme selon une règle, et tu récupères un résultat en sortie. La règle est toujours la même — chaque entrée donne exactement une sortie.</div>
+
+      <!-- Schéma machine à fonction -->
+      <svg viewBox="0 0 300 100" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:12px auto;max-width:300px;background:#f0fdfa;border-radius:10px;padding:4px;">
+        <!-- Flèche entrée -->
+        <text x="22" y="52" font-size="14" fill="#0f766e" font-weight="bold" text-anchor="middle">x</text>
+        <line x1="35" y1="50" x2="75" y2="50" stroke="#0f766e" stroke-width="2" marker-end="url(#arr)"/>
+        <!-- Machine -->
+        <rect x="78" y="28" width="144" height="44" rx="10" fill="#0f766e"/>
+        <text x="150" y="55" font-size="13" fill="white" font-weight="bold" text-anchor="middle">f(x) = 2x + 1</text>
+        <!-- Flèche sortie -->
+        <line x1="222" y1="50" x2="262" y2="50" stroke="#0f766e" stroke-width="2" marker-end="url(#arr)"/>
+        <text x="278" y="52" font-size="14" fill="#0f766e" font-weight="bold" text-anchor="middle">f(x)</text>
+        <defs><marker id="arr" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#0f766e"/></marker></defs>
+        <!-- Labels -->
+        <text x="22" y="72" font-size="9" fill="#64748b" text-anchor="middle">entrée</text>
+        <text x="278" y="72" font-size="9" fill="#64748b" text-anchor="middle">sortie</text>
+        <!-- Exemples -->
+        <text x="22" y="88" font-size="9" fill="#0f766e" font-weight="bold" text-anchor="middle">x=3</text>
+        <text x="278" y="88" font-size="9" fill="#0f766e" font-weight="bold" text-anchor="middle">f(3)=7</text>
+      </svg>
+
+      <div class="def-box">
+        <h4>Vocabulaire fondamental</h4>
+        <p><strong>Fonction f</strong> : règle qui associe à chaque nombre x un unique nombre f(x).<br>
+        <strong>Image de x par f</strong> : le résultat f(x) obtenu en appliquant la règle à x.<br>
+        <strong>Antécédent de y par f</strong> : le(s) nombre(s) x tel(s) que f(x) = y.<br>
+        <strong>Ensemble de définition</strong> : l'ensemble des valeurs de x autorisées.</p>
+      </div>
+      <div class="exemple-ligne"><span class="tag">Image</span> f(x)=2x+1. Image de 3 : f(3)=2×3+1=<span class="hl">7</span></div>
+      <div class="exemple-ligne"><span class="tag">Antécédent</span> f(x)=7 → 2x+1=7 → x=3. L'antécédent de 7 est <span class="hl">3</span></div>
+      <div class="astuce"><strong>💡 Différence clé :</strong> l'image part de x → donne f(x). L'antécédent part de f(x) → cherche x. Ce sont deux directions opposées.</div>
+      <button class="btn-compris" onclick="revealBloc(1)">Bloc suivant →</button>
+    </div>
+
+    <div class="lecon-block" id="bloc-1">
+      <hr class="sep">
+      <div class="lecon-subtitle">② Le tableau de valeurs et la courbe représentative</div>
+      <div class="analogie">📊 Le tableau de valeurs, c'est le carnet de notes de la fonction. Pour chaque x, on calcule f(x) et on note la paire. Ensuite, on place ces points dans un repère et on les relie — c'est la courbe représentative.</div>
+
+      <!-- Tableau de valeurs SVG -->
+      <svg viewBox="0 0 300 80" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:10px auto;max-width:300px;background:#f0fdfa;border-radius:8px;padding:4px;">
+        <text x="150" y="13" font-size="10" fill="#0f766e" font-weight="bold" text-anchor="middle">Tableau de valeurs — f(x) = 2x + 1</text>
+        <rect x="5" y="18" width="40" height="24" fill="#0f766e" rx="3"/><text x="25" y="34" font-size="10" fill="white" font-weight="bold" text-anchor="middle">x</text>
+        <rect x="5" y="44" width="40" height="24" fill="#5eead4" rx="3"/><text x="25" y="60" font-size="10" fill="#0f766e" font-weight="bold" text-anchor="middle">f(x)</text>
+        <!-- Colonnes -->
+        <rect x="47" y="18" width="40" height="24" fill="white" stroke="#e2e8f0" stroke-width="1"/><text x="67" y="34" font-size="10" fill="#475569" text-anchor="middle">−2</text>
+        <rect x="47" y="44" width="40" height="24" fill="white" stroke="#e2e8f0" stroke-width="1"/><text x="67" y="60" font-size="10" fill="#0f766e" font-weight="bold" text-anchor="middle">−3</text>
+        <rect x="89" y="18" width="40" height="24" fill="white" stroke="#e2e8f0" stroke-width="1"/><text x="109" y="34" font-size="10" fill="#475569" text-anchor="middle">0</text>
+        <rect x="89" y="44" width="40" height="24" fill="white" stroke="#e2e8f0" stroke-width="1"/><text x="109" y="60" font-size="10" fill="#0f766e" font-weight="bold" text-anchor="middle">1</text>
+        <rect x="131" y="18" width="40" height="24" fill="white" stroke="#e2e8f0" stroke-width="1"/><text x="151" y="34" font-size="10" fill="#475569" text-anchor="middle">1</text>
+        <rect x="131" y="44" width="40" height="24" fill="white" stroke="#e2e8f0" stroke-width="1"/><text x="151" y="60" font-size="10" fill="#0f766e" font-weight="bold" text-anchor="middle">3</text>
+        <rect x="173" y="18" width="40" height="24" fill="white" stroke="#e2e8f0" stroke-width="1"/><text x="193" y="34" font-size="10" fill="#475569" text-anchor="middle">2</text>
+        <rect x="173" y="44" width="40" height="24" fill="white" stroke="#e2e8f0" stroke-width="1"/><text x="193" y="60" font-size="10" fill="#0f766e" font-weight="bold" text-anchor="middle">5</text>
+        <rect x="215" y="18" width="40" height="24" fill="white" stroke="#e2e8f0" stroke-width="1"/><text x="235" y="34" font-size="10" fill="#475569" text-anchor="middle">3</text>
+        <rect x="215" y="44" width="40" height="24" fill="white" stroke="#e2e8f0" stroke-width="1"/><text x="235" y="60" font-size="10" fill="#0f766e" font-weight="bold" text-anchor="middle">7</text>
+        <rect x="257" y="18" width="38" height="24" fill="#0f766e" rx="3"/><text x="276" y="34" font-size="9" fill="white" font-weight="bold" text-anchor="middle">2x+1</text>
+        <rect x="257" y="44" width="38" height="24" fill="#5eead4" rx="3"/><text x="276" y="60" font-size="9" fill="#0f766e" font-weight="bold" text-anchor="middle">formule</text>
+      </svg>
+
+      <!-- Courbe représentative SVG -->
+      <svg viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:10px auto;max-width:300px;background:#f0fdfa;border-radius:8px;padding:4px;">
+        <text x="150" y="13" font-size="10" fill="#0f766e" font-weight="bold" text-anchor="middle">Courbe représentative — f(x) = 2x + 1</text>
+        <!-- Repère -->
+        <line x1="20" y1="15" x2="20" y2="165" stroke="#475569" stroke-width="1.5"/>
+        <line x1="15" y1="160" x2="290" y2="160" stroke="#475569" stroke-width="1.5"/>
+        <!-- Flèches axes -->
+        <polygon points="17,14 20,8 23,14" fill="#475569"/>
+        <polygon points="286,157 292,160 286,163" fill="#475569"/>
+        <text x="16" y="7" font-size="9" fill="#475569">y</text>
+        <text x="288" y="170" font-size="9" fill="#475569">x</text>
+        <!-- Graduations x -->
+        <line x1="70" y1="157" x2="70" y2="163" stroke="#475569" stroke-width="1"/>
+        <text x="70" y="172" font-size="9" fill="#475569" text-anchor="middle">1</text>
+        <line x1="120" y1="157" x2="120" y2="163" stroke="#475569" stroke-width="1"/>
+        <text x="120" y="172" font-size="9" fill="#475569" text-anchor="middle">2</text>
+        <line x1="170" y1="157" x2="170" y2="163" stroke="#475569" stroke-width="1"/>
+        <text x="170" y="172" font-size="9" fill="#475569" text-anchor="middle">3</text>
+        <!-- Graduations y -->
+        <line x1="17" y1="110" x2="23" y2="110" stroke="#475569" stroke-width="1"/>
+        <text x="14" y="114" font-size="9" fill="#475569" text-anchor="end">1</text>
+        <line x1="17" y1="60" x2="23" y2="60" stroke="#475569" stroke-width="1"/>
+        <text x="14" y="64" font-size="9" fill="#475569" text-anchor="end">3</text>
+        <!-- Droite f(x)=2x+1 : passe par (-0.5, 0) et (3, 7) -->
+        <!-- x=0 → y=1 : repère (20,110) → x=0 donne (20, 110-0*50=110) wait... -->
+        <!-- Repère : origine à (20, 160), 1 unité x = 50px, 1 unité y = 50px -->
+        <!-- f(x)=2x+1 : x=-0.5 → y=0 : (20-25, 160) = (-5, 160) hors cadre → x=0 → (20, 160-50)=(20,110) -->
+        <!-- x=3 → y=7 : (20+150, 160-350) hors... y=5 à x=2: (120, 160-250) trop haut -->
+        <!-- Utiliser échelle y = 20px/unité : x=0→(20,120), x=3→(170,120-7*20)=(170,20) -->
+        <line x1="20" y1="120" x2="220" y2="20" stroke="#0f766e" stroke-width="2.5" stroke-linecap="round"/>
+        <!-- Points -->
+        <circle cx="20" cy="120" r="4" fill="#0f766e"/><text x="27" y="118" font-size="8" fill="#0f766e">(0,1)</text>
+        <circle cx="70" cy="100" r="4" fill="#0f766e"/><text x="77" y="98" font-size="8" fill="#0f766e">(1,3)</text>
+        <circle cx="120" cy="80" r="4" fill="#0f766e"/><text x="127" y="78" font-size="8" fill="#0f766e">(2,5)</text>
+        <circle cx="170" cy="60" r="4" fill="#0f766e"/><text x="177" y="58" font-size="8" fill="#0f766e">(3,7)</text>
+        <!-- Label courbe -->
+        <text x="200" y="35" font-size="10" fill="#0f766e" font-weight="bold">f(x)=2x+1</text>
+      </svg>
+
+      <div class="def-box">
+        <h4>Lire une courbe</h4>
+        <p>• <strong>Image de a :</strong> placer x=a sur l'axe, monter jusqu'à la courbe, lire y. → f(a)<br>
+        • <strong>Antécédent de b :</strong> placer y=b sur l'axe, aller horizontalement jusqu'à la courbe, lire x. → x tel que f(x)=b</p>
+      </div>
+      <button class="btn-compris" onclick="revealBloc(2)">Bloc suivant →</button>
+    </div>
+
+    <div class="lecon-block" id="bloc-2">
+      <hr class="sep">
+      <div class="lecon-subtitle">③ Fonctions linéaires et affines</div>
+      <div class="analogie">📏 La fonction affine est la plus simple : elle donne une droite. La fonction linéaire est un cas particulier — elle passe par l'origine. Ces deux familles sont les plus utilisées en 3e.</div>
+
+      <div class="def-box">
+        <h4>Deux familles fondamentales</h4>
+        <p><strong>Fonction affine :</strong> f(x) = ax + b<br>
+        → Courbe = <strong>droite</strong>. Pente = a (taux d'accroissement). Ordonnée à l'origine = b.<br><br>
+        <strong>Fonction linéaire :</strong> f(x) = ax (cas particulier avec b=0)<br>
+        → Droite passant par <strong>l'origine</strong> (0,0). Proportionnalité directe.<br><br>
+        <strong>Taux d'accroissement / pente :</strong> a = (f(x₂)−f(x₁)) / (x₂−x₁)</p>
+      </div>
+
+      <!-- Comparaison 2 droites -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0;">
+        <div style="background:#f0fdfa;border-radius:8px;padding:10px;border:2px solid var(--acc-mid);">
+          <div style="font-weight:900;color:#0f766e;font-size:.85rem;margin-bottom:6px;">Fonction affine</div>
+          <div style="font-size:.82rem;line-height:1.8;">
+            f(x) = <strong>2x + 1</strong><br>
+            a=2 (pente), b=1 (ordo.)<br>
+            f(0) = 1 ≠ 0<br>
+            Droite ne passe pas par O
+          </div>
+        </div>
+        <div style="background:#f0fdfa;border-radius:8px;padding:10px;border:2px solid var(--acc-mid);">
+          <div style="font-weight:900;color:#0f766e;font-size:.85rem;margin-bottom:6px;">Fonction linéaire</div>
+          <div style="font-size:.82rem;line-height:1.8;">
+            f(x) = <strong>3x</strong><br>
+            a=3 (pente), b=0<br>
+            f(0) = 0<br>
+            Droite passe par O ✓
+          </div>
+        </div>
+      </div>
+
+      <div class="astuce"><strong>💡 Reconnaître :</strong> f(x) = ax + b → affine. Si b=0 → linéaire. La pente a indique de combien monte (ou descend si négatif) la droite quand x augmente de 1.</div>
+      <div class="piege"><strong>⚠ Piège :</strong> une fonction linéaire EST une fonction affine (cas particulier). Mais une fonction affine n'est pas forcément linéaire (sauf si b=0).</div>
+      <button class="btn-compris" onclick="goToPhase('guided1',1)">✓ Leçon comprise — À l'entraînement !</button>
+    </div>
+  </div>
+</div>
+
+<!-- GUIDÉ 1 -->
+<div class="phase" id="phase-guided1">
+  <div class="mascot-msg"><span class="emo">🦉</span><p><strong>Exercice guidé 1</strong> — QCM étape par étape. <strong>3 essais</strong> par question. Point uniquement au premier essai correct !</p></div>
+  <div class="ex-header-box"><h2>Images, antécédents et lecture de courbe (QCM)</h2><p>Le problème change à chaque recommencement.</p></div>
+  <div id="g1-reset" class="reset-msg">
+    <div class="ugo">🦉</div><h3>On recommence !</h3>
+    <p>Rappelle-toi : image = remplacer x et calculer f(x). Antécédent = résoudre f(x)=valeur.</p>
+    <button class="btn-restart" onclick="initGuided1()">↺ Recommencer</button>
+  </div>
+  <div id="g1-container"></div>
+  <button class="btn-suivant" id="btn-to-g2" onclick="goToPhase('guided2',2)">Bien joué ! Exercice suivant →</button>
+</div>
+
+<!-- GUIDÉ 2 -->
+<div class="phase" id="phase-guided2">
+  <div class="mascot-msg"><span class="emo">🦉</span><p><strong>Exercice guidé 2</strong> — Tu écris ta réponse. <strong>3 essais</strong> par étape. Point uniquement au premier essai correct !</p></div>
+  <div class="ex-header-box"><h2>Calculer images et antécédents (saisie)</h2><p>Donne des valeurs exactes (entiers ou fractions).</p></div>
+  <div id="g2-reset" class="reset-msg">
+    <div class="ugo">🦉</div><h3>On repart !</h3>
+    <p>Image : f(x₀) = formule avec x=x₀. Antécédent de k : résoudre f(x)=k.</p>
+    <button class="btn-restart" onclick="initGuided2()">↺ Recommencer</button>
+  </div>
+  <div id="g2-container"></div>
+  <button class="btn-suivant" id="btn-to-free" onclick="goToPhase('free',3)">Excellent ! Exercices libres →</button>
+</div>
+
+<!-- LIBRES 1 -->
+<div class="phase" id="phase-free">
+  <div class="mascot-msg"><span class="emo">🦉</span><p><strong>Exercices libres</strong> — 5 exercices variés sans aide. Chaque bonne réponse compte !</p></div>
+  <div id="free1-container"></div>
+  <button class="btn-suivant" id="btn-to-free2" onclick="goToPhase('free2',4)">Encore des exercices →</button>
+</div>
+
+<!-- LIBRES 2 -->
+<div class="phase" id="phase-free2">
+  <div class="mascot-msg"><span class="emo">🦉</span><p><strong>Entraînement supplémentaire</strong> — 5 exercices de plus. Tu y es presque !</p></div>
+  <div id="free2-container"></div>
+  <button class="btn-suivant" id="btn-to-bilan" onclick="goToPhase('bilan',5)">🌟 Voir mon bilan</button>
+</div>
+
+<!-- BILAN -->
+<div class="phase" id="phase-bilan">
+  <div class="bilan-card">
+    <span class="bilan-icon">📈</span>
+    <h2 class="bilan-title" id="bilan-title">Résultat</h2>
+    <p class="bilan-msg" id="bilan-msg"></p>
+    <div class="stars-row"><span class="star-big" id="star1">⭐</span><span class="star-big" id="star2">⭐</span><span class="star-big" id="star3">⭐</span></div>
+    <div class="score-circle"><span class="score-num" id="bilan-score">0</span><span class="score-sub" id="bilan-total-txt">/ 0 pts</span></div>
+    <div class="memo-card">
+      <h3>Mémo — Fonctions</h3>
+      <div class="memo-grid">
+        <div class="memo-item"><strong>Image</strong><br>f(a) = remplacer x par a<br>x → f(x)</div>
+        <div class="memo-item"><strong>Antécédent</strong><br>Résoudre f(x) = b<br>f(x) → x</div>
+        <div class="memo-item"><strong>Fonction affine</strong><br>f(x) = ax + b<br>Droite, ordonnée b</div>
+        <div class="memo-item"><strong>Fonction linéaire</strong><br>f(x) = ax (b=0)<br>Droite par l'origine</div>
+      </div>
+    </div>
+    <div class="bilan-btns">
+      <button class="btn-act secondary" onclick="location.reload()">↺ Recommencer</button>
+      <button class="btn-act primary" onclick="location.href='../12-15ans.html'">← Retour aux fiches</button>
+    </div>
+  </div>
+</div>
+</main>
+
+<script>
+// ════ SVG tableau de valeurs avec un ? ════
+function tabValSVG(titre, fn_label, xs, ys, q_idx) {
+  // q_idx : index de la valeur cachée (-1 si toutes affichées)
+  var cols = xs.length, cellW = Math.min(44, 240/cols), H = 78;
+  var W = 60 + cols*cellW;
+  var s = '<svg viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:10px auto;max-width:'+W+'px;background:#f0fdfa;border-radius:8px;padding:2px;">';
+  s += '<text x="'+(W/2)+'" y="12" font-size="9" fill="#0f766e" font-weight="bold" text-anchor="middle">'+titre+'</text>';
+  // En-tête ligne 1 (x)
+  s += '<rect x="4" y="16" width="54" height="26" fill="#0f766e" rx="3"/>';
+  s += '<text x="31" y="33" font-size="10" fill="white" font-weight="bold" text-anchor="middle">x</text>';
+  xs.forEach(function(x, i) {
+    s += '<rect x="'+(60+i*cellW)+'" y="16" width="'+cellW+'" height="26" fill="white" stroke="#e2e8f0" stroke-width="1"/>';
+    s += '<text x="'+(60+i*cellW+cellW/2)+'" y="33" font-size="10" fill="#475569" text-anchor="middle">'+x+'</text>';
+  });
+  // Ligne 2 (f(x))
+  s += '<rect x="4" y="44" width="54" height="26" fill="#5eead4" rx="3"/>';
+  s += '<text x="31" y="61" font-size="9" fill="#0f766e" font-weight="bold" text-anchor="middle">'+fn_label+'</text>';
+  xs.forEach(function(x, i) {
+    var val = (i === q_idx) ? '?' : ys[i];
+    var isQ = (i === q_idx);
+    s += '<rect x="'+(60+i*cellW)+'" y="44" width="'+cellW+'" height="26" fill="'+(isQ?'#fce7f3':'white')+'" stroke="'+(isQ?'#dc2626':'#e2e8f0')+'" stroke-width="1"/>';
+    s += '<text x="'+(60+i*cellW+cellW/2)+'" y="61" font-size="10" fill="'+(isQ?'#9f1239':'#0f766e')+'" font-weight="bold" text-anchor="middle">'+val+'</text>';
+  });
+  s += '</svg>';
+  return s;
+}
+
+// ════ Graphique SVG simple ════
+function graphSVG(titre, pts, fn_label) {
+  // pts : [{x,y,label}] — points à afficher
+  // Repère : orig (30,150), echX=40px/u, echY=20px/u
+  var origX=30, origY=150, echX=40, echY=20;
+  function px(x){return origX+x*echX;}
+  function py(y){return origY-y*echY;}
+  var W=280, H=175;
+  var s='<svg viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:10px auto;max-width:'+W+'px;background:#f0fdfa;border-radius:8px;padding:2px;">';
+  s+='<text x="140" y="11" font-size="9" fill="#0f766e" font-weight="bold" text-anchor="middle">'+titre+'</text>';
+  // Axes
+  s+='<line x1="'+origX+'" y1="15" x2="'+origX+'" y2="'+(H-10)+'" stroke="#475569" stroke-width="1.5"/>';
+  s+='<line x1="10" y1="'+origY+'" x2="'+(W-10)+'" y2="'+origY+'" stroke="#475569" stroke-width="1.5"/>';
+  // Graduations
+  for(var xi=0;xi<=4;xi++){
+    var px2=px(xi);
+    s+='<line x1="'+px2+'" y1="'+(origY-2)+'" x2="'+px2+'" y2="'+(origY+4)+'" stroke="#475569" stroke-width="1"/>';
+    s+='<text x="'+px2+'" y="'+(origY+13)+'" font-size="8" fill="#475569" text-anchor="middle">'+xi+'</text>';
+  }
+  for(var yi=0;yi<=7;yi+=2){
+    var py2=py(yi);
+    s+='<line x1="'+(origX-4)+'" y1="'+py2+'" x2="'+(origX+2)+'" y2="'+py2+'" stroke="#475569" stroke-width="1"/>';
+    s+='<text x="'+(origX-6)+'" y="'+(py2+3)+'" font-size="8" fill="#475569" text-anchor="end">'+yi+'</text>';
+  }
+  // Droite entre les deux points extrêmes
+  if(pts.length>=2){
+    var p0=pts[0],pn=pts[pts.length-1];
+    s+='<line x1="'+px(p0.x)+'" y1="'+py(p0.y)+'" x2="'+px(pn.x)+'" y2="'+py(pn.y)+'" stroke="#0f766e" stroke-width="2.5" stroke-linecap="round"/>';
+  }
+  // Points
+  pts.forEach(function(p){
+    s+='<circle cx="'+px(p.x)+'" cy="'+py(p.y)+'" r="4" fill="#0f766e"/>';
+    if(p.label)s+='<text x="'+(px(p.x)+6)+'" y="'+(py(p.y)-3)+'" font-size="8" fill="#0f766e">'+p.label+'</text>';
+  });
+  if(fn_label)s+='<text x="'+(W-10)+'" y="30" font-size="9" fill="#0f766e" font-weight="bold" text-anchor="end">'+fn_label+'</text>';
+  s+='</svg>';
+  return s;
+}
+
+// ════ GUIDÉ 1 — QCM (4 variantes) ════
+var G1=[
+  { titre:"f(x) = 3x − 2",
+    svg:tabValSVG("f(x) = 3x − 2","f(x)",[-1,0,1,2,3],[-5,-2,1,4,7],4)
+       +graphSVG("Courbe de f(x)=3x−2",[{x:0,y:-2,label:"(0,−2)"},{x:1,y:1,label:"(1,1)"},{x:2,y:4,label:"(2,4)"}],"f(x)=3x−2"),
+    etapes:[
+      {q:"Étape 1 — Calcule l'image de 3 par f : f(3) = 3×3−2 = ?",
+       opts:["7","9","11","5"],ok:0,hint:"3×3 = 9, puis 9−2 = ?",
+       expl_ok:"f(3) = 3×3−2 = 9−2 = 7.",
+       expl_ko:"3×3=9, 9−2=7."},
+      {q:"Étape 2 — Quel est l'antécédent de 4 par f ? Résoudre f(x)=4 → 3x−2=4 → 3x=?",
+       opts:["6","4","2","8"],ok:0,hint:"3x−2=4 → 3x = 4+2.",
+       expl_ok:"3x = 6. Donc x = 2.",
+       expl_ko:"4+2=6 → 3x=6."},
+      {q:"Étape 3 — L'antécédent de 4 par f est donc ?",
+       opts:["2","6","3","1"],ok:0,hint:"3x = 6 → x = 6÷3.",
+       expl_ok:"x = 2. Vérif : f(2) = 3×2−2 = 4 ✓",
+       expl_ko:"6÷3 = 2."},
+      {q:"Étape 4 — f(x)=3x−2 est une fonction affine. Quelle est son ordonnée à l'origine ?",
+       opts:["−2","3","2","0"],ok:0,hint:"Dans f(x)=ax+b, b est l'ordonnée à l'origine. Ici f(x)=3x+(−2).",
+       expl_ok:"b = −2. La droite coupe l'axe y en (0, −2).",
+       expl_ko:"Dans ax+b, b = −2 ici."}
+    ]
+  },
+  { titre:"f(x) = −x + 5",
+    svg:tabValSVG("f(x) = −x + 5","f(x)",[0,1,2,3,5],[5,4,3,2,0],3),
+    etapes:[
+      {q:"Étape 1 — Calcule f(2) = −2+5 = ?",
+       opts:["3","7","−3","2"],ok:0,hint:"−2+5 = ?",
+       expl_ok:"f(2) = −2+5 = 3.",
+       expl_ko:"−2+5 = 3."},
+      {q:"Étape 2 — Calcule f(0) = ?",
+       opts:["5","0","−5","1"],ok:0,hint:"f(0) = −0+5.",
+       expl_ok:"f(0) = 5. C'est l'ordonnée à l'origine.",
+       expl_ko:"−0+5 = 5."},
+      {q:"Étape 3 — La pente (coefficient directeur) de f(x)=−x+5 est ?",
+       opts:["−1","5","1","−5"],ok:0,hint:"Dans f(x)=ax+b, a est la pente. Ici f(x)=(−1)x+5.",
+       expl_ok:"a = −1. La droite descend quand x augmente (pente négative).",
+       expl_ko:"f(x) = −1×x+5 → a = −1."}
+    ]
+  },
+  { titre:"f(x) = x² (fonction carré — lecture de courbe)",
+    svg:'<svg viewBox="0 0 280 165" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:10px auto;max-width:280px;background:#f0fdfa;border-radius:8px;padding:2px;"><text x="140" y="11" font-size="9" fill="#0f766e" font-weight="bold" text-anchor="middle">Courbe de f(x) = x²</text><line x1="140" y1="14" x2="140" y2="158" stroke="#475569" stroke-width="1.5"/><line x1="10" y1="140" x2="270" y2="140" stroke="#475569" stroke-width="1.5"/><polygon points="137,13 140,8 143,13" fill="#475569"/><polygon points="267,137 272,140 267,143" fill="#475569"/><text x="136" y="8" font-size="8" fill="#475569">y</text><text x="269" y="150" font-size="8" fill="#475569">x</text><text x="152" y="153" font-size="8" fill="#475569">0</text><text x="192" y="153" font-size="8" fill="#475569">1</text><text x="232" y="153" font-size="8" fill="#475569">2</text><text x="100" y="153" font-size="8" fill="#475569">−1</text><text x="58" y="153" font-size="8" fill="#475569">−2</text><text x="133" y="120" font-size="8" fill="#475569" text-anchor="end">1</text><text x="133" y="100" font-size="8" fill="#475569" text-anchor="end">2</text><text x="133" y="60" font-size="8" fill="#475569" text-anchor="end">4</text><path d="M60,60 Q140,148 220,60" fill="none" stroke="#0f766e" stroke-width="2.5"/><circle cx="140" cy="140" r="3.5" fill="#0f766e"/><text x="148" y="138" font-size="8" fill="#0f766e">(0,0)</text><circle cx="190" cy="120" r="3.5" fill="#0f766e"/><text x="198" y="118" font-size="8" fill="#0f766e">(1,1)</text><circle cx="230" cy="60" r="3.5" fill="#0f766e"/><text x="238" y="58" font-size="8" fill="#0f766e">(2,4)</text><circle cx="90" cy="120" r="3.5" fill="#0f766e"/><circle cx="60" cy="60" r="3.5" fill="#0f766e"/><text x="15" y="58" font-size="8" fill="#0f766e">(−2,4)</text></svg>',
+    etapes:[
+      {q:"Étape 1 — D'après la courbe, f(x)=x². Quelle est l'image de −2 ?",
+       opts:["4","−2","−4","2"],ok:0,hint:"f(−2) = (−2)² = ?",
+       expl_ok:"f(−2) = (−2)² = 4. Le carré d'un nombre négatif est positif.",
+       expl_ko:"(−2)² = (−2)×(−2) = 4."},
+      {q:"Étape 2 — D'après la courbe, quels sont les antécédents de 4 par f ?",
+       opts:["2 et −2","2 seulement","−2 seulement","4 et 16"],ok:0,hint:"f(x)=4 → x²=4 → deux solutions.",
+       expl_ok:"x²=4 → x=2 ou x=−2. Une parabole peut avoir deux antécédents pour un même y.",
+       expl_ko:"x²=4 → x=2 (car 2²=4) ou x=−2 (car (−2)²=4). Deux antécédents."},
+      {q:"Étape 3 — La courbe de f(x)=x² est une droite ou une courbe ?",
+       opts:["Une courbe (parabole) — ce n'est pas une fonction affine","Une droite","Un cercle"],ok:0,hint:"f(x)=x² contient un x au carré — ce n'est pas de la forme ax+b.",
+       expl_ok:"C'est une parabole, pas une droite. f(x)=x² n'est pas une fonction affine.",
+       expl_ko:"Fonction affine = ax+b (degré 1). x² est de degré 2 → parabole."}
+    ]
+  },
+  { titre:"Tableau de valeurs d'une fonction g.",
+    svg:tabValSVG("Valeurs de g","g(x)",[-2,-1,0,1,2,3],[3,1,-1,-3,-5,-7],5),
+    etapes:[
+      {q:"Étape 1 — La fonction g semble affine. Quelle est la pente a ? (utilise g(0) et g(1))",
+       opts:["−2","2","−1","−3"],ok:0,hint:"Pente = (g(1)−g(0)) ÷ (1−0).",
+       expl_ok:"a = (g(1)−g(0))÷1 = (−3−(−1))÷1 = −2.",
+       expl_ko:"Pente = (g(1)−g(0)) = −3−(−1) = −2."},
+      {q:"Étape 2 — L'ordonnée à l'origine est g(0) = ?",
+       opts:["−1","0","1","−3"],ok:0,hint:"g(0) se lit directement dans le tableau.",
+       expl_ok:"g(0) = −1. C'est l'ordonnée à l'origine b = −1.",
+       expl_ko:"Dans le tableau, x=0 donne g(0)=−1."},
+      {q:"Étape 3 — L'expression de g est donc ?",
+       opts:["g(x) = −2x − 1","g(x) = 2x − 1","g(x) = −x − 1","g(x) = −2x + 1"],ok:0,hint:"g(x) = ax+b avec a=−2 et b=−1.",
+       expl_ok:"g(x) = −2x−1. Vérif : g(0)=−1 ✓ g(1)=−3 ✓",
+       expl_ko:"a=−2 et b=−1 → g(x)=−2x−1."}
+    ]
+  }
+];
+
+// ════ GUIDÉ 2 — Saisie (4 variantes) ════
+var G2=[
+  { titre:"f(x) = 4x − 3",
+    svg:tabValSVG("f(x) = 4x − 3","f(x)",[0,1,2,3],[-3,1,5,9],-1),
+    etapes:[
+      {q:"Étape 1 — f(0) = 4×0 − 3 = ?",acc:["-3","−3"],hint:"4×0=0, 0−3=?",expl_ok:"f(0) = −3.",expl_ko:"4×0−3 = −3."},
+      {q:"Étape 2 — f(2) = 4×2 − 3 = ?",acc:["5"],hint:"4×2=8, 8−3=?",expl_ok:"f(2) = 5.",expl_ko:"8−3=5."},
+      {q:"Étape 3 — Antécédent de 9 : f(x)=9 → 4x−3=9 → 4x=12 → x=?",acc:["3"],hint:"4x=12 → x=12÷4.",expl_ok:"x=3. Vérif: f(3)=4×3−3=9 ✓",expl_ko:"12÷4=3."}
+    ]
+  },
+  { titre:"g(x) = −3x + 6",
+    svg:tabValSVG("g(x) = −3x+6","g(x)",[0,1,2,3],[6,3,0,-3],-1),
+    etapes:[
+      {q:"Étape 1 — g(1) = −3×1 + 6 = ?",acc:["3"],hint:"−3+6=?",expl_ok:"g(1) = 3.",expl_ko:"−3+6=3."},
+      {q:"Étape 2 — Pour quel x g(x)=0 ? Résoudre −3x+6=0 → −3x=−6 → x=?",acc:["2"],hint:"−3x=−6 → x=−6÷(−3).",expl_ok:"x=2. Vérif: g(2)=−6+6=0 ✓",expl_ko:"−6÷−3=2."},
+      {q:"Étape 3 — La pente de g est ?",acc:["-3","−3"],hint:"Dans g(x)=ax+b, a est la pente.",expl_ok:"a=−3. La droite descend.",expl_ko:"g(x)=−3x+6 → a=−3."}
+    ]
+  },
+  { titre:"h(x) = 2x + 4",
+    svg:tabValSVG("h(x) = 2x+4","h(x)",[-2,-1,0,1,2],[0,2,4,6,8],-1),
+    etapes:[
+      {q:"Étape 1 — h(−2) = 2×(−2)+4 = ?",acc:["0"],hint:"2×(−2)=−4, −4+4=?",expl_ok:"h(−2)=0. La courbe coupe l'axe x en x=−2.",expl_ko:"−4+4=0."},
+      {q:"Étape 2 — Antécédent de 8 : 2x+4=8 → 2x=4 → x=?",acc:["2"],hint:"2x=8−4=4 → x=?",expl_ok:"x=2. Vérif: h(2)=8 ✓",expl_ko:"4÷2=2."},
+      {q:"Étape 3 — h(x)=2x+4. L'ordonnée à l'origine est ?",acc:["4"],hint:"h(0)=?",expl_ok:"h(0)=4. La droite coupe l'axe y en y=4.",expl_ko:"h(0)=2×0+4=4."}
+    ]
+  },
+  { titre:"k(x) = 5x (fonction linéaire)",
+    svg:tabValSVG("k(x) = 5x","k(x)",[-1,0,1,2,3],[-5,0,5,10,15],-1),
+    etapes:[
+      {q:"Étape 1 — k(3) = 5×3 = ?",acc:["15"],hint:"5×3=?",expl_ok:"k(3)=15.",expl_ko:"5×3=15."},
+      {q:"Étape 2 — Antécédent de 10 : 5x=10 → x=?",acc:["2"],hint:"10÷5=?",expl_ok:"x=2. Vérif: k(2)=10 ✓",expl_ko:"10÷5=2."},
+      {q:"Étape 3 — k(0) = 5×0 = ? → la droite passe-t-elle par l'origine ?",acc:["0"],hint:"5×0=?",expl_ok:"k(0)=0 → la droite passe par O. C'est une fonction LINÉAIRE (b=0).",expl_ko:"5×0=0."}
+    ]
+  }
+];
+
+// ════ POOL EXERCICES LIBRES ════
+var FREE_POOL=[
+  {type:'classify',data:{q:"f(x)=3x+2. f(4) = ?",opts:["14","14","10","16"],ok:0,expl:"3×4+2=12+2=14."}},
+  {type:'saisie',data:{q:"f(x)=2x−5. f(3)=?",acc:["1"],expl:"2×3−5=6−5=1."}},
+  {type:'saisie',data:{q:"f(x)=x+7. Antécédent de 10 : f(x)=10 → x=?",acc:["3"],expl:"x+7=10 → x=3."}},
+  {type:'saisie',data:{q:"f(x)=4x+1. f(0)=?",acc:["1"],expl:"4×0+1=1. C'est l'ordonnée à l'origine."}},
+  {type:'saisie',data:{q:"f(x)=−x+8. Antécédent de 5 : f(x)=5 → x=?",acc:["3"],expl:"−x+8=5 → −x=−3 → x=3."}},
+  {type:'classify',data:{q:"f(x)=6x. Quelle est la pente ?",opts:["6","0","1","6x"],ok:0,expl:"Dans f(x)=ax, a=6 est la pente."}},
+  {type:'classify',data:{q:"f(x)=3x−5. L'ordonnée à l'origine est ?",opts:["−5","3","5","−3"],ok:0,expl:"Dans ax+b, b=−5. La courbe coupe l'axe y en y=−5."}},
+  {type:'jugement',data:{consigne:"f(x)=4x est-elle une fonction linéaire ?",a:"Oui, car b=0 → droite passant par l'origine",b:"Non, car il n'y a pas de +b",ok:"A",expl:"Fonction linéaire = f(x)=ax avec b=0. Ici b=0 → oui, c'est une fonction linéaire."}},
+  {type:'jugement',data:{consigne:"Image de x=2 par f(x)=x²+1 = ?",a:"5 (car 2²+1=5)",b:"3 (car 2+1=3)",ok:"A",expl:"f(2)=(2)²+1=4+1=5. On remplace x par 2 dans la formule complète."}},
+  {type:'saisie',data:{q:"f(x)=2x+3. Pour quel x f(x)=11 ? (Antécédent de 11)",acc:["4"],expl:"2x+3=11 → 2x=8 → x=4."}},
+  {type:'saisie',data:{q:"f(x)=−2x+10. f(3)=?",acc:["4"],expl:"−2×3+10=−6+10=4."}},
+  {type:'classify',data:{q:"Quelle est la courbe de f(x)=3x+1 ?",opts:["Une droite","Une parabole","Un cercle"],ok:0,expl:"Fonction affine = droite. f(x)=3x+1 est de la forme ax+b → droite."}},
+  {type:'saisie',data:{q:"f(x)=5x−2. Antécédent de 8 : f(x)=8 → x=?",acc:["2"],expl:"5x−2=8 → 5x=10 → x=2."}},
+  {type:'jugement',data:{consigne:"f(x)=2x+5. La droite coupe l'axe y en ?",a:"y=5 (ordo. à l'origine = f(0)=5)",b:"y=2 (coefficient directeur)",ok:"A",expl:"L'ordonnée à l'origine est f(0)=2×0+5=5. Le 2 est la pente, pas l'ordonnée."}},
+  {type:'saisie',data:{q:"🚗 Prix d'un taxi : f(km) = 2×km + 5 (5€ de base + 2€/km). Prix pour 8 km = ?",acc:["21"],expl:"f(8)=2×8+5=16+5=21€."}},
+  {type:'saisie',data:{q:"f(x)=3x. f(−4)=?",acc:["-12","−12"],expl:"3×(−4)=−12."}},
+  {type:'classify',data:{q:"Pente de f(x)=−2x+7 ?",opts:["−2","7","2","−7"],ok:0,expl:"Dans f(x)=ax+b, a=−2. La droite descend."}},
+  {type:'saisie',data:{q:"f(x)=x+3. Antécédent de 0 : x=?",acc:["-3","−3"],expl:"x+3=0 → x=−3. La droite coupe l'axe x en x=−3."}},
+  {type:'jugement',data:{consigne:"f(x)=2x+1 et g(x)=−x+4. Pour quel x f(x)=g(x) ?",a:"x=1 (car 2×1+1=3=−1+4=3 ✓)","b":"x=2",ok:"A",expl:"f(1)=3 et g(1)=3 → les courbes se croisent en x=1."}},
+  {type:'saisie',data:{q:"📦 Une bougie de 20 cm fond à raison de 2 cm/h. Sa hauteur h(t)=20−2t. Hauteur après 6h ?",acc:["8"],expl:"h(6)=20−2×6=20−12=8 cm."}}
+];
+
+var score=0,g1Idx=0,g2Idx=0,g1Tries=0,g2Tries=0;
+var free1Exs=[],free2Exs=[],free1Done=0,free2Done=0;
+var _cbs={};
+
+function nsF(s){return(s||'').trim().toLowerCase().replace(/\s+/g,'').replace(',','.').replace('−','-');}
+function shuffle(arr){var a=arr.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function addScore(){score++;document.getElementById('score-display').textContent=score;}
+
+function updateSteps(active){for(var i=0;i<6;i++){var s=document.getElementById('step-'+i);if(!s)continue;s.classList.remove('active','done');if(i<active)s.classList.add('done');else if(i===active)s.classList.add('active');}}
+
+function goToPhase(ph,si){
+  document.querySelectorAll('.phase').forEach(function(p){p.classList.remove('active');});
+  var el=document.getElementById('phase-'+ph);
+  if(el){el.classList.add('active');setTimeout(function(){el.scrollIntoView({behavior:'smooth',block:'start'});},100);}
+  updateSteps(si);
+  if(ph==='guided1')initGuided1();
+  if(ph==='guided2')initGuided2();
+  if(ph==='free')initFree1();
+  if(ph==='free2')initFree2();
+  if(ph==='bilan')showBilan();
+}
+
+function revealBloc(n){
+  var bloc=document.getElementById('bloc-'+n);if(!bloc)return;
+  var prev=document.getElementById('bloc-'+(n-1));
+  if(prev){var b=prev.querySelector('.btn-compris');if(b){b.textContent='✓ Compris';b.disabled=true;b.style.opacity='.4';}}
+  bloc.classList.add('revealed');
+  setTimeout(function(){var hH=(document.querySelector('.header')||{offsetHeight:0}).offsetHeight;var rect=bloc.getBoundingClientRect();window.scrollTo({top:window.pageYOffset+rect.top-hH-20,behavior:'smooth'});},150);
+}
+
+function initGuided1(){
+  g1Idx=Math.floor(Math.random()*G1.length);g1Tries=0;
+  document.getElementById('g1-reset').classList.remove('show');
+  document.getElementById('btn-to-g2').classList.remove('show');
+  var v=G1[g1Idx],c=document.getElementById('g1-container');c.innerHTML='';
+  var box=document.createElement('div');box.className='guided-problem';
+  box.innerHTML='<div class="guided-problem-title">📈 '+v.titre+'<span class="tries-left" id="g1-tries">3 essais</span></div>'
+    +(v.svg||'')+'<div class="step-container" id="g1-sc"></div>';
+  c.appendChild(box);
+  var sc=document.getElementById('g1-sc');
+  v.etapes.forEach(function(step,si){
+    var so=shuffle(step.opts.map(function(o,oi){return{t:o,i:oi};}));
+    var sb=document.createElement('div');sb.className='step-box'+(si===0?' active':'');sb.id='g1s'+si;
+    sb.innerHTML='<div class="step-num">Étape '+(si+1)+'/'+v.etapes.length+'</div>'
+      +'<div class="step-question">'+step.q+'</div>'
+      +'<div class="step-hint" id="g1h'+si+'">💡 '+step.hint+'</div>'
+      +'<div class="step-qcm-opts">'+so.map(function(o){return'<button class="step-qcm-opt" onclick="g1Check('+si+','+o.i+',this)">'+o.t+'</button>';}).join('')+'</div>'
+      +'<div class="step-fb" id="g1f'+si+'"></div>';
+    sc.appendChild(sb);
+  });
+  g1Tries=0;updG1();
+}
+function updG1(){var el=document.getElementById('g1-tries');if(el)el.textContent=(3-g1Tries)+' essai'+(3-g1Tries>1?'s':'');}
+function g1Check(si,ci,btn){
+  var v=G1[g1Idx],step=v.etapes[si],sb=document.getElementById('g1s'+si),fb=document.getElementById('g1f'+si);
+  if(sb.classList.contains('correct'))return;
+  if(ci===step.ok){
+    btn.classList.add('opt-correct');sb.querySelectorAll('.step-qcm-opt').forEach(function(b){b.disabled=true;});sb.classList.add('correct');
+    if(g1Tries===0){fb.className='step-fb show fb-ok';fb.innerHTML='✓ '+step.expl_ok+' <span style="color:#065f46;font-size:.78rem">(+1 pt)</span>';addScore();}
+    else{fb.className='step-fb show fb-ok';fb.innerHTML='✓ '+step.expl_ok+' <span style="color:#64748b;font-size:.78rem">(pas de point — réussi après plusieurs essais)</span>';}
+    g1Tries=0;updG1();
+    var nx=document.getElementById('g1s'+(si+1));
+    if(nx){nx.classList.add('active');setTimeout(function(){nx.scrollIntoView({behavior:'smooth',block:'nearest'});},300);}
+    else{setTimeout(function(){document.getElementById('btn-to-g2').classList.add('show');document.getElementById('btn-to-g2').scrollIntoView({behavior:'smooth',block:'nearest'});},500);}
+  }else{
+    btn.classList.add('opt-wrong');btn.disabled=true;g1Tries++;updG1();
+    fb.className='step-fb show fb-ko';
+    if(g1Tries<3){fb.innerHTML='✗ Pas tout à fait. Lis l\'indice ci-dessus et réessaie !';document.getElementById('g1h'+si).classList.add('show');}
+    else{fb.innerHTML='✗ '+step.expl_ko+' On recommence !';setTimeout(function(){document.getElementById('g1-reset').classList.add('show');document.getElementById('g1-container').innerHTML='';document.getElementById('g1-reset').scrollIntoView({behavior:'smooth',block:'start'});},1200);}
+  }
+}
+
+function initGuided2(){
+  g2Idx=Math.floor(Math.random()*G2.length);g2Tries=0;
+  document.getElementById('g2-reset').classList.remove('show');
+  document.getElementById('btn-to-free').classList.remove('show');
+  var v=G2[g2Idx],c=document.getElementById('g2-container');c.innerHTML='';
+  var box=document.createElement('div');box.className='guided-problem';
+  box.innerHTML='<div class="guided-problem-title">✏️ '+v.titre+'<span class="tries-left" id="g2-tries">3 essais</span></div>'
+    +(v.svg||'')+'<div class="step-container" id="g2-sc"></div>';
+  c.appendChild(box);
+  var sc=document.getElementById('g2-sc');
+  v.etapes.forEach(function(step,si){
+    var sb=document.createElement('div');sb.className='step-box'+(si===0?' active':'');sb.id='g2s'+si;
+    sb.innerHTML='<div class="step-num">Étape '+(si+1)+'/'+v.etapes.length+'</div>'
+      +'<div class="step-question">'+step.q+'</div>'
+      +'<div class="step-hint" id="g2h'+si+'">💡 '+step.hint+'</div>'
+      +'<div class="step-input-row"><input class="step-input" id="g2i'+si+'" type="text" placeholder="?" autocomplete="off" spellcheck="false"'+(si>0?' disabled':'')+'><button class="btn-step-check" id="g2b'+si+'" onclick="g2Check('+si+')"'+(si>0?' disabled':'')+'>Vérifier</button></div>'
+      +'<div class="step-fb" id="g2f'+si+'"></div>';
+    sc.appendChild(sb);
+  });
+  g2Tries=0;updG2();
+}
+function updG2(){var el=document.getElementById('g2-tries');if(el)el.textContent=(3-g2Tries)+' essai'+(3-g2Tries>1?'s':'');}
+function g2Check(si){
+  var v=G2[g2Idx],step=v.etapes[si],inp=document.getElementById('g2i'+si),fb=document.getElementById('g2f'+si),sb=document.getElementById('g2s'+si);
+  if(!inp||sb.classList.contains('correct'))return;
+  var val=nsF(inp.value),ok=step.acc.some(function(a){return val===nsF(a);});
+  if(ok){
+    inp.classList.add('input-ok');inp.disabled=true;document.getElementById('g2b'+si).disabled=true;sb.classList.add('correct');
+    if(g2Tries===0){fb.className='step-fb show fb-ok';fb.innerHTML='✓ '+step.expl_ok+' <span style="color:#065f46;font-size:.78rem">(+1 pt)</span>';addScore();}
+    else{fb.className='step-fb show fb-ok';fb.innerHTML='✓ '+step.expl_ok+' <span style="color:#64748b;font-size:.78rem">(pas de point — réussi après plusieurs essais)</span>';}
+    g2Tries=0;updG2();
+    var nxSb=document.getElementById('g2s'+(si+1));
+    if(nxSb){nxSb.classList.add('active');var ni=document.getElementById('g2i'+(si+1)),nb=document.getElementById('g2b'+(si+1));if(ni)ni.disabled=false;if(nb)nb.disabled=false;setTimeout(function(){nxSb.scrollIntoView({behavior:'smooth',block:'nearest'});},300);}
+    else{setTimeout(function(){document.getElementById('btn-to-free').classList.add('show');document.getElementById('btn-to-free').scrollIntoView({behavior:'smooth',block:'nearest'});},500);}
+  }else{
+    inp.classList.add('input-ko');inp.value='';inp.placeholder='Réessaie...';g2Tries++;updG2();
+    fb.className='step-fb show fb-ko';
+    if(g2Tries<3){fb.innerHTML='✗ Pas tout à fait. Lis l\'indice ci-dessus et réessaie !';document.getElementById('g2h'+si).classList.add('show');setTimeout(function(){inp.classList.remove('input-ko');inp.placeholder='?';},1000);}
+    else{fb.innerHTML='✗ '+step.expl_ko+' On recommence !';setTimeout(function(){document.getElementById('g2-reset').classList.add('show');document.getElementById('g2-container').innerHTML='';document.getElementById('g2-reset').scrollIntoView({behavior:'smooth',block:'start'});},1200);}
+  }
+}
+
+function buildFreeCard(ex,i,prefix,onDone){
+  var card=document.createElement('div');card.className='free-ex-card';card.id=prefix+i;
+  if(ex.type==='classify')buildCl(card,ex.data,i,prefix,onDone);
+  else if(ex.type==='saisie')buildSa(card,ex.data,i,prefix,onDone);
+  else if(ex.type==='jugement')buildJu(card,ex.data,i,prefix,onDone);
+  return card;
+}
+function buildCl(card,data,i,prefix,onDone){
+  card.innerHTML='<div class="free-ex-label">Exercice '+(i+1)+'</div><div class="free-ex-question">'+data.q+'</div><div class="free-classify-btns" id="'+prefix+'cl'+i+'"></div><div class="free-fb" id="'+prefix+'fb'+i+'"></div>';
+  var ba=card.querySelector('#'+prefix+'cl'+i);
+  data.opts.forEach(function(opt,oi){
+    var btn=document.createElement('button');btn.className='free-classify-btn';btn.textContent=opt;
+    btn.onclick=function(){
+      if(card.classList.contains('answered'))return;
+      card.classList.add('answered');ba.querySelectorAll('button').forEach(function(b){b.disabled=true;});
+      var fb=document.getElementById(prefix+'fb'+i);
+      if(oi===data.ok){btn.classList.add('ans-correct');fb.className='free-fb show fb-ok';fb.innerHTML='✓ '+data.expl;addScore();}
+      else{btn.classList.add('ans-wrong');ba.querySelectorAll('button').forEach(function(b,bi){if(bi===data.ok)b.classList.add('ans-reveal');});fb.className='free-fb show fb-ko';fb.innerHTML='✗ '+data.expl;}
+      onDone();
+    };ba.appendChild(btn);
+  });
+}
+function buildSa(card,data,i,prefix,onDone){
+  card.innerHTML='<div class="free-ex-label">Exercice '+(i+1)+'</div><div class="free-ex-question">'+data.q+'</div><div class="free-input-row"><input class="free-input" id="'+prefix+'inp'+i+'" type="text" placeholder="?" autocomplete="off" spellcheck="false"><button class="btn-free-check" onclick="checkFS(\''+prefix+'\','+i+')">Vérifier</button></div><div class="free-fb" id="'+prefix+'fb'+i+'"></div>';
+  _cbs[prefix+i]=onDone;
+}
+function checkFS(prefix,i){
+  var card=document.getElementById(prefix+i);if(card.classList.contains('answered'))return;
+  var exs=prefix==='f1'?free1Exs:free2Exs,ex=exs[i],inp=document.getElementById(prefix+'inp'+i),fb=document.getElementById(prefix+'fb'+i);
+  var val=nsF(inp.value),ok=ex.data.acc.some(function(a){return val===nsF(a);});
+  card.classList.add('answered');inp.disabled=true;card.querySelector('.btn-free-check').disabled=true;
+  if(ok){inp.classList.add('free-ok');fb.className='free-fb show fb-ok';fb.innerHTML='✓ '+ex.data.expl;addScore();}
+  else{inp.classList.add('free-ko');fb.className='free-fb show fb-ko';fb.innerHTML='✗ Réponse : <strong>'+ex.data.acc[0]+'</strong>. '+ex.data.expl;}
+  if(_cbs[prefix+i])_cbs[prefix+i]();
+}
+function buildJu(card,data,i,prefix,onDone){
+  card.innerHTML='<div class="free-ex-label">Exercice '+(i+1)+'</div><div class="free-ex-question">'+data.consigne+'</div><div class="jugement-opts"><button class="jugement-opt-btn" onclick="checkFJ(\''+prefix+'\','+i+',\'A\',this)"><strong>A —</strong> '+data.a+'</button><button class="jugement-opt-btn" onclick="checkFJ(\''+prefix+'\','+i+',\'B\',this)"><strong>B —</strong> '+data.b+'</button></div><div class="free-fb" id="'+prefix+'fb'+i+'"></div>';
+  _cbs[prefix+i]=onDone;
+}
+function checkFJ(prefix,i,choice,btn){
+  var card=document.getElementById(prefix+i);if(card.classList.contains('answered'))return;
+  var exs=prefix==='f1'?free1Exs:free2Exs,ex=exs[i],fb=document.getElementById(prefix+'fb'+i);
+  card.classList.add('answered');card.querySelectorAll('.jugement-opt-btn').forEach(function(b){b.disabled=true;});
+  if(choice===ex.data.ok){btn.classList.add('jug-correct');fb.className='free-fb show fb-ok';fb.innerHTML='✓ '+ex.data.expl;addScore();}
+  else{btn.classList.add('jug-wrong');card.querySelectorAll('.jugement-opt-btn')[choice==='A'?1:0].classList.add('jug-correct');fb.className='free-fb show fb-ko';fb.innerHTML='✗ '+ex.data.expl;}
+  if(_cbs[prefix+i])_cbs[prefix+i]();
+}
+
+function initFree1(){
+  free1Exs=shuffle(FREE_POOL.slice()).slice(0,5);free1Done=0;
+  var c=document.getElementById('free1-container');c.innerHTML='';
+  free1Exs.forEach(function(ex,i){
+    _cbs['f1'+i]=function(){free1Done++;if(free1Done>=free1Exs.length)setTimeout(function(){document.getElementById('btn-to-free2').classList.add('show');document.getElementById('btn-to-free2').scrollIntoView({behavior:'smooth',block:'nearest'});},600);};
+    c.appendChild(buildFreeCard(ex,i,'f1',_cbs['f1'+i]));
+  });
+}
+function initFree2(){
+  var used=free1Exs.map(function(e){return e.data.q||e.data.consigne;});
+  var pool=FREE_POOL.filter(function(e){return used.indexOf(e.data.q||e.data.consigne)<0;});
+  free2Exs=shuffle(pool).slice(0,5);free2Done=0;
+  var c=document.getElementById('free2-container');c.innerHTML='';
+  free2Exs.forEach(function(ex,i){
+    _cbs['f2'+i]=function(){free2Done++;if(free2Done>=free2Exs.length)setTimeout(function(){document.getElementById('btn-to-bilan').classList.add('show');document.getElementById('btn-to-bilan').scrollIntoView({behavior:'smooth',block:'nearest'});},600);};
+    c.appendChild(buildFreeCard(ex,i,'f2',_cbs['f2'+i]));
+  });
+}
+
+function showBilan(){
+  var g1Steps=G1[g1Idx]?G1[g1Idx].etapes.length:4,g2Steps=G2[g2Idx]?G2[g2Idx].etapes.length:3,total=g1Steps+g2Steps+10;
+  document.getElementById('bilan-score').textContent=score;
+  document.getElementById('bilan-total-txt').textContent='/ '+total+' pts';
+  var pct=score/total,title,msg;
+  if(pct>=0.8){title='Excellent !';msg='Tu maîtrises les fonctions — images, antécédents, lecture de courbe et fonctions affines/linéaires !';}
+  else if(pct>=0.6){title='Bon travail !';msg='Bonne base ! Revois la distinction image/antécédent et la lecture des coefficients a et b dans f(x)=ax+b.';}
+  else{title='Continue !';msg='L\'essentiel : image = remplacer x, antécédent = résoudre f(x)=valeur. Dans ax+b, a=pente et b=ordonnée à l\'origine.';}
+  document.getElementById('bilan-title').textContent=title;document.getElementById('bilan-msg').textContent=msg;
+  var s=[Math.ceil(total*.4),Math.ceil(total*.7),Math.ceil(total*.9)];
+  ['star1','star2','star3'].forEach(function(id,i){var el=document.getElementById(id);if(score>=s[i]){(function(e,d){setTimeout(function(){e.classList.add('earned');},d);})(el,300+i*400);}else el.style.filter='grayscale(1)';});
+  if(pct>=0.6)lanceConfetti();
+}
+function lanceConfetti(){var cols=['#0f766e','#5eead4','#059669','#d97706','#0369a1'];for(var i=0;i<50;i++){var el=document.createElement('div');el.className='confetti-piece';el.style.cssText='left:'+Math.random()*100+'vw;background:'+cols[Math.floor(Math.random()*5)]+';animation-duration:'+(1.5+Math.random()*2)+'s;animation-delay:'+Math.random()*1.2+'s;width:'+(6+Math.random()*7)+'px;height:'+(6+Math.random()*7)+'px;border-radius:'+(Math.random()>.5?'50%':'2px')+';';document.body.appendChild(el);setTimeout(function(){if(el.parentNode)el.remove();},4000);}}
+</script>
+</body>
+</html>

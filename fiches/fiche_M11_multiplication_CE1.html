@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>M11 — La multiplication | L'Atelier du Devoir</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--acc:#7c3aed;--acc-pale:#f5f3ff;--acc-mid:#c4b5fd;--acc-dark:#5b21b6;--mint:#059669;--mint-pale:#d1fae5;--mint-deep:#047857;--coral:#dc2626;--coral-pale:#fee2e2;--sun:#d97706;--sun-pale:#fef3c7;--radius:18px;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Fredoka One',cursive;background:#f5f3ff;color:#1e293b;font-size:20px;line-height:1.5;}
+.header{background:white;border-bottom:4px solid var(--acc-pale);position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.1);}
+.header-top{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;}
+.logo{font-size:1.1rem;color:var(--acc);text-decoration:none;}
+.score-badge{background:var(--acc);color:white;font-size:.9rem;padding:6px 16px;border-radius:20px;}
+.steps-wrap{padding:0 16px 8px;}
+.steps{display:flex;gap:5px;}
+.step{flex:1;height:10px;border-radius:10px;background:#e9d5ff;transition:all .4s;}
+.step.done{background:#10b981;}.step.active{background:var(--acc);}
+.main{max-width:640px;margin:0 auto;padding:18px 14px 100px;}
+.phase{display:none;}.phase.active{display:block;}
+.accroche{background:white;border-radius:var(--radius);padding:22px 20px;margin-bottom:20px;border:3px solid var(--acc-pale);text-align:center;}
+.accroche .big-icon{font-size:4rem;margin-bottom:10px;}
+.accroche h1{font-size:1.75rem;color:var(--acc);margin-bottom:8px;}
+.accroche p{font-family:'Nunito',sans-serif;font-size:.92rem;color:#64748b;margin-bottom:12px;}
+.meta-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
+.meta-tag{background:var(--acc-pale);border-radius:20px;padding:5px 16px;font-size:.78rem;color:var(--acc);}
+.lecon-card{background:white;border-radius:var(--radius);padding:22px 18px;margin-bottom:18px;border:3px solid var(--acc-pale);}
+.lecon-card h2{font-size:1.25rem;color:var(--acc);margin-bottom:18px;}
+.lecon-block{display:none;}.lecon-block.revealed{display:block;}
+.bloc-titre{font-size:1.15rem;color:var(--acc);margin-bottom:14px;}
+.sep{margin:20px 0;border:none;border-top:3px dashed #e9d5ff;}
+.ugo-box{background:white;border:3px solid var(--acc-pale);border-radius:var(--radius);padding:15px 18px;margin:14px 0;display:flex;gap:12px;align-items:flex-start;}
+.ugo-box .ugo{font-size:2.3rem;flex-shrink:0;}
+.ugo-box p{font-family:'Nunito',sans-serif;font-size:.92rem;color:#475569;line-height:1.7;}
+.ugo-box p strong{color:var(--acc);}
+.info-box{background:var(--acc-pale);border-left:6px solid var(--acc);border-radius:0 14px 14px 0;padding:14px 18px;margin:14px 0;font-family:'Nunito',sans-serif;font-size:.92rem;line-height:1.9;}
+.info-box strong{color:var(--acc-dark);}
+/* Groupes visuels */
+.groupes-viz{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:14px 0;}
+.groupe{background:var(--acc-pale);border:2px solid var(--acc-mid);border-radius:12px;padding:10px 14px;text-align:center;min-width:60px;}
+.groupe .dots{font-size:1.5rem;letter-spacing:3px;}
+.groupe small{font-family:'Nunito',sans-serif;font-size:.72rem;color:#64748b;display:block;margin-top:4px;}
+/* Équivalence + et × */
+.equiv-box{background:var(--acc-pale);border-radius:14px;padding:14px 18px;margin:12px 0;display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:center;}
+.equiv-box .add-form{font-family:'Nunito',sans-serif;font-size:.88rem;color:#475569;flex:1;min-width:120px;text-align:center;}
+.equiv-box .fleche{font-size:1.8rem;color:var(--acc);}
+.equiv-box .mult-form{font-size:1.3rem;color:var(--acc-dark);text-align:center;}
+/* Tables */
+.table-grille{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:14px 0;}
+.table-cell{background:white;border:2px solid var(--acc-mid);border-radius:10px;padding:8px 4px;text-align:center;font-size:.95rem;}
+.table-cell.head{background:var(--acc);color:white;font-size:.85rem;}
+.table-cell.hl{background:var(--sun-pale);border-color:var(--sun);font-weight:800;}
+.btn-compris{margin-top:18px;padding:14px 30px;border-radius:38px;font-size:1.1rem;background:var(--acc);color:white;border:none;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:8px;box-shadow:0 4px 14px rgba(124,58,237,.35);}
+.btn-compris:hover{background:var(--acc-dark);transform:translateY(-2px);}
+.btn-compris:disabled{opacity:.4;cursor:default;transform:none;}
+.guided-box{background:white;border:3px solid var(--acc);border-radius:var(--radius);padding:20px 18px;margin-bottom:16px;}
+.guided-title{font-size:1rem;color:var(--acc);margin-bottom:16px;background:var(--acc-pale);padding:10px 16px;border-radius:12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.tries-b{font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:800;color:var(--coral);background:#fee2e2;padding:3px 12px;border-radius:20px;margin-left:auto;}
+.q-box{border:3px solid #e9d5ff;border-radius:14px;padding:16px;margin-bottom:10px;opacity:.5;pointer-events:none;}
+.q-box.active{opacity:1;pointer-events:all;border-color:var(--acc-mid);}
+.q-box.correct{border-color:var(--mint);background:var(--mint-pale);opacity:1;}
+.q-num{font-family:'Nunito',sans-serif;font-size:.65rem;font-weight:800;color:#94a3b8;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;}
+.q-text{font-size:1.05rem;color:var(--acc-dark);margin-bottom:14px;line-height:1.5;}
+.hint-box{font-family:'Nunito',sans-serif;font-size:.86rem;color:#78350f;background:var(--sun-pale);border-radius:10px;padding:10px 14px;margin-bottom:10px;display:none;}
+.hint-box.show{display:block;}
+.opts{display:flex;flex-direction:column;gap:10px;}
+.opt{padding:13px 16px;border-radius:13px;border:3px solid #e9d5ff;background:white;font-size:1rem;cursor:pointer;text-align:left;transition:all .2s;}
+.opt:hover:not(:disabled){border-color:var(--acc);background:var(--acc-pale);}
+.opt:disabled{cursor:default;}
+.opt.ok{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.opt.ko{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
+.fb{margin-top:10px;padding:10px 14px;border-radius:12px;font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:800;display:none;}
+.fb.show{display:block;}
+.fb.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.fb.ko{background:var(--coral-pale);color:#b91c1c;}
+.reset-box{background:white;border:3px solid var(--acc);border-radius:var(--radius);padding:22px;text-align:center;margin-bottom:16px;display:none;}
+.reset-box.show{display:block;}
+.reset-box .r-ugo{font-size:3.2rem;margin-bottom:8px;}
+.reset-box h3{font-size:1.2rem;color:var(--acc);margin-bottom:8px;}
+.reset-box p{font-family:'Nunito',sans-serif;font-size:.9rem;color:#64748b;margin-bottom:14px;line-height:1.7;}
+.btn-reset{padding:12px 26px;border-radius:28px;font-size:.95rem;background:var(--acc);color:white;border:none;cursor:pointer;}
+.free-card{background:white;border:3px solid var(--acc-pale);border-radius:var(--radius);padding:18px;margin-bottom:14px;}
+.free-num{font-family:'Nunito',sans-serif;font-size:.7rem;font-weight:800;color:var(--acc);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;}
+.free-q{font-size:1.05rem;color:var(--acc-dark);margin-bottom:14px;background:var(--acc-pale);border-radius:12px;padding:12px 16px;line-height:1.5;}
+.free-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.free-opt{padding:12px;border-radius:13px;font-size:1rem;border:3px solid #e9d5ff;background:white;cursor:pointer;transition:all .2s;text-align:center;}
+.free-opt:hover{border-color:var(--acc);background:var(--acc-pale);}
+.free-opt.ok{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.free-opt.ko{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
+.free-opt.reveal{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.free-fb{margin-top:10px;padding:10px 14px;border-radius:12px;font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:800;display:none;}
+.free-fb.show{display:block;}
+.free-fb.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.free-fb.ko{background:var(--coral-pale);color:#b91c1c;}
+.btn-suite{margin-top:16px;padding:13px 26px;border-radius:32px;font-size:1rem;background:var(--acc);color:white;border:none;cursor:pointer;display:none;align-items:center;gap:8px;box-shadow:0 4px 14px rgba(124,58,237,.3);transition:all .2s;}
+.btn-suite.show{display:inline-flex;}
+.btn-suite:hover{background:var(--acc-dark);transform:translateY(-2px);}
+.bilan-card{background:white;border-radius:var(--radius);padding:28px 20px;text-align:center;border:3px solid var(--acc-pale);}
+.bilan-ugo{font-size:4.5rem;margin-bottom:10px;display:block;}
+.bilan-title{font-size:2rem;color:var(--acc);margin-bottom:8px;}
+.bilan-msg{font-family:'Nunito',sans-serif;font-size:.95rem;color:#64748b;margin-bottom:20px;line-height:1.8;}
+.stars-row{display:flex;justify-content:center;gap:14px;margin-bottom:18px;}
+.star-big{font-size:3rem;filter:grayscale(1);transition:all .5s;}
+.star-big.earned{filter:none;animation:starPop .5s ease both;}
+@keyframes starPop{0%{transform:scale(0);}60%{transform:scale(1.3);}100%{transform:scale(1);}}
+.score-circle{width:115px;height:115px;border-radius:50%;background:var(--acc);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 20px;color:white;box-shadow:0 6px 20px rgba(124,58,237,.4);}
+.score-num{font-size:2.2rem;line-height:1;}
+.score-sub{font-family:'Nunito',sans-serif;font-size:.65rem;opacity:.85;}
+.memo{background:var(--acc-pale);border-radius:var(--radius);padding:16px 18px;margin:16px 0;text-align:left;}
+.memo h3{font-size:.9rem;color:var(--acc);margin-bottom:12px;}
+.memo-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media(max-width:400px){.memo-grid{grid-template-columns:1fr;}.free-opts{grid-template-columns:1fr;}}
+.memo-item{background:white;border-radius:12px;padding:11px 13px;border:2px solid var(--acc-pale);}
+.memo-item strong{color:var(--acc);display:block;margin-bottom:3px;}
+.memo-item span{font-family:'Nunito',sans-serif;font-size:.8rem;color:#475569;line-height:1.6;}
+.bilan-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:18px;}
+.btn-bilan{padding:13px 22px;border-radius:30px;font-size:.95rem;cursor:pointer;border:none;transition:all .2s;}
+.btn-bilan.primary{background:var(--acc);color:white;}
+.btn-bilan.secondary{background:var(--acc-pale);color:var(--acc);border:3px solid var(--acc);}
+.btn-bilan:hover{transform:translateY(-2px);}
+.confetti-piece{position:fixed;border-radius:3px;top:-20px;animation:fall linear both;pointer-events:none;z-index:9999;}
+@keyframes fall{0%{transform:translateY(0) rotate(0deg);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
+@media print{body{background:white;}.phase{display:block!important;}.btn-compris,.btn-suite,.bilan-card,.ugo-box{display:none!important;}}
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="header-top">
+    <a href="../6-9ans.html" class="logo">🦉 L'Atelier du Devoir</a>
+    <div class="score-badge">⭐ <span id="score-display">0</span></div>
+  </div>
+  <div class="steps-wrap">
+    <div class="steps">
+      <div class="step active" id="s0"></div>
+      <div class="step" id="s1"></div>
+      <div class="step" id="s2"></div>
+      <div class="step" id="s3"></div>
+      <div class="step" id="s4"></div>
+      <div class="step" id="s5"></div>
+    </div>
+  </div>
+</header>
+
+<main class="main">
+
+<div class="accroche">
+  <div class="big-icon">✖️</div>
+  <h1>La multiplication !</h1>
+  <p style="font-family:'Nunito',sans-serif;">Multiplier, c'est additionner vite ! 3 × 4 = 4 + 4 + 4. Découvre cette super astuce ! 🌟</p>
+  <div class="meta-row">
+    <span class="meta-tag">CE1</span>
+    <span class="meta-tag">⭐ Facile</span>
+    <span class="meta-tag">🔢 Maths</span>
+  </div>
+</div>
+
+<div class="phase active" id="phase-lecon">
+  <div class="lecon-card">
+    <h2>📖 La leçon</h2>
+
+    <!-- BLOC 0 -->
+    <div class="lecon-block revealed" id="bloc-0">
+      <div class="bloc-titre">① Multiplier = additionner vite !</div>
+      <div class="ugo-box">
+        <span class="ugo">🦉</span>
+        <p>Il y a <strong>3 groupes de 4 pommes</strong>. On peut écrire 4 + 4 + 4 = 12. Ou plus vite : <strong>3 × 4 = 12</strong> ! La multiplication, c'est une addition répétée ! 🍎</p>
+      </div>
+
+      <!-- Groupes visuels -->
+      <div class="groupes-viz">
+        <div class="groupe"><div class="dots">🍎🍎🍎🍎</div><small>groupe 1</small></div>
+        <div class="groupe"><div class="dots">🍎🍎🍎🍎</div><small>groupe 2</small></div>
+        <div class="groupe"><div class="dots">🍎🍎🍎🍎</div><small>groupe 3</small></div>
+      </div>
+
+      <div class="equiv-box">
+        <div class="add-form">4 + 4 + 4<br><span style="font-size:.78rem;color:#94a3b8;">(addition répétée)</span></div>
+        <div class="fleche">=</div>
+        <div class="mult-form">3 × 4 = 12<br><span style="font-family:'Nunito',sans-serif;font-size:.78rem;color:#94a3b8;">3 fois 4</span></div>
+      </div>
+
+      <div class="info-box">
+        <strong>3 × 4 se lit "3 fois 4" :</strong><br>
+        On prend le nombre <strong>4</strong> → <strong>3 fois</strong>.<br>
+        Le signe × s'appelle <strong>multiplié par</strong>.<br>
+        Le résultat s'appelle le <strong>produit</strong>.
+      </div>
+
+      <button class="btn-compris" onclick="revealBloc(1)">J'ai compris ! 🎉</button>
+    </div>
+
+    <!-- BLOC 1 -->
+    <div class="lecon-block" id="bloc-1">
+      <hr class="sep">
+      <div class="bloc-titre">② Exemples avec les groupes</div>
+      <div class="ugo-box">
+        <span class="ugo">🦉</span>
+        <p>Regarde comment on passe de l'addition à la multiplication. C'est toujours la même idée : <strong>groupes égaux</strong> ! 😊</p>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:10px;margin:14px 0;">
+        <div style="background:var(--acc-pale);border-radius:14px;padding:13px 16px;">
+          <div style="font-size:1.1rem;color:var(--acc-dark);margin-bottom:6px;">2 groupes de 5 🌟🌟🌟🌟🌟 | 🌟🌟🌟🌟🌟</div>
+          <div style="font-family:'Nunito',sans-serif;font-size:.88rem;color:#475569;">5 + 5 = <strong>2 × 5 = 10</strong></div>
+        </div>
+        <div style="background:var(--mint-pale);border-radius:14px;padding:13px 16px;border:2px solid var(--mint);">
+          <div style="font-size:1.1rem;color:var(--mint-deep);margin-bottom:6px;">4 groupes de 3 🔵🔵🔵 | 🔵🔵🔵 | 🔵🔵🔵 | 🔵🔵🔵</div>
+          <div style="font-family:'Nunito',sans-serif;font-size:.88rem;color:#475569;">3 + 3 + 3 + 3 = <strong>4 × 3 = 12</strong></div>
+        </div>
+        <div style="background:var(--sun-pale);border-radius:14px;padding:13px 16px;border:2px solid var(--sun);">
+          <div style="font-size:1.1rem;color:var(--acc-dark);margin-bottom:6px;">5 groupes de 2 🌈🌈 | 🌈🌈 | 🌈🌈 | 🌈🌈 | 🌈🌈</div>
+          <div style="font-family:'Nunito',sans-serif;font-size:.88rem;color:#475569;">2 + 2 + 2 + 2 + 2 = <strong>5 × 2 = 10</strong></div>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <strong>Propriété importante :</strong><br>
+        3 × 4 = 4 × 3 = 12 ! L'ordre ne change pas le résultat.<br>
+        On peut toujours retourner la multiplication ! 🔄
+      </div>
+
+      <button class="btn-compris" onclick="revealBloc(2)">J'ai compris ! 🎉</button>
+    </div>
+
+    <!-- BLOC 2 -->
+    <div class="lecon-block" id="bloc-2">
+      <hr class="sep">
+      <div class="bloc-titre">③ Les tables de × 2 et × 5</div>
+      <div class="ugo-box">
+        <span class="ugo">🦉</span>
+        <p>Voici les premières tables ! La table de <strong>2</strong> (compter de 2 en 2) et la table de <strong>5</strong> (compter de 5 en 5). 😊</p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0;">
+        <div>
+          <div style="font-family:'Nunito',sans-serif;font-size:.82rem;font-weight:800;color:var(--acc);margin-bottom:8px;text-align:center;">Table de × 2</div>
+          <div style="display:flex;flex-direction:column;gap:4px;">
+            <div style="background:var(--acc-pale);border-radius:8px;padding:6px 10px;font-size:.95rem;display:flex;justify-content:space-between;"><span>1 × 2</span><strong>= 2</strong></div>
+            <div style="background:var(--acc-pale);border-radius:8px;padding:6px 10px;font-size:.95rem;display:flex;justify-content:space-between;"><span>2 × 2</span><strong>= 4</strong></div>
+            <div style="background:var(--acc-pale);border-radius:8px;padding:6px 10px;font-size:.95rem;display:flex;justify-content:space-between;"><span>3 × 2</span><strong>= 6</strong></div>
+            <div style="background:var(--acc-pale);border-radius:8px;padding:6px 10px;font-size:.95rem;display:flex;justify-content:space-between;"><span>4 × 2</span><strong>= 8</strong></div>
+            <div style="background:var(--acc-pale);border-radius:8px;padding:6px 10px;font-size:.95rem;display:flex;justify-content:space-between;"><span>5 × 2</span><strong>= 10</strong></div>
+            <div style="background:var(--sun-pale);border-radius:8px;padding:6px 10px;font-size:.95rem;display:flex;justify-content:space-between;"><span>6 × 2</span><strong>= 12</strong></div>
+            <div style="background:var(--sun-pale);border-radius:8px;padding:6px 10px;font-size:.95rem;display:flex;justify-content:space-between;"><span>7 × 2</span><strong>= 14</strong></div>
+            <div style="background:var(--sun-pale);border-radius:8px;padding:6px 10px;font-size:.95rem;display:flex;justify-content:space-between;"><span>8 × 2</span><strong>= 16</strong></div>
+            <div style="background:var(--sun-pale);border-radius:8px;padding:6px 10px;font-size:.95rem;display:flex;justify-content:space-between;"><span>9 × 2</span><strong>= 18</strong></div>
+            <div style="background:var(--sun-pale);border-radius:8px;padding:6px 10px;font-size:.95rem;display:flex;justify-content:space-between;"><span>10 × 2</span><strong>= 20</strong></div>
+          </div>
+        </div>
+        <div>
+          <div style="font-family:'Nunito',sans-serif;font-size:.82rem;font-weight:800;color:var(--mint-deep);margin-bottom:8px;text-align:center;">Table de × 5</div>
+          <div style="display:flex;flex-direction:column;gap:4px;">
+            <div style="background:var(--mint-pale);border-radius:8px;padding:6px 10px;font-size:.95rem;display:flex;justify-content:space-between;"><span>1 × 5</span><strong>= 5</strong></div>
+            <div style="background:var(--mint-pale);border-radius:8px;padding:6px 10px;font-size:.95rem;display:flex;justify-content:space-between;"><span>2 × 5</span><strong>= 10</strong></div>
+            <div style="background:var(--mint-pale);border-radius:8px;padding:6px 10px;font-size:.95rem;display:flex;justify-content:space-between;"><span>3 × 5</span><strong>= 15</strong></div>
+            <div style="background:var(--mint-pale);border-radius:8px;padding:6px 10px;font-size:.95rem;display:flex;justify-content:space-between;"><span>4 × 5</span><strong>= 20</strong></div>
+            <div style="background:var(--mint-pale);border-radius:8px;padding:6px 10px;font-size:.95rem;display:flex;justify-content:space-between;"><span>5 × 5</span><strong>= 25</strong></div>
+            <div style="background:#fef9c3;border-radius:8px;padding:6px 10px;font-size:.95rem;display:flex;justify-content:space-between;"><span>6 × 5</span><strong>= 30</strong></div>
+            <div style="background:#fef9c3;border-radius:8px;padding:6px 10px;font-size:.95rem;display:flex;justify-content:space-between;"><span>7 × 5</span><strong>= 35</strong></div>
+            <div style="background:#fef9c3;border-radius:8px;padding:6px 10px;font-size:.95rem;display:flex;justify-content:space-between;"><span>8 × 5</span><strong>= 40</strong></div>
+            <div style="background:#fef9c3;border-radius:8px;padding:6px 10px;font-size:.95rem;display:flex;justify-content:space-between;"><span>9 × 5</span><strong>= 45</strong></div>
+            <div style="background:#fef9c3;border-radius:8px;padding:6px 10px;font-size:.95rem;display:flex;justify-content:space-between;"><span>10 × 5</span><strong>= 50</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <strong>Astuce × 5 :</strong> les résultats finissent toujours par 0 ou 5 !<br>
+        <strong>Astuce × 2 :</strong> les résultats sont toujours pairs (2, 4, 6, 8…)
+      </div>
+
+      <button class="btn-compris" onclick="goPhase('g1',1)">On joue ! 🚀</button>
+    </div>
+  </div>
+</div>
+
+<!-- GUIDÉ 1 -->
+<div class="phase" id="phase-g1">
+  <div class="ugo-box">
+    <span class="ugo">🦉</span>
+    <p>Super ! <strong>3 questions</strong> sur la notion de multiplication. <strong>3 essais</strong> ! 💜</p>
+  </div>
+  <div id="g1-reset" class="reset-box">
+    <div class="r-ugo">🦉</div>
+    <h3>On recommence !</h3>
+    <p>Multiplier = additionner vite ! 3 × 4 = 4 + 4 + 4 = 12. Compte les groupes ! 💪</p>
+    <button class="btn-reset" onclick="initG1()">↺ Réessayer !</button>
+  </div>
+  <div id="g1-zone"></div>
+  <button class="btn-suite" id="btn-g1-to-g2" onclick="goPhase('g2',2)">Encore des questions ! 🌟</button>
+</div>
+
+<!-- GUIDÉ 2 -->
+<div class="phase" id="phase-g2">
+  <div class="ugo-box">
+    <span class="ugo">🦉</span>
+    <p>Excellent ! <strong>3 questions</strong> sur les tables de × 2 et × 5. Tu vas y arriver ! 🏆</p>
+  </div>
+  <div id="g2-reset" class="reset-box">
+    <div class="r-ugo">🦉</div>
+    <h3>On recommence !</h3>
+    <p>× 2 : résultats pairs. × 5 : finissent par 0 ou 5 ! 💪</p>
+    <button class="btn-reset" onclick="initG2()">↺ Réessayer !</button>
+  </div>
+  <div id="g2-zone"></div>
+  <button class="btn-suite" id="btn-g2-to-free" onclick="goPhase('free',3)">Super ! Exercices libres 🎯</button>
+</div>
+
+<div class="phase" id="phase-free">
+  <div class="ugo-box"><span class="ugo">🦉</span><p><strong>5 questions !</strong> 💜</p></div>
+  <div id="free1-zone"></div>
+  <button class="btn-suite" id="btn-free-to-free2" onclick="goPhase('free2',4)">5 dernières ! 💪</button>
+</div>
+
+<div class="phase" id="phase-free2">
+  <div class="ugo-box"><span class="ugo">🦉</span><p>Encore <strong>5 questions</strong> ! 🏁</p></div>
+  <div id="free2-zone"></div>
+  <button class="btn-suite" id="btn-free2-to-bilan" onclick="goPhase('bilan',5)">🌟 Mon résultat !</button>
+</div>
+
+<div class="phase" id="phase-bilan">
+  <div class="bilan-card">
+    <span class="bilan-ugo">🦉</span>
+    <h2 class="bilan-title" id="bilan-title">Bravo !</h2>
+    <p class="bilan-msg" id="bilan-msg"></p>
+    <div class="stars-row">
+      <span class="star-big" id="etoile1">⭐</span>
+      <span class="star-big" id="etoile2">⭐</span>
+      <span class="star-big" id="etoile3">⭐</span>
+    </div>
+    <div class="score-circle">
+      <span class="score-num" id="bilan-pts">0</span>
+      <span class="score-sub" id="bilan-sur">/ 0 pts</span>
+    </div>
+    <div class="memo">
+      <h3>📝 Ce que j'ai appris</h3>
+      <div class="memo-grid">
+        <div class="memo-item"><strong>× = additionner vite</strong><span>3 × 4 = 4+4+4 = 12<br>3 groupes de 4</span></div>
+        <div class="memo-item"><strong>L'ordre importe peu</strong><span>3 × 4 = 4 × 3<br>même résultat !</span></div>
+        <div class="memo-item"><strong>Table × 2</strong><span>résultats pairs<br>2, 4, 6, 8, 10…</span></div>
+        <div class="memo-item"><strong>Table × 5</strong><span>finissent par 0 ou 5<br>5, 10, 15, 20…</span></div>
+      </div>
+    </div>
+    <div class="bilan-btns">
+      <button class="btn-bilan secondary" onclick="location.reload()">↺ Recommencer</button>
+      <button class="btn-bilan primary" onclick="location.href='../6-9ans.html'">← Les fiches</button>
+    </div>
+  </div>
+</div>
+</main>
+
+<script>
+var G1=[
+  {titre:"✖️ Multiplication = addition répétée",etapes:[
+    {q:"3 groupes de 4 pommes. On peut écrire 4 + 4 + 4 = ?",opts:["12","7","8","16"],ok:0,
+     hint:"4 + 4 + 4 = ?",
+     expl_ok:"12 ! 4+4+4=12. Et on écrit aussi 3 × 4 = 12. 🎉",
+     expl_ko:"4+4+4=12."},
+    {q:"3 × 4 = ? C'est pareil que 4 + 4 + 4 = ?",opts:["12","7","8","34"],ok:0,
+     hint:"3 × 4 = 3 fois 4 = 4+4+4.",
+     expl_ok:"12 ! 3 × 4 = 12. 🌟",
+     expl_ko:"3 × 4 = 4+4+4 = 12."},
+    {q:"5 + 5 + 5 = ? On peut aussi écrire ?",opts:["15 et 3×5","15 et 5×3","10 et 2×5","20 et 4×5"],ok:0,
+     hint:"5+5+5 : combien de 5 ? → c'est ? fois 5.",
+     expl_ok:"15 et 3×5 ! Trois fois 5 = 15. 🎉",
+     expl_ko:"5+5+5 = 3 fois 5 = 3×5 = 15."}
+  ]},
+  {titre:"✖️ Lire une multiplication",etapes:[
+    {q:"2 × 5 se lit...",opts:["2 fois 5","2 plus 5","25","5 moins 2"],ok:0,
+     hint:"Le signe × se lit 'fois'.",
+     expl_ok:"2 fois 5 ! × se lit 'fois'. Donc 2 × 5 = 5 + 5 = 10. 🌟",
+     expl_ko:"× se lit 'fois' → 2 × 5 = 2 fois 5."},
+    {q:"4 × 3 = combien de groupes de 3 ?",opts:["4 groupes","3 groupes","7 groupes","12 groupes"],ok:0,
+     hint:"4 × 3 = 4 fois 3 = 4 groupes de 3.",
+     expl_ok:"4 groupes ! 4 × 3 = 4 groupes de 3 = 3+3+3+3 = 12. 🎉",
+     expl_ko:"4 × 3 = 4 fois 3 = 4 groupes de 3."},
+    {q:"3 × 4 = 4 × 3 ?",opts:["Oui ! L'ordre ne change pas le résultat","Non, ils sont différents"],ok:0,
+     hint:"3 × 4 = 12. 4 × 3 = 12. Même résultat !",
+     expl_ok:"Oui ! 3×4 = 4×3 = 12. L'ordre ne change rien ! 🔄 🌟",
+     expl_ko:"3×4=12 et 4×3=12. Même résultat → oui !"}
+  ]},
+  {titre:"✖️ Compter les groupes",etapes:[
+    {q:"🌟🌟 | 🌟🌟 | 🌟🌟 | 🌟🌟 → Quelle multiplication ?",opts:["4 × 2 = 8","2 × 4 = 8","4 + 2 = 6","3 × 2 = 6"],ok:0,
+     hint:"Combien de groupes ? Combien dans chaque groupe ?",
+     expl_ok:"4 × 2 = 8 ! (ou 2 × 4 = 8) 4 groupes de 2 étoiles. 🎉",
+     expl_ko:"4 groupes de 2 → 4 × 2 = 8."},
+    {q:"🔵🔵🔵 | 🔵🔵🔵 → Quelle addition ?",opts:["3 + 3","2 + 3","6 + 0","3 + 2"],ok:0,
+     hint:"2 groupes de 3 → ? + ?",
+     expl_ok:"3 + 3 ! 2 groupes de 3 = 3+3 = 2×3 = 6. 🌟",
+     expl_ko:"2 groupes de 3 → 3+3."},
+    {q:"2 × 3 = 3 + 3 = ?",opts:["6","5","8","9"],ok:0,
+     hint:"3 + 3 = ?",
+     expl_ok:"6 ! 2 × 3 = 3+3 = 6. 🎉",
+     expl_ko:"3+3=6."}
+  ]},
+  {titre:"✖️ Trouver le résultat",etapes:[
+    {q:"5 × 2 = ?",opts:["10","7","12","8"],ok:0,
+     hint:"5 fois 2 = 2+2+2+2+2 = ?",
+     expl_ok:"10 ! 5×2 = 2+2+2+2+2 = 10. 🌟",
+     expl_ko:"5×2 = 2+2+2+2+2 = 10."},
+    {q:"2 × 6 = ?",opts:["12","8","10","14"],ok:0,
+     hint:"2 fois 6 = 6+6 = ?",
+     expl_ok:"12 ! 2×6 = 6+6 = 12. 🎉",
+     expl_ko:"2×6 = 6+6 = 12."},
+    {q:"3 × 5 = ?",opts:["15","10","20","8"],ok:0,
+     hint:"3 fois 5 = 5+5+5 = ?",
+     expl_ok:"15 ! 3×5 = 5+5+5 = 15. 🌟",
+     expl_ko:"3×5 = 5+5+5 = 15."}
+  ]}
+];
+
+var G2=[
+  {titre:"✖️ Table de × 2",etapes:[
+    {q:"3 × 2 = ?",opts:["6","4","8","5"],ok:0,
+     hint:"3 fois 2 = 2+2+2 = ?",
+     expl_ok:"6 ! 3×2=6. 🎉",
+     expl_ko:"3×2=2+2+2=6."},
+    {q:"7 × 2 = ?",opts:["14","12","16","10"],ok:0,
+     hint:"7 fois 2. Ou : 7 est le 7e résultat de la table de 2 : 2,4,6,8,10,12,14.",
+     expl_ok:"14 ! 7×2=14. 🌟",
+     expl_ko:"7×2=14."},
+    {q:"9 × 2 = ?",opts:["18","16","20","14"],ok:0,
+     hint:"9 fois 2. Compte de 2 en 2 jusqu'au 9e : …18.",
+     expl_ok:"18 ! 9×2=18. 🎉",
+     expl_ko:"9×2=18."}
+  ]},
+  {titre:"✖️ Table de × 5",etapes:[
+    {q:"4 × 5 = ?",opts:["20","15","25","10"],ok:0,
+     hint:"4 fois 5 = 5+5+5+5 = ?",
+     expl_ok:"20 ! 4×5=20. 🌟",
+     expl_ko:"4×5=5+5+5+5=20."},
+    {q:"6 × 5 = ?",opts:["30","25","35","20"],ok:0,
+     hint:"6 fois 5. Table de 5 : 5,10,15,20,25,30.",
+     expl_ok:"30 ! 6×5=30. 🎉",
+     expl_ko:"6×5=30."},
+    {q:"8 × 5 = ?",opts:["40","35","45","50"],ok:0,
+     hint:"8 fois 5. Table de 5 : …35,40.",
+     expl_ok:"40 ! 8×5=40. 🌟",
+     expl_ko:"8×5=40."}
+  ]},
+  {titre:"✖️ Mélange × 2 et × 5",etapes:[
+    {q:"5 × 5 = ?",opts:["25","20","30","10"],ok:0,
+     hint:"5 fois 5 = 5+5+5+5+5 = ?",
+     expl_ok:"25 ! 5×5=25. 🎉",
+     expl_ko:"5×5=25."},
+    {q:"4 × 2 = ?",opts:["8","6","10","4"],ok:0,
+     hint:"4 fois 2 = 2+2+2+2 = ?",
+     expl_ok:"8 ! 4×2=8. 🌟",
+     expl_ko:"4×2=8."},
+    {q:"10 × 5 = ?",opts:["50","45","40","55"],ok:0,
+     hint:"10 fois 5 = la dernière ligne de la table de 5.",
+     expl_ok:"50 ! 10×5=50. 🎉",
+     expl_ko:"10×5=50."}
+  ]},
+  {titre:"✖️ Problèmes de multiplication",etapes:[
+    {q:"Chaque élève a 2 crayons. Il y a 6 élèves. Combien de crayons EN TOUT ?",opts:["12 (6×2)","8 (6+2)","3 (6÷2)","10"],ok:0,
+     hint:"6 élèves × 2 crayons = ?",
+     expl_ok:"12 ! 6×2=12 crayons. 🌟",
+     expl_ko:"6 élèves × 2 crayons = 6×2 = 12."},
+    {q:"5 boîtes de 5 bonbons. Combien de bonbons EN TOUT ?",opts:["25 (5×5)","10 (5+5)","20","30"],ok:0,
+     hint:"5 boîtes × 5 bonbons = ?",
+     expl_ok:"25 ! 5×5=25 bonbons. 🎉",
+     expl_ko:"5×5=25 bonbons."},
+    {q:"3 enfants ont chacun 2 bonbons. 7 × 2 = 14 ?",opts:["Non ! Ici c'est 3×2=6","Oui, 14 c'est juste"],ok:0,
+     hint:"3 enfants × 2 bonbons chacun = ?",
+     expl_ok:"Non ! 3 enfants × 2 bonbons = 3×2 = 6 bonbons (pas 7×2). 🌟",
+     expl_ko:"3 enfants × 2 = 6 bonbons. 7×2=14 ne correspond pas à l'énoncé."}
+  ]}
+];
+
+var FREE_POOL=[
+  {q:"2 × 3 = ?",opts:["6","5"],ok:0,expl:"2×3=3+3=6."},
+  {q:"3 × 2 = ?",opts:["6","8"],ok:0,expl:"3×2=2+2+2=6. Pareil que 2×3 !"},
+  {q:"4 × 2 = ?",opts:["8","6"],ok:0,expl:"4×2=2+2+2+2=8."},
+  {q:"5 × 2 = ?",opts:["10","8"],ok:0,expl:"5×2=2+2+2+2+2=10."},
+  {q:"7 × 2 = ?",opts:["14","12"],ok:0,expl:"7×2=14."},
+  {q:"9 × 2 = ?",opts:["18","16"],ok:0,expl:"9×2=18."},
+  {q:"2 × 5 = ?",opts:["10","8"],ok:0,expl:"2×5=5+5=10."},
+  {q:"3 × 5 = ?",opts:["15","10"],ok:0,expl:"3×5=5+5+5=15."},
+  {q:"4 × 5 = ?",opts:["20","15"],ok:0,expl:"4×5=5+5+5+5=20."},
+  {q:"6 × 5 = ?",opts:["30","25"],ok:0,expl:"6×5=30."},
+  {q:"8 × 5 = ?",opts:["40","35"],ok:0,expl:"8×5=40."},
+  {q:"10 × 2 = ?",opts:["20","18"],ok:0,expl:"10×2=20."},
+  {q:"5 × 5 = ?",opts:["25","20"],ok:0,expl:"5×5=25."},
+  {q:"3 × 5 = 5 + 5 + 5 = ?",opts:["15","10"],ok:0,expl:"3×5=5+5+5=15."},
+  {q:"4 × 2 = 2 × 4 ?",opts:["Oui, même résultat (8)","Non, différent"],ok:0,expl:"Oui ! 4×2=8 et 2×4=8. L'ordre ne change pas !"},
+  {q:"6 × 2 = ?",opts:["12","10"],ok:0,expl:"6×2=12."},
+  {q:"7 × 5 = ?",opts:["35","30"],ok:0,expl:"7×5=35."},
+  {q:"Multiplier c'est...",opts:["Additionner vite !","Soustraire vite"],ok:0,expl:"Multiplier = addition répétée ! 3×4=4+4+4."},
+  {q:"5 boîtes de 2 gâteaux. Combien en tout ?",opts:["10 (5×2)","7 (5+2)"],ok:0,expl:"5×2=10 gâteaux."},
+  {q:"10 × 5 = ?",opts:["50","45"],ok:0,expl:"10×5=50."}
+];
+
+var score=0,g1Idx=0,g2Idx=0;
+var f1Exs=[],f2Exs=[],f1Done=0,f2Done=0;
+var _cb={};
+var _g1tries=0,_g2tries=0;
+
+function shuffle(a){var b=a.slice();for(var i=b.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=b[i];b[i]=b[j];b[j]=t;}return b;}
+function addPt(){score++;document.getElementById('score-display').textContent=score;}
+function updSteps(n){for(var i=0;i<6;i++){var s=document.getElementById('s'+i);if(!s)return;s.classList.remove('active','done');if(i<n)s.classList.add('done');else if(i===n)s.classList.add('active');}}
+function goPhase(ph,si){
+  document.querySelectorAll('.phase').forEach(function(p){p.classList.remove('active');});
+  var el=document.getElementById('phase-'+ph);
+  if(el){el.classList.add('active');setTimeout(function(){el.scrollIntoView({behavior:'smooth',block:'start'});},100);}
+  updSteps(si);
+  if(ph==='g1')initG1();if(ph==='g2')initG2();
+  if(ph==='free')initFree1();if(ph==='free2')initFree2();
+  if(ph==='bilan')showBilan();
+}
+function revealBloc(n){
+  var b=document.getElementById('bloc-'+n);if(!b)return;
+  var p=document.getElementById('bloc-'+(n-1));
+  if(p){var btn=p.querySelector('.btn-compris');if(btn){btn.textContent='✓ Compris !';btn.disabled=true;btn.style.opacity='.4';}}
+  b.classList.add('revealed');
+  setTimeout(function(){var hH=(document.querySelector('.header')||{offsetHeight:0}).offsetHeight;var r=b.getBoundingClientRect();window.scrollTo({top:window.pageYOffset+r.top-hH-16,behavior:'smooth'});},150);
+}
+function makeQBox(step,si,prefix){
+  var so=shuffle(step.opts.map(function(o,oi){return{t:o,i:oi};}));
+  var sb=document.createElement('div');sb.className='q-box'+(si===0?' active':'');sb.id=prefix+'s'+si;
+  sb.innerHTML='<div class="q-num">Question '+(si+1)+'</div>'
+    +'<div class="q-text">'+step.q+'</div>'
+    +'<div class="hint-box" id="'+prefix+'h'+si+'">💡 '+step.hint+'</div>'
+    +'<div class="opts">'+so.map(function(o){return'<button class="opt" onclick="checkQ(\''+prefix+'\','+si+','+o.i+',this)">'+o.t+'</button>';}).join('')+'</div>'
+    +'<div class="fb" id="'+prefix+'f'+si+'"></div>';
+  return sb;
+}
+function initG1(){
+  g1Idx=Math.floor(Math.random()*G1.length);_g1tries=0;
+  document.getElementById('g1-reset').classList.remove('show');
+  document.getElementById('btn-g1-to-g2').classList.remove('show');
+  var v=G1[g1Idx],z=document.getElementById('g1-zone');z.innerHTML='';
+  var box=document.createElement('div');box.className='guided-box';
+  box.innerHTML='<div class="guided-title">'+v.titre+'<span class="tries-b" id="tries-g1">3 essais</span></div><div id="g1-steps"></div>';
+  z.appendChild(box);
+  v.etapes.forEach(function(step,si){document.getElementById('g1-steps').appendChild(makeQBox(step,si,'g1'));});
+}
+function initG2(){
+  g2Idx=Math.floor(Math.random()*G2.length);_g2tries=0;
+  document.getElementById('g2-reset').classList.remove('show');
+  document.getElementById('btn-g2-to-free').classList.remove('show');
+  var v=G2[g2Idx],z=document.getElementById('g2-zone');z.innerHTML='';
+  var box=document.createElement('div');box.className='guided-box';
+  box.innerHTML='<div class="guided-title">'+v.titre+'<span class="tries-b" id="tries-g2">3 essais</span></div><div id="g2-steps"></div>';
+  z.appendChild(box);
+  v.etapes.forEach(function(step,si){document.getElementById('g2-steps').appendChild(makeQBox(step,si,'g2'));});
+}
+function checkQ(prefix,si,ci,btn){
+  var v=prefix==='g1'?G1[g1Idx]:G2[g2Idx];
+  var step=v.etapes[si],sb=document.getElementById(prefix+'s'+si),fb=document.getElementById(prefix+'f'+si);
+  var triesId=prefix==='g1'?'tries-g1':'tries-g2';
+  var tries=prefix==='g1'?_g1tries:_g2tries;
+  if(sb.classList.contains('correct'))return;
+  if(ci===step.ok){
+    btn.classList.add('ok');sb.querySelectorAll('.opt').forEach(function(b){b.disabled=true;});sb.classList.add('correct');
+    if(tries===0){fb.className='fb show ok';fb.innerHTML='✅ '+step.expl_ok+' <span style="font-size:.75rem;color:#065f46">(+1 pt)</span>';addPt();}
+    else{fb.className='fb show ok';fb.innerHTML='✅ '+step.expl_ok;}
+    if(prefix==='g1')_g1tries=0;else _g2tries=0;
+    var el=document.getElementById(triesId);if(el)el.textContent='3 essais';
+    var nx=document.getElementById(prefix+'s'+(si+1));
+    if(nx){nx.classList.add('active');setTimeout(function(){nx.scrollIntoView({behavior:'smooth',block:'nearest'});},350);}
+    else{var btnId=prefix==='g1'?'btn-g1-to-g2':'btn-g2-to-free';setTimeout(function(){var b=document.getElementById(btnId);b.classList.add('show');b.scrollIntoView({behavior:'smooth',block:'nearest'});},550);}
+  }else{
+    btn.classList.add('ko');btn.disabled=true;
+    if(prefix==='g1')_g1tries++;else _g2tries++;
+    var newTries=prefix==='g1'?_g1tries:_g2tries;
+    var el=document.getElementById(triesId);if(el)el.textContent=(3-newTries)+' essai'+(3-newTries>1?'s':'');
+    fb.className='fb show ko';
+    if(newTries<3){fb.innerHTML='❌ Réessaie ! 💪';document.getElementById(prefix+'h'+si).classList.add('show');}
+    else{
+      fb.innerHTML='❌ '+step.expl_ko;
+      var rid=prefix==='g1'?'g1-reset':'g2-reset',zid=prefix==='g1'?'g1-zone':'g2-zone';
+      setTimeout(function(){document.getElementById(rid).classList.add('show');document.getElementById(zid).innerHTML='';document.getElementById(rid).scrollIntoView({behavior:'smooth',block:'start'});},1400);
+    }
+  }
+}
+function buildFree(ex,i,prefix,cb){
+  var card=document.createElement('div');card.className='free-card';card.id=prefix+'c'+i;
+  var so=shuffle(ex.opts.map(function(o,oi){return{t:o,i:oi};}));
+  card.innerHTML='<div class="free-num">Question '+(i+1)+'</div>'
+    +'<div class="free-q">'+ex.q+'</div>'
+    +'<div class="free-opts" id="'+prefix+'fo'+i+'"></div>'
+    +'<div class="free-fb" id="'+prefix+'ff'+i+'"></div>';
+  setTimeout(function(){
+    var ba=document.getElementById(prefix+'fo'+i);
+    so.forEach(function(o){
+      var btn=document.createElement('button');btn.className='free-opt';btn.textContent=o.t;
+      btn.onclick=function(){
+        if(card.classList.contains('done'))return;card.classList.add('done');ba.querySelectorAll('button').forEach(function(b){b.disabled=true;});
+        var fb=document.getElementById(prefix+'ff'+i);
+        if(o.i===ex.ok){btn.classList.add('ok');fb.className='free-fb show ok';fb.innerHTML='✅ '+ex.expl;addPt();}
+        else{btn.classList.add('ko');ba.querySelectorAll('button').forEach(function(b,bi){if(bi===ex.ok)b.classList.add('reveal');});fb.className='free-fb show ko';fb.innerHTML='❌ '+ex.expl;}
+        cb();
+      };ba.appendChild(btn);
+    });
+  },0);
+  return card;
+}
+function initFree1(){
+  f1Exs=shuffle(FREE_POOL.slice()).slice(0,5);f1Done=0;
+  var z=document.getElementById('free1-zone');z.innerHTML='';
+  f1Exs.forEach(function(ex,i){
+    _cb['f1'+i]=function(){f1Done++;if(f1Done>=5)setTimeout(function(){var b=document.getElementById('btn-free-to-free2');b.classList.add('show');b.scrollIntoView({behavior:'smooth',block:'nearest'});},600);};
+    z.appendChild(buildFree(ex,i,'f1',_cb['f1'+i]));
+  });
+}
+function initFree2(){
+  var used=f1Exs.map(function(e){return e.q;});
+  var pool=FREE_POOL.filter(function(e){return used.indexOf(e.q)<0;});
+  f2Exs=shuffle(pool).slice(0,5);f2Done=0;
+  var z=document.getElementById('free2-zone');z.innerHTML='';
+  f2Exs.forEach(function(ex,i){
+    _cb['f2'+i]=function(){f2Done++;if(f2Done>=5)setTimeout(function(){var b=document.getElementById('btn-free2-to-bilan');b.classList.add('show');b.scrollIntoView({behavior:'smooth',block:'nearest'});},600);};
+    z.appendChild(buildFree(ex,i,'f2',_cb['f2'+i]));
+  });
+}
+function showBilan(){
+  var g1n=G1[g1Idx]?G1[g1Idx].etapes.length:3,g2n=G2[g2Idx]?G2[g2Idx].etapes.length:3,tot=g1n+g2n+10;
+  document.getElementById('bilan-pts').textContent=score;
+  document.getElementById('bilan-sur').textContent='/ '+tot+' pts';
+  var pct=score/tot,t,m;
+  if(pct>=.8){t='BRAVO ! 🎉🎊';m:'Tu maîtrises la multiplication ! Ugo est super fier de toi ! 🦉⭐';}
+  else if(pct>=.5){t='Très bien ! 😊🌟';m:'Tu progresses ! Rappelle-toi : multiplier = additionner vite. × 2 résultats pairs, × 5 finissent par 0 ou 5.';}
+  else{t:'Bien essayé ! 💪';m:'3×4 = 4+4+4 = 12. × = additionner vite ! Révise les tables de 2 et 5. Tu peux recommencer ! 🦉';}
+  document.getElementById('bilan-title').textContent=t;
+  document.getElementById('bilan-msg').textContent=m;
+  var s=[Math.ceil(tot*.33),Math.ceil(tot*.66),Math.ceil(tot*.89)];
+  ['etoile1','etoile2','etoile3'].forEach(function(id,i){var el=document.getElementById(id);if(score>=s[i]){(function(e,d){setTimeout(function(){e.classList.add('earned');},d);})(el,300+i*450);}else el.style.filter='grayscale(1)';});
+  if(pct>=.5)confetti();
+}
+function confetti(){var cols=['#7c3aed','#c4b5fd','#059669','#d97706','#0369a1'];for(var i=0;i<65;i++){var el=document.createElement('div');el.className='confetti-piece';el.style.cssText='left:'+Math.random()*100+'vw;background:'+cols[Math.floor(Math.random()*cols.length)]+';animation-duration:'+(1.8+Math.random()*2.2)+'s;animation-delay:'+Math.random()*1.5+'s;width:'+(7+Math.random()*10)+'px;height:'+(7+Math.random()*10)+'px;border-radius:'+(Math.random()>.5?'50%':'4px')+';';document.body.appendChild(el);setTimeout(function(){if(el.parentNode)el.remove();},5000);}}
+</script>
+</body>
+</html>

@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>M04 — La valeur positionnelle | L'Atelier du Devoir</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--acc:#d97706;--acc-pale:#fffbeb;--acc-mid:#fcd34d;--acc-dark:#b45309;--mint:#059669;--mint-pale:#d1fae5;--mint-deep:#047857;--coral:#dc2626;--coral-pale:#fee2e2;--sun:#d97706;--sun-pale:#fef3c7;--radius:18px;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Fredoka One',cursive;background:#fffbeb;color:#1e293b;font-size:20px;line-height:1.5;}
+.header{background:white;border-bottom:4px solid var(--acc-pale);position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.1);}
+.header-top{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;}
+.logo{font-size:1.1rem;color:var(--acc);text-decoration:none;}
+.score-badge{background:var(--acc);color:white;font-size:.9rem;padding:6px 16px;border-radius:20px;}
+.steps-wrap{padding:0 16px 8px;}
+.steps{display:flex;gap:5px;}
+.step{flex:1;height:10px;border-radius:10px;background:#fde68a;transition:all .4s;}
+.step.done{background:#10b981;}.step.active{background:var(--acc);}
+.main{max-width:640px;margin:0 auto;padding:18px 14px 100px;}
+.phase{display:none;}.phase.active{display:block;}
+.accroche{background:white;border-radius:var(--radius);padding:22px 20px;margin-bottom:20px;border:3px solid var(--acc-pale);text-align:center;}
+.accroche .big-icon{font-size:4rem;margin-bottom:10px;}
+.accroche h1{font-size:1.75rem;color:var(--acc);margin-bottom:8px;}
+.accroche p{font-family:'Nunito',sans-serif;font-size:.92rem;color:#64748b;margin-bottom:12px;}
+.meta-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
+.meta-tag{background:var(--acc-pale);border-radius:20px;padding:5px 16px;font-size:.78rem;color:var(--acc);}
+.lecon-card{background:white;border-radius:var(--radius);padding:22px 18px;margin-bottom:18px;border:3px solid var(--acc-pale);}
+.lecon-card h2{font-size:1.25rem;color:var(--acc);margin-bottom:18px;}
+.lecon-block{display:none;}.lecon-block.revealed{display:block;}
+.bloc-titre{font-size:1.15rem;color:var(--acc);margin-bottom:14px;}
+.sep{margin:20px 0;border:none;border-top:3px dashed #fde68a;}
+.ugo-box{background:white;border:3px solid var(--acc-pale);border-radius:var(--radius);padding:15px 18px;margin:14px 0;display:flex;gap:12px;align-items:flex-start;}
+.ugo-box .ugo{font-size:2.3rem;flex-shrink:0;}
+.ugo-box p{font-family:'Nunito',sans-serif;font-size:.92rem;color:#475569;line-height:1.7;}
+.ugo-box p strong{color:var(--acc);}
+/* Tableau dizaines/unités couleur */
+.tab-pos{display:flex;gap:0;margin:16px auto;border-radius:14px;overflow:hidden;border:3px solid var(--acc);}
+.tab-pos .col{flex:1;text-align:center;}
+.tab-pos .col .head{background:var(--acc);color:white;font-size:.9rem;padding:8px 4px;}
+.tab-pos .col .val{font-size:2.8rem;color:var(--acc-dark);padding:14px 4px;background:var(--acc-pale);}
+.tab-pos .col:not(:last-child){border-right:3px solid var(--acc);}
+/* Jetons visuels */
+.jetons{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0;align-items:center;}
+.jeton{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;font-size:1rem;font-weight:800;border:2px solid;}
+.jeton.diz{background:#fef3c7;border-color:var(--acc);color:var(--acc-dark);}
+.jeton.unit{background:#dbeafe;border-color:#3b82f6;color:#1d4ed8;}
+/* Exemples colorés */
+.ex-row{display:flex;align-items:center;gap:12px;background:var(--acc-pale);border-radius:14px;padding:13px 16px;margin-bottom:10px;flex-wrap:wrap;}
+.ex-row .nb{font-size:2.2rem;color:var(--acc-dark);min-width:60px;}
+.ex-row .fleche{font-size:1.5rem;color:var(--acc);}
+.ex-row .detail{font-family:'Nunito',sans-serif;font-size:.88rem;color:#475569;line-height:1.7;flex:1;}
+.ex-row .detail strong{color:var(--acc-dark);}
+.info-box{background:var(--acc-pale);border-left:6px solid var(--acc);border-radius:0 14px 14px 0;padding:14px 18px;margin:14px 0;font-family:'Nunito',sans-serif;font-size:.92rem;line-height:1.9;}
+.info-box strong{color:var(--acc-dark);}
+.btn-compris{margin-top:18px;padding:14px 30px;border-radius:38px;font-size:1.1rem;background:var(--acc);color:white;border:none;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:8px;box-shadow:0 4px 14px rgba(217,119,6,.35);}
+.btn-compris:hover{background:var(--acc-dark);transform:translateY(-2px);}
+.btn-compris:disabled{opacity:.4;cursor:default;transform:none;}
+/* Questions */
+.guided-box{background:white;border:3px solid var(--acc);border-radius:var(--radius);padding:20px 18px;margin-bottom:16px;}
+.guided-title{font-size:1rem;color:var(--acc);margin-bottom:16px;background:var(--acc-pale);padding:10px 16px;border-radius:12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.tries-b{font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:800;color:var(--coral);background:#fee2e2;padding:3px 12px;border-radius:20px;margin-left:auto;}
+.q-box{border:3px solid #fde68a;border-radius:14px;padding:16px;margin-bottom:10px;opacity:.5;pointer-events:none;}
+.q-box.active{opacity:1;pointer-events:all;border-color:var(--acc-mid);}
+.q-box.correct{border-color:var(--mint);background:var(--mint-pale);opacity:1;}
+.q-num{font-family:'Nunito',sans-serif;font-size:.65rem;font-weight:800;color:#94a3b8;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;}
+.q-text{font-size:1.05rem;color:var(--acc-dark);margin-bottom:14px;line-height:1.5;}
+.hint-box{font-family:'Nunito',sans-serif;font-size:.86rem;color:#78350f;background:var(--sun-pale);border-radius:10px;padding:10px 14px;margin-bottom:10px;display:none;}
+.hint-box.show{display:block;}
+.opts{display:flex;flex-direction:column;gap:10px;}
+.opt{padding:13px 16px;border-radius:13px;border:3px solid #fde68a;background:white;font-size:1rem;cursor:pointer;text-align:left;transition:all .2s;}
+.opt:hover:not(:disabled){border-color:var(--acc);background:var(--acc-pale);}
+.opt:disabled{cursor:default;}
+.opt.ok{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.opt.ko{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
+.fb{margin-top:10px;padding:10px 14px;border-radius:12px;font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:800;display:none;}
+.fb.show{display:block;}
+.fb.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.fb.ko{background:var(--coral-pale);color:#b91c1c;}
+.reset-box{background:white;border:3px solid var(--acc);border-radius:var(--radius);padding:22px;text-align:center;margin-bottom:16px;display:none;}
+.reset-box.show{display:block;}
+.reset-box .r-ugo{font-size:3.2rem;margin-bottom:8px;}
+.reset-box h3{font-size:1.2rem;color:var(--acc);margin-bottom:8px;}
+.reset-box p{font-family:'Nunito',sans-serif;font-size:.9rem;color:#64748b;margin-bottom:14px;line-height:1.7;}
+.btn-reset{padding:12px 26px;border-radius:28px;font-size:.95rem;background:var(--acc);color:white;border:none;cursor:pointer;}
+.free-card{background:white;border:3px solid var(--acc-pale);border-radius:var(--radius);padding:18px;margin-bottom:14px;}
+.free-num{font-family:'Nunito',sans-serif;font-size:.7rem;font-weight:800;color:var(--acc);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;}
+.free-q{font-size:1.05rem;color:var(--acc-dark);margin-bottom:14px;background:var(--acc-pale);border-radius:12px;padding:12px 16px;line-height:1.5;}
+.free-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.free-opt{padding:12px;border-radius:13px;font-size:1rem;border:3px solid #fde68a;background:white;cursor:pointer;transition:all .2s;text-align:center;}
+.free-opt:hover{border-color:var(--acc);background:var(--acc-pale);}
+.free-opt.ok{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.free-opt.ko{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
+.free-opt.reveal{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.free-fb{margin-top:10px;padding:10px 14px;border-radius:12px;font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:800;display:none;}
+.free-fb.show{display:block;}
+.free-fb.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.free-fb.ko{background:var(--coral-pale);color:#b91c1c;}
+.btn-suite{margin-top:16px;padding:13px 26px;border-radius:32px;font-size:1rem;background:var(--acc);color:white;border:none;cursor:pointer;display:none;align-items:center;gap:8px;box-shadow:0 4px 14px rgba(217,119,6,.3);transition:all .2s;}
+.btn-suite.show{display:inline-flex;}
+.btn-suite:hover{background:var(--acc-dark);transform:translateY(-2px);}
+.bilan-card{background:white;border-radius:var(--radius);padding:28px 20px;text-align:center;border:3px solid var(--acc-pale);}
+.bilan-ugo{font-size:4.5rem;margin-bottom:10px;display:block;}
+.bilan-title{font-size:2rem;color:var(--acc);margin-bottom:8px;}
+.bilan-msg{font-family:'Nunito',sans-serif;font-size:.95rem;color:#64748b;margin-bottom:20px;line-height:1.8;}
+.stars-row{display:flex;justify-content:center;gap:14px;margin-bottom:18px;}
+.star-big{font-size:3rem;filter:grayscale(1);transition:all .5s;}
+.star-big.earned{filter:none;animation:starPop .5s ease both;}
+@keyframes starPop{0%{transform:scale(0);}60%{transform:scale(1.3);}100%{transform:scale(1);}}
+.score-circle{width:115px;height:115px;border-radius:50%;background:var(--acc);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 20px;color:white;box-shadow:0 6px 20px rgba(217,119,6,.4);}
+.score-num{font-size:2.2rem;line-height:1;}
+.score-sub{font-family:'Nunito',sans-serif;font-size:.65rem;opacity:.85;}
+.memo{background:var(--acc-pale);border-radius:var(--radius);padding:16px 18px;margin:16px 0;text-align:left;}
+.memo h3{font-size:.9rem;color:var(--acc);margin-bottom:12px;}
+.memo-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media(max-width:400px){.memo-grid{grid-template-columns:1fr;}.free-opts{grid-template-columns:1fr;}}
+.memo-item{background:white;border-radius:12px;padding:11px 13px;border:2px solid var(--acc-pale);}
+.memo-item strong{color:var(--acc);display:block;margin-bottom:3px;}
+.memo-item span{font-family:'Nunito',sans-serif;font-size:.8rem;color:#475569;line-height:1.6;}
+.bilan-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:18px;}
+.btn-bilan{padding:13px 22px;border-radius:30px;font-size:.95rem;cursor:pointer;border:none;transition:all .2s;}
+.btn-bilan.primary{background:var(--acc);color:white;}
+.btn-bilan.secondary{background:var(--acc-pale);color:var(--acc);border:3px solid var(--acc);}
+.btn-bilan:hover{transform:translateY(-2px);}
+.confetti-piece{position:fixed;border-radius:3px;top:-20px;animation:fall linear both;pointer-events:none;z-index:9999;}
+@keyframes fall{0%{transform:translateY(0) rotate(0deg);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
+@media print{body{background:white;}.phase{display:block!important;}.btn-compris,.btn-suite,.bilan-card,.ugo-box{display:none!important;}}
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="header-top">
+    <a href="../6-9ans.html" class="logo">🦉 L'Atelier du Devoir</a>
+    <div class="score-badge">⭐ <span id="score-display">0</span></div>
+  </div>
+  <div class="steps-wrap">
+    <div class="steps">
+      <div class="step active" id="s0"></div>
+      <div class="step" id="s1"></div>
+      <div class="step" id="s2"></div>
+      <div class="step" id="s3"></div>
+      <div class="step" id="s4"></div>
+      <div class="step" id="s5"></div>
+    </div>
+  </div>
+</header>
+
+<main class="main">
+
+<div class="accroche">
+  <div class="big-icon">🎯</div>
+  <h1>La place des chiffres !</h1>
+  <p style="font-family:'Nunito',sans-serif;">Le même chiffre peut valoir 3 ou 30 selon sa place. C'est ça la valeur positionnelle ! 🌟</p>
+  <div class="meta-row">
+    <span class="meta-tag">CP / CE1</span>
+    <span class="meta-tag">⭐ Facile</span>
+    <span class="meta-tag">🔢 Maths</span>
+  </div>
+</div>
+
+<div class="phase active" id="phase-lecon">
+  <div class="lecon-card">
+    <h2>📖 La leçon</h2>
+
+    <!-- BLOC 0 -->
+    <div class="lecon-block revealed" id="bloc-0">
+      <div class="bloc-titre">① La place change la valeur !</div>
+      <div class="ugo-box">
+        <span class="ugo">🦉</span>
+        <p>Regarde ce chiffre : <strong>3</strong>. Selon sa place, il vaut 3 ou 30 ! C'est très important de regarder <strong>où</strong> il est dans le nombre. 😊</p>
+      </div>
+
+      <!-- Comparaison 35 vs 53 -->
+      <div style="display:flex;gap:12px;margin:16px 0;flex-wrap:wrap;">
+        <div style="flex:1;min-width:120px;background:var(--acc-pale);border:3px solid var(--acc);border-radius:14px;padding:14px;text-align:center;">
+          <div style="font-size:3.5rem;color:var(--acc-dark);letter-spacing:4px;">35</div>
+          <div style="font-family:'Nunito',sans-serif;font-size:.82rem;color:#64748b;margin-top:8px;line-height:1.7;">
+            Le <strong style="color:var(--acc-dark);">3</strong> est à <strong>gauche</strong><br>→ il vaut <strong style="color:var(--acc);">30</strong>
+          </div>
+        </div>
+        <div style="flex:1;min-width:120px;background:#eff6ff;border:3px solid #3b82f6;border-radius:14px;padding:14px;text-align:center;">
+          <div style="font-size:3.5rem;color:#1d4ed8;letter-spacing:4px;">53</div>
+          <div style="font-family:'Nunito',sans-serif;font-size:.82rem;color:#64748b;margin-top:8px;line-height:1.7;">
+            Le <strong style="color:#1d4ed8;">3</strong> est à <strong>droite</strong><br>→ il vaut <strong style="color:#3b82f6;">3</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <strong>La règle :</strong><br>
+        Le même chiffre a une <strong>valeur différente</strong> selon sa place !<br>
+        Le 3 dans 35 → vaut <strong>30</strong> (dizaine)<br>
+        Le 3 dans 53 → vaut <strong>3</strong> (unité)
+      </div>
+
+      <button class="btn-compris" onclick="revealBloc(1)">J'ai compris ! 🎉</button>
+    </div>
+
+    <!-- BLOC 1 -->
+    <div class="lecon-block" id="bloc-1">
+      <hr class="sep">
+      <div class="bloc-titre">② Quelle valeur ?</div>
+      <div class="ugo-box">
+        <span class="ugo">🦉</span>
+        <p>Pour trouver la valeur d'un chiffre, regarde sa <strong>colonne</strong> dans le tableau ! 📊</p>
+      </div>
+
+      <!-- Tableau dizaines/unités pour 47 -->
+      <div style="text-align:center;margin:6px 0 10px;font-size:3rem;color:var(--acc-dark);letter-spacing:6px;">47</div>
+      <div class="tab-pos" style="max-width:220px;">
+        <div class="col"><div class="head">Dizaines</div><div class="val">4</div></div>
+        <div class="col"><div class="head">Unités</div><div class="val">7</div></div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:10px;margin:14px 0;">
+        <div class="ex-row">
+          <span class="nb">47</span>
+          <span class="fleche">→</span>
+          <div class="detail">Le <strong>4</strong> est dans les dizaines → <strong>vaut 40</strong><br>Le <strong>7</strong> est dans les unités → <strong>vaut 7</strong></div>
+        </div>
+        <div class="ex-row" style="background:#eff6ff;border:2px solid #bfdbfe;">
+          <span class="nb" style="color:#1d4ed8;">62</span>
+          <span class="fleche" style="color:#3b82f6;">→</span>
+          <div class="detail">Le <strong>6</strong> est dans les dizaines → <strong>vaut 60</strong><br>Le <strong>2</strong> est dans les unités → <strong>vaut 2</strong></div>
+        </div>
+        <div class="ex-row" style="background:var(--mint-pale);border:2px solid var(--mint);">
+          <span class="nb" style="color:var(--mint-deep);">90</span>
+          <span class="fleche" style="color:var(--mint);">→</span>
+          <div class="detail">Le <strong>9</strong> → vaut <strong>90</strong> (dizaines)<br>Le <strong>0</strong> → vaut <strong>0</strong> (unités, rien !)</div>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <strong>À retenir :</strong><br>
+        Chiffre dans les <strong>dizaines</strong> → valeur = chiffre × 10<br>
+        Chiffre dans les <strong>unités</strong> → valeur = chiffre tout seul<br>
+        Le 0 vaut toujours <strong>0</strong>, quelle que soit sa place !
+      </div>
+
+      <button class="btn-compris" onclick="revealBloc(2)">J'ai compris ! 🎉</button>
+    </div>
+
+    <!-- BLOC 2 -->
+    <div class="lecon-block" id="bloc-2">
+      <hr class="sep">
+      <div class="bloc-titre">③ Décomposer un nombre</div>
+      <div class="ugo-box">
+        <span class="ugo">🦉</span>
+        <p>Décomposer, c'est <strong>séparer</strong> la valeur des dizaines et la valeur des unités. Comme défaire un sandwich en deux ! 🥪</p>
+      </div>
+
+      <!-- Exemples de décomposition -->
+      <div style="display:flex;flex-direction:column;gap:10px;margin:14px 0;">
+        <div style="background:var(--acc-pale);border:2px solid var(--acc-mid);border-radius:14px;padding:14px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+          <span style="font-size:2rem;color:var(--acc-dark);">56</span>
+          <span style="font-size:1.5rem;color:var(--acc);">=</span>
+          <span style="font-size:1.5rem;color:var(--acc);">50</span>
+          <span style="font-size:1.5rem;color:var(--acc);">+</span>
+          <span style="font-size:1.5rem;color:var(--acc);">6</span>
+          <span style="font-family:'Nunito',sans-serif;font-size:.8rem;color:#64748b;">(5 diz. + 6 unit.)</span>
+        </div>
+        <div style="background:#eff6ff;border:2px solid #bfdbfe;border-radius:14px;padding:14px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+          <span style="font-size:2rem;color:#1d4ed8;">73</span>
+          <span style="font-size:1.5rem;color:#3b82f6;">=</span>
+          <span style="font-size:1.5rem;color:#3b82f6;">70</span>
+          <span style="font-size:1.5rem;color:#3b82f6;">+</span>
+          <span style="font-size:1.5rem;color:#3b82f6;">3</span>
+          <span style="font-family:'Nunito',sans-serif;font-size:.8rem;color:#64748b;">(7 diz. + 3 unit.)</span>
+        </div>
+        <div style="background:var(--mint-pale);border:2px solid var(--mint);border-radius:14px;padding:14px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+          <span style="font-size:2rem;color:var(--mint-deep);">40</span>
+          <span style="font-size:1.5rem;color:var(--mint);">=</span>
+          <span style="font-size:1.5rem;color:var(--mint);">40</span>
+          <span style="font-size:1.5rem;color:var(--mint);">+</span>
+          <span style="font-size:1.5rem;color:var(--mint);">0</span>
+          <span style="font-family:'Nunito',sans-serif;font-size:.8rem;color:#64748b;">(4 diz. + 0 unit.)</span>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <strong>Astuce :</strong> 56 = 50 + 6. On retrouve 50 en faisant 5 × 10. C'est parce que le 5 est dans la colonne des dizaines (× 10) !
+      </div>
+
+      <button class="btn-compris" onclick="goPhase('g1',1)">On joue ! 🚀</button>
+    </div>
+  </div>
+</div>
+
+<!-- GUIDÉ 1 -->
+<div class="phase" id="phase-g1">
+  <div class="ugo-box">
+    <span class="ugo">🦉</span>
+    <p>Super ! <strong>3 questions</strong> sur la valeur des chiffres. <strong>3 essais</strong> par question ! 🧡</p>
+  </div>
+  <div id="g1-reset" class="reset-box">
+    <div class="r-ugo">🦉</div>
+    <h3>On recommence !</h3>
+    <p>Rappelle-toi : le chiffre à gauche = dizaines (× 10). Le chiffre à droite = unités (valeur seule) ! 💪</p>
+    <button class="btn-reset" onclick="initG1()">↺ Réessayer !</button>
+  </div>
+  <div id="g1-zone"></div>
+  <button class="btn-suite" id="btn-g1-to-g2" onclick="goPhase('g2',2)">Encore des questions ! 🌟</button>
+</div>
+
+<!-- GUIDÉ 2 -->
+<div class="phase" id="phase-g2">
+  <div class="ugo-box">
+    <span class="ugo">🦉</span>
+    <p>Excellent ! <strong>3 questions</strong> sur la décomposition. Tu vas y arriver ! 🏆</p>
+  </div>
+  <div id="g2-reset" class="reset-box">
+    <div class="r-ugo">🦉</div>
+    <h3>On recommence !</h3>
+    <p>Pour décomposer 56 : dizaines = 50, unités = 6. Alors 56 = 50 + 6 ! 🥪</p>
+    <button class="btn-reset" onclick="initG2()">↺ Réessayer !</button>
+  </div>
+  <div id="g2-zone"></div>
+  <button class="btn-suite" id="btn-g2-to-free" onclick="goPhase('free',3)">Super ! Exercices libres 🎯</button>
+</div>
+
+<!-- LIBRES 1 -->
+<div class="phase" id="phase-free">
+  <div class="ugo-box"><span class="ugo">🦉</span><p><strong>5 questions !</strong> Clique sur la bonne réponse ! 🧡</p></div>
+  <div id="free1-zone"></div>
+  <button class="btn-suite" id="btn-free-to-free2" onclick="goPhase('free2',4)">5 dernières ! 💪</button>
+</div>
+
+<!-- LIBRES 2 -->
+<div class="phase" id="phase-free2">
+  <div class="ugo-box"><span class="ugo">🦉</span><p>Encore <strong>5 questions</strong> et tu vois ton score ! 🏁</p></div>
+  <div id="free2-zone"></div>
+  <button class="btn-suite" id="btn-free2-to-bilan" onclick="goPhase('bilan',5)">🌟 Mon résultat !</button>
+</div>
+
+<!-- BILAN -->
+<div class="phase" id="phase-bilan">
+  <div class="bilan-card">
+    <span class="bilan-ugo">🦉</span>
+    <h2 class="bilan-title" id="bilan-title">Bravo !</h2>
+    <p class="bilan-msg" id="bilan-msg"></p>
+    <div class="stars-row">
+      <span class="star-big" id="etoile1">⭐</span>
+      <span class="star-big" id="etoile2">⭐</span>
+      <span class="star-big" id="etoile3">⭐</span>
+    </div>
+    <div class="score-circle">
+      <span class="score-num" id="bilan-pts">0</span>
+      <span class="score-sub" id="bilan-sur">/ 0 pts</span>
+    </div>
+    <div class="memo">
+      <h3>📝 Ce que j'ai appris</h3>
+      <div class="memo-grid">
+        <div class="memo-item"><strong>Valeur positionnelle</strong><span>La place change la valeur !<br>3 dans 35 → vaut 30</span></div>
+        <div class="memo-item"><strong>Dizaines × 10</strong><span>Chiffre à gauche × 10<br>Le 4 dans 47 → 40</span></div>
+        <div class="memo-item"><strong>Unités seules</strong><span>Chiffre à droite = sa valeur<br>Le 7 dans 47 → 7</span></div>
+        <div class="memo-item"><strong>Décomposer</strong><span>56 = 50 + 6<br>73 = 70 + 3</span></div>
+      </div>
+    </div>
+    <div class="bilan-btns">
+      <button class="btn-bilan secondary" onclick="location.reload()">↺ Recommencer</button>
+      <button class="btn-bilan primary" onclick="location.href='../6-9ans.html'">← Les fiches</button>
+    </div>
+  </div>
+</div>
+</main>
+
+<script>
+var G1=[
+  {titre:"🎯 Dans le nombre 47",etapes:[
+    {q:"Le 4 est à gauche dans 47. Quelle est sa valeur ?",opts:["40","4","47","14"],ok:0,
+     hint:"Le chiffre à gauche = dizaines. 4 dizaines = 4 × 10 = ?",
+     expl_ok:"40 ! Le 4 est dans les dizaines → vaut 4 × 10 = 40. 🎉",
+     expl_ko:"Dizaines : 4 × 10 = 40. Le 4 à gauche vaut 40."},
+    {q:"Le 7 est à droite dans 47. Quelle est sa valeur ?",opts:["7","70","47","17"],ok:0,
+     hint:"Le chiffre à droite = unités. Sa valeur = le chiffre tout seul.",
+     expl_ok:"7 ! Le 7 est dans les unités → vaut 7. 🌟",
+     expl_ko:"Unités : le chiffre à droite vaut lui-même. Le 7 vaut 7."},
+    {q:"47 = 40 + ?",opts:["7","4","70","10"],ok:0,
+     hint:"47 = 4 dizaines + 7 unités = 40 + ?",
+     expl_ok:"7 ! 47 = 40 + 7. 🎉",
+     expl_ko:"47 = 40 + 7. Les unités valent 7."}
+  ]},
+  {titre:"🎯 Dans le nombre 35",etapes:[
+    {q:"Le 3 est à gauche dans 35. Sa valeur = ?",opts:["30","3","35","13"],ok:0,
+     hint:"3 dizaines = 3 × 10.",
+     expl_ok:"30 ! Le 3 à gauche vaut 3 × 10 = 30. 🌟",
+     expl_ko:"Dizaines : 3 × 10 = 30."},
+    {q:"Le 5 est à droite dans 35. Sa valeur = ?",opts:["5","50","35","15"],ok:0,
+     hint:"Unités = valeur du chiffre seul.",
+     expl_ok:"5 ! Le 5 à droite vaut 5. 🎉",
+     expl_ko:"Unités : le 5 vaut 5."},
+    {q:"Dans 53, le 3 est à droite. Sa valeur = ?",opts:["3","30","53","13"],ok:0,
+     hint:"Le 3 est maintenant à droite (unités).",
+     expl_ok:"3 ! Dans 53, le 3 est à droite → vaut 3. Dans 35, il était à gauche et valait 30. La place compte ! 🌟",
+     expl_ko:"Dans 53, le 3 est à droite = unités → vaut 3 (pas 30 !)."}
+  ]},
+  {titre:"🎯 Valeurs des chiffres",etapes:[
+    {q:"Dans 62, quelle est la valeur du chiffre 6 ?",opts:["60","6","62","16"],ok:0,
+     hint:"62 : le 6 est à gauche = dizaines.",
+     expl_ok:"60 ! 6 dizaines = 60. 🎉",
+     expl_ko:"6 est à gauche dans 62 → dizaines → vaut 60."},
+    {q:"Dans 62, quelle est la valeur du chiffre 2 ?",opts:["2","20","62","12"],ok:0,
+     hint:"Le 2 est à droite = unités.",
+     expl_ok:"2 ! Le 2 à droite vaut 2. 🌟",
+     expl_ko:"2 est à droite dans 62 → unités → vaut 2."},
+    {q:"Dans 26, quelle est la valeur du chiffre 6 ?",opts:["6","60","26","16"],ok:0,
+     hint:"Dans 26, le 6 est maintenant à droite !",
+     expl_ok:"6 ! Dans 26, le 6 est à droite = unités → vaut 6. Pas 60 ! 🎉",
+     expl_ko:"Dans 26, le 6 est à droite = unités → vaut 6."}
+  ]},
+  {titre:"🎯 Piège ou pas piège ?",etapes:[
+    {q:"Dans 80, quelle est la valeur du 8 ?",opts:["80","8","800","0"],ok:0,
+     hint:"Le 8 est à gauche = dizaines. 8 × 10 = ?",
+     expl_ok:"80 ! 8 dizaines = 8 × 10 = 80. 🌟",
+     expl_ko:"Le 8 est à gauche = dizaines → vaut 8 × 10 = 80."},
+    {q:"Dans 80, quelle est la valeur du 0 ?",opts:["0","8","80","10"],ok:0,
+     hint:"Le 0 vaut toujours... 0 ! Quelle que soit sa place.",
+     expl_ok:"0 ! Le 0 vaut toujours 0. Même dans les unités ! 🎉",
+     expl_ko:"Le 0 vaut toujours 0, quelle que soit sa place."},
+    {q:"Dans 08 (= 8), quelle est la valeur du 8 ?",opts:["8","80","0","8"],ok:0,
+     hint:"08 = juste 8. Le 8 est tout à droite = unités.",
+     expl_ok:"8 ! Dans 08 (= 8), le 8 est dans les unités → vaut 8. 🌟",
+     expl_ko:"08 = 8. Le 8 est dans les unités → vaut 8."}
+  ]}
+];
+
+var G2=[
+  {titre:"🥪 Décomposer !",etapes:[
+    {q:"56 = 50 + ?",opts:["6","5","50","16"],ok:0,
+     hint:"56 : 5 dizaines = 50, et les unités ?",
+     expl_ok:"6 ! 56 = 50 + 6. 🎉",
+     expl_ko:"56 = 50 + 6. Le 6 est dans les unités."},
+    {q:"73 = ? + 3",opts:["70","7","73","30"],ok:0,
+     hint:"73 : le 7 est dans les dizaines. 7 × 10 = ?",
+     expl_ok:"70 ! 73 = 70 + 3. 🌟",
+     expl_ko:"73 = 70 + 3. Le 7 dans les dizaines vaut 70."},
+    {q:"Quel nombre correspond à 40 + 9 ?",opts:["49","94","40","409"],ok:0,
+     hint:"40 = 4 dizaines. 9 = 9 unités. 4 à gauche, 9 à droite.",
+     expl_ok:"49 ! 40 + 9 = 49. 4 à gauche, 9 à droite. 🎉",
+     expl_ko:"40 + 9 : 4 dizaines + 9 unités = 49."}
+  ]},
+  {titre:"🥪 Décomposer encore",etapes:[
+    {q:"28 = 20 + ?",opts:["8","2","80","28"],ok:0,
+     hint:"28 : les unités = le chiffre à droite.",
+     expl_ok:"8 ! 28 = 20 + 8. 🌟",
+     expl_ko:"28 = 20 + 8. Le 8 est dans les unités."},
+    {q:"60 = ? + 0",opts:["60","6","0","600"],ok:0,
+     hint:"60 : le 6 dans les dizaines vaut ?",
+     expl_ok:"60 ! 60 = 60 + 0. Le 6 vaut 60, et 0 unité. 🎉",
+     expl_ko:"60 = 60 + 0. 6 dizaines = 60."},
+    {q:"Quel nombre correspond à 30 + 7 ?",opts:["37","73","30","307"],ok:0,
+     hint:"30 = 3 dizaines, 7 = 7 unités. 3 à gauche, 7 à droite.",
+     expl_ok:"37 ! 30 + 7 = 37. 🌟",
+     expl_ko:"30 + 7 : 3 dizaines + 7 unités = 37."}
+  ]},
+  {titre:"🥪 Retrouver la décomposition",etapes:[
+    {q:"91 = ? + 1",opts:["90","9","91","10"],ok:0,
+     hint:"91 : le 9 est dans les dizaines. 9 × 10 = ?",
+     expl_ok:"90 ! 91 = 90 + 1. 🎉",
+     expl_ko:"91 = 90 + 1. Le 9 dans les dizaines vaut 90."},
+    {q:"Quel nombre correspond à 80 + 5 ?",opts:["85","58","80","805"],ok:0,
+     hint:"80 = 8 dizaines, 5 = 5 unités → 8 à gauche, 5 à droite.",
+     expl_ok:"85 ! 80 + 5 = 85. 🌟",
+     expl_ko:"80 + 5 = 85. 8 dizaines + 5 unités."},
+    {q:"45 = 40 + ?",opts:["5","4","45","50"],ok:0,
+     hint:"45 : les unités = le 5.",
+     expl_ok:"5 ! 45 = 40 + 5. 🎉",
+     expl_ko:"45 = 40 + 5. Le 5 est dans les unités."}
+  ]},
+  {titre:"🥪 Le 0 spécial",etapes:[
+    {q:"50 = ? + 0",opts:["50","5","0","500"],ok:0,
+     hint:"50 : le 5 dans les dizaines vaut 5 × 10 = ?",
+     expl_ok:"50 ! 50 = 50 + 0. Le 5 vaut 50, le 0 vaut 0. 🌟",
+     expl_ko:"50 = 50 + 0. 5 dizaines = 50."},
+    {q:"Quel nombre correspond à 20 + 0 ?",opts:["20","2","200","0"],ok:0,
+     hint:"20 + 0 = ? 2 dizaines et 0 unité.",
+     expl_ok:"20 ! 20 + 0 = 20. 🎉",
+     expl_ko:"20 + 0 = 20. 2 dizaines, 0 unité."},
+    {q:"Dans 70, quelle est la valeur du 7 ?",opts:["70","7","0","700"],ok:0,
+     hint:"Le 7 est à gauche = dizaines. 7 × 10 = ?",
+     expl_ok:"70 ! 7 dizaines = 70. 🌟",
+     expl_ko:"Le 7 dans les dizaines vaut 7 × 10 = 70."}
+  ]}
+];
+
+var FREE_POOL=[
+  {q:"Dans 38, quelle est la valeur du 3 ?",opts:["30","3"],ok:0,expl:"Le 3 est à gauche = dizaines → 3 × 10 = 30."},
+  {q:"Dans 38, quelle est la valeur du 8 ?",opts:["8","80"],ok:0,expl:"Le 8 est à droite = unités → vaut 8."},
+  {q:"Dans 83, quelle est la valeur du 3 ?",opts:["3","30"],ok:0,expl:"Dans 83, le 3 est à droite = unités → vaut 3 (pas 30 !)."},
+  {q:"67 = 60 + ?",opts:["7","6"],ok:0,expl:"67 = 60 + 7. Le 7 est dans les unités."},
+  {q:"Quel nombre = 50 + 4 ?",opts:["54","45"],ok:0,expl:"50 + 4 = 54. 5 dizaines + 4 unités."},
+  {q:"Dans 40, quelle est la valeur du 4 ?",opts:["40","4"],ok:0,expl:"Le 4 est à gauche = dizaines → 4 × 10 = 40."},
+  {q:"19 = 10 + ?",opts:["9","1"],ok:0,expl:"19 = 10 + 9. Le 9 est dans les unités."},
+  {q:"Quel nombre = 70 + 2 ?",opts:["72","27"],ok:0,expl:"70 + 2 = 72. 7 dizaines + 2 unités."},
+  {q:"Dans 55, les deux 5 ont-ils la même valeur ?",opts:["Non ! 50 et 5","Oui, ils valent 5"],ok:0,expl:"Non ! Le 5 à gauche vaut 50 (dizaines). Le 5 à droite vaut 5 (unités)."},
+  {q:"Dans 90, quelle est la valeur du 0 ?",opts:["0","9"],ok:0,expl:"Le 0 vaut toujours 0 ! Le 9 est dans les dizaines et vaut 90."},
+  {q:"Quel nombre = 30 + 0 ?",opts:["30","3"],ok:0,expl:"30 + 0 = 30. 3 dizaines, 0 unité."},
+  {q:"Dans 16, quelle est la valeur du 1 ?",opts:["10","1"],ok:0,expl:"Le 1 est à gauche dans 16 = dizaines → 1 × 10 = 10."},
+  {q:"Dans 61, quelle est la valeur du 1 ?",opts:["1","10"],ok:0,expl:"Dans 61, le 1 est à droite = unités → vaut 1."},
+  {q:"48 = 40 + ?",opts:["8","4"],ok:0,expl:"48 = 40 + 8. Le 8 est dans les unités."},
+  {q:"Quel nombre = 20 + 9 ?",opts:["29","92"],ok:0,expl:"20 + 9 = 29. 2 dizaines + 9 unités."},
+  {q:"Dans 77, la valeur du 7 à gauche est…",opts:["70","7"],ok:0,expl:"Le 7 à gauche = dizaines → vaut 70."},
+  {q:"Dans 77, la valeur du 7 à droite est…",opts:["7","70"],ok:0,expl:"Le 7 à droite = unités → vaut 7."},
+  {q:"Quel nombre = 60 + 6 ?",opts:["66","6"],ok:0,expl:"60 + 6 = 66. 6 dizaines + 6 unités."},
+  {q:"99 = 90 + ?",opts:["9","90"],ok:0,expl:"99 = 90 + 9. Le 9 à droite est dans les unités."},
+  {q:"Dans 52, la valeur du 5 est…",opts:["50","5"],ok:0,expl:"Le 5 est à gauche dans 52 = dizaines → vaut 50."}
+];
+
+var score=0,g1Idx=0,g2Idx=0;
+var f1Exs=[],f2Exs=[],f1Done=0,f2Done=0;
+var _cb={};
+var _g1tries=0,_g2tries=0;
+
+function shuffle(a){var b=a.slice();for(var i=b.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=b[i];b[i]=b[j];b[j]=t;}return b;}
+function addPt(){score++;document.getElementById('score-display').textContent=score;}
+function updSteps(n){for(var i=0;i<6;i++){var s=document.getElementById('s'+i);if(!s)return;s.classList.remove('active','done');if(i<n)s.classList.add('done');else if(i===n)s.classList.add('active');}}
+function goPhase(ph,si){
+  document.querySelectorAll('.phase').forEach(function(p){p.classList.remove('active');});
+  var el=document.getElementById('phase-'+ph);
+  if(el){el.classList.add('active');setTimeout(function(){el.scrollIntoView({behavior:'smooth',block:'start'});},100);}
+  updSteps(si);
+  if(ph==='g1')initG1();if(ph==='g2')initG2();
+  if(ph==='free')initFree1();if(ph==='free2')initFree2();
+  if(ph==='bilan')showBilan();
+}
+function revealBloc(n){
+  var b=document.getElementById('bloc-'+n);if(!b)return;
+  var p=document.getElementById('bloc-'+(n-1));
+  if(p){var btn=p.querySelector('.btn-compris');if(btn){btn.textContent='✓ Compris !';btn.disabled=true;btn.style.opacity='.4';}}
+  b.classList.add('revealed');
+  setTimeout(function(){var hH=(document.querySelector('.header')||{offsetHeight:0}).offsetHeight;var r=b.getBoundingClientRect();window.scrollTo({top:window.pageYOffset+r.top-hH-16,behavior:'smooth'});},150);
+}
+function makeQBox(step,si,prefix){
+  var so=shuffle(step.opts.map(function(o,oi){return{t:o,i:oi};}));
+  var sb=document.createElement('div');sb.className='q-box'+(si===0?' active':'');sb.id=prefix+'s'+si;
+  sb.innerHTML='<div class="q-num">Question '+(si+1)+'</div>'
+    +'<div class="q-text">'+step.q+'</div>'
+    +'<div class="hint-box" id="'+prefix+'h'+si+'">💡 '+step.hint+'</div>'
+    +'<div class="opts">'+so.map(function(o){return'<button class="opt" onclick="checkQ(\''+prefix+'\','+si+','+o.i+',this)">'+o.t+'</button>';}).join('')+'</div>'
+    +'<div class="fb" id="'+prefix+'f'+si+'"></div>';
+  return sb;
+}
+function initG1(){
+  g1Idx=Math.floor(Math.random()*G1.length);_g1tries=0;
+  document.getElementById('g1-reset').classList.remove('show');
+  document.getElementById('btn-g1-to-g2').classList.remove('show');
+  var v=G1[g1Idx],z=document.getElementById('g1-zone');z.innerHTML='';
+  var box=document.createElement('div');box.className='guided-box';
+  box.innerHTML='<div class="guided-title">'+v.titre+'<span class="tries-b" id="tries-g1">3 essais</span></div><div id="g1-steps"></div>';
+  z.appendChild(box);
+  v.etapes.forEach(function(step,si){document.getElementById('g1-steps').appendChild(makeQBox(step,si,'g1'));});
+}
+function initG2(){
+  g2Idx=Math.floor(Math.random()*G2.length);_g2tries=0;
+  document.getElementById('g2-reset').classList.remove('show');
+  document.getElementById('btn-g2-to-free').classList.remove('show');
+  var v=G2[g2Idx],z=document.getElementById('g2-zone');z.innerHTML='';
+  var box=document.createElement('div');box.className='guided-box';
+  box.innerHTML='<div class="guided-title">'+v.titre+'<span class="tries-b" id="tries-g2">3 essais</span></div><div id="g2-steps"></div>';
+  z.appendChild(box);
+  v.etapes.forEach(function(step,si){document.getElementById('g2-steps').appendChild(makeQBox(step,si,'g2'));});
+}
+function checkQ(prefix,si,ci,btn){
+  var v=prefix==='g1'?G1[g1Idx]:G2[g2Idx];
+  var step=v.etapes[si],sb=document.getElementById(prefix+'s'+si),fb=document.getElementById(prefix+'f'+si);
+  var triesId=prefix==='g1'?'tries-g1':'tries-g2';
+  var tries=prefix==='g1'?_g1tries:_g2tries;
+  if(sb.classList.contains('correct'))return;
+  if(ci===step.ok){
+    btn.classList.add('ok');sb.querySelectorAll('.opt').forEach(function(b){b.disabled=true;});sb.classList.add('correct');
+    if(tries===0){fb.className='fb show ok';fb.innerHTML='✅ '+step.expl_ok+' <span style="font-size:.75rem;color:#065f46">(+1 pt)</span>';addPt();}
+    else{fb.className='fb show ok';fb.innerHTML='✅ '+step.expl_ok;}
+    if(prefix==='g1')_g1tries=0;else _g2tries=0;
+    var el=document.getElementById(triesId);if(el)el.textContent='3 essais';
+    var nx=document.getElementById(prefix+'s'+(si+1));
+    if(nx){nx.classList.add('active');setTimeout(function(){nx.scrollIntoView({behavior:'smooth',block:'nearest'});},350);}
+    else{var btnId=prefix==='g1'?'btn-g1-to-g2':'btn-g2-to-free';setTimeout(function(){var b=document.getElementById(btnId);b.classList.add('show');b.scrollIntoView({behavior:'smooth',block:'nearest'});},550);}
+  }else{
+    btn.classList.add('ko');btn.disabled=true;
+    if(prefix==='g1')_g1tries++;else _g2tries++;
+    var newTries=prefix==='g1'?_g1tries:_g2tries;
+    var el=document.getElementById(triesId);if(el)el.textContent=(3-newTries)+' essai'+(3-newTries>1?'s':'');
+    fb.className='fb show ko';
+    if(newTries<3){fb.innerHTML='❌ Réessaie ! 💪';document.getElementById(prefix+'h'+si).classList.add('show');}
+    else{
+      fb.innerHTML='❌ '+step.expl_ko;
+      var rid=prefix==='g1'?'g1-reset':'g2-reset',zid=prefix==='g1'?'g1-zone':'g2-zone';
+      setTimeout(function(){document.getElementById(rid).classList.add('show');document.getElementById(zid).innerHTML='';document.getElementById(rid).scrollIntoView({behavior:'smooth',block:'start'});},1400);
+    }
+  }
+}
+function buildFree(ex,i,prefix,cb){
+  var card=document.createElement('div');card.className='free-card';card.id=prefix+'c'+i;
+  var so=shuffle(ex.opts.map(function(o,oi){return{t:o,i:oi};}));
+  card.innerHTML='<div class="free-num">Question '+(i+1)+'</div>'
+    +'<div class="free-q">'+ex.q+'</div>'
+    +'<div class="free-opts" id="'+prefix+'fo'+i+'"></div>'
+    +'<div class="free-fb" id="'+prefix+'ff'+i+'"></div>';
+  setTimeout(function(){
+    var ba=document.getElementById(prefix+'fo'+i);
+    so.forEach(function(o){
+      var btn=document.createElement('button');btn.className='free-opt';btn.textContent=o.t;
+      btn.onclick=function(){
+        if(card.classList.contains('done'))return;card.classList.add('done');ba.querySelectorAll('button').forEach(function(b){b.disabled=true;});
+        var fb=document.getElementById(prefix+'ff'+i);
+        if(o.i===ex.ok){btn.classList.add('ok');fb.className='free-fb show ok';fb.innerHTML='✅ '+ex.expl;addPt();}
+        else{btn.classList.add('ko');ba.querySelectorAll('button').forEach(function(b,bi){if(bi===ex.ok)b.classList.add('reveal');});fb.className='free-fb show ko';fb.innerHTML='❌ '+ex.expl;}
+        cb();
+      };ba.appendChild(btn);
+    });
+  },0);
+  return card;
+}
+function initFree1(){
+  f1Exs=shuffle(FREE_POOL.slice()).slice(0,5);f1Done=0;
+  var z=document.getElementById('free1-zone');z.innerHTML='';
+  f1Exs.forEach(function(ex,i){
+    _cb['f1'+i]=function(){f1Done++;if(f1Done>=5)setTimeout(function(){var b=document.getElementById('btn-free-to-free2');b.classList.add('show');b.scrollIntoView({behavior:'smooth',block:'nearest'});},600);};
+    z.appendChild(buildFree(ex,i,'f1',_cb['f1'+i]));
+  });
+}
+function initFree2(){
+  var used=f1Exs.map(function(e){return e.q;});
+  var pool=FREE_POOL.filter(function(e){return used.indexOf(e.q)<0;});
+  f2Exs=shuffle(pool).slice(0,5);f2Done=0;
+  var z=document.getElementById('free2-zone');z.innerHTML='';
+  f2Exs.forEach(function(ex,i){
+    _cb['f2'+i]=function(){f2Done++;if(f2Done>=5)setTimeout(function(){var b=document.getElementById('btn-free2-to-bilan');b.classList.add('show');b.scrollIntoView({behavior:'smooth',block:'nearest'});},600);};
+    z.appendChild(buildFree(ex,i,'f2',_cb['f2'+i]));
+  });
+}
+function showBilan(){
+  var g1n=G1[g1Idx]?G1[g1Idx].etapes.length:3,g2n=G2[g2Idx]?G2[g2Idx].etapes.length:3,tot=g1n+g2n+10;
+  document.getElementById('bilan-pts').textContent=score;
+  document.getElementById('bilan-sur').textContent='/ '+tot+' pts';
+  var pct=score/tot,t,m;
+  if(pct>=.8){t='BRAVO ! 🎉🎊';m:'Tu comprends la valeur positionnelle ! Ugo est super fier de toi ! 🦉⭐';}
+  else if(pct>=.5){t='Très bien ! 😊🌟';m:'Tu progresses bien ! Rappelle-toi : la place du chiffre change tout ! 🧡';}
+  else{t='Bien essayé ! 💪';m:'Continue ! Gauche = dizaines (× 10), droite = unités. Tu peux recommencer ! 🦉';}
+  document.getElementById('bilan-title').textContent=t;
+  document.getElementById('bilan-msg').textContent=m;
+  var s=[Math.ceil(tot*.33),Math.ceil(tot*.66),Math.ceil(tot*.89)];
+  ['etoile1','etoile2','etoile3'].forEach(function(id,i){var el=document.getElementById(id);if(score>=s[i]){(function(e,d){setTimeout(function(){e.classList.add('earned');},d);})(el,300+i*450);}else el.style.filter='grayscale(1)';});
+  if(pct>=.5)confetti();
+}
+function confetti(){var cols=['#d97706','#fcd34d','#059669','#0369a1','#7c3aed'];for(var i=0;i<65;i++){var el=document.createElement('div');el.className='confetti-piece';el.style.cssText='left:'+Math.random()*100+'vw;background:'+cols[Math.floor(Math.random()*cols.length)]+';animation-duration:'+(1.8+Math.random()*2.2)+'s;animation-delay:'+Math.random()*1.5+'s;width:'+(7+Math.random()*10)+'px;height:'+(7+Math.random()*10)+'px;border-radius:'+(Math.random()>.5?'50%':'4px')+';';document.body.appendChild(el);setTimeout(function(){if(el.parentNode)el.remove();},5000);}}
+</script>
+</body>
+</html>

@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>M402 — Les puissances de 10 | L'Atelier du Devoir</title>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --acc:#1e40af;--acc-pale:#eff6ff;--acc-mid:#93c5fd;
+  --mint:#059669;--mint-pale:#d1fae5;--mint-deep:#047857;
+  --coral:#dc2626;--coral-pale:#fee2e2;
+  --text:#1e293b;--text-light:#64748b;
+  --radius:12px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Lato',sans-serif;background:#eff6ff;color:var(--text);font-size:16px;line-height:1.65;}
+.print-bar{position:fixed;right:16px;top:50%;transform:translateY(-50%);z-index:200;display:flex;flex-direction:column;gap:8px;}
+.print-btn{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:8px;font-family:'Lato',sans-serif;font-weight:700;font-size:.78rem;border:none;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.15);}
+.print-btn-lecon{background:#d97706;color:white;}.print-btn-eval{background:#dc2626;color:white;}
+@media(max-width:600px){.print-bar{right:6px;}.print-btn{font-size:0;width:40px;height:40px;padding:0;justify-content:center;}.print-btn span.lbl{display:none;}.print-btn span.ico{font-size:1.1rem;}}
+.header{background:white;border-bottom:2px solid var(--acc-pale);position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.06);}
+.header-top{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;}
+.logo{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--acc);text-decoration:none;}
+.score-badge{background:var(--acc);color:white;font-weight:700;font-size:.85rem;padding:5px 14px;border-radius:6px;}
+.steps-wrap{padding:0 20px 8px;}
+.steps{display:flex;gap:3px;}
+.step{flex:1;height:5px;border-radius:4px;background:var(--acc-pale);transition:all .35s;}
+.step.done{background:var(--mint);}.step.active{background:var(--acc);}
+.steps-labels{display:flex;gap:3px;padding-top:3px;}
+.step-lbl{flex:1;font-size:.48rem;font-weight:700;color:var(--text-light);text-align:center;text-transform:uppercase;letter-spacing:.03em;}
+.main{max-width:760px;margin:0 auto;padding:28px 16px 100px;}
+.phase{display:none;}.phase.active{display:block;}
+.accroche{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:22px 24px;margin-bottom:22px;display:flex;gap:16px;align-items:flex-start;}
+.accroche-icon{font-size:2.4rem;flex-shrink:0;}
+.accroche-text h1{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--acc);margin-bottom:6px;}
+.accroche-text p{color:var(--text-light);font-size:.92rem;line-height:1.5;}
+.meta-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+.meta-tag{background:var(--acc-pale);border-radius:4px;padding:3px 10px;font-size:.72rem;font-weight:700;color:var(--acc);text-transform:uppercase;letter-spacing:.04em;}
+.lecon-card{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:22px;margin-bottom:18px;}
+.lecon-card h2{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--acc);margin-bottom:14px;border-bottom:2px solid var(--acc-pale);padding-bottom:8px;}
+.lecon-block{display:none;}.lecon-block.revealed{display:block;}
+.lecon-subtitle{font-weight:900;font-size:1rem;color:var(--acc);margin-bottom:10px;margin-top:6px;}
+.sep{margin:18px 0;border:none;border-top:1px solid var(--acc-pale);}
+.analogie{font-size:.92rem;color:var(--text-light);font-style:italic;margin-bottom:12px;line-height:1.6;background:#f0f9ff;border-radius:8px;padding:10px 14px;border-left:3px solid var(--acc-mid);}
+.def-box{border-left:4px solid var(--acc);background:var(--acc-pale);border-radius:0 var(--radius) var(--radius) 0;padding:14px 16px;margin-bottom:12px;}
+.def-box h4{font-weight:900;color:var(--acc);font-size:.9rem;margin-bottom:6px;}
+.def-box p{font-size:.88rem;color:var(--text);line-height:1.6;}
+.exemple-ligne{background:white;border:1px solid #e2e8f0;border-radius:8px;padding:10px 16px;font-size:.95rem;margin-bottom:6px;line-height:1.8;display:flex;align-items:center;gap:12px;}
+.exemple-ligne .tag{background:var(--acc);color:white;font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:4px;text-transform:uppercase;flex-shrink:0;}
+.hl{background:var(--acc-pale);color:var(--acc);border-radius:4px;padding:1px 6px;font-weight:700;}
+.tableau{width:100%;border-collapse:collapse;margin:10px 0;font-size:.88rem;}
+.tableau th{padding:9px 12px;text-align:center;font-weight:700;background:var(--acc);color:white;}
+.tableau td{padding:8px 12px;border:1px solid #e2e8f0;text-align:center;}
+.tableau tr:nth-child(even) td{background:var(--acc-pale);}
+.astuce{background:#fefce8;border:1px solid #fde68a;border-radius:8px;padding:11px 14px;font-size:.85rem;margin-top:8px;color:#78350f;}
+.astuce strong{color:#92400e;}
+.piege{background:#fff1f2;border:1px solid #fecdd3;border-radius:8px;padding:11px 14px;font-size:.85rem;margin-top:8px;color:#9f1239;}
+.piege strong{color:#be123c;}
+.btn-compris{margin-top:18px;padding:11px 26px;border-radius:8px;font-family:'Lato',sans-serif;font-weight:700;font-size:.9rem;background:var(--acc);color:white;border:none;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:8px;}
+.btn-compris:hover{background:#1e3a8a;transform:translateY(-1px);}
+.btn-compris:disabled{opacity:.4;cursor:default;transform:none;}
+.mascot-msg{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:13px 16px;margin:14px 0;display:flex;align-items:flex-start;gap:10px;}
+.mascot-msg .emo{font-size:1.6rem;flex-shrink:0;}
+.mascot-msg p{font-size:.88rem;color:var(--text-light);line-height:1.6;}
+.ex-header-box{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:16px 20px;margin-bottom:16px;}
+.ex-header-box h2{font-family:'Playfair Display',serif;font-size:1.15rem;color:var(--acc);margin-bottom:4px;}
+.ex-header-box p{color:var(--text-light);font-size:.85rem;}
+.guided-problem{background:white;border:2px solid var(--acc);border-radius:var(--radius);padding:20px;margin-bottom:16px;}
+.guided-problem-title{font-size:1.05rem;font-weight:900;color:var(--acc);margin-bottom:16px;background:var(--acc-pale);padding:10px 14px;border-radius:8px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.tries-left{font-size:.75rem;font-weight:700;color:var(--coral);background:var(--coral-pale);padding:2px 8px;border-radius:4px;margin-left:auto;}
+.step-container{display:flex;flex-direction:column;gap:10px;}
+.step-box{border:2px solid #e2e8f0;border-radius:10px;padding:14px 16px;transition:all .3s;opacity:.5;pointer-events:none;}
+.step-box.active{opacity:1;pointer-events:all;border-color:var(--acc-mid);}
+.step-box.correct{border-color:var(--mint);background:var(--mint-pale);opacity:1;}
+.step-num{font-size:.65rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;}
+.step-question{font-size:.95rem;font-weight:700;margin-bottom:10px;line-height:1.6;}
+.step-hint{font-size:.83rem;color:#92400e;background:#fef3c7;border-radius:6px;padding:8px 12px;margin-bottom:8px;display:none;}
+.step-hint.show{display:block;}
+.step-qcm-opts{display:flex;flex-direction:column;gap:6px;}
+.step-qcm-opt{padding:9px 14px;border-radius:8px;border:2px solid #e2e8f0;background:white;font-family:'Lato',sans-serif;font-weight:600;font-size:.9rem;cursor:pointer;text-align:left;transition:all .2s;}
+.step-qcm-opt:hover:not(:disabled){border-color:var(--acc);background:var(--acc-pale);}
+.step-qcm-opt:disabled{cursor:default;}
+.step-qcm-opt.opt-correct{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.step-qcm-opt.opt-wrong{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
+.step-input-row{display:flex;gap:8px;align-items:center;}
+.step-input{border:2px solid var(--acc);border-radius:6px;padding:8px 12px;font-family:'Lato',monospace;font-weight:700;font-size:1rem;color:var(--text);background:white;outline:none;min-width:100px;max-width:160px;text-align:center;}
+.step-input:disabled{border-color:#e2e8f0;background:#f8fafc;color:var(--text-light);}
+.step-input.input-ok{border-color:var(--mint);background:var(--mint-pale);}
+.step-input.input-ko{border-color:var(--coral);}
+.btn-step-check{padding:8px 16px;border-radius:6px;font-family:'Lato',sans-serif;font-weight:700;font-size:.85rem;background:var(--acc);color:white;border:none;cursor:pointer;}
+.btn-step-check:disabled{opacity:.4;cursor:not-allowed;}
+.step-fb{margin-top:8px;padding:8px 12px;border-radius:6px;font-size:.83rem;font-weight:700;display:none;}
+.step-fb.show{display:block;}
+.step-fb.fb-ok{background:var(--mint-pale);color:var(--mint-deep);}
+.step-fb.fb-ko{background:var(--coral-pale);color:#b91c1c;}
+.reset-msg{background:#fff;border:2px solid var(--acc);border-radius:var(--radius);padding:22px 24px;text-align:center;margin-bottom:16px;display:none;}
+.reset-msg.show{display:block;}
+.reset-msg .ugo{font-size:2.5rem;margin-bottom:8px;}
+.reset-msg h3{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--acc);margin-bottom:8px;}
+.reset-msg p{color:var(--text-light);font-size:.9rem;margin-bottom:14px;line-height:1.6;}
+.btn-restart{padding:10px 24px;border-radius:8px;font-family:'Lato',sans-serif;font-weight:700;font-size:.9rem;background:var(--acc);color:white;border:none;cursor:pointer;}
+.free-ex-card{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:18px;margin-bottom:14px;}
+.free-ex-label{font-size:.7rem;font-weight:700;color:var(--acc);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;}
+.free-ex-question{font-size:.95rem;font-weight:700;margin-bottom:12px;background:var(--acc-pale);border-radius:8px;padding:11px 14px;line-height:1.8;}
+.free-classify-btns{display:flex;gap:8px;flex-wrap:wrap;}
+.free-classify-btn{padding:9px 16px;border-radius:6px;font-family:'Lato',sans-serif;font-weight:700;font-size:.85rem;border:2px solid #e2e8f0;background:white;cursor:pointer;transition:all .2s;flex:1;text-align:center;}
+.free-classify-btn:hover{border-color:var(--acc);background:var(--acc-pale);}
+.free-classify-btn.ans-correct{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.free-classify-btn.ans-wrong{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
+.free-classify-btn.ans-reveal{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.free-input-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.free-input{border:2px solid var(--acc);border-radius:6px;padding:8px 12px;font-family:'Lato',monospace;font-weight:700;font-size:1rem;color:var(--text);background:white;outline:none;min-width:100px;max-width:160px;text-align:center;}
+.free-input:disabled{border-color:#e2e8f0;background:#f8fafc;}
+.free-input.free-ok{border-color:var(--mint);background:var(--mint-pale);}
+.free-input.free-ko{border-color:var(--coral);background:var(--coral-pale);}
+.btn-free-check{padding:8px 16px;border-radius:6px;font-family:'Lato',sans-serif;font-weight:700;font-size:.85rem;background:var(--acc);color:white;border:none;cursor:pointer;}
+.btn-free-check:disabled{opacity:.4;cursor:not-allowed;}
+.jugement-opts{display:flex;flex-direction:column;gap:8px;}
+.jugement-opt-btn{padding:11px 16px;border-radius:8px;border:2px solid #e2e8f0;background:white;font-family:'Lato',sans-serif;font-size:.92rem;cursor:pointer;text-align:left;transition:all .2s;line-height:1.6;}
+.jugement-opt-btn:hover{border-color:var(--acc);background:var(--acc-pale);}
+.jugement-opt-btn.jug-correct{border-color:var(--mint);background:var(--mint-pale);}
+.jugement-opt-btn.jug-wrong{border-color:var(--coral);background:var(--coral-pale);}
+.free-fb{margin-top:10px;padding:9px 13px;border-radius:8px;font-size:.84rem;font-weight:700;display:none;}
+.free-fb.show{display:block;}
+.free-fb.fb-ok{background:var(--mint-pale);color:var(--mint-deep);}
+.free-fb.fb-ko{background:var(--coral-pale);color:#b91c1c;}
+.btn-suivant{margin-top:14px;padding:10px 22px;border-radius:8px;font-family:'Lato',sans-serif;font-weight:700;font-size:.88rem;background:var(--acc);color:white;border:none;cursor:pointer;display:none;align-items:center;gap:8px;transition:all .2s;}
+.btn-suivant.show{display:inline-flex;}
+.btn-suivant:hover{background:#1e3a8a;}
+.bilan-card{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:28px 24px;text-align:center;}
+.bilan-icon{font-size:3.5rem;margin-bottom:12px;display:block;}
+.bilan-title{font-family:'Playfair Display',serif;font-size:1.8rem;margin-bottom:6px;color:var(--acc);}
+.bilan-msg{color:var(--text-light);font-size:.95rem;margin-bottom:20px;}
+.stars-row{display:flex;justify-content:center;gap:10px;margin-bottom:20px;}
+.star-big{font-size:2.5rem;filter:grayscale(1);transition:all .5s;}
+.star-big.earned{filter:none;animation:starPop .5s ease both;}
+@keyframes starPop{0%{transform:scale(0);}60%{transform:scale(1.2);}100%{transform:scale(1);}}
+.score-circle{width:100px;height:100px;border-radius:50%;background:var(--acc);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 20px;color:white;}
+.score-num{font-family:'Playfair Display',serif;font-size:1.8rem;line-height:1;}
+.score-sub{font-size:.65rem;opacity:.8;}
+.memo-card{background:var(--acc-pale);border-radius:var(--radius);padding:16px 20px;margin:18px 0;text-align:left;}
+.memo-card h3{font-weight:700;font-size:.85rem;color:var(--acc);margin-bottom:10px;text-transform:uppercase;letter-spacing:.04em;}
+.memo-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media(max-width:480px){.memo-grid{grid-template-columns:1fr;}}
+.memo-item{background:white;border-radius:8px;padding:10px 12px;font-size:.82rem;border:1px solid #e2e8f0;}
+.memo-item strong{color:var(--acc);}
+.bilan-btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:16px;}
+.btn-act{padding:10px 20px;border-radius:8px;font-family:'Lato',sans-serif;font-weight:700;font-size:.85rem;cursor:pointer;border:none;transition:all .2s;}
+.btn-act.primary{background:var(--acc);color:white;}
+.btn-act.secondary{background:var(--acc-pale);color:var(--acc);border:2px solid var(--acc);}
+.btn-act:hover{transform:translateY(-1px);}
+.confetti-piece{position:fixed;border-radius:2px;top:-20px;animation:fall linear both;pointer-events:none;z-index:9999;}
+@keyframes fall{0%{transform:translateY(0) rotate(0deg);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
+@media print{.print-bar,.btn-compris,.btn-suivant,.bilan-card,.mascot-msg{display:none!important;}body{background:white;}.phase{display:block!important;}}
+</style>
+</head>
+<body>
+<div class="print-bar">
+  <button class="print-btn print-btn-lecon" onclick="window.print()"><span class="ico">📖</span><span class="lbl">Leçon</span></button>
+  <button class="print-btn print-btn-eval" onclick="window.print()"><span class="ico">📝</span><span class="lbl">Exercices</span></button>
+</div>
+<header class="header">
+  <div class="header-top">
+    <a href="../12-15ans.html" class="logo">🦉 L'Atelier du Devoir</a>
+    <div class="score-badge">⭐ <span id="score-display">0</span> pts</div>
+  </div>
+  <div class="steps-wrap">
+    <div class="steps">
+      <div class="step active" id="step-0"></div><div class="step" id="step-1"></div><div class="step" id="step-2"></div>
+      <div class="step" id="step-3"></div><div class="step" id="step-4"></div><div class="step" id="step-5"></div>
+    </div>
+    <div class="steps-labels">
+      <div class="step-lbl">Leçon</div><div class="step-lbl">Guidé 1</div><div class="step-lbl">Guidé 2</div>
+      <div class="step-lbl">Exercices</div><div class="step-lbl">+ Exercices</div><div class="step-lbl">Bilan</div>
+    </div>
+  </div>
+</header>
+<main class="main">
+
+<div class="accroche">
+  <div class="accroche-icon">🔢</div>
+  <div class="accroche-text">
+    <h1>Les puissances de 10</h1>
+    <p>Maîtriser la notation des très grands et très petits nombres, et calculer avec les puissances de 10.</p>
+    <div class="meta-row">
+      <span class="meta-tag">4e</span><span class="meta-tag">~30 min</span>
+      <span class="meta-tag">⭐⭐ Difficulté</span><span class="meta-tag">Mathématiques</span>
+    </div>
+  </div>
+</div>
+
+<!-- LEÇON -->
+<div class="phase active" id="phase-lecon">
+  <div class="lecon-card">
+    <h2>📖 La leçon</h2>
+    <div class="lecon-block revealed" id="bloc-0">
+      <div class="lecon-subtitle">① Qu'est-ce qu'une puissance de 10 ?</div>
+      <div class="analogie">🌌 La distance Terre-Soleil est de 150 000 000 km. Compter les zéros prend du temps et multiplie les erreurs. Les scientifiques écrivent 1,5 × 10⁸ km — compact, précis, universel. Les puissances de 10, c'est ce raccourci.</div>
+      <div class="def-box">
+        <h4>Définition</h4>
+        <p><strong>10ⁿ</strong> (n positif) = 1 suivi de n zéros.<br>
+        <strong>10⁻ⁿ</strong> = 1 ÷ 10ⁿ (décimal avec n−1 zéros après la virgule, puis le 1).<br>
+        <strong>10⁰ = 1</strong> — tout nombre élevé à la puissance 0 vaut 1.</p>
+      </div>
+      <table class="tableau">
+        <tr><th>Puissance</th><th>Valeur</th><th>Sens</th></tr>
+        <tr><td>10⁶</td><td>1 000 000</td><td>1 suivi de 6 zéros</td></tr>
+        <tr><td>10³</td><td>1 000</td><td>1 suivi de 3 zéros</td></tr>
+        <tr><td>10⁰</td><td>1</td><td>Toujours égal à 1</td></tr>
+        <tr><td>10⁻²</td><td>0,01</td><td>1 divisé par 100</td></tr>
+        <tr><td>10⁻⁶</td><td>0,000 001</td><td>1 divisé par 1 000 000</td></tr>
+      </table>
+      <div class="astuce"><strong>💡 Méthode :</strong> pour convertir 10ⁿ, pars de 1 et déplace la virgule de n rangs vers la droite (n > 0) ou vers la gauche (n &lt; 0).</div>
+      <button class="btn-compris" onclick="revealBloc(1)">Bloc suivant →</button>
+    </div>
+
+    <div class="lecon-block" id="bloc-1">
+      <hr class="sep">
+      <div class="lecon-subtitle">② Règles de calcul</div>
+      <div class="analogie">➕ Multiplier deux puissances de 10, c'est additionner leurs exposants — comme si on comptait les zéros qu'on rajoute. Diviser, c'est en retrancher.</div>
+      <div class="def-box">
+        <h4>Les trois règles fondamentales</h4>
+        <p><strong>Multiplication :</strong> 10ᵃ × 10ᵇ = 10<sup>a+b</sup> → additionner les exposants<br>
+        <strong>Division :</strong> 10ᵃ ÷ 10ᵇ = 10<sup>a−b</sup> → soustraire les exposants<br>
+        <strong>Puissance de puissance :</strong> (10ᵃ)ᵇ = 10<sup>a×b</sup> → multiplier les exposants</p>
+      </div>
+      <div class="exemple-ligne"><span class="tag">×</span> 10³ × 10⁴ = 10<sup>3+4</sup> = <span class="hl">10⁷</span></div>
+      <div class="exemple-ligne"><span class="tag">÷</span> 10⁶ ÷ 10² = 10<sup>6−2</sup> = <span class="hl">10⁴</span></div>
+      <div class="exemple-ligne"><span class="tag">(  )ⁿ</span> (10³)² = 10<sup>3×2</sup> = <span class="hl">10⁶</span></div>
+      <div class="piege"><strong>⚠ Piège :</strong> 10³ × 10⁴ ≠ 10¹² ! On additionne les exposants (3+4=7), on ne les multiplie pas.</div>
+      <button class="btn-compris" onclick="revealBloc(2)">Bloc suivant →</button>
+    </div>
+
+    <div class="lecon-block" id="bloc-2">
+      <hr class="sep">
+      <div class="lecon-subtitle">③ La notation scientifique</div>
+      <div class="analogie">🔬 Un biologiste mesure un virus : 0,000 000 120 m. Un astronome calcule une distance : 4 700 000 000 km. La notation scientifique leur donne le même langage compact pour les deux.</div>
+      <div class="def-box">
+        <h4>Notation scientifique : a × 10ⁿ avec 1 ≤ a &lt; 10</h4>
+        <p>Pour convertir :<br>
+        1. Déplace la virgule pour obtenir un nombre entre 1 et 10 → c'est le coefficient a.<br>
+        2. Compte les rangs déplacés → c'est l'exposant n (positif si vers la gauche, négatif si vers la droite).</p>
+      </div>
+      <div class="exemple-ligne"><span class="tag">Grand</span> 47 000 = <span class="hl">4,7 × 10⁴</span> — virgule 4 rangs à gauche → exposant +4</div>
+      <div class="exemple-ligne"><span class="tag">Petit</span> 0,000 032 = <span class="hl">3,2 × 10⁻⁵</span> — virgule 5 rangs à droite → exposant −5</div>
+      <div class="astuce"><strong>💡 Vérification :</strong> le coefficient a doit toujours être entre 1 et 10. Si a = 45 → ce n'est PAS une notation scientifique valide.</div>
+      <button class="btn-compris" onclick="goToPhase('guided1',1)">✓ Leçon comprise — À l'entraînement !</button>
+    </div>
+  </div>
+</div>
+
+<!-- GUIDÉ 1 -->
+<div class="phase" id="phase-guided1">
+  <div class="mascot-msg"><span class="emo">🦉</span><p><strong>Exercice guidé 1</strong> — QCM étape par étape. <strong>3 essais</strong> par question. Chaque bonne réponse rapporte un point !</p></div>
+  <div class="ex-header-box"><h2>Calculer pas à pas (QCM)</h2><p>Le problème change à chaque recommencement.</p></div>
+  <div id="g1-reset" class="reset-msg">
+    <div class="ugo">🦉</div><h3>On recommence !</h3>
+    <p>Pas de souci. Rappelle-toi les règles : multiplication → additionner les exposants, division → soustraire. Tu vas y arriver !</p>
+    <button class="btn-restart" onclick="initGuided1()">↺ Recommencer</button>
+  </div>
+  <div id="g1-container"></div>
+  <button class="btn-suivant" id="btn-to-g2" onclick="goToPhase('guided2',2)">Bien joué ! Exercice suivant →</button>
+</div>
+
+<!-- GUIDÉ 2 -->
+<div class="phase" id="phase-guided2">
+  <div class="mascot-msg"><span class="emo">🦉</span><p><strong>Exercice guidé 2</strong> — Tu écris ta réponse à chaque étape. <strong>3 essais</strong>. Chaque bonne réponse compte !</p></div>
+  <div class="ex-header-box"><h2>Calculer pas à pas (saisie)</h2><p>Écris l'exposant ou la valeur demandée.</p></div>
+  <div id="g2-reset" class="reset-msg">
+    <div class="ugo">🦉</div><h3>On repart !</h3>
+    <p>Astuce : pour chaque opération, identifie d'abord les deux exposants, puis applique la règle (+ pour ×, − pour ÷, × pour puissance de puissance).</p>
+    <button class="btn-restart" onclick="initGuided2()">↺ Recommencer</button>
+  </div>
+  <div id="g2-container"></div>
+  <button class="btn-suivant" id="btn-to-free" onclick="goToPhase('free',3)">Excellent ! Exercices libres →</button>
+</div>
+
+<!-- LIBRES 1 -->
+<div class="phase" id="phase-free">
+  <div class="mascot-msg"><span class="emo">🦉</span><p><strong>Exercices libres</strong> — 5 exercices variés, sans aide. Chaque bonne réponse compte !</p></div>
+  <div id="free1-container"></div>
+  <button class="btn-suivant" id="btn-to-free2" onclick="goToPhase('free2',4)">Encore des exercices →</button>
+</div>
+
+<!-- LIBRES 2 -->
+<div class="phase" id="phase-free2">
+  <div class="mascot-msg"><span class="emo">🦉</span><p><strong>Entraînement supplémentaire</strong> — 5 exercices de plus. Tu y es presque !</p></div>
+  <div id="free2-container"></div>
+  <button class="btn-suivant" id="btn-to-bilan" onclick="goToPhase('bilan',5)">🌟 Voir mon bilan</button>
+</div>
+
+<!-- BILAN -->
+<div class="phase" id="phase-bilan">
+  <div class="bilan-card">
+    <span class="bilan-icon">🔢</span>
+    <h2 class="bilan-title" id="bilan-title">Résultat</h2>
+    <p class="bilan-msg" id="bilan-msg"></p>
+    <div class="stars-row"><span class="star-big" id="star1">⭐</span><span class="star-big" id="star2">⭐</span><span class="star-big" id="star3">⭐</span></div>
+    <div class="score-circle"><span class="score-num" id="bilan-score">0</span><span class="score-sub" id="bilan-total-txt">/ 0 pts</span></div>
+    <div class="memo-card">
+      <h3>Mémo — Puissances de 10</h3>
+      <div class="memo-grid">
+        <div class="memo-item"><strong>Multiplication</strong><br>10ᵃ × 10ᵇ = 10<sup>a+b</sup><br>Additionner les exposants</div>
+        <div class="memo-item"><strong>Division</strong><br>10ᵃ ÷ 10ᵇ = 10<sup>a−b</sup><br>Soustraire les exposants</div>
+        <div class="memo-item"><strong>Puissance de puissance</strong><br>(10ᵃ)ᵇ = 10<sup>a×b</sup><br>Multiplier les exposants</div>
+        <div class="memo-item"><strong>Notation scientifique</strong><br>a × 10ⁿ avec 1 ≤ a &lt; 10<br>Ex : 4,7 × 10⁴ = 47 000</div>
+      </div>
+    </div>
+    <div class="bilan-btns">
+      <button class="btn-act secondary" onclick="location.reload()">↺ Recommencer</button>
+      <button class="btn-act primary" onclick="location.href='../12-15ans.html'">← Retour aux fiches</button>
+    </div>
+  </div>
+</div>
+</main>
+
+<script>
+// ════════════════════════════════════════════════
+// DONNÉES GUIDÉ 1 — QCM par étape (4 variantes)
+// ════════════════════════════════════════════════
+var G1 = [
+  { titre:"Calcule : 10³ × 10⁵",
+    etapes:[
+      { q:"Étape 1 — Quelle règle applique-t-on pour multiplier deux puissances de 10 ?",
+        opts:["On additionne les exposants","On multiplie les exposants","On additionne les bases"],
+        ok:0, hint:"10ᵃ × 10ᵇ = 10 à la puissance a+b ou a×b ?",
+        expl_ok:"Pour multiplier : on additionne les exposants. 10ᵃ × 10ᵇ = 10^(a+b).",
+        expl_ko:"Règle multiplication : additionner les exposants (pas les multiplier !)" },
+      { q:"Étape 2 — Quels sont les deux exposants à additionner dans 10³ × 10⁵ ?",
+        opts:["3 et 5","10 et 10","3 et 10"],
+        ok:0, hint:"Dans 10³, l'exposant est le petit chiffre en haut : 3. Même chose pour 10⁵.",
+        expl_ok:"Exposants : 3 (de 10³) et 5 (de 10⁵). On va calculer 3 + 5.",
+        expl_ko:"Les exposants sont les petits chiffres en haut : 3 et 5." },
+      { q:"Étape 3 — Calcule 3 + 5 = ?",
+        opts:["8","15","2","35"],
+        ok:0, hint:"Simple addition.",
+        expl_ok:"3 + 5 = 8. Ce sera l'exposant du résultat.",
+        expl_ko:"3 + 5 = 8 (pas 15 qui serait 3×5, ni 35 qui juxtapose)." },
+      { q:"Étape 4 — Résultat final de 10³ × 10⁵ ?",
+        opts:["10⁸","10¹⁵","10²","100⁸"],
+        ok:0, hint:"La base reste 10, l'exposant est 3+5.",
+        expl_ok:"10³ × 10⁵ = 10⁸. Vérif : 1000 × 100 000 = 100 000 000 = 10⁸ ✓",
+        expl_ko:"Base 10, exposant = 3+5 = 8 → 10⁸." }
+    ]
+  },
+  { titre:"Calcule : 10⁷ ÷ 10³",
+    etapes:[
+      { q:"Étape 1 — Quelle règle applique-t-on pour diviser deux puissances de 10 ?",
+        opts:["On soustrait les exposants","On divise les exposants","On additionne les exposants"],
+        ok:0, hint:"10ᵃ ÷ 10ᵇ = 10 à la puissance a−b ou a+b ?",
+        expl_ok:"Pour diviser : on soustrait les exposants. 10ᵃ ÷ 10ᵇ = 10^(a−b).",
+        expl_ko:"Règle division : soustraire les exposants (exposant du dividende − exposant du diviseur)." },
+      { q:"Étape 2 — Dans 10⁷ ÷ 10³, on calcule quel − quel ?",
+        opts:["7 − 3","3 − 7","7 + 3"],
+        ok:0, hint:"Exposant du dividende (10⁷) − exposant du diviseur (10³).",
+        expl_ok:"On soustrait l'exposant du diviseur à celui du dividende : 7 − 3.",
+        expl_ko:"Dividende 10⁷ (exposant 7) ÷ diviseur 10³ (exposant 3) → 7 − 3." },
+      { q:"Étape 3 — Calcule 7 − 3 = ?",
+        opts:["4","10","−4","21"],
+        ok:0, hint:"7 − 3 = ?",
+        expl_ok:"7 − 3 = 4. C'est l'exposant du résultat.",
+        expl_ko:"7 − 3 = 4. Ne pas inverser l'ordre de la soustraction." },
+      { q:"Étape 4 — Résultat final de 10⁷ ÷ 10³ ?",
+        opts:["10⁴","10¹⁰","10⁻⁴","10²¹"],
+        ok:0, hint:"Base 10, exposant = 7−3.",
+        expl_ok:"10⁷ ÷ 10³ = 10⁴. Vérif : 10 000 000 ÷ 1 000 = 10 000 = 10⁴ ✓",
+        expl_ko:"Base 10, exposant = 7−3 = 4 → 10⁴." }
+    ]
+  },
+  { titre:"Calcule : (10²)³",
+    etapes:[
+      { q:"Étape 1 — Quelle règle pour élever une puissance de 10 à une autre puissance ?",
+        opts:["On multiplie les exposants","On additionne les exposants","On divise les exposants"],
+        ok:0, hint:"(10ᵃ)ᵇ = 10 à la puissance a×b ou a+b ?",
+        expl_ok:"Puissance de puissance : on multiplie les exposants. (10ᵃ)ᵇ = 10^(a×b).",
+        expl_ko:"Règle puissance de puissance : multiplier les deux exposants." },
+      { q:"Étape 2 — Dans (10²)³, quels sont les deux exposants à multiplier ?",
+        opts:["2 et 3","10 et 2","10 et 3"],
+        ok:0, hint:"Exposant intérieur (de 10²) et exposant extérieur (³).",
+        expl_ok:"Exposant intérieur = 2, exposant extérieur = 3. On calcule 2 × 3.",
+        expl_ko:"(10²)³ → exposant intérieur 2, exposant extérieur 3." },
+      { q:"Étape 3 — Calcule 2 × 3 = ?",
+        opts:["6","5","8","23"],
+        ok:0, hint:"2 × 3 = ?",
+        expl_ok:"2 × 3 = 6. Ce sera l'exposant du résultat.",
+        expl_ko:"2 × 3 = 6 (pas 5 qui serait 2+3, ni 23 qui juxtapose)." },
+      { q:"Étape 4 — Résultat final de (10²)³ ?",
+        opts:["10⁶","10⁵","10²³","10⁸"],
+        ok:0, hint:"Base 10, exposant = 2×3.",
+        expl_ok:"(10²)³ = 10⁶. Vérif : 10² = 100, 100³ = 1 000 000 = 10⁶ ✓",
+        expl_ko:"Base 10, exposant = 2×3 = 6 → 10⁶." }
+    ]
+  },
+  { titre:"Calcule : 10⁵ × 10⁻²",
+    etapes:[
+      { q:"Étape 1 — Quelle règle s'applique ici (c'est une multiplication) ?",
+        opts:["Multiplication → additionner les exposants","Division → soustraire les exposants","Puissance → multiplier les exposants"],
+        ok:0, hint:"Le signe × entre les deux puissances indique une multiplication.",
+        expl_ok:"Multiplication → additionner les exposants : 5 + (−2).",
+        expl_ko:"Le signe × → règle multiplication → additionner les exposants." },
+      { q:"Étape 2 — Quel est l'exposant de 10⁻² ?",
+        opts:["−2","+2","½"],
+        ok:0, hint:"L'exposant est le petit chiffre en haut, avec son signe.",
+        expl_ok:"L'exposant de 10⁻² est −2. Le signe négatif fait partie de l'exposant.",
+        expl_ko:"Dans 10⁻², le − fait partie de l'exposant : exposant = −2." },
+      { q:"Étape 3 — Calcule 5 + (−2) = ?",
+        opts:["3","7","−3","10"],
+        ok:0, hint:"Additionner un négatif revient à soustraire : 5 + (−2) = 5 − 2.",
+        expl_ok:"5 + (−2) = 5 − 2 = 3. L'exposant du résultat est 3.",
+        expl_ko:"5 + (−2) = 5 − 2 = 3. Ajouter un négatif = soustraire." },
+      { q:"Étape 4 — Résultat final de 10⁵ × 10⁻² ?",
+        opts:["10³","10⁷","10⁻¹⁰","10⁻³"],
+        ok:0, hint:"Base 10, exposant = 5+(−2) = 3.",
+        expl_ok:"10⁵ × 10⁻² = 10³. Vérif : 100 000 × 0,01 = 1 000 = 10³ ✓",
+        expl_ko:"Base 10, exposant = 5+(−2) = 3 → 10³." }
+    ]
+  }
+];
+
+// ════════════════════════════════════════════════
+// DONNÉES GUIDÉ 2 — Saisie par étape (4 variantes)
+// ════════════════════════════════════════════════
+var G2 = [
+  { titre:"Écris 35 000 en notation scientifique",
+    etapes:[
+      { q:"Étape 1 — Quel est le premier chiffre significatif de 35 000 ?", acc:["3"],
+        hint:"Le premier chiffre non nul en partant de la gauche.",
+        expl_ok:"3 est le premier chiffre significatif. On partira de 3,... pour construire le coefficient.",
+        expl_ko:"Lis de gauche à droite : le premier chiffre non nul est 3." },
+      { q:"Étape 2 — Pour obtenir un nombre entre 1 et 10, écris le coefficient a (sous la forme 3,?).", acc:["3.5","3,5"],
+        hint:"Prends 35 000 et place la virgule après le 3 : 3,5000.",
+        expl_ok:"3,5 est bien entre 1 et 10. C'est le coefficient a de la notation scientifique.",
+        expl_ko:"Déplace la virgule après le premier chiffre : 35 000 → 3,5000." },
+      { q:"Étape 3 — De combien de rangs as-tu déplacé la virgule vers la gauche ?", acc:["4"],
+        hint:"Compte : 35 000 → 3 500,0 → 350,00 → 35,000 → 3,5000.",
+        expl_ok:"4 rangs vers la gauche → exposant positif = 4.",
+        expl_ko:"Compte les décalages : 35 000 → 3,5000 = 4 déplacements." },
+      { q:"Étape 4 — Quel est l'exposant ? (déplacement vers la gauche → exposant positif)", acc:["4","+4"],
+        hint:"4 rangs vers la gauche → exposant = +4.",
+        expl_ok:"Exposant = +4. Donc 35 000 = 3,5 × 10⁴.",
+        expl_ko:"Vers la gauche → exposant positif. 4 rangs → exposant 4." }
+    ]
+  },
+  { titre:"Écris 0,000 47 en notation scientifique",
+    etapes:[
+      { q:"Étape 1 — Quel est le premier chiffre significatif de 0,000 47 ?", acc:["4"],
+        hint:"Ignore les zéros après la virgule jusqu'au premier chiffre non nul.",
+        expl_ok:"4 est le premier chiffre significatif. Les zéros avant ne comptent pas.",
+        expl_ko:"Les zéros après la virgule avant le premier chiffre non nul ne comptent pas. Ici c'est 4." },
+      { q:"Étape 2 — Écris le coefficient a sous la forme 4,?", acc:["4.7","4,7"],
+        hint:"Les chiffres significatifs sont 4 et 7 → le coefficient est 4,7.",
+        expl_ok:"4,7 est bien entre 1 et 10. C'est le coefficient.",
+        expl_ko:"Les chiffres significatifs : 4 et 7 → coefficient 4,7." },
+      { q:"Étape 3 — Pour passer de 0,000 47 à 4,7, de combien de rangs déplace-t-on la virgule vers la droite ?", acc:["4"],
+        hint:"0,00047 → 0,0047 → 0,047 → 0,47 → 4,7 : compte les étapes.",
+        expl_ok:"4 rangs vers la droite → exposant négatif.",
+        expl_ko:"0,00047 → 0,0047 → 0,047 → 0,47 → 4,7 = 4 déplacements." },
+      { q:"Étape 4 — Déplacement vers la droite → exposant négatif. Écris l'exposant avec son signe.", acc:["-4","−4"],
+        hint:"4 rangs vers la droite → exposant = −4.",
+        expl_ok:"0,000 47 = 4,7 × 10⁻⁴. Vérif : 4,7 × 0,0001 = 0,00047 ✓",
+        expl_ko:"Vers la droite = petit nombre = exposant négatif. Exposant = −4." }
+    ]
+  },
+  { titre:"Calcule 10⁴ × 10⁻⁷ et donne l'exposant",
+    etapes:[
+      { q:"Étape 1 — Identifie le premier exposant.", acc:["4"],
+        hint:"Dans 10⁴ × 10⁻⁷, le premier exposant est celui de 10⁴.",
+        expl_ok:"Premier exposant : 4.",
+        expl_ko:"10⁴ → exposant 4." },
+      { q:"Étape 2 — Identifie le deuxième exposant (avec son signe).", acc:["-7","−7"],
+        hint:"Dans 10⁻⁷, l'exposant est −7 (avec le signe −).",
+        expl_ok:"Deuxième exposant : −7. Le signe fait partie de l'exposant.",
+        expl_ko:"10⁻⁷ → exposant −7 (pas +7)." },
+      { q:"Étape 3 — Calcule 4 + (−7) = ?", acc:["-3","−3"],
+        hint:"4 + (−7) = 4 − 7 = ?",
+        expl_ok:"4 + (−7) = −3. L'exposant du résultat est −3.",
+        expl_ko:"4 + (−7) = 4 − 7 = −3." },
+      { q:"Étape 4 — Résultat : 10⁴ × 10⁻⁷ = 10^?", acc:["-3","−3"],
+        hint:"La base est 10, l'exposant est −3.",
+        expl_ok:"10⁴ × 10⁻⁷ = 10⁻³. Vérif : 10 000 × 0,000 000 1 = 0,001 = 10⁻³ ✓",
+        expl_ko:"Exposant = 4+(−7) = −3 → 10⁻³." }
+    ]
+  },
+  { titre:"Calcule 10⁶ ÷ 10⁻² et donne l'exposant",
+    etapes:[
+      { q:"Étape 1 — Identifie l'exposant du dividende (10⁶).", acc:["6"],
+        hint:"Dans 10⁶, l'exposant est le petit chiffre en haut.",
+        expl_ok:"Exposant du dividende : 6.",
+        expl_ko:"10⁶ → exposant 6." },
+      { q:"Étape 2 — Identifie l'exposant du diviseur (10⁻²) avec son signe.", acc:["-2","−2"],
+        hint:"Dans 10⁻², l'exposant est −2.",
+        expl_ok:"Exposant du diviseur : −2.",
+        expl_ko:"10⁻² → exposant −2 (le tiret est le signe négatif)." },
+      { q:"Étape 3 — Division : calcule 6 − (−2) = ?", acc:["8"],
+        hint:"Soustraire un négatif = ajouter son opposé : 6 − (−2) = 6 + 2.",
+        expl_ok:"6 − (−2) = 6 + 2 = 8. Soustraire un négatif = ajouter !",
+        expl_ko:"6 − (−2) = 6 + 2 = 8. Règle : − (−) = +." },
+      { q:"Étape 4 — Résultat : 10⁶ ÷ 10⁻² = 10^?", acc:["8"],
+        hint:"Exposant = 6−(−2) = 8.",
+        expl_ok:"10⁶ ÷ 10⁻² = 10⁸. Vérif : diviser par 10⁻² = multiplier par 10² → 10⁶ × 10² = 10⁸ ✓",
+        expl_ko:"Exposant = 8 → 10⁸." }
+    ]
+  }
+];
+
+// ════════════════════════════════════════════════
+// POOL EXERCICES LIBRES — 20 exercices variés
+// ════════════════════════════════════════════════
+var FREE_POOL = [
+  // Classement (Hattie)
+  { type:'classify', data:{ q:"10⁻³ est-il plus grand, plus petit ou égal à 1 ?", opts:["Plus grand que 1","Plus petit que 1","Égal à 1"], ok:1, expl:"10⁻³ = 0,001. Exposant négatif → nombre entre 0 et 1, donc inférieur à 1." } },
+  { type:'classify', data:{ q:"10⁴ est-il plus grand, plus petit ou égal à 1 ?", opts:["Plus grand que 1","Plus petit que 1","Égal à 1"], ok:0, expl:"10⁴ = 10 000. Exposant positif → nombre supérieur à 1." } },
+  { type:'classify', data:{ q:"10⁰ est-il plus grand, plus petit ou égal à 1 ?", opts:["Plus grand que 1","Plus petit que 1","Égal à 1"], ok:2, expl:"10⁰ = 1. Tout nombre élevé à la puissance 0 vaut exactement 1." } },
+  { type:'classify', data:{ q:"10⁻¹ est-il plus grand, plus petit ou égal à 1 ?", opts:["Plus grand que 1","Plus petit que 1","Égal à 1"], ok:1, expl:"10⁻¹ = 0,1. Exposant négatif → inférieur à 1." } },
+  // Calcul exposant — saisie (Vygotsky)
+  { type:'saisie', data:{ q:"10³ × 10⁶ = 10^?", acc:["9"], expl:"Multiplication → additionner : 3 + 6 = 9 → 10⁹." } },
+  { type:'saisie', data:{ q:"10⁸ ÷ 10³ = 10^?", acc:["5"], expl:"Division → soustraire : 8 − 3 = 5 → 10⁵." } },
+  { type:'saisie', data:{ q:"(10²)⁴ = 10^?", acc:["8"], expl:"Puissance de puissance → multiplier : 2 × 4 = 8 → 10⁸." } },
+  { type:'saisie', data:{ q:"10⁵ × 10⁻³ = 10^?", acc:["2"], expl:"Multiplication : 5 + (−3) = 2 → 10²." } },
+  { type:'saisie', data:{ q:"10³ ÷ 10⁻² = 10^?", acc:["5"], expl:"Division : 3 − (−2) = 3 + 2 = 5 → 10⁵." } },
+  { type:'saisie', data:{ q:"10⁻⁴ × 10⁷ = 10^?", acc:["3"], expl:"Multiplication : −4 + 7 = 3 → 10³." } },
+  // Jugement (Csikszentmihalyi)
+  { type:'jugement', data:{ consigne:"Laquelle est une notation scientifique valide ?", a:"45 × 10³", b:"4,5 × 10⁴", ok:"B", expl:"45 n'est pas entre 1 et 10 → invalide. 4,5 × 10⁴ est correct : 1 ≤ 4,5 < 10. Les deux valent 45 000." } },
+  { type:'jugement', data:{ consigne:"Laquelle est une notation scientifique valide ?", a:"3,2 × 10⁻⁵", b:"0,32 × 10⁻⁴", ok:"A", expl:"0,32 < 1 → invalide. 3,2 × 10⁻⁵ est correct. Les deux valent 0,000 032." } },
+  { type:'jugement', data:{ consigne:"Laquelle est correcte ?", a:"10⁴ × 10⁻¹ = 10³", b:"10⁴ × 10⁻¹ = 10⁻⁴", ok:"A", expl:"4 + (−1) = 3 → 10³. La phrase B soustrait au lieu d'additionner." } },
+  { type:'jugement', data:{ consigne:"Laquelle est correcte ?", a:"10³ × 10⁴ = 10¹²", b:"10³ × 10⁴ = 10⁷", ok:"B", expl:"Multiplication → additionner : 3 + 4 = 7 → 10⁷. La phrase A multiplie les exposants — erreur classique !" } },
+  // Valeur décimale (Dweck : raisonnement inverse)
+  { type:'saisie', data:{ q:"Quelle est la valeur décimale de 10⁻⁴ ?", acc:["0.0001","0,0001"], expl:"10⁻⁴ = 1/10 000 = 0,0001. 4 rangs à gauche depuis 1." } },
+  { type:'saisie', data:{ q:"Quel est l'exposant n pour écrire 1 000 000 = 10^n ?", acc:["6"], expl:"1 000 000 = 10⁶ : 1 suivi de 6 zéros." } },
+  { type:'saisie', data:{ q:"Quelle est la valeur décimale de 10⁻² ?", acc:["0.01","0,01"], expl:"10⁻² = 1/100 = 0,01." } },
+  // Problèmes concrets (Deci & Ryan)
+  { type:'classify', data:{ q:"🌌 Un atome a un rayon de 10⁻¹⁰ m. Un virus a un rayon de 10⁻⁷ m. Lequel est plus petit ?", opts:["L'atome (10⁻¹⁰)","Le virus (10⁻⁷)","Ils sont égaux"], ok:0, expl:"10⁻¹⁰ < 10⁻⁷ : un exposant négatif plus grand en valeur absolue donne un nombre plus petit. L'atome est bien plus petit." } },
+  { type:'classify', data:{ q:"🔬 En notation scientifique, lequel représente le plus grand nombre ?", opts:["3,2 × 10⁵","7,8 × 10⁴","9,9 × 10⁴"], ok:0, expl:"3,2 × 10⁵ = 320 000. Les deux autres sont inférieurs à 100 000. L'exposant 5 > 4 fait la différence." } },
+  { type:'saisie', data:{ q:"💡 L'exposant n de 10ⁿ augmente de 1 quand on multiplie par 10. Quel exposant correspond à 10 milliards (10 000 000 000) ?", acc:["10"], expl:"10 milliards = 10 000 000 000 = 10¹⁰ : 1 suivi de 10 zéros." } }
+];
+
+// ════════════════════════════════════════════════
+// ÉTAT
+// ════════════════════════════════════════════════
+var score = 0;
+var g1Idx = 0, g2Idx = 0, g1Tries = 0, g2Tries = 0;
+var free1Exs = [], free2Exs = [], free1Done = 0, free2Done = 0;
+
+function ns(s){ return (s||'').trim().toLowerCase().replace(/\s+/g,'').replace(',','.'); }
+function shuffle(arr){ var a=arr.slice(); for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;} return a; }
+function addScore(){ score++; document.getElementById('score-display').textContent=score; }
+
+// ════════════════════════════════════════════════
+// NAVIGATION
+// ════════════════════════════════════════════════
+function updateSteps(active){
+  for(var i=0;i<6;i++){
+    var s=document.getElementById('step-'+i); if(!s) continue;
+    s.classList.remove('active','done');
+    if(i<active) s.classList.add('done'); else if(i===active) s.classList.add('active');
+  }
+}
+
+function goToPhase(ph,si){
+  document.querySelectorAll('.phase').forEach(function(p){ p.classList.remove('active'); });
+  var el=document.getElementById('phase-'+ph);
+  if(el){ el.classList.add('active'); setTimeout(function(){ el.scrollIntoView({behavior:'smooth',block:'start'}); },100); }
+  updateSteps(si);
+  if(ph==='guided1') initGuided1();
+  if(ph==='guided2') initGuided2();
+  if(ph==='free') initFree1();
+  if(ph==='free2') initFree2();
+  if(ph==='bilan') showBilan();
+}
+
+function revealBloc(n){
+  var bloc=document.getElementById('bloc-'+n); if(!bloc) return;
+  var prev=document.getElementById('bloc-'+(n-1));
+  if(prev){ var b=prev.querySelector('.btn-compris'); if(b){b.textContent='✓ Compris';b.disabled=true;b.style.opacity='.4';} }
+  bloc.classList.add('revealed');
+  setTimeout(function(){
+    var hH=(document.querySelector('.header')||{offsetHeight:0}).offsetHeight;
+    var rect=bloc.getBoundingClientRect();
+    window.scrollTo({top:window.pageYOffset+rect.top-hH-20,behavior:'smooth'});
+  },150);
+}
+
+// ════════════════════════════════════════════════
+// GUIDÉ 1
+// ════════════════════════════════════════════════
+function initGuided1(){
+  g1Idx=Math.floor(Math.random()*G1.length); g1Tries=0;
+  document.getElementById('g1-reset').classList.remove('show');
+  document.getElementById('btn-to-g2').classList.remove('show');
+  renderGuided1();
+}
+
+function renderGuided1(){
+  var v=G1[g1Idx], c=document.getElementById('g1-container'); c.innerHTML='';
+  var box=document.createElement('div'); box.className='guided-problem';
+  box.innerHTML='<div class="guided-problem-title">🧮 '+v.titre
+    +'<span class="tries-left" id="g1-tries">3 essais</span></div>'
+    +'<div class="step-container" id="g1-sc"></div>';
+  c.appendChild(box);
+  var sc=document.getElementById('g1-sc');
+  v.etapes.forEach(function(step,si){
+    var so=shuffle(step.opts.map(function(o,oi){return{t:o,i:oi};}));
+    var sb=document.createElement('div');
+    sb.className='step-box'+(si===0?' active':''); sb.id='g1s'+si;
+    sb.innerHTML='<div class="step-num">Étape '+(si+1)+'/'+v.etapes.length+'</div>'
+      +'<div class="step-question">'+step.q+'</div>'
+      +'<div class="step-hint" id="g1h'+si+'">💡 '+step.hint+'</div>'
+      +'<div class="step-qcm-opts">'
+        +so.map(function(o){return '<button class="step-qcm-opt" onclick="g1Check('+si+','+o.i+',this)">'+o.t+'</button>';}).join('')
+      +'</div>'
+      +'<div class="step-fb" id="g1f'+si+'"></div>';
+    sc.appendChild(sb);
+  });
+  g1Tries=0; updG1();
+}
+
+function updG1(){ var el=document.getElementById('g1-tries'); if(el) el.textContent=(3-g1Tries)+' essai'+(3-g1Tries>1?'s':''); }
+
+function g1Check(si,ci,btn){
+  var v=G1[g1Idx], step=v.etapes[si];
+  var sb=document.getElementById('g1s'+si), fb=document.getElementById('g1f'+si);
+  if(sb.classList.contains('correct')) return;
+  if(ci===step.ok){
+    btn.classList.add('opt-correct');
+    sb.querySelectorAll('.step-qcm-opt').forEach(function(b){b.disabled=true;});
+    sb.classList.add('correct');
+    fb.className='step-fb show fb-ok';
+    if(g1Tries===0){ fb.innerHTML='✓ '+step.expl_ok+' <span style="color:#065f46;font-size:.78rem;">(+1 pt)</span>'; addScore(); }
+    else { fb.innerHTML='✓ '+step.expl_ok+' <span style="color:#64748b;font-size:.78rem;">(pas de point — réussi après plusieurs essais)</span>'; }
+    g1Tries=0; updG1();
+    var nx=document.getElementById('g1s'+(si+1));
+    if(nx){ nx.classList.add('active'); setTimeout(function(){nx.scrollIntoView({behavior:'smooth',block:'nearest'});},300); }
+    else { setTimeout(function(){document.getElementById('btn-to-g2').classList.add('show');document.getElementById('btn-to-g2').scrollIntoView({behavior:'smooth',block:'nearest'});},500); }
+  } else {
+    btn.classList.add('opt-wrong'); btn.disabled=true;
+    g1Tries++; updG1();
+    fb.className='step-fb show fb-ko';
+    if(g1Tries<3){
+      fb.innerHTML='✗ Pas tout à fait. Lis l\'indice ci-dessus et réessaie !';
+      document.getElementById('g1h'+si).classList.add('show');
+    } else {
+      fb.innerHTML='✗ '+step.expl_ko+' On recommence depuis le début !';
+      setTimeout(function(){
+        document.getElementById('g1-reset').classList.add('show');
+        document.getElementById('g1-container').innerHTML='';
+        document.getElementById('g1-reset').scrollIntoView({behavior:'smooth',block:'start'});
+      },1200);
+    }
+  }
+}
+
+// ════════════════════════════════════════════════
+// GUIDÉ 2
+// ════════════════════════════════════════════════
+function initGuided2(){
+  g2Idx=Math.floor(Math.random()*G2.length); g2Tries=0;
+  document.getElementById('g2-reset').classList.remove('show');
+  document.getElementById('btn-to-free').classList.remove('show');
+  renderGuided2();
+}
+
+function renderGuided2(){
+  var v=G2[g2Idx], c=document.getElementById('g2-container'); c.innerHTML='';
+  var box=document.createElement('div'); box.className='guided-problem';
+  box.innerHTML='<div class="guided-problem-title">✏️ '+v.titre
+    +'<span class="tries-left" id="g2-tries">3 essais</span></div>'
+    +'<div class="step-container" id="g2-sc"></div>';
+  c.appendChild(box);
+  var sc=document.getElementById('g2-sc');
+  v.etapes.forEach(function(step,si){
+    var sb=document.createElement('div');
+    sb.className='step-box'+(si===0?' active':''); sb.id='g2s'+si;
+    sb.innerHTML='<div class="step-num">Étape '+(si+1)+'/'+v.etapes.length+'</div>'
+      +'<div class="step-question">'+step.q+'</div>'
+      +'<div class="step-hint" id="g2h'+si+'">💡 '+step.hint+'</div>'
+      +'<div class="step-input-row">'
+        +'<input class="step-input" id="g2i'+si+'" type="text" placeholder="?" autocomplete="off" spellcheck="false"'+(si>0?' disabled':'')+'>'
+        +'<button class="btn-step-check" id="g2b'+si+'" onclick="g2Check('+si+')"'+(si>0?' disabled':'')+'>Vérifier</button>'
+      +'</div>'
+      +'<div class="step-fb" id="g2f'+si+'"></div>';
+    sc.appendChild(sb);
+  });
+  g2Tries=0; updG2();
+}
+
+function updG2(){ var el=document.getElementById('g2-tries'); if(el) el.textContent=(3-g2Tries)+' essai'+(3-g2Tries>1?'s':''); }
+
+function g2Check(si){
+  var v=G2[g2Idx], step=v.etapes[si];
+  var inp=document.getElementById('g2i'+si), fb=document.getElementById('g2f'+si), sb=document.getElementById('g2s'+si);
+  if(!inp||sb.classList.contains('correct')) return;
+  var val=ns(inp.value), ok=step.acc.some(function(a){return val===ns(a);});
+  if(ok){
+    inp.classList.add('input-ok'); inp.disabled=true;
+    document.getElementById('g2b'+si).disabled=true;
+    sb.classList.add('correct');
+    fb.className='step-fb show fb-ok';
+    if(g2Tries===0){ fb.innerHTML='✓ '+step.expl_ok+' <span style="color:#065f46;font-size:.78rem;">(+1 pt)</span>'; addScore(); }
+    else { fb.innerHTML='✓ '+step.expl_ok+' <span style="color:#64748b;font-size:.78rem;">(pas de point — réussi après plusieurs essais)</span>'; }
+    g2Tries=0; updG2();
+    var nxSb=document.getElementById('g2s'+(si+1));
+    if(nxSb){
+      nxSb.classList.add('active');
+      var ni=document.getElementById('g2i'+(si+1)), nb=document.getElementById('g2b'+(si+1));
+      if(ni) ni.disabled=false; if(nb) nb.disabled=false;
+      setTimeout(function(){nxSb.scrollIntoView({behavior:'smooth',block:'nearest'});},300);
+    } else {
+      setTimeout(function(){document.getElementById('btn-to-free').classList.add('show');document.getElementById('btn-to-free').scrollIntoView({behavior:'smooth',block:'nearest'});},500);
+    }
+  } else {
+    inp.classList.add('input-ko'); inp.value=''; inp.placeholder='Réessaie...';
+    g2Tries++; updG2();
+    fb.className='step-fb show fb-ko';
+    if(g2Tries<3){
+      fb.innerHTML='✗ Pas tout à fait. Lis l\'indice ci-dessus et réessaie !';
+      document.getElementById('g2h'+si).classList.add('show');
+      setTimeout(function(){inp.classList.remove('input-ko');inp.placeholder='?';},1000);
+    } else {
+      fb.innerHTML='✗ '+step.expl_ko+' On recommence !';
+      setTimeout(function(){
+        document.getElementById('g2-reset').classList.add('show');
+        document.getElementById('g2-container').innerHTML='';
+        document.getElementById('g2-reset').scrollIntoView({behavior:'smooth',block:'start'});
+      },1200);
+    }
+  }
+}
+
+// ════════════════════════════════════════════════
+// EXERCICES LIBRES — moteur commun
+// ════════════════════════════════════════════════
+function buildFreeCard(ex, i, prefix, onDone){
+  var card=document.createElement('div'); card.className='free-ex-card'; card.id=prefix+i;
+  if(ex.type==='classify') buildClassify(card,ex.data,i,prefix,onDone);
+  else if(ex.type==='saisie') buildSaisie(card,ex.data,i,prefix,onDone);
+  else if(ex.type==='jugement') buildJugement(card,ex.data,i,prefix,onDone);
+  return card;
+}
+
+function buildClassify(card,data,i,prefix,onDone){
+  card.innerHTML='<div class="free-ex-label">Exercice '+(i+1)+'</div>'
+    +'<div class="free-ex-question">'+data.q+'</div>'
+    +'<div class="free-classify-btns" id="'+prefix+'cl'+i+'"></div>'
+    +'<div class="free-fb" id="'+prefix+'fb'+i+'"></div>';
+  var ba=card.querySelector('#'+prefix+'cl'+i);
+  data.opts.forEach(function(opt,oi){
+    var btn=document.createElement('button'); btn.className='free-classify-btn'; btn.textContent=opt;
+    btn.onclick=function(){
+      if(card.classList.contains('answered')) return;
+      card.classList.add('answered'); ba.querySelectorAll('button').forEach(function(b){b.disabled=true;});
+      var fb=document.getElementById(prefix+'fb'+i);
+      if(oi===data.ok){ btn.classList.add('ans-correct'); fb.className='free-fb show fb-ok'; fb.innerHTML='✓ '+data.expl; addScore(); }
+      else { btn.classList.add('ans-wrong'); ba.querySelectorAll('button').forEach(function(b,bi){if(bi===data.ok)b.classList.add('ans-reveal');}); fb.className='free-fb show fb-ko'; fb.innerHTML='✗ '+data.expl; }
+      onDone();
+    };
+    ba.appendChild(btn);
+  });
+}
+
+function buildSaisie(card,data,i,prefix,onDone){
+  card.innerHTML='<div class="free-ex-label">Exercice '+(i+1)+'</div>'
+    +'<div class="free-ex-question">'+data.q+'</div>'
+    +'<div class="free-input-row"><input class="free-input" id="'+prefix+'inp'+i+'" type="text" placeholder="?" autocomplete="off" spellcheck="false">'
+    +'<button class="btn-free-check" onclick="checkFreeS(\''+prefix+'\','+i+')">Vérifier</button></div>'
+    +'<div class="free-fb" id="'+prefix+'fb'+i+'"></div>';
+}
+
+var _freeDoneCallbacks = {};
+function checkFreeS(prefix,i){
+  var card=document.getElementById(prefix+i); if(card.classList.contains('answered')) return;
+  var exs=prefix==='f1'?free1Exs:free2Exs;
+  var ex=exs[i], inp=document.getElementById(prefix+'inp'+i), fb=document.getElementById(prefix+'fb'+i);
+  var val=ns(inp.value), ok=ex.data.acc.some(function(a){return val===ns(a);});
+  card.classList.add('answered'); inp.disabled=true; card.querySelector('.btn-free-check').disabled=true;
+  if(ok){ inp.classList.add('free-ok'); fb.className='free-fb show fb-ok'; fb.innerHTML='✓ '+ex.data.expl; addScore(); }
+  else { inp.classList.add('free-ko'); fb.className='free-fb show fb-ko'; fb.innerHTML='✗ Réponse : <strong>'+ex.data.acc[0]+'</strong>. '+ex.data.expl; }
+  if(_freeDoneCallbacks[prefix+i]) _freeDoneCallbacks[prefix+i]();
+}
+
+function buildJugement(card,data,i,prefix,onDone){
+  card.innerHTML='<div class="free-ex-label">Exercice '+(i+1)+'</div>'
+    +'<div class="free-ex-question">'+data.consigne+'</div>'
+    +'<div class="jugement-opts">'
+      +'<button class="jugement-opt-btn" onclick="checkFreeJ(\''+prefix+'\','+i+',\'A\',this)"><strong>A —</strong> '+data.a+'</button>'
+      +'<button class="jugement-opt-btn" onclick="checkFreeJ(\''+prefix+'\','+i+',\'B\',this)"><strong>B —</strong> '+data.b+'</button>'
+    +'</div><div class="free-fb" id="'+prefix+'fb'+i+'"></div>';
+}
+
+function checkFreeJ(prefix,i,choice,btn){
+  var card=document.getElementById(prefix+i); if(card.classList.contains('answered')) return;
+  var exs=prefix==='f1'?free1Exs:free2Exs;
+  var ex=exs[i], fb=document.getElementById(prefix+'fb'+i);
+  card.classList.add('answered'); card.querySelectorAll('.jugement-opt-btn').forEach(function(b){b.disabled=true;});
+  if(choice===ex.data.ok){ btn.classList.add('jug-correct'); fb.className='free-fb show fb-ok'; fb.innerHTML='✓ '+ex.data.expl; addScore(); }
+  else { btn.classList.add('jug-wrong'); card.querySelectorAll('.jugement-opt-btn')[choice==='A'?1:0].classList.add('jug-correct'); fb.className='free-fb show fb-ko'; fb.innerHTML='✗ '+ex.data.expl; }
+  if(_freeDoneCallbacks[prefix+i]) _freeDoneCallbacks[prefix+i]();
+}
+
+function initFree1(){
+  free1Exs=shuffle(FREE_POOL.slice()).slice(0,5); free1Done=0;
+  var c=document.getElementById('free1-container'); c.innerHTML='';
+  free1Exs.forEach(function(ex,i){
+    _freeDoneCallbacks['f1'+i]=function(){
+      free1Done++;
+      if(free1Done>=free1Exs.length) setTimeout(function(){document.getElementById('btn-to-free2').classList.add('show');document.getElementById('btn-to-free2').scrollIntoView({behavior:'smooth',block:'nearest'});},600);
+    };
+    c.appendChild(buildFreeCard(ex,i,'f1',_freeDoneCallbacks['f1'+i]));
+  });
+}
+
+function initFree2(){
+  var used=free1Exs.map(function(e){return e.data.q||e.data.consigne;});
+  var pool=FREE_POOL.filter(function(e){return used.indexOf(e.data.q||e.data.consigne)<0;});
+  free2Exs=shuffle(pool).slice(0,5); free2Done=0;
+  var c=document.getElementById('free2-container'); c.innerHTML='';
+  free2Exs.forEach(function(ex,i){
+    _freeDoneCallbacks['f2'+i]=function(){
+      free2Done++;
+      if(free2Done>=free2Exs.length) setTimeout(function(){document.getElementById('btn-to-bilan').classList.add('show');document.getElementById('btn-to-bilan').scrollIntoView({behavior:'smooth',block:'nearest'});},600);
+    };
+    c.appendChild(buildFreeCard(ex,i,'f2',_freeDoneCallbacks['f2'+i]));
+  });
+}
+
+// ════════════════════════════════════════════════
+// BILAN
+// ════════════════════════════════════════════════
+function showBilan(){
+  var g1Steps=G1[g1Idx]?G1[g1Idx].etapes.length:4;
+  var g2Steps=G2[g2Idx]?G2[g2Idx].etapes.length:4;
+  var total=g1Steps+g2Steps+10;
+  document.getElementById('bilan-score').textContent=score;
+  document.getElementById('bilan-total-txt').textContent='/ '+total+' pts';
+  var pct=score/total;
+  var title,msg;
+  if(pct>=0.8){title='Excellent !';msg='Tu maîtrises les puissances de 10 — règles de calcul, notation scientifique et sens physique !';}
+  else if(pct>=0.6){title='Bon travail !';msg='Bonne base ! Revois les règles avec les exposants négatifs et vérifie toujours que ton coefficient est entre 1 et 10.';}
+  else{title='Continue !';msg='Relis les trois règles et refais les exercices guidés. La régularité fait tout !';}
+  document.getElementById('bilan-title').textContent=title;
+  document.getElementById('bilan-msg').textContent=msg;
+  var s=[Math.ceil(total*.4),Math.ceil(total*.7),Math.ceil(total*.9)];
+  ['star1','star2','star3'].forEach(function(id,i){
+    var el=document.getElementById(id);
+    if(score>=s[i]){(function(e,d){setTimeout(function(){e.classList.add('earned');},d);})(el,300+i*400);}
+    else el.style.filter='grayscale(1)';
+  });
+  if(pct>=0.6) lanceConfetti();
+}
+
+function lanceConfetti(){
+  var cols=['#1e40af','#93c5fd','#059669','#d97706','#dc2626'];
+  for(var i=0;i<50;i++){
+    var el=document.createElement('div'); el.className='confetti-piece';
+    el.style.cssText='left:'+Math.random()*100+'vw;background:'+cols[Math.floor(Math.random()*5)]
+      +';animation-duration:'+(1.5+Math.random()*2)+'s;animation-delay:'+Math.random()*1.2
+      +'s;width:'+(6+Math.random()*7)+'px;height:'+(6+Math.random()*7)+'px;border-radius:'+(Math.random()>.5?'50%':'2px')+';';
+    document.body.appendChild(el); setTimeout(function(){if(el.parentNode)el.remove();},4000);
+  }
+}
+</script>
+</body>
+</html>

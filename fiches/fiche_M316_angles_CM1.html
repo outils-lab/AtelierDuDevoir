@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>M316 — Les angles | L'Atelier du Devoir</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--acc:#d97706;--acc-pale:#fffbeb;--acc-mid:#fcd34d;--acc-dark:#b45309;--mint:#059669;--mint-pale:#d1fae5;--mint-deep:#047857;--coral:#dc2626;--coral-pale:#fee2e2;--sun:#d97706;--sun-pale:#fef3c7;--text:#1e293b;--text-light:#64748b;--radius:14px;--radius-sm:8px;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Nunito',sans-serif;background:#fffbeb;color:var(--text);font-size:16px;line-height:1.6;}
+.header{background:white;border-bottom:3px solid var(--acc-pale);position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.08);}
+.header-top{display:flex;align-items:center;justify-content:space-between;padding:10px 18px;}
+.logo{font-family:'Fredoka One',cursive;font-size:1.2rem;color:var(--acc);text-decoration:none;}
+.score-badge{background:var(--acc);color:white;font-weight:800;font-size:.88rem;padding:5px 14px;border-radius:20px;}
+.steps-wrap{padding:0 18px 8px;}
+.steps{display:flex;gap:4px;}
+.step{flex:1;height:6px;border-radius:6px;background:#fde68a;transition:all .35s;}
+.step.done{background:#10b981;}.step.active{background:var(--acc);}
+.steps-labels{display:flex;gap:4px;padding-top:3px;}
+.step-lbl{flex:1;font-size:.46rem;font-weight:700;color:var(--text-light);text-align:center;text-transform:uppercase;letter-spacing:.04em;}
+.main{max-width:700px;margin:0 auto;padding:22px 14px 100px;}
+.phase{display:none;}.phase.active{display:block;}
+.accroche{background:white;border-radius:var(--radius);padding:20px;margin-bottom:20px;border:2px solid var(--acc-pale);display:flex;gap:14px;align-items:flex-start;}
+.accroche-icon{font-size:2.6rem;flex-shrink:0;}
+.accroche-text h1{font-family:'Fredoka One',cursive;font-size:1.5rem;color:var(--acc);margin-bottom:4px;}
+.accroche-text p{color:var(--text-light);font-size:.9rem;line-height:1.5;}
+.meta-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
+.meta-tag{background:var(--acc-pale);border-radius:20px;padding:3px 12px;font-size:.72rem;font-weight:700;color:var(--acc);}
+.lecon-card{background:white;border-radius:var(--radius);padding:20px;margin-bottom:16px;border:2px solid var(--acc-pale);}
+.lecon-card h2{font-family:'Fredoka One',cursive;font-size:1.2rem;color:var(--acc);margin-bottom:14px;}
+.lecon-block{display:none;}.lecon-block.revealed{display:block;}
+.lecon-subtitle{font-weight:800;font-size:.95rem;color:var(--acc);margin-bottom:8px;margin-top:4px;}
+.sep{margin:16px 0;border:none;border-top:2px dashed #fde68a;}
+.analogie{font-size:.9rem;color:var(--text-light);font-style:italic;margin-bottom:10px;line-height:1.6;background:var(--acc-pale);border-radius:var(--radius-sm);padding:10px 14px;border-left:4px solid var(--acc-mid);}
+.def-box{border-left:4px solid var(--acc);background:var(--acc-pale);border-radius:0 var(--radius) var(--radius) 0;padding:12px 16px;margin-bottom:10px;}
+.def-box h4{font-weight:800;color:var(--acc);font-size:.88rem;margin-bottom:6px;}
+.def-box p{font-size:.86rem;color:var(--text);line-height:1.7;}
+.hl{background:var(--sun-pale);color:var(--sun);border-radius:6px;padding:1px 8px;font-weight:800;}
+.hl-g{background:var(--mint-pale);color:var(--mint-deep);border-radius:6px;padding:1px 8px;font-weight:800;}
+.exemple-block{background:white;border:2px solid var(--acc-pale);border-radius:var(--radius-sm);padding:10px 14px;margin-bottom:8px;font-size:.9rem;line-height:1.9;}
+.exemple-block .tag{display:inline-block;background:var(--acc);color:white;font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:20px;margin-right:8px;text-transform:uppercase;}
+.astuce{background:var(--sun-pale);border:2px solid #fde68a;border-radius:var(--radius-sm);padding:10px 14px;font-size:.85rem;margin-top:8px;color:#78350f;}
+.astuce strong{color:#92400e;}
+.piege{background:#fff1f2;border:2px solid #fecdd3;border-radius:var(--radius-sm);padding:10px 14px;font-size:.85rem;margin-top:8px;color:#9f1239;}
+.btn-compris{margin-top:16px;padding:12px 28px;border-radius:30px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.95rem;background:var(--acc);color:white;border:none;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:8px;box-shadow:0 4px 12px rgba(217,119,6,.3);}
+.btn-compris:hover{background:var(--acc-dark);transform:translateY(-2px);}
+.btn-compris:disabled{opacity:.4;cursor:default;transform:none;box-shadow:none;}
+.ugo-msg{background:white;border:2px solid var(--acc-pale);border-radius:var(--radius);padding:14px 16px;margin:14px 0;display:flex;align-items:flex-start;gap:12px;}
+.ugo-msg .ugo{font-size:2rem;flex-shrink:0;}
+.ugo-msg p{font-size:.88rem;color:var(--text-light);line-height:1.6;}
+.ugo-msg p strong{color:var(--acc);}
+.ex-header{background:white;border:2px solid var(--acc-pale);border-radius:var(--radius);padding:14px 18px;margin-bottom:14px;}
+.ex-header h2{font-family:'Fredoka One',cursive;font-size:1.1rem;color:var(--acc);margin-bottom:3px;}
+.ex-header p{color:var(--text-light);font-size:.84rem;}
+.guided-box{background:white;border:3px solid var(--acc);border-radius:var(--radius);padding:18px;margin-bottom:14px;}
+.guided-title{font-size:1rem;font-weight:800;color:var(--acc);margin-bottom:14px;background:var(--acc-pale);padding:9px 14px;border-radius:var(--radius-sm);display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.tries-badge{font-size:.72rem;font-weight:700;color:var(--coral);background:var(--coral-pale);padding:2px 10px;border-radius:20px;margin-left:auto;}
+.step-box{border:2px solid #fde68a;border-radius:10px;padding:14px;transition:all .3s;opacity:.5;pointer-events:none;margin-bottom:8px;}
+.step-box.active{opacity:1;pointer-events:all;border-color:var(--acc-mid);}
+.step-box.correct{border-color:var(--mint);background:var(--mint-pale);opacity:1;}
+.step-lbl-num{font-size:.62rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;}
+.step-q{font-size:.93rem;font-weight:700;margin-bottom:10px;line-height:1.6;}
+.step-hint{font-size:.82rem;color:#92400e;background:var(--sun-pale);border-radius:6px;padding:8px 12px;margin-bottom:8px;display:none;}
+.step-hint.show{display:block;}
+.qcm-opts{display:flex;flex-direction:column;gap:7px;}
+.qcm-opt{padding:10px 14px;border-radius:10px;border:2px solid #fde68a;background:white;font-family:'Nunito',sans-serif;font-weight:700;font-size:.9rem;cursor:pointer;text-align:left;transition:all .2s;}
+.qcm-opt:hover:not(:disabled){border-color:var(--acc);background:var(--acc-pale);}
+.qcm-opt:disabled{cursor:default;}
+.qcm-opt.opt-ok{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.qcm-opt.opt-ko{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
+.step-fb{margin-top:8px;padding:9px 12px;border-radius:8px;font-size:.83rem;font-weight:700;display:none;}
+.step-fb.show{display:block;}
+.step-fb.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.step-fb.ko{background:var(--coral-pale);color:#b91c1c;}
+.reset-box{background:white;border:3px solid var(--acc);border-radius:var(--radius);padding:20px;text-align:center;margin-bottom:14px;display:none;}
+.reset-box.show{display:block;}
+.reset-box .ugo-big{font-size:3rem;margin-bottom:8px;}
+.reset-box h3{font-family:'Fredoka One',cursive;font-size:1.2rem;color:var(--acc);margin-bottom:8px;}
+.reset-box p{color:var(--text-light);font-size:.88rem;margin-bottom:14px;line-height:1.6;}
+.btn-restart{padding:11px 26px;border-radius:30px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.9rem;background:var(--acc);color:white;border:none;cursor:pointer;}
+.free-card{background:white;border:2px solid var(--acc-pale);border-radius:var(--radius);padding:16px;margin-bottom:12px;}
+.free-label{font-size:.68rem;font-weight:700;color:var(--acc);text-transform:uppercase;letter-spacing:.06em;margin-bottom:7px;}
+.free-q{font-size:.93rem;font-weight:700;margin-bottom:11px;background:var(--acc-pale);border-radius:var(--radius-sm);padding:10px 14px;line-height:1.9;}
+.free-opts{display:flex;gap:8px;flex-wrap:wrap;}
+.free-opt{padding:10px 16px;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.88rem;border:2px solid #fde68a;background:white;cursor:pointer;transition:all .2s;flex:1;text-align:center;}
+.free-opt:hover{border-color:var(--acc);background:var(--acc-pale);}
+.free-opt.ok{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.free-opt.ko{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
+.free-opt.reveal{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.jug-opts{display:flex;flex-direction:column;gap:8px;}
+.jug-opt{padding:11px 16px;border-radius:10px;border:2px solid #fde68a;background:white;font-family:'Nunito',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;text-align:left;transition:all .2s;line-height:1.6;}
+.jug-opt:hover{border-color:var(--acc);background:var(--acc-pale);}
+.jug-opt.ok{border-color:var(--mint);background:var(--mint-pale);}
+.jug-opt.ko{border-color:var(--coral);background:var(--coral-pale);}
+.free-fb{margin-top:10px;padding:9px 13px;border-radius:8px;font-size:.84rem;font-weight:700;display:none;}
+.free-fb.show{display:block;}
+.free-fb.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.free-fb.ko{background:var(--coral-pale);color:#b91c1c;}
+.btn-suite{margin-top:14px;padding:11px 24px;border-radius:30px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.9rem;background:var(--acc);color:white;border:none;cursor:pointer;display:none;align-items:center;gap:8px;box-shadow:0 4px 12px rgba(217,119,6,.3);transition:all .2s;}
+.btn-suite.show{display:inline-flex;}
+.btn-suite:hover{background:var(--acc-dark);transform:translateY(-2px);}
+.bilan-card{background:white;border-radius:var(--radius);padding:28px 20px;text-align:center;border:3px solid var(--acc-pale);}
+.bilan-ugo{font-size:4rem;margin-bottom:10px;display:block;}
+.bilan-title{font-family:'Fredoka One',cursive;font-size:2rem;margin-bottom:6px;color:var(--acc);}
+.bilan-msg{color:var(--text-light);font-size:.95rem;margin-bottom:20px;line-height:1.6;}
+.stars-row{display:flex;justify-content:center;gap:12px;margin-bottom:18px;}
+.star-big{font-size:2.8rem;filter:grayscale(1);transition:all .5s;}
+.star-big.earned{filter:none;animation:starPop .5s ease both;}
+@keyframes starPop{0%{transform:scale(0);}60%{transform:scale(1.3);}100%{transform:scale(1);}}
+.score-circle{width:110px;height:110px;border-radius:50%;background:var(--acc);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 20px;color:white;box-shadow:0 6px 20px rgba(217,119,6,.4);}
+.score-num{font-family:'Fredoka One',cursive;font-size:2rem;line-height:1;}
+.score-sub{font-size:.65rem;opacity:.85;}
+.memo{background:var(--acc-pale);border-radius:var(--radius);padding:14px 16px;margin:16px 0;text-align:left;}
+.memo h3{font-weight:800;font-size:.85rem;color:var(--acc);margin-bottom:10px;text-transform:uppercase;letter-spacing:.05em;}
+.memo-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+@media(max-width:460px){.memo-grid{grid-template-columns:1fr;}}
+.memo-item{background:white;border-radius:10px;padding:10px 12px;font-size:.82rem;border:2px solid var(--acc-pale);}
+.memo-item strong{color:var(--acc);}
+.bilan-btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:16px;}
+.btn-bilan{padding:11px 22px;border-radius:30px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.88rem;cursor:pointer;border:none;transition:all .2s;}
+.btn-bilan.primary{background:var(--acc);color:white;}
+.btn-bilan.secondary{background:var(--acc-pale);color:var(--acc);border:2px solid var(--acc);}
+.btn-bilan:hover{transform:translateY(-2px);}
+.confetti-piece{position:fixed;border-radius:3px;top:-20px;animation:fall linear both;pointer-events:none;z-index:9999;}
+@keyframes fall{0%{transform:translateY(0) rotate(0deg);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
+.print-bar{position:fixed;right:14px;top:50%;transform:translateY(-50%);z-index:200;display:flex;flex-direction:column;gap:8px;}
+.print-btn{display:flex;align-items:center;gap:6px;padding:9px 13px;border-radius:20px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.75rem;border:none;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.15);}
+.print-btn-a{background:#0369a1;color:white;}.print-btn-b{background:#059669;color:white;}
+@media(max-width:560px){.print-bar{right:6px;}.print-btn{font-size:0;width:38px;height:38px;padding:0;justify-content:center;}.print-btn span.lbl{display:none;}.print-btn span.ico{font-size:1.1rem;}}
+@media print{.print-bar,.btn-compris,.btn-suite,.bilan-card,.ugo-msg{display:none!important;}body{background:white;}.phase{display:block!important;}}
+</style>
+</head>
+<body>
+<div class="print-bar">
+  <button class="print-btn print-btn-a" onclick="window.print()"><span class="ico">📖</span><span class="lbl">Leçon</span></button>
+  <button class="print-btn print-btn-b" onclick="window.print()"><span class="ico">📝</span><span class="lbl">Exercices</span></button>
+</div>
+<header class="header">
+  <div class="header-top">
+    <a href="../9-12ans.html" class="logo">🦉 L'Atelier du Devoir</a>
+    <div class="score-badge">⭐ <span id="score-display">0</span> pts</div>
+  </div>
+  <div class="steps-wrap">
+    <div class="steps">
+      <div class="step active" id="s0"></div><div class="step" id="s1"></div><div class="step" id="s2"></div>
+      <div class="step" id="s3"></div><div class="step" id="s4"></div><div class="step" id="s5"></div>
+    </div>
+    <div class="steps-labels">
+      <div class="step-lbl">Leçon</div><div class="step-lbl">Guidé 1</div><div class="step-lbl">Guidé 2</div>
+      <div class="step-lbl">Exercices</div><div class="step-lbl">+ Exercices</div><div class="step-lbl">Bilan</div>
+    </div>
+  </div>
+</header>
+<main class="main">
+
+<div class="accroche">
+  <div class="accroche-icon">📐</div>
+  <div class="accroche-text">
+    <h1>Les angles : aigu, droit, obtus</h1>
+    <p>Coin de mur, tranche de pizza, aiguilles d'horloge… Les angles sont partout ! Apprends à les reconnaître et les classer.</p>
+    <div class="meta-row">
+      <span class="meta-tag">CM1</span><span class="meta-tag">⏱ 20 min</span>
+      <span class="meta-tag">⭐⭐ Difficulté</span><span class="meta-tag">Mathématiques</span>
+    </div>
+  </div>
+</div>
+
+<div class="phase active" id="phase-lecon">
+  <div class="lecon-card">
+    <h2>📖 La leçon</h2>
+
+    <div class="lecon-block revealed" id="bloc-0">
+      <div class="lecon-subtitle">① Qu'est-ce qu'un angle ?</div>
+      <div class="analogie">🕐 Sur une horloge, les aiguilles forment un angle. Quand les deux aiguilles sont à 3h, elles forment un angle droit (90°). Un angle, c'est l'écartement entre deux demi-droites qui partent du même point (le sommet).</div>
+
+      <svg viewBox="0 0 300 110" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:10px auto;max-width:300px;background:#fffbeb;border-radius:12px;padding:8px;">
+        <text x="150" y="14" font-size="10" fill="#d97706" font-weight="bold" text-anchor="middle">Les 4 types d'angles</text>
+        <!-- Aigu ~40° -->
+        <line x1="20" y1="95" x2="70" y2="95" stroke="#dc2626" stroke-width="2.5"/>
+        <line x1="20" y1="95" x2="50" y2="45" stroke="#dc2626" stroke-width="2.5"/>
+        <path d="M 38 95 A 18 18 0 0 1 33 77" fill="none" stroke="#dc2626" stroke-width="1.5"/>
+        <text x="45" y="108" font-size="9" fill="#dc2626" font-weight="bold" text-anchor="middle">Aigu &lt;90°</text>
+        <!-- Droit 90° -->
+        <line x1="100" y1="95" x2="160" y2="95" stroke="#059669" stroke-width="2.5"/>
+        <line x1="100" y1="95" x2="100" y2="35" stroke="#059669" stroke-width="2.5"/>
+        <rect x="100" y="83" width="12" height="12" fill="none" stroke="#059669" stroke-width="2"/>
+        <text x="130" y="108" font-size="9" fill="#059669" font-weight="bold" text-anchor="middle">Droit = 90°</text>
+        <!-- Obtus ~120° -->
+        <line x1="180" y1="95" x2="240" y2="95" stroke="#d97706" stroke-width="2.5"/>
+        <line x1="180" y1="95" x2="155" y2="48" stroke="#d97706" stroke-width="2.5"/>
+        <path d="M 198 95 A 18 18 0 0 1 172 82" fill="none" stroke="#d97706" stroke-width="1.5"/>
+        <text x="198" y="108" font-size="9" fill="#d97706" font-weight="bold" text-anchor="middle">Obtus &gt;90°</text>
+        <!-- Plat 180° -->
+        <line x1="260" y1="75" x2="295" y2="75" stroke="#7c3aed" stroke-width="2.5"/>
+        <line x1="260" y1="75" x2="225" y2="75" stroke="#7c3aed" stroke-width="2.5"/>
+        <text x="260" y="108" font-size="9" fill="#7c3aed" font-weight="bold" text-anchor="middle">Plat = 180°</text>
+      </svg>
+
+      <div class="def-box">
+        <h4>🔑 Les types d'angles</h4>
+        <p>• <strong>Angle aigu :</strong> mesure entre 0° et 90° (plus petit qu'un angle droit)<br>
+        • <strong>Angle droit :</strong> mesure exactement <span class="hl">90°</span> — symbolisé par un petit carré ☐<br>
+        • <strong>Angle obtus :</strong> mesure entre 90° et 180° (plus grand qu'un angle droit)<br>
+        • <strong>Angle plat :</strong> mesure exactement 180° (une ligne droite)</p>
+      </div>
+      <div class="astuce"><strong>💡 Truc pour retenir :</strong> Aigu = pointu (comme une aiguille !). Obtus = émoussé, ouvert. Droit = coin de feuille.</div>
+      <button class="btn-compris" onclick="revealBloc(1)">J'ai compris ! →</button>
+    </div>
+
+    <div class="lecon-block" id="bloc-1">
+      <hr class="sep">
+      <div class="lecon-subtitle">② Reconnaître un angle droit</div>
+      <div class="analogie">📏 L'équerre est l'outil pour tester si un angle est droit. Tu poses le coin de l'équerre dans l'angle : si les deux côtés de l'équerre coïncident avec les deux côtés de l'angle, c'est un angle droit !</div>
+
+      <div class="def-box">
+        <h4>Tester un angle droit avec l'équerre</h4>
+        <p>1. Pose le sommet de l'équerre sur le sommet de l'angle<br>
+        2. Aligne un côté de l'équerre avec un côté de l'angle<br>
+        3. Si l'autre côté de l'équerre coïncide avec l'autre côté de l'angle → <strong>angle droit !</strong><br><br>
+        Sans équerre : plie une feuille en deux fois → le coin est un angle droit !</p>
+      </div>
+      <div class="exemple-block"><span class="tag">Angle droit</span> Coins d'une feuille, coins d'une pièce, lettre L, lettre T → tous des angles droits !</div>
+      <div class="exemple-block"><span class="tag">Aigu ou obtus ?</span> Si l'équerre "dépasse" → l'angle est aigu. Si l'angle "dépasse" l'équerre → l'angle est obtus.</div>
+      <button class="btn-compris" onclick="revealBloc(2)">J'ai compris ! →</button>
+    </div>
+
+    <div class="lecon-block" id="bloc-2">
+      <hr class="sep">
+      <div class="lecon-subtitle">③ Angles dans la vie quotidienne</div>
+      <div class="analogie">🕐 Les aiguilles d'une horloge forment différents angles selon l'heure. À 3h : angle droit. À 6h : angle plat. À 1h : angle aigu. À 10h : angle obtus. Regarde autour de toi — les angles sont partout !</div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0;">
+        <div style="background:var(--acc-pale);border:2px solid var(--acc-mid);border-radius:10px;padding:11px;">
+          <div style="font-weight:800;color:var(--acc);margin-bottom:6px;font-size:.88rem;">🔴 Aigus (pointus)</div>
+          <div style="font-size:.82rem;line-height:1.7;">Tranche de pizza fine<br>Pointe d'une étoile<br>Aiguilles à 1h<br>Toit très pentu</div>
+        </div>
+        <div style="background:var(--mint-pale);border:2px solid var(--mint);border-radius:10px;padding:11px;">
+          <div style="font-weight:800;color:var(--mint-deep);margin-bottom:6px;font-size:.88rem;">🟠 Obtus (larges)</div>
+          <div style="font-size:.82rem;line-height:1.7;">Grande tranche de pizza<br>Branches ouvertes<br>Aiguilles à 10h<br>Toit peu pentu</div>
+        </div>
+      </div>
+      <div class="piege"><strong>⚠ Attention !</strong> La longueur des côtés ne change pas le type d'angle. Un angle aigu reste aigu peu importe si ses côtés sont longs ou courts !</div>
+      <button class="btn-compris" onclick="goPhase('g1',1)">J'ai compris ! Aux exercices 🚀</button>
+    </div>
+  </div>
+</div>
+
+<div class="phase" id="phase-g1">
+  <div class="ugo-msg"><span class="ugo">🦉</span><p><strong>Guidé 1 — QCM !</strong> Identifie les angles. <strong>3 essais</strong> par question. 🌟</p></div>
+  <div class="ex-header"><h2>📐 Reconnaître les angles</h2><p>Aigu (&lt;90°), droit (=90°) ou obtus (&gt;90°) ?</p></div>
+  <div id="g1-reset" class="reset-box">
+    <div class="ugo-big">🦉</div><h3>On recommence !</h3>
+    <p>Aigu = pointu (&lt;90°). Droit = coin carré (=90°). Obtus = large (&gt;90°).</p>
+    <button class="btn-restart" onclick="initG1()">↺ Recommencer</button>
+  </div>
+  <div id="g1-zone"></div>
+  <button class="btn-suite" id="btn-g1-to-g2" onclick="goPhase('g2',2)">Super ! →</button>
+</div>
+
+<div class="phase" id="phase-g2">
+  <div class="ugo-msg"><span class="ugo">🦉</span><p><strong>Guidé 2 — Tu classes !</strong> Identifie le type d'angle. <strong>3 essais</strong> 💪</p></div>
+  <div class="ex-header"><h2>✏️ Classer les angles</h2><p>Tape : aigu, droit ou obtus.</p></div>
+  <div id="g2-reset" class="reset-box">
+    <div class="ugo-big">🦉</div><h3>On repart !</h3>
+    <p>Compare à 90° : &lt;90° → aigu. =90° → droit. &gt;90° → obtus.</p>
+    <button class="btn-restart" onclick="initG2()">↺ Recommencer</button>
+  </div>
+  <div id="g2-zone"></div>
+  <button class="btn-suite" id="btn-g2-to-free" onclick="goPhase('free',3)">Excellent ! →</button>
+</div>
+
+<div class="phase" id="phase-free">
+  <div class="ugo-msg"><span class="ugo">🦉</span><p><strong>Exercices libres !</strong> 5 exercices. Tu gères ! 🎯</p></div>
+  <div id="free1-zone"></div>
+  <button class="btn-suite" id="btn-free-to-free2" onclick="goPhase('free2',4)">Encore ! →</button>
+</div>
+
+<div class="phase" id="phase-free2">
+  <div class="ugo-msg"><span class="ugo">🦉</span><p><strong>5 exercices de plus !</strong> 💪</p></div>
+  <div id="free2-zone"></div>
+  <button class="btn-suite" id="btn-free2-to-bilan" onclick="goPhase('bilan',5)">🌟 Résultat !</button>
+</div>
+
+<div class="phase" id="phase-bilan">
+  <div class="bilan-card">
+    <span class="bilan-ugo">🦉</span>
+    <h2 class="bilan-title" id="bilan-title">Bravo !</h2>
+    <p class="bilan-msg" id="bilan-msg"></p>
+    <div class="stars-row"><span class="star-big" id="etoile1">⭐</span><span class="star-big" id="etoile2">⭐</span><span class="star-big" id="etoile3">⭐</span></div>
+    <div class="score-circle"><span class="score-num" id="bilan-pts">0</span><span class="score-sub" id="bilan-sur">/ 0 pts</span></div>
+    <div class="memo">
+      <h3>📝 Ce que j'ai appris</h3>
+      <div class="memo-grid">
+        <div class="memo-item"><strong>Angle aigu</strong><br>&lt; 90° · pointu<br>ex: pointe d'étoile</div>
+        <div class="memo-item"><strong>Angle droit</strong><br>= 90° · symbole ☐<br>ex: coin de feuille</div>
+        <div class="memo-item"><strong>Angle obtus</strong><br>&gt; 90° · large<br>ex: grande tranche</div>
+        <div class="memo-item"><strong>Angle plat</strong><br>= 180° · ligne droite<br>demi-tour complet</div>
+      </div>
+    </div>
+    <div class="bilan-btns">
+      <button class="btn-bilan secondary" onclick="location.reload()">↺ Recommencer</button>
+      <button class="btn-bilan primary" onclick="location.href='../9-12ans.html'">← Retour</button>
+    </div>
+  </div>
+</div>
+</main>
+
+<script>
+var G1=[
+  {titre:"📐 Identifie les angles suivants.",etapes:[
+    {q:"Un coin de feuille de papier, c'est un angle...",opts:["Droit (= 90°)","Aigu (< 90°)","Obtus (> 90°)"],ok:0,
+     hint:"Le coin d'une feuille = angle droit, symbolisé par un petit carré.",
+     expl_ok:"Droit ! 90° exactement. On le marque avec un petit carré ☐.",
+     expl_ko:"Coin de feuille = angle droit = 90°."},
+    {q:"Une pointe de pizza très fine, c'est un angle...",opts:["Aigu (pointu, < 90°)","Droit (= 90°)","Obtus (> 90°)"],ok:0,
+     hint:"Pointu → plus petit que 90° → aigu !",
+     expl_ok:"Aigu ! Moins de 90°, très pointu.",
+     expl_ko:"Pointu = aigu = moins de 90°."},
+    {q:"Une grande tranche de pizza (plus de la moitié du cercle), c'est un angle...",opts:["Obtus (> 90°)","Aigu (< 90°)","Plat (= 180°)"],ok:0,
+     hint:"Plus grand que 90° mais moins que 180° → obtus.",
+     expl_ok:"Obtus ! Plus de 90°, bien ouvert. 🌟",
+     expl_ko:"Large = obtus = plus de 90°."}
+  ]},
+  {titre:"🕐 Angles formés par les aiguilles d'une horloge.",etapes:[
+    {q:"À 3h00, les aiguilles forment un angle...",opts:["Droit (= 90°)","Aigu (< 90°)","Plat (= 180°)"],ok:0,
+     hint:"À 3h, la grande aiguille pointe vers le haut (12) et la petite vers la droite (3) → 90°.",
+     expl_ok:"Droit ! À 3h, les aiguilles font exactement 90°.",
+     expl_ko:"3h → grande aiguille (12) et petite (3) → 90° = droit."},
+    {q:"À 6h00, les aiguilles forment un angle...",opts:["Plat (= 180°)","Droit (= 90°)","Obtus (> 90°)"],ok:0,
+     hint:"À 6h, les deux aiguilles sont dans le même axe vertical → 180°.",
+     expl_ok:"Plat ! À 6h, les aiguilles forment une ligne droite = 180°.",
+     expl_ko:"6h → aiguilles alignées = 180° = plat."},
+    {q:"À 2h00, les aiguilles forment un angle...",opts:["Aigu (< 90°)","Droit (= 90°)","Obtus (> 90°)"],ok:0,
+     hint:"À 2h, les aiguilles sont peu écartées, moins de 90°.",
+     expl_ok:"Aigu ! À 2h, l'angle est d'environ 60° < 90°. 🎉",
+     expl_ko:"2h → peu écartées → moins de 90° → aigu."}
+  ]},
+  {titre:"📐 Vrai ou faux sur les angles.",etapes:[
+    {q:"Un angle droit mesure toujours exactement 90°.",opts:["Vrai","Faux","Ça dépend de la longueur des côtés"],ok:0,
+     hint:"La définition d'un angle droit = 90° exactement.",
+     expl_ok:"Vrai ! L'angle droit = 90°, toujours, quelle que soit la longueur des côtés.",
+     expl_ko:"Angle droit = 90° par définition."},
+    {q:"Un angle aigu est plus grand qu'un angle droit.",opts:["Faux : aigu < droit (aigu < 90°)","Vrai : aigu > droit","Ils sont égaux"],ok:0,
+     hint:"Aigu < 90° < droit (=90°). Donc aigu < droit.",
+     expl_ok:"Faux ! Aigu < 90° donc aigu est PLUS PETIT que le droit.",
+     expl_ko:"Aigu < 90° = droit."},
+    {q:"Un angle obtus est plus grand qu'un angle droit.",opts:["Vrai : obtus > 90° > droit","Faux","Ils sont égaux"],ok:0,
+     hint:"Obtus > 90° et droit = 90°. Donc obtus > droit.",
+     expl_ok:"Vrai ! Obtus > 90° > droit (90°). 🌟",
+     expl_ko:"Obtus > 90° = droit → obtus > droit."}
+  ]},
+  {titre:"📐 Dans quelles figures trouve-t-on des angles droits ?",etapes:[
+    {q:"Un carré a combien d'angles droits ?",opts:["4 angles droits","0","2","1"],ok:0,
+     hint:"Chaque coin d'un carré est un angle droit.",
+     expl_ok:"4 ! Chaque coin du carré est un angle droit (90°).",
+     expl_ko:"Carré → 4 coins → 4 angles droits."},
+    {q:"Un triangle peut-il avoir un angle droit ?",opts:["Oui : le triangle rectangle !","Non, jamais","Tous les triangles ont un angle droit"],ok:0,
+     hint:"Le triangle rectangle possède exactement un angle droit.",
+     expl_ok:"Oui ! Le triangle rectangle a exactement un angle de 90°.",
+     expl_ko:"Triangle rectangle = triangle avec un angle droit."},
+    {q:"Un triangle quelconque a-t-il toujours des angles droits ?",opts:["Non ! Il peut avoir des aigus et/ou obtus","Oui, toujours","Seulement s'il est rectangle"],ok:0,
+     hint:"Un triangle peut avoir des angles aigus, obtus ou un droit, mais pas forcément.",
+     expl_ok:"Non ! Un triangle quelconque peut n'avoir que des angles aigus, ou avoir un angle obtus. 🌟",
+     expl_ko:"Les triangles peuvent avoir des angles aigus, obtus ou un droit."}
+  ]}
+];
+
+var G2=[
+  {titre:"✏️ Classe ces angles.",etapes:[
+    {q:"Un angle de 45° : aigu, droit ou obtus ?",acc:["aigu"],hint:"45° < 90° → aigu.",expl_ok:"Aigu ! 45° < 90°.",expl_ko:"45° < 90° → aigu."},
+    {q:"Un angle de 90° : aigu, droit ou obtus ?",acc:["droit"],hint:"90° = angle droit.",expl_ok:"Droit ! Exactement 90°.",expl_ko:"90° = droit."},
+    {q:"Un angle de 120° : aigu, droit ou obtus ?",acc:["obtus"],hint:"120° > 90° → obtus.",expl_ok:"Obtus ! 120° > 90°. ✓",expl_ko:"120° > 90° → obtus."}
+  ]},
+  {titre:"✏️ Type d'angle dans la vie quotidienne.",etapes:[
+    {q:"Le coin d'une porte ouverte à moitié (environ 45°) : type ?",acc:["aigu"],hint:"45° < 90°.",expl_ok:"Aigu ! 45° < 90°.",expl_ko:"45° < 90° → aigu."},
+    {q:"Le coin d'un livre fermé posé à plat (page de couverture et quatrième de couverture) : type ?",acc:["plat","obtus"],hint:"Pages parallèles et opposées → 180°.",expl_ok:"Plat (180°) ou on pourrait dire obtus selon comment on voit les pages !",expl_ko:"Pages opposées → 180° → plat."},
+    {q:"L'angle au centre d'un demi-cercle : type ?",acc:["plat"],hint:"Demi-cercle = 180°.",expl_ok:"Plat ! 180° = demi-tour. ✓",expl_ko:"Demi-cercle = 180° = plat."}
+  ]},
+  {titre:"✏️ Combien d'angles droits ?",etapes:[
+    {q:"Un rectangle a combien d'angles droits ?",acc:["4"],hint:"Chaque coin d'un rectangle est un angle droit.",expl_ok:"4 ! Les 4 coins sont des angles droits.",expl_ko:"Rectangle → 4 angles droits."},
+    {q:"Un triangle équilatéral (3 côtés égaux) a combien d'angles droits ?",acc:["0"],hint:"Triangle équilatéral → 3 angles de 60° chacun.",expl_ok:"0 ! Tous ses angles valent 60°, donc ce sont des angles aigus.",expl_ko:"Triangle équilatéral → 3 angles de 60° → aigus → 0 droit."},
+    {q:"Un angle de 89° est-il aigu, droit ou obtus ? Tape le type.",acc:["aigu"],hint:"89° < 90° → juste un peu moins que le droit → aigu.",expl_ok:"Aigu ! 89° < 90°, même de très peu. ✓",expl_ko:"89° < 90° → aigu."}
+  ]},
+  {titre:"✏️ Angles d'une horloge.",etapes:[
+    {q:"À 12h00, les deux aiguilles sont ensemble. L'angle est de 0°. Type ?",acc:["aigu","nul"],hint:"0° est encore plus petit qu'un angle aigu !",expl_ok:"Angle nul (ou aigu de 0°). Les aiguilles sont confondues.",expl_ko:"0° → angle nul."},
+    {q:"À 9h00, la petite pointe vers 9 et la grande vers 12. L'angle = 90°. Type ?",acc:["droit"],hint:"90° = ?",expl_ok:"Droit ! À 9h, les aiguilles forment un angle droit. ✓",expl_ko:"90° = droit."},
+    {q:"À 10h00, l'angle entre les aiguilles est d'environ 60°. Type ?",acc:["aigu"],hint:"60° < 90° → aigu.",expl_ok:"Aigu ! 60° < 90°. ✓",expl_ko:"60° < 90° → aigu."}
+  ]}
+];
+
+var FREE_POOL=[
+  {type:'qcm',data:{q:"Un angle de 135° est...",opts:["Obtus (> 90°)","Aigu (< 90°)","Droit (= 90°)"],ok:0,expl:"135° > 90° → obtus."}},
+  {type:'qcm',data:{q:"Un angle de 30° est...",opts:["Aigu (< 90°)","Droit (= 90°)","Obtus (> 90°)"],ok:0,expl:"30° < 90° → aigu."}},
+  {type:'jugement',data:{consigne:"Un angle droit a ses côtés perpendiculaires l'un à l'autre ?",a:"Oui ! Deux droites perpendiculaires forment un angle de 90° = droit","b":"Non, perpendiculaire ≠ droit",ok:"A",expl:"Oui ! Deux lignes perpendiculaires forment exactement 90°. C'est la définition de la perpendicularité."}},
+  {type:'qcm',data:{q:"Combien d'angles droits dans un rectangle ?",opts:["4","2","1","0"],ok:0,expl:"Les 4 coins d'un rectangle sont des angles droits."}},
+  {type:'qcm',data:{q:"Un angle obtus est plus grand que...",opts:["90°","180°","45°","0°"],ok:0,expl:"Obtus > 90° (et < 180°)."}},
+  {type:'jugement',data:{consigne:"Plus les côtés d'un angle sont longs, plus l'angle est grand ?",a:"Non ! La longueur des côtés ne change pas la mesure de l'angle","b:"Oui ! Côtés longs = grand angle",ok:"A",expl:"Non ! La mesure d'un angle dépend de l'écartement, pas de la longueur des côtés. Un angle aigu reste aigu même avec de très longs côtés."}},
+  {type:'qcm',data:{q:"Quel angle forment les aiguilles d'une horloge à 3h ?",opts:["Droit (90°)","Aigu","Obtus","Plat"],ok:0,expl:"À 3h : grande aiguille au 12, petite au 3 → 90° = droit."}},
+  {type:'qcm',data:{q:"Un angle plat mesure...",opts:["180°","90°","360°","270°"],ok:0,expl:"Angle plat = 180° = une ligne droite."}},
+  {type:'jugement',data:{consigne:"Un triangle peut avoir deux angles obtus ?",a:"Non ! La somme des angles d'un triangle = 180°. Deux obtus dépasseraient 180°","b:"Oui ! Un triangle peut avoir deux angles obtus",ok:"A",expl:"Non ! La somme des 3 angles d'un triangle = 180°. Si deux angles sont obtus (>90° chacun), leur somme dépasse déjà 180° → impossible !"}},
+  {type:'qcm',data:{q:"Lequel est un angle aigu ?",opts:["60°","90°","120°","180°"],ok:0,expl:"60° < 90° → aigu. Les autres sont droit, obtus, plat."}},
+  {type:'qcm',data:{q:"La lettre L majuscule a combien d'angles droits ?",opts:["1","2","0","4"],ok:0,expl:"La lettre L a un seul angle droit (le coin intérieur entre la base et la barre verticale)."}},
+  {type:'jugement',data:{consigne:"Un angle de 91° est obtus ?",a:"Oui ! 91° > 90° → obtus, même si c'est juste un peu plus","b":"Non ! 91° ≈ 90° donc c'est un angle droit",ok:"A",expl:"Oui ! Dès que l'angle dépasse 90°, même d'un tout petit degré, c'est un angle obtus."}},
+  {type:'qcm',data:{q:"Quel angle est formé par les aiguilles à 6h ?",opts:["Plat (180°)","Droit (90°)","Obtus","Aigu"],ok:0,expl:"À 6h, les deux aiguilles forment une ligne droite = 180° = angle plat."}},
+  {type:'qcm',data:{q:"Un triangle rectangle contient...",opts:["Exactement 1 angle droit","2 angles droits","3 angles droits","0 angle droit"],ok:0,expl:"Triangle rectangle = exactement 1 angle droit (90°). Les 2 autres sont forcément aigus."}},
+  {type:'jugement',data:{consigne:"L'angle droit est plus petit que l'angle obtus ?",a:"Oui ! Droit = 90° < Obtus (entre 90° et 180°)","b":"Non ! Droit > obtus",ok:"A",expl:"Oui ! Droit = 90°. Obtus > 90°. Donc droit < obtus."}},
+  {type:'qcm',data:{q:"Quel type d'angle forme le toit d'une maison en V très pentu ?",opts:["Aigu (pointu)","Obtus (large)","Droit (90°)"],ok:0,expl:"Toit très pentu = angle pointu au sommet = aigu. Un toit peu pentu aurait un angle obtus."}},
+  {type:'jugement',data:{consigne:"Un angle de 0° est un angle aigu ?",a:"C'est un angle nul (pas vraiment aigu). Aigu est strictement entre 0° et 90°","b":"Oui, 0° < 90° donc c'est aigu",ok:"A",expl:"L'angle nul (0°) est un cas limite. En général, on dit que l'angle aigu est strictement entre 0° et 90° (non inclus). 0° = les deux côtés sont confondus."}},
+  {type:'qcm',data:{q:"Lequel est un angle obtus ?",opts:["110°","90°","45°","180°"],ok:0,expl:"110° est entre 90° et 180° → obtus. 90°=droit, 45°=aigu, 180°=plat."}},
+  {type:'qcm',data:{q:"Dans un carré, les angles sont...",opts:["Tous droits (90°)","Tous aigus","Alternativement aigus et obtus","Tous obtus"],ok:0,expl:"Un carré a 4 angles droits (90°) dans ses 4 coins."}},
+  {type:'jugement',data:{consigne:"Un angle de 180° est aussi appelé angle plat ?",a:"Oui ! 180° = angle plat = une droite complète","b":"Non, 180° = angle droit",ok:"A",expl:"Oui ! Angle plat = 180° = les deux côtés forment une ligne droite. Le droit = 90°."}}
+];
+
+var score=0,g1Idx=0,g2Idx=0,g1Tries=0,g2Tries=0;
+var f1Exs=[],f2Exs=[],f1Done=0,f2Done=0;
+var _cb={};
+
+function norm(s){return(s||'').trim().toLowerCase().replace(/[éèê]/g,'e').replace(/[àâ]/g,'a');}
+function shuffle(a){var b=a.slice();for(var i=b.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=b[i];b[i]=b[j];b[j]=t;}return b;}
+function addPt(){score++;document.getElementById('score-display').textContent=score;}
+function updSteps(n){for(var i=0;i<6;i++){var s=document.getElementById('s'+i);if(!s)return;s.classList.remove('active','done');if(i<n)s.classList.add('done');else if(i===n)s.classList.add('active');}}
+
+function goPhase(ph,si){
+  document.querySelectorAll('.phase').forEach(function(p){p.classList.remove('active');});
+  var el=document.getElementById('phase-'+ph);
+  if(el){el.classList.add('active');setTimeout(function(){el.scrollIntoView({behavior:'smooth',block:'start'});},100);}
+  updSteps(si);
+  if(ph==='g1')initG1();if(ph==='g2')initG2();
+  if(ph==='free')initFree1();if(ph==='free2')initFree2();
+  if(ph==='bilan')showBilan();
+}
+function revealBloc(n){
+  var b=document.getElementById('bloc-'+n);if(!b)return;
+  var p=document.getElementById('bloc-'+(n-1));
+  if(p){var btn=p.querySelector('.btn-compris');if(btn){btn.textContent='✓ Compris !';btn.disabled=true;btn.style.opacity='.4';}}
+  b.classList.add('revealed');
+  setTimeout(function(){var hH=(document.querySelector('.header')||{offsetHeight:0}).offsetHeight;var r=b.getBoundingClientRect();window.scrollTo({top:window.pageYOffset+r.top-hH-16,behavior:'smooth'});},150);
+}
+
+function initG1(){
+  g1Idx=Math.floor(Math.random()*G1.length);g1Tries=0;
+  document.getElementById('g1-reset').classList.remove('show');
+  document.getElementById('btn-g1-to-g2').classList.remove('show');
+  var v=G1[g1Idx],z=document.getElementById('g1-zone');z.innerHTML='';
+  var box=document.createElement('div');box.className='guided-box';
+  box.innerHTML='<div class="guided-title">'+v.titre+'<span class="tries-badge" id="g1-tries">3 essais</span></div><div id="g1-steps"></div>';
+  z.appendChild(box);
+  var sc=document.getElementById('g1-steps');
+  v.etapes.forEach(function(step,si){
+    var so=shuffle(step.opts.map(function(o,oi){return{t:o,i:oi};}));
+    var sb=document.createElement('div');sb.className='step-box'+(si===0?' active':'');sb.id='g1s'+si;
+    sb.innerHTML='<div class="step-lbl-num">Étape '+(si+1)+'/'+v.etapes.length+'</div>'
+      +'<div class="step-q">'+step.q+'</div>'
+      +'<div class="step-hint" id="g1h'+si+'">💡 '+step.hint+'</div>'
+      +'<div class="qcm-opts">'+so.map(function(o){return'<button class="qcm-opt" onclick="g1Check('+si+','+o.i+',this)">'+o.t+'</button>';}).join('')+'</div>'
+      +'<div class="step-fb" id="g1f'+si+'"></div>';
+    sc.appendChild(sb);
+  });updG1();
+}
+function updG1(){var el=document.getElementById('g1-tries');if(el)el.textContent=(3-g1Tries)+' essai'+(3-g1Tries>1?'s':'');}
+function g1Check(si,ci,btn){
+  var v=G1[g1Idx],step=v.etapes[si],sb=document.getElementById('g1s'+si),fb=document.getElementById('g1f'+si);
+  if(sb.classList.contains('correct'))return;
+  if(ci===step.ok){
+    btn.classList.add('opt-ok');sb.querySelectorAll('.qcm-opt').forEach(function(b){b.disabled=true;});sb.classList.add('correct');
+    if(g1Tries===0){fb.className='step-fb show ok';fb.innerHTML='✅ '+step.expl_ok+' <span style="color:#065f46;font-size:.78rem">(+1 pt)</span>';addPt();}
+    else{fb.className='step-fb show ok';fb.innerHTML='✅ '+step.expl_ok;}
+    g1Tries=0;updG1();
+    var nx=document.getElementById('g1s'+(si+1));
+    if(nx){nx.classList.add('active');setTimeout(function(){nx.scrollIntoView({behavior:'smooth',block:'nearest'});},300);}
+    else{setTimeout(function(){var b=document.getElementById('btn-g1-to-g2');b.classList.add('show');b.scrollIntoView({behavior:'smooth',block:'nearest'});},500);}
+  }else{
+    btn.classList.add('opt-ko');btn.disabled=true;g1Tries++;updG1();
+    fb.className='step-fb show ko';
+    if(g1Tries<3){fb.innerHTML='❌ Pas tout à fait ! Lis l\'indice 💪';document.getElementById('g1h'+si).classList.add('show');}
+    else{fb.innerHTML='❌ '+step.expl_ko+' On recommence !';setTimeout(function(){document.getElementById('g1-reset').classList.add('show');document.getElementById('g1-zone').innerHTML='';document.getElementById('g1-reset').scrollIntoView({behavior:'smooth',block:'start'});},1200);}
+  }
+}
+
+function initG2(){
+  g2Idx=Math.floor(Math.random()*G2.length);g2Tries=0;
+  document.getElementById('g2-reset').classList.remove('show');
+  document.getElementById('btn-g2-to-free').classList.remove('show');
+  var v=G2[g2Idx],z=document.getElementById('g2-zone');z.innerHTML='';
+  var box=document.createElement('div');box.className='guided-box';
+  box.innerHTML='<div class="guided-title">'+v.titre+'<span class="tries-badge" id="g2-tries">3 essais</span></div><div id="g2-steps"></div>';
+  z.appendChild(box);
+  var sc=document.getElementById('g2-steps');
+  v.etapes.forEach(function(step,si){
+    var sb=document.createElement('div');sb.className='step-box'+(si===0?' active':'');sb.id='g2s'+si;
+    sb.innerHTML='<div class="step-lbl-num">Étape '+(si+1)+'/'+v.etapes.length+'</div>'
+      +'<div class="step-q">'+step.q+'</div>'
+      +'<div class="step-hint" id="g2h'+si+'">💡 '+step.hint+'</div>'
+      +'<div class="step-input-row"><input class="step-input" style="min-width:110px;max-width:200px;" id="g2i'+si+'" type="text" placeholder="aigu / droit / obtus" autocomplete="off" spellcheck="false"'+(si>0?' disabled':'')+'>'
+      +'<button class="btn-check" id="g2b'+si+'" onclick="g2Check('+si+')"'+(si>0?' disabled':'')+'>Vérifier</button></div>'
+      +'<div class="step-fb" id="g2f'+si+'"></div>';
+    sc.appendChild(sb);
+  });updG2();
+}
+function updG2(){var el=document.getElementById('g2-tries');if(el)el.textContent=(3-g2Tries)+' essai'+(3-g2Tries>1?'s':'');}
+function g2Check(si){
+  var v=G2[g2Idx],step=v.etapes[si],inp=document.getElementById('g2i'+si),fb=document.getElementById('g2f'+si),sb=document.getElementById('g2s'+si);
+  if(!inp||sb.classList.contains('correct'))return;
+  var ok=step.acc.some(function(a){return norm(inp.value)===norm(a);});
+  if(ok){
+    inp.classList.add('ok');inp.disabled=true;document.getElementById('g2b'+si).disabled=true;sb.classList.add('correct');
+    if(g2Tries===0){fb.className='step-fb show ok';fb.innerHTML='✅ '+step.expl_ok+' <span style="color:#065f46;font-size:.78rem">(+1 pt)</span>';addPt();}
+    else{fb.className='step-fb show ok';fb.innerHTML='✅ '+step.expl_ok;}
+    g2Tries=0;updG2();
+    var nxSb=document.getElementById('g2s'+(si+1));
+    if(nxSb){nxSb.classList.add('active');var ni=document.getElementById('g2i'+(si+1)),nb=document.getElementById('g2b'+(si+1));if(ni)ni.disabled=false;if(nb)nb.disabled=false;setTimeout(function(){nxSb.scrollIntoView({behavior:'smooth',block:'nearest'});},300);}
+    else{setTimeout(function(){var b=document.getElementById('btn-g2-to-free');b.classList.add('show');b.scrollIntoView({behavior:'smooth',block:'nearest'});},500);}
+  }else{
+    inp.classList.add('ko');inp.value='';inp.placeholder='Réessaie…';g2Tries++;updG2();
+    fb.className='step-fb show ko';
+    if(g2Tries<3){fb.innerHTML='❌ Lis l\'indice 💪';document.getElementById('g2h'+si).classList.add('show');setTimeout(function(){inp.classList.remove('ko');inp.placeholder='aigu / droit / obtus';},900);}
+    else{fb.innerHTML='❌ '+step.expl_ko+' On recommence !';setTimeout(function(){document.getElementById('g2-reset').classList.add('show');document.getElementById('g2-zone').innerHTML='';document.getElementById('g2-reset').scrollIntoView({behavior:'smooth',block:'start'});},1200);}
+  }
+}
+
+function buildFree(ex,i,prefix,cb){
+  var card=document.createElement('div');card.className='free-card';card.id=prefix+'c'+i;
+  if(ex.type==='qcm'){
+    card.innerHTML='<div class="free-label">Exercice '+(i+1)+'</div><div class="free-q">'+ex.data.q+'</div><div class="free-opts" id="'+prefix+'opts'+i+'"></div><div class="free-fb" id="'+prefix+'fb'+i+'"></div>';
+    setTimeout(function(){
+      var ba=document.getElementById(prefix+'opts'+i);
+      ex.data.opts.forEach(function(opt,oi){
+        var btn=document.createElement('button');btn.className='free-opt';btn.textContent=opt;
+        btn.onclick=function(){
+          if(card.classList.contains('done'))return;card.classList.add('done');ba.querySelectorAll('button').forEach(function(b){b.disabled=true;});
+          var fb=document.getElementById(prefix+'fb'+i);
+          if(oi===ex.data.ok){btn.classList.add('ok');fb.className='free-fb show ok';fb.innerHTML='✅ '+ex.data.expl;addPt();}
+          else{btn.classList.add('ko');ba.querySelectorAll('button').forEach(function(b,bi){if(bi===ex.data.ok)b.classList.add('reveal');});fb.className='free-fb show ko';fb.innerHTML='❌ '+ex.data.expl;}
+          cb();
+        };ba.appendChild(btn);
+      });
+    },0);
+  }else if(ex.type==='jugement'){
+    card.innerHTML='<div class="free-label">Exercice '+(i+1)+'</div><div class="free-q">'+ex.data.consigne+'</div><div class="jug-opts"><button class="jug-opt" onclick="chkJug(\''+prefix+'\','+i+',\'A\',this)"><strong>A —</strong> '+ex.data.a+'</button><button class="jug-opt" onclick="chkJug(\''+prefix+'\','+i+',\'B\',this)"><strong>B —</strong> '+ex.data.b+'</button></div><div class="free-fb" id="'+prefix+'fb'+i+'"></div>';
+    _cb[prefix+i]=cb;
+  }
+  return card;
+}
+function chkJug(p,i,ch,btn){
+  var card=document.getElementById(p+'c'+i);if(card.classList.contains('done'))return;
+  var exs=p==='f1'?f1Exs:f2Exs,ex=exs[i],fb=document.getElementById(p+'fb'+i);
+  card.classList.add('done');card.querySelectorAll('.jug-opt').forEach(function(b){b.disabled=true;});
+  if(ch===ex.data.ok){btn.classList.add('ok');fb.className='free-fb show ok';fb.innerHTML='✅ '+ex.data.expl;addPt();}
+  else{btn.classList.add('ko');card.querySelectorAll('.jug-opt')[ch==='A'?1:0].classList.add('ok');fb.className='free-fb show ko';fb.innerHTML='❌ '+ex.data.expl;}
+  if(_cb[p+i])_cb[p+i]();
+}
+
+function initFree1(){
+  f1Exs=shuffle(FREE_POOL.slice()).slice(0,5);f1Done=0;
+  var z=document.getElementById('free1-zone');z.innerHTML='';
+  f1Exs.forEach(function(ex,i){
+    _cb['f1'+i]=function(){f1Done++;if(f1Done>=5)setTimeout(function(){var b=document.getElementById('btn-free-to-free2');b.classList.add('show');b.scrollIntoView({behavior:'smooth',block:'nearest'});},600);};
+    z.appendChild(buildFree(ex,i,'f1',_cb['f1'+i]));
+  });
+}
+function initFree2(){
+  var used=f1Exs.map(function(e){return e.data.q||e.data.consigne;});
+  var pool=FREE_POOL.filter(function(e){return used.indexOf(e.data.q||e.data.consigne)<0;});
+  f2Exs=shuffle(pool).slice(0,5);f2Done=0;
+  var z=document.getElementById('free2-zone');z.innerHTML='';
+  f2Exs.forEach(function(ex,i){
+    _cb['f2'+i]=function(){f2Done++;if(f2Done>=5)setTimeout(function(){var b=document.getElementById('btn-free2-to-bilan');b.classList.add('show');b.scrollIntoView({behavior:'smooth',block:'nearest'});},600);};
+    z.appendChild(buildFree(ex,i,'f2',_cb['f2'+i]));
+  });
+}
+
+function showBilan(){
+  var g1n=G1[g1Idx]?G1[g1Idx].etapes.length:3,g2n=G2[g2Idx]?G2[g2Idx].etapes.length:3,tot=g1n+g2n+10;
+  document.getElementById('bilan-pts').textContent=score;
+  document.getElementById('bilan-sur').textContent='/ '+tot+' pts';
+  var pct=score/tot,t,m;
+  if(pct>=.8){t='Fantastique ! 🎉';m='Tu maîtrises les angles ! Aigu, droit, obtus… Tu ne te trompes plus jamais !';}
+  else if(pct>=.6){t='Très bien ! 😊';m='Belle progression ! Rappelle-toi : aigu < 90° (pointu), droit = 90° (coin carré), obtus > 90° (large).';}
+  else{t='Continue ! 💪';m:'Mémo : Aigu = pointu (< 90°). Droit = coin de feuille (= 90°). Obtus = large (> 90°). Compare toujours à 90° !';}
+  document.getElementById('bilan-title').textContent=t;
+  document.getElementById('bilan-msg').textContent=m;
+  var s=[Math.ceil(tot*.33),Math.ceil(tot*.66),Math.ceil(tot*.89)];
+  ['etoile1','etoile2','etoile3'].forEach(function(id,i){var el=document.getElementById(id);if(score>=s[i]){(function(e,d){setTimeout(function(){e.classList.add('earned');},d);})(el,300+i*400);}else el.style.filter='grayscale(1)';});
+  if(pct>=.5)confetti();
+}
+function confetti(){var cols=['#d97706','#fcd34d','#059669','#0369a1','#7c3aed'];for(var i=0;i<55;i++){var el=document.createElement('div');el.className='confetti-piece';el.style.cssText='left:'+Math.random()*100+'vw;background:'+cols[Math.floor(Math.random()*5)]+';animation-duration:'+(1.5+Math.random()*2)+'s;animation-delay:'+Math.random()*1.2+'s;width:'+(6+Math.random()*8)+'px;height:'+(6+Math.random()*8)+'px;border-radius:'+(Math.random()>.5?'50%':'3px')+';';document.body.appendChild(el);setTimeout(function(){if(el.parentNode)el.remove();},4000);}}
+</script>
+</body>
+</html>

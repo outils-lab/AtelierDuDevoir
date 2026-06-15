@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>M18 — Les formes géométriques | L'Atelier du Devoir</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--acc:#059669;--acc-pale:#f0fdf4;--acc-mid:#6ee7b7;--acc-dark:#047857;--mint:#059669;--mint-pale:#d1fae5;--mint-deep:#047857;--coral:#dc2626;--coral-pale:#fee2e2;--sun:#d97706;--sun-pale:#fef3c7;--radius:18px;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Fredoka One',cursive;background:#f0fdf4;color:#1e293b;font-size:20px;line-height:1.5;}
+.header{background:white;border-bottom:4px solid var(--acc-pale);position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.1);}
+.header-top{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;}
+.logo{font-size:1.1rem;color:var(--acc);text-decoration:none;}
+.score-badge{background:var(--acc);color:white;font-size:.9rem;padding:6px 16px;border-radius:20px;}
+.steps-wrap{padding:0 16px 8px;}
+.steps{display:flex;gap:5px;}
+.step{flex:1;height:10px;border-radius:10px;background:#a7f3d0;transition:all .4s;}
+.step.done{background:#10b981;}.step.active{background:var(--acc);}
+.main{max-width:640px;margin:0 auto;padding:18px 14px 100px;}
+.phase{display:none;}.phase.active{display:block;}
+.accroche{background:white;border-radius:var(--radius);padding:22px 20px;margin-bottom:20px;border:3px solid var(--acc-pale);text-align:center;}
+.accroche .big-icon{font-size:4rem;margin-bottom:10px;}
+.accroche h1{font-size:1.75rem;color:var(--acc);margin-bottom:8px;}
+.accroche p{font-family:'Nunito',sans-serif;font-size:.92rem;color:#64748b;margin-bottom:12px;}
+.meta-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
+.meta-tag{background:var(--acc-pale);border-radius:20px;padding:5px 16px;font-size:.78rem;color:var(--acc);}
+.lecon-card{background:white;border-radius:var(--radius);padding:22px 18px;margin-bottom:18px;border:3px solid var(--acc-pale);}
+.lecon-card h2{font-size:1.25rem;color:var(--acc);margin-bottom:18px;}
+.lecon-block{display:none;}.lecon-block.revealed{display:block;}
+.bloc-titre{font-size:1.15rem;color:var(--acc);margin-bottom:14px;}
+.sep{margin:20px 0;border:none;border-top:3px dashed #a7f3d0;}
+.ugo-box{background:white;border:3px solid var(--acc-pale);border-radius:var(--radius);padding:15px 18px;margin:14px 0;display:flex;gap:12px;align-items:flex-start;}
+.ugo-box .ugo{font-size:2.3rem;flex-shrink:0;}
+.ugo-box p{font-family:'Nunito',sans-serif;font-size:.92rem;color:#475569;line-height:1.7;}
+.ugo-box p strong{color:var(--acc);}
+.info-box{background:var(--acc-pale);border-left:6px solid var(--acc);border-radius:0 14px 14px 0;padding:14px 18px;margin:14px 0;font-family:'Nunito',sans-serif;font-size:.92rem;line-height:1.9;}
+.info-box strong{color:var(--acc-dark);}
+.btn-compris{margin-top:18px;padding:14px 30px;border-radius:38px;font-size:1.1rem;background:var(--acc);color:white;border:none;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:8px;box-shadow:0 4px 14px rgba(5,150,105,.35);}
+.btn-compris:hover{background:var(--acc-dark);transform:translateY(-2px);}
+.btn-compris:disabled{opacity:.4;cursor:default;transform:none;}
+.guided-box{background:white;border:3px solid var(--acc);border-radius:var(--radius);padding:20px 18px;margin-bottom:16px;}
+.guided-title{font-size:1rem;color:var(--acc);margin-bottom:16px;background:var(--acc-pale);padding:10px 16px;border-radius:12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.tries-b{font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:800;color:var(--coral);background:#fee2e2;padding:3px 12px;border-radius:20px;margin-left:auto;}
+.q-box{border:3px solid #a7f3d0;border-radius:14px;padding:16px;margin-bottom:10px;opacity:.5;pointer-events:none;}
+.q-box.active{opacity:1;pointer-events:all;border-color:var(--acc-mid);}
+.q-box.correct{border-color:var(--mint);background:var(--mint-pale);opacity:1;}
+.q-num{font-family:'Nunito',sans-serif;font-size:.65rem;font-weight:800;color:#94a3b8;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;}
+.q-text{font-size:1.05rem;color:var(--acc-dark);margin-bottom:14px;line-height:1.5;}
+.hint-box{font-family:'Nunito',sans-serif;font-size:.86rem;color:#78350f;background:var(--sun-pale);border-radius:10px;padding:10px 14px;margin-bottom:10px;display:none;}
+.hint-box.show{display:block;}
+.opts{display:flex;flex-direction:column;gap:10px;}
+.opt{padding:13px 16px;border-radius:13px;border:3px solid #a7f3d0;background:white;font-size:1rem;cursor:pointer;text-align:left;transition:all .2s;}
+.opt:hover:not(:disabled){border-color:var(--acc);background:var(--acc-pale);}
+.opt:disabled{cursor:default;}
+.opt.ok{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.opt.ko{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
+.fb{margin-top:10px;padding:10px 14px;border-radius:12px;font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:800;display:none;}
+.fb.show{display:block;}
+.fb.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.fb.ko{background:var(--coral-pale);color:#b91c1c;}
+.reset-box{background:white;border:3px solid var(--acc);border-radius:var(--radius);padding:22px;text-align:center;margin-bottom:16px;display:none;}
+.reset-box.show{display:block;}
+.reset-box .r-ugo{font-size:3.2rem;margin-bottom:8px;}
+.reset-box h3{font-size:1.2rem;color:var(--acc);margin-bottom:8px;}
+.reset-box p{font-family:'Nunito',sans-serif;font-size:.9rem;color:#64748b;margin-bottom:14px;line-height:1.7;}
+.btn-reset{padding:12px 26px;border-radius:28px;font-size:.95rem;background:var(--acc);color:white;border:none;cursor:pointer;}
+.free-card{background:white;border:3px solid var(--acc-pale);border-radius:var(--radius);padding:18px;margin-bottom:14px;}
+.free-num{font-family:'Nunito',sans-serif;font-size:.7rem;font-weight:800;color:var(--acc);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;}
+.free-q{font-size:1.05rem;color:var(--acc-dark);margin-bottom:14px;background:var(--acc-pale);border-radius:12px;padding:12px 16px;line-height:1.5;}
+.free-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.free-opt{padding:12px;border-radius:13px;font-size:1rem;border:3px solid #a7f3d0;background:white;cursor:pointer;transition:all .2s;text-align:center;}
+.free-opt:hover{border-color:var(--acc);background:var(--acc-pale);}
+.free-opt.ok{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.free-opt.ko{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
+.free-opt.reveal{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.free-fb{margin-top:10px;padding:10px 14px;border-radius:12px;font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:800;display:none;}
+.free-fb.show{display:block;}
+.free-fb.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.free-fb.ko{background:var(--coral-pale);color:#b91c1c;}
+.btn-suite{margin-top:16px;padding:13px 26px;border-radius:32px;font-size:1rem;background:var(--acc);color:white;border:none;cursor:pointer;display:none;align-items:center;gap:8px;box-shadow:0 4px 14px rgba(5,150,105,.3);transition:all .2s;}
+.btn-suite.show{display:inline-flex;}
+.btn-suite:hover{background:var(--acc-dark);transform:translateY(-2px);}
+.bilan-card{background:white;border-radius:var(--radius);padding:28px 20px;text-align:center;border:3px solid var(--acc-pale);}
+.bilan-ugo{font-size:4.5rem;margin-bottom:10px;display:block;}
+.bilan-title{font-size:2rem;color:var(--acc);margin-bottom:8px;}
+.bilan-msg{font-family:'Nunito',sans-serif;font-size:.95rem;color:#64748b;margin-bottom:20px;line-height:1.8;}
+.stars-row{display:flex;justify-content:center;gap:14px;margin-bottom:18px;}
+.star-big{font-size:3rem;filter:grayscale(1);transition:all .5s;}
+.star-big.earned{filter:none;animation:starPop .5s ease both;}
+@keyframes starPop{0%{transform:scale(0);}60%{transform:scale(1.3);}100%{transform:scale(1);}}
+.score-circle{width:115px;height:115px;border-radius:50%;background:var(--acc);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 20px;color:white;box-shadow:0 6px 20px rgba(5,150,105,.4);}
+.score-num{font-size:2.2rem;line-height:1;}
+.score-sub{font-family:'Nunito',sans-serif;font-size:.65rem;opacity:.85;}
+.memo{background:var(--acc-pale);border-radius:var(--radius);padding:16px 18px;margin:16px 0;text-align:left;}
+.memo h3{font-size:.9rem;color:var(--acc);margin-bottom:12px;}
+.memo-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media(max-width:400px){.memo-grid{grid-template-columns:1fr;}.free-opts{grid-template-columns:1fr;}}
+.memo-item{background:white;border-radius:12px;padding:11px 13px;border:2px solid var(--acc-pale);}
+.memo-item strong{color:var(--acc);display:block;margin-bottom:3px;}
+.memo-item span{font-family:'Nunito',sans-serif;font-size:.8rem;color:#475569;line-height:1.6;}
+.bilan-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:18px;}
+.btn-bilan{padding:13px 22px;border-radius:30px;font-size:.95rem;cursor:pointer;border:none;transition:all .2s;}
+.btn-bilan.primary{background:var(--acc);color:white;}
+.btn-bilan.secondary{background:var(--acc-pale);color:var(--acc);border:3px solid var(--acc);}
+.btn-bilan:hover{transform:translateY(-2px);}
+.confetti-piece{position:fixed;border-radius:3px;top:-20px;animation:fall linear both;pointer-events:none;z-index:9999;}
+@keyframes fall{0%{transform:translateY(0) rotate(0deg);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
+@media print{body{background:white;}.phase{display:block!important;}.btn-compris,.btn-suite,.bilan-card,.ugo-box{display:none!important;}}
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="header-top">
+    <a href="../6-9ans.html" class="logo">🦉 L'Atelier du Devoir</a>
+    <div class="score-badge">⭐ <span id="score-display">0</span></div>
+  </div>
+  <div class="steps-wrap"><div class="steps">
+    <div class="step active" id="s0"></div><div class="step" id="s1"></div><div class="step" id="s2"></div>
+    <div class="step" id="s3"></div><div class="step" id="s4"></div><div class="step" id="s5"></div>
+  </div></div>
+</header>
+<main class="main">
+<div class="accroche">
+  <div class="big-icon">📐</div>
+  <h1>Les formes géométriques !</h1>
+  <p style="font-family:'Nunito',sans-serif;">Carré, rectangle, triangle, cercle… apprends à les reconnaître ! 🌟</p>
+  <div class="meta-row">
+    <span class="meta-tag">CP / CE1</span><span class="meta-tag">⭐ Facile</span><span class="meta-tag">📐 Géométrie</span>
+  </div>
+</div>
+<div class="phase active" id="phase-lecon">
+  <div class="lecon-card">
+    <h2>📖 La leçon</h2>
+    <div class="lecon-block revealed" id="bloc-0">
+      <div class="bloc-titre">① Les 4 formes principales</div>
+      <div class="ugo-box"><span class="ugo">🦉</span>
+        <p>Chaque forme a un <strong>nom</strong> et un <strong>nombre de côtés</strong> ! Un côté = une ligne droite sur le bord. 😊</p>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0;">
+        <div style="background:#f0fdf4;border:3px solid #6ee7b7;border-radius:14px;padding:14px;text-align:center;">
+          <svg viewBox="0 0 80 80" width="70" height="70"><rect x="10" y="10" width="60" height="60" fill="none" stroke="#059669" stroke-width="4"/></svg>
+          <div style="font-size:1.1rem;color:#047857;margin-top:6px;">Carré</div>
+          <div style="font-family:'Nunito',sans-serif;font-size:.78rem;color:#64748b;">4 côtés <strong>égaux</strong><br>4 angles droits</div>
+        </div>
+        <div style="background:#eff6ff;border:3px solid #93c5fd;border-radius:14px;padding:14px;text-align:center;">
+          <svg viewBox="0 0 80 80" width="70" height="70"><rect x="5" y="20" width="70" height="40" fill="none" stroke="#2563eb" stroke-width="4"/></svg>
+          <div style="font-size:1.1rem;color:#1d4ed8;margin-top:6px;">Rectangle</div>
+          <div style="font-family:'Nunito',sans-serif;font-size:.78rem;color:#64748b;">4 côtés (2 longueurs)<br>4 angles droits</div>
+        </div>
+        <div style="background:#fef3c7;border:3px solid #fcd34d;border-radius:14px;padding:14px;text-align:center;">
+          <svg viewBox="0 0 80 80" width="70" height="70"><polygon points="40,8 72,72 8,72" fill="none" stroke="#d97706" stroke-width="4"/></svg>
+          <div style="font-size:1.1rem;color:#b45309;margin-top:6px;">Triangle</div>
+          <div style="font-family:'Nunito',sans-serif;font-size:.78rem;color:#64748b;">3 côtés<br>3 angles</div>
+        </div>
+        <div style="background:#fdf4ff;border:3px solid #d8b4fe;border-radius:14px;padding:14px;text-align:center;">
+          <svg viewBox="0 0 80 80" width="70" height="70"><circle cx="40" cy="40" r="30" fill="none" stroke="#7c3aed" stroke-width="4"/></svg>
+          <div style="font-size:1.1rem;color:#5b21b6;margin-top:6px;">Cercle</div>
+          <div style="font-family:'Nunito',sans-serif;font-size:.78rem;color:#64748b;">0 côté<br>Tout rond !</div>
+        </div>
+      </div>
+      <div class="info-box">
+        <strong>Le côté</strong> = une ligne droite qui forme le bord de la forme.<br>
+        Le <strong>carré</strong> est un rectangle spécial : tous ses côtés sont égaux !
+      </div>
+      <button class="btn-compris" onclick="revealBloc(1)">J'ai compris ! 🎉</button>
+    </div>
+    <div class="lecon-block" id="bloc-1">
+      <hr class="sep">
+      <div class="bloc-titre">② D'autres formes</div>
+      <div class="ugo-box"><span class="ugo">🦉</span><p>Il existe d'autres formes ! Le nombre de <strong>côtés</strong> donne le nom. 😊</p></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:14px 0;">
+        <div style="background:#fff1f2;border:2px solid #fda4af;border-radius:12px;padding:12px;text-align:center;">
+          <svg viewBox="0 0 80 80" width="60" height="60"><polygon points="40,5 75,30 62,70 18,70 5,30" fill="none" stroke="#dc2626" stroke-width="3.5"/></svg>
+          <div style="font-size:.95rem;color:#b91c1c;margin-top:5px;">Pentagone</div>
+          <div style="font-family:'Nunito',sans-serif;font-size:.72rem;color:#64748b;">5 côtés</div>
+        </div>
+        <div style="background:#f0f9ff;border:2px solid #7dd3fc;border-radius:12px;padding:12px;text-align:center;">
+          <svg viewBox="0 0 80 80" width="60" height="60"><polygon points="40,5 70,20 70,60 40,75 10,60 10,20" fill="none" stroke="#0369a1" stroke-width="3.5"/></svg>
+          <div style="font-size:.95rem;color:#075985;margin-top:5px;">Hexagone</div>
+          <div style="font-family:'Nunito',sans-serif;font-size:.72rem;color:#64748b;">6 côtés</div>
+        </div>
+        <div style="background:#f0fdf4;border:2px solid #6ee7b7;border-radius:12px;padding:12px;text-align:center;">
+          <svg viewBox="0 0 80 80" width="60" height="60"><polygon points="40,5 65,15 75,40 65,65 40,75 15,65 5,40 15,15" fill="none" stroke="#059669" stroke-width="3.5"/></svg>
+          <div style="font-size:.95rem;color:#047857;margin-top:5px;">Octogone</div>
+          <div style="font-family:'Nunito',sans-serif;font-size:.72rem;color:#64748b;">8 côtés</div>
+        </div>
+      </div>
+      <div class="info-box">
+        <strong>Astuce :</strong> compte les côtés pour trouver le nom !<br>
+        3 → triangle · 4 → carré/rectangle · 5 → pentagone · 6 → hexagone · 8 → octogone
+      </div>
+      <button class="btn-compris" onclick="revealBloc(2)">J'ai compris ! 🎉</button>
+    </div>
+    <div class="lecon-block" id="bloc-2">
+      <hr class="sep">
+      <div class="bloc-titre">③ Dans la vie de tous les jours</div>
+      <div class="ugo-box"><span class="ugo">🦉</span><p>Les formes sont <strong>partout</strong> autour de toi ! 🏠</p></div>
+      <div style="display:flex;flex-direction:column;gap:10px;margin:14px 0;">
+        <div style="background:#f0fdf4;border:2px solid #6ee7b7;border-radius:12px;padding:12px;display:flex;align-items:center;gap:14px;">
+          <svg viewBox="0 0 40 40" width="36" height="36"><rect x="2" y="2" width="36" height="36" fill="none" stroke="#059669" stroke-width="3"/></svg>
+          <div style="font-family:'Nunito',sans-serif;font-size:.88rem;color:#475569;"><strong style="color:#047857;">Carré :</strong> une fenêtre, un carreau, un timbre</div>
+        </div>
+        <div style="background:#eff6ff;border:2px solid #93c5fd;border-radius:12px;padding:12px;display:flex;align-items:center;gap:14px;">
+          <svg viewBox="0 0 60 36" width="54" height="36"><rect x="2" y="2" width="56" height="32" fill="none" stroke="#2563eb" stroke-width="3"/></svg>
+          <div style="font-family:'Nunito',sans-serif;font-size:.88rem;color:#475569;"><strong style="color:#1d4ed8;">Rectangle :</strong> une porte, un livre, un écran</div>
+        </div>
+        <div style="background:#fef3c7;border:2px solid #fcd34d;border-radius:12px;padding:12px;display:flex;align-items:center;gap:14px;">
+          <svg viewBox="0 0 50 44" width="44" height="40"><polygon points="25,2 48,42 2,42" fill="none" stroke="#d97706" stroke-width="3"/></svg>
+          <div style="font-family:'Nunito',sans-serif;font-size:.88rem;color:#475569;"><strong style="color:#b45309;">Triangle :</strong> un toit de maison, une pointe de pizza</div>
+        </div>
+        <div style="background:#fdf4ff;border:2px solid #d8b4fe;border-radius:12px;padding:12px;display:flex;align-items:center;gap:14px;">
+          <svg viewBox="0 0 40 40" width="36" height="36"><circle cx="20" cy="20" r="17" fill="none" stroke="#7c3aed" stroke-width="3"/></svg>
+          <div style="font-family:'Nunito',sans-serif;font-size:.88rem;color:#475569;"><strong style="color:#5b21b6;">Cercle :</strong> une roue, une pièce, le soleil</div>
+        </div>
+      </div>
+      <button class="btn-compris" onclick="goPhase('g1',1)">On joue ! 🚀</button>
+    </div>
+  </div>
+</div>
+<div class="phase" id="phase-g1">
+  <div class="ugo-box"><span class="ugo">🦉</span><p>Super ! <strong>3 questions</strong> sur les formes. <strong>3 essais</strong> ! 💚</p></div>
+  <div id="g1-reset" class="reset-box"><div class="r-ugo">🦉</div><h3>On recommence !</h3><p>Carré=4 côtés égaux · Rectangle=4 côtés · Triangle=3 côtés · Cercle=0 côté. 💪</p><button class="btn-reset" onclick="initG1()">↺ Réessayer !</button></div>
+  <div id="g1-zone"></div>
+  <button class="btn-suite" id="btn-g1-to-g2" onclick="goPhase('g2',2)">Encore des questions ! 🌟</button>
+</div>
+<div class="phase" id="phase-g2">
+  <div class="ugo-box"><span class="ugo">🦉</span><p>Excellent ! <strong>3 questions</strong> de plus. Tu vas y arriver ! 🏆</p></div>
+  <div id="g2-reset" class="reset-box"><div class="r-ugo">🦉</div><h3>On recommence !</h3><p>Compte les côtés pour trouver le nom ! 💪</p><button class="btn-reset" onclick="initG2()">↺ Réessayer !</button></div>
+  <div id="g2-zone"></div>
+  <button class="btn-suite" id="btn-g2-to-free" onclick="goPhase('free',3)">Super ! Exercices libres 🎯</button>
+</div>
+<div class="phase" id="phase-free">
+  <div class="ugo-box"><span class="ugo">🦉</span><p><strong>5 questions !</strong> 📐</p></div>
+  <div id="free1-zone"></div>
+  <button class="btn-suite" id="btn-free-to-free2" onclick="goPhase('free2',4)">5 dernières ! 💪</button>
+</div>
+<div class="phase" id="phase-free2">
+  <div class="ugo-box"><span class="ugo">🦉</span><p>Encore <strong>5 questions</strong> ! 🏁</p></div>
+  <div id="free2-zone"></div>
+  <button class="btn-suite" id="btn-free2-to-bilan" onclick="goPhase('bilan',5)">🌟 Mon résultat !</button>
+</div>
+<div class="phase" id="phase-bilan">
+  <div class="bilan-card">
+    <span class="bilan-ugo">🦉</span>
+    <h2 class="bilan-title" id="bilan-title"></h2>
+    <p class="bilan-msg" id="bilan-msg"></p>
+    <div class="stars-row"><span class="star-big" id="etoile1">⭐</span><span class="star-big" id="etoile2">⭐</span><span class="star-big" id="etoile3">⭐</span></div>
+    <div class="score-circle"><span class="score-num" id="bilan-pts">0</span><span class="score-sub" id="bilan-sur">/0</span></div>
+    <div class="memo"><h3>📝 Ce que j'ai appris</h3>
+      <div class="memo-grid">
+        <div class="memo-item"><strong>Carré</strong><span>4 côtés égaux<br>4 angles droits</span></div>
+        <div class="memo-item"><strong>Rectangle</strong><span>4 côtés (2 paires)<br>4 angles droits</span></div>
+        <div class="memo-item"><strong>Triangle</strong><span>3 côtés<br>TRI = 3 !</span></div>
+        <div class="memo-item"><strong>Cercle</strong><span>0 côté<br>Tout rond !</span></div>
+      </div>
+    </div>
+    <div class="bilan-btns">
+      <button class="btn-bilan secondary" onclick="location.reload()">↺ Recommencer</button>
+      <button class="btn-bilan primary" onclick="location.href='../6-9ans.html'">← Les fiches</button>
+    </div>
+  </div>
+</div>
+</main>
+<script>
+var G1=[
+  {titre:"📐 Reconnaître les formes",etapes:[
+    {q:"Quelle forme a 4 côtés ÉGAUX et 4 angles droits ?",opts:["Le carré","Le rectangle","Le triangle","Le cercle"],ok:0,hint:"4 côtés tous pareils + 4 angles droits = ?",expl_ok:"Le carré ! 4 côtés égaux, 4 angles droits. 🎉",expl_ko:"Le carré a 4 côtés tous égaux et 4 angles droits."},
+    {q:"Quelle forme n'a AUCUN côté ?",opts:["Le cercle","Le triangle","Le carré","Le rectangle"],ok:0,hint:"Une forme toute ronde, sans ligne droite.",expl_ok:"Le cercle ! Tout rond, aucun côté droit. 🌟",expl_ko:"Le cercle est rond et n'a aucun côté droit."},
+    {q:"Quelle forme a exactement 3 côtés ?",opts:["Le triangle","Le carré","L'hexagone","Le rectangle"],ok:0,hint:"TRI = 3. Comme tricycle = 3 roues !",expl_ok:"Le triangle ! TRI = 3 côtés. 🎉",expl_ko:"TRI = 3 → triangle = 3 côtés."}
+  ]},
+  {titre:"📐 Compter les côtés",etapes:[
+    {q:"Un carré a combien de côtés ?",opts:["4","3","6","2"],ok:0,hint:"Compte les lignes droites du carré.",expl_ok:"4 côtés ! Un carré a 4 côtés tous égaux. 🌟",expl_ko:"Un carré a 4 côtés."},
+    {q:"Un triangle a combien de côtés ?",opts:["3","4","5","2"],ok:0,hint:"TRI = 3.",expl_ok:"3 côtés ! Un triangle a toujours 3 côtés. 🎉",expl_ko:"Un triangle a 3 côtés."},
+    {q:"Un hexagone a combien de côtés ?",opts:["6","5","8","4"],ok:0,hint:"HEXA = 6. Comme un alvéole d'abeille !",expl_ok:"6 côtés ! Un hexagone a 6 côtés. 🌟",expl_ko:"Un hexagone a 6 côtés."}
+  ]},
+  {titre:"📐 Dans la vie",etapes:[
+    {q:"Une roue de vélo, c'est quelle forme ?",opts:["Un cercle","Un carré","Un triangle","Un rectangle"],ok:0,hint:"Toute ronde, sans côté droit.",expl_ok:"Un cercle ! Les roues sont rondes. 🎉",expl_ko:"Une roue est ronde → cercle."},
+    {q:"Une porte, c'est quelle forme ?",opts:["Un rectangle","Un carré","Un triangle","Un cercle"],ok:0,hint:"Plus haut que large, 4 côtés.",expl_ok:"Un rectangle ! Une porte est plus haute que large. 🌟",expl_ko:"Une porte est plus haute que large → rectangle."},
+    {q:"Un toit de maison vu de face, c'est quelle forme ?",opts:["Un triangle","Un carré","Un cercle","Un rectangle"],ok:0,hint:"3 côtés, une pointe en haut.",expl_ok:"Un triangle ! Le toit fait une pointe. 🎉",expl_ko:"Un toit avec une pointe en haut → triangle."}
+  ]},
+  {titre:"📐 Carré ou rectangle ?",etapes:[
+    {q:"Différence entre carré et rectangle ?",opts:["Carré = 4 côtés égaux / Rectangle = 2 longueurs différentes","Ils sont identiques","Carré = 3 côtés / Rectangle = 4 côtés"],ok:0,hint:"Dans un carré, tous les côtés ont la même longueur.",expl_ok:"Carré = 4 côtés égaux. Rectangle = 2 paires de côtés. 🌟",expl_ko:"Carré = 4 côtés tous égaux. Rectangle = 2 longueurs différentes."},
+    {q:"Un carré est-il aussi un rectangle ?",opts:["Oui ! C'est un rectangle spécial","Non, ce sont deux formes différentes"],ok:0,hint:"Un carré a 4 côtés droits comme un rectangle, mais tous ses côtés sont égaux.",expl_ok:"Oui ! Le carré est un rectangle dont tous les côtés sont égaux. 🎉",expl_ko:"Oui, le carré EST un rectangle spécial."},
+    {q:"Une feuille de papier, c'est quelle forme ?",opts:["Un rectangle","Un carré","Un triangle","Un cercle"],ok:0,hint:"Une feuille est plus longue que large.",expl_ok:"Un rectangle ! La feuille est plus longue que large. 🌟",expl_ko:"Une feuille A4 est plus longue que large → rectangle."}
+  ]}
+];
+var G2=[
+  {titre:"✏️ Problèmes de formes",etapes:[
+    {q:"Léa dessine une forme avec 4 côtés égaux. Quelle forme ?",opts:["Un carré","Un triangle","Un cercle","Un pentagone"],ok:0,hint:"4 côtés tous égaux → ?",expl_ok:"Un carré ! 4 côtés égaux = carré. 🎉",expl_ko:"4 côtés égaux → carré."},
+    {q:"Tom coupe une pizza en morceaux pointus à 3 côtés. Quelle forme ?",opts:["Des triangles","Des carrés","Des cercles","Des rectangles"],ok:0,hint:"Pointu avec 3 côtés = ?",expl_ok:"Des triangles ! 3 côtés → triangle. 🌟",expl_ko:"3 côtés → triangle."},
+    {q:"Une pièce de 2 euros est quelle forme ?",opts:["Un cercle","Un carré","Un triangle","Un hexagone"],ok:0,hint:"Toute ronde !",expl_ok:"Un cercle ! Les pièces de monnaie sont rondes. 🎉",expl_ko:"Une pièce ronde → cercle."}
+  ]},
+  {titre:"✏️ Vrai ou faux ?",etapes:[
+    {q:"Un triangle peut avoir 4 côtés ?",opts:["Non ! Triangle = toujours 3 côtés","Oui, parfois"],ok:0,hint:"TRI = 3. Toujours.",expl_ok:"Non ! TRI = 3. Un triangle a TOUJOURS 3 côtés. 🌟",expl_ko:"Non. Triangle = toujours 3 côtés. TRI = 3."},
+    {q:"Un carré a 4 angles droits ?",opts:["Oui ! Comme un rectangle","Non, seulement 2"],ok:0,hint:"Les 4 coins d'un carré font des angles droits.",expl_ok:"Oui ! Un carré a 4 angles droits, comme un rectangle. 🎉",expl_ko:"Oui, un carré a bien 4 angles droits."},
+    {q:"Un cercle a des côtés droits ?",opts:["Non ! Le cercle est tout rond","Oui, il a 1 côté courbe"],ok:0,hint:"Le cercle est une courbe continue, pas de ligne droite.",expl_ok:"Non ! Le cercle est tout rond, aucun côté droit. 🌟",expl_ko:"Non, le cercle n'a aucun côté droit."}
+  ]},
+  {titre:"✏️ Formes et objets",etapes:[
+    {q:"Une fenêtre carrée a combien de côtés de même longueur ?",opts:["4","2","3","0"],ok:0,hint:"Carré = tous les côtés égaux.",expl_ok:"4 ! Dans un carré, les 4 côtés ont la même longueur. 🎉",expl_ko:"Carré = 4 côtés tous égaux."},
+    {q:"Un panneau STOP est quelle forme ? (8 côtés)",opts:["Un octogone","Un hexagone","Un carré","Un pentagone"],ok:0,hint:"OCTO = 8.",expl_ok:"Un octogone ! OCTO = 8 côtés. 🌟",expl_ko:"8 côtés → octogone. OCTO = 8."},
+    {q:"Une ardoise de classe est quelle forme ?",opts:["Un rectangle","Un triangle","Un cercle","Un pentagone"],ok:0,hint:"Large et rectangulaire, 4 côtés.",expl_ok:"Un rectangle ! L'ardoise est plus large que haute. 🎉",expl_ko:"Une ardoise rectangulaire → rectangle."}
+  ]},
+  {titre:"✏️ Compter et nommer",etapes:[
+    {q:"Quelle forme a 5 côtés ?",opts:["Un pentagone","Un hexagone","Un triangle","Un octogone"],ok:0,hint:"PENTA = 5.",expl_ok:"Un pentagone ! PENTA = 5 côtés. 🌟",expl_ko:"PENTA = 5 → pentagone."},
+    {q:"Quelle forme ressemble à un alvéole d'abeille ?",opts:["Un hexagone","Un carré","Un triangle","Un cercle"],ok:0,hint:"Les ruches ont des cellules à 6 côtés.",expl_ok:"Un hexagone ! Les abeilles construisent des hexagones. 🎉",expl_ko:"Cellules d'une ruche = 6 côtés → hexagone."},
+    {q:"Si une forme a 0 côté, c'est…",opts:["Un cercle","Un carré","Un triangle","Un pentagone"],ok:0,hint:"Aucun côté = tout rond.",expl_ok:"Un cercle ! 0 côté = tout rond. 🌟",expl_ko:"0 côté → cercle (tout rond)."}
+  ]}
+];
+var FREE_POOL=[
+  {q:"Un carré a combien de côtés ?",opts:["4","3"],ok:0,expl:"Un carré a 4 côtés tous égaux."},
+  {q:"Un triangle a combien de côtés ?",opts:["3","4"],ok:0,expl:"TRI = 3. Un triangle a toujours 3 côtés."},
+  {q:"Quelle forme est toute ronde (0 côté) ?",opts:["Le cercle","Le carré"],ok:0,expl:"Le cercle est tout rond, aucun côté droit."},
+  {q:"Une porte est quelle forme ?",opts:["Un rectangle","Un triangle"],ok:0,expl:"Une porte plus haute que large → rectangle."},
+  {q:"Un toit avec une pointe est quelle forme ?",opts:["Un triangle","Un cercle"],ok:0,expl:"3 côtés, une pointe → triangle."},
+  {q:"Un hexagone a combien de côtés ?",opts:["6","5"],ok:0,expl:"HEXA = 6 côtés."},
+  {q:"Un carré est-il aussi un rectangle ?",opts:["Oui !","Non"],ok:0,expl:"Oui ! Le carré est un rectangle dont tous les côtés sont égaux."},
+  {q:"Une pièce de monnaie est quelle forme ?",opts:["Un cercle","Un carré"],ok:0,expl:"Toute ronde → cercle."},
+  {q:"Un pentagone a combien de côtés ?",opts:["5","6"],ok:0,expl:"PENTA = 5 côtés."},
+  {q:"Une feuille A4 est quelle forme ?",opts:["Un rectangle","Un carré"],ok:0,expl:"Plus longue que large → rectangle."},
+  {q:"Un octogone a combien de côtés ?",opts:["8","6"],ok:0,expl:"OCTO = 8. Le panneau STOP est un octogone."},
+  {q:"Quelle forme a 4 côtés ÉGAUX ?",opts:["Le carré","Le rectangle"],ok:0,expl:"Le carré a 4 côtés tous égaux. Le rectangle en a 2 paires."},
+  {q:"Un livre fermé est quelle forme ?",opts:["Un rectangle","Un triangle"],ok:0,expl:"Un livre a 4 côtés, plus haut que large → rectangle."},
+  {q:"Une roue de vélo est quelle forme ?",opts:["Un cercle","Un hexagone"],ok:0,expl:"Toute ronde → cercle."},
+  {q:"Combien de côtés a un triangle ?",opts:["3","6"],ok:0,expl:"TRI = 3 côtés toujours."},
+  {q:"Le soleil (sans rayons) est quelle forme ?",opts:["Un cercle","Un carré"],ok:0,expl:"Le soleil est rond → cercle."},
+  {q:"Les cellules d'une ruche sont quelle forme ?",opts:["L'hexagone","Le carré"],ok:0,expl:"Les alvéoles d'une ruche sont des hexagones (6 côtés)."},
+  {q:"Un carreau de carrelage carré a combien de côtés ?",opts:["4","3"],ok:0,expl:"Carré = 4 côtés."},
+  {q:"Un panneau STOP a 8 côtés → c'est un…",opts:["octogone","hexagone"],ok:0,expl:"OCTO = 8 → octogone."},
+  {q:"Quelle forme n'a aucun angle droit ?",opts:["Le cercle","Le carré"],ok:0,expl:"Le cercle est tout rond, aucun coin, aucun angle droit."}
+];
+var score=0,g1Idx=0,g2Idx=0,f1Exs=[],f2Exs=[],f1Done=0,f2Done=0,_cb={},_g1tries=0,_g2tries=0;
+function shuffle(a){var b=a.slice();for(var i=b.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=b[i];b[i]=b[j];b[j]=t;}return b;}
+function addPt(){score++;document.getElementById('score-display').textContent=score;}
+function updSteps(n){for(var i=0;i<6;i++){var s=document.getElementById('s'+i);if(!s)return;s.classList.remove('active','done');if(i<n)s.classList.add('done');else if(i===n)s.classList.add('active');}}
+function goPhase(ph,si){document.querySelectorAll('.phase').forEach(function(p){p.classList.remove('active');});var el=document.getElementById('phase-'+ph);if(el){el.classList.add('active');setTimeout(function(){el.scrollIntoView({behavior:'smooth',block:'start'});},100);}updSteps(si);if(ph==='g1')initG1();if(ph==='g2')initG2();if(ph==='free')initFree1();if(ph==='free2')initFree2();if(ph==='bilan')showBilan();}
+function revealBloc(n){var b=document.getElementById('bloc-'+n);if(!b)return;var p=document.getElementById('bloc-'+(n-1));if(p){var btn=p.querySelector('.btn-compris');if(btn){btn.textContent='✓ Compris !';btn.disabled=true;btn.style.opacity='.4';}}b.classList.add('revealed');setTimeout(function(){var hH=(document.querySelector('.header')||{offsetHeight:0}).offsetHeight;var r=b.getBoundingClientRect();window.scrollTo({top:window.pageYOffset+r.top-hH-16,behavior:'smooth'});},150);}
+function makeQBox(step,si,prefix){var so=shuffle(step.opts.map(function(o,oi){return{t:o,i:oi};}));var sb=document.createElement('div');sb.className='q-box'+(si===0?' active':'');sb.id=prefix+'s'+si;sb.innerHTML='<div class="q-num">Question '+(si+1)+'</div><div class="q-text">'+step.q+'</div><div class="hint-box" id="'+prefix+'h'+si+'">💡 '+step.hint+'</div><div class="opts">'+so.map(function(o){return'<button class="opt" onclick="checkQ(\''+prefix+'\','+si+','+o.i+',this)">'+o.t+'</button>';}).join('')+'</div><div class="fb" id="'+prefix+'f'+si+'"></div>';return sb;}
+function checkQ(prefix,si,ci,btn){var v=prefix==='g1'?G1[g1Idx]:G2[g2Idx];var step=v.etapes[si];var sb=document.getElementById(prefix+'s'+si);var fb=document.getElementById(prefix+'f'+si);var triesId=prefix==='g1'?'tries-g1':'tries-g2';var tries=prefix==='g1'?_g1tries:_g2tries;if(sb.classList.contains('correct'))return;if(ci===step.ok){btn.classList.add('ok');sb.querySelectorAll('.opt').forEach(function(b){b.disabled=true;});sb.classList.add('correct');if(tries===0){fb.className='fb show ok';fb.innerHTML='✅ '+step.expl_ok+' <span style="font-size:.75rem;color:#065f46">(+1 pt)</span>';addPt();}else{fb.className='fb show ok';fb.innerHTML='✅ '+step.expl_ok;}if(prefix==='g1')_g1tries=0;else _g2tries=0;var el=document.getElementById(triesId);if(el)el.textContent='3 essais';var nx=document.getElementById(prefix+'s'+(si+1));if(nx){nx.classList.add('active');setTimeout(function(){nx.scrollIntoView({behavior:'smooth',block:'nearest'});},350);}else{var btnId=prefix==='g1'?'btn-g1-to-g2':'btn-g2-to-free';setTimeout(function(){var b=document.getElementById(btnId);b.classList.add('show');b.scrollIntoView({behavior:'smooth',block:'nearest'});},550);}}else{btn.classList.add('ko');btn.disabled=true;if(prefix==='g1')_g1tries++;else _g2tries++;var newTries=prefix==='g1'?_g1tries:_g2tries;var el=document.getElementById(triesId);if(el)el.textContent=(3-newTries)+' essai'+(3-newTries>1?'s':'');fb.className='fb show ko';if(newTries<3){fb.innerHTML='❌ Réessaie ! 💪';document.getElementById(prefix+'h'+si).classList.add('show');}else{fb.innerHTML='❌ '+step.expl_ko;var rid=prefix==='g1'?'g1-reset':'g2-reset',zid=prefix==='g1'?'g1-zone':'g2-zone';setTimeout(function(){document.getElementById(rid).classList.add('show');document.getElementById(zid).innerHTML='';document.getElementById(rid).scrollIntoView({behavior:'smooth',block:'start'});},1400);}}}
+function initG(which){var isG1=which==='g1';if(isG1){g1Idx=Math.floor(Math.random()*G1.length);_g1tries=0;}else{g2Idx=Math.floor(Math.random()*G2.length);_g2tries=0;}var v=isG1?G1[g1Idx]:G2[g2Idx];document.getElementById(which+'-reset').classList.remove('show');document.getElementById('btn-'+which+'-to-'+(isG1?'g2':'free')).classList.remove('show');var z=document.getElementById(which+'-zone');z.innerHTML='';var box=document.createElement('div');box.className='guided-box';box.innerHTML='<div class="guided-title">'+v.titre+'<span class="tries-b" id="tries-'+which+'">3 essais</span></div><div id="'+which+'-steps"></div>';z.appendChild(box);v.etapes.forEach(function(step,si){document.getElementById(which+'-steps').appendChild(makeQBox(step,si,which));});}
+function initG1(){initG('g1');}function initG2(){initG('g2');}
+function buildFree(ex,i,prefix,cb){var card=document.createElement('div');card.className='free-card';card.id=prefix+'c'+i;var so=shuffle(ex.opts.map(function(o,oi){return{t:o,i:oi};}));card.innerHTML='<div class="free-num">Question '+(i+1)+'</div><div class="free-q">'+ex.q+'</div><div class="free-opts" id="'+prefix+'fo'+i+'"></div><div class="free-fb" id="'+prefix+'ff'+i+'"></div>';setTimeout(function(){var ba=document.getElementById(prefix+'fo'+i);so.forEach(function(o){var btn=document.createElement('button');btn.className='free-opt';btn.textContent=o.t;btn.onclick=function(){if(card.classList.contains('done'))return;card.classList.add('done');ba.querySelectorAll('button').forEach(function(b){b.disabled=true;});var fb=document.getElementById(prefix+'ff'+i);if(o.i===ex.ok){btn.classList.add('ok');fb.className='free-fb show ok';fb.innerHTML='✅ '+ex.expl;addPt();}else{btn.classList.add('ko');ba.querySelectorAll('button').forEach(function(b,bi){if(bi===ex.ok)b.classList.add('reveal');});fb.className='free-fb show ko';fb.innerHTML='❌ '+ex.expl;}cb();};ba.appendChild(btn);});},0);return card;}
+function initFree1(){f1Exs=shuffle(FREE_POOL.slice()).slice(0,5);f1Done=0;var z=document.getElementById('free1-zone');z.innerHTML='';f1Exs.forEach(function(ex,i){_cb['f1'+i]=function(){f1Done++;if(f1Done>=5)setTimeout(function(){var b=document.getElementById('btn-free-to-free2');b.classList.add('show');b.scrollIntoView({behavior:'smooth',block:'nearest'});},600);};z.appendChild(buildFree(ex,i,'f1',_cb['f1'+i]));});}
+function initFree2(){var used=f1Exs.map(function(e){return e.q;});var pool=FREE_POOL.filter(function(e){return used.indexOf(e.q)<0;});f2Exs=shuffle(pool).slice(0,5);f2Done=0;var z=document.getElementById('free2-zone');z.innerHTML='';f2Exs.forEach(function(ex,i){_cb['f2'+i]=function(){f2Done++;if(f2Done>=5)setTimeout(function(){var b=document.getElementById('btn-free2-to-bilan');b.classList.add('show');b.scrollIntoView({behavior:'smooth',block:'nearest'});},600);};z.appendChild(buildFree(ex,i,'f2',_cb['f2'+i]));});}
+function showBilan(){var g1n=G1[g1Idx]?G1[g1Idx].etapes.length:3,g2n=G2[g2Idx]?G2[g2Idx].etapes.length:3,tot=g1n+g2n+10;document.getElementById('bilan-pts').textContent=score;document.getElementById('bilan-sur').textContent='/ '+tot+' pts';var pct=score/tot,t,m;if(pct>=.8){t='BRAVO ! 🎉🎊';m='Tu connais toutes les formes ! Ugo est super fier de toi ! 🦉⭐';}else if(pct>=.5){t='Très bien ! 😊🌟';m='Tu progresses bien ! Rappelle-toi les formes et leurs côtés.';}else{t='Bien essayé ! 💪';m='Relis la leçon et recommence ! Tu vas y arriver ! 🦉';}document.getElementById('bilan-title').textContent=t;document.getElementById('bilan-msg').textContent=m;var s=[Math.ceil(tot*.33),Math.ceil(tot*.66),Math.ceil(tot*.89)];['etoile1','etoile2','etoile3'].forEach(function(id,i){var el=document.getElementById(id);if(score>=s[i]){(function(e,d){setTimeout(function(){e.classList.add('earned');},d);})(el,300+i*450);}else el.style.filter='grayscale(1)';});if(pct>=.5)confetti();}
+function confetti(){var cols=['#059669','#6ee7b7','#d97706','#7c3aed','#0369a1'];for(var i=0;i<65;i++){var el=document.createElement('div');el.className='confetti-piece';el.style.cssText='left:'+Math.random()*100+'vw;background:'+cols[Math.floor(Math.random()*cols.length)]+';animation-duration:'+(1.8+Math.random()*2.2)+'s;animation-delay:'+Math.random()*1.5+'s;width:'+(7+Math.random()*10)+'px;height:'+(7+Math.random()*10)+'px;border-radius:'+(Math.random()>.5?'50%':'4px')+';';document.body.appendChild(el);setTimeout(function(){if(el.parentNode)el.remove();},5000);}}
+</script>
+</body>
+</html>

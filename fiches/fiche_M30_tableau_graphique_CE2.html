@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>M30 — Lire un tableau et un graphique | L'Atelier du Devoir</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--acc:#0369a1;--acc-pale:#f0f9ff;--acc-mid:#7dd3fc;--acc-dark:#075985;--mint:#059669;--mint-pale:#d1fae5;--mint-deep:#047857;--coral:#dc2626;--coral-pale:#fee2e2;--sun:#d97706;--sun-pale:#fef3c7;--radius:18px;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Fredoka One',cursive;background:#f0f9ff;color:#1e293b;font-size:20px;line-height:1.5;}
+.header{background:white;border-bottom:4px solid var(--acc-pale);position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.1);}
+.header-top{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;}
+.logo{font-size:1.1rem;color:var(--acc);text-decoration:none;}
+.score-badge{background:var(--acc);color:white;font-size:.9rem;padding:6px 16px;border-radius:20px;}
+.steps-wrap{padding:0 16px 8px;}
+.steps{display:flex;gap:5px;}
+.step{flex:1;height:10px;border-radius:10px;background:#bae6fd;transition:all .4s;}
+.step.done{background:#10b981;}.step.active{background:var(--acc);}
+.main{max-width:640px;margin:0 auto;padding:18px 14px 100px;}
+.phase{display:none;}.phase.active{display:block;}
+.accroche{background:white;border-radius:var(--radius);padding:22px 20px;margin-bottom:20px;border:3px solid var(--acc-pale);text-align:center;}
+.accroche .big-icon{font-size:4rem;margin-bottom:10px;}
+.accroche h1{font-size:1.75rem;color:var(--acc);margin-bottom:8px;}
+.accroche p{font-family:'Nunito',sans-serif;font-size:.92rem;color:#64748b;margin-bottom:12px;}
+.meta-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
+.meta-tag{background:var(--acc-pale);border-radius:20px;padding:5px 16px;font-size:.78rem;color:var(--acc);}
+.lecon-card{background:white;border-radius:var(--radius);padding:22px 18px;margin-bottom:18px;border:3px solid var(--acc-pale);}
+.lecon-card h2{font-size:1.25rem;color:var(--acc);margin-bottom:18px;}
+.lecon-block{display:none;}.lecon-block.revealed{display:block;}
+.bloc-titre{font-size:1.15rem;color:var(--acc);margin-bottom:14px;}
+.sep{margin:20px 0;border:none;border-top:3px dashed #bae6fd;}
+.ugo-box{background:white;border:3px solid var(--acc-pale);border-radius:var(--radius);padding:15px 18px;margin:14px 0;display:flex;gap:12px;align-items:flex-start;}
+.ugo-box .ugo{font-size:2.3rem;flex-shrink:0;}
+.ugo-box p{font-family:'Nunito',sans-serif;font-size:.92rem;color:#475569;line-height:1.7;}
+.ugo-box p strong{color:var(--acc);}
+.info-box{background:var(--acc-pale);border-left:6px solid var(--acc);border-radius:0 14px 14px 0;padding:14px 18px;margin:14px 0;font-family:'Nunito',sans-serif;font-size:.92rem;line-height:1.9;}
+.info-box strong{color:var(--acc-dark);}
+/* Tableau de données */
+.data-table{width:100%;border-collapse:collapse;margin:14px 0;font-family:'Nunito',sans-serif;font-size:.88rem;border-radius:12px;overflow:hidden;border:2px solid var(--acc-mid);}
+.data-table th{background:var(--acc);color:white;padding:10px 8px;text-align:center;}
+.data-table td{padding:9px 8px;text-align:center;border-bottom:1px solid var(--acc-pale);}
+.data-table tr:nth-child(even) td{background:var(--acc-pale);}
+.data-table .hl{font-weight:800;color:var(--acc-dark);}
+/* Graphique barre SVG */
+.graph-wrap{background:white;border:2px solid var(--acc-mid);border-radius:14px;padding:14px;margin:14px 0;overflow-x:auto;}
+.graph-title{font-family:'Nunito',sans-serif;font-size:.85rem;font-weight:800;color:var(--acc-dark);text-align:center;margin-bottom:10px;}
+.btn-compris{margin-top:18px;padding:14px 30px;border-radius:38px;font-size:1.1rem;background:var(--acc);color:white;border:none;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:8px;box-shadow:0 4px 14px rgba(3,105,161,.35);}
+.btn-compris:hover{background:var(--acc-dark);transform:translateY(-2px);}
+.btn-compris:disabled{opacity:.4;cursor:default;transform:none;}
+.guided-box{background:white;border:3px solid var(--acc);border-radius:var(--radius);padding:20px 18px;margin-bottom:16px;}
+.guided-title{font-size:1rem;color:var(--acc);margin-bottom:16px;background:var(--acc-pale);padding:10px 16px;border-radius:12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.tries-b{font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:800;color:var(--coral);background:#fee2e2;padding:3px 12px;border-radius:20px;margin-left:auto;}
+.q-box{border:3px solid #bae6fd;border-radius:14px;padding:16px;margin-bottom:10px;opacity:.5;pointer-events:none;}
+.q-box.active{opacity:1;pointer-events:all;border-color:var(--acc-mid);}
+.q-box.correct{border-color:var(--mint);background:var(--mint-pale);opacity:1;}
+.q-num{font-family:'Nunito',sans-serif;font-size:.65rem;font-weight:800;color:#94a3b8;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;}
+.q-text{font-size:1rem;color:var(--acc-dark);margin-bottom:14px;line-height:1.6;}
+.hint-box{font-family:'Nunito',sans-serif;font-size:.86rem;color:#78350f;background:var(--sun-pale);border-radius:10px;padding:10px 14px;margin-bottom:10px;display:none;}
+.hint-box.show{display:block;}
+.opts{display:flex;flex-direction:column;gap:10px;}
+.opt{padding:13px 16px;border-radius:13px;border:3px solid #bae6fd;background:white;font-size:1rem;cursor:pointer;text-align:left;transition:all .2s;}
+.opt:hover:not(:disabled){border-color:var(--acc);background:var(--acc-pale);}
+.opt:disabled{cursor:default;}
+.opt.ok{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.opt.ko{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
+.fb{margin-top:10px;padding:10px 14px;border-radius:12px;font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:800;display:none;}
+.fb.show{display:block;}
+.fb.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.fb.ko{background:var(--coral-pale);color:#b91c1c;}
+.reset-box{background:white;border:3px solid var(--acc);border-radius:var(--radius);padding:22px;text-align:center;margin-bottom:16px;display:none;}
+.reset-box.show{display:block;}
+.reset-box .r-ugo{font-size:3.2rem;margin-bottom:8px;}
+.reset-box h3{font-size:1.2rem;color:var(--acc);margin-bottom:8px;}
+.reset-box p{font-family:'Nunito',sans-serif;font-size:.9rem;color:#64748b;margin-bottom:14px;line-height:1.7;}
+.btn-reset{padding:12px 26px;border-radius:28px;font-size:.95rem;background:var(--acc);color:white;border:none;cursor:pointer;}
+.free-card{background:white;border:3px solid var(--acc-pale);border-radius:var(--radius);padding:18px;margin-bottom:14px;}
+.free-num{font-family:'Nunito',sans-serif;font-size:.7rem;font-weight:800;color:var(--acc);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;}
+.free-q{font-size:1rem;color:var(--acc-dark);margin-bottom:14px;background:var(--acc-pale);border-radius:12px;padding:12px 16px;line-height:1.7;}
+.free-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.free-opt{padding:12px;border-radius:13px;font-size:.95rem;border:3px solid #bae6fd;background:white;cursor:pointer;transition:all .2s;text-align:center;}
+.free-opt:hover{border-color:var(--acc);background:var(--acc-pale);}
+.free-opt.ok{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.free-opt.ko{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
+.free-opt.reveal{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.free-fb{margin-top:10px;padding:10px 14px;border-radius:12px;font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:800;display:none;}
+.free-fb.show{display:block;}
+.free-fb.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.free-fb.ko{background:var(--coral-pale);color:#b91c1c;}
+.btn-suite{margin-top:16px;padding:13px 26px;border-radius:32px;font-size:1rem;background:var(--acc);color:white;border:none;cursor:pointer;display:none;align-items:center;gap:8px;box-shadow:0 4px 14px rgba(3,105,161,.3);transition:all .2s;}
+.btn-suite.show{display:inline-flex;}
+.btn-suite:hover{background:var(--acc-dark);transform:translateY(-2px);}
+.bilan-card{background:white;border-radius:var(--radius);padding:28px 20px;text-align:center;border:3px solid var(--acc-pale);}
+.bilan-ugo{font-size:4.5rem;margin-bottom:10px;display:block;}
+.bilan-title{font-size:2rem;color:var(--acc);margin-bottom:8px;}
+.bilan-msg{font-family:'Nunito',sans-serif;font-size:.95rem;color:#64748b;margin-bottom:20px;line-height:1.8;}
+.stars-row{display:flex;justify-content:center;gap:14px;margin-bottom:18px;}
+.star-big{font-size:3rem;filter:grayscale(1);transition:all .5s;}
+.star-big.earned{filter:none;animation:starPop .5s ease both;}
+@keyframes starPop{0%{transform:scale(0);}60%{transform:scale(1.3);}100%{transform:scale(1);}}
+.score-circle{width:115px;height:115px;border-radius:50%;background:var(--acc);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 20px;color:white;box-shadow:0 6px 20px rgba(3,105,161,.4);}
+.score-num{font-size:2.2rem;line-height:1;}
+.score-sub{font-family:'Nunito',sans-serif;font-size:.65rem;opacity:.85;}
+.memo{background:var(--acc-pale);border-radius:var(--radius);padding:16px 18px;margin:16px 0;text-align:left;}
+.memo h3{font-size:.9rem;color:var(--acc);margin-bottom:12px;}
+.memo-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media(max-width:400px){.memo-grid{grid-template-columns:1fr;}.free-opts{grid-template-columns:1fr;}}
+.memo-item{background:white;border-radius:12px;padding:11px 13px;border:2px solid var(--acc-pale);}
+.memo-item strong{color:var(--acc);display:block;margin-bottom:3px;}
+.memo-item span{font-family:'Nunito',sans-serif;font-size:.8rem;color:#475569;line-height:1.6;}
+.bilan-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:18px;}
+.btn-bilan{padding:13px 22px;border-radius:30px;font-size:.95rem;cursor:pointer;border:none;transition:all .2s;}
+.btn-bilan.primary{background:var(--acc);color:white;}
+.btn-bilan.secondary{background:var(--acc-pale);color:var(--acc);border:3px solid var(--acc);}
+.btn-bilan:hover{transform:translateY(-2px);}
+.confetti-piece{position:fixed;border-radius:3px;top:-20px;animation:fall linear both;pointer-events:none;z-index:9999;}
+@keyframes fall{0%{transform:translateY(0) rotate(0deg);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="header-top">
+    <a href="../6-9ans.html" class="logo">🦉 L'Atelier du Devoir</a>
+    <div class="score-badge">⭐ <span id="score-display">0</span></div>
+  </div>
+  <div class="steps-wrap"><div class="steps">
+    <div class="step active" id="s0"></div><div class="step" id="s1"></div><div class="step" id="s2"></div>
+    <div class="step" id="s3"></div><div class="step" id="s4"></div><div class="step" id="s5"></div>
+  </div></div>
+</header>
+<main class="main">
+<div class="accroche">
+  <div class="big-icon">📊</div>
+  <h1>Tableaux et graphiques !</h1>
+  <p style="font-family:'Nunito',sans-serif;">Apprends à lire et interpréter des données 🌟</p>
+  <div class="meta-row">
+    <span class="meta-tag">CE2</span><span class="meta-tag">⭐ Facile</span><span class="meta-tag">📊 Données</span>
+  </div>
+</div>
+<div class="phase active" id="phase-lecon">
+  <div class="lecon-card">
+    <h2>📖 La leçon</h2>
+    <!-- BLOC 0 : lire un tableau -->
+    <div class="lecon-block revealed" id="bloc-0">
+      <div class="bloc-titre">① Lire un tableau de données</div>
+      <div class="ugo-box"><span class="ugo">🦉</span>
+        <p>Un <strong>tableau</strong> organise des informations en <strong>lignes</strong> et <strong>colonnes</strong>. Il faut lire le titre, les en-têtes, puis trouver la valeur à l'intersection. 😊</p>
+      </div>
+      <div class="graph-title">🐾 Animaux préférés des élèves de CE2</div>
+      <table class="data-table">
+        <tr><th>Animal</th><th>🐶 Chien</th><th>🐱 Chat</th><th>🐇 Lapin</th><th>🐠 Poisson</th><th>🐹 Hamster</th></tr>
+        <tr><td>Nb d'élèves</td><td class="hl">12</td><td class="hl">9</td><td class="hl">5</td><td class="hl">6</td><td class="hl">3</td></tr>
+      </table>
+      <div style="font-family:'Nunito',sans-serif;font-size:.88rem;color:#475569;background:var(--acc-pale);border-radius:12px;padding:12px 14px;margin:10px 0;line-height:1.8;">
+        📌 Le chien est préféré par <strong>12 élèves</strong>.<br>
+        📌 Total = 12 + 9 + 5 + 6 + 3 = <strong>35 élèves</strong>.<br>
+        📌 Animal le plus choisi = <strong>chien</strong> (12). Le moins = <strong>hamster</strong> (3).
+      </div>
+      <div class="info-box">
+        <strong>Comment lire :</strong> 1. Lis le titre. 2. Regarde les en-têtes. 3. Trouve la valeur dans la bonne case.<br>
+        <strong>Calculs possibles :</strong> total (addition), différence (soustraction), le plus grand, le plus petit.
+      </div>
+      <button class="btn-compris" onclick="revealBloc(1)">J'ai compris ! 🎉</button>
+    </div>
+    <!-- BLOC 1 : graphique en barres -->
+    <div class="lecon-block" id="bloc-1">
+      <hr class="sep">
+      <div class="bloc-titre">② Lire un graphique en barres</div>
+      <div class="ugo-box"><span class="ugo">🦉</span>
+        <p>Un <strong>graphique en barres</strong> représente les données sous forme de rectangles. Plus la barre est <strong>haute</strong>, plus la valeur est <strong>grande</strong>. 📊</p>
+      </div>
+      <div class="graph-wrap">
+        <div class="graph-title">🌦️ Nombre de jours de pluie par mois (printemps)</div>
+        <svg viewBox="0 0 280 160" width="100%" style="max-width:320px;display:block;margin:0 auto;">
+          <!-- Axes -->
+          <line x1="40" y1="10" x2="40" y2="130" stroke="#475569" stroke-width="2"/>
+          <line x1="40" y1="130" x2="265" y2="130" stroke="#475569" stroke-width="2"/>
+          <!-- Graduations Y -->
+          <text x="32" y="133" text-anchor="end" font-family="Nunito" font-size="9" fill="#64748b">0</text>
+          <text x="32" y="106" text-anchor="end" font-family="Nunito" font-size="9" fill="#64748b">5</text>
+          <text x="32" y="80" text-anchor="end" font-family="Nunito" font-size="9" fill="#64748b">10</text>
+          <text x="32" y="53" text-anchor="end" font-family="Nunito" font-size="9" fill="#64748b">15</text>
+          <text x="32" y="27" text-anchor="end" font-family="Nunito" font-size="9" fill="#64748b">20</text>
+          <!-- Lignes grille -->
+          <line x1="40" y1="106" x2="265" y2="106" stroke="#e2e8f0" stroke-width="1"/>
+          <line x1="40" y1="80" x2="265" y2="80" stroke="#e2e8f0" stroke-width="1"/>
+          <line x1="40" y1="53" x2="265" y2="53" stroke="#e2e8f0" stroke-width="1"/>
+          <line x1="40" y1="27" x2="265" y2="27" stroke="#e2e8f0" stroke-width="1"/>
+          <!-- Barres : Mars=8j, Avril=14j, Mai=6j -->
+          <!-- Mars : 8j → hauteur = 8×24/10 → scale: 24px=10j, donc 8j=19.2px... utilisons 130-(8*5)=90, hauteur=8*5=40 -->
+          <rect x="60" y="90" width="50" height="40" fill="#0369a1" rx="4"/>
+          <text x="85" y="86" text-anchor="middle" font-family="Fredoka One" font-size="11" fill="#0369a1">8</text>
+          <text x="85" y="144" text-anchor="middle" font-family="Nunito" font-size="10" fill="#475569">Mars</text>
+          <!-- Avril : 14j → y=130-70=60, h=70 -->
+          <rect x="130" y="60" width="50" height="70" fill="#d97706" rx="4"/>
+          <text x="155" y="56" text-anchor="middle" font-family="Fredoka One" font-size="11" fill="#d97706">14</text>
+          <text x="155" y="144" text-anchor="middle" font-family="Nunito" font-size="10" fill="#475569">Avril</text>
+          <!-- Mai : 6j → y=100, h=30 -->
+          <rect x="200" y="100" width="50" height="30" fill="#059669" rx="4"/>
+          <text x="225" y="96" text-anchor="middle" font-family="Fredoka One" font-size="11" fill="#059669">6</text>
+          <text x="225" y="144" text-anchor="middle" font-family="Nunito" font-size="10" fill="#475569">Mai</text>
+        </svg>
+      </div>
+      <div style="font-family:'Nunito',sans-serif;font-size:.88rem;color:#475569;background:var(--acc-pale);border-radius:12px;padding:12px 14px;margin:10px 0;line-height:1.8;">
+        📌 Mois le plus pluvieux : <strong>avril</strong> (14 jours).<br>
+        📌 Mois le moins pluvieux : <strong>mai</strong> (6 jours).<br>
+        📌 Total sur les 3 mois : 8 + 14 + 6 = <strong>28 jours</strong>.
+      </div>
+      <div class="info-box">
+        <strong>Comment lire une barre :</strong> regarde à quelle hauteur elle arrive sur l'axe vertical.<br>
+        <strong>Comparaison :</strong> la barre la plus haute = la valeur la plus grande.
+      </div>
+      <button class="btn-compris" onclick="revealBloc(2)">J'ai compris ! 🎉</button>
+    </div>
+    <!-- BLOC 2 : calculs sur tableau -->
+    <div class="lecon-block" id="bloc-2">
+      <hr class="sep">
+      <div class="bloc-titre">③ Calculer à partir d'un tableau</div>
+      <div class="ugo-box"><span class="ugo">🦉</span>
+        <p>À partir d'un tableau ou d'un graphique, on peut calculer : le <strong>total</strong>, la <strong>différence</strong>, trouver le <strong>plus grand</strong> ou le <strong>plus petit</strong>. 🎯</p>
+      </div>
+      <div class="graph-title">🎒 Ventes de fournitures en septembre</div>
+      <table class="data-table">
+        <tr><th>Fourniture</th><th>✏️ Crayon</th><th>📏 Règle</th><th>🖊️ Stylo</th><th>📐 Équerre</th></tr>
+        <tr><td>Quantité vendue</td><td class="hl">45</td><td class="hl">20</td><td class="hl">30</td><td class="hl">15</td></tr>
+        <tr><td>Prix unitaire</td><td class="hl">1 €</td><td class="hl">2 €</td><td class="hl">1 €</td><td class="hl">3 €</td></tr>
+      </table>
+      <div style="font-family:'Nunito',sans-serif;font-size:.88rem;color:#475569;background:var(--acc-pale);border-radius:12px;padding:12px 14px;margin:10px 0;line-height:1.8;">
+        Total crayons vendus = <strong>45</strong>.<br>
+        Article le plus vendu = <strong>crayon</strong> (45). Le moins vendu = <strong>équerre</strong> (15).<br>
+        Recette crayons = 45 × 1 = <strong>45 €</strong> · Recette règles = 20 × 2 = <strong>40 €</strong>.
+      </div>
+      <button class="btn-compris" onclick="goPhase('g1',1)">On joue ! 🚀</button>
+    </div>
+  </div>
+</div>
+<div class="phase" id="phase-g1">
+  <div class="ugo-box"><span class="ugo">🦉</span><p>Super ! <strong>3 questions</strong> sur le tableau et le graphique. <strong>3 essais</strong> ! 💙</p></div>
+  <div id="g1-reset" class="reset-box"><div class="r-ugo">🦉</div><h3>On recommence !</h3><p>Lis bien le titre et les en-têtes du tableau ! 💪</p><button class="btn-reset" onclick="initG1()">↺ Réessayer !</button></div>
+  <div id="g1-zone"></div>
+  <button class="btn-suite" id="btn-g1-to-g2" onclick="goPhase('g2',2)">Encore des questions ! 🌟</button>
+</div>
+<div class="phase" id="phase-g2">
+  <div class="ugo-box"><span class="ugo">🦉</span><p>Excellent ! <strong>3 questions</strong> de plus. 🏆</p></div>
+  <div id="g2-reset" class="reset-box"><div class="r-ugo">🦉</div><h3>On recommence !</h3><p>Regarde à quelle hauteur arrivent les barres ! 💪</p><button class="btn-reset" onclick="initG2()">↺ Réessayer !</button></div>
+  <div id="g2-zone"></div>
+  <button class="btn-suite" id="btn-g2-to-free" onclick="goPhase('free',3)">Exercices libres 🎯</button>
+</div>
+<div class="phase" id="phase-free">
+  <div class="ugo-box"><span class="ugo">🦉</span><p><strong>5 questions !</strong> 📊</p></div>
+  <div id="free1-zone"></div>
+  <button class="btn-suite" id="btn-free-to-free2" onclick="goPhase('free2',4)">5 dernières ! 💪</button>
+</div>
+<div class="phase" id="phase-free2">
+  <div class="ugo-box"><span class="ugo">🦉</span><p>Encore <strong>5 questions</strong> ! 🏁</p></div>
+  <div id="free2-zone"></div>
+  <button class="btn-suite" id="btn-free2-to-bilan" onclick="goPhase('bilan',5)">🌟 Mon résultat !</button>
+</div>
+<div class="phase" id="phase-bilan">
+  <div class="bilan-card">
+    <span class="bilan-ugo">🦉</span>
+    <h2 class="bilan-title" id="bilan-title"></h2>
+    <p class="bilan-msg" id="bilan-msg"></p>
+    <div class="stars-row"><span class="star-big" id="etoile1">⭐</span><span class="star-big" id="etoile2">⭐</span><span class="star-big" id="etoile3">⭐</span></div>
+    <div class="score-circle"><span class="score-num" id="bilan-pts">0</span><span class="score-sub" id="bilan-sur">/0</span></div>
+    <div class="memo"><h3>📝 Ce que j'ai appris</h3>
+      <div class="memo-grid">
+        <div class="memo-item"><strong>Tableau</strong><span>Lignes + colonnes<br>Lire à l'intersection</span></div>
+        <div class="memo-item"><strong>Graphique</strong><span>Barre haute = grande valeur<br>Lire sur l'axe vertical</span></div>
+        <div class="memo-item"><strong>Calculs</strong><span>Total = additionner<br>Différence = soustraire</span></div>
+        <div class="memo-item"><strong>Comparer</strong><span>Chercher le max et le min<br>dans une série de données</span></div>
+      </div>
+    </div>
+    <div class="bilan-btns">
+      <button class="btn-bilan secondary" onclick="location.reload()">↺ Recommencer</button>
+      <button class="btn-bilan primary" onclick="location.href='../6-9ans.html'">← Les fiches</button>
+    </div>
+  </div>
+</div>
+</main>
+<script>
+/* Données de référence pour les questions (tableaux et graphiques de la leçon) */
+// Tableau animaux : chien=12, chat=9, lapin=5, poisson=6, hamster=3, total=35
+// Graphique pluie : mars=8, avril=14, mai=6, total=28
+// Tableau fournitures : crayon=45@1€, règle=20@2€, stylo=30@1€, équerre=15@3€
+
+var G1=[
+  {titre:"📊 Questions sur le tableau des animaux",etapes:[
+    {q:"Tableau animaux préférés — Combien d'élèves ont choisi le chat ?",
+     opts:["9 élèves","12 élèves","5 élèves","6 élèves"],ok:0,
+     hint:"Cherche la colonne 'Chat' dans le tableau de la leçon.",
+     expl_ok:"9 élèves ! Dans le tableau : chat = 9. 🎉",expl_ko:"Dans le tableau animaux, chat = 9 élèves."},
+    {q:"Tableau animaux — Quel animal a été choisi par le plus d'élèves ?",
+     opts:["Le chien (12)","Le chat (9)","Le lapin (5)","Le poisson (6)"],ok:0,
+     hint:"Compare toutes les valeurs : 12, 9, 5, 6, 3.",
+     expl_ok:"Le chien ! 12 élèves l'ont choisi — c'est le maximum. 🌟",expl_ko:"Chien=12 (le plus grand de : 12, 9, 5, 6, 3)."},
+    {q:"Tableau animaux — Combien d'élèves ont répondu au total ?",
+     opts:["35 élèves","30 élèves","40 élèves","45 élèves"],ok:0,
+     hint:"12 + 9 + 5 + 6 + 3 = ?",
+     expl_ok:"35 élèves ! 12+9+5+6+3 = 35. 🎉",expl_ko:"12+9+5+6+3 = 35 élèves au total."}
+  ]},
+  {titre:"📊 Questions sur le graphique pluie",etapes:[
+    {q:"Graphique pluie — Quel mois a eu le plus de jours de pluie ?",
+     opts:["Avril (14 jours)","Mars (8 jours)","Mai (6 jours)"],ok:0,
+     hint:"La barre la plus haute indique le mois le plus pluvieux.",
+     expl_ok:"Avril ! 14 jours — la barre la plus haute. 🌟",expl_ko:"Barre la plus haute = plus de pluie = avril (14 j)."},
+    {q:"Graphique pluie — Combien de jours de pluie en mai ?",
+     opts:["6 jours","8 jours","14 jours","12 jours"],ok:0,
+     hint:"Regarde la hauteur de la barre verte (mai) sur le graphique.",
+     expl_ok:"6 jours ! La barre verte de mai arrive à 6. 🎉",expl_ko:"La barre de mai (verte) indique 6 jours."},
+    {q:"Graphique pluie — Total des jours de pluie sur les 3 mois ?",
+     opts:["28 jours","20 jours","30 jours","26 jours"],ok:0,
+     hint:"Mars(8) + Avril(14) + Mai(6) = ?",
+     expl_ok:"28 jours ! 8+14+6 = 28. 🌟",expl_ko:"8 + 14 + 6 = 28 jours."}
+  ]},
+  {titre:"📊 Questions sur le tableau fournitures",etapes:[
+    {q:"Tableau fournitures — Quelle fourniture a été la moins vendue ?",
+     opts:["L'équerre (15)","Le crayon (45)","Le stylo (30)","La règle (20)"],ok:0,
+     hint:"Cherche la plus petite valeur : 45, 20, 30, 15.",
+     expl_ok:"L'équerre ! 15 — c'est le minimum. 🎉",expl_ko:"Min(45,20,30,15) = 15 = équerre."},
+    {q:"Tableau fournitures — Combien a-t-on vendu de règles et de stylos au total ?",
+     opts:["50 (20+30)","35 (20+15)","75 (45+30)","60 (45+15)"],ok:0,
+     hint:"Règles(20) + Stylos(30) = ?",
+     expl_ok:"50 ! 20 + 30 = 50. 🌟",expl_ko:"Règles 20 + Stylos 30 = 50."},
+    {q:"Tableau fournitures — Recette totale des équerres vendues (15 × 3 €) ?",
+     opts:["45 €","30 €","18 €","15 €"],ok:0,
+     hint:"15 équerres × 3 € chacune = ?",
+     expl_ok:"45 € ! 15 × 3 = 45 €. 🎉",expl_ko:"15 × 3 = 45 €."}
+  ]},
+  {titre:"📊 Comprendre les données",etapes:[
+    {q:"Dans un tableau, que lit-on sur les en-têtes ?",
+     opts:["Le nom des catégories (lignes et colonnes)","Les valeurs calculées","Le titre du tableau"],ok:0,
+     hint:"Les en-têtes sont les titres de chaque ligne ou colonne.",
+     expl_ok:"Le nom des catégories ! Les en-têtes indiquent ce que représente chaque case. 🌟",expl_ko:"Les en-têtes = titres des lignes/colonnes."},
+    {q:"Dans un graphique en barres, que représente la hauteur d'une barre ?",
+     opts:["La valeur de cette donnée","Le titre du graphique","Le nombre de colonnes"],ok:0,
+     hint:"Plus la barre est haute, plus la valeur est grande.",
+     expl_ok:"La valeur ! Barre haute = grande valeur. 🎉",expl_ko:"Hauteur de la barre = valeur de la donnée."},
+    {q:"Dans le tableau animaux, combien y a-t-il d'élèves de PLUS pour le chien que pour le chat ?",
+     opts:["3 de plus (12-9)","21 de plus (12+9)","12 de plus","9 de plus"],ok:0,
+     hint:"Différence chien-chat = 12 − 9 = ?",
+     expl_ok:"3 de plus ! 12 − 9 = 3. 🌟",expl_ko:"12 − 9 = 3 élèves de plus pour le chien."}
+  ]}
+];
+
+var G2=[
+  {titre:"✏️ Calculs sur les données",etapes:[
+    {q:"Graphique pluie — De combien de jours avril est-il plus pluvieux que mars ?",
+     opts:["6 jours (14-8)","22 jours (14+8)","8 jours","14 jours"],ok:0,
+     hint:"Différence = avril − mars = 14 − 8 = ?",
+     expl_ok:"6 jours ! 14 − 8 = 6 jours de plus en avril. 🎉",expl_ko:"14 − 8 = 6 jours de différence."},
+    {q:"Tableau fournitures — Recette des crayons ET des stylos combinés ?",
+     opts:["75 € (45×1 + 30×1)","135 €","45 €","30 €"],ok:0,
+     hint:"Crayons : 45×1=45 €. Stylos : 30×1=30 €. Total = ?",
+     expl_ok:"75 € ! 45 + 30 = 75 €. 🌟",expl_ko:"45×1=45 € + 30×1=30 € = 75 €."},
+    {q:"Tableau animaux — Si 4 élèves changent d'avis du chien vers le chat, combien de votes pour le chat ?",
+     opts:["13 votes (9+4)","8 votes (9-4)","9 votes","16 votes (12+4)"],ok:0,
+     hint:"Chat avait 9. On ajoute 4 → ?",
+     expl_ok:"13 votes ! 9 + 4 = 13. 🎉",expl_ko:"Chat : 9 + 4 = 13 votes."}
+  ]},
+  {titre:"✏️ Nouveau tableau",etapes:[
+    {q:"Tableau des sports pratiqués — Foot=18, Natation=12, Judo=7, Gym=9. Quel sport est pratiqué par le moins d'élèves ?",
+     opts:["Judo (7)","Gym (9)","Natation (12)","Foot (18)"],ok:0,
+     hint:"Le minimum de 18, 12, 7, 9.",
+     expl_ok:"Judo ! 7 c'est le minimum. 🌟",expl_ko:"Min(18,12,7,9) = 7 = Judo."},
+    {q:"Sports — Total des élèves faisant Foot OU Natation ?",
+     opts:["30 élèves (18+12)","6 élèves (18-12)","18 élèves","46 élèves (18+12+7+9)"],ok:0,
+     hint:"Foot(18) + Natation(12) = ?",
+     expl_ok:"30 élèves ! 18 + 12 = 30. 🎉",expl_ko:"18 + 12 = 30 élèves."},
+    {q:"Sports — Combien d'élèves en tout ont répondu ?",
+     opts:["46 élèves (18+12+7+9)","46","39 élèves","37 élèves"],ok:0,
+     hint:"18 + 12 + 7 + 9 = ?",
+     expl_ok:"46 élèves ! 18+12+7+9 = 46. 🌟",expl_ko:"18+12+7+9 = 46 élèves."}
+  ]},
+  {titre:"✏️ Vrai ou faux ?",etapes:[
+    {q:"Dans le tableau animaux, le lapin a été choisi par plus d'élèves que le poisson.",
+     opts:["Faux ! Lapin=5, Poisson=6 (poisson > lapin)","Vrai, lapin > poisson"],ok:0,
+     hint:"Lapin=5, poisson=6. Comparer.",
+     expl_ok:"Faux ! 5 < 6 → le poisson a été plus choisi que le lapin. 🎉",expl_ko:"Faux. Lapin=5 < Poisson=6."},
+    {q:"Dans le graphique pluie, la barre la plus haute correspond au mois avec le plus de pluie.",
+     opts:["Vrai !","Faux, la plus haute = le moins de pluie"],ok:0,
+     hint:"Barre haute = grande valeur.",
+     expl_ok:"Vrai ! Barre haute = grande valeur = beaucoup de pluie. 🌟",expl_ko:"Vrai. Barre haute = grande valeur."},
+    {q:"Pour trouver le total dans un tableau, on additionne toutes les valeurs.",
+     opts:["Vrai !","Faux, on soustrait"],ok:0,
+     hint:"Total = somme de toutes les cases.",
+     expl_ok:"Vrai ! Total = addition de toutes les valeurs. 🎉",expl_ko:"Vrai. Total = additionner toutes les valeurs."}
+  ]},
+  {titre:"✏️ Interpréter les données",etapes:[
+    {q:"Tableau températures : Lun=15°, Mar=18°, Mer=12°, Jeu=20°, Ven=16°. Quel jour fait-il le plus chaud ?",
+     opts:["Jeudi (20°)","Mardi (18°)","Vendredi (16°)","Lundi (15°)"],ok:0,
+     hint:"Le maximum de 15, 18, 12, 20, 16.",
+     expl_ok:"Jeudi ! 20° c'est le maximum. 🌟",expl_ko:"Max(15,18,12,20,16) = 20 = jeudi."},
+    {q:"Même tableau températures — Différence entre le jour le plus chaud (20°) et le plus froid (12°) ?",
+     opts:["8 degrés (20-12)","32 degrés (20+12)","20 degrés","12 degrés"],ok:0,
+     hint:"20 − 12 = ?",
+     expl_ok:"8 degrés ! 20 − 12 = 8. 🎉",expl_ko:"20 − 12 = 8 degrés d'écart."},
+    {q:"Un graphique est utile pour…",
+     opts:["Voir rapidement les différences entre valeurs","Faire des calculs complexes","Remplacer un texte"],ok:0,
+     hint:"Un graphique montre visuellement les données.",
+     expl_ok:"Voir rapidement ! Un graphique permet de comparer visuellement. 🌟",expl_ko:"Un graphique = visualiser et comparer rapidement."}
+  ]}
+];
+
+var FREE_POOL=[
+  // Basé sur tableau animaux : chien=12, chat=9, lapin=5, poisson=6, hamster=3
+  {q:"Tableau animaux — Combien ont choisi le chien ?",opts:["12 élèves","9 élèves"],ok:0,expl:"Chien = 12 élèves dans le tableau."},
+  {q:"Tableau animaux — Combien ont choisi le hamster ?",opts:["3 élèves","6 élèves"],ok:0,expl:"Hamster = 3 élèves (le moins choisi)."},
+  {q:"Tableau animaux — Total = ?",opts:["35 élèves","30 élèves"],ok:0,expl:"12+9+5+6+3 = 35 élèves."},
+  // Graphique pluie : mars=8, avril=14, mai=6
+  {q:"Graphique pluie — Combien de jours pluvieux en mars ?",opts:["8 jours","14 jours"],ok:0,expl:"La barre de mars indique 8 jours."},
+  {q:"Graphique pluie — Mois le moins pluvieux ?",opts:["Mai (6j)","Mars (8j)"],ok:0,expl:"Mai = 6 jours (barre la plus basse)."},
+  {q:"Graphique pluie — Total mars+mai ?",opts:["14 jours","22 jours"],ok:0,expl:"8 + 6 = 14 jours."},
+  // Tableau fournitures : crayon=45, règle=20, stylo=30, équerre=15
+  {q:"Tableau fournitures — Combien de stylos vendus ?",opts:["30","20"],ok:0,expl:"Stylo = 30 dans le tableau."},
+  {q:"Tableau fournitures — Article le plus vendu ?",opts:["Crayon (45)","Stylo (30)"],ok:0,expl:"Crayon = 45 (le maximum)."},
+  {q:"Barre la plus haute dans un graphique = ?",opts:["La plus grande valeur","La plus petite valeur"],ok:0,expl:"Barre haute = grande valeur."},
+  {q:"Pour trouver le total d'un tableau, on…",opts:["Additionne toutes les valeurs","Soustrait les valeurs"],ok:0,expl:"Total = addition de toutes les cases."},
+  // Nouvelles données : températures lun=15, mar=18, mer=12, jeu=20, ven=16
+  {q:"Températures semaine — Jour le plus froid ?",opts:["Mercredi (12°)","Lundi (15°)"],ok:0,expl:"Min(15,18,12,20,16) = 12 = mercredi."},
+  {q:"Températures — Écart entre 20° (jeudi) et 12° (mercredi) ?",opts:["8°","32°"],ok:0,expl:"20 − 12 = 8 degrés d'écart."},
+  // Sports : foot=18, natation=12, judo=7, gym=9
+  {q:"Sports — Sport le plus pratiqué ?",opts:["Foot (18)","Natation (12)"],ok:0,expl:"Foot = 18 (le maximum)."},
+  {q:"Sports — Total judo + gym ?",opts:["16 élèves","25 élèves"],ok:0,expl:"7 + 9 = 16 élèves."},
+  {q:"Tableau animaux — Différence chien − chat ?",opts:["3 élèves","21 élèves"],ok:0,expl:"12 − 9 = 3 élèves de plus pour le chien."},
+  {q:"Graphique pluie — Différence avril − mai ?",opts:["8 jours","20 jours"],ok:0,expl:"14 − 6 = 8 jours de plus en avril."},
+  {q:"Tableau fournitures — Recette stylos (30 × 1 €) ?",opts:["30 €","3 €"],ok:0,expl:"30 × 1 = 30 €."},
+  {q:"Un tableau sert à…",opts:["Organiser des données en lignes et colonnes","Dessiner des figures"],ok:0,expl:"Un tableau organise les données pour les lire facilement."},
+  {q:"Tableau animaux — Lapin + poisson ?",opts:["11 élèves","2 élèves"],ok:0,expl:"5 + 6 = 11 élèves."},
+  {q:"Tableau fournitures — Différence crayons − équerres ?",opts:["30 (45-15)","60 (45+15)"],ok:0,expl:"45 − 15 = 30."}
+];
+
+var score=0,g1Idx=0,g2Idx=0,f1Exs=[],f2Exs=[],f1Done=0,f2Done=0,_cb={},_g1tries=0,_g2tries=0;
+function shuffle(a){var b=a.slice();for(var i=b.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=b[i];b[i]=b[j];b[j]=t;}return b;}
+function addPt(){score++;document.getElementById('score-display').textContent=score;}
+function updSteps(n){for(var i=0;i<6;i++){var s=document.getElementById('s'+i);if(!s)return;s.classList.remove('active','done');if(i<n)s.classList.add('done');else if(i===n)s.classList.add('active');}}
+function goPhase(ph,si){document.querySelectorAll('.phase').forEach(function(p){p.classList.remove('active');});var el=document.getElementById('phase-'+ph);if(el){el.classList.add('active');setTimeout(function(){el.scrollIntoView({behavior:'smooth',block:'start'});},100);}updSteps(si);if(ph==='g1')initG1();if(ph==='g2')initG2();if(ph==='free')initFree1();if(ph==='free2')initFree2();if(ph==='bilan')showBilan();}
+function revealBloc(n){var b=document.getElementById('bloc-'+n);if(!b)return;var p=document.getElementById('bloc-'+(n-1));if(p){var btn=p.querySelector('.btn-compris');if(btn){btn.textContent='✓ Compris !';btn.disabled=true;btn.style.opacity='.4';}}b.classList.add('revealed');setTimeout(function(){var hH=(document.querySelector('.header')||{offsetHeight:0}).offsetHeight;var r=b.getBoundingClientRect();window.scrollTo({top:window.pageYOffset+r.top-hH-16,behavior:'smooth'});},150);}
+function makeQBox(step,si,prefix){var so=shuffle(step.opts.map(function(o,oi){return{t:o,i:oi};}));var sb=document.createElement('div');sb.className='q-box'+(si===0?' active':'');sb.id=prefix+'s'+si;sb.innerHTML='<div class="q-num">Question '+(si+1)+'</div><div class="q-text">'+step.q+'</div><div class="hint-box" id="'+prefix+'h'+si+'">💡 '+step.hint+'</div><div class="opts">'+so.map(function(o){return'<button class="opt" onclick="checkQ(\''+prefix+'\','+si+','+o.i+',this)">'+o.t+'</button>';}).join('')+'</div><div class="fb" id="'+prefix+'f'+si+'"></div>';return sb;}
+function checkQ(prefix,si,ci,btn){var v=prefix==='g1'?G1[g1Idx]:G2[g2Idx];var step=v.etapes[si];var sb=document.getElementById(prefix+'s'+si);var fb=document.getElementById(prefix+'f'+si);var triesId=prefix==='g1'?'tries-g1':'tries-g2';var tries=prefix==='g1'?_g1tries:_g2tries;if(sb.classList.contains('correct'))return;if(ci===step.ok){btn.classList.add('ok');sb.querySelectorAll('.opt').forEach(function(b){b.disabled=true;});sb.classList.add('correct');if(tries===0){fb.className='fb show ok';fb.innerHTML='✅ '+step.expl_ok+' <span style="font-size:.75rem;color:#065f46">(+1 pt)</span>';addPt();}else{fb.className='fb show ok';fb.innerHTML='✅ '+step.expl_ok;}if(prefix==='g1')_g1tries=0;else _g2tries=0;var el=document.getElementById(triesId);if(el)el.textContent='3 essais';var nx=document.getElementById(prefix+'s'+(si+1));if(nx){nx.classList.add('active');setTimeout(function(){nx.scrollIntoView({behavior:'smooth',block:'nearest'});},350);}else{var btnId=prefix==='g1'?'btn-g1-to-g2':'btn-g2-to-free';setTimeout(function(){var b=document.getElementById(btnId);b.classList.add('show');b.scrollIntoView({behavior:'smooth',block:'nearest'});},550);}}else{btn.classList.add('ko');btn.disabled=true;if(prefix==='g1')_g1tries++;else _g2tries++;var newTries=prefix==='g1'?_g1tries:_g2tries;var el=document.getElementById(triesId);if(el)el.textContent=(3-newTries)+' essai'+(3-newTries>1?'s':'');fb.className='fb show ko';if(newTries<3){fb.innerHTML='❌ Relis bien le tableau ou le graphique ! 💪';document.getElementById(prefix+'h'+si).classList.add('show');}else{fb.innerHTML='❌ '+step.expl_ko;var rid=prefix==='g1'?'g1-reset':'g2-reset',zid=prefix==='g1'?'g1-zone':'g2-zone';setTimeout(function(){document.getElementById(rid).classList.add('show');document.getElementById(zid).innerHTML='';document.getElementById(rid).scrollIntoView({behavior:'smooth',block:'start'});},1400);}}}
+function initG(which){var isG1=which==='g1';if(isG1){g1Idx=Math.floor(Math.random()*G1.length);_g1tries=0;}else{g2Idx=Math.floor(Math.random()*G2.length);_g2tries=0;}var v=isG1?G1[g1Idx]:G2[g2Idx];document.getElementById(which+'-reset').classList.remove('show');document.getElementById('btn-'+which+'-to-'+(isG1?'g2':'free')).classList.remove('show');var z=document.getElementById(which+'-zone');z.innerHTML='';var box=document.createElement('div');box.className='guided-box';box.innerHTML='<div class="guided-title">'+v.titre+'<span class="tries-b" id="tries-'+which+'">3 essais</span></div><div id="'+which+'-steps"></div>';z.appendChild(box);v.etapes.forEach(function(step,si){document.getElementById(which+'-steps').appendChild(makeQBox(step,si,which));});}
+function initG1(){initG('g1');}function initG2(){initG('g2');}
+function buildFree(ex,i,prefix,cb){var card=document.createElement('div');card.className='free-card';card.id=prefix+'c'+i;var so=shuffle(ex.opts.map(function(o,oi){return{t:o,i:oi};}));card.innerHTML='<div class="free-num">Question '+(i+1)+'</div><div class="free-q">'+ex.q+'</div><div class="free-opts" id="'+prefix+'fo'+i+'"></div><div class="free-fb" id="'+prefix+'ff'+i+'"></div>';setTimeout(function(){var ba=document.getElementById(prefix+'fo'+i);so.forEach(function(o){var btn=document.createElement('button');btn.className='free-opt';btn.textContent=o.t;btn.onclick=function(){if(card.classList.contains('done'))return;card.classList.add('done');ba.querySelectorAll('button').forEach(function(b){b.disabled=true;});var fb=document.getElementById(prefix+'ff'+i);if(o.i===ex.ok){btn.classList.add('ok');fb.className='free-fb show ok';fb.innerHTML='✅ '+ex.expl;addPt();}else{btn.classList.add('ko');ba.querySelectorAll('button').forEach(function(b,bi){if(bi===ex.ok)b.classList.add('reveal');});fb.className='free-fb show ko';fb.innerHTML='❌ '+ex.expl;}cb();};ba.appendChild(btn);});},0);return card;}
+function initFree1(){f1Exs=shuffle(FREE_POOL.slice()).slice(0,5);f1Done=0;var z=document.getElementById('free1-zone');z.innerHTML='';f1Exs.forEach(function(ex,i){_cb['f1'+i]=function(){f1Done++;if(f1Done>=5)setTimeout(function(){var b=document.getElementById('btn-free-to-free2');b.classList.add('show');b.scrollIntoView({behavior:'smooth',block:'nearest'});},600);};z.appendChild(buildFree(ex,i,'f1',_cb['f1'+i]));});}
+function initFree2(){var used=f1Exs.map(function(e){return e.q;});var pool=FREE_POOL.filter(function(e){return used.indexOf(e.q)<0;});f2Exs=shuffle(pool).slice(0,5);f2Done=0;var z=document.getElementById('free2-zone');z.innerHTML='';f2Exs.forEach(function(ex,i){_cb['f2'+i]=function(){f2Done++;if(f2Done>=5)setTimeout(function(){var b=document.getElementById('btn-free2-to-bilan');b.classList.add('show');b.scrollIntoView({behavior:'smooth',block:'nearest'});},600);};z.appendChild(buildFree(ex,i,'f2',_cb['f2'+i]));});}
+function showBilan(){var g1n=G1[g1Idx]?G1[g1Idx].etapes.length:3,g2n=G2[g2Idx]?G2[g2Idx].etapes.length:3,tot=g1n+g2n+10;document.getElementById('bilan-pts').textContent=score;document.getElementById('bilan-sur').textContent='/ '+tot+' pts';var pct=score/tot,t,m;if(pct>=.8){t='BRAVO ! 🎉🎊';m='Tu sais lire tableaux et graphiques ! Ugo est fier ! 🦉⭐';}else if(pct>=.5){t='Très bien ! 😊🌟';m:'Lis les en-têtes, compare les valeurs, calcule le total. Continue !';}else{t='Bien essayé ! 💪';m:'Barre haute = grande valeur · Total = additionner toutes les cases. 🦉';}document.getElementById('bilan-title').textContent=t;document.getElementById('bilan-msg').textContent=m;var s=[Math.ceil(tot*.33),Math.ceil(tot*.66),Math.ceil(tot*.89)];['etoile1','etoile2','etoile3'].forEach(function(id,i){var el=document.getElementById(id);if(score>=s[i]){(function(e,d){setTimeout(function(){e.classList.add('earned');},d);})(el,300+i*450);}else el.style.filter='grayscale(1)';});if(pct>=.5)confetti();}
+function confetti(){var cols=['#0369a1','#7dd3fc','#059669','#d97706','#7c3aed'];for(var i=0;i<65;i++){var el=document.createElement('div');el.className='confetti-piece';el.style.cssText='left:'+Math.random()*100+'vw;background:'+cols[Math.floor(Math.random()*cols.length)]+';animation-duration:'+(1.8+Math.random()*2.2)+'s;animation-delay:'+Math.random()*1.5+'s;width:'+(7+Math.random()*10)+'px;height:'+(7+Math.random()*10)+'px;border-radius:'+(Math.random()>.5?'50%':'4px')+';';document.body.appendChild(el);setTimeout(function(){if(el.parentNode)el.remove();},5000);}}
+</script>
+</body>
+</html>

@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>M29 — Problèmes multiplicatifs | L'Atelier du Devoir</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--acc:#7c3aed;--acc-pale:#f5f3ff;--acc-mid:#c4b5fd;--acc-dark:#5b21b6;--mint:#059669;--mint-pale:#d1fae5;--mint-deep:#047857;--coral:#dc2626;--coral-pale:#fee2e2;--sun:#d97706;--sun-pale:#fef3c7;--radius:18px;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Fredoka One',cursive;background:#f5f3ff;color:#1e293b;font-size:20px;line-height:1.5;}
+.header{background:white;border-bottom:4px solid var(--acc-pale);position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.1);}
+.header-top{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;}
+.logo{font-size:1.1rem;color:var(--acc);text-decoration:none;}
+.score-badge{background:var(--acc);color:white;font-size:.9rem;padding:6px 16px;border-radius:20px;}
+.steps-wrap{padding:0 16px 8px;}
+.steps{display:flex;gap:5px;}
+.step{flex:1;height:10px;border-radius:10px;background:#ddd6fe;transition:all .4s;}
+.step.done{background:#10b981;}.step.active{background:var(--acc);}
+.main{max-width:640px;margin:0 auto;padding:18px 14px 100px;}
+.phase{display:none;}.phase.active{display:block;}
+.accroche{background:white;border-radius:var(--radius);padding:22px 20px;margin-bottom:20px;border:3px solid var(--acc-pale);text-align:center;}
+.accroche .big-icon{font-size:4rem;margin-bottom:10px;}
+.accroche h1{font-size:1.75rem;color:var(--acc);margin-bottom:8px;}
+.accroche p{font-family:'Nunito',sans-serif;font-size:.92rem;color:#64748b;margin-bottom:12px;}
+.meta-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
+.meta-tag{background:var(--acc-pale);border-radius:20px;padding:5px 16px;font-size:.78rem;color:var(--acc);}
+.lecon-card{background:white;border-radius:var(--radius);padding:22px 18px;margin-bottom:18px;border:3px solid var(--acc-pale);}
+.lecon-card h2{font-size:1.25rem;color:var(--acc);margin-bottom:18px;}
+.lecon-block{display:none;}.lecon-block.revealed{display:block;}
+.bloc-titre{font-size:1.15rem;color:var(--acc);margin-bottom:14px;}
+.sep{margin:20px 0;border:none;border-top:3px dashed #ddd6fe;}
+.ugo-box{background:white;border:3px solid var(--acc-pale);border-radius:var(--radius);padding:15px 18px;margin:14px 0;display:flex;gap:12px;align-items:flex-start;}
+.ugo-box .ugo{font-size:2.3rem;flex-shrink:0;}
+.ugo-box p{font-family:'Nunito',sans-serif;font-size:.92rem;color:#475569;line-height:1.7;}
+.ugo-box p strong{color:var(--acc);}
+.info-box{background:var(--acc-pale);border-left:6px solid var(--acc);border-radius:0 14px 14px 0;padding:14px 18px;margin:14px 0;font-family:'Nunito',sans-serif;font-size:.92rem;line-height:1.9;}
+.info-box strong{color:var(--acc-dark);}
+.mots-cles{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0;}
+.mot-card{border-radius:12px;padding:12px 14px;font-family:'Nunito',sans-serif;font-size:.88rem;line-height:1.7;}
+.mot-card.mul{background:#f5f3ff;border:2px solid #c4b5fd;}
+.mot-card.div{background:#fff7ed;border:2px solid #fdba74;}
+.mot-card strong{display:block;margin-bottom:4px;}
+.methode-box{background:var(--acc-pale);border-radius:14px;padding:14px 16px;margin:14px 0;font-family:'Nunito',sans-serif;font-size:.9rem;line-height:2;}
+.pb-step{display:flex;gap:8px;align-items:flex-start;margin-bottom:6px;}
+.pb-num{background:var(--acc);color:white;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:.75rem;flex-shrink:0;margin-top:2px;}
+.exemple-pb{background:white;border:3px solid var(--acc-pale);border-radius:14px;padding:16px;margin:10px 0;font-family:'Nunito',sans-serif;font-size:.9rem;}
+.pb-enonce{background:var(--acc-pale);border-radius:10px;padding:10px 14px;margin-bottom:10px;font-size:.95rem;line-height:1.7;}
+.btn-compris{margin-top:18px;padding:14px 30px;border-radius:38px;font-size:1.1rem;background:var(--acc);color:white;border:none;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:8px;box-shadow:0 4px 14px rgba(124,58,237,.35);}
+.btn-compris:hover{background:var(--acc-dark);transform:translateY(-2px);}
+.btn-compris:disabled{opacity:.4;cursor:default;transform:none;}
+.guided-box{background:white;border:3px solid var(--acc);border-radius:var(--radius);padding:20px 18px;margin-bottom:16px;}
+.guided-title{font-size:1rem;color:var(--acc);margin-bottom:16px;background:var(--acc-pale);padding:10px 16px;border-radius:12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.tries-b{font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:800;color:var(--coral);background:#fee2e2;padding:3px 12px;border-radius:20px;margin-left:auto;}
+.q-box{border:3px solid #ddd6fe;border-radius:14px;padding:16px;margin-bottom:10px;opacity:.5;pointer-events:none;}
+.q-box.active{opacity:1;pointer-events:all;border-color:var(--acc-mid);}
+.q-box.correct{border-color:var(--mint);background:var(--mint-pale);opacity:1;}
+.q-num{font-family:'Nunito',sans-serif;font-size:.65rem;font-weight:800;color:#94a3b8;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;}
+.q-text{font-size:1rem;color:var(--acc-dark);margin-bottom:14px;line-height:1.6;}
+.hint-box{font-family:'Nunito',sans-serif;font-size:.86rem;color:#78350f;background:var(--sun-pale);border-radius:10px;padding:10px 14px;margin-bottom:10px;display:none;}
+.hint-box.show{display:block;}
+.opts{display:flex;flex-direction:column;gap:10px;}
+.opt{padding:13px 16px;border-radius:13px;border:3px solid #ddd6fe;background:white;font-size:1rem;cursor:pointer;text-align:left;transition:all .2s;}
+.opt:hover:not(:disabled){border-color:var(--acc);background:var(--acc-pale);}
+.opt:disabled{cursor:default;}
+.opt.ok{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.opt.ko{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
+.fb{margin-top:10px;padding:10px 14px;border-radius:12px;font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:800;display:none;}
+.fb.show{display:block;}
+.fb.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.fb.ko{background:var(--coral-pale);color:#b91c1c;}
+.reset-box{background:white;border:3px solid var(--acc);border-radius:var(--radius);padding:22px;text-align:center;margin-bottom:16px;display:none;}
+.reset-box.show{display:block;}
+.reset-box .r-ugo{font-size:3.2rem;margin-bottom:8px;}
+.reset-box h3{font-size:1.2rem;color:var(--acc);margin-bottom:8px;}
+.reset-box p{font-family:'Nunito',sans-serif;font-size:.9rem;color:#64748b;margin-bottom:14px;line-height:1.7;}
+.btn-reset{padding:12px 26px;border-radius:28px;font-size:.95rem;background:var(--acc);color:white;border:none;cursor:pointer;}
+.free-card{background:white;border:3px solid var(--acc-pale);border-radius:var(--radius);padding:18px;margin-bottom:14px;}
+.free-num{font-family:'Nunito',sans-serif;font-size:.7rem;font-weight:800;color:var(--acc);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;}
+.free-q{font-size:1rem;color:var(--acc-dark);margin-bottom:14px;background:var(--acc-pale);border-radius:12px;padding:12px 16px;line-height:1.7;}
+.free-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.free-opt{padding:12px;border-radius:13px;font-size:.95rem;border:3px solid #ddd6fe;background:white;cursor:pointer;transition:all .2s;text-align:center;}
+.free-opt:hover{border-color:var(--acc);background:var(--acc-pale);}
+.free-opt.ok{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.free-opt.ko{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
+.free-opt.reveal{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.free-fb{margin-top:10px;padding:10px 14px;border-radius:12px;font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:800;display:none;}
+.free-fb.show{display:block;}
+.free-fb.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.free-fb.ko{background:var(--coral-pale);color:#b91c1c;}
+.btn-suite{margin-top:16px;padding:13px 26px;border-radius:32px;font-size:1rem;background:var(--acc);color:white;border:none;cursor:pointer;display:none;align-items:center;gap:8px;box-shadow:0 4px 14px rgba(124,58,237,.3);transition:all .2s;}
+.btn-suite.show{display:inline-flex;}
+.btn-suite:hover{background:var(--acc-dark);transform:translateY(-2px);}
+.bilan-card{background:white;border-radius:var(--radius);padding:28px 20px;text-align:center;border:3px solid var(--acc-pale);}
+.bilan-ugo{font-size:4.5rem;margin-bottom:10px;display:block;}
+.bilan-title{font-size:2rem;color:var(--acc);margin-bottom:8px;}
+.bilan-msg{font-family:'Nunito',sans-serif;font-size:.95rem;color:#64748b;margin-bottom:20px;line-height:1.8;}
+.stars-row{display:flex;justify-content:center;gap:14px;margin-bottom:18px;}
+.star-big{font-size:3rem;filter:grayscale(1);transition:all .5s;}
+.star-big.earned{filter:none;animation:starPop .5s ease both;}
+@keyframes starPop{0%{transform:scale(0);}60%{transform:scale(1.3);}100%{transform:scale(1);}}
+.score-circle{width:115px;height:115px;border-radius:50%;background:var(--acc);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 20px;color:white;box-shadow:0 6px 20px rgba(124,58,237,.4);}
+.score-num{font-size:2.2rem;line-height:1;}
+.score-sub{font-family:'Nunito',sans-serif;font-size:.65rem;opacity:.85;}
+.memo{background:var(--acc-pale);border-radius:var(--radius);padding:16px 18px;margin:16px 0;text-align:left;}
+.memo h3{font-size:.9rem;color:var(--acc);margin-bottom:12px;}
+.memo-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media(max-width:400px){.memo-grid{grid-template-columns:1fr;}.free-opts{grid-template-columns:1fr;}.mots-cles{grid-template-columns:1fr;}}
+.memo-item{background:white;border-radius:12px;padding:11px 13px;border:2px solid var(--acc-pale);}
+.memo-item strong{color:var(--acc);display:block;margin-bottom:3px;}
+.memo-item span{font-family:'Nunito',sans-serif;font-size:.8rem;color:#475569;line-height:1.6;}
+.bilan-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:18px;}
+.btn-bilan{padding:13px 22px;border-radius:30px;font-size:.95rem;cursor:pointer;border:none;transition:all .2s;}
+.btn-bilan.primary{background:var(--acc);color:white;}
+.btn-bilan.secondary{background:var(--acc-pale);color:var(--acc);border:3px solid var(--acc);}
+.btn-bilan:hover{transform:translateY(-2px);}
+.confetti-piece{position:fixed;border-radius:3px;top:-20px;animation:fall linear both;pointer-events:none;z-index:9999;}
+@keyframes fall{0%{transform:translateY(0) rotate(0deg);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="header-top">
+    <a href="../6-9ans.html" class="logo">🦉 L'Atelier du Devoir</a>
+    <div class="score-badge">⭐ <span id="score-display">0</span></div>
+  </div>
+  <div class="steps-wrap"><div class="steps">
+    <div class="step active" id="s0"></div><div class="step" id="s1"></div><div class="step" id="s2"></div>
+    <div class="step" id="s3"></div><div class="step" id="s4"></div><div class="step" id="s5"></div>
+  </div></div>
+</header>
+<main class="main">
+<div class="accroche">
+  <div class="big-icon">🧩</div>
+  <h1>Problèmes multiplicatifs !</h1>
+  <p style="font-family:'Nunito',sans-serif;">Multiplication ou division ? Repère les mots-clés et choisis ! 🌟</p>
+  <div class="meta-row">
+    <span class="meta-tag">CE2</span><span class="meta-tag">⭐⭐ Moyen</span><span class="meta-tag">🧩 Problèmes</span>
+  </div>
+</div>
+<div class="phase active" id="phase-lecon">
+  <div class="lecon-card">
+    <h2>📖 La leçon</h2>
+    <div class="lecon-block revealed" id="bloc-0">
+      <div class="bloc-titre">① Quand multiplier ? Quand diviser ?</div>
+      <div class="ugo-box"><span class="ugo">🦉</span>
+        <p>La <strong>multiplication</strong> regroupe des quantités égales. La <strong>division</strong> partage ou groupe une quantité en parts égales. 😊</p>
+      </div>
+      <div class="mots-cles">
+        <div class="mot-card mul">
+          <strong style="color:#5b21b6;">✖️ Multiplication</strong>
+          "fois", "chaque", "par", "à chaque fois", "autant de fois", "groupes de", "par semaine/jour/élève"
+        </div>
+        <div class="mot-card div">
+          <strong style="color:#c2410c;">➗ Division</strong>
+          "partager", "répartir", "combien par", "combien chacun", "distribuer également", "en parts égales"
+        </div>
+      </div>
+      <div class="info-box">
+        <strong>Règle :</strong> Si on répète la <strong>même quantité</strong> plusieurs fois → ×<br>
+        Si on partage une quantité en <strong>parts égales</strong> → ÷
+      </div>
+      <button class="btn-compris" onclick="revealBloc(1)">J'ai compris ! 🎉</button>
+    </div>
+    <div class="lecon-block" id="bloc-1">
+      <hr class="sep">
+      <div class="bloc-titre">② Exemples commentés</div>
+      <div class="ugo-box"><span class="ugo">🦉</span>
+        <p>Lis bien les mots-indices dans chaque énoncé ! 🔍</p>
+      </div>
+      <div class="exemple-pb">
+        <div class="pb-enonce">🍎 Une caisse contient 6 pommes. Il y a 4 caisses. Combien de pommes <strong>en tout</strong> ?</div>
+        <div class="pb-step"><div class="pb-num">1</div><div style="font-family:'Nunito',sans-serif;font-size:.88rem;">Même quantité (6) répétée 4 fois → <strong>multiplication</strong></div></div>
+        <div class="pb-step"><div class="pb-num">2</div><div style="font-family:'Nunito',sans-serif;font-size:.88rem;">6 × 4 = <strong>24 pommes</strong></div></div>
+      </div>
+      <div class="exemple-pb">
+        <div class="pb-enonce">🍬 On a 24 bonbons à <strong>partager</strong> entre 6 enfants. Combien <strong>chacun</strong> reçoit ?</div>
+        <div class="pb-step"><div class="pb-num">1</div><div style="font-family:'Nunito',sans-serif;font-size:.88rem;">"Partager" + "chacun" → <strong>division</strong></div></div>
+        <div class="pb-step"><div class="pb-num">2</div><div style="font-family:'Nunito',sans-serif;font-size:.88rem;">24 ÷ 6 = <strong>4 bonbons</strong></div></div>
+      </div>
+      <div class="exemple-pb">
+        <div class="pb-enonce">📦 Un colis pèse 3 kg. Combien pèsent <strong>5 colis</strong> pareils ?</div>
+        <div class="pb-step"><div class="pb-num">1</div><div style="font-family:'Nunito',sans-serif;font-size:.88rem;">"Pareils" = même poids répété 5 fois → <strong>multiplication</strong></div></div>
+        <div class="pb-step"><div class="pb-num">2</div><div style="font-family:'Nunito',sans-serif;font-size:.88rem;">3 × 5 = <strong>15 kg</strong></div></div>
+      </div>
+      <button class="btn-compris" onclick="revealBloc(2)">J'ai compris ! 🎉</button>
+    </div>
+    <div class="lecon-block" id="bloc-2">
+      <hr class="sep">
+      <div class="bloc-titre">③ Lien multiplication ↔ division</div>
+      <div class="ugo-box"><span class="ugo">🦉</span>
+        <p>La multiplication et la division sont des opérations <strong>inverses</strong> : l'une défait ce que l'autre fait ! 🔄</p>
+      </div>
+      <div style="background:var(--acc-pale);border-radius:14px;padding:14px;margin:14px 0;font-family:'Nunito',sans-serif;font-size:.9rem;line-height:2.2;text-align:center;">
+        <div>4 × 3 = <strong>12</strong> &nbsp;↔&nbsp; 12 ÷ 3 = <strong>4</strong></div>
+        <div>6 × 5 = <strong>30</strong> &nbsp;↔&nbsp; 30 ÷ 5 = <strong>6</strong></div>
+        <div style="font-size:.8rem;color:#64748b;">Si tu connais la multiplication, tu peux vérifier la division !</div>
+      </div>
+      <div class="info-box">
+        <strong>Astuce vérification :</strong> si 30 ÷ 5 = 6, alors 6 × 5 doit faire 30. ✓<br>
+        <strong>Problème en 2 étapes :</strong> lire, identifier, calculer étape par étape.
+      </div>
+      <button class="btn-compris" onclick="goPhase('g1',1)">On joue ! 🚀</button>
+    </div>
+  </div>
+</div>
+<div class="phase" id="phase-g1">
+  <div class="ugo-box"><span class="ugo">🦉</span><p>Super ! <strong>3 problèmes</strong>. <strong>3 essais</strong> ! 💜</p></div>
+  <div id="g1-reset" class="reset-box"><div class="r-ugo">🦉</div><h3>On recommence !</h3><p>"Fois/chaque/groupes de" → × · "Partager/chacun/répartir" → ÷. 💪</p><button class="btn-reset" onclick="initG1()">↺ Réessayer !</button></div>
+  <div id="g1-zone"></div>
+  <button class="btn-suite" id="btn-g1-to-g2" onclick="goPhase('g2',2)">Encore des problèmes ! 🌟</button>
+</div>
+<div class="phase" id="phase-g2">
+  <div class="ugo-box"><span class="ugo">🦉</span><p>Excellent ! <strong>3 problèmes</strong> de plus. 🏆</p></div>
+  <div id="g2-reset" class="reset-box"><div class="r-ugo">🦉</div><h3>On recommence !</h3><p>Lis bien et repère les mots-clés ! 💪</p><button class="btn-reset" onclick="initG2()">↺ Réessayer !</button></div>
+  <div id="g2-zone"></div>
+  <button class="btn-suite" id="btn-g2-to-free" onclick="goPhase('free',3)">Exercices libres 🎯</button>
+</div>
+<div class="phase" id="phase-free">
+  <div class="ugo-box"><span class="ugo">🦉</span><p><strong>5 problèmes !</strong> 🧩</p></div>
+  <div id="free1-zone"></div>
+  <button class="btn-suite" id="btn-free-to-free2" onclick="goPhase('free2',4)">5 derniers ! 💪</button>
+</div>
+<div class="phase" id="phase-free2">
+  <div class="ugo-box"><span class="ugo">🦉</span><p>Encore <strong>5 problèmes</strong> ! 🏁</p></div>
+  <div id="free2-zone"></div>
+  <button class="btn-suite" id="btn-free2-to-bilan" onclick="goPhase('bilan',5)">🌟 Mon résultat !</button>
+</div>
+<div class="phase" id="phase-bilan">
+  <div class="bilan-card">
+    <span class="bilan-ugo">🦉</span>
+    <h2 class="bilan-title" id="bilan-title"></h2>
+    <p class="bilan-msg" id="bilan-msg"></p>
+    <div class="stars-row"><span class="star-big" id="etoile1">⭐</span><span class="star-big" id="etoile2">⭐</span><span class="star-big" id="etoile3">⭐</span></div>
+    <div class="score-circle"><span class="score-num" id="bilan-pts">0</span><span class="score-sub" id="bilan-sur">/0</span></div>
+    <div class="memo"><h3>📝 Ce que j'ai appris</h3>
+      <div class="memo-grid">
+        <div class="memo-item"><strong>Mots pour ×</strong><span>"fois", "chaque", "par"<br>"groupes de"</span></div>
+        <div class="memo-item"><strong>Mots pour ÷</strong><span>"partager", "chacun"<br>"répartir"</span></div>
+        <div class="memo-item"><strong>× si...</strong><span>Même quantité<br>répétée plusieurs fois</span></div>
+        <div class="memo-item"><strong>÷ si...</strong><span>On partage en<br>parts égales</span></div>
+      </div>
+    </div>
+    <div class="bilan-btns">
+      <button class="btn-bilan secondary" onclick="location.reload()">↺ Recommencer</button>
+      <button class="btn-bilan primary" onclick="location.href='../6-9ans.html'">← Les fiches</button>
+    </div>
+  </div>
+</div>
+</main>
+<script>
+var G1=[
+  {titre:"🧩 Problèmes × et ÷ — série A",etapes:[
+    {q:"🚌 Dans chaque bus, il y a 30 élèves. Il y a 4 bus. Combien d'élèves en tout ?",
+     opts:["120 élèves (30×4)","7 élèves (30÷4)","34 élèves (30+4)","26 élèves (30-4)"],ok:0,
+     hint:"Même quantité (30) répétée 4 fois → multiplication.",
+     expl_ok:"120 élèves ! 30 × 4 = 120. Même quantité répétée → ×. 🎉",expl_ko:"30 × 4 = 120 élèves."},
+    {q:"🍫 On a 36 chocolats à répartir également dans 6 boîtes. Combien par boîte ?",
+     opts:["6 chocolats (36÷6)","216 chocolats (36×6)","30 chocolats (36-6)","42 chocolats (36+6)"],ok:0,
+     hint:'"Répartir également" → division. 36 ÷ 6 = ?',
+     expl_ok:"6 chocolats ! 36 ÷ 6 = 6. 'Répartir' → division. 🌟",expl_ko:"Répartir = partager en parts égales → ÷. 36 ÷ 6 = 6."},
+    {q:"🌹 Un bouquet contient 8 roses. Combien de roses dans 5 bouquets pareils ?",
+     opts:["40 roses (8×5)","3 roses (8-5)","13 roses (8+5)","1,6 rose (8÷5)"],ok:0,
+     hint:"5 bouquets × 8 roses chacun.",
+     expl_ok:"40 roses ! 8 × 5 = 40. 'Pareils' = même quantité répétée. 🎉",expl_ko:"8 roses × 5 bouquets = 40."}
+  ]},
+  {titre:"🧩 Problèmes × et ÷ — série B",etapes:[
+    {q:"🎒 Une caisse contient 48 livres. On les répartit dans 8 classes. Combien de livres par classe ?",
+     opts:["6 livres (48÷8)","384 livres (48×8)","40 livres (48-8)","56 livres (48+8)"],ok:0,
+     hint:'"Répartir" + "par classe" → division. 48 ÷ 8 = ?',
+     expl_ok:"6 livres ! 48 ÷ 8 = 6. 🌟",expl_ko:"48 ÷ 8 = 6 livres par classe."},
+    {q:"🍕 Une pizzeria prépare 7 pizzas par heure. Combien en 9 heures ?",
+     opts:["63 pizzas (7×9)","63 pizzas","2 pizzas (9-7)","16 pizzas (7+9)"],ok:0,
+     hint:'"Par heure" = même quantité répétée. 7 × 9 = ?',
+     expl_ok:"63 pizzas ! 7 × 9 = 63. 'Par heure' → multiplication. 🎉",expl_ko:"7 pizzas × 9 heures = 63."},
+    {q:"🐟 On a 56 poissons à mettre dans des bocaux de 7 poissons chacun. Combien de bocaux faut-il ?",
+     opts:["8 bocaux (56÷7)","392 bocaux (56×7)","49 bocaux (56-7)","63 bocaux (56+7)"],ok:0,
+     hint:"Combien de groupes de 7 dans 56 ? → division. 56 ÷ 7 = ?",
+     expl_ok:"8 bocaux ! 56 ÷ 7 = 8. 🌟",expl_ko:"56 ÷ 7 = 8 bocaux."}
+  ]},
+  {titre:"🧩 Choisir l'opération",etapes:[
+    {q:"🎯 Quel problème nécessite une MULTIPLICATION ?",
+     opts:["5 paquets de 12 biscuits → combien en tout ?","60 billes partagées entre 10 enfants → combien chacun ?"],ok:0,
+     hint:"Même quantité (12) répétée 5 fois.",
+     expl_ok:"Le premier ! 5 × 12 = 60 biscuits. Même quantité répétée → ×. 🎉",expl_ko:"Même quantité répétée → multiplication. 5 × 12 = 60."},
+    {q:"🔍 Quel problème nécessite une DIVISION ?",
+     opts:["30 élèves répartis dans 5 groupes → combien par groupe ?","3 boîtes de 10 crayons → combien en tout ?"],ok:0,
+     hint:"Partager en parts égales → division.",
+     expl_ok:"Le premier ! 30 ÷ 5 = 6 élèves par groupe. 🌟",expl_ko:"Répartir = partager → division. 30 ÷ 5 = 6."},
+    {q:"🏊 Une piscine accueille 25 nageurs par couloir. Il y a 6 couloirs. Combien de nageurs en tout ?",
+     opts:["150 nageurs (25×6)","4 nageurs (25÷6)","31 nageurs (25+6)","19 nageurs (25-6)"],ok:0,
+     hint:'"Par couloir" = même quantité. 25 × 6 = ?',
+     expl_ok:"150 nageurs ! 25 × 6 = 150. 'Par couloir' → multiplication. 🎉",expl_ko:"25 × 6 = 150 nageurs."}
+  ]},
+  {titre:"🧩 Problèmes à 2 étapes",etapes:[
+    {q:"🍎 On a 4 caisses de 8 pommes et 2 caisses de 6 pommes. Combien de pommes en tout ?",
+     opts:["44 pommes (4×8 + 2×6)","48 pommes (4×8×2×6)","14 pommes","32 pommes (4×8)"],ok:0,
+     hint:"Étape 1 : 4×8=32. Étape 2 : 2×6=12. Total : 32+12.",
+     expl_ok:"44 pommes ! 4×8=32, 2×6=12, 32+12=44. 🌟",expl_ko:"4×8=32, 2×6=12, 32+12=44 pommes."},
+    {q:"🎨 Un paquet de crayons coûte 4 €. Paul en achète 5. Il paie avec un billet de 30 €. Combien lui rend-on ?",
+     opts:["10 € (30-5×4)","10 €","110 € (30+5×4)","6 € (30÷5)"],ok:0,
+     hint:"Étape 1 : 5 × 4 = 20 €. Étape 2 : 30 − 20 = ?",
+     expl_ok:"10 € ! 5×4=20. 30−20=10 €. 🎉",expl_ko:"5×4=20 €. 30−20=10 €."},
+    {q:"🚲 3 enfants ont chacun 4 autocollants. Ils en reçoivent 6 de plus chacun. Combien chaque enfant a-t-il maintenant ?",
+     opts:["10 autocollants (4+6)","30 autocollants (3×10)","42 autocollants","12 autocollants (4×3)"],ok:0,
+     hint:"Chaque enfant : 4 + 6 = 10 autocollants.",
+     expl_ok:"10 autocollants ! 4 + 6 = 10 (par enfant). 🌟",expl_ko:"Chaque enfant : 4 + 6 = 10 autocollants."}
+  ]}
+];
+var G2=[
+  {titre:"✏️ Calculs multiplicatifs",etapes:[
+    {q:"🐄 Une ferme a 9 vaches. Chaque vache produit 5 litres de lait par jour. Combien de litres en tout ?",
+     opts:["45 L (9×5)","14 L (9+5)","4 L (9-5)","1,8 L (9÷5)"],ok:0,
+     hint:'"Chaque" = même quantité. 9 × 5 = ?',
+     expl_ok:"45 L ! 9 × 5 = 45. 'Chaque' → multiplication. 🎉",expl_ko:"9 × 5 = 45 L."},
+    {q:"🎁 72 cadeaux sont répartis en parts égales dans 9 sacs. Combien de cadeaux par sac ?",
+     opts:["8 cadeaux (72÷9)","648 cadeaux (72×9)","63 cadeaux (72-9)","81 cadeaux (72+9)"],ok:0,
+     hint:"72 ÷ 9 = ?",
+     expl_ok:"8 cadeaux ! 72 ÷ 9 = 8. 🌟",expl_ko:"72 ÷ 9 = 8 cadeaux."},
+    {q:"🏃 Un coureur fait 6 km par jour. Combien de km en 7 jours ?",
+     opts:["42 km (6×7)","13 km (6+7)","1 km (7-6)","42 km"],ok:0,
+     hint:'"Par jour" × nombre de jours.',
+     expl_ok:"42 km ! 6 × 7 = 42. 🎉",expl_ko:"6 km × 7 jours = 42 km."}
+  ]},
+  {titre:"✏️ Problèmes contextuels",etapes:[
+    {q:"📚 Un livre coûte 8 €. Combien coûtent 6 livres pareils ?",
+     opts:["48 € (8×6)","2 € (8-6)","14 € (8+6)","1,33 € (8÷6)"],ok:0,
+     hint:"Même prix × nombre d'exemplaires.",
+     expl_ok:"48 € ! 8 × 6 = 48. 🌟",expl_ko:"8 × 6 = 48 €."},
+    {q:"🎒 40 stylos sont distribués également entre 8 enfants. Combien chaque enfant reçoit-il ?",
+     opts:["5 stylos (40÷8)","320 stylos (40×8)","32 stylos (40-8)","48 stylos (40+8)"],ok:0,
+     hint:"Distribuer également → ÷. 40 ÷ 8 = ?",
+     expl_ok:"5 stylos ! 40 ÷ 8 = 5. 🎉",expl_ko:"40 ÷ 8 = 5 stylos."},
+    {q:"🍊 Une caisse contient 54 oranges. On les range dans des filets de 9. Combien de filets ?",
+     opts:["6 filets (54÷9)","486 filets (54×9)","45 filets (54-9)","63 filets (54+9)"],ok:0,
+     hint:"Combien de groupes de 9 dans 54 ? → ÷.",
+     expl_ok:"6 filets ! 54 ÷ 9 = 6. 🌟",expl_ko:"54 ÷ 9 = 6 filets."}
+  ]},
+  {titre:"✏️ Vrai ou faux ?",etapes:[
+    {q:"'3 boîtes de 10 crayons' → on utilise une multiplication.",
+     opts:["Vrai ! 3 × 10 = 30","Faux, on additionne"],ok:0,
+     hint:"Même quantité (10) répétée 3 fois.",
+     expl_ok:"Vrai ! 3 × 10 = 30 crayons. 🎉",expl_ko:"Vrai. Même quantité répétée → multiplication."},
+    {q:"'20 élèves partagés en 4 groupes' → on divise.",
+     opts:["Vrai ! 20 ÷ 4 = 5","Faux, on multiplie"],ok:0,
+     hint:"Partager en parts égales → ÷.",
+     expl_ok:"Vrai ! 20 ÷ 4 = 5 élèves par groupe. 🌟",expl_ko:"Vrai. Partager = diviser. 20 ÷ 4 = 5."},
+    {q:"Si 7 × 8 = 56, alors 56 ÷ 8 = 7.",
+     opts:["Vrai ! × et ÷ sont des opérations inverses","Faux"],ok:0,
+     hint:"Multiplication et division sont inverses : l'une défait l'autre.",
+     expl_ok:"Vrai ! 7 × 8 = 56 ↔ 56 ÷ 8 = 7. 🎉",expl_ko:"Vrai. × et ÷ sont inverses."}
+  ]},
+  {titre:"✏️ Problèmes variés",etapes:[
+    {q:"🐣 Un poulailler a 8 poules. Chaque poule pond 3 œufs par semaine. Combien d'œufs en une semaine ?",
+     opts:["24 œufs (8×3)","5 œufs (8-3)","11 œufs (8+3)","2 œufs (8÷4)"],ok:0,
+     hint:"8 poules × 3 œufs chacune.",
+     expl_ok:"24 œufs ! 8 × 3 = 24. 🌟",expl_ko:"8 × 3 = 24 œufs."},
+    {q:"🚂 Un train a 63 passagers répartis dans 7 wagons. Combien de passagers par wagon ?",
+     opts:["9 passagers (63÷7)","441 passagers (63×7)","56 passagers (63-7)","70 passagers (63+7)"],ok:0,
+     hint:"63 ÷ 7 = ?",
+     expl_ok:"9 passagers ! 63 ÷ 7 = 9. 🎉",expl_ko:"63 ÷ 7 = 9 passagers."},
+    {q:"🏪 Un magasin vend 9 articles par jour à 6 € chacun. Combien gagne-t-il en 3 jours ?",
+     opts:["162 € (9×6×3)","54 € (9×6)","18 € (9+6+3)","2 € (18÷9)"],ok:0,
+     hint:"Étape 1 : recette par jour = 9×6=54 €. Étape 2 : ×3 jours.",
+     expl_ok:"162 € ! 9×6=54, 54×3=162. 🌟",expl_ko:"9×6=54 €/jour. 54×3=162 € en 3 jours."}
+  ]}
+];
+var FREE_POOL=[
+  {q:"🍎 5 caisses de 8 pommes. Combien en tout ?",opts:["40 pommes","13 pommes"],ok:0,expl:"5 × 8 = 40 pommes."},
+  {q:"🍬 42 bonbons partagés entre 6 enfants. Combien chacun ?",opts:["7 bonbons","36 bonbons"],ok:0,expl:"42 ÷ 6 = 7 bonbons."},
+  {q:"🚌 4 bus de 35 élèves. Combien d'élèves en tout ?",opts:["140 élèves","39 élèves"],ok:0,expl:"4 × 35 = 140 élèves."},
+  {q:"📦 48 livres dans 8 boîtes égales. Combien par boîte ?",opts:["6 livres","40 livres"],ok:0,expl:"48 ÷ 8 = 6 livres."},
+  {q:"🐟 6 bocaux de 9 poissons. Combien de poissons en tout ?",opts:["54 poissons","15 poissons"],ok:0,expl:"6 × 9 = 54 poissons."},
+  {q:"🎨 56 crayons rangés par 7. Combien de groupes ?",opts:["8 groupes","49 groupes"],ok:0,expl:"56 ÷ 7 = 8 groupes."},
+  {q:"🌸 7 pots de 4 fleurs. Combien en tout ?",opts:["28 fleurs","11 fleurs"],ok:0,expl:"7 × 4 = 28 fleurs."},
+  {q:"🎁 30 cadeaux répartis dans 5 sacs. Combien par sac ?",opts:["6 cadeaux","25 cadeaux"],ok:0,expl:"30 ÷ 5 = 6 cadeaux."},
+  {q:"🏃 Un nageur fait 3 km par jour pendant 8 jours. Combien en tout ?",opts:["24 km","11 km"],ok:0,expl:"3 × 8 = 24 km."},
+  {q:"🐄 36 litres de lait dans 9 bidons égaux. Combien par bidon ?",opts:["4 litres","45 litres"],ok:0,expl:"36 ÷ 9 = 4 litres."},
+  {q:"📚 8 étagères de 6 livres. Combien de livres en tout ?",opts:["48 livres","14 livres"],ok:0,expl:"8 × 6 = 48 livres."},
+  {q:"🍕 63 parts de pizza pour 9 personnes. Combien chacun ?",opts:["7 parts","54 parts"],ok:0,expl:"63 ÷ 9 = 7 parts."},
+  {q:"🚲 5 enfants ont chacun 6 cartes. Combien en tout ?",opts:["30 cartes","11 cartes"],ok:0,expl:"5 × 6 = 30 cartes."},
+  {q:"'Chaque fois', 'par' → quel signe ?",opts:["×","÷"],ok:0,expl:'"Chaque", "par", "fois" → multiplication (×).'},
+  {q:"'Partager', 'chacun' → quel signe ?",opts:["÷","×"],ok:0,expl:'"Partager", "chacun" → division (÷).'},
+  {q:"🌻 72 graines réparties dans 8 pots. Combien par pot ?",opts:["9 graines","64 graines"],ok:0,expl:"72 ÷ 8 = 9 graines."},
+  {q:"🎯 Un archer tire 4 flèches par cible. Il y a 7 cibles. Combien de flèches en tout ?",opts:["28 flèches","11 flèches"],ok:0,expl:"4 × 7 = 28 flèches."},
+  {q:"🍦 45 boules de glace pour 9 cornets. Combien par cornet ?",opts:["5 boules","36 boules"],ok:0,expl:"45 ÷ 9 = 5 boules."},
+  {q:"🏅 3 équipes de 8 joueurs. Combien de joueurs en tout ?",opts:["24 joueurs","11 joueurs"],ok:0,expl:"3 × 8 = 24 joueurs."},
+  {q:"🌈 Si 5 × 9 = 45, alors 45 ÷ 9 = ?",opts:["5","9"],ok:0,expl:"× et ÷ sont inverses : 5 × 9 = 45 → 45 ÷ 9 = 5."}
+];
+var score=0,g1Idx=0,g2Idx=0,f1Exs=[],f2Exs=[],f1Done=0,f2Done=0,_cb={},_g1tries=0,_g2tries=0;
+function shuffle(a){var b=a.slice();for(var i=b.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=b[i];b[i]=b[j];b[j]=t;}return b;}
+function addPt(){score++;document.getElementById('score-display').textContent=score;}
+function updSteps(n){for(var i=0;i<6;i++){var s=document.getElementById('s'+i);if(!s)return;s.classList.remove('active','done');if(i<n)s.classList.add('done');else if(i===n)s.classList.add('active');}}
+function goPhase(ph,si){document.querySelectorAll('.phase').forEach(function(p){p.classList.remove('active');});var el=document.getElementById('phase-'+ph);if(el){el.classList.add('active');setTimeout(function(){el.scrollIntoView({behavior:'smooth',block:'start'});},100);}updSteps(si);if(ph==='g1')initG1();if(ph==='g2')initG2();if(ph==='free')initFree1();if(ph==='free2')initFree2();if(ph==='bilan')showBilan();}
+function revealBloc(n){var b=document.getElementById('bloc-'+n);if(!b)return;var p=document.getElementById('bloc-'+(n-1));if(p){var btn=p.querySelector('.btn-compris');if(btn){btn.textContent='✓ Compris !';btn.disabled=true;btn.style.opacity='.4';}}b.classList.add('revealed');setTimeout(function(){var hH=(document.querySelector('.header')||{offsetHeight:0}).offsetHeight;var r=b.getBoundingClientRect();window.scrollTo({top:window.pageYOffset+r.top-hH-16,behavior:'smooth'});},150);}
+function makeQBox(step,si,prefix){var so=shuffle(step.opts.map(function(o,oi){return{t:o,i:oi};}));var sb=document.createElement('div');sb.className='q-box'+(si===0?' active':'');sb.id=prefix+'s'+si;sb.innerHTML='<div class="q-num">Problème '+(si+1)+'</div><div class="q-text">'+step.q+'</div><div class="hint-box" id="'+prefix+'h'+si+'">💡 '+step.hint+'</div><div class="opts">'+so.map(function(o){return'<button class="opt" onclick="checkQ(\''+prefix+'\','+si+','+o.i+',this)">'+o.t+'</button>';}).join('')+'</div><div class="fb" id="'+prefix+'f'+si+'"></div>';return sb;}
+function checkQ(prefix,si,ci,btn){var v=prefix==='g1'?G1[g1Idx]:G2[g2Idx];var step=v.etapes[si];var sb=document.getElementById(prefix+'s'+si);var fb=document.getElementById(prefix+'f'+si);var triesId=prefix==='g1'?'tries-g1':'tries-g2';var tries=prefix==='g1'?_g1tries:_g2tries;if(sb.classList.contains('correct'))return;if(ci===step.ok){btn.classList.add('ok');sb.querySelectorAll('.opt').forEach(function(b){b.disabled=true;});sb.classList.add('correct');if(tries===0){fb.className='fb show ok';fb.innerHTML='✅ '+step.expl_ok+' <span style="font-size:.75rem;color:#065f46">(+1 pt)</span>';addPt();}else{fb.className='fb show ok';fb.innerHTML='✅ '+step.expl_ok;}if(prefix==='g1')_g1tries=0;else _g2tries=0;var el=document.getElementById(triesId);if(el)el.textContent='3 essais';var nx=document.getElementById(prefix+'s'+(si+1));if(nx){nx.classList.add('active');setTimeout(function(){nx.scrollIntoView({behavior:'smooth',block:'nearest'});},350);}else{var btnId=prefix==='g1'?'btn-g1-to-g2':'btn-g2-to-free';setTimeout(function(){var b=document.getElementById(btnId);b.classList.add('show');b.scrollIntoView({behavior:'smooth',block:'nearest'});},550);}}else{btn.classList.add('ko');btn.disabled=true;if(prefix==='g1')_g1tries++;else _g2tries++;var newTries=prefix==='g1'?_g1tries:_g2tries;var el=document.getElementById(triesId);if(el)el.textContent=(3-newTries)+' essai'+(3-newTries>1?'s':'');fb.className='fb show ko';if(newTries<3){fb.innerHTML='❌ Relis bien le problème ! 💪';document.getElementById(prefix+'h'+si).classList.add('show');}else{fb.innerHTML='❌ '+step.expl_ko;var rid=prefix==='g1'?'g1-reset':'g2-reset',zid=prefix==='g1'?'g1-zone':'g2-zone';setTimeout(function(){document.getElementById(rid).classList.add('show');document.getElementById(zid).innerHTML='';document.getElementById(rid).scrollIntoView({behavior:'smooth',block:'start'});},1400);}}}
+function initG(which){var isG1=which==='g1';if(isG1){g1Idx=Math.floor(Math.random()*G1.length);_g1tries=0;}else{g2Idx=Math.floor(Math.random()*G2.length);_g2tries=0;}var v=isG1?G1[g1Idx]:G2[g2Idx];document.getElementById(which+'-reset').classList.remove('show');document.getElementById('btn-'+which+'-to-'+(isG1?'g2':'free')).classList.remove('show');var z=document.getElementById(which+'-zone');z.innerHTML='';var box=document.createElement('div');box.className='guided-box';box.innerHTML='<div class="guided-title">'+v.titre+'<span class="tries-b" id="tries-'+which+'">3 essais</span></div><div id="'+which+'-steps"></div>';z.appendChild(box);v.etapes.forEach(function(step,si){document.getElementById(which+'-steps').appendChild(makeQBox(step,si,which));});}
+function initG1(){initG('g1');}function initG2(){initG('g2');}
+function buildFree(ex,i,prefix,cb){var card=document.createElement('div');card.className='free-card';card.id=prefix+'c'+i;var so=shuffle(ex.opts.map(function(o,oi){return{t:o,i:oi};}));card.innerHTML='<div class="free-num">Problème '+(i+1)+'</div><div class="free-q">'+ex.q+'</div><div class="free-opts" id="'+prefix+'fo'+i+'"></div><div class="free-fb" id="'+prefix+'ff'+i+'"></div>';setTimeout(function(){var ba=document.getElementById(prefix+'fo'+i);so.forEach(function(o){var btn=document.createElement('button');btn.className='free-opt';btn.textContent=o.t;btn.onclick=function(){if(card.classList.contains('done'))return;card.classList.add('done');ba.querySelectorAll('button').forEach(function(b){b.disabled=true;});var fb=document.getElementById(prefix+'ff'+i);if(o.i===ex.ok){btn.classList.add('ok');fb.className='free-fb show ok';fb.innerHTML='✅ '+ex.expl;addPt();}else{btn.classList.add('ko');ba.querySelectorAll('button').forEach(function(b,bi){if(bi===ex.ok)b.classList.add('reveal');});fb.className='free-fb show ko';fb.innerHTML='❌ '+ex.expl;}cb();};ba.appendChild(btn);});},0);return card;}
+function initFree1(){f1Exs=shuffle(FREE_POOL.slice()).slice(0,5);f1Done=0;var z=document.getElementById('free1-zone');z.innerHTML='';f1Exs.forEach(function(ex,i){_cb['f1'+i]=function(){f1Done++;if(f1Done>=5)setTimeout(function(){var b=document.getElementById('btn-free-to-free2');b.classList.add('show');b.scrollIntoView({behavior:'smooth',block:'nearest'});},600);};z.appendChild(buildFree(ex,i,'f1',_cb['f1'+i]));});}
+function initFree2(){var used=f1Exs.map(function(e){return e.q;});var pool=FREE_POOL.filter(function(e){return used.indexOf(e.q)<0;});f2Exs=shuffle(pool).slice(0,5);f2Done=0;var z=document.getElementById('free2-zone');z.innerHTML='';f2Exs.forEach(function(ex,i){_cb['f2'+i]=function(){f2Done++;if(f2Done>=5)setTimeout(function(){var b=document.getElementById('btn-free2-to-bilan');b.classList.add('show');b.scrollIntoView({behavior:'smooth',block:'nearest'});},600);};z.appendChild(buildFree(ex,i,'f2',_cb['f2'+i]));});}
+function showBilan(){var g1n=G1[g1Idx]?G1[g1Idx].etapes.length:3,g2n=G2[g2Idx]?G2[g2Idx].etapes.length:3,tot=g1n+g2n+10;document.getElementById('bilan-pts').textContent=score;document.getElementById('bilan-sur').textContent='/ '+tot+' pts';var pct=score/tot,t,m;if(pct>=.8){t='BRAVO ! 🎉🎊';m='Tu maîtrises les problèmes multiplicatifs ! Ugo est fier ! 🦉⭐';}else if(pct>=.5){t='Très bien ! 😊🌟';m='"Fois/chaque" → × · "Partager/chacun" → ÷. Continue !';}else{t='Bien essayé ! 💪';m='Rappelle : même quantité répétée → × · partager en égal → ÷. 🦉';}document.getElementById('bilan-title').textContent=t;document.getElementById('bilan-msg').textContent=m;var s=[Math.ceil(tot*.33),Math.ceil(tot*.66),Math.ceil(tot*.89)];['etoile1','etoile2','etoile3'].forEach(function(id,i){var el=document.getElementById(id);if(score>=s[i]){(function(e,d){setTimeout(function(){e.classList.add('earned');},d);})(el,300+i*450);}else el.style.filter='grayscale(1)';});if(pct>=.5)confetti();}
+function confetti(){var cols=['#7c3aed','#c4b5fd','#059669','#d97706','#dc2626'];for(var i=0;i<65;i++){var el=document.createElement('div');el.className='confetti-piece';el.style.cssText='left:'+Math.random()*100+'vw;background:'+cols[Math.floor(Math.random()*cols.length)]+';animation-duration:'+(1.8+Math.random()*2.2)+'s;animation-delay:'+Math.random()*1.5+'s;width:'+(7+Math.random()*10)+'px;height:'+(7+Math.random()*10)+'px;border-radius:'+(Math.random()>.5?'50%':'4px')+';';document.body.appendChild(el);setTimeout(function(){if(el.parentNode)el.remove();},5000);}}
+</script>
+</body>
+</html>

@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>M24 — Mesures de contenance : L et cL | L'Atelier du Devoir</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--acc:#0369a1;--acc-pale:#f0f9ff;--acc-mid:#7dd3fc;--acc-dark:#075985;--mint:#059669;--mint-pale:#d1fae5;--mint-deep:#047857;--coral:#dc2626;--coral-pale:#fee2e2;--sun:#d97706;--sun-pale:#fef3c7;--radius:18px;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Fredoka One',cursive;background:#f0f9ff;color:#1e293b;font-size:20px;line-height:1.5;}
+.header{background:white;border-bottom:4px solid var(--acc-pale);position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.1);}
+.header-top{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;}
+.logo{font-size:1.1rem;color:var(--acc);text-decoration:none;}
+.score-badge{background:var(--acc);color:white;font-size:.9rem;padding:6px 16px;border-radius:20px;}
+.steps-wrap{padding:0 16px 8px;}
+.steps{display:flex;gap:5px;}
+.step{flex:1;height:10px;border-radius:10px;background:#bae6fd;transition:all .4s;}
+.step.done{background:#10b981;}.step.active{background:var(--acc);}
+.main{max-width:640px;margin:0 auto;padding:18px 14px 100px;}
+.phase{display:none;}.phase.active{display:block;}
+.accroche{background:white;border-radius:var(--radius);padding:22px 20px;margin-bottom:20px;border:3px solid var(--acc-pale);text-align:center;}
+.accroche .big-icon{font-size:4rem;margin-bottom:10px;}
+.accroche h1{font-size:1.75rem;color:var(--acc);margin-bottom:8px;}
+.accroche p{font-family:'Nunito',sans-serif;font-size:.92rem;color:#64748b;margin-bottom:12px;}
+.meta-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
+.meta-tag{background:var(--acc-pale);border-radius:20px;padding:5px 16px;font-size:.78rem;color:var(--acc);}
+.lecon-card{background:white;border-radius:var(--radius);padding:22px 18px;margin-bottom:18px;border:3px solid var(--acc-pale);}
+.lecon-card h2{font-size:1.25rem;color:var(--acc);margin-bottom:18px;}
+.lecon-block{display:none;}.lecon-block.revealed{display:block;}
+.bloc-titre{font-size:1.15rem;color:var(--acc);margin-bottom:14px;}
+.sep{margin:20px 0;border:none;border-top:3px dashed #bae6fd;}
+.ugo-box{background:white;border:3px solid var(--acc-pale);border-radius:var(--radius);padding:15px 18px;margin:14px 0;display:flex;gap:12px;align-items:flex-start;}
+.ugo-box .ugo{font-size:2.3rem;flex-shrink:0;}
+.ugo-box p{font-family:'Nunito',sans-serif;font-size:.92rem;color:#475569;line-height:1.7;}
+.ugo-box p strong{color:var(--acc);}
+.info-box{background:var(--acc-pale);border-left:6px solid var(--acc);border-radius:0 14px 14px 0;padding:14px 18px;margin:14px 0;font-family:'Nunito',sans-serif;font-size:.92rem;line-height:1.9;}
+.info-box strong{color:var(--acc-dark);}
+.btn-compris{margin-top:18px;padding:14px 30px;border-radius:38px;font-size:1.1rem;background:var(--acc);color:white;border:none;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:8px;box-shadow:0 4px 14px rgba(3,105,161,.35);}
+.btn-compris:hover{background:var(--acc-dark);transform:translateY(-2px);}
+.btn-compris:disabled{opacity:.4;cursor:default;transform:none;}
+.guided-box{background:white;border:3px solid var(--acc);border-radius:var(--radius);padding:20px 18px;margin-bottom:16px;}
+.guided-title{font-size:1rem;color:var(--acc);margin-bottom:16px;background:var(--acc-pale);padding:10px 16px;border-radius:12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.tries-b{font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:800;color:var(--coral);background:#fee2e2;padding:3px 12px;border-radius:20px;margin-left:auto;}
+.q-box{border:3px solid #bae6fd;border-radius:14px;padding:16px;margin-bottom:10px;opacity:.5;pointer-events:none;}
+.q-box.active{opacity:1;pointer-events:all;border-color:var(--acc-mid);}
+.q-box.correct{border-color:var(--mint);background:var(--mint-pale);opacity:1;}
+.q-num{font-family:'Nunito',sans-serif;font-size:.65rem;font-weight:800;color:#94a3b8;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;}
+.q-text{font-size:1.05rem;color:var(--acc-dark);margin-bottom:14px;line-height:1.5;}
+.hint-box{font-family:'Nunito',sans-serif;font-size:.86rem;color:#78350f;background:var(--sun-pale);border-radius:10px;padding:10px 14px;margin-bottom:10px;display:none;}
+.hint-box.show{display:block;}
+.opts{display:flex;flex-direction:column;gap:10px;}
+.opt{padding:13px 16px;border-radius:13px;border:3px solid #bae6fd;background:white;font-size:1rem;cursor:pointer;text-align:left;transition:all .2s;}
+.opt:hover:not(:disabled){border-color:var(--acc);background:var(--acc-pale);}
+.opt:disabled{cursor:default;}
+.opt.ok{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.opt.ko{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
+.fb{margin-top:10px;padding:10px 14px;border-radius:12px;font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:800;display:none;}
+.fb.show{display:block;}
+.fb.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.fb.ko{background:var(--coral-pale);color:#b91c1c;}
+.reset-box{background:white;border:3px solid var(--acc);border-radius:var(--radius);padding:22px;text-align:center;margin-bottom:16px;display:none;}
+.reset-box.show{display:block;}
+.reset-box .r-ugo{font-size:3.2rem;margin-bottom:8px;}
+.reset-box h3{font-size:1.2rem;color:var(--acc);margin-bottom:8px;}
+.reset-box p{font-family:'Nunito',sans-serif;font-size:.9rem;color:#64748b;margin-bottom:14px;line-height:1.7;}
+.btn-reset{padding:12px 26px;border-radius:28px;font-size:.95rem;background:var(--acc);color:white;border:none;cursor:pointer;}
+.free-card{background:white;border:3px solid var(--acc-pale);border-radius:var(--radius);padding:18px;margin-bottom:14px;}
+.free-num{font-family:'Nunito',sans-serif;font-size:.7rem;font-weight:800;color:var(--acc);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;}
+.free-q{font-size:1.05rem;color:var(--acc-dark);margin-bottom:14px;background:var(--acc-pale);border-radius:12px;padding:12px 16px;line-height:1.5;}
+.free-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.free-opt{padding:12px;border-radius:13px;font-size:1rem;border:3px solid #bae6fd;background:white;cursor:pointer;transition:all .2s;text-align:center;}
+.free-opt:hover{border-color:var(--acc);background:var(--acc-pale);}
+.free-opt.ok{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.free-opt.ko{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
+.free-opt.reveal{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.free-fb{margin-top:10px;padding:10px 14px;border-radius:12px;font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:800;display:none;}
+.free-fb.show{display:block;}
+.free-fb.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.free-fb.ko{background:var(--coral-pale);color:#b91c1c;}
+.btn-suite{margin-top:16px;padding:13px 26px;border-radius:32px;font-size:1rem;background:var(--acc);color:white;border:none;cursor:pointer;display:none;align-items:center;gap:8px;box-shadow:0 4px 14px rgba(3,105,161,.3);transition:all .2s;}
+.btn-suite.show{display:inline-flex;}
+.btn-suite:hover{background:var(--acc-dark);transform:translateY(-2px);}
+.bilan-card{background:white;border-radius:var(--radius);padding:28px 20px;text-align:center;border:3px solid var(--acc-pale);}
+.bilan-ugo{font-size:4.5rem;margin-bottom:10px;display:block;}
+.bilan-title{font-size:2rem;color:var(--acc);margin-bottom:8px;}
+.bilan-msg{font-family:'Nunito',sans-serif;font-size:.95rem;color:#64748b;margin-bottom:20px;line-height:1.8;}
+.stars-row{display:flex;justify-content:center;gap:14px;margin-bottom:18px;}
+.star-big{font-size:3rem;filter:grayscale(1);transition:all .5s;}
+.star-big.earned{filter:none;animation:starPop .5s ease both;}
+@keyframes starPop{0%{transform:scale(0);}60%{transform:scale(1.3);}100%{transform:scale(1);}}
+.score-circle{width:115px;height:115px;border-radius:50%;background:var(--acc);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 20px;color:white;box-shadow:0 6px 20px rgba(3,105,161,.4);}
+.score-num{font-size:2.2rem;line-height:1;}
+.score-sub{font-family:'Nunito',sans-serif;font-size:.65rem;opacity:.85;}
+.memo{background:var(--acc-pale);border-radius:var(--radius);padding:16px 18px;margin:16px 0;text-align:left;}
+.memo h3{font-size:.9rem;color:var(--acc);margin-bottom:12px;}
+.memo-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media(max-width:400px){.memo-grid{grid-template-columns:1fr;}.free-opts{grid-template-columns:1fr;}}
+.memo-item{background:white;border-radius:12px;padding:11px 13px;border:2px solid var(--acc-pale);}
+.memo-item strong{color:var(--acc);display:block;margin-bottom:3px;}
+.memo-item span{font-family:'Nunito',sans-serif;font-size:.8rem;color:#475569;line-height:1.6;}
+.bilan-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:18px;}
+.btn-bilan{padding:13px 22px;border-radius:30px;font-size:.95rem;cursor:pointer;border:none;transition:all .2s;}
+.btn-bilan.primary{background:var(--acc);color:white;}
+.btn-bilan.secondary{background:var(--acc-pale);color:var(--acc);border:3px solid var(--acc);}
+.btn-bilan:hover{transform:translateY(-2px);}
+.confetti-piece{position:fixed;border-radius:3px;top:-20px;animation:fall linear both;pointer-events:none;z-index:9999;}
+@keyframes fall{0%{transform:translateY(0) rotate(0deg);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="header-top">
+    <a href="../6-9ans.html" class="logo">🦉 L'Atelier du Devoir</a>
+    <div class="score-badge">⭐ <span id="score-display">0</span></div>
+  </div>
+  <div class="steps-wrap"><div class="steps">
+    <div class="step active" id="s0"></div><div class="step" id="s1"></div><div class="step" id="s2"></div>
+    <div class="step" id="s3"></div><div class="step" id="s4"></div><div class="step" id="s5"></div>
+  </div></div>
+</header>
+<main class="main">
+
+<div class="accroche">
+  <div class="big-icon">🫗</div>
+  <h1>Litres et centilitres !</h1>
+  <p style="font-family:'Nunito',sans-serif;">Les unités pour mesurer les liquides 🌟</p>
+  <div class="meta-row">
+    <span class="meta-tag">CE2</span><span class="meta-tag">⭐ Facile</span><span class="meta-tag">💧 Mesures</span>
+  </div>
+</div>
+
+<div class="phase active" id="phase-lecon">
+  <div class="lecon-card">
+    <h2>📖 La leçon</h2>
+
+    <div class="lecon-block revealed" id="bloc-0">
+      <div class="bloc-titre">① Le litre et le centilitre</div>
+      <div class="ugo-box"><span class="ugo">🦉</span>
+        <p>Pour mesurer des <strong>liquides</strong>, on utilise le <strong>litre (L)</strong> et le <strong>centilitre (cL)</strong>. Et aussi le <strong>millilitre (mL)</strong> pour les très petites quantités ! 💧</p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;margin:14px 0;">
+        <div style="background:#f0f9ff;border:2px solid #7dd3fc;border-radius:14px;padding:14px;display:flex;align-items:center;gap:14px;">
+          <div style="font-size:2.5rem;min-width:50px;text-align:center;">🧴</div>
+          <div>
+            <div style="font-family:'Fredoka One';color:#075985;font-size:1.1rem;">Le litre (L)</div>
+            <div style="font-family:'Nunito',sans-serif;font-size:.85rem;color:#475569;line-height:1.6;">Grande bouteille d'eau = <strong>1,5 L</strong>. Seau = <strong>10 L</strong>.<br>On mesure : bouteilles, bassines, aquariums.</div>
+          </div>
+        </div>
+        <div style="background:#ecfeff;border:2px solid #67e8f9;border-radius:14px;padding:14px;display:flex;align-items:center;gap:14px;">
+          <div style="font-size:2.5rem;min-width:50px;text-align:center;">🥤</div>
+          <div>
+            <div style="font-family:'Fredoka One';color:#0e7490;font-size:1.1rem;">Le centilitre (cL)</div>
+            <div style="font-family:'Nunito',sans-serif;font-size:.85rem;color:#475569;line-height:1.6;">Un verre = environ <strong>20 cL</strong>. Une canette = <strong>33 cL</strong>.<br>On mesure : verres, canettes, sirops.</div>
+          </div>
+        </div>
+        <div style="background:#fef3c7;border:2px solid #fcd34d;border-radius:14px;padding:14px;display:flex;align-items:center;gap:14px;">
+          <div style="font-size:2.5rem;min-width:50px;text-align:center;">💊</div>
+          <div>
+            <div style="font-family:'Fredoka One';color:#b45309;font-size:1.1rem;">Le millilitre (mL)</div>
+            <div style="font-family:'Nunito',sans-serif;font-size:.85rem;color:#475569;line-height:1.6;">Une cuillère à café = environ <strong>5 mL</strong>.<br>On mesure : médicaments, parfums.</div>
+          </div>
+        </div>
+      </div>
+      <div style="background:white;border:3px solid var(--acc-pale);border-radius:14px;padding:14px;text-align:center;margin:14px 0;">
+        <div style="font-family:'Nunito',sans-serif;font-size:.92rem;color:#475569;line-height:2.2;">
+          <span style="background:#0369a1;color:white;padding:5px 14px;border-radius:16px;font-weight:800;">1 L</span>
+          <span style="margin:0 8px;">=</span>
+          <span style="background:#0891b2;color:white;padding:5px 14px;border-radius:16px;font-weight:800;">100 cL</span>
+          <span style="margin:0 8px;">=</span>
+          <span style="background:#06b6d4;color:white;padding:5px 14px;border-radius:16px;font-weight:800;">1 000 mL</span>
+        </div>
+      </div>
+      <div class="info-box">
+        <strong>L → cL :</strong> ×100 &nbsp;|&nbsp; <strong>cL → L :</strong> ÷100<br>
+        <strong>L → mL :</strong> ×1 000 &nbsp;|&nbsp; <strong>cL → mL :</strong> ×10<br>
+        2 L = 200 cL = 2 000 mL
+      </div>
+      <button class="btn-compris" onclick="revealBloc(1)">J'ai compris ! 🎉</button>
+    </div>
+
+    <div class="lecon-block" id="bloc-1">
+      <hr class="sep">
+      <div class="bloc-titre">② Conversions et exemples</div>
+      <div class="ugo-box"><span class="ugo">🦉</span>
+        <p>Sur les emballages, on lit souvent <strong>cL</strong> ou <strong>mL</strong>. Apprends à les reconnaître et convertir ! 🛒</p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:9px;margin:14px 0;">
+        <div style="background:#f0f9ff;border:2px solid #7dd3fc;border-radius:12px;padding:12px 14px;">
+          <div style="font-family:'Nunito',sans-serif;font-size:.88rem;color:#475569;line-height:1.8;">
+            🧃 <strong>Jus de fruit :</strong> 50 cL = 0,5 L (demi-litre)<br>
+            🥛 <strong>Lait :</strong> 1 L = 100 cL<br>
+            🫗 <strong>Sirop :</strong> 75 cL = 750 mL
+          </div>
+        </div>
+        <div style="background:#f0f9ff;border:2px solid #7dd3fc;border-radius:12px;padding:12px 14px;">
+          <div style="font-family:'Nunito',sans-serif;font-size:.88rem;color:#475569;line-height:1.8;">
+            🥤 <strong>Canette :</strong> 33 cL = 330 mL<br>
+            🍶 <strong>Grande bouteille :</strong> 150 cL = 1,5 L<br>
+            💧 <strong>Seau :</strong> 10 L = 1 000 cL
+          </div>
+        </div>
+        <div style="background:#fee2e2;border:2px solid #fda4af;border-radius:12px;padding:11px 14px;">
+          <div style="font-family:'Nunito',sans-serif;font-size:.88rem;color:#b91c1c;line-height:1.7;">⚠️ <strong>Piège :</strong> 1 L 50 cL = 150 cL (pas 1,5 cL !). 2 L 30 cL = 230 cL.</div>
+        </div>
+      </div>
+      <button class="btn-compris" onclick="revealBloc(2)">J'ai compris ! 🎉</button>
+    </div>
+
+    <div class="lecon-block" id="bloc-2">
+      <hr class="sep">
+      <div class="bloc-titre">③ Comparer et calculer</div>
+      <div class="ugo-box"><span class="ugo">🦉</span>
+        <p>Pour comparer des contenances, convertis dans la <strong>même unité</strong> ! 🎯</p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;margin:14px 0;">
+        <div style="background:#f0f9ff;border:2px solid #7dd3fc;border-radius:12px;padding:13px;">
+          <div style="font-family:'Nunito',sans-serif;font-size:.9rem;color:#475569;line-height:1.8;">
+            <strong style="color:#0369a1;">Comparer :</strong> 1,5 L et 120 cL ?<br>
+            1,5 L = 150 cL. 150 > 120 → <strong>1,5 L est plus grand</strong>
+          </div>
+        </div>
+        <div style="background:#f0f9ff;border:2px solid #7dd3fc;border-radius:12px;padding:13px;">
+          <div style="font-family:'Nunito',sans-serif;font-size:.9rem;color:#475569;line-height:1.8;">
+            <strong style="color:#0369a1;">Additionner :</strong> 50 cL + 75 cL = 125 cL = <strong>1 L 25 cL</strong>
+          </div>
+        </div>
+      </div>
+      <button class="btn-compris" onclick="goPhase('g1',1)">On joue ! 🚀</button>
+    </div>
+  </div>
+</div>
+
+<div class="phase" id="phase-g1">
+  <div class="ugo-box"><span class="ugo">🦉</span><p>Super ! <strong>3 questions</strong>. <strong>3 essais</strong> ! 💙</p></div>
+  <div id="g1-reset" class="reset-box"><div class="r-ugo">🦉</div><h3>On recommence !</h3><p>1 L = 100 cL = 1 000 mL · L→cL : ×100. 💪</p><button class="btn-reset" onclick="initG1()">↺ Réessayer !</button></div>
+  <div id="g1-zone"></div>
+  <button class="btn-suite" id="btn-g1-to-g2" onclick="goPhase('g2',2)">Encore des questions ! 🌟</button>
+</div>
+<div class="phase" id="phase-g2">
+  <div class="ugo-box"><span class="ugo">🦉</span><p>Excellent ! <strong>3 questions</strong> de plus ! 🏆</p></div>
+  <div id="g2-reset" class="reset-box"><div class="r-ugo">🦉</div><h3>On recommence !</h3><p>Convertis dans la même unité pour comparer ! 💪</p><button class="btn-reset" onclick="initG2()">↺ Réessayer !</button></div>
+  <div id="g2-zone"></div>
+  <button class="btn-suite" id="btn-g2-to-free" onclick="goPhase('free',3)">Exercices libres 🎯</button>
+</div>
+<div class="phase" id="phase-free">
+  <div class="ugo-box"><span class="ugo">🦉</span><p><strong>5 questions !</strong> 💧</p></div>
+  <div id="free1-zone"></div>
+  <button class="btn-suite" id="btn-free-to-free2" onclick="goPhase('free2',4)">5 dernières ! 💪</button>
+</div>
+<div class="phase" id="phase-free2">
+  <div class="ugo-box"><span class="ugo">🦉</span><p>Encore <strong>5 questions</strong> ! 🏁</p></div>
+  <div id="free2-zone"></div>
+  <button class="btn-suite" id="btn-free2-to-bilan" onclick="goPhase('bilan',5)">🌟 Mon résultat !</button>
+</div>
+<div class="phase" id="phase-bilan">
+  <div class="bilan-card">
+    <span class="bilan-ugo">🦉</span>
+    <h2 class="bilan-title" id="bilan-title"></h2>
+    <p class="bilan-msg" id="bilan-msg"></p>
+    <div class="stars-row"><span class="star-big" id="etoile1">⭐</span><span class="star-big" id="etoile2">⭐</span><span class="star-big" id="etoile3">⭐</span></div>
+    <div class="score-circle"><span class="score-num" id="bilan-pts">0</span><span class="score-sub" id="bilan-sur">/0</span></div>
+    <div class="memo"><h3>📝 Ce que j'ai appris</h3>
+      <div class="memo-grid">
+        <div class="memo-item"><strong>Conversion</strong><span>1 L = 100 cL<br>1 L = 1 000 mL</span></div>
+        <div class="memo-item"><strong>L → cL</strong><span>×100<br>3 L = 300 cL</span></div>
+        <div class="memo-item"><strong>cL → L</strong><span>÷100<br>200 cL = 2 L</span></div>
+        <div class="memo-item"><strong>Exemples</strong><span>Verre = 20 cL<br>Canette = 33 cL</span></div>
+      </div>
+    </div>
+    <div class="bilan-btns">
+      <button class="btn-bilan secondary" onclick="location.reload()">↺ Recommencer</button>
+      <button class="btn-bilan primary" onclick="location.href='../6-9ans.html'">← Les fiches</button>
+    </div>
+  </div>
+</div>
+</main>
+
+<script>
+var G1=[
+  {titre:"💧 L et cL : conversions",etapes:[
+    {q:"1 L = combien de cL ?",opts:["100 cL","10 cL","1 000 cL","50 cL"],ok:0,hint:"Centilitre = 1/100 de litre. 1 L = 100 cL.",expl_ok:"100 cL ! 1 L = 100 cL. 🎉",expl_ko:"1 L = 100 cL."},
+    {q:"3 L = combien de cL ?",opts:["300 cL","30 cL","3 000 cL","103 cL"],ok:0,hint:"3 × 100 = ?",expl_ok:"300 cL ! 3 × 100 = 300 cL. 🌟",expl_ko:"3 L = 3 × 100 = 300 cL."},
+    {q:"200 cL = combien de L ?",opts:["2 L","20 L","200 L","0,2 L"],ok:0,hint:"200 ÷ 100 = ?",expl_ok:"2 L ! 200 ÷ 100 = 2 L. 🎉",expl_ko:"200 cL = 200 ÷ 100 = 2 L."}
+  ]},
+  {titre:"💧 Exemples du quotidien",etapes:[
+    {q:"Une canette de soda fait 33 cL. En mL, ça fait ?",opts:["330 mL","33 mL","3 300 mL","3,3 mL"],ok:0,hint:"cL → mL : ×10. 33 × 10 = ?",expl_ok:"330 mL ! 33 × 10 = 330 mL. 🌟",expl_ko:"33 cL = 33 × 10 = 330 mL."},
+    {q:"Une grande bouteille d'eau fait 150 cL. En L ?",opts:["1 L 50 cL = 1,5 L","15 L","1 050 L","50 L"],ok:0,hint:"150 cL ÷ 100 = ? L.",expl_ok:"1,5 L ! 150 ÷ 100 = 1 L 50 cL = 1,5 L. 🎉",expl_ko:"150 cL = 1 L 50 cL = 1,5 L."},
+    {q:"Un verre contient 20 cL. Combien faut-il de verres pour faire 1 L ?",opts:["5 verres (100÷20)","10 verres","20 verres","2 verres"],ok:0,hint:"1 L = 100 cL. 100 ÷ 20 = ?",expl_ok:"5 verres ! 100 ÷ 20 = 5. 🌟",expl_ko:"1 L = 100 cL. 100 ÷ 20 = 5 verres."}
+  ]},
+  {titre:"💧 Choisir la bonne unité",etapes:[
+    {q:"Pour mesurer le contenu d'une piscine, on utilise… ?",opts:["L (litres)","cL (centilitres)","mL (millilitres)"],ok:0,hint:"Une piscine contient des milliers de litres !",expl_ok:"L ! Une piscine se mesure en litres (des milliers !). 🎉",expl_ko:"Grande quantité → litres."},
+    {q:"Pour mesurer le sirop dans un flacon, on utilise… ?",opts:["cL (centilitres)","L (litres)","kg (kilogrammes)"],ok:0,hint:"Un flacon de sirop = quelques dizaines de cL.",expl_ok:"cL ! Un flacon de sirop = environ 75 cL. 🌟",expl_ko:"Flacon → centilitres (cL)."},
+    {q:"1 L 50 cL = ? cL",opts:["150 cL","50 cL","1 050 cL","15 cL"],ok:0,hint:"1 L = 100 cL. 100 + 50 = ?",expl_ok:"150 cL ! 100 + 50 = 150 cL. 🎉",expl_ko:"1 L 50 cL = 100 + 50 = 150 cL."}
+  ]},
+  {titre:"💧 Vrai ou faux ?",etapes:[
+    {q:"50 cL = demi-litre",opts:["Vrai ! 50 cL = 50/100 L = 0,5 L","Faux"],ok:0,hint:"1 L = 100 cL. La moitié = 50 cL.",expl_ok:"Vrai ! 50 cL = la moitié d'un litre. 🌟",expl_ko:"Vrai. 50 cL = 0,5 L = demi-litre."},
+    {q:"2 L = 20 cL",opts:["Faux ! 2 L = 200 cL","Vrai"],ok:0,hint:"2 × 100 = 200 cL.",expl_ok:"Faux ! 2 L = 200 cL (pas 20 cL). 🎉",expl_ko:"Faux. 2 L = 2 × 100 = 200 cL."},
+    {q:"Une canette de 33 cL et un verre de 20 cL, lequel contient plus ?",opts:["La canette (33 > 20)","Le verre (20 cL)"],ok:0,hint:"33 cL > 20 cL.",expl_ok:"La canette ! 33 cL > 20 cL. 🌟",expl_ko:"33 cL > 20 cL → la canette contient plus."}
+  ]}
+];
+
+var G2=[
+  {titre:"✏️ Calculs de contenance",etapes:[
+    {q:"4 L = ? cL",opts:["400 cL","40 cL","4 000 cL","14 cL"],ok:0,hint:"4 × 100 = ?",expl_ok:"400 cL ! 4 × 100 = 400 cL. 🎉",expl_ko:"4 L = 4 × 100 = 400 cL."},
+    {q:"350 cL = ? L ? cL",opts:["3 L 50 cL","35 L","350 L","3 500 L"],ok:0,hint:"350 = 300 + 50. 300 cL = 3 L.",expl_ok:"3 L 50 cL ! 300 cL = 3 L, reste 50 cL. 🌟",expl_ko:"350 cL = 300 + 50 = 3 L 50 cL."},
+    {q:"1 L 75 cL + 50 cL = ?",opts:["2 L 25 cL = 225 cL","1 L 125 cL","175 cL","225 L"],ok:0,hint:"1 L 75 cL = 175 cL. 175 + 50 = 225 cL = 2 L 25 cL.",expl_ok:"225 cL = 2 L 25 cL ! 175 + 50 = 225 cL. 🎉",expl_ko:"175 + 50 = 225 cL = 2 L 25 cL."}
+  ]},
+  {titre:"✏️ Comparer des contenances",etapes:[
+    {q:"Lequel contient plus : 1 L 20 cL ou 150 cL ?",opts:["1 L 20 cL (= 120 cL < 150 cL)… Attendez ! Non : 150 cL > 120 cL","1 L 20 cL"],ok:0,hint:"1 L 20 cL = 120 cL. 150 cL > 120 cL.",expl_ok:"150 cL ! 120 cL < 150 cL. 🌟",expl_ko:"1 L 20 cL = 120 cL. 150 > 120 → 150 cL est plus grand."},
+    {q:"Range du plus petit au plus grand : 50 cL, 2 L, 120 cL",opts:["50 cL → 120 cL → 2 L (200 cL)","2 L → 120 cL → 50 cL"],ok:0,hint:"Convertis en cL : 2 L = 200 cL.",expl_ok:"50 cL < 120 cL < 200 cL (=2 L). 🎉",expl_ko:"50 < 120 < 200 (=2 L)."},
+    {q:"Une bouteille de 75 cL est-elle plus grande qu'un demi-litre ?",opts:["Oui ! 75 cL > 50 cL (demi-litre)","Non, 75 cL < 50 cL"],ok:0,hint:"Demi-litre = 50 cL. 75 > 50.",expl_ok:"Oui ! 75 cL > 50 cL. 🌟",expl_ko:"75 cL > 50 cL (=demi-litre)."}
+  ]},
+  {titre:"✏️ Problèmes",etapes:[
+    {q:"On verse 3 verres de 20 cL dans une carafe. Combien de cL en tout ?",opts:["60 cL (3×20)","23 cL (3+20)","20 cL","6 cL"],ok:0,hint:"3 × 20 = ?",expl_ok:"60 cL ! 3 × 20 = 60 cL. 🎉",expl_ko:"3 × 20 = 60 cL."},
+    {q:"Une bouteille de 1 L est à moitié pleine. Combien reste-t-il ?",opts:["50 cL (100÷2)","25 cL","75 cL","1 L"],ok:0,hint:"1 L = 100 cL. La moitié = ?",expl_ok:"50 cL ! 100 ÷ 2 = 50 cL. 🌟",expl_ko:"1 L = 100 cL. La moitié = 50 cL."},
+    {q:"Papa verse 4 verres de 25 cL de jus. A-t-il rempli un litre entier ?",opts:["Oui ! 4×25=100 cL=1 L","Non, il manque encore du jus"],ok:0,hint:"4 × 25 = ? cL. 1 L = 100 cL.",expl_ok:"Oui ! 4 × 25 = 100 cL = 1 L exactement. 🎉",expl_ko:"4 × 25 = 100 cL = 1 L."}
+  ]},
+  {titre:"✏️ Vrai ou faux ?",etapes:[
+    {q:"1 L 50 cL = 150 cL",opts:["Vrai !","Faux"],ok:0,hint:"1 L = 100 cL. 100 + 50 = 150 cL.",expl_ok:"Vrai ! 100 + 50 = 150 cL. 🌟",expl_ko:"Vrai. 1 L 50 cL = 150 cL."},
+    {q:"33 cL = 330 mL",opts:["Vrai ! 33 × 10 = 330","Faux"],ok:0,hint:"cL → mL : ×10.",expl_ok:"Vrai ! 33 × 10 = 330 mL. 🎉",expl_ko:"Vrai. 33 cL = 330 mL."},
+    {q:"Pour mesurer la pluie dans un pluviomètre, on utilise plutôt… ?",opts:["mL (millilitres)","L (litres)"],ok:0,hint:"La pluie est en petite quantité dans un pluviomètre.",expl_ok:"mL ! La pluie se mesure en mm ou mL dans un pluviomètre. 🌟",expl_ko:"Petite quantité → millilitres (mL)."}
+  ]}
+];
+
+var FREE_POOL=[
+  {q:"1 L = ? cL",opts:["100 cL","10 cL"],ok:0,expl:"1 L = 100 cL."},
+  {q:"1 L = ? mL",opts:["1 000 mL","100 mL"],ok:0,expl:"1 L = 1 000 mL."},
+  {q:"3 L = ? cL",opts:["300 cL","30 cL"],ok:0,expl:"3 × 100 = 300 cL."},
+  {q:"200 cL = ? L",opts:["2 L","20 L"],ok:0,expl:"200 ÷ 100 = 2 L."},
+  {q:"50 cL = demi-litre ?",opts:["Oui !","Non"],ok:0,expl:"50 cL = 0,5 L = demi-litre."},
+  {q:"33 cL = ? mL",opts:["330 mL","33 mL"],ok:0,expl:"33 × 10 = 330 mL."},
+  {q:"1 L 50 cL = ? cL",opts:["150 cL","50 cL"],ok:0,expl:"100 + 50 = 150 cL."},
+  {q:"L → cL : on… ?",opts:["×100","×10"],ok:0,expl:"Pour passer de L en cL : ×100."},
+  {q:"4 L = ? cL",opts:["400 cL","40 cL"],ok:0,expl:"4 × 100 = 400 cL."},
+  {q:"Un verre contient environ… ?",opts:["20 cL","20 L"],ok:0,expl:"Un verre = environ 20 cL."},
+  {q:"Une canette contient 33 cL. Un verre 20 cL. Lequel est plus grand ?",opts:["La canette (33>20)","Le verre"],ok:0,expl:"33 cL > 20 cL."},
+  {q:"500 cL = ? L",opts:["5 L","50 L"],ok:0,expl:"500 ÷ 100 = 5 L."},
+  {q:"2 L 30 cL = ? cL",opts:["230 cL","32 cL"],ok:0,expl:"2 L = 200 cL. 200 + 30 = 230 cL."},
+  {q:"1 cL = ? mL",opts:["10 mL","100 mL"],ok:0,expl:"1 cL = 10 mL."},
+  {q:"Pour mesurer un plein d'essence, on utilise… ?",opts:["L (litres)","cL"],ok:0,expl:"Un plein d'essence = des dizaines de litres."},
+  {q:"6 L = ? cL",opts:["600 cL","60 cL"],ok:0,expl:"6 × 100 = 600 cL."},
+  {q:"100 cL = ? L",opts:["1 L","10 L"],ok:0,expl:"100 ÷ 100 = 1 L."},
+  {q:"Qui contient plus : 1 L ou 80 cL ?",opts:["1 L (=100 cL)","80 cL"],ok:0,expl:"1 L = 100 cL > 80 cL."},
+  {q:"Pour mesurer un médicament en sirop, on utilise… ?",opts:["mL","L"],ok:0,expl:"Très petite quantité → millilitres."},
+  {q:"5 L = ? cL",opts:["500 cL","50 cL"],ok:0,expl:"5 × 100 = 500 cL."}
+];
+
+var score=0,g1Idx=0,g2Idx=0,f1Exs=[],f2Exs=[],f1Done=0,f2Done=0,_cb={},_g1tries=0,_g2tries=0;
+function shuffle(a){var b=a.slice();for(var i=b.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=b[i];b[i]=b[j];b[j]=t;}return b;}
+function addPt(){score++;document.getElementById('score-display').textContent=score;}
+function updSteps(n){for(var i=0;i<6;i++){var s=document.getElementById('s'+i);if(!s)return;s.classList.remove('active','done');if(i<n)s.classList.add('done');else if(i===n)s.classList.add('active');}}
+function goPhase(ph,si){document.querySelectorAll('.phase').forEach(function(p){p.classList.remove('active');});var el=document.getElementById('phase-'+ph);if(el){el.classList.add('active');setTimeout(function(){el.scrollIntoView({behavior:'smooth',block:'start'});},100);}updSteps(si);if(ph==='g1')initG1();if(ph==='g2')initG2();if(ph==='free')initFree1();if(ph==='free2')initFree2();if(ph==='bilan')showBilan();}
+function revealBloc(n){var b=document.getElementById('bloc-'+n);if(!b)return;var p=document.getElementById('bloc-'+(n-1));if(p){var btn=p.querySelector('.btn-compris');if(btn){btn.textContent='✓ Compris !';btn.disabled=true;btn.style.opacity='.4';}}b.classList.add('revealed');setTimeout(function(){var hH=(document.querySelector('.header')||{offsetHeight:0}).offsetHeight;var r=b.getBoundingClientRect();window.scrollTo({top:window.pageYOffset+r.top-hH-16,behavior:'smooth'});},150);}
+function makeQBox(step,si,prefix){var so=shuffle(step.opts.map(function(o,oi){return{t:o,i:oi};}));var sb=document.createElement('div');sb.className='q-box'+(si===0?' active':'');sb.id=prefix+'s'+si;sb.innerHTML='<div class="q-num">Question '+(si+1)+'</div><div class="q-text">'+step.q+'</div><div class="hint-box" id="'+prefix+'h'+si+'">💡 '+step.hint+'</div><div class="opts">'+so.map(function(o){return'<button class="opt" onclick="checkQ(\''+prefix+'\','+si+','+o.i+',this)">'+o.t+'</button>';}).join('')+'</div><div class="fb" id="'+prefix+'f'+si+'"></div>';return sb;}
+function checkQ(prefix,si,ci,btn){var v=prefix==='g1'?G1[g1Idx]:G2[g2Idx];var step=v.etapes[si];var sb=document.getElementById(prefix+'s'+si);var fb=document.getElementById(prefix+'f'+si);var triesId=prefix==='g1'?'tries-g1':'tries-g2';var tries=prefix==='g1'?_g1tries:_g2tries;if(sb.classList.contains('correct'))return;if(ci===step.ok){btn.classList.add('ok');sb.querySelectorAll('.opt').forEach(function(b){b.disabled=true;});sb.classList.add('correct');if(tries===0){fb.className='fb show ok';fb.innerHTML='✅ '+step.expl_ok+' <span style="font-size:.75rem;color:#065f46">(+1 pt)</span>';addPt();}else{fb.className='fb show ok';fb.innerHTML='✅ '+step.expl_ok;}if(prefix==='g1')_g1tries=0;else _g2tries=0;var el=document.getElementById(triesId);if(el)el.textContent='3 essais';var nx=document.getElementById(prefix+'s'+(si+1));if(nx){nx.classList.add('active');setTimeout(function(){nx.scrollIntoView({behavior:'smooth',block:'nearest'});},350);}else{var btnId=prefix==='g1'?'btn-g1-to-g2':'btn-g2-to-free';setTimeout(function(){var b=document.getElementById(btnId);b.classList.add('show');b.scrollIntoView({behavior:'smooth',block:'nearest'});},550);}}else{btn.classList.add('ko');btn.disabled=true;if(prefix==='g1')_g1tries++;else _g2tries++;var newTries=prefix==='g1'?_g1tries:_g2tries;var el=document.getElementById(triesId);if(el)el.textContent=(3-newTries)+' essai'+(3-newTries>1?'s':'');fb.className='fb show ko';if(newTries<3){fb.innerHTML='❌ Réessaie ! 💪';document.getElementById(prefix+'h'+si).classList.add('show');}else{fb.innerHTML='❌ '+step.expl_ko;var rid=prefix==='g1'?'g1-reset':'g2-reset',zid=prefix==='g1'?'g1-zone':'g2-zone';setTimeout(function(){document.getElementById(rid).classList.add('show');document.getElementById(zid).innerHTML='';document.getElementById(rid).scrollIntoView({behavior:'smooth',block:'start'});},1400);}}}
+function initG(which){var isG1=which==='g1';if(isG1){g1Idx=Math.floor(Math.random()*G1.length);_g1tries=0;}else{g2Idx=Math.floor(Math.random()*G2.length);_g2tries=0;}var v=isG1?G1[g1Idx]:G2[g2Idx];document.getElementById(which+'-reset').classList.remove('show');document.getElementById('btn-'+which+'-to-'+(isG1?'g2':'free')).classList.remove('show');var z=document.getElementById(which+'-zone');z.innerHTML='';var box=document.createElement('div');box.className='guided-box';box.innerHTML='<div class="guided-title">'+v.titre+'<span class="tries-b" id="tries-'+which+'">3 essais</span></div><div id="'+which+'-steps"></div>';z.appendChild(box);v.etapes.forEach(function(step,si){document.getElementById(which+'-steps').appendChild(makeQBox(step,si,which));});}
+function initG1(){initG('g1');}function initG2(){initG('g2');}
+function buildFree(ex,i,prefix,cb){var card=document.createElement('div');card.className='free-card';card.id=prefix+'c'+i;var so=shuffle(ex.opts.map(function(o,oi){return{t:o,i:oi};}));card.innerHTML='<div class="free-num">Question '+(i+1)+'</div><div class="free-q">'+ex.q+'</div><div class="free-opts" id="'+prefix+'fo'+i+'"></div><div class="free-fb" id="'+prefix+'ff'+i+'"></div>';setTimeout(function(){var ba=document.getElementById(prefix+'fo'+i);so.forEach(function(o){var btn=document.createElement('button');btn.className='free-opt';btn.textContent=o.t;btn.onclick=function(){if(card.classList.contains('done'))return;card.classList.add('done');ba.querySelectorAll('button').forEach(function(b){b.disabled=true;});var fb=document.getElementById(prefix+'ff'+i);if(o.i===ex.ok){btn.classList.add('ok');fb.className='free-fb show ok';fb.innerHTML='✅ '+ex.expl;addPt();}else{btn.classList.add('ko');ba.querySelectorAll('button').forEach(function(b,bi){if(bi===ex.ok)b.classList.add('reveal');});fb.className='free-fb show ko';fb.innerHTML='❌ '+ex.expl;}cb();};ba.appendChild(btn);});},0);return card;}
+function initFree1(){f1Exs=shuffle(FREE_POOL.slice()).slice(0,5);f1Done=0;var z=document.getElementById('free1-zone');z.innerHTML='';f1Exs.forEach(function(ex,i){_cb['f1'+i]=function(){f1Done++;if(f1Done>=5)setTimeout(function(){var b=document.getElementById('btn-free-to-free2');b.classList.add('show');b.scrollIntoView({behavior:'smooth',block:'nearest'});},600);};z.appendChild(buildFree(ex,i,'f1',_cb['f1'+i]));});}
+function initFree2(){var used=f1Exs.map(function(e){return e.q;});var pool=FREE_POOL.filter(function(e){return used.indexOf(e.q)<0;});f2Exs=shuffle(pool).slice(0,5);f2Done=0;var z=document.getElementById('free2-zone');z.innerHTML='';f2Exs.forEach(function(ex,i){_cb['f2'+i]=function(){f2Done++;if(f2Done>=5)setTimeout(function(){var b=document.getElementById('btn-free2-to-bilan');b.classList.add('show');b.scrollIntoView({behavior:'smooth',block:'nearest'});},600);};z.appendChild(buildFree(ex,i,'f2',_cb['f2'+i]));});}
+function showBilan(){var g1n=G1[g1Idx]?G1[g1Idx].etapes.length:3,g2n=G2[g2Idx]?G2[g2Idx].etapes.length:3,tot=g1n+g2n+10;document.getElementById('bilan-pts').textContent=score;document.getElementById('bilan-sur').textContent='/ '+tot+' pts';var pct=score/tot,t,m;if(pct>=.8){t='BRAVO ! 🎉🎊';m='Tu maîtrises litres et centilitres ! Ugo est super fier de toi ! 🦉⭐';}else if(pct>=.5){t='Très bien ! 😊🌟';m='1 L = 100 cL · L→cL : ×100. Continue !';}else{t='Bien essayé ! 💪';m:'1 L = 100 cL. Recommence ! 🦉';}document.getElementById('bilan-title').textContent=t;document.getElementById('bilan-msg').textContent=m;var s=[Math.ceil(tot*.33),Math.ceil(tot*.66),Math.ceil(tot*.89)];['etoile1','etoile2','etoile3'].forEach(function(id,i){var el=document.getElementById(id);if(score>=s[i]){(function(e,d){setTimeout(function(){e.classList.add('earned');},d);})(el,300+i*450);}else el.style.filter='grayscale(1)';});if(pct>=.5)confetti();}
+function confetti(){var cols=['#0369a1','#7dd3fc','#059669','#d97706','#7c3aed'];for(var i=0;i<65;i++){var el=document.createElement('div');el.className='confetti-piece';el.style.cssText='left:'+Math.random()*100+'vw;background:'+cols[Math.floor(Math.random()*cols.length)]+';animation-duration:'+(1.8+Math.random()*2.2)+'s;animation-delay:'+Math.random()*1.5+'s;width:'+(7+Math.random()*10)+'px;height:'+(7+Math.random()*10)+'px;border-radius:'+(Math.random()>.5?'50%':'4px')+';';document.body.appendChild(el);setTimeout(function(){if(el.parentNode)el.remove();},5000);}}
+</script>
+</body>
+</html>

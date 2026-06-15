@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>M410 — Les transformations géométriques | L'Atelier du Devoir</title>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{--acc:#0f766e;--acc-pale:#f0fdfa;--acc-mid:#5eead4;--mint:#059669;--mint-pale:#d1fae5;--mint-deep:#047857;--coral:#dc2626;--coral-pale:#fee2e2;--text:#1e293b;--text-light:#64748b;--radius:12px;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Lato',sans-serif;background:#f0fdfa;color:var(--text);font-size:16px;line-height:1.65;}
+.print-bar{position:fixed;right:16px;top:50%;transform:translateY(-50%);z-index:200;display:flex;flex-direction:column;gap:8px;}
+.print-btn{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:8px;font-family:'Lato',sans-serif;font-weight:700;font-size:.78rem;border:none;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.15);}
+.print-btn-lecon{background:#d97706;color:white;}.print-btn-eval{background:#9f1239;color:white;}
+@media(max-width:600px){.print-bar{right:6px;}.print-btn{font-size:0;width:40px;height:40px;padding:0;justify-content:center;}.print-btn span.lbl{display:none;}.print-btn span.ico{font-size:1.1rem;}}
+.header{background:white;border-bottom:2px solid var(--acc-pale);position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.06);}
+.header-top{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;}
+.logo{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--acc);text-decoration:none;}
+.score-badge{background:var(--acc);color:white;font-weight:700;font-size:.85rem;padding:5px 14px;border-radius:6px;}
+.steps-wrap{padding:0 20px 8px;}
+.steps{display:flex;gap:3px;}
+.step{flex:1;height:5px;border-radius:4px;background:var(--acc-pale);transition:all .35s;}
+.step.done{background:var(--mint);}.step.active{background:var(--acc);}
+.steps-labels{display:flex;gap:3px;padding-top:3px;}
+.step-lbl{flex:1;font-size:.48rem;font-weight:700;color:var(--text-light);text-align:center;text-transform:uppercase;letter-spacing:.03em;}
+.main{max-width:760px;margin:0 auto;padding:28px 16px 100px;}
+.phase{display:none;}.phase.active{display:block;}
+.accroche{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:22px 24px;margin-bottom:22px;display:flex;gap:16px;align-items:flex-start;}
+.accroche-icon{font-size:2.4rem;flex-shrink:0;}
+.accroche-text h1{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--acc);margin-bottom:6px;}
+.accroche-text p{color:var(--text-light);font-size:.92rem;line-height:1.5;}
+.meta-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+.meta-tag{background:var(--acc-pale);border-radius:4px;padding:3px 10px;font-size:.72rem;font-weight:700;color:var(--acc);text-transform:uppercase;letter-spacing:.04em;}
+.lecon-card{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:22px;margin-bottom:18px;}
+.lecon-card h2{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--acc);margin-bottom:14px;border-bottom:2px solid var(--acc-pale);padding-bottom:8px;}
+.lecon-block{display:none;}.lecon-block.revealed{display:block;}
+.lecon-subtitle{font-weight:900;font-size:1rem;color:var(--acc);margin-bottom:10px;margin-top:6px;}
+.sep{margin:18px 0;border:none;border-top:1px solid var(--acc-pale);}
+.analogie{font-size:.92rem;color:var(--text-light);font-style:italic;margin-bottom:12px;line-height:1.6;background:#f0fdfa;border-radius:8px;padding:10px 14px;border-left:3px solid var(--acc-mid);}
+.def-box{border-left:4px solid var(--acc);background:var(--acc-pale);border-radius:0 var(--radius) var(--radius) 0;padding:14px 16px;margin-bottom:12px;}
+.def-box h4{font-weight:900;color:var(--acc);font-size:.9rem;margin-bottom:6px;}
+.def-box p{font-size:.88rem;color:var(--text);line-height:1.7;}
+.exemple-ligne{background:white;border:1px solid #e2e8f0;border-radius:8px;padding:10px 16px;font-size:.95rem;margin-bottom:6px;line-height:1.8;display:flex;align-items:center;gap:12px;}
+.exemple-ligne .tag{background:var(--acc);color:white;font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:4px;text-transform:uppercase;flex-shrink:0;}
+.hl{background:var(--acc-pale);color:var(--acc);border-radius:4px;padding:1px 6px;font-weight:700;}
+.astuce{background:#fefce8;border:1px solid #fde68a;border-radius:8px;padding:11px 14px;font-size:.85rem;margin-top:8px;color:#78350f;}
+.astuce strong{color:#92400e;}
+.piege{background:#fff1f2;border:1px solid #fecdd3;border-radius:8px;padding:11px 14px;font-size:.85rem;margin-top:8px;color:#9f1239;}
+.piege strong{color:#be123c;}
+.transfo-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0;}
+@media(max-width:480px){.transfo-grid{grid-template-columns:1fr;}}
+.transfo-card{background:white;border:1px solid #e2e8f0;border-radius:10px;padding:12px;text-align:center;}
+.transfo-card h4{font-size:.85rem;font-weight:900;margin-bottom:6px;}
+.transfo-card p{font-size:.78rem;color:var(--text-light);line-height:1.5;}
+.btn-compris{margin-top:18px;padding:11px 26px;border-radius:8px;font-family:'Lato',sans-serif;font-weight:700;font-size:.9rem;background:var(--acc);color:white;border:none;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:8px;}
+.btn-compris:hover{background:#0d6b63;transform:translateY(-1px);}
+.btn-compris:disabled{opacity:.4;cursor:default;transform:none;}
+.mascot-msg{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:13px 16px;margin:14px 0;display:flex;align-items:flex-start;gap:10px;}
+.mascot-msg .emo{font-size:1.6rem;flex-shrink:0;}
+.mascot-msg p{font-size:.88rem;color:var(--text-light);line-height:1.6;}
+.ex-header-box{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:16px 20px;margin-bottom:16px;}
+.ex-header-box h2{font-family:'Playfair Display',serif;font-size:1.15rem;color:var(--acc);margin-bottom:4px;}
+.ex-header-box p{color:var(--text-light);font-size:.85rem;}
+.guided-problem{background:white;border:2px solid var(--acc);border-radius:var(--radius);padding:20px;margin-bottom:16px;}
+.guided-problem-title{font-size:1.05rem;font-weight:900;color:var(--acc);margin-bottom:16px;background:var(--acc-pale);padding:10px 14px;border-radius:8px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.tries-left{font-size:.75rem;font-weight:700;color:var(--coral);background:var(--coral-pale);padding:2px 8px;border-radius:4px;margin-left:auto;}
+.step-container{display:flex;flex-direction:column;gap:10px;}
+.step-box{border:2px solid #e2e8f0;border-radius:10px;padding:14px 16px;transition:all .3s;opacity:.5;pointer-events:none;}
+.step-box.active{opacity:1;pointer-events:all;border-color:var(--acc-mid);}
+.step-box.correct{border-color:var(--mint);background:var(--mint-pale);opacity:1;}
+.step-num{font-size:.65rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;}
+.step-question{font-size:.95rem;font-weight:700;margin-bottom:10px;line-height:1.6;}
+.step-hint{font-size:.83rem;color:#92400e;background:#fef3c7;border-radius:6px;padding:8px 12px;margin-bottom:8px;display:none;}
+.step-hint.show{display:block;}
+.step-qcm-opts{display:flex;flex-direction:column;gap:6px;}
+.step-qcm-opt{padding:9px 14px;border-radius:8px;border:2px solid #e2e8f0;background:white;font-family:'Lato',sans-serif;font-weight:600;font-size:.9rem;cursor:pointer;text-align:left;transition:all .2s;}
+.step-qcm-opt:hover:not(:disabled){border-color:var(--acc);background:var(--acc-pale);}
+.step-qcm-opt:disabled{cursor:default;}
+.step-qcm-opt.opt-correct{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.step-qcm-opt.opt-wrong{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
+.step-input-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.step-input{border:2px solid var(--acc);border-radius:6px;padding:8px 12px;font-family:'Lato',monospace;font-weight:700;font-size:1rem;color:var(--text);background:white;outline:none;min-width:100px;max-width:200px;text-align:center;}
+.step-input:disabled{border-color:#e2e8f0;background:#f8fafc;color:var(--text-light);}
+.step-input.input-ok{border-color:var(--mint);background:var(--mint-pale);}
+.step-input.input-ko{border-color:var(--coral);}
+.btn-step-check{padding:8px 16px;border-radius:6px;font-family:'Lato',sans-serif;font-weight:700;font-size:.85rem;background:var(--acc);color:white;border:none;cursor:pointer;}
+.btn-step-check:disabled{opacity:.4;cursor:not-allowed;}
+.step-fb{margin-top:8px;padding:8px 12px;border-radius:6px;font-size:.83rem;font-weight:700;display:none;}
+.step-fb.show{display:block;}
+.step-fb.fb-ok{background:var(--mint-pale);color:var(--mint-deep);}
+.step-fb.fb-ko{background:var(--coral-pale);color:#b91c1c;}
+.reset-msg{background:#fff;border:2px solid var(--acc);border-radius:var(--radius);padding:22px 24px;text-align:center;margin-bottom:16px;display:none;}
+.reset-msg.show{display:block;}
+.reset-msg .ugo{font-size:2.5rem;margin-bottom:8px;}
+.reset-msg h3{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--acc);margin-bottom:8px;}
+.reset-msg p{color:var(--text-light);font-size:.9rem;margin-bottom:14px;line-height:1.6;}
+.btn-restart{padding:10px 24px;border-radius:8px;font-family:'Lato',sans-serif;font-weight:700;font-size:.9rem;background:var(--acc);color:white;border:none;cursor:pointer;}
+.free-ex-card{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:18px;margin-bottom:14px;}
+.free-ex-label{font-size:.7rem;font-weight:700;color:var(--acc);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;}
+.free-ex-question{font-size:.95rem;font-weight:700;margin-bottom:12px;background:var(--acc-pale);border-radius:8px;padding:11px 14px;line-height:1.8;}
+.free-classify-btns{display:flex;gap:8px;flex-wrap:wrap;}
+.free-classify-btn{padding:9px 16px;border-radius:6px;font-family:'Lato',sans-serif;font-weight:700;font-size:.85rem;border:2px solid #e2e8f0;background:white;cursor:pointer;transition:all .2s;flex:1;text-align:center;}
+.free-classify-btn:hover{border-color:var(--acc);background:var(--acc-pale);}
+.free-classify-btn.ans-correct{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.free-classify-btn.ans-wrong{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
+.free-classify-btn.ans-reveal{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.free-input-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.free-input{border:2px solid var(--acc);border-radius:6px;padding:8px 12px;font-family:'Lato',monospace;font-weight:700;font-size:1rem;color:var(--text);background:white;outline:none;min-width:100px;max-width:180px;text-align:center;}
+.free-input:disabled{border-color:#e2e8f0;background:#f8fafc;}
+.free-input.free-ok{border-color:var(--mint);background:var(--mint-pale);}
+.free-input.free-ko{border-color:var(--coral);background:var(--coral-pale);}
+.btn-free-check{padding:8px 16px;border-radius:6px;font-family:'Lato',sans-serif;font-weight:700;font-size:.85rem;background:var(--acc);color:white;border:none;cursor:pointer;}
+.jugement-opts{display:flex;flex-direction:column;gap:8px;}
+.jugement-opt-btn{padding:11px 16px;border-radius:8px;border:2px solid #e2e8f0;background:white;font-family:'Lato',sans-serif;font-size:.92rem;cursor:pointer;text-align:left;transition:all .2s;line-height:1.6;}
+.jugement-opt-btn:hover{border-color:var(--acc);background:var(--acc-pale);}
+.jugement-opt-btn.jug-correct{border-color:var(--mint);background:var(--mint-pale);}
+.jugement-opt-btn.jug-wrong{border-color:var(--coral);background:var(--coral-pale);}
+.free-fb{margin-top:10px;padding:9px 13px;border-radius:8px;font-size:.84rem;font-weight:700;display:none;}
+.free-fb.show{display:block;}
+.free-fb.fb-ok{background:var(--mint-pale);color:var(--mint-deep);}
+.free-fb.fb-ko{background:var(--coral-pale);color:#b91c1c;}
+.btn-suivant{margin-top:14px;padding:10px 22px;border-radius:8px;font-family:'Lato',sans-serif;font-weight:700;font-size:.88rem;background:var(--acc);color:white;border:none;cursor:pointer;display:none;align-items:center;gap:8px;transition:all .2s;}
+.btn-suivant.show{display:inline-flex;}
+.btn-suivant:hover{background:#0d6b63;}
+.bilan-card{background:white;border:1px solid #e2e8f0;border-radius:var(--radius);padding:28px 24px;text-align:center;}
+.bilan-icon{font-size:3.5rem;margin-bottom:12px;display:block;}
+.bilan-title{font-family:'Playfair Display',serif;font-size:1.8rem;margin-bottom:6px;color:var(--acc);}
+.bilan-msg{color:var(--text-light);font-size:.95rem;margin-bottom:20px;}
+.stars-row{display:flex;justify-content:center;gap:10px;margin-bottom:20px;}
+.star-big{font-size:2.5rem;filter:grayscale(1);transition:all .5s;}
+.star-big.earned{filter:none;animation:starPop .5s ease both;}
+@keyframes starPop{0%{transform:scale(0);}60%{transform:scale(1.2);}100%{transform:scale(1);}}
+.score-circle{width:100px;height:100px;border-radius:50%;background:var(--acc);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 20px;color:white;}
+.score-num{font-family:'Playfair Display',serif;font-size:1.8rem;line-height:1;}
+.score-sub{font-size:.65rem;opacity:.8;}
+.memo-card{background:var(--acc-pale);border-radius:var(--radius);padding:16px 20px;margin:18px 0;text-align:left;}
+.memo-card h3{font-weight:700;font-size:.85rem;color:var(--acc);margin-bottom:10px;text-transform:uppercase;letter-spacing:.04em;}
+.memo-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media(max-width:480px){.memo-grid{grid-template-columns:1fr;}}
+.memo-item{background:white;border-radius:8px;padding:10px 12px;font-size:.82rem;border:1px solid #e2e8f0;}
+.memo-item strong{color:var(--acc);}
+.bilan-btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:16px;}
+.btn-act{padding:10px 20px;border-radius:8px;font-family:'Lato',sans-serif;font-weight:700;font-size:.85rem;cursor:pointer;border:none;transition:all .2s;}
+.btn-act.primary{background:var(--acc);color:white;}
+.btn-act.secondary{background:var(--acc-pale);color:var(--acc);border:2px solid var(--acc);}
+.btn-act:hover{transform:translateY(-1px);}
+.confetti-piece{position:fixed;border-radius:2px;top:-20px;animation:fall linear both;pointer-events:none;z-index:9999;}
+@keyframes fall{0%{transform:translateY(0) rotate(0deg);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
+@media print{.print-bar,.btn-compris,.btn-suivant,.bilan-card,.mascot-msg{display:none!important;}body{background:white;}.phase{display:block!important;}}
+</style>
+</head>
+<body>
+<div class="print-bar">
+  <button class="print-btn print-btn-lecon" onclick="window.print()"><span class="ico">📖</span><span class="lbl">Leçon</span></button>
+  <button class="print-btn print-btn-eval" onclick="window.print()"><span class="ico">📝</span><span class="lbl">Exercices</span></button>
+</div>
+<header class="header">
+  <div class="header-top">
+    <a href="../12-15ans.html" class="logo">🦉 L'Atelier du Devoir</a>
+    <div class="score-badge">⭐ <span id="score-display">0</span> pts</div>
+  </div>
+  <div class="steps-wrap">
+    <div class="steps">
+      <div class="step active" id="step-0"></div><div class="step" id="step-1"></div><div class="step" id="step-2"></div>
+      <div class="step" id="step-3"></div><div class="step" id="step-4"></div><div class="step" id="step-5"></div>
+    </div>
+    <div class="steps-labels">
+      <div class="step-lbl">Leçon</div><div class="step-lbl">Guidé 1</div><div class="step-lbl">Guidé 2</div>
+      <div class="step-lbl">Exercices</div><div class="step-lbl">+ Exercices</div><div class="step-lbl">Bilan</div>
+    </div>
+  </div>
+</header>
+<main class="main">
+
+<div class="accroche">
+  <div class="accroche-icon">🔄</div>
+  <div class="accroche-text">
+    <h1>Les transformations géométriques</h1>
+    <p>Symétrie axiale, symétrie centrale, rotation et translation : déplacer et transformer des figures en conservant leurs propriétés.</p>
+    <div class="meta-row">
+      <span class="meta-tag">5e</span><span class="meta-tag">~30 min</span>
+      <span class="meta-tag">⭐⭐ Difficulté</span><span class="meta-tag">Mathématiques</span>
+    </div>
+  </div>
+</div>
+
+<!-- LEÇON -->
+<div class="phase active" id="phase-lecon">
+  <div class="lecon-card">
+    <h2>📖 La leçon</h2>
+
+    <!-- BLOC 0 : Symétries -->
+    <div class="lecon-block revealed" id="bloc-0">
+      <div class="lecon-subtitle">① Symétrie axiale et symétrie centrale</div>
+      <div class="analogie">🪞 La symétrie axiale, c'est un miroir : tu te retournes par rapport à un axe. La symétrie centrale, c'est une rotation de 180° autour d'un point central — comme retourner une feuille à 180°.</div>
+
+      <!-- Schémas côte à côte -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0;">
+        <!-- Symétrie axiale -->
+        <div style="background:#f0fdfa;border-radius:10px;padding:8px;text-align:center;">
+          <div style="font-weight:900;color:#0f766e;font-size:.82rem;margin-bottom:6px;">Symétrie axiale</div>
+          <svg viewBox="0 0 130 120" xmlns="http://www.w3.org/2000/svg" style="max-width:130px;display:block;margin:0 auto;">
+            <!-- Axe de symétrie vertical -->
+            <line x1="65" y1="5" x2="65" y2="115" stroke="#0f766e" stroke-width="2" stroke-dasharray="5,3"/>
+            <text x="68" y="12" font-size="8" fill="#0f766e">axe</text>
+            <!-- Figure A (gauche) -->
+            <polygon points="10,30 45,20 40,70 10,75" fill="#d1fae5" stroke="#059669" stroke-width="1.8"/>
+            <text x="22" y="52" font-size="11" fill="#059669" font-weight="bold">A</text>
+            <!-- Figure A' (droite = symétrique) -->
+            <polygon points="120,30 85,20 90,70 120,75" fill="#fce7f3" stroke="#9f1239" stroke-width="1.8"/>
+            <text x="98" y="52" font-size="11" fill="#9f1239" font-weight="bold">A'</text>
+            <!-- Tirets perpendiculaires -->
+            <line x1="20" y1="30" x2="110" y2="30" stroke="#94a3b8" stroke-width="0.8" stroke-dasharray="2,2"/>
+            <line x1="10" y1="55" x2="120" y2="55" stroke="#94a3b8" stroke-width="0.8" stroke-dasharray="2,2"/>
+          </svg>
+          <div style="font-size:.72rem;color:#64748b;margin-top:4px;">A et A' sont symétriques<br>par rapport à l'axe</div>
+        </div>
+        <!-- Symétrie centrale -->
+        <div style="background:#f0fdfa;border-radius:10px;padding:8px;text-align:center;">
+          <div style="font-weight:900;color:#0f766e;font-size:.82rem;margin-bottom:6px;">Symétrie centrale</div>
+          <svg viewBox="0 0 130 120" xmlns="http://www.w3.org/2000/svg" style="max-width:130px;display:block;margin:0 auto;">
+            <!-- Centre O -->
+            <circle cx="65" cy="60" r="4" fill="#0f766e"/>
+            <text x="68" y="57" font-size="9" fill="#0f766e" font-weight="bold">O</text>
+            <!-- Figure B (haut-gauche) -->
+            <polygon points="15,15 45,10 40,45 15,48" fill="#d1fae5" stroke="#059669" stroke-width="1.8"/>
+            <text x="25" y="34" font-size="11" fill="#059669" font-weight="bold">B</text>
+            <!-- Figure B' (bas-droite = symétrique par O) -->
+            <polygon points="115,105 85,110 90,75 115,72" fill="#fce7f3" stroke="#9f1239" stroke-width="1.8"/>
+            <text x="93" y="96" font-size="11" fill="#9f1239" font-weight="bold">B'</text>
+            <!-- Diagonale passant par O -->
+            <line x1="30" y1="28" x2="100" y2="92" stroke="#94a3b8" stroke-width="0.9" stroke-dasharray="3,2"/>
+          </svg>
+          <div style="font-size:.72rem;color:#64748b;margin-top:4px;">B et B' sont symétriques<br>par rapport au point O</div>
+        </div>
+      </div>
+
+      <div class="def-box">
+        <h4>🔑 Propriétés communes aux deux symétries</h4>
+        <p>
+        • La figure image est <strong>congruente</strong> à la figure originale (même forme, même taille)<br>
+        • Les longueurs et les angles sont <strong>conservés</strong><br>
+        • <strong>Symétrie axiale :</strong> le milieu de [AA'] est sur l'axe, et AA' est perpendiculaire à l'axe<br>
+        • <strong>Symétrie centrale :</strong> O est le milieu de [BB'] pour chaque point B et son image B'
+        </p>
+      </div>
+
+      <div class="piege"><strong>⚠ Ne pas confondre :</strong> la symétrie axiale retourne la figure (comme un reflet), la symétrie centrale la fait pivoter de 180° — elle peut sembler identique selon la figure !</div>
+      <button class="btn-compris" onclick="revealBloc(1)">Bloc suivant →</button>
+    </div>
+
+    <!-- BLOC 1 : Translation -->
+    <div class="lecon-block" id="bloc-1">
+      <hr class="sep">
+      <div class="lecon-subtitle">② La translation</div>
+      <div class="analogie">🚂 Un train qui avance sur des rails droits : chaque point du train se déplace de la même distance dans la même direction. C'est une translation — tout se déplace ensemble, sans tourner.</div>
+
+      <!-- Schéma translation -->
+      <svg viewBox="0 0 280 110" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:12px auto;max-width:280px;background:#f0fdfa;border-radius:10px;padding:6px;">
+        <!-- Figure originale -->
+        <polygon points="20,30 60,20 55,70 20,75" fill="#d1fae5" stroke="#059669" stroke-width="2"/>
+        <text x="32" y="52" font-size="11" fill="#059669" font-weight="bold">C</text>
+        <!-- Figure translatée -->
+        <polygon points="160,30 200,20 195,70 160,75" fill="#fce7f3" stroke="#9f1239" stroke-width="2"/>
+        <text x="172" y="52" font-size="11" fill="#9f1239" font-weight="bold">C'</text>
+        <!-- Vecteur de translation -->
+        <defs>
+          <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#0f766e"/>
+          </marker>
+        </defs>
+        <line x1="40" y1="47" x2="168" y2="47" stroke="#0f766e" stroke-width="2.5" marker-end="url(#arr)"/>
+        <text x="90" y="42" font-size="10" fill="#0f766e" font-weight="bold" text-anchor="middle">vecteur t⃗</text>
+        <!-- Points correspondants -->
+        <line x1="20" y1="30" x2="160" y2="30" stroke="#94a3b8" stroke-width="0.8" stroke-dasharray="3,2"/>
+        <line x1="60" y1="20" x2="200" y2="20" stroke="#94a3b8" stroke-width="0.8" stroke-dasharray="3,2"/>
+        <line x1="20" y1="75" x2="160" y2="75" stroke="#94a3b8" stroke-width="0.8" stroke-dasharray="3,2"/>
+        <text x="8" y="26" font-size="8" fill="#059669">A</text>
+        <text x="155" y="26" font-size="8" fill="#9f1239">A'</text>
+      </svg>
+
+      <div class="def-box">
+        <h4>🔑 Translation</h4>
+        <p>
+        Une <strong>translation</strong> est définie par un <strong>vecteur</strong> t⃗ qui indique la direction, le sens et la distance du déplacement.<br>
+        Si t⃗ = (a ; b), alors chaque point (x ; y) devient (x+a ; y+b).<br>
+        • Propriétés conservées : longueurs, angles, aires, orientation
+        </p>
+      </div>
+
+      <div class="exemple-ligne"><span class="tag">Exemple</span> t⃗ = (+3 ; −2) : tout point se déplace de 3 vers la droite et 2 vers le bas</div>
+      <div class="exemple-ligne"><span class="tag">Coordonnées</span> A(1 ; 5) → A'(1+3 ; 5−2) = <span class="hl">A'(4 ; 3)</span></div>
+
+      <div class="astuce"><strong>💡 Signe du vecteur :</strong> + vers la droite / vers le haut, − vers la gauche / vers le bas (selon convention habituelle).</div>
+      <button class="btn-compris" onclick="revealBloc(2)">Bloc suivant →</button>
+    </div>
+
+    <!-- BLOC 2 : Rotation -->
+    <div class="lecon-block" id="bloc-2">
+      <hr class="sep">
+      <div class="lecon-subtitle">③ La rotation</div>
+      <div class="analogie">🎡 Une grande roue tourne autour de son centre. Chaque siège parcourt le même angle, reste à la même distance du centre — c'est une rotation. Le sens (horaire ou anti-horaire) et l'angle définissent tout.</div>
+
+      <!-- Schéma rotation -->
+      <svg viewBox="0 0 240 180" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:12px auto;max-width:240px;background:#f0fdfa;border-radius:10px;padding:6px;">
+        <!-- Centre O -->
+        <circle cx="120" cy="120" r="5" fill="#0f766e"/>
+        <text x="124" y="118" font-size="10" fill="#0f766e" font-weight="bold">O</text>
+        <!-- Figure originale D (droite) -->
+        <polygon points="170,50 200,40 195,80 170,85" fill="#d1fae5" stroke="#059669" stroke-width="2"/>
+        <text x="179" y="66" font-size="11" fill="#059669" font-weight="bold">D</text>
+        <!-- Figure D' (après rotation 90° anti-horaire) -->
+        <polygon points="40,90 50,60 85,65 80,90" fill="#fce7f3" stroke="#9f1239" stroke-width="2"/>
+        <text x="52" y="82" font-size="11" fill="#9f1239" font-weight="bold">D'</text>
+        <!-- Rayon vers D -->
+        <line x1="120" y1="120" x2="182" y2="65" stroke="#059669" stroke-width="1.5" stroke-dasharray="4,2"/>
+        <!-- Rayon vers D' -->
+        <line x1="120" y1="120" x2="63" y2="75" stroke="#9f1239" stroke-width="1.5" stroke-dasharray="4,2"/>
+        <!-- Arc angle rotation : O=(120,120), P1=(182,65), P2=(63,75) -->
+        <!-- Vecteur OP1 = (62,-55), angle = atan2(-55,62) ≈ -41.5° -->
+        <!-- Vecteur OP2 = (-57,-45), angle = atan2(-45,-57) ≈ -141.7° -->
+        <!-- Arc anti-horaire de -41.5° à -141.7° : diff = -100.2° -->
+        <!-- Points sur arc rayon=40: -->
+        <!-- P1 sur arc: 120+40*cos(-41.5°)=120+30=150, 120+40*sin(-41.5°)=120-26.5=93.5 -->
+        <!-- P2 sur arc: 120+40*cos(-141.7°)=120-31.4=88.6, 120+40*sin(-141.7°)=120-24.8=95.2 -->
+        <path d="M150,93.5 A40,40 0 0,0 88.6,95.2" fill="none" stroke="#9f1239" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M120,120 L150,93.5 A40,40 0 0,0 88.6,95.2 Z" fill="#fecdd3" opacity="0.35"/>
+        <!-- Label angle au milieu de l'arc (~-91.6°): 120+50*cos(-91.6°)≈120-1.4=118.6, 120+50*sin(-91.6°)≈120-50=70 -->
+        <text x="112" y="74" font-size="13" fill="#9f1239" font-weight="900" font-style="italic">90°</text>
+        <text x="108" y="165" font-size="9" fill="#64748b" text-anchor="middle">Rotation 90° anti-horaire</text>
+      </svg>
+
+      <div class="def-box">
+        <h4>🔑 Rotation</h4>
+        <p>
+        Une <strong>rotation</strong> est définie par :<br>
+        • Un <strong>centre O</strong> (point fixe)<br>
+        • Un <strong>angle</strong> (ex : 90°, 180°, 270°)<br>
+        • Un <strong>sens</strong> : anti-horaire (+) ou horaire (−)<br><br>
+        Propriétés conservées : longueurs, angles, aires. La rotation de 180° = symétrie centrale.
+        </p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;font-size:.82rem;">
+        <div style="background:#d1fae5;border-radius:8px;padding:10px;">
+          <strong style="color:#047857;">Anti-horaire (+)</strong><br>
+          Comme les aiguilles d'une montre à l'envers<br>
+          90°, 180°, 270°...
+        </div>
+        <div style="background:#fce7f3;border-radius:8px;padding:10px;">
+          <strong style="color:#9f1239;">Horaire (−)</strong><br>
+          Comme les aiguilles d'une montre<br>
+          −90°, −180°, −270°...
+        </div>
+      </div>
+
+      <div class="astuce" style="margin-top:10px;"><strong>💡 Astuce :</strong> rotation de 90° anti-horaire → (x ; y) devient (−y ; x). Rotation 180° → (x ; y) devient (−x ; −y).</div>
+      <button class="btn-compris" onclick="goToPhase('guided1',1)">✓ Leçon comprise — À l'entraînement !</button>
+    </div>
+  </div>
+</div>
+
+<!-- GUIDÉ 1 -->
+<div class="phase" id="phase-guided1">
+  <div class="mascot-msg"><span class="emo">🦉</span><p><strong>Exercice guidé 1</strong> — QCM étape par étape. <strong>3 essais</strong> par question. Point uniquement au premier essai correct !</p></div>
+  <div class="ex-header-box"><h2>Identifier et raisonner (QCM)</h2><p>Le problème change à chaque recommencement.</p></div>
+  <div id="g1-reset" class="reset-msg">
+    <div class="ugo">🦉</div><h3>On recommence !</h3>
+    <p>Rappelle-toi les 4 transformations et leurs propriétés clés : symétrie axiale (miroir), symétrie centrale (180°), translation (vecteur), rotation (centre + angle + sens).</p>
+    <button class="btn-restart" onclick="initGuided1()">↺ Recommencer</button>
+  </div>
+  <div id="g1-container"></div>
+  <button class="btn-suivant" id="btn-to-g2" onclick="goToPhase('guided2',2)">Bien joué ! Exercice suivant →</button>
+</div>
+
+<!-- GUIDÉ 2 -->
+<div class="phase" id="phase-guided2">
+  <div class="mascot-msg"><span class="emo">🦉</span><p><strong>Exercice guidé 2</strong> — Tu écris ta réponse. <strong>3 essais</strong> par étape. Point uniquement au premier essai correct !</p></div>
+  <div class="ex-header-box"><h2>Calculer les coordonnées (saisie)</h2><p>Écris les coordonnées sous la forme (x ; y) ou juste la valeur demandée.</p></div>
+  <div id="g2-reset" class="reset-msg">
+    <div class="ugo">🦉</div><h3>On repart !</h3>
+    <p>Translation : ajouter le vecteur. Symétrie centrale par O(a,b) : image de P(x,y) = (2a−x ; 2b−y). Symétrie axiale : réfléchir par rapport à l'axe.</p>
+    <button class="btn-restart" onclick="initGuided2()">↺ Recommencer</button>
+  </div>
+  <div id="g2-container"></div>
+  <button class="btn-suivant" id="btn-to-free" onclick="goToPhase('free',3)">Excellent ! Exercices libres →</button>
+</div>
+
+<!-- LIBRES 1 -->
+<div class="phase" id="phase-free">
+  <div class="mascot-msg"><span class="emo">🦉</span><p><strong>Exercices libres</strong> — 5 exercices variés sans aide. Chaque bonne réponse compte !</p></div>
+  <div id="free1-container"></div>
+  <button class="btn-suivant" id="btn-to-free2" onclick="goToPhase('free2',4)">Encore des exercices →</button>
+</div>
+
+<!-- LIBRES 2 -->
+<div class="phase" id="phase-free2">
+  <div class="mascot-msg"><span class="emo">🦉</span><p><strong>Entraînement supplémentaire</strong> — 5 exercices de plus. Tu y es presque !</p></div>
+  <div id="free2-container"></div>
+  <button class="btn-suivant" id="btn-to-bilan" onclick="goToPhase('bilan',5)">🌟 Voir mon bilan</button>
+</div>
+
+<!-- BILAN -->
+<div class="phase" id="phase-bilan">
+  <div class="bilan-card">
+    <span class="bilan-icon">🔄</span>
+    <h2 class="bilan-title" id="bilan-title">Résultat</h2>
+    <p class="bilan-msg" id="bilan-msg"></p>
+    <div class="stars-row"><span class="star-big" id="star1">⭐</span><span class="star-big" id="star2">⭐</span><span class="star-big" id="star3">⭐</span></div>
+    <div class="score-circle"><span class="score-num" id="bilan-score">0</span><span class="score-sub" id="bilan-total-txt">/ 0 pts</span></div>
+    <div class="memo-card">
+      <h3>Mémo — Les 4 transformations</h3>
+      <div class="memo-grid">
+        <div class="memo-item"><strong>Symétrie axiale</strong><br>Miroir par rapport à un axe<br>AA' ⊥ axe, milieu sur l'axe</div>
+        <div class="memo-item"><strong>Symétrie centrale</strong><br>Rotation 180° autour de O<br>O = milieu de [BB']</div>
+        <div class="memo-item"><strong>Translation</strong><br>Vecteur t⃗=(a;b)<br>P(x;y)→P'(x+a;y+b)</div>
+        <div class="memo-item"><strong>Rotation</strong><br>Centre O + angle + sens<br>180°=sym. centrale</div>
+      </div>
+    </div>
+    <div class="bilan-btns">
+      <button class="btn-act secondary" onclick="location.reload()">↺ Recommencer</button>
+      <button class="btn-act primary" onclick="location.href='../12-15ans.html'">← Retour aux fiches</button>
+    </div>
+  </div>
+</div>
+</main>
+
+<script>
+// ════ SVGs pour les guidés ════
+
+// SVG symétrie axiale : axe vertical, point P et son image P'
+function svgAxiale(Px, Py, label_P, label_Pp, axeX) {
+  var Ppx = 2*axeX - Px;
+  return `<svg viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:10px auto;max-width:200px;background:#f0fdfa;border-radius:8px;padding:4px;">
+  <line x1="${axeX}" y1="5" x2="${axeX}" y2="125" stroke="#0f766e" stroke-width="2" stroke-dasharray="5,3"/>
+  <text x="${axeX+3}" y="14" font-size="8" fill="#0f766e">axe</text>
+  <circle cx="${Px}" cy="${Py}" r="5" fill="#059669"/>
+  <text x="${Px-14}" y="${Py+4}" font-size="12" fill="#059669" font-weight="bold">${label_P}</text>
+  <circle cx="${Ppx}" cy="${Py}" r="5" fill="#9f1239" stroke="white" stroke-width="1.5"/>
+  <text x="${Ppx+7}" y="${Py+4}" font-size="12" fill="#9f1239" font-weight="bold">${label_Pp} = ?</text>
+  <line x1="${Px}" y1="${Py}" x2="${Ppx}" y2="${Py}" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,2"/>
+  <circle cx="${axeX}" cy="${Py}" r="2.5" fill="#0f766e"/>
+</svg>`;
+}
+
+// SVG symétrie centrale : centre O, point B et image B'
+function svgCentrale(Bx, By, Ox, Oy, label_B) {
+  var Bpx = 2*Ox - Bx, Bpy = 2*Oy - By;
+  return `<svg viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:10px auto;max-width:200px;background:#f0fdfa;border-radius:8px;padding:4px;">
+  <circle cx="${Ox}" cy="${Oy}" r="5" fill="#0f766e"/>
+  <text x="${Ox+6}" y="${Oy-2}" font-size="10" fill="#0f766e" font-weight="bold">O</text>
+  <circle cx="${Bx}" cy="${By}" r="5" fill="#059669"/>
+  <text x="${Bx-14}" y="${By+4}" font-size="12" fill="#059669" font-weight="bold">${label_B}</text>
+  <circle cx="${Bpx}" cy="${Bpy}" r="5" fill="#9f1239" stroke="white" stroke-width="1.5"/>
+  <text x="${Bpx+7}" y="${Bpy+4}" font-size="12" fill="#9f1239" font-weight="bold">${label_B}' = ?</text>
+  <line x1="${Bx}" y1="${By}" x2="${Bpx}" y2="${Bpy}" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,2"/>
+</svg>`;
+}
+
+// SVG translation : point P et vecteur vers P'
+function svgTranslation(Px, Py, dx, dy, label_P) {
+  var Ppx = Px+dx, Ppy = Py+dy;
+  return `<svg viewBox="0 0 220 130" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:10px auto;max-width:220px;background:#f0fdfa;border-radius:8px;padding:4px;">
+  <defs><marker id="arrt" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#0f766e"/></marker></defs>
+  <circle cx="${Px}" cy="${Py}" r="5" fill="#059669"/>
+  <text x="${Px-14}" y="${Py+4}" font-size="12" fill="#059669" font-weight="bold">${label_P}</text>
+  <circle cx="${Ppx}" cy="${Ppy}" r="5" fill="#9f1239" stroke="white" stroke-width="1.5"/>
+  <text x="${Ppx+7}" y="${Ppy+4}" font-size="12" fill="#9f1239" font-weight="bold">${label_P}' = ?</text>
+  <line x1="${Px}" y1="${Py}" x2="${Ppx-6*Math.sign(dx)}" y2="${Ppy-6*Math.sign(dy)}" stroke="#0f766e" stroke-width="2.5" marker-end="url(#arrt)" stroke-linecap="round"/>
+  <text x="${(Px+Ppx)/2}" y="${(Py+Ppy)/2-8}" font-size="9" fill="#0f766e" font-weight="bold" text-anchor="middle">t⃗=(${dx>0?'+':''}${dx} ; ${dy>0?'+':''}${dy})</text>
+</svg>`;
+}
+
+// ════ GUIDÉ 1 — QCM (4 variantes) ════
+var G1=[
+  {titre:"Quelle transformation envoie A sur A' ?",
+   svg:`<svg viewBox="0 0 220 130" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:10px auto;max-width:220px;background:#f0fdfa;border-radius:8px;padding:4px;">
+  <line x1="110" y1="5" x2="110" y2="125" stroke="#0f766e" stroke-width="2" stroke-dasharray="5,3"/>
+  <polygon points="20,30 55,20 50,75 20,78" fill="#d1fae5" stroke="#059669" stroke-width="1.8"/>
+  <text x="32" y="53" font-size="11" fill="#059669" font-weight="bold">A</text>
+  <polygon points="200,30 165,20 170,75 200,78" fill="#fce7f3" stroke="#9f1239" stroke-width="1.8"/>
+  <text x="175" y="53" font-size="11" fill="#9f1239" font-weight="bold">A'</text>
+  <line x1="20" y1="30" x2="200" y2="30" stroke="#94a3b8" stroke-width="0.7" stroke-dasharray="2,2"/>
+  <line x1="20" y1="78" x2="200" y2="78" stroke="#94a3b8" stroke-width="0.7" stroke-dasharray="2,2"/>
+</svg>`,
+   etapes:[
+    {q:"Étape 1 — A et A' semblent être le reflet l'un de l'autre par rapport à la ligne verticale. Quel type de symétrie est-ce ?",
+     opts:["Symétrie axiale (par rapport à l'axe vertical)","Symétrie centrale","Translation"],
+     ok:0,hint:"Un axe vertical sépare les deux figures comme un miroir.",
+     expl_ok:"C'est une symétrie axiale : l'axe vertical est l'axe de symétrie entre A et A'.",
+     expl_ko:"L'axe vertical agit comme un miroir → symétrie axiale."},
+    {q:"Étape 2 — Dans une symétrie axiale, le segment [AA'] est-il perpendiculaire ou parallèle à l'axe ?",
+     opts:["Perpendiculaire à l'axe","Parallèle à l'axe","Oblique quelconque"],
+     ok:0,hint:"Par définition, [PP'] est toujours perpendiculaire à l'axe de symétrie.",
+     expl_ok:"[AA'] ⊥ axe. De plus, l'axe coupe [AA'] en son milieu.",
+     expl_ko:"Propriété fondamentale : [PP'] ⊥ axe et l'axe passe par le milieu de [PP']."},
+    {q:"Étape 3 — Que conserve la symétrie axiale ?",
+     opts:["Les longueurs et les angles","Seulement les longueurs","Seulement la direction"],
+     ok:0,hint:"Toutes les transformations géométriques du cours conservent la forme.",
+     expl_ok:"La symétrie axiale conserve longueurs, angles et aires — la figure image est congruente à l'originale.",
+     expl_ko:"Toutes les isométries conservent longueurs ET angles."}
+  ]},
+  {titre:"Le point B(2 ; 5) est translaté par t⃗=(+4 ; −3). Trouve B'.",
+   svg:svgTranslation(40, 50, 80, -60, "B"),
+   etapes:[
+    {q:"Étape 1 — Pour une translation de vecteur (a ; b), comment calcule-t-on les coordonnées de l'image ?",
+     opts:["x' = x + a et y' = y + b","x' = x × a et y' = y × b","x' = x − a et y' = y − b"],
+     ok:0,hint:"On additionne les composantes du vecteur aux coordonnées du point.",
+     expl_ok:"x' = x + a et y' = y + b. On ajoute chaque composante du vecteur.",
+     expl_ko:"Translation : on AJOUTE le vecteur aux coordonnées."},
+    {q:"Étape 2 — t⃗=(+4 ; −3) et B(2 ; 5). Calcule x' = 2 + 4 = ?",
+     opts:["6","−2","8","1"],
+     ok:0,hint:"2 + 4 = ?",
+     expl_ok:"x' = 2 + 4 = 6.",
+     expl_ko:"2 + 4 = 6."},
+    {q:"Étape 3 — Calcule y' = 5 + (−3) = ?",
+     opts:["2","8","−2","15"],
+     ok:0,hint:"5 + (−3) = 5 − 3 = ?",
+     expl_ok:"y' = 5 − 3 = 2. Donc B'(6 ; 2).",
+     expl_ko:"5 + (−3) = 2."}
+  ]},
+  {titre:"C(3 ; 4) est symétrique de C' par rapport au centre O(0 ; 0). Trouve C'.",
+   svg:svgCentrale(150, 30, 100, 75, "C"),
+   etapes:[
+    {q:"Étape 1 — Dans une symétrie centrale de centre O, quel est le rôle de O par rapport à [CC'] ?",
+     opts:["O est le milieu de [CC']","O est sur la perpendiculaire à [CC']","O est un sommet du triangle"],
+     ok:0,hint:"Définition : O est le milieu du segment [PP'] pour tout point P.",
+     expl_ok:"O est le milieu de [CC']. Donc si O=(0;0) et C=(3;4), on peut trouver C'.",
+     expl_ko:"Propriété fondamentale : O = milieu de [PP'] dans une symétrie centrale."},
+    {q:"Étape 2 — O est le milieu de [CC']. Si O=(0;0) et C=(3;4), alors x_C' = 2×0 − 3 = ?",
+     opts:["−3","3","−6","0"],
+     ok:0,hint:"Milieu de [CC'] = ((xC+xC')/2 ; (yC+yC')/2) = O → xC' = 2×Ox − xC.",
+     expl_ok:"x_C' = 2×0 − 3 = −3.",
+     expl_ko:"Formule milieu : xC' = 2×Ox − xC = 2×0 − 3 = −3."},
+    {q:"Étape 3 — y_C' = 2×0 − 4 = ?",
+     opts:["−4","4","−8","0"],
+     ok:0,hint:"2×0 − 4 = ?",
+     expl_ok:"y_C' = −4. Donc C'(−3 ; −4). Vérif : milieu(C, C') = ((3−3)/2 ; (4−4)/2) = (0;0) = O ✓",
+     expl_ko:"2×0 − 4 = −4."}
+  ]},
+  {titre:"Quelle transformation envoie D sur D' par une rotation de 90° anti-horaire autour de O ?",
+   svg:`<svg viewBox="0 0 200 180" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:10px auto;max-width:200px;background:#f0fdfa;border-radius:8px;padding:4px;">
+  <circle cx="100" cy="100" r="5" fill="#0f766e"/>
+  <text x="104" y="98" font-size="10" fill="#0f766e" font-weight="bold">O</text>
+  <circle cx="160" cy="40" r="5" fill="#059669"/>
+  <text x="163" y="38" font-size="11" fill="#059669" font-weight="bold">D</text>
+  <circle cx="40" cy="40" r="5" fill="#9f1239" stroke="white" stroke-width="1.5"/>
+  <text x="14" y="38" font-size="11" fill="#9f1239" font-weight="bold">D'</text>
+  <line x1="100" y1="100" x2="155" y2="45" stroke="#059669" stroke-width="1.5" stroke-dasharray="4,2"/>
+  <line x1="100" y1="100" x2="45" y2="45" stroke="#9f1239" stroke-width="1.5" stroke-dasharray="4,2"/>
+  <!-- Arc rotation : O=(100,100), D=(160,40) → angle≈-45°, D'=(40,40) → angle≈-135° -->
+  <!-- Rayon OP ≈ 85. Arc rayon 40. -->
+  <!-- Sur arc r=40 : dep=100+40*cos(-45°)=128.3,100+40*sin(-45°)=71.7 ; arr=100+40*cos(-135°)=71.7,71.7 -->
+  <path d="M128.3,71.7 A40,40 0 0,0 71.7,71.7" fill="none" stroke="#9f1239" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M100,100 L128.3,71.7 A40,40 0 0,0 71.7,71.7 Z" fill="#fecdd3" opacity="0.35"/>
+  <text x="90" y="60" font-size="12" fill="#9f1239" font-weight="900" font-style="italic">90°</text>
+</svg>`,
+   etapes:[
+    {q:"Étape 1 — Pour une rotation de 90° anti-horaire autour de O(0;0), D(x;y) devient D'(?,?). Quelle formule s'applique ?",
+     opts:["D'(−y ; x)","D'(y ; −x)","D'(−x ; −y)"],
+     ok:0,hint:"Rotation 90° anti-horaire : (x;y) → (−y ; x).",
+     expl_ok:"Rotation 90° anti-horaire : (x;y) → (−y ; x). C'est la formule à retenir.",
+     expl_ko:"90° anti-horaire : (x;y) → (−y ; x). 180° → (−x;−y). 90° horaire → (y;−x)."},
+    {q:"Étape 2 — D(4 ; 1) tourne de 90° anti-horaire autour de O(0;0). x' = −y = −1. y' = x = 4. D' = ?",
+     opts:["D'(−1 ; 4)","D'(1 ; −4)","D'(−4 ; −1)"],
+     ok:0,hint:"x' = −y = −1, y' = x = 4.",
+     expl_ok:"D'(−1 ; 4). Vérif : OD = OD' (même distance) ✓ et l'angle ∠DOD' = 90° ✓",
+     expl_ko:"x' = −y = −1 et y' = x = 4 → D'(−1 ; 4)."}
+  ]}
+];
+
+// ════ GUIDÉ 2 — Saisie (4 variantes) ════
+var G2=[
+  {titre:"Symétrie axiale par l'axe x=5. P(2 ; 3) → P'(? ; 3).",
+   svg:svgAxiale(40, 65, "P", "P'", 100),
+   etapes:[
+    {q:"Étape 1 — L'axe est x=5 (vertical). Pour trouver x' : x' = 2×5 − xP = 10 − 2 = ?",acc:["8"],
+     hint:"Formule : x' = 2×(position axe) − x du point.",
+     expl_ok:"x' = 10 − 2 = 8. Donc P'(8 ; 3).",
+     expl_ko:"x' = 2×5 − 2 = 8."},
+    {q:"Étape 2 — y' = y du point P = ? (l'axe est vertical, y ne change pas)",acc:["3"],
+     hint:"Symétrie par rapport à un axe vertical : y ne change pas.",
+     expl_ok:"y' = 3. P'(8 ; 3). Vérif : milieu de [PP'] = ((2+8)/2 ; (3+3)/2) = (5 ; 3) sur l'axe x=5 ✓",
+     expl_ko:"Axe vertical → y inchangé : y' = 3."}
+  ]},
+  {titre:"Translation t⃗=(−3 ; +5). Q(6 ; 2) → Q'(? ; ?).",
+   svg:svgTranslation(140, 90, -90, -75, "Q"),
+   etapes:[
+    {q:"Étape 1 — x' = xQ + (−3) = 6 − 3 = ?",acc:["3"],
+     hint:"6 + (−3) = 6 − 3 = ?",
+     expl_ok:"x' = 3.",
+     expl_ko:"6 − 3 = 3."},
+    {q:"Étape 2 — y' = yQ + 5 = 2 + 5 = ?",acc:["7"],
+     hint:"2 + 5 = ?",
+     expl_ok:"y' = 7. Donc Q'(3 ; 7).",
+     expl_ko:"2 + 5 = 7."},
+    {q:"Étape 3 — Écris les coordonnées complètes de Q' sous la forme (x ; y).",acc:["(3;7)","(3 ; 7)","3;7"],
+     hint:"x'=3 et y'=7.",
+     expl_ok:"Q'(3 ; 7). ✓",
+     expl_ko:"x'=3 et y'=7 → Q'(3 ; 7)."}
+  ]},
+  {titre:"Symétrie centrale de centre O(4 ; 2). R(7 ; 5) → R'(? ; ?).",
+   svg:svgCentrale(150, 30, 100, 80, "R"),
+   etapes:[
+    {q:"Étape 1 — x' = 2×Ox − xR = 2×4 − 7 = 8 − 7 = ?",acc:["1"],
+     hint:"2×4 = 8. 8 − 7 = ?",
+     expl_ok:"x' = 1.",
+     expl_ko:"2×4 − 7 = 8 − 7 = 1."},
+    {q:"Étape 2 — y' = 2×Oy − yR = 2×2 − 5 = 4 − 5 = ?",acc:["-1","−1"],
+     hint:"2×2 = 4. 4 − 5 = ?",
+     expl_ok:"y' = −1. Donc R'(1 ; −1).",
+     expl_ko:"4 − 5 = −1."},
+    {q:"Étape 3 — Écris les coordonnées de R'.",acc:["(1;-1)","(1 ; -1)","(1;−1)","1;-1"],
+     hint:"x'=1 et y'=−1.",
+     expl_ok:"R'(1 ; −1). Vérif : milieu(R, R') = ((7+1)/2 ; (5−1)/2) = (4 ; 2) = O ✓",
+     expl_ko:"x'=1 et y'=−1 → R'(1;−1)."}
+  ]},
+  {titre:"Rotation 90° anti-horaire autour de O(0;0). S(3 ; −2) → S'(? ; ?).",
+   svg:`<svg viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:10px auto;max-width:200px;background:#f0fdfa;border-radius:8px;padding:4px;">
+  <circle cx="100" cy="80" r="5" fill="#0f766e"/>
+  <text x="104" y="78" font-size="10" fill="#0f766e" font-weight="bold">O</text>
+  <circle cx="160" cy="120" r="5" fill="#059669"/>
+  <text x="163" y="118" font-size="11" fill="#059669" font-weight="bold">S(3;−2)</text>
+  <circle cx="60" cy="20" r="5" fill="#9f1239" stroke="white" stroke-width="1.5"/>
+  <text x="8" y="18" font-size="11" fill="#9f1239" font-weight="bold">S'=?</text>
+  <line x1="100" y1="80" x2="155" y2="115" stroke="#059669" stroke-width="1.5" stroke-dasharray="4,2"/>
+  <line x1="100" y1="80" x2="65" y2="25" stroke="#9f1239" stroke-width="1.5" stroke-dasharray="4,2"/>
+  <!-- Arc : O=(100,80), S=(160,120) angle=atan2(40,60)=33.7°, S'=(60,20) angle=atan2(-60,−40)=−123.7° -->
+  <!-- anti-horaire de 33.7° à 123.7°+90=... recalcul: S'=(−y,x)=(2,3), en coords svg S' ≈ (60,20) -->
+  <!-- Arc rayon 30 : dep=100+30*cos(33.7°)=124.9,80+30*sin(33.7°)=96.6 ; arr=100+30*cos(143.7°)=75.8,80+30*sin(143.7°)=97.7... -->
+  <path d="M124.9,96.6 A30,30 0 0,0 75.8,62" fill="none" stroke="#9f1239" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M100,80 L124.9,96.6 A30,30 0 0,0 75.8,62 Z" fill="#fecdd3" opacity="0.35"/>
+  <text x="105" y="55" font-size="12" fill="#9f1239" font-weight="900" font-style="italic">90°</text>
+</svg>`,
+   etapes:[
+    {q:"Étape 1 — Rotation 90° anti-horaire : (x;y)→(−y;x). x' = −(−2) = ?",acc:["2"],
+     hint:"x' = −y = −(−2) = +2.",
+     expl_ok:"x' = 2.",
+     expl_ko:"x' = −y = −(−2) = 2."},
+    {q:"Étape 2 — y' = x = 3. Écris S'(? ; ?).",acc:["(2;3)","(2 ; 3)","2;3"],
+     hint:"y' = x du point original = 3.",
+     expl_ok:"S'(2 ; 3). Vérif : OS = √(9+4) = √13 et OS' = √(4+9) = √13 ✓",
+     expl_ko:"y' = x = 3 → S'(2;3)."}
+  ]}
+];
+
+// ════ POOL EXERCICES LIBRES — 20 exercices ════
+var FREE_POOL=[
+  // Identifier la transformation (Hattie)
+  {type:'classify',data:{q:"On fait pivoter une figure de 180° autour d'un point O. Quelle transformation est-ce ?",opts:["Symétrie centrale de centre O","Rotation de 90°","Translation"],ok:0,expl:"Une rotation de 180° autour d'un point = symétrie centrale de centre O. Ce sont deux noms pour la même transformation."}},
+  {type:'classify',data:{q:"Le vecteur t⃗=(0 ; 0) correspond à quelle transformation ?",opts:["La transformation identité (rien ne bouge)","Une rotation de 90°","Une symétrie centrale"],ok:0,expl:"Un vecteur nul (0;0) ne déplace aucun point — c'est la transformation identité."}},
+  {type:'classify',data:{q:"Dans une symétrie axiale, AA' est perpendiculaire à l'axe et le milieu de [AA'] est sur l'axe. C'est ?",opts:["La définition de la symétrie axiale","La définition de la translation","La définition de la rotation"],ok:0,expl:"Ces deux propriétés (⊥ et milieu sur l'axe) sont exactement la définition de la symétrie axiale."}},
+  // Calcul coordonnées (Vygotsky)
+  {type:'saisie',data:{q:"Translation t⃗=(+2;+3). A(1;4) → A'(x;y). Donne x.",acc:["3"],expl:"x' = 1+2 = 3."}},
+  {type:'saisie',data:{q:"Translation t⃗=(+2;+3). A(1;4) → A'(x;y). Donne y.",acc:["7"],expl:"y' = 4+3 = 7."}},
+  {type:'saisie',data:{q:"Symétrie centrale O(0;0). B(5;−3) → B'. Donne x de B'.",acc:["-5","−5"],expl:"x' = 2×0 − 5 = −5."}},
+  {type:'saisie',data:{q:"Symétrie centrale O(0;0). B(5;−3) → B'. Donne y de B'.",acc:["3"],expl:"y' = 2×0 − (−3) = 3."}},
+  {type:'saisie',data:{q:"Symétrie axiale (axe x=3). C(7;2) → C'. Donne x de C'.",acc:["-1","−1"],expl:"x' = 2×3 − 7 = 6 − 7 = −1."}},
+  {type:'saisie',data:{q:"Rotation 90° anti-horaire autour de O(0;0). D(4;3) → D'. Donne x de D'.",acc:["-3","−3"],expl:"x' = −y = −3."}},
+  {type:'saisie',data:{q:"Rotation 90° anti-horaire autour de O(0;0). D(4;3) → D'. Donne y de D'.",acc:["4"],expl:"y' = x = 4. Donc D'(−3;4)."}},
+  // Jugement (Csikszentmihalyi)
+  {type:'jugement',data:{consigne:"Laquelle est correcte pour une translation de vecteur (a;b) ?",a:"P'(x−a ; y−b)",b:"P'(x+a ; y+b)",ok:"B",expl:"Translation : on AJOUTE le vecteur. P'(x+a ; y+b). La phrase A soustrait à tort."}},
+  {type:'jugement',data:{consigne:"Rotation 180° autour de O(0;0). P(3;−5) → P' = ?",a:"P'(−3 ; 5)","b":"P'(5 ; 3)",ok:"A",expl:"Rotation 180° : (x;y)→(−x;−y). P'(−3;5). La phrase B applique une mauvaise formule."}},
+  {type:'jugement',data:{consigne:"Une transformation conserve-t-elle toujours les longueurs ?",a:"Oui, toutes les transformations du cours conservent les longueurs","b":"Non, la translation agrandit la figure",ok:"A",expl:"Les 4 transformations (sym. axiale, sym. centrale, translation, rotation) sont des isométries : elles conservent toutes les longueurs ET les angles."}},
+  // Raisonnement inverse (Dweck)
+  {type:'saisie',data:{q:"P'(8;1) est l'image de P par translation t⃗=(+3;−2). Quelles sont les coordonnées de P ? Donne x.",acc:["5"],expl:"x = x' − 3 = 8 − 3 = 5. (On fait l'opération inverse.)"}},
+  {type:'saisie',data:{q:"P'(8;1) est l'image de P par translation t⃗=(+3;−2). Donne y de P.",acc:["3"],expl:"y = y' − (−2) = 1 + 2 = 3. Donc P(5;3)."}},
+  // Problèmes concrets (Deci & Ryan)
+  {type:'classify',data:{q:"🎨 Une frise décorative est créée en répétant un motif. Quelle transformation est utilisée ?",opts:["Translation","Rotation","Symétrie centrale"],ok:0,expl:"Une frise répète le motif en le déplaçant dans une direction → translation."}},
+  {type:'classify',data:{q:"🦋 Les ailes d'un papillon sont identiques mais inversées. Quelle transformation relie l'aile gauche à l'aile droite ?",opts:["Symétrie axiale (axe vertical du corps)","Translation","Rotation de 90°"],ok:0,expl:"Les deux ailes sont symétriques par rapport à l'axe vertical du corps du papillon → symétrie axiale."}},
+  {type:'saisie',data:{q:"Symétrie centrale O(2;3). E(6;7) → E'. Donne x de E'.",acc:["-2","−2"],expl:"x' = 2×2 − 6 = 4 − 6 = −2."}},
+  {type:'saisie',data:{q:"Translation t⃗=(−4;+1). F(−1;−3) → F'. Donne y de F'.",acc:["-2","−2"],expl:"y' = −3 + 1 = −2."}},
+  {type:'jugement',data:{consigne:"Rotation 90° horaire autour de O(0;0). G(2;5) → G' = ?",a:"G'(5;−2)","b":"G'(−5;2)",ok:"A",expl:"Rotation 90° horaire : (x;y)→(y;−x). G'(5;−2). Anti-horaire aurait donné (−5;2)."}}
+];
+
+var score=0,g1Idx=0,g2Idx=0,g1Tries=0,g2Tries=0;
+var free1Exs=[],free2Exs=[],free1Done=0,free2Done=0;
+var _cbs={};
+
+function nsG(s){return(s||'').trim().toLowerCase().replace(/\s+/g,'').replace('−','-').replace(';',',');}
+function shuffle(arr){var a=arr.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function addScore(){score++;document.getElementById('score-display').textContent=score;}
+
+function updateSteps(active){for(var i=0;i<6;i++){var s=document.getElementById('step-'+i);if(!s)continue;s.classList.remove('active','done');if(i<active)s.classList.add('done');else if(i===active)s.classList.add('active');}}
+
+function goToPhase(ph,si){
+  document.querySelectorAll('.phase').forEach(function(p){p.classList.remove('active');});
+  var el=document.getElementById('phase-'+ph);
+  if(el){el.classList.add('active');setTimeout(function(){el.scrollIntoView({behavior:'smooth',block:'start'});},100);}
+  updateSteps(si);
+  if(ph==='guided1')initGuided1();
+  if(ph==='guided2')initGuided2();
+  if(ph==='free')initFree1();
+  if(ph==='free2')initFree2();
+  if(ph==='bilan')showBilan();
+}
+
+function revealBloc(n){
+  var bloc=document.getElementById('bloc-'+n);if(!bloc)return;
+  var prev=document.getElementById('bloc-'+(n-1));
+  if(prev){var b=prev.querySelector('.btn-compris');if(b){b.textContent='✓ Compris';b.disabled=true;b.style.opacity='.4';}}
+  bloc.classList.add('revealed');
+  setTimeout(function(){var hH=(document.querySelector('.header')||{offsetHeight:0}).offsetHeight;var rect=bloc.getBoundingClientRect();window.scrollTo({top:window.pageYOffset+rect.top-hH-20,behavior:'smooth'});},150);
+}
+
+function initGuided1(){
+  g1Idx=Math.floor(Math.random()*G1.length);g1Tries=0;
+  document.getElementById('g1-reset').classList.remove('show');
+  document.getElementById('btn-to-g2').classList.remove('show');
+  var v=G1[g1Idx],c=document.getElementById('g1-container');c.innerHTML='';
+  var box=document.createElement('div');box.className='guided-problem';
+  box.innerHTML='<div class="guided-problem-title">🔄 '+v.titre+'<span class="tries-left" id="g1-tries">3 essais</span></div>'
+    +(v.svg||'')+'<div class="step-container" id="g1-sc"></div>';
+  c.appendChild(box);
+  var sc=document.getElementById('g1-sc');
+  v.etapes.forEach(function(step,si){
+    var so=shuffle(step.opts.map(function(o,oi){return{t:o,i:oi};}));
+    var sb=document.createElement('div');sb.className='step-box'+(si===0?' active':'');sb.id='g1s'+si;
+    sb.innerHTML='<div class="step-num">Étape '+(si+1)+'/'+v.etapes.length+'</div>'
+      +'<div class="step-question">'+step.q+'</div>'
+      +'<div class="step-hint" id="g1h'+si+'">💡 '+step.hint+'</div>'
+      +'<div class="step-qcm-opts">'+so.map(function(o){return'<button class="step-qcm-opt" onclick="g1Check('+si+','+o.i+',this)">'+o.t+'</button>';}).join('')+'</div>'
+      +'<div class="step-fb" id="g1f'+si+'"></div>';
+    sc.appendChild(sb);
+  });
+  g1Tries=0;updG1();
+}
+function updG1(){var el=document.getElementById('g1-tries');if(el)el.textContent=(3-g1Tries)+' essai'+(3-g1Tries>1?'s':'');}
+function g1Check(si,ci,btn){
+  var v=G1[g1Idx],step=v.etapes[si],sb=document.getElementById('g1s'+si),fb=document.getElementById('g1f'+si);
+  if(sb.classList.contains('correct'))return;
+  if(ci===step.ok){
+    btn.classList.add('opt-correct');sb.querySelectorAll('.step-qcm-opt').forEach(function(b){b.disabled=true;});sb.classList.add('correct');
+    if(g1Tries===0){fb.className='step-fb show fb-ok';fb.innerHTML='✓ '+step.expl_ok+' <span style="color:#065f46;font-size:.78rem">(+1 pt)</span>';addScore();}
+    else{fb.className='step-fb show fb-ok';fb.innerHTML='✓ '+step.expl_ok+' <span style="color:#64748b;font-size:.78rem">(pas de point — réussi après plusieurs essais)</span>';}
+    g1Tries=0;updG1();
+    var nx=document.getElementById('g1s'+(si+1));
+    if(nx){nx.classList.add('active');setTimeout(function(){nx.scrollIntoView({behavior:'smooth',block:'nearest'});},300);}
+    else{setTimeout(function(){document.getElementById('btn-to-g2').classList.add('show');document.getElementById('btn-to-g2').scrollIntoView({behavior:'smooth',block:'nearest'});},500);}
+  }else{
+    btn.classList.add('opt-wrong');btn.disabled=true;g1Tries++;updG1();
+    fb.className='step-fb show fb-ko';
+    if(g1Tries<3){fb.innerHTML='✗ Pas tout à fait. Lis l\'indice ci-dessus et réessaie !';document.getElementById('g1h'+si).classList.add('show');}
+    else{fb.innerHTML='✗ '+step.expl_ko+' On recommence !';setTimeout(function(){document.getElementById('g1-reset').classList.add('show');document.getElementById('g1-container').innerHTML='';document.getElementById('g1-reset').scrollIntoView({behavior:'smooth',block:'start'});},1200);}
+  }
+}
+
+function initGuided2(){
+  g2Idx=Math.floor(Math.random()*G2.length);g2Tries=0;
+  document.getElementById('g2-reset').classList.remove('show');
+  document.getElementById('btn-to-free').classList.remove('show');
+  var v=G2[g2Idx],c=document.getElementById('g2-container');c.innerHTML='';
+  var box=document.createElement('div');box.className='guided-problem';
+  box.innerHTML='<div class="guided-problem-title">✏️ '+v.titre+'<span class="tries-left" id="g2-tries">3 essais</span></div>'
+    +(v.svg||'')+'<div class="step-container" id="g2-sc"></div>';
+  c.appendChild(box);
+  var sc=document.getElementById('g2-sc');
+  v.etapes.forEach(function(step,si){
+    var sb=document.createElement('div');sb.className='step-box'+(si===0?' active':'');sb.id='g2s'+si;
+    sb.innerHTML='<div class="step-num">Étape '+(si+1)+'/'+v.etapes.length+'</div>'
+      +'<div class="step-question">'+step.q+'</div>'
+      +'<div class="step-hint" id="g2h'+si+'">💡 '+step.hint+'</div>'
+      +'<div class="step-input-row"><input class="step-input" id="g2i'+si+'" type="text" placeholder="?" autocomplete="off" spellcheck="false"'+(si>0?' disabled':'')+'><button class="btn-step-check" id="g2b'+si+'" onclick="g2Check('+si+')"'+(si>0?' disabled':'')+'>Vérifier</button></div>'
+      +'<div class="step-fb" id="g2f'+si+'"></div>';
+    sc.appendChild(sb);
+  });
+  g2Tries=0;updG2();
+}
+function updG2(){var el=document.getElementById('g2-tries');if(el)el.textContent=(3-g2Tries)+' essai'+(3-g2Tries>1?'s':'');}
+function g2Check(si){
+  var v=G2[g2Idx],step=v.etapes[si],inp=document.getElementById('g2i'+si),fb=document.getElementById('g2f'+si),sb=document.getElementById('g2s'+si);
+  if(!inp||sb.classList.contains('correct'))return;
+  var val=nsG(inp.value),ok=step.acc.some(function(a){return val===nsG(a);});
+  if(ok){
+    inp.classList.add('input-ok');inp.disabled=true;document.getElementById('g2b'+si).disabled=true;sb.classList.add('correct');
+    if(g2Tries===0){fb.className='step-fb show fb-ok';fb.innerHTML='✓ '+step.expl_ok+' <span style="color:#065f46;font-size:.78rem">(+1 pt)</span>';addScore();}
+    else{fb.className='step-fb show fb-ok';fb.innerHTML='✓ '+step.expl_ok+' <span style="color:#64748b;font-size:.78rem">(pas de point — réussi après plusieurs essais)</span>';}
+    g2Tries=0;updG2();
+    var nxSb=document.getElementById('g2s'+(si+1));
+    if(nxSb){nxSb.classList.add('active');var ni=document.getElementById('g2i'+(si+1)),nb=document.getElementById('g2b'+(si+1));if(ni)ni.disabled=false;if(nb)nb.disabled=false;setTimeout(function(){nxSb.scrollIntoView({behavior:'smooth',block:'nearest'});},300);}
+    else{setTimeout(function(){document.getElementById('btn-to-free').classList.add('show');document.getElementById('btn-to-free').scrollIntoView({behavior:'smooth',block:'nearest'});},500);}
+  }else{
+    inp.classList.add('input-ko');inp.value='';inp.placeholder='Réessaie...';g2Tries++;updG2();
+    fb.className='step-fb show fb-ko';
+    if(g2Tries<3){fb.innerHTML='✗ Pas tout à fait. Lis l\'indice ci-dessus et réessaie !';document.getElementById('g2h'+si).classList.add('show');setTimeout(function(){inp.classList.remove('input-ko');inp.placeholder='?';},1000);}
+    else{fb.innerHTML='✗ '+step.expl_ko+' On recommence !';setTimeout(function(){document.getElementById('g2-reset').classList.add('show');document.getElementById('g2-container').innerHTML='';document.getElementById('g2-reset').scrollIntoView({behavior:'smooth',block:'start'});},1200);}
+  }
+}
+
+function buildFreeCard(ex,i,prefix,onDone){
+  var card=document.createElement('div');card.className='free-ex-card';card.id=prefix+i;
+  if(ex.type==='classify')buildCl(card,ex.data,i,prefix,onDone);
+  else if(ex.type==='saisie')buildSa(card,ex.data,i,prefix,onDone);
+  else if(ex.type==='jugement')buildJu(card,ex.data,i,prefix,onDone);
+  return card;
+}
+function buildCl(card,data,i,prefix,onDone){
+  card.innerHTML='<div class="free-ex-label">Exercice '+(i+1)+'</div><div class="free-ex-question">'+data.q+'</div><div class="free-classify-btns" id="'+prefix+'cl'+i+'"></div><div class="free-fb" id="'+prefix+'fb'+i+'"></div>';
+  var ba=card.querySelector('#'+prefix+'cl'+i);
+  data.opts.forEach(function(opt,oi){
+    var btn=document.createElement('button');btn.className='free-classify-btn';btn.textContent=opt;
+    btn.onclick=function(){
+      if(card.classList.contains('answered'))return;
+      card.classList.add('answered');ba.querySelectorAll('button').forEach(function(b){b.disabled=true;});
+      var fb=document.getElementById(prefix+'fb'+i);
+      if(oi===data.ok){btn.classList.add('ans-correct');fb.className='free-fb show fb-ok';fb.innerHTML='✓ '+data.expl;addScore();}
+      else{btn.classList.add('ans-wrong');ba.querySelectorAll('button').forEach(function(b,bi){if(bi===data.ok)b.classList.add('ans-reveal');});fb.className='free-fb show fb-ko';fb.innerHTML='✗ '+data.expl;}
+      onDone();
+    };ba.appendChild(btn);
+  });
+}
+function buildSa(card,data,i,prefix,onDone){
+  card.innerHTML='<div class="free-ex-label">Exercice '+(i+1)+'</div><div class="free-ex-question">'+data.q+'</div><div class="free-input-row"><input class="free-input" id="'+prefix+'inp'+i+'" type="text" placeholder="?" autocomplete="off" spellcheck="false"><button class="btn-free-check" onclick="checkFS(\''+prefix+'\','+i+')">Vérifier</button></div><div class="free-fb" id="'+prefix+'fb'+i+'"></div>';
+  _cbs[prefix+i]=onDone;
+}
+function checkFS(prefix,i){
+  var card=document.getElementById(prefix+i);if(card.classList.contains('answered'))return;
+  var exs=prefix==='f1'?free1Exs:free2Exs,ex=exs[i],inp=document.getElementById(prefix+'inp'+i),fb=document.getElementById(prefix+'fb'+i);
+  var val=nsG(inp.value),ok=ex.data.acc.some(function(a){return val===nsG(a);});
+  card.classList.add('answered');inp.disabled=true;card.querySelector('.btn-free-check').disabled=true;
+  if(ok){inp.classList.add('free-ok');fb.className='free-fb show fb-ok';fb.innerHTML='✓ '+ex.data.expl;addScore();}
+  else{inp.classList.add('free-ko');fb.className='free-fb show fb-ko';fb.innerHTML='✗ Réponse : <strong>'+ex.data.acc[0]+'</strong>. '+ex.data.expl;}
+  if(_cbs[prefix+i])_cbs[prefix+i]();
+}
+function buildJu(card,data,i,prefix,onDone){
+  card.innerHTML='<div class="free-ex-label">Exercice '+(i+1)+'</div><div class="free-ex-question">'+data.consigne+'</div><div class="jugement-opts"><button class="jugement-opt-btn" onclick="checkFJ(\''+prefix+'\','+i+',\'A\',this)"><strong>A —</strong> '+data.a+'</button><button class="jugement-opt-btn" onclick="checkFJ(\''+prefix+'\','+i+',\'B\',this)"><strong>B —</strong> '+data.b+'</button></div><div class="free-fb" id="'+prefix+'fb'+i+'"></div>';
+  _cbs[prefix+i]=onDone;
+}
+function checkFJ(prefix,i,choice,btn){
+  var card=document.getElementById(prefix+i);if(card.classList.contains('answered'))return;
+  var exs=prefix==='f1'?free1Exs:free2Exs,ex=exs[i],fb=document.getElementById(prefix+'fb'+i);
+  card.classList.add('answered');card.querySelectorAll('.jugement-opt-btn').forEach(function(b){b.disabled=true;});
+  if(choice===ex.data.ok){btn.classList.add('jug-correct');fb.className='free-fb show fb-ok';fb.innerHTML='✓ '+ex.data.expl;addScore();}
+  else{btn.classList.add('jug-wrong');card.querySelectorAll('.jugement-opt-btn')[choice==='A'?1:0].classList.add('jug-correct');fb.className='free-fb show fb-ko';fb.innerHTML='✗ '+ex.data.expl;}
+  if(_cbs[prefix+i])_cbs[prefix+i]();
+}
+
+function initFree1(){
+  free1Exs=shuffle(FREE_POOL.slice()).slice(0,5);free1Done=0;
+  var c=document.getElementById('free1-container');c.innerHTML='';
+  free1Exs.forEach(function(ex,i){
+    _cbs['f1'+i]=function(){free1Done++;if(free1Done>=free1Exs.length)setTimeout(function(){document.getElementById('btn-to-free2').classList.add('show');document.getElementById('btn-to-free2').scrollIntoView({behavior:'smooth',block:'nearest'});},600);};
+    c.appendChild(buildFreeCard(ex,i,'f1',_cbs['f1'+i]));
+  });
+}
+function initFree2(){
+  var used=free1Exs.map(function(e){return e.data.q||e.data.consigne;});
+  var pool=FREE_POOL.filter(function(e){return used.indexOf(e.data.q||e.data.consigne)<0;});
+  free2Exs=shuffle(pool).slice(0,5);free2Done=0;
+  var c=document.getElementById('free2-container');c.innerHTML='';
+  free2Exs.forEach(function(ex,i){
+    _cbs['f2'+i]=function(){free2Done++;if(free2Done>=free2Exs.length)setTimeout(function(){document.getElementById('btn-to-bilan').classList.add('show');document.getElementById('btn-to-bilan').scrollIntoView({behavior:'smooth',block:'nearest'});},600);};
+    c.appendChild(buildFreeCard(ex,i,'f2',_cbs['f2'+i]));
+  });
+}
+
+function showBilan(){
+  var g1Steps=G1[g1Idx]?G1[g1Idx].etapes.length:3,g2Steps=G2[g2Idx]?G2[g2Idx].etapes.length:2,total=g1Steps+g2Steps+10;
+  document.getElementById('bilan-score').textContent=score;
+  document.getElementById('bilan-total-txt').textContent='/ '+total+' pts';
+  var pct=score/total,title,msg;
+  if(pct>=0.8){title='Excellent !';msg='Tu maîtrises les 4 transformations — symétries, translation et rotation. Les calculs de coordonnées sont acquis !';}
+  else if(pct>=0.6){title='Bon travail !';msg='Bonne base ! Revois les formules de coordonnées : translation (+vecteur), symétrie centrale (2×O−P), rotation 90° (−y;x).';}
+  else{title='Continue !';msg:'Mémorise les 4 définitions et les formules de coordonnées. Les guidés te guident pas à pas pour chaque type de transformation !';}
+  document.getElementById('bilan-title').textContent=title;document.getElementById('bilan-msg').textContent=msg;
+  var s=[Math.ceil(total*.4),Math.ceil(total*.7),Math.ceil(total*.9)];
+  ['star1','star2','star3'].forEach(function(id,i){var el=document.getElementById(id);if(score>=s[i]){(function(e,d){setTimeout(function(){e.classList.add('earned');},d);})(el,300+i*400);}else el.style.filter='grayscale(1)';});
+  if(pct>=0.6)lanceConfetti();
+}
+function lanceConfetti(){var cols=['#0f766e','#5eead4','#059669','#d97706','#9f1239'];for(var i=0;i<50;i++){var el=document.createElement('div');el.className='confetti-piece';el.style.cssText='left:'+Math.random()*100+'vw;background:'+cols[Math.floor(Math.random()*5)]+';animation-duration:'+(1.5+Math.random()*2)+'s;animation-delay:'+Math.random()*1.2+'s;width:'+(6+Math.random()*7)+'px;height:'+(6+Math.random()*7)+'px;border-radius:'+(Math.random()>.5?'50%':'2px')+';';document.body.appendChild(el);setTimeout(function(){if(el.parentNode)el.remove();},4000);}}
+</script>
+</body>
+</html>

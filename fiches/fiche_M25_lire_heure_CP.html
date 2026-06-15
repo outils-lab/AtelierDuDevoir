@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>M25 — Lire l'heure : heure et demi-heure | L'Atelier du Devoir</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--acc:#7c3aed;--acc-pale:#f5f3ff;--acc-mid:#c4b5fd;--acc-dark:#5b21b6;--mint:#059669;--mint-pale:#d1fae5;--mint-deep:#047857;--coral:#dc2626;--coral-pale:#fee2e2;--sun:#d97706;--sun-pale:#fef3c7;--radius:18px;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Fredoka One',cursive;background:#f5f3ff;color:#1e293b;font-size:20px;line-height:1.5;}
+.header{background:white;border-bottom:4px solid var(--acc-pale);position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.1);}
+.header-top{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;}
+.logo{font-size:1.1rem;color:var(--acc);text-decoration:none;}
+.score-badge{background:var(--acc);color:white;font-size:.9rem;padding:6px 16px;border-radius:20px;}
+.steps-wrap{padding:0 16px 8px;}
+.steps{display:flex;gap:5px;}
+.step{flex:1;height:10px;border-radius:10px;background:#ddd6fe;transition:all .4s;}
+.step.done{background:#10b981;}.step.active{background:var(--acc);}
+.main{max-width:640px;margin:0 auto;padding:18px 14px 100px;}
+.phase{display:none;}.phase.active{display:block;}
+.accroche{background:white;border-radius:var(--radius);padding:22px 20px;margin-bottom:20px;border:3px solid var(--acc-pale);text-align:center;}
+.accroche .big-icon{font-size:4rem;margin-bottom:10px;}
+.accroche h1{font-size:1.75rem;color:var(--acc);margin-bottom:8px;}
+.accroche p{font-family:'Nunito',sans-serif;font-size:.92rem;color:#64748b;margin-bottom:12px;}
+.meta-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
+.meta-tag{background:var(--acc-pale);border-radius:20px;padding:5px 16px;font-size:.78rem;color:var(--acc);}
+.lecon-card{background:white;border-radius:var(--radius);padding:22px 18px;margin-bottom:18px;border:3px solid var(--acc-pale);}
+.lecon-card h2{font-size:1.25rem;color:var(--acc);margin-bottom:18px;}
+.lecon-block{display:none;}.lecon-block.revealed{display:block;}
+.bloc-titre{font-size:1.15rem;color:var(--acc);margin-bottom:14px;}
+.sep{margin:20px 0;border:none;border-top:3px dashed #ddd6fe;}
+.ugo-box{background:white;border:3px solid var(--acc-pale);border-radius:var(--radius);padding:15px 18px;margin:14px 0;display:flex;gap:12px;align-items:flex-start;}
+.ugo-box .ugo{font-size:2.3rem;flex-shrink:0;}
+.ugo-box p{font-family:'Nunito',sans-serif;font-size:.92rem;color:#475569;line-height:1.7;}
+.ugo-box p strong{color:var(--acc);}
+.info-box{background:var(--acc-pale);border-left:6px solid var(--acc);border-radius:0 14px 14px 0;padding:14px 18px;margin:14px 0;font-family:'Nunito',sans-serif;font-size:.92rem;line-height:1.9;}
+.info-box strong{color:var(--acc-dark);}
+/* Horloges SVG */
+.clock-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0;}
+.clock-card{background:var(--acc-pale);border:2px solid var(--acc-mid);border-radius:14px;padding:14px;text-align:center;}
+.clock-card .time-label{font-size:1.2rem;color:var(--acc-dark);margin-top:8px;}
+.clock-card .time-note{font-family:'Nunito',sans-serif;font-size:.75rem;color:#64748b;margin-top:4px;}
+.btn-compris{margin-top:18px;padding:14px 30px;border-radius:38px;font-size:1.1rem;background:var(--acc);color:white;border:none;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:8px;box-shadow:0 4px 14px rgba(124,58,237,.35);}
+.btn-compris:hover{background:var(--acc-dark);transform:translateY(-2px);}
+.btn-compris:disabled{opacity:.4;cursor:default;transform:none;}
+.guided-box{background:white;border:3px solid var(--acc);border-radius:var(--radius);padding:20px 18px;margin-bottom:16px;}
+.guided-title{font-size:1rem;color:var(--acc);margin-bottom:16px;background:var(--acc-pale);padding:10px 16px;border-radius:12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.tries-b{font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:800;color:var(--coral);background:#fee2e2;padding:3px 12px;border-radius:20px;margin-left:auto;}
+.q-box{border:3px solid #ddd6fe;border-radius:14px;padding:16px;margin-bottom:10px;opacity:.5;pointer-events:none;}
+.q-box.active{opacity:1;pointer-events:all;border-color:var(--acc-mid);}
+.q-box.correct{border-color:var(--mint);background:var(--mint-pale);opacity:1;}
+.q-num{font-family:'Nunito',sans-serif;font-size:.65rem;font-weight:800;color:#94a3b8;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;}
+.q-text{font-size:1.05rem;color:var(--acc-dark);margin-bottom:14px;line-height:1.5;}
+.hint-box{font-family:'Nunito',sans-serif;font-size:.86rem;color:#78350f;background:var(--sun-pale);border-radius:10px;padding:10px 14px;margin-bottom:10px;display:none;}
+.hint-box.show{display:block;}
+.opts{display:flex;flex-direction:column;gap:10px;}
+.opt{padding:13px 16px;border-radius:13px;border:3px solid #ddd6fe;background:white;font-size:1rem;cursor:pointer;text-align:left;transition:all .2s;}
+.opt:hover:not(:disabled){border-color:var(--acc);background:var(--acc-pale);}
+.opt:disabled{cursor:default;}
+.opt.ok{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.opt.ko{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
+.fb{margin-top:10px;padding:10px 14px;border-radius:12px;font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:800;display:none;}
+.fb.show{display:block;}
+.fb.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.fb.ko{background:var(--coral-pale);color:#b91c1c;}
+.reset-box{background:white;border:3px solid var(--acc);border-radius:var(--radius);padding:22px;text-align:center;margin-bottom:16px;display:none;}
+.reset-box.show{display:block;}
+.reset-box .r-ugo{font-size:3.2rem;margin-bottom:8px;}
+.reset-box h3{font-size:1.2rem;color:var(--acc);margin-bottom:8px;}
+.reset-box p{font-family:'Nunito',sans-serif;font-size:.9rem;color:#64748b;margin-bottom:14px;line-height:1.7;}
+.btn-reset{padding:12px 26px;border-radius:28px;font-size:.95rem;background:var(--acc);color:white;border:none;cursor:pointer;}
+.free-card{background:white;border:3px solid var(--acc-pale);border-radius:var(--radius);padding:18px;margin-bottom:14px;}
+.free-num{font-family:'Nunito',sans-serif;font-size:.7rem;font-weight:800;color:var(--acc);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;}
+.free-q{font-size:1.05rem;color:var(--acc-dark);margin-bottom:14px;background:var(--acc-pale);border-radius:12px;padding:12px 16px;line-height:1.5;}
+.free-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.free-opt{padding:12px;border-radius:13px;font-size:1rem;border:3px solid #ddd6fe;background:white;cursor:pointer;transition:all .2s;text-align:center;}
+.free-opt:hover{border-color:var(--acc);background:var(--acc-pale);}
+.free-opt.ok{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.free-opt.ko{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
+.free-opt.reveal{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.free-fb{margin-top:10px;padding:10px 14px;border-radius:12px;font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:800;display:none;}
+.free-fb.show{display:block;}
+.free-fb.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.free-fb.ko{background:var(--coral-pale);color:#b91c1c;}
+.btn-suite{margin-top:16px;padding:13px 26px;border-radius:32px;font-size:1rem;background:var(--acc);color:white;border:none;cursor:pointer;display:none;align-items:center;gap:8px;box-shadow:0 4px 14px rgba(124,58,237,.3);transition:all .2s;}
+.btn-suite.show{display:inline-flex;}
+.btn-suite:hover{background:var(--acc-dark);transform:translateY(-2px);}
+.bilan-card{background:white;border-radius:var(--radius);padding:28px 20px;text-align:center;border:3px solid var(--acc-pale);}
+.bilan-ugo{font-size:4.5rem;margin-bottom:10px;display:block;}
+.bilan-title{font-size:2rem;color:var(--acc);margin-bottom:8px;}
+.bilan-msg{font-family:'Nunito',sans-serif;font-size:.95rem;color:#64748b;margin-bottom:20px;line-height:1.8;}
+.stars-row{display:flex;justify-content:center;gap:14px;margin-bottom:18px;}
+.star-big{font-size:3rem;filter:grayscale(1);transition:all .5s;}
+.star-big.earned{filter:none;animation:starPop .5s ease both;}
+@keyframes starPop{0%{transform:scale(0);}60%{transform:scale(1.3);}100%{transform:scale(1);}}
+.score-circle{width:115px;height:115px;border-radius:50%;background:var(--acc);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 20px;color:white;box-shadow:0 6px 20px rgba(124,58,237,.4);}
+.score-num{font-size:2.2rem;line-height:1;}
+.score-sub{font-family:'Nunito',sans-serif;font-size:.65rem;opacity:.85;}
+.memo{background:var(--acc-pale);border-radius:var(--radius);padding:16px 18px;margin:16px 0;text-align:left;}
+.memo h3{font-size:.9rem;color:var(--acc);margin-bottom:12px;}
+.memo-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media(max-width:400px){.memo-grid{grid-template-columns:1fr;}.free-opts{grid-template-columns:1fr;}.clock-grid{grid-template-columns:1fr;}}
+.memo-item{background:white;border-radius:12px;padding:11px 13px;border:2px solid var(--acc-pale);}
+.memo-item strong{color:var(--acc);display:block;margin-bottom:3px;}
+.memo-item span{font-family:'Nunito',sans-serif;font-size:.8rem;color:#475569;line-height:1.6;}
+.bilan-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:18px;}
+.btn-bilan{padding:13px 22px;border-radius:30px;font-size:.95rem;cursor:pointer;border:none;transition:all .2s;}
+.btn-bilan.primary{background:var(--acc);color:white;}
+.btn-bilan.secondary{background:var(--acc-pale);color:var(--acc);border:3px solid var(--acc);}
+.btn-bilan:hover{transform:translateY(-2px);}
+.confetti-piece{position:fixed;border-radius:3px;top:-20px;animation:fall linear both;pointer-events:none;z-index:9999;}
+@keyframes fall{0%{transform:translateY(0) rotate(0deg);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="header-top">
+    <a href="../6-9ans.html" class="logo">🦉 L'Atelier du Devoir</a>
+    <div class="score-badge">⭐ <span id="score-display">0</span></div>
+  </div>
+  <div class="steps-wrap"><div class="steps">
+    <div class="step active" id="s0"></div><div class="step" id="s1"></div><div class="step" id="s2"></div>
+    <div class="step" id="s3"></div><div class="step" id="s4"></div><div class="step" id="s5"></div>
+  </div></div>
+</header>
+<main class="main">
+
+<div class="accroche">
+  <div class="big-icon">🕐</div>
+  <h1>Lire l'heure !</h1>
+  <p style="font-family:'Nunito',sans-serif;">Les heures entières et les demi-heures sur l'horloge 🌟</p>
+  <div class="meta-row">
+    <span class="meta-tag">CP</span><span class="meta-tag">⭐ Facile</span><span class="meta-tag">🕐 Temps</span>
+  </div>
+</div>
+
+<div class="phase active" id="phase-lecon">
+  <div class="lecon-card">
+    <h2>📖 La leçon</h2>
+
+    <!-- BLOC 0 : les aiguilles -->
+    <div class="lecon-block revealed" id="bloc-0">
+      <div class="bloc-titre">① Les deux aiguilles</div>
+      <div class="ugo-box"><span class="ugo">🦉</span>
+        <p>Une horloge a <strong>deux aiguilles</strong> : la petite indique les <strong>heures</strong>, la grande indique les <strong>minutes</strong>. 😊</p>
+      </div>
+      <div style="text-align:center;margin:16px 0;">
+        <svg viewBox="0 0 200 200" width="180" height="180">
+          <!-- Cadran -->
+          <circle cx="100" cy="100" r="90" fill="white" stroke="#7c3aed" stroke-width="4"/>
+          <!-- Chiffres -->
+          <text x="100" y="22" text-anchor="middle" font-family="Fredoka One" font-size="16" fill="#5b21b6">12</text>
+          <text x="178" y="106" text-anchor="middle" font-family="Fredoka One" font-size="16" fill="#5b21b6">3</text>
+          <text x="100" y="188" text-anchor="middle" font-family="Fredoka One" font-size="16" fill="#5b21b6">6</text>
+          <text x="22" y="106" text-anchor="middle" font-family="Fredoka One" font-size="16" fill="#5b21b6">9</text>
+          <text x="155" y="50" text-anchor="middle" font-family="Fredoka One" font-size="13" fill="#94a3b8">2</text>
+          <text x="50" y="50" text-anchor="middle" font-family="Fredoka One" font-size="13" fill="#94a3b8">10</text>
+          <text x="50" y="162" text-anchor="middle" font-family="Fredoka One" font-size="13" fill="#94a3b8">8</text>
+          <text x="155" y="162" text-anchor="middle" font-family="Fredoka One" font-size="13" fill="#94a3b8">4</text>
+          <text x="175" y="72" text-anchor="middle" font-family="Fredoka One" font-size="13" fill="#94a3b8">1</text>
+          <text x="28" y="72" text-anchor="middle" font-family="Fredoka One" font-size="13" fill="#94a3b8">11</text>
+          <text x="28" y="140" text-anchor="middle" font-family="Fredoka One" font-size="13" fill="#94a3b8">7</text>
+          <text x="175" y="140" text-anchor="middle" font-family="Fredoka One" font-size="13" fill="#94a3b8">5</text>
+          <!-- Aiguille minutes (vers 12) -->
+          <line x1="100" y1="100" x2="100" y2="22" stroke="#0369a1" stroke-width="4" stroke-linecap="round"/>
+          <!-- Aiguille heures (vers 3) -->
+          <line x1="100" y1="100" x2="160" y2="100" stroke="#dc2626" stroke-width="6" stroke-linecap="round"/>
+          <!-- Centre -->
+          <circle cx="100" cy="100" r="6" fill="#1e293b"/>
+          <!-- Légendes -->
+          <text x="130" y="82" font-family="Nunito" font-size="11" fill="#0369a1" font-weight="800">grande →</text>
+          <text x="130" y="95" font-family="Nunito" font-size="11" fill="#0369a1">minutes</text>
+          <text x="115" y="130" font-family="Nunito" font-size="11" fill="#dc2626" font-weight="800">petite →</text>
+          <text x="115" y="143" font-family="Nunito" font-size="11" fill="#dc2626">heures</text>
+        </svg>
+      </div>
+      <div class="info-box">
+        <strong style="color:#dc2626;">Petite aiguille</strong> = les heures (courte et épaisse)<br>
+        <strong style="color:#0369a1;">Grande aiguille</strong> = les minutes (longue et fine)<br>
+        L'horloge tourne dans le sens des aiguilles : 12 → 1 → 2 → ... → 12
+      </div>
+      <button class="btn-compris" onclick="revealBloc(1)">J'ai compris ! 🎉</button>
+    </div>
+
+    <!-- BLOC 1 : heures entières -->
+    <div class="lecon-block" id="bloc-1">
+      <hr class="sep">
+      <div class="bloc-titre">② Les heures entières</div>
+      <div class="ugo-box"><span class="ugo">🦉</span>
+        <p>Quand la <strong>grande aiguille est sur le 12</strong>, c'est une heure pile ! La petite aiguille indique l'heure. 😊</p>
+      </div>
+      <div class="clock-grid">
+        <!-- 3h00 -->
+        <div class="clock-card">
+          <svg viewBox="0 0 120 120" width="110" height="110">
+            <circle cx="60" cy="60" r="55" fill="white" stroke="#7c3aed" stroke-width="3"/>
+            <text x="60" y="14" text-anchor="middle" font-family="Fredoka One" font-size="11" fill="#5b21b6">12</text>
+            <text x="107" y="65" text-anchor="middle" font-family="Fredoka One" font-size="11" fill="#5b21b6">3</text>
+            <text x="60" y="113" text-anchor="middle" font-family="Fredoka One" font-size="11" fill="#5b21b6">6</text>
+            <text x="13" y="65" text-anchor="middle" font-family="Fredoka One" font-size="11" fill="#5b21b6">9</text>
+            <!-- Grande aiguille vers 12 -->
+            <line x1="60" y1="60" x2="60" y2="14" stroke="#0369a1" stroke-width="3" stroke-linecap="round"/>
+            <!-- Petite aiguille vers 3 -->
+            <line x1="60" y1="60" x2="96" y2="60" stroke="#dc2626" stroke-width="5" stroke-linecap="round"/>
+            <circle cx="60" cy="60" r="4" fill="#1e293b"/>
+          </svg>
+          <div class="time-label">3 heures</div>
+          <div class="time-note">grande sur 12 · petite sur 3</div>
+        </div>
+        <!-- 7h00 -->
+        <div class="clock-card">
+          <svg viewBox="0 0 120 120" width="110" height="110">
+            <circle cx="60" cy="60" r="55" fill="white" stroke="#7c3aed" stroke-width="3"/>
+            <text x="60" y="14" text-anchor="middle" font-family="Fredoka One" font-size="11" fill="#5b21b6">12</text>
+            <text x="107" y="65" text-anchor="middle" font-family="Fredoka One" font-size="11" fill="#5b21b6">3</text>
+            <text x="60" y="113" text-anchor="middle" font-family="Fredoka One" font-size="11" fill="#5b21b6">6</text>
+            <text x="13" y="65" text-anchor="middle" font-family="Fredoka One" font-size="11" fill="#5b21b6">9</text>
+            <!-- Grande aiguille vers 12 -->
+            <line x1="60" y1="60" x2="60" y2="14" stroke="#0369a1" stroke-width="3" stroke-linecap="round"/>
+            <!-- Petite aiguille vers 7 (210°) -->
+            <line x1="60" y1="60" x2="22" y2="90" stroke="#dc2626" stroke-width="5" stroke-linecap="round"/>
+            <circle cx="60" cy="60" r="4" fill="#1e293b"/>
+          </svg>
+          <div class="time-label">7 heures</div>
+          <div class="time-note">grande sur 12 · petite sur 7</div>
+        </div>
+        <!-- 12h00 -->
+        <div class="clock-card">
+          <svg viewBox="0 0 120 120" width="110" height="110">
+            <circle cx="60" cy="60" r="55" fill="white" stroke="#7c3aed" stroke-width="3"/>
+            <text x="60" y="14" text-anchor="middle" font-family="Fredoka One" font-size="11" fill="#5b21b6">12</text>
+            <text x="107" y="65" text-anchor="middle" font-family="Fredoka One" font-size="11" fill="#5b21b6">3</text>
+            <text x="60" y="113" text-anchor="middle" font-family="Fredoka One" font-size="11" fill="#5b21b6">6</text>
+            <text x="13" y="65" text-anchor="middle" font-family="Fredoka One" font-size="11" fill="#5b21b6">9</text>
+            <!-- Grande aiguille vers 12 -->
+            <line x1="60" y1="60" x2="60" y2="14" stroke="#0369a1" stroke-width="3" stroke-linecap="round"/>
+            <!-- Petite aiguille vers 12 -->
+            <line x1="60" y1="60" x2="60" y2="22" stroke="#dc2626" stroke-width="5" stroke-linecap="round"/>
+            <circle cx="60" cy="60" r="4" fill="#1e293b"/>
+          </svg>
+          <div class="time-label">12 heures</div>
+          <div class="time-note">les deux sur 12 !</div>
+        </div>
+        <!-- 9h00 -->
+        <div class="clock-card">
+          <svg viewBox="0 0 120 120" width="110" height="110">
+            <circle cx="60" cy="60" r="55" fill="white" stroke="#7c3aed" stroke-width="3"/>
+            <text x="60" y="14" text-anchor="middle" font-family="Fredoka One" font-size="11" fill="#5b21b6">12</text>
+            <text x="107" y="65" text-anchor="middle" font-family="Fredoka One" font-size="11" fill="#5b21b6">3</text>
+            <text x="60" y="113" text-anchor="middle" font-family="Fredoka One" font-size="11" fill="#5b21b6">6</text>
+            <text x="13" y="65" text-anchor="middle" font-family="Fredoka One" font-size="11" fill="#5b21b6">9</text>
+            <!-- Grande aiguille vers 12 -->
+            <line x1="60" y1="60" x2="60" y2="14" stroke="#0369a1" stroke-width="3" stroke-linecap="round"/>
+            <!-- Petite aiguille vers 9 (270°) -->
+            <line x1="60" y1="60" x2="24" y2="60" stroke="#dc2626" stroke-width="5" stroke-linecap="round"/>
+            <circle cx="60" cy="60" r="4" fill="#1e293b"/>
+          </svg>
+          <div class="time-label">9 heures</div>
+          <div class="time-note">grande sur 12 · petite sur 9</div>
+        </div>
+      </div>
+      <button class="btn-compris" onclick="revealBloc(2)">J'ai compris ! 🎉</button>
+    </div>
+
+    <!-- BLOC 2 : demi-heures -->
+    <div class="lecon-block" id="bloc-2">
+      <hr class="sep">
+      <div class="bloc-titre">③ Et demie !</div>
+      <div class="ugo-box"><span class="ugo">🦉</span>
+        <p>Quand la <strong>grande aiguille est sur le 6</strong>, c'est "et demie" ! On a passé la moitié de l'heure. 😊</p>
+      </div>
+      <div class="clock-grid">
+        <!-- 3h30 -->
+        <div class="clock-card">
+          <svg viewBox="0 0 120 120" width="110" height="110">
+            <circle cx="60" cy="60" r="55" fill="white" stroke="#7c3aed" stroke-width="3"/>
+            <text x="60" y="14" text-anchor="middle" font-family="Fredoka One" font-size="11" fill="#5b21b6">12</text>
+            <text x="107" y="65" text-anchor="middle" font-family="Fredoka One" font-size="11" fill="#5b21b6">3</text>
+            <text x="60" y="113" text-anchor="middle" font-family="Fredoka One" font-size="11" fill="#5b21b6">6</text>
+            <text x="13" y="65" text-anchor="middle" font-family="Fredoka One" font-size="11" fill="#5b21b6">9</text>
+            <!-- Grande aiguille vers 6 -->
+            <line x1="60" y1="60" x2="60" y2="106" stroke="#0369a1" stroke-width="3" stroke-linecap="round"/>
+            <!-- Petite aiguille vers 3h30 (entre 3 et 4 → ~105°) -->
+            <line x1="60" y1="60" x2="89" y2="86" stroke="#dc2626" stroke-width="5" stroke-linecap="round"/>
+            <circle cx="60" cy="60" r="4" fill="#1e293b"/>
+          </svg>
+          <div class="time-label">3 heures et demie</div>
+          <div class="time-note">grande sur 6 · petite entre 3 et 4</div>
+        </div>
+        <!-- 8h30 -->
+        <div class="clock-card">
+          <svg viewBox="0 0 120 120" width="110" height="110">
+            <circle cx="60" cy="60" r="55" fill="white" stroke="#7c3aed" stroke-width="3"/>
+            <text x="60" y="14" text-anchor="middle" font-family="Fredoka One" font-size="11" fill="#5b21b6">12</text>
+            <text x="107" y="65" text-anchor="middle" font-family="Fredoka One" font-size="11" fill="#5b21b6">3</text>
+            <text x="60" y="113" text-anchor="middle" font-family="Fredoka One" font-size="11" fill="#5b21b6">6</text>
+            <text x="13" y="65" text-anchor="middle" font-family="Fredoka One" font-size="11" fill="#5b21b6">9</text>
+            <!-- Grande aiguille vers 6 -->
+            <line x1="60" y1="60" x2="60" y2="106" stroke="#0369a1" stroke-width="3" stroke-linecap="round"/>
+            <!-- Petite aiguille vers 8h30 (entre 8 et 9 → ~255°) -->
+            <line x1="60" y1="60" x2="24" y2="82" stroke="#dc2626" stroke-width="5" stroke-linecap="round"/>
+            <circle cx="60" cy="60" r="4" fill="#1e293b"/>
+          </svg>
+          <div class="time-label">8 heures et demie</div>
+          <div class="time-note">grande sur 6 · petite entre 8 et 9</div>
+        </div>
+      </div>
+      <div class="info-box">
+        <strong>Règle :</strong> Grande aiguille sur <strong>12</strong> → heure pile (ex : 5 h)<br>
+        Grande aiguille sur <strong>6</strong> → et demie (ex : 5 h et demie)<br>
+        La petite aiguille indique toujours l'heure.
+      </div>
+      <button class="btn-compris" onclick="goPhase('g1',1)">On joue ! 🚀</button>
+    </div>
+  </div>
+</div>
+
+<div class="phase" id="phase-g1">
+  <div class="ugo-box"><span class="ugo">🦉</span><p>Super ! <strong>3 questions</strong> sur l'heure. <strong>3 essais</strong> ! 💜</p></div>
+  <div id="g1-reset" class="reset-box"><div class="r-ugo">🦉</div><h3>On recommence !</h3><p>Petite aiguille = heures · Grande sur 12 = heure pile · Grande sur 6 = et demie. 💪</p><button class="btn-reset" onclick="initG1()">↺ Réessayer !</button></div>
+  <div id="g1-zone"></div>
+  <button class="btn-suite" id="btn-g1-to-g2" onclick="goPhase('g2',2)">Encore des questions ! 🌟</button>
+</div>
+
+<div class="phase" id="phase-g2">
+  <div class="ugo-box"><span class="ugo">🦉</span><p>Excellent ! <strong>3 questions</strong> de plus ! 🏆</p></div>
+  <div id="g2-reset" class="reset-box"><div class="r-ugo">🦉</div><h3>On recommence !</h3><p>Rappelle : petite = heures, grande = minutes ! 💪</p><button class="btn-reset" onclick="initG2()">↺ Réessayer !</button></div>
+  <div id="g2-zone"></div>
+  <button class="btn-suite" id="btn-g2-to-free" onclick="goPhase('free',3)">Exercices libres 🎯</button>
+</div>
+
+<div class="phase" id="phase-free">
+  <div class="ugo-box"><span class="ugo">🦉</span><p><strong>5 questions !</strong> 🕐</p></div>
+  <div id="free1-zone"></div>
+  <button class="btn-suite" id="btn-free-to-free2" onclick="goPhase('free2',4)">5 dernières ! 💪</button>
+</div>
+
+<div class="phase" id="phase-free2">
+  <div class="ugo-box"><span class="ugo">🦉</span><p>Encore <strong>5 questions</strong> ! 🏁</p></div>
+  <div id="free2-zone"></div>
+  <button class="btn-suite" id="btn-free2-to-bilan" onclick="goPhase('bilan',5)">🌟 Mon résultat !</button>
+</div>
+
+<div class="phase" id="phase-bilan">
+  <div class="bilan-card">
+    <span class="bilan-ugo">🦉</span>
+    <h2 class="bilan-title" id="bilan-title"></h2>
+    <p class="bilan-msg" id="bilan-msg"></p>
+    <div class="stars-row"><span class="star-big" id="etoile1">⭐</span><span class="star-big" id="etoile2">⭐</span><span class="star-big" id="etoile3">⭐</span></div>
+    <div class="score-circle"><span class="score-num" id="bilan-pts">0</span><span class="score-sub" id="bilan-sur">/0</span></div>
+    <div class="memo"><h3>📝 Ce que j'ai appris</h3>
+      <div class="memo-grid">
+        <div class="memo-item"><strong>Petite aiguille</strong><span>Indique les heures</span></div>
+        <div class="memo-item"><strong>Grande aiguille</strong><span>Indique les minutes</span></div>
+        <div class="memo-item"><strong>Grande sur 12</strong><span>Heure pile<br>ex : 3 heures</span></div>
+        <div class="memo-item"><strong>Grande sur 6</strong><span>Et demie<br>ex : 3 h et demie</span></div>
+      </div>
+    </div>
+    <div class="bilan-btns">
+      <button class="btn-bilan secondary" onclick="location.reload()">↺ Recommencer</button>
+      <button class="btn-bilan primary" onclick="location.href='../6-9ans.html'">← Les fiches</button>
+    </div>
+  </div>
+</div>
+</main>
+
+<script>
+var G1=[
+  {titre:"🕐 Heures entières",etapes:[
+    {q:"La grande aiguille est sur 12 et la petite est sur 3. Quelle heure est-il ?",opts:["3 heures","3 heures et demie","12 heures","6 heures"],ok:0,
+     hint:"Grande sur 12 = heure pile. Petite sur 3 = 3 heures.",
+     expl_ok:"3 heures ! Grande sur 12 = pile. Petite sur 3. 🎉",expl_ko:"Grande sur 12 → heure pile. Petite sur 3 → 3 heures."},
+    {q:"La grande aiguille est sur 12 et la petite est sur 6. Quelle heure est-il ?",opts:["6 heures","6 heures et demie","12 heures","3 heures"],ok:0,
+     hint:"Grande sur 12 = heure pile. Petite sur 6 = 6 heures.",
+     expl_ok:"6 heures ! Grande sur 12 = pile. Petite sur 6. 🌟",expl_ko:"Grande sur 12 → heure pile. Petite sur 6 → 6 heures."},
+    {q:"Les deux aiguilles sont sur 12. Quelle heure est-il ?",opts:["12 heures","6 heures","1 heure","12 heures et demie"],ok:0,
+     hint:"Grande ET petite sur 12 = 12 heures pile.",
+     expl_ok:"12 heures ! Les deux aiguilles sur 12 = midi (ou minuit). 🎉",expl_ko:"Quand les deux sont sur 12 → 12 heures."}
+  ]},
+  {titre:"🕐 Heures et demies",etapes:[
+    {q:"La grande aiguille est sur 6 et la petite est entre 3 et 4. Quelle heure est-il ?",opts:["3 heures et demie","3 heures","4 heures","4 heures et demie"],ok:0,
+     hint:"Grande sur 6 = et demie. Petite entre 3 et 4 → 3 heures et demie.",
+     expl_ok:"3 heures et demie ! Grande sur 6 = demie. Petite dépasse 3. 🌟",expl_ko:"Grande sur 6 → et demie. Petite entre 3 et 4 → 3 h et demie."},
+    {q:"La grande aiguille est sur 6 et la petite est entre 7 et 8. Quelle heure est-il ?",opts:["7 heures et demie","7 heures","8 heures","8 heures et demie"],ok:0,
+     hint:"Grande sur 6 = et demie. Petite a dépassé 7.",
+     expl_ok:"7 heures et demie ! Grande sur 6 = demie. Petite dépasse 7. 🎉",expl_ko:"Grande sur 6 → et demie. Petite a dépassé 7 → 7 h et demie."},
+    {q:"La grande aiguille est sur 6 et la petite est entre 11 et 12. Quelle heure est-il ?",opts:["11 heures et demie","12 heures","11 heures","10 heures et demie"],ok:0,
+     hint:"Grande sur 6 = et demie. Petite a dépassé 11.",
+     expl_ok:"11 heures et demie ! Grande sur 6 = demie. Petite dépasse 11. 🌟",expl_ko:"Grande sur 6 → et demie. Petite a dépassé 11 → 11 h et demie."}
+  ]},
+  {titre:"🕐 Mélange",etapes:[
+    {q:"Grande sur 12, petite sur 9. Quelle heure ?",opts:["9 heures","9 heures et demie","12 heures","3 heures"],ok:0,
+     hint:"Grande sur 12 = pile. Petite sur 9.",
+     expl_ok:"9 heures ! 🎉",expl_ko:"Grande sur 12 → pile. Petite sur 9 → 9 heures."},
+    {q:"Grande sur 6, petite entre 5 et 6. Quelle heure ?",opts:["5 heures et demie","6 heures","5 heures","6 heures et demie"],ok:0,
+     hint:"Grande sur 6 = et demie. Petite a dépassé 5.",
+     expl_ok:"5 heures et demie ! 🌟",expl_ko:"Grande sur 6 → et demie. Petite dépasse 5 → 5 h et demie."},
+    {q:"Grande sur 12, petite sur 1. Quelle heure ?",opts:["1 heure","1 heure et demie","12 heures","2 heures"],ok:0,
+     hint:"Grande sur 12 = pile. Petite sur 1.",
+     expl_ok:"1 heure ! 🎉",expl_ko:"Grande sur 12 → pile. Petite sur 1 → 1 heure."}
+  ]},
+  {titre:"🕐 Dans la journée",etapes:[
+    {q:"Le réveil sonne : grande sur 12, petite sur 7. C'est l'heure de…",opts:["Se lever (7h00)","Déjeuner (7h30)","Dormir (12h00)","Dîner (7h30)"],ok:0,
+     hint:"Grande sur 12 = pile. Petite sur 7 = 7 heures.",
+     expl_ok:"7 heures ! C'est l'heure de se lever. 🎉",expl_ko:"Grande sur 12, petite sur 7 → 7 heures."},
+    {q:"Tu manges à midi : grande sur 12, petite sur…",opts:["12","6","3","9"],ok:0,
+     hint:"Midi = 12 heures. Grande sur 12. Petite sur ?",
+     expl_ok:"Petite sur 12 aussi ! Midi = 12 heures. 🌟",expl_ko:"Midi = 12 heures. Grande ET petite sur 12."},
+    {q:"Il est 8 heures et demie. La grande aiguille est sur…",opts:["6","12","3","8"],ok:0,
+     hint:"Et demie = grande aiguille sur 6.",
+     expl_ok:"Sur le 6 ! Et demie = grande sur 6. 🎉",expl_ko:"Et demie → grande aiguille sur 6."}
+  ]}
+];
+
+var G2=[
+  {titre:"✏️ Reconnaître l'heure",etapes:[
+    {q:"Il est 2 heures pile. Où est la grande aiguille ?",opts:["Sur le 12","Sur le 6","Sur le 2","Entre 2 et 3"],ok:0,
+     hint:"Heure pile → grande aiguille sur 12.",
+     expl_ok:"Sur le 12 ! Heure pile = grande toujours sur 12. 🎉",expl_ko:"Heure pile → grande aiguille sur le 12."},
+    {q:"Il est 4 heures et demie. Où est la grande aiguille ?",opts:["Sur le 6","Sur le 12","Sur le 4","Entre 4 et 5"],ok:0,
+     hint:"Et demie → grande aiguille sur 6.",
+     expl_ok:"Sur le 6 ! Et demie = grande sur 6. 🌟",expl_ko:"Et demie → grande aiguille sur le 6."},
+    {q:"Il est 6 heures et demie. Où est la petite aiguille ?",opts:["Entre 6 et 7","Sur le 6","Sur le 12","Sur le 7"],ok:0,
+     hint:"À 6h30, la petite aiguille a dépassé le 6 et se dirige vers le 7.",
+     expl_ok:"Entre 6 et 7 ! La petite a dépassé 6 mais pas encore atteint 7. 🎉",expl_ko:"À 6h et demie, la petite est entre 6 et 7."}
+  ]},
+  {titre:"✏️ Lire l'heure dans la vie",etapes:[
+    {q:"L'école commence à 8 heures et demie. Grande aiguille sur ?",opts:["6","12","3","8"],ok:0,
+     hint:"Et demie = grande sur 6.",
+     expl_ok:"Sur le 6 ! Et demie = grande sur 6. 🌟",expl_ko:"Et demie → grande sur 6."},
+    {q:"La récré est à 10 heures pile. Petite aiguille sur ?",opts:["10","12","6","11"],ok:0,
+     hint:"10 heures pile. La petite indique l'heure.",
+     expl_ok:"Sur le 10 ! 10 heures pile → petite sur 10. 🎉",expl_ko:"10 heures → petite sur 10."},
+    {q:"Tu te couches à 8 heures et demie. Que montre l'horloge ?",opts:["Grande sur 6, petite entre 8 et 9","Grande sur 12, petite sur 8","Grande sur 8, petite sur 6","Les deux sur 8"],ok:0,
+     hint:"Et demie = grande sur 6. 8h30 = petite a dépassé le 8.",
+     expl_ok:"Grande sur 6, petite entre 8 et 9 ! C'est 8h30. 🌟",expl_ko:"8h30 = grande sur 6, petite entre 8 et 9."}
+  ]},
+  {titre:"✏️ Vrai ou faux ?",etapes:[
+    {q:"Grande sur 12 → c'est une heure et demie.",opts:["Faux ! Grande sur 12 = heure PILE","Vrai, grande sur 12 = et demie"],ok:0,
+     hint:"Grande sur 12 = pile. Grande sur 6 = et demie.",
+     expl_ok:"Faux ! Grande sur 12 = heure PILE (pas demie). 🎉",expl_ko:"Faux. Grande sur 12 = pile. Grande sur 6 = et demie."},
+    {q:"À 5 heures et demie, la grande aiguille est sur le 6.",opts:["Vrai ! Et demie = grande sur 6","Faux, grande sur 5"],ok:0,
+     hint:"Et demie = grande toujours sur 6.",
+     expl_ok:"Vrai ! Et demie = grande sur 6. Toujours ! 🌟",expl_ko:"Vrai. Et demie → grande sur 6."},
+    {q:"La petite aiguille indique les minutes.",opts:["Faux ! La petite indique les HEURES","Vrai, petite = minutes"],ok:0,
+     hint:"Petite = heures. Grande = minutes.",
+     expl_ok:"Faux ! Petite = heures. Grande = minutes. 🎉",expl_ko:"Faux. Petite aiguille = heures. Grande aiguille = minutes."}
+  ]},
+  {titre:"✏️ Questions variées",etapes:[
+    {q:"Grande sur 12, petite sur 4 : quelle heure ?",opts:["4 heures","4 heures et demie","12 heures","6 heures"],ok:0,
+     hint:"Grande sur 12 = pile. Petite sur 4.",
+     expl_ok:"4 heures ! 🌟",expl_ko:"Grande sur 12 → pile. Petite sur 4 → 4 heures."},
+    {q:"Grande sur 6, petite entre 9 et 10 : quelle heure ?",opts:["9 heures et demie","10 heures","9 heures","10 heures et demie"],ok:0,
+     hint:"Grande sur 6 = et demie. Petite a dépassé 9.",
+     expl_ok:"9 heures et demie ! 🎉",expl_ko:"Grande sur 6 → demie. Petite dépasse 9 → 9 h et demie."},
+    {q:"À midi et demi, la grande aiguille est sur…",opts:["6","12","1","2"],ok:0,
+     hint:"Et demi = grande sur 6.",
+     expl_ok:"Sur le 6 ! Midi et demi = grande sur 6. 🌟",expl_ko:"Et demi → grande sur 6."}
+  ]}
+];
+
+var FREE_POOL=[
+  {q:"Grande sur 12, petite sur 3 → quelle heure ?",opts:["3 heures","3 h et demie"],ok:0,expl:"Grande sur 12 = pile. Petite sur 3 = 3 heures."},
+  {q:"Grande sur 6, petite entre 3 et 4 → quelle heure ?",opts:["3 h et demie","3 heures"],ok:0,expl:"Grande sur 6 = et demie. Petite entre 3 et 4 = 3 h et demie."},
+  {q:"Grande sur 12, petite sur 6 → quelle heure ?",opts:["6 heures","6 h et demie"],ok:0,expl:"Grande sur 12 = pile. Petite sur 6 = 6 heures."},
+  {q:"Grande sur 6, petite entre 7 et 8 → quelle heure ?",opts:["7 h et demie","7 heures"],ok:0,expl:"Grande sur 6 = et demie. Petite entre 7 et 8 = 7 h et demie."},
+  {q:"Heure pile : la grande aiguille est sur…",opts:["12","6"],ok:0,expl:"Heure pile = grande aiguille sur 12."},
+  {q:"Et demie : la grande aiguille est sur…",opts:["6","12"],ok:0,expl:"Et demie = grande aiguille sur 6."},
+  {q:"La petite aiguille indique…",opts:["les heures","les minutes"],ok:0,expl:"Petite aiguille = heures. Grande = minutes."},
+  {q:"Grande sur 12, petite sur 9 → quelle heure ?",opts:["9 heures","9 h et demie"],ok:0,expl:"Grande sur 12 = pile. 9 heures."},
+  {q:"Grande sur 6, petite entre 11 et 12 → quelle heure ?",opts:["11 h et demie","12 heures"],ok:0,expl:"Grande sur 6 = et demie. 11 h et demie."},
+  {q:"Il est 2 heures pile. Où est la grande aiguille ?",opts:["Sur le 12","Sur le 6"],ok:0,expl:"Heure pile = grande sur 12."},
+  {q:"Il est 5 h et demie. Où est la grande aiguille ?",opts:["Sur le 6","Sur le 12"],ok:0,expl:"Et demie = grande sur 6."},
+  {q:"Grande sur 12, petite sur 12 → quelle heure ?",opts:["12 heures","6 heures"],ok:0,expl:"Les deux sur 12 = 12 heures (midi ou minuit)."},
+  {q:"Grande sur 6, petite entre 1 et 2 → quelle heure ?",opts:["1 h et demie","2 heures"],ok:0,expl:"Grande sur 6 = et demie. Petite entre 1 et 2 = 1 h et demie."},
+  {q:"Grande sur 12, petite sur 8 → quelle heure ?",opts:["8 heures","8 h et demie"],ok:0,expl:"Grande sur 12 = pile. 8 heures."},
+  {q:"À 6 h et demie, la petite aiguille est…",opts:["entre 6 et 7","sur le 6"],ok:0,expl:"À 6h30, la petite a dépassé 6 et va vers 7 → entre 6 et 7."},
+  {q:"Grande sur 6, petite entre 5 et 6 → quelle heure ?",opts:["5 h et demie","6 heures"],ok:0,expl:"Grande sur 6 = et demie. Petite entre 5 et 6 = 5 h et demie."},
+  {q:"Grande sur 12, petite sur 2 → quelle heure ?",opts:["2 heures","2 h et demie"],ok:0,expl:"Grande sur 12 = pile. 2 heures."},
+  {q:"La grande aiguille indique…",opts:["les minutes","les heures"],ok:0,expl:"Grande aiguille = minutes. Petite = heures."},
+  {q:"Grande sur 6, petite entre 9 et 10 → quelle heure ?",opts:["9 h et demie","10 heures"],ok:0,expl:"Grande sur 6 = et demie. 9 h et demie."},
+  {q:"Grande sur 12, petite sur 11 → quelle heure ?",opts:["11 heures","11 h et demie"],ok:0,expl:"Grande sur 12 = pile. 11 heures."}
+];
+
+var score=0,g1Idx=0,g2Idx=0,f1Exs=[],f2Exs=[],f1Done=0,f2Done=0,_cb={},_g1tries=0,_g2tries=0;
+function shuffle(a){var b=a.slice();for(var i=b.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=b[i];b[i]=b[j];b[j]=t;}return b;}
+function addPt(){score++;document.getElementById('score-display').textContent=score;}
+function updSteps(n){for(var i=0;i<6;i++){var s=document.getElementById('s'+i);if(!s)return;s.classList.remove('active','done');if(i<n)s.classList.add('done');else if(i===n)s.classList.add('active');}}
+function goPhase(ph,si){document.querySelectorAll('.phase').forEach(function(p){p.classList.remove('active');});var el=document.getElementById('phase-'+ph);if(el){el.classList.add('active');setTimeout(function(){el.scrollIntoView({behavior:'smooth',block:'start'});},100);}updSteps(si);if(ph==='g1')initG1();if(ph==='g2')initG2();if(ph==='free')initFree1();if(ph==='free2')initFree2();if(ph==='bilan')showBilan();}
+function revealBloc(n){var b=document.getElementById('bloc-'+n);if(!b)return;var p=document.getElementById('bloc-'+(n-1));if(p){var btn=p.querySelector('.btn-compris');if(btn){btn.textContent='✓ Compris !';btn.disabled=true;btn.style.opacity='.4';}}b.classList.add('revealed');setTimeout(function(){var hH=(document.querySelector('.header')||{offsetHeight:0}).offsetHeight;var r=b.getBoundingClientRect();window.scrollTo({top:window.pageYOffset+r.top-hH-16,behavior:'smooth'});},150);}
+function makeQBox(step,si,prefix){var so=shuffle(step.opts.map(function(o,oi){return{t:o,i:oi};}));var sb=document.createElement('div');sb.className='q-box'+(si===0?' active':'');sb.id=prefix+'s'+si;sb.innerHTML='<div class="q-num">Question '+(si+1)+'</div><div class="q-text">'+step.q+'</div><div class="hint-box" id="'+prefix+'h'+si+'">💡 '+step.hint+'</div><div class="opts">'+so.map(function(o){return'<button class="opt" onclick="checkQ(\''+prefix+'\','+si+','+o.i+',this)">'+o.t+'</button>';}).join('')+'</div><div class="fb" id="'+prefix+'f'+si+'"></div>';return sb;}
+function checkQ(prefix,si,ci,btn){var v=prefix==='g1'?G1[g1Idx]:G2[g2Idx];var step=v.etapes[si];var sb=document.getElementById(prefix+'s'+si);var fb=document.getElementById(prefix+'f'+si);var triesId=prefix==='g1'?'tries-g1':'tries-g2';var tries=prefix==='g1'?_g1tries:_g2tries;if(sb.classList.contains('correct'))return;if(ci===step.ok){btn.classList.add('ok');sb.querySelectorAll('.opt').forEach(function(b){b.disabled=true;});sb.classList.add('correct');if(tries===0){fb.className='fb show ok';fb.innerHTML='✅ '+step.expl_ok+' <span style="font-size:.75rem;color:#065f46">(+1 pt)</span>';addPt();}else{fb.className='fb show ok';fb.innerHTML='✅ '+step.expl_ok;}if(prefix==='g1')_g1tries=0;else _g2tries=0;var el=document.getElementById(triesId);if(el)el.textContent='3 essais';var nx=document.getElementById(prefix+'s'+(si+1));if(nx){nx.classList.add('active');setTimeout(function(){nx.scrollIntoView({behavior:'smooth',block:'nearest'});},350);}else{var btnId=prefix==='g1'?'btn-g1-to-g2':'btn-g2-to-free';setTimeout(function(){var b=document.getElementById(btnId);b.classList.add('show');b.scrollIntoView({behavior:'smooth',block:'nearest'});},550);}}else{btn.classList.add('ko');btn.disabled=true;if(prefix==='g1')_g1tries++;else _g2tries++;var newTries=prefix==='g1'?_g1tries:_g2tries;var el=document.getElementById(triesId);if(el)el.textContent=(3-newTries)+' essai'+(3-newTries>1?'s':'');fb.className='fb show ko';if(newTries<3){fb.innerHTML='❌ Réessaie ! 💪';document.getElementById(prefix+'h'+si).classList.add('show');}else{fb.innerHTML='❌ '+step.expl_ko;var rid=prefix==='g1'?'g1-reset':'g2-reset',zid=prefix==='g1'?'g1-zone':'g2-zone';setTimeout(function(){document.getElementById(rid).classList.add('show');document.getElementById(zid).innerHTML='';document.getElementById(rid).scrollIntoView({behavior:'smooth',block:'start'});},1400);}}}
+function initG(which){var isG1=which==='g1';if(isG1){g1Idx=Math.floor(Math.random()*G1.length);_g1tries=0;}else{g2Idx=Math.floor(Math.random()*G2.length);_g2tries=0;}var v=isG1?G1[g1Idx]:G2[g2Idx];document.getElementById(which+'-reset').classList.remove('show');document.getElementById('btn-'+which+'-to-'+(isG1?'g2':'free')).classList.remove('show');var z=document.getElementById(which+'-zone');z.innerHTML='';var box=document.createElement('div');box.className='guided-box';box.innerHTML='<div class="guided-title">'+v.titre+'<span class="tries-b" id="tries-'+which+'">3 essais</span></div><div id="'+which+'-steps"></div>';z.appendChild(box);v.etapes.forEach(function(step,si){document.getElementById(which+'-steps').appendChild(makeQBox(step,si,which));});}
+function initG1(){initG('g1');}function initG2(){initG('g2');}
+function buildFree(ex,i,prefix,cb){var card=document.createElement('div');card.className='free-card';card.id=prefix+'c'+i;var so=shuffle(ex.opts.map(function(o,oi){return{t:o,i:oi};}));card.innerHTML='<div class="free-num">Question '+(i+1)+'</div><div class="free-q">'+ex.q+'</div><div class="free-opts" id="'+prefix+'fo'+i+'"></div><div class="free-fb" id="'+prefix+'ff'+i+'"></div>';setTimeout(function(){var ba=document.getElementById(prefix+'fo'+i);so.forEach(function(o){var btn=document.createElement('button');btn.className='free-opt';btn.textContent=o.t;btn.onclick=function(){if(card.classList.contains('done'))return;card.classList.add('done');ba.querySelectorAll('button').forEach(function(b){b.disabled=true;});var fb=document.getElementById(prefix+'ff'+i);if(o.i===ex.ok){btn.classList.add('ok');fb.className='free-fb show ok';fb.innerHTML='✅ '+ex.expl;addPt();}else{btn.classList.add('ko');ba.querySelectorAll('button').forEach(function(b,bi){if(bi===ex.ok)b.classList.add('reveal');});fb.className='free-fb show ko';fb.innerHTML='❌ '+ex.expl;}cb();};ba.appendChild(btn);});},0);return card;}
+function initFree1(){f1Exs=shuffle(FREE_POOL.slice()).slice(0,5);f1Done=0;var z=document.getElementById('free1-zone');z.innerHTML='';f1Exs.forEach(function(ex,i){_cb['f1'+i]=function(){f1Done++;if(f1Done>=5)setTimeout(function(){var b=document.getElementById('btn-free-to-free2');b.classList.add('show');b.scrollIntoView({behavior:'smooth',block:'nearest'});},600);};z.appendChild(buildFree(ex,i,'f1',_cb['f1'+i]));});}
+function initFree2(){var used=f1Exs.map(function(e){return e.q;});var pool=FREE_POOL.filter(function(e){return used.indexOf(e.q)<0;});f2Exs=shuffle(pool).slice(0,5);f2Done=0;var z=document.getElementById('free2-zone');z.innerHTML='';f2Exs.forEach(function(ex,i){_cb['f2'+i]=function(){f2Done++;if(f2Done>=5)setTimeout(function(){var b=document.getElementById('btn-free2-to-bilan');b.classList.add('show');b.scrollIntoView({behavior:'smooth',block:'nearest'});},600);};z.appendChild(buildFree(ex,i,'f2',_cb['f2'+i]));});}
+function showBilan(){var g1n=G1[g1Idx]?G1[g1Idx].etapes.length:3,g2n=G2[g2Idx]?G2[g2Idx].etapes.length:3,tot=g1n+g2n+10;document.getElementById('bilan-pts').textContent=score;document.getElementById('bilan-sur').textContent='/ '+tot+' pts';var pct=score/tot,t,m;if(pct>=.8){t='BRAVO ! 🎉🎊';m='Tu sais lire l\'heure ! Ugo est super fier de toi ! 🦉⭐';}else if(pct>=.5){t='Très bien ! 😊🌟';m='Rappelle : grande sur 12 = pile, grande sur 6 = et demie ! Continue !';}else{t='Bien essayé ! 💪';m='Petite = heures, grande sur 12 = pile, grande sur 6 = et demie. Recommence ! 🦉';}document.getElementById('bilan-title').textContent=t;document.getElementById('bilan-msg').textContent=m;var s=[Math.ceil(tot*.33),Math.ceil(tot*.66),Math.ceil(tot*.89)];['etoile1','etoile2','etoile3'].forEach(function(id,i){var el=document.getElementById(id);if(score>=s[i]){(function(e,d){setTimeout(function(){e.classList.add('earned');},d);})(el,300+i*450);}else el.style.filter='grayscale(1)';});if(pct>=.5)confetti();}
+function confetti(){var cols=['#7c3aed','#c4b5fd','#059669','#d97706','#0369a1'];for(var i=0;i<65;i++){var el=document.createElement('div');el.className='confetti-piece';el.style.cssText='left:'+Math.random()*100+'vw;background:'+cols[Math.floor(Math.random()*cols.length)]+';animation-duration:'+(1.8+Math.random()*2.2)+'s;animation-delay:'+Math.random()*1.5+'s;width:'+(7+Math.random()*10)+'px;height:'+(7+Math.random()*10)+'px;border-radius:'+(Math.random()>.5?'50%':'4px')+';';document.body.appendChild(el);setTimeout(function(){if(el.parentNode)el.remove();},5000);}}
+</script>
+</body>
+</html>
