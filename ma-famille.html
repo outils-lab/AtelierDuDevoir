@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Ma famille – L'Atelier du Devoir</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bleu:#3B82F6;--vert:#10B981;--orange:#F59E0B;--violet:#8B5CF6;--rouge:#EF4444;
+  --texte:#2C3E50;
+}
+body{font-family:'Nunito',sans-serif;background:#F8F9FA;color:var(--texte);min-height:100vh;}
+
+.topbar{padding:16px 20px 0;display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+.mini-btn{
+  display:inline-block;background:#fff;border:2.5px solid;border-radius:14px;
+  padding:9px 18px;font-family:'Fredoka One',cursive;font-size:.9rem;
+  text-decoration:none;cursor:pointer;transition:transform .13s,box-shadow .13s;
+}
+.mini-btn:hover{transform:translateY(-3px);box-shadow:0 8px 14px rgba(0,0,0,.12);}
+.mb-bleu{color:var(--bleu);border-color:var(--bleu);}
+.mb-rouge{color:var(--rouge);border-color:var(--rouge);}
+.spacer{flex:1;}
+
+.wrap{max-width:900px;margin:0 auto;padding:20px 16px 60px;}
+
+.tete{text-align:center;margin:10px 0 26px;}
+.tete h1{font-family:'Nunito',sans-serif;font-weight:900;font-size:2.5rem;line-height:1.1;}
+.tete h1 span{color:var(--violet);}
+.tete p{font-weight:700;font-size:.95rem;color:#6b7280;margin-top:6px;}
+.tete p::after{content:"";display:block;width:60px;height:3px;border-radius:3px;background:var(--violet);margin:8px auto 0;opacity:.55;}
+
+.compte-mail{text-align:center;font-weight:700;font-size:.82rem;color:#9aa5b1;margin-bottom:22px;}
+
+/* Cartes enfants */
+.grille{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-bottom:26px;}
+.carte-enfant{
+  background:#fff;border:2.5px solid;border-radius:18px;padding:20px 14px 18px;
+  text-align:center;cursor:pointer;position:relative;
+  transition:transform .13s,box-shadow .13s;
+}
+.carte-enfant:hover{transform:translateY(-4px);box-shadow:0 8px 14px rgba(0,0,0,.12);}
+.carte-enfant.actif{box-shadow:0 0 0 4px rgba(0,0,0,.06),0 8px 18px rgba(0,0,0,.13);}
+.ce-avatar{font-size:2.6rem;display:block;margin-bottom:6px;}
+.ce-prenom{font-family:'Fredoka One',cursive;font-size:1.35rem;line-height:1.2;}
+.ce-classe{font-weight:800;font-size:.85rem;color:#6b7280;margin-top:2px;}
+.ce-badge{
+  display:inline-block;margin-top:10px;border-radius:20px;padding:4px 12px;
+  font-weight:800;font-size:.72rem;background:#f1f5f9;color:#94a3b8;
+}
+.carte-enfant.actif .ce-badge{background:currentColor;color:#fff;}
+.ce-suppr{
+  position:absolute;top:8px;right:10px;background:none;border:none;
+  font-size:1rem;color:#cbd5e1;cursor:pointer;line-height:1;padding:4px;
+}
+.ce-suppr:hover{color:var(--rouge);}
+
+.c-1{color:var(--bleu);border-color:var(--bleu);}
+.c-2{color:var(--vert);border-color:var(--vert);}
+.c-3{color:var(--orange);border-color:var(--orange);}
+.c-4{color:var(--violet);border-color:var(--violet);}
+
+/* Carte "ajouter" */
+.carte-ajout{
+  background:#fff;border:2.5px dashed #cbd5e1;border-radius:18px;padding:20px 14px;
+  text-align:center;cursor:pointer;color:#9aa5b1;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:150px;
+  transition:all .15s;font-family:'Fredoka One',cursive;font-size:1.05rem;
+}
+.carte-ajout:hover{border-color:var(--vert);color:var(--vert);transform:translateY(-3px);}
+.carte-ajout .plus{font-size:2rem;display:block;margin-bottom:4px;}
+
+/* Formulaire ajout */
+.form-ajout{
+  display:none;background:#fff;border:2.5px solid var(--vert);border-radius:18px;
+  padding:22px 20px;margin-bottom:26px;
+}
+.form-ajout.visible{display:block;}
+.form-ajout h3{font-family:'Fredoka One',cursive;font-size:1.2rem;color:var(--vert);margin-bottom:14px;text-align:center;}
+.champ{margin-bottom:14px;}
+.champ label{display:block;font-weight:800;font-size:.86rem;margin-bottom:6px;}
+.champ input,.champ select{
+  width:100%;background:#fff;border:2.5px solid #d7dde5;border-radius:14px;
+  padding:12px 14px;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:600;outline:none;
+}
+.champ input:focus,.champ select:focus{border-color:var(--vert);}
+.form-btns{display:flex;gap:10px;margin-top:16px;}
+.btn-form{
+  flex:1;background:#fff;border:2.5px solid;border-radius:14px;padding:13px 4px 15px;
+  font-family:'Fredoka One',cursive;font-size:1rem;cursor:pointer;position:relative;
+  transition:transform .13s,box-shadow .13s;
+}
+.btn-form::after{content:"";position:absolute;left:22%;right:22%;bottom:7px;height:3px;border-radius:2px;background:currentColor;opacity:.5;}
+.btn-form:hover{transform:translateY(-3px);box-shadow:0 8px 14px rgba(0,0,0,.12);}
+.btn-form:disabled{opacity:.55;cursor:default;transform:none;box-shadow:none;}
+.bf-valider{color:var(--vert);border-color:var(--vert);}
+.bf-annuler{color:#9aa5b1;border-color:#cbd5e1;}
+
+.msg{display:none;border-radius:14px;padding:12px 14px;margin-bottom:18px;font-size:.9rem;font-weight:700;line-height:1.5;border:2.5px solid;background:#fff;}
+.msg.show{display:block;}
+.msg.err{border-color:var(--rouge);color:var(--rouge);}
+.msg.ok{border-color:var(--vert);color:#0d9464;}
+
+.chargement{text-align:center;padding:50px 20px;font-weight:800;color:#9aa5b1;}
+
+.bloc-info{
+  background:#fff;border:2.5px solid #e8ecf1;border-radius:18px;padding:18px 20px;
+  font-weight:700;font-size:.88rem;color:#6b7280;line-height:1.7;text-align:center;
+}
+.bloc-info strong{color:var(--texte);}
+
+@media(max-width:480px){
+  .tete h1{font-size:2rem;}
+  .grille{grid-template-columns:1fr 1fr;gap:10px;}
+  .ce-prenom{font-size:1.1rem;}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="index.html" class="mini-btn mb-bleu">&#8592; Accueil</a>
+  <span class="spacer"></span>
+  <button class="mini-btn mb-rouge" onclick="deconnexion()">Se déconnecter</button>
+</div>
+
+<div class="wrap">
+
+  <div class="tete">
+    <h1>Ma famille<span> !</span></h1>
+    <p>Choisis qui travaille aujourd'hui</p>
+  </div>
+  <div class="compte-mail" id="compte-mail"></div>
+
+  <div class="msg" id="msg"></div>
+
+  <div id="chargement" class="chargement">Chargement…</div>
+
+  <div id="contenu" style="display:none;">
+
+    <div class="grille" id="grille-enfants"></div>
+
+    <div class="form-ajout" id="form-ajout">
+      <h3>&#x2795; Ajouter un enfant</h3>
+      <div class="champ">
+        <label for="in-prenom">Prénom</label>
+        <input type="text" id="in-prenom" placeholder="écris ici…" maxlength="20" autocomplete="off">
+      </div>
+      <div class="champ">
+        <label for="in-classe">Classe</label>
+        <select id="in-classe">
+          <option value="">— choisis une classe —</option>
+          <option value="CP">CP</option>
+          <option value="CE1">CE1</option>
+          <option value="CE2">CE2</option>
+          <option value="CM1">CM1</option>
+          <option value="CM2">CM2</option>
+          <option value="6e">6ème</option>
+          <option value="5e">5ème</option>
+          <option value="4e">4ème</option>
+          <option value="3e">3ème</option>
+        </select>
+      </div>
+      <div class="form-btns">
+        <button class="btn-form bf-annuler" onclick="fermerForm()">Annuler</button>
+        <button class="btn-form bf-valider" id="btn-ajouter" onclick="ajouterEnfant()">Ajouter</button>
+      </div>
+    </div>
+
+    <div class="bloc-info" id="bloc-info"></div>
+
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+var SUPABASE_URL = "https://rwqsvrmjjoihuhmvbwuu.supabase.co";
+var SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ3cXN2cm1qam9paHVobXZid3V1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQzNjQxNTMsImV4cCI6MjA5OTk0MDE1M30.VtdOnI169-erf48NpxLPCC0th6kHqBcsBuCauOx52HI";
+var sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+var CLE_ACTIF = "atelier_enfant_actif";
+var AVATARS = ["\u{1F9D2}","\u{1F467}","\u{1F466}","\u{1F9D1}"];
+var enfants = [];
+var userId = null;
+
+function showMsg(text, type){
+  var el = document.getElementById('msg');
+  el.textContent = text;
+  el.className = 'msg show ' + type;
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+function hideMsg(){ document.getElementById('msg').className = 'msg'; }
+
+// ═══ Démarrage : vérifier la session ═══
+(async function init(){
+  var res = await sb.auth.getSession();
+  if(!res.data.session){
+    window.location.href = "connexion.html";
+    return;
+  }
+  userId = res.data.session.user.id;
+  document.getElementById('compte-mail').textContent = "Compte : " + res.data.session.user.email;
+  await chargerEnfants();
+})();
+
+async function chargerEnfants(){
+  var res = await sb.from('enfants').select('*').order('cree_le', {ascending:true});
+  document.getElementById('chargement').style.display = 'none';
+  document.getElementById('contenu').style.display = 'block';
+
+  if(res.error){
+    showMsg("Impossible de charger les profils : " + res.error.message, 'err');
+    return;
+  }
+  enfants = res.data || [];
+
+  // Sélection automatique si un seul enfant
+  if(enfants.length === 1){
+    localStorage.setItem(CLE_ACTIF, enfants[0].id);
+  }
+  // Si l'enfant actif n'existe plus, on nettoie
+  var actif = localStorage.getItem(CLE_ACTIF);
+  if(actif && !enfants.some(function(e){ return e.id === actif; })){
+    localStorage.removeItem(CLE_ACTIF);
+  }
+
+  afficher();
+}
+
+function afficher(){
+  var grille = document.getElementById('grille-enfants');
+  var actif = localStorage.getItem(CLE_ACTIF);
+  grille.innerHTML = '';
+
+  enfants.forEach(function(e, i){
+    var estActif = (e.id === actif);
+    var div = document.createElement('div');
+    div.className = 'carte-enfant c-' + ((i % 4) + 1) + (estActif ? ' actif' : '');
+    div.onclick = function(ev){
+      if(ev.target.classList.contains('ce-suppr')) return;
+      choisirEnfant(e.id);
+    };
+    div.innerHTML =
+      '<button class="ce-suppr" title="Supprimer ce profil" onclick="supprimerEnfant(\'' + e.id + '\')">&#x2715;</button>' +
+      '<span class="ce-avatar">' + AVATARS[i % AVATARS.length] + '</span>' +
+      '<div class="ce-prenom">' + echapper(e.prenom) + '</div>' +
+      '<div class="ce-classe">' + echapper(e.classe) + '</div>' +
+      '<span class="ce-badge">' + (estActif ? "\u2713 sélectionné" : "choisir") + '</span>';
+    grille.appendChild(div);
+  });
+
+  // Carte "ajouter" si moins de 4
+  if(enfants.length < 4){
+    var add = document.createElement('div');
+    add.className = 'carte-ajout';
+    add.onclick = ouvrirForm;
+    add.innerHTML = '<span class="plus">&#x2795;</span>' + (enfants.length === 0 ? "Ajoute ton premier enfant" : "Ajouter un enfant");
+    grille.appendChild(add);
+  }
+
+  // Bloc d'info du bas
+  var info = document.getElementById('bloc-info');
+  if(enfants.length === 0){
+    info.innerHTML = "Crée un profil pour chaque enfant.<br>Sa progression sera enregistrée automatiquement quand il termine une fiche.";
+  } else if(actif){
+    var e = enfants.filter(function(x){ return x.id === actif; })[0];
+    info.innerHTML = "<strong>" + echapper(e.prenom) + "</strong> travaille en ce moment.<br>Ses résultats seront enregistrés sur son profil.<br>Ce choix est retenu sur cet appareil.";
+  } else {
+    info.innerHTML = "Tape sur un prénom pour choisir qui travaille aujourd'hui.";
+  }
+}
+
+function echapper(s){
+  var d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+function choisirEnfant(id){
+  localStorage.setItem(CLE_ACTIF, id);
+  hideMsg();
+  afficher();
+}
+
+function ouvrirForm(){
+  hideMsg();
+  document.getElementById('form-ajout').classList.add('visible');
+  document.getElementById('in-prenom').focus();
+}
+function fermerForm(){
+  document.getElementById('form-ajout').classList.remove('visible');
+  document.getElementById('in-prenom').value = '';
+  document.getElementById('in-classe').value = '';
+}
+
+async function ajouterEnfant(){
+  hideMsg();
+  var prenom = document.getElementById('in-prenom').value.trim();
+  var classe = document.getElementById('in-classe').value;
+
+  if(!prenom){ showMsg("Écris le prénom de l'enfant.", 'err'); return; }
+  if(!classe){ showMsg("Choisis la classe de l'enfant.", 'err'); return; }
+
+  var btn = document.getElementById('btn-ajouter');
+  btn.disabled = true; btn.textContent = "Ajout…";
+
+  var res = await sb.from('enfants').insert({ parent_id: userId, prenom: prenom, classe: classe }).select();
+
+  btn.disabled = false; btn.textContent = "Ajouter";
+
+  if(res.error){
+    var m = res.error.message || '';
+    if(m.indexOf('Maximum 4 enfants') !== -1){
+      showMsg("Tu as déjà 4 enfants sur ce compte, c'est le maximum.", 'err');
+    } else {
+      showMsg("Impossible d'ajouter : " + m, 'err');
+    }
+    return;
+  }
+
+  fermerForm();
+  await chargerEnfants();
+  showMsg(prenom + " a été ajouté ! \u{1F389}", 'ok');
+}
+
+async function supprimerEnfant(id){
+  var e = enfants.filter(function(x){ return x.id === id; })[0];
+  if(!e) return;
+  var ok = confirm("Supprimer le profil de " + e.prenom + " ?\n\nToute sa progression sera définitivement effacée.");
+  if(!ok) return;
+
+  hideMsg();
+  var res = await sb.from('enfants').delete().eq('id', id);
+  if(res.error){
+    showMsg("Impossible de supprimer : " + res.error.message, 'err');
+    return;
+  }
+  if(localStorage.getItem(CLE_ACTIF) === id){
+    localStorage.removeItem(CLE_ACTIF);
+  }
+  await chargerEnfants();
+  showMsg("Profil supprimé.", 'ok');
+}
+
+async function deconnexion(){
+  await sb.auth.signOut();
+  localStorage.removeItem(CLE_ACTIF);
+  window.location.href = "index.html";
+}
+
+document.getElementById('in-prenom').addEventListener('keydown', function(ev){
+  if(ev.key === 'Enter') document.getElementById('in-classe').focus();
+});
+</script>
+</body>
+</html>
