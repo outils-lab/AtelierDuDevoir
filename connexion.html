@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Mon compte – L'Atelier du Devoir</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bleu:#3B82F6;--vert:#10B981;--orange:#F59E0B;--violet:#8B5CF6;--rouge:#EF4444;
+  --jaune-pale:#FFF9E6;--violet-pale:#F5F0FF;--texte:#2C3E50;
+}
+body{font-family:'Nunito',sans-serif;background:#F8F9FA;color:var(--texte);min-height:100vh;display:flex;flex-direction:column;}
+
+/* Lien retour, discret comme sur le site */
+.topbar{padding:16px 20px 0;}
+.retour{
+  display:inline-block;background:#fff;border:2.5px solid var(--bleu);border-radius:14px;
+  padding:9px 18px;font-family:'Fredoka One',cursive;font-size:.95rem;color:var(--bleu);
+  text-decoration:none;transition:transform .13s,box-shadow .13s;
+}
+.retour:hover{transform:translateY(-3px);box-shadow:0 8px 14px rgba(0,0,0,.12);}
+
+.wrap{flex:1;display:flex;align-items:flex-start;justify-content:center;padding:20px 16px 50px;}
+.carte{width:100%;max-width:470px;}
+
+/* Tête : Ugo + titre, comme les panneaux du site */
+.tete{text-align:center;margin-bottom:18px;}
+.tete .ugo{font-size:3.4rem;display:block;margin-bottom:4px;filter:drop-shadow(0 4px 10px rgba(0,0,0,.13));}
+.tete h1{font-family:'Nunito',sans-serif;font-weight:900;font-size:2.4rem;color:var(--texte);line-height:1.1;}
+.tete h1 span{color:var(--bleu);}
+.tete p{font-weight:700;font-size:.95rem;color:#6b7280;margin-top:6px;}
+.tete p::after{content:"";display:block;width:60px;height:3px;border-radius:3px;background:var(--bleu);margin:8px auto 0;opacity:.55;}
+
+/* Onglets : style .btn du site (blanc, bordure colorée, Fredoka One) */
+.onglets{display:flex;gap:10px;margin-bottom:0;}
+.onglet{
+  flex:1;background:#fff;border:2.5px solid #d7dde5;border-radius:14px 14px 0 0;border-bottom:none;
+  padding:14px 4px 12px;font-family:'Fredoka One',cursive;font-size:1.02rem;color:#9aa5b1;
+  text-align:center;cursor:pointer;transition:all .15s;position:relative;
+}
+.onglet.actif-signup{color:var(--orange);border-color:var(--orange);background:var(--jaune-pale);}
+.onglet.actif-login{color:var(--violet);border-color:var(--violet);background:var(--violet-pale);}
+.onglet.actif-signup::after,.onglet.actif-login::after{
+  content:"";position:absolute;left:20%;right:20%;bottom:8px;height:3px;border-radius:2px;
+  background:currentColor;opacity:.5;
+}
+.onglet:hover:not(.actif-signup):not(.actif-login){transform:translateY(-2px);}
+
+/* Panneaux : style .panel du site */
+.panneau{
+  display:none;border-radius:0 0 24px 24px;padding:24px 22px 26px;
+  box-shadow:0 6px 20px rgba(0,0,0,.07);
+}
+.panneau.visible{display:block;}
+#panneau-signup{background:var(--jaune-pale);border:2.5px solid var(--orange);border-top:none;}
+#panneau-login{background:var(--violet-pale);border:2.5px solid var(--violet);border-top:none;}
+
+.champ{margin-bottom:15px;}
+.champ label{display:block;font-weight:800;font-size:.88rem;margin-bottom:6px;color:var(--texte);}
+.champ input{
+  width:100%;background:#fff;border:2.5px solid #d7dde5;border-radius:14px;
+  padding:12px 14px;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:600;outline:none;
+  transition:border-color .15s;
+}
+.champ input:focus{border-color:var(--bleu);}
+.indice{font-size:.78rem;font-weight:700;color:#9aa5b1;margin-top:4px;}
+
+/* Bouton principal : style .btn du site en pleine largeur */
+.btn-action{
+  width:100%;background:#fff;border:2.5px solid;border-radius:14px;
+  padding:15px 4px 17px;margin-top:4px;
+  font-family:'Fredoka One',cursive;font-size:1.15rem;
+  text-align:center;cursor:pointer;transition:transform .13s,box-shadow .13s;
+  position:relative;display:block;
+}
+.btn-action::after{
+  content:"";position:absolute;left:20%;right:20%;bottom:8px;height:3px;border-radius:2px;
+  background:currentColor;opacity:.5;
+}
+.btn-action:hover{transform:translateY(-4px);box-shadow:0 8px 14px rgba(0,0,0,.12);}
+.btn-action:disabled{opacity:.55;cursor:default;transform:none;box-shadow:none;}
+.btn-signup{color:var(--orange);border-color:var(--orange);}
+.btn-login{color:var(--violet);border-color:var(--violet);}
+
+.msg{display:none;border-radius:14px;padding:12px 14px;margin-bottom:15px;font-size:.9rem;font-weight:700;line-height:1.5;border:2.5px solid;}
+.msg.show{display:block;}
+.msg.err{background:#fff;border-color:var(--rouge);color:var(--rouge);}
+.msg.ok{background:#fff;border-color:var(--vert);color:#0d9464;}
+
+.oubli{text-align:center;margin-top:14px;}
+.oubli button{background:none;border:none;color:var(--violet);font-family:'Nunito',sans-serif;font-weight:800;font-size:.85rem;cursor:pointer;text-decoration:underline;}
+
+.note-bas{text-align:center;margin-top:18px;font-size:.8rem;font-weight:700;color:#9aa5b1;line-height:1.6;}
+
+@media(max-width:480px){
+  .tete h1{font-size:2rem;}
+  .onglet{font-size:.92rem;}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="index.html" class="retour">&#8592; Accueil</a>
+</div>
+
+<div class="wrap">
+  <div class="carte">
+
+    <div class="tete">
+      <span class="ugo">&#x1F989;</span>
+      <h1>Bienvenue&nbsp;<span>!</span></h1>
+      <p>Crée ton compte famille pour sauvegarder la progression de tes enfants</p>
+    </div>
+
+    <div class="onglets">
+      <button class="onglet actif-signup" id="ong-signup" onclick="switchTab('signup')">Créer un compte</button>
+      <button class="onglet" id="ong-login" onclick="switchTab('login')">Se connecter</button>
+    </div>
+
+    <!-- CRÉER UN COMPTE -->
+    <div class="panneau visible" id="panneau-signup">
+      <div class="msg" id="msg-signup"></div>
+      <div class="champ">
+        <label for="su-email">Adresse email</label>
+        <input type="email" id="su-email" placeholder="parent@exemple.fr" autocomplete="email">
+      </div>
+      <div class="champ">
+        <label for="su-pass">Mot de passe</label>
+        <input type="password" id="su-pass" placeholder="écris ici…" autocomplete="new-password">
+        <div class="indice">Au moins 6 caractères.</div>
+      </div>
+      <div class="champ">
+        <label for="su-pass2">Confirme le mot de passe</label>
+        <input type="password" id="su-pass2" placeholder="écris ici…" autocomplete="new-password">
+      </div>
+      <button class="btn-action btn-signup" id="btn-signup" onclick="doSignup()">Créer mon compte &#x1F680;</button>
+    </div>
+
+    <!-- SE CONNECTER -->
+    <div class="panneau" id="panneau-login">
+      <div class="msg" id="msg-login"></div>
+      <div class="champ">
+        <label for="li-email">Adresse email</label>
+        <input type="email" id="li-email" placeholder="parent@exemple.fr" autocomplete="email">
+      </div>
+      <div class="champ">
+        <label for="li-pass">Mot de passe</label>
+        <input type="password" id="li-pass" placeholder="écris ici…" autocomplete="current-password">
+      </div>
+      <button class="btn-action btn-login" id="btn-login" onclick="doLogin()">Me connecter &#x2728;</button>
+      <div class="oubli">
+        <button onclick="doForgot()">Mot de passe oublié ?</button>
+      </div>
+    </div>
+
+    <div class="note-bas">
+      Gratuit &middot; Un compte = jusqu'à 4 enfants<br>
+      Les fiches restent accessibles librement sans compte
+    </div>
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+var SUPABASE_URL = "https://rwqsvrmjjoihuhmvbwuu.supabase.co";
+var SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ3cXN2cm1qam9paHVobXZid3V1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQzNjQxNTMsImV4cCI6MjA5OTk0MDE1M30.VtdOnI169-erf48NpxLPCC0th6kHqBcsBuCauOx52HI";
+var sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// Déjà connecté ? → espace famille
+sb.auth.getSession().then(function(res){
+  if(res.data.session){ window.location.href = "ma-famille.html"; }
+});
+
+function switchTab(name){
+  var ongS = document.getElementById('ong-signup');
+  var ongL = document.getElementById('ong-login');
+  ongS.className = 'onglet' + (name==='signup' ? ' actif-signup' : '');
+  ongL.className = 'onglet' + (name==='login' ? ' actif-login' : '');
+  document.getElementById('panneau-signup').classList.toggle('visible', name==='signup');
+  document.getElementById('panneau-login').classList.toggle('visible', name==='login');
+}
+
+function showMsg(id, text, type){
+  var el = document.getElementById(id);
+  el.textContent = text;
+  el.className = 'msg show ' + type;
+}
+function hideMsg(id){ document.getElementById(id).className = 'msg'; }
+
+function frError(message){
+  var m = (message||'').toLowerCase();
+  if(m.indexOf('email not confirmed') !== -1) return "Ton adresse email n'est pas encore confirmée. Clique sur le lien dans l'email que tu as reçu (vérifie aussi tes spams).";
+  if(m.indexOf('invalid login credentials') !== -1) return "Email ou mot de passe incorrect.";
+  if(m.indexOf('user already registered') !== -1) return "Un compte existe déjà avec cette adresse email. Utilise l'onglet « Se connecter ».";
+  if(m.indexOf('password should be at least') !== -1) return "Le mot de passe doit contenir au moins 6 caractères.";
+  if(m.indexOf('unable to validate email') !== -1 || m.indexOf('invalid email') !== -1) return "Cette adresse email ne semble pas valide.";
+  if(m.indexOf('rate limit') !== -1) return "Trop de tentatives. Attends quelques minutes et réessaie.";
+  if(m.indexOf('network') !== -1 || m.indexOf('fetch') !== -1) return "Problème de connexion internet. Vérifie ta connexion et réessaie.";
+  return "Une erreur est survenue : " + message;
+}
+
+async function doSignup(){
+  hideMsg('msg-signup');
+  var email = document.getElementById('su-email').value.trim();
+  var pass = document.getElementById('su-pass').value;
+  var pass2 = document.getElementById('su-pass2').value;
+
+  if(!email){ showMsg('msg-signup', "Écris ton adresse email.", 'err'); return; }
+  if(pass.length < 6){ showMsg('msg-signup', "Le mot de passe doit contenir au moins 6 caractères.", 'err'); return; }
+  if(pass !== pass2){ showMsg('msg-signup', "Les deux mots de passe ne sont pas identiques.", 'err'); return; }
+
+  var btn = document.getElementById('btn-signup');
+  btn.disabled = true; btn.textContent = "Création en cours…";
+
+  var res = await sb.auth.signUp({
+    email: email,
+    password: pass,
+    options: { emailRedirectTo: window.location.origin + window.location.pathname }
+  });
+
+  btn.disabled = false; btn.innerHTML = "Créer mon compte &#x1F680;";
+
+  if(res.error){ showMsg('msg-signup', frError(res.error.message), 'err'); return; }
+
+  if(res.data && res.data.user && !res.data.session){
+    showMsg('msg-signup', "Compte créé ! \u{1F4E7} Un email de confirmation vient de t'être envoyé. Clique sur le lien dans cet email (pense à vérifier tes spams), puis reviens ici pour te connecter.", 'ok');
+    return;
+  }
+  showMsg('msg-signup', "Compte créé ! Redirection…", 'ok');
+  setTimeout(function(){ window.location.href = "ma-famille.html"; }, 800);
+}
+
+async function doLogin(){
+  hideMsg('msg-login');
+  var email = document.getElementById('li-email').value.trim();
+  var pass = document.getElementById('li-pass').value;
+
+  if(!email || !pass){ showMsg('msg-login', "Remplis l'email et le mot de passe.", 'err'); return; }
+
+  var btn = document.getElementById('btn-login');
+  btn.disabled = true; btn.textContent = "Connexion…";
+
+  var res = await sb.auth.signInWithPassword({ email: email, password: pass });
+
+  btn.disabled = false; btn.innerHTML = "Me connecter &#x2728;";
+
+  if(res.error){ showMsg('msg-login', frError(res.error.message), 'err'); return; }
+
+  showMsg('msg-login', "Connecté ! Redirection…", 'ok');
+  setTimeout(function(){ window.location.href = "ma-famille.html"; }, 600);
+}
+
+async function doForgot(){
+  hideMsg('msg-login');
+  var email = document.getElementById('li-email').value.trim();
+  if(!email){
+    showMsg('msg-login', "Écris d'abord ton adresse email ci-dessus, puis reclique sur « Mot de passe oublié ? ».", 'err');
+    return;
+  }
+  var res = await sb.auth.resetPasswordForEmail(email, {
+    redirectTo: window.location.origin + window.location.pathname.replace('connexion.html','nouveau-mot-de-passe.html')
+  });
+  if(res.error){ showMsg('msg-login', frError(res.error.message), 'err'); return; }
+  showMsg('msg-login', "Email envoyé ! Regarde ta boîte mail (et tes spams) pour réinitialiser ton mot de passe.", 'ok');
+}
+
+document.getElementById('su-pass2').addEventListener('keydown', function(e){ if(e.key==='Enter') doSignup(); });
+document.getElementById('li-pass').addEventListener('keydown', function(e){ if(e.key==='Enter') doLogin(); });
+</script>
+</body>
+</html>
