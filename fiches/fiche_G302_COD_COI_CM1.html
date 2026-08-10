@@ -546,6 +546,8 @@ body{font-family:'Nunito',sans-serif;background:#f0fbff;color:var(--text);font-s
   </div>
 </main>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
 <script>
 // ── IMPRESSION ─────────────────────────────────
 function printLecon() {
@@ -738,6 +740,7 @@ function verifyTyping(){
 
 // ── BILAN ───────────────────────────────────────
 function showBilan(){
+  if(typeof enregistrerProgression==='function'){ enregistrerProgression('G302', score, 18); }
   document.getElementById('bilan-score').textContent=score;
   var pct=score/18, mascot,title,msg;
   if(pct>=0.89){mascot='🦉🌟';title='Excellent !';msg='Tu maîtrises parfaitement la distinction COD/COI. Bravo !'}

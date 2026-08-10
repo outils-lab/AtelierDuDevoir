@@ -553,6 +553,8 @@ body{font-family:'Nunito',sans-serif;background:#f0fbff;color:var(--text);font-s
   </div>
 </main>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
 <script>
 function printLecon(){document.body.classList.remove('print-mode-eval');document.body.classList.add('print-mode-lecon');setTimeout(function(){window.print();setTimeout(function(){document.body.classList.remove('print-mode-lecon');},600);},60);}
 function printEval(){document.body.classList.remove('print-mode-lecon');document.body.classList.add('print-mode-eval');setTimeout(function(){window.print();setTimeout(function(){document.body.classList.remove('print-mode-eval');},600);},60);}
@@ -688,6 +690,7 @@ function classifyAnswer(btn) {
 }
 
 function showBilan(){
+  if(typeof enregistrerProgression==='function'){ enregistrerProgression('G304', score, 18); }
   document.getElementById('bilan-score').textContent=score;
   var pct=score/18,mascot,title,msg;
   if(pct>=0.89){mascot='🦉🌟';title='Excellent !';msg='Tu maîtrises parfaitement les CC. Bravo !';}

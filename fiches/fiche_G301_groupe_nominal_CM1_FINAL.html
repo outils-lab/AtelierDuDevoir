@@ -714,6 +714,8 @@ body{font-family:'Nunito',sans-serif;background:#f0fbff;color:var(--text);font-s
   </div>
 </main>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
 <script>
 
 // ── IMPRESSION ─────────────────────────────────
@@ -1011,6 +1013,7 @@ function verifyTyping() {
 // ── BILAN ──────────────────────────────────────
 function showBilan() {
   document.getElementById('bilan-score').textContent = score;
+  if(typeof enregistrerProgression==='function'){ enregistrerProgression('G301', score, 18); }
   var mascot, title, msg;
   if (score >= 16) { mascot = '🦉🌟'; title = 'Excellent !'; msg = 'Tu maîtrises parfaitement le groupe nominal. Bravo !'; }
   else if (score >= 13) { mascot = '🦉'; title = 'Très bien !'; msg = 'Relis les types d\'expansions pour être au top !'; }

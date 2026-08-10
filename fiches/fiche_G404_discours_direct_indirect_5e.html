@@ -468,6 +468,8 @@ body{font-family:'Lato',sans-serif;background:#fff7ed;color:var(--text);font-siz
   </div>
 
 </main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
 <script>
 var TOTAL_PTS = 21;
 
@@ -828,6 +830,7 @@ function verifyJugement(ji,choice){
 }
 
 function showBilan(){
+  if(typeof enregistrerProgression==='function'){ enregistrerProgression('G404', score, TOTAL_PTS); }
   document.getElementById('bilan-score').textContent=score;
   var pct=score/TOTAL_PTS;
   var title,msg;
