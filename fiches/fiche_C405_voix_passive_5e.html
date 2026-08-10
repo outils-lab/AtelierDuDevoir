@@ -479,6 +479,8 @@ body{font-family:'Lato',sans-serif;background:#ecfeff;color:var(--text);font-siz
     </div>
   </div>
 </main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
 <script>
 var classifyExpls = {
   "0": "Passive : 'a été inauguré' = être au passé composé + participe passé. Le sujet 'le nouveau pont' subit l'action. Le complément d'agent est 'par le ministre'.",
@@ -708,6 +710,7 @@ function verifyJugement(ji,choice){
 }
 
 function showBilan(){
+  if(typeof enregistrerProgression==='function'){ enregistrerProgression('C405', score, TOTAL_PTS); }
   document.getElementById('bilan-score').textContent=score;
   document.getElementById('bilan-total').textContent='/ '+TOTAL_PTS+' pts';
   var pct=score/TOTAL_PTS;

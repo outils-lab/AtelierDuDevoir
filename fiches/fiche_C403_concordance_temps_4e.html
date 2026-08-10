@@ -484,6 +484,8 @@ body{font-family:'Lato',sans-serif;background:#f5f3ff;color:var(--text);font-siz
   </div>
 
 </main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
 <script>
 var classifyExpls = {
   "0": "Conditionnel : 'annonça' est au passé simple. La postériorité dans la subordonnée s'exprime au conditionnel présent → 'seraient'. Le futur simple 'seront' est incorrect après un verbe principal au passé.",
@@ -803,6 +805,7 @@ function verifyJugement(ji,choice){
 }
 
 function showBilan(){
+  if(typeof enregistrerProgression==='function'){ enregistrerProgression('C403', score, TOTAL_PTS); }
   document.getElementById('bilan-score').textContent=score;
   document.getElementById('bilan-total').textContent='/ '+TOTAL_PTS+' pts';
   var pct=score/TOTAL_PTS;

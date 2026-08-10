@@ -357,6 +357,8 @@ body{font-family:'Nunito',sans-serif;background:#f0fbff;color:var(--text);font-s
   </div>
 </main>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
 <script>
 function printLecon(){document.body.classList.add('print-mode-lecon');setTimeout(function(){window.print();setTimeout(function(){document.body.classList.remove('print-mode-lecon');},600);},60);}
 function printEval(){document.body.classList.add('print-mode-eval');setTimeout(function(){window.print();setTimeout(function(){document.body.classList.remove('print-mode-eval');},600);},60);}
@@ -488,6 +490,7 @@ function verifyConjVerb(verbIdx,answers){
   if(Object.keys(conjVerified).length>=conjTotal){setTimeout(function(){var nb=document.getElementById('btn-to-bilan');if(nb){nb.classList.add('show');nb.scrollIntoView({behavior:'smooth',block:'nearest'});}},800);}
 }
 function showBilan(){
+  if(typeof enregistrerProgression==='function'){ enregistrerProgression('C307', score, 42); }
   document.getElementById('bilan-score').textContent=score;
   var pct=score/42;
   var title,msg;

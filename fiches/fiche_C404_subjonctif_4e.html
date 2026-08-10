@@ -463,6 +463,8 @@ body{font-family:'Lato',sans-serif;background:#fff7ed;color:var(--text);font-siz
     </div>
   </div>
 </main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
 <script>
 var classifyExpls = {
   "0": "Subjonctif : 'il est indispensable que' est une expression impersonnelle de nécessité → subjonctif obligatoire. Forme correcte : 'prennes'.",
@@ -684,6 +686,7 @@ function verifyJugement(ji,choice){
 }
 
 function showBilan(){
+  if(typeof enregistrerProgression==='function'){ enregistrerProgression('C404', score, TOTAL_PTS); }
   document.getElementById('bilan-score').textContent=score;
   document.getElementById('bilan-total').textContent='/ '+TOTAL_PTS+' pts';
   var pct=score/TOTAL_PTS;

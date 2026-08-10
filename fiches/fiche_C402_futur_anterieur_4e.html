@@ -500,6 +500,8 @@ body{font-family:'Lato',sans-serif;background:#ecfdf5;color:var(--text);font-siz
   </div>
 
 </main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
 <script>
 var classifyExpls = {
   "0": "Antériorité future : la remise du rapport (futur antérieur) est antérieure à la convocation de réunion (futur simple). 'Dès que' renforce cette relation d'ordre.",
@@ -840,6 +842,7 @@ function verifyJugement(ji,choice){
 }
 
 function showBilan(){
+  if(typeof enregistrerProgression==='function'){ enregistrerProgression('C402', score, TOTAL_PTS); }
   document.getElementById('bilan-score').textContent=score;
   document.getElementById('bilan-total').textContent='/ '+TOTAL_PTS+' pts';
   var pct=score/TOTAL_PTS;
