@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Mes devoirs – L'Atelier du Devoir</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{--bleu:#3B82F6;--vert:#10B981;--orange:#F59E0B;--violet:#8B5CF6;--rouge:#EF4444;--texte:#2C3E50;--gris:#9aa5b1;}
+body{font-family:'Nunito',sans-serif;background:#F8F9FA;color:var(--texte);min-height:100vh;}
+
+.topbar{padding:16px 20px 0;display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+.mini-btn{display:inline-block;background:#fff;border:2.5px solid;border-radius:14px;padding:9px 18px;
+  font-family:'Fredoka One',cursive;font-size:.9rem;text-decoration:none;cursor:pointer;
+  transition:transform .13s,box-shadow .13s;}
+.mini-btn:hover{transform:translateY(-3px);box-shadow:0 8px 14px rgba(0,0,0,.12);}
+.mb-bleu{color:var(--bleu);border-color:var(--bleu);}
+.mb-violet{color:var(--violet);border-color:var(--violet);}
+
+.wrap{max-width:820px;margin:0 auto;padding:20px 16px 70px;}
+.tete{text-align:center;margin:10px 0 8px;}
+.tete .ico{font-size:3rem;display:block;margin-bottom:2px;}
+.tete h1{font-weight:900;font-size:2.4rem;line-height:1.1;}
+.tete h1 span{color:var(--orange);}
+.tete p{font-weight:700;font-size:.95rem;color:#6b7280;margin-top:6px;}
+.tete p::after{content:"";display:block;width:60px;height:3px;border-radius:3px;background:var(--orange);margin:8px auto 0;opacity:.55;}
+
+.qui{text-align:center;font-weight:800;font-size:.86rem;color:var(--gris);margin-bottom:22px;}
+.qui a{color:var(--violet);}
+
+/* Matière */
+.matiere{background:#fff;border:2.5px solid #e8ecf1;border-radius:20px;padding:18px 16px;margin-bottom:16px;}
+.mat-head{display:flex;align-items:center;gap:10px;margin-bottom:13px;}
+.mat-ico{font-size:1.7rem;}
+.mat-nom{font-family:'Fredoka One',cursive;font-size:1.2rem;}
+.mat-cpt{margin-left:auto;font-weight:800;font-size:.8rem;color:var(--gris);}
+
+/* Ligne de devoir */
+.devoir{display:flex;align-items:center;gap:12px;flex-wrap:wrap;text-decoration:none;color:inherit;
+  border:2.5px solid;border-radius:16px;padding:13px 15px;margin-bottom:10px;
+  transition:transform .13s,box-shadow .13s;background:#fff;}
+.devoir:hover{transform:translateY(-3px);box-shadow:0 8px 14px rgba(0,0,0,.11);}
+.d-todo{border-color:var(--orange);background:#fffbeb;}
+.d-fait{border-color:#e8ecf1;}
+.d-valide{border-color:var(--vert);background:#f0fdf4;}
+.d-ico{font-size:1.6rem;flex-shrink:0;}
+.d-txt{flex:1;min-width:170px;}
+.d-titre{font-weight:800;font-size:1rem;line-height:1.3;}
+.d-meta{font-weight:700;font-size:.76rem;color:var(--gris);margin-top:3px;}
+.d-score{font-family:'Fredoka One',cursive;font-size:1.05rem;white-space:nowrap;}
+.niv{display:inline-block;border-radius:20px;padding:3px 10px;font-weight:800;font-size:.73rem;white-space:nowrap;}
+.n-rouge{background:#fee2e2;color:#b91c1c;} .n-orange{background:#fef3c7;color:#b45309;}
+.n-vert{background:#d1fae5;color:#047857;} .n-violet{background:#ede9fe;color:#6d28d9;}
+.n-todo{background:#fed7aa;color:#c2410c;}
+.d-fleche{font-size:1.2rem;color:var(--gris);}
+
+.vide{text-align:center;padding:44px 20px;}
+.vide .em{font-size:3.4rem;display:block;margin-bottom:12px;}
+.vide h3{font-family:'Fredoka One',cursive;font-size:1.3rem;color:var(--vert);margin-bottom:8px;}
+.vide p{font-weight:700;font-size:.92rem;color:var(--gris);line-height:1.7;}
+
+.chargement{text-align:center;padding:50px 20px;font-weight:800;color:var(--gris);}
+.msg{display:none;border-radius:14px;padding:12px 14px;margin-bottom:18px;font-size:.9rem;
+  font-weight:700;border:2.5px solid;background:#fff;}
+.msg.show{display:block;}
+.msg.err{border-color:var(--rouge);color:var(--rouge);}
+
+.recap{background:#fff;border:2.5px solid var(--orange);border-radius:18px;padding:15px 18px;
+  margin-bottom:22px;text-align:center;font-weight:800;font-size:.95rem;}
+.recap .gros{font-family:'Fredoka One',cursive;font-size:1.6rem;color:var(--orange);display:block;}
+
+@media(max-width:480px){
+  .tete h1{font-size:2rem;}
+  .devoir{padding:12px;}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="index.html" class="mini-btn mb-bleu">&#8592; Accueil</a>
+  <a href="ma-famille.html" class="mini-btn mb-violet">&#x1F465; Changer d'enfant</a>
+</div>
+
+<div class="wrap">
+  <div class="tete">
+    <span class="ico">&#x1F4DA;</span>
+    <h1>Mes <span>devoirs</span></h1>
+    <p>Les leçons qu'un adulte t'a préparées</p>
+  </div>
+  <div class="qui" id="qui"></div>
+
+  <div class="msg" id="msg"></div>
+  <div id="chargement" class="chargement">Chargement…</div>
+  <div id="contenu" style="display:none;"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+var SUPABASE_URL = "https://rwqsvrmjjoihuhmvbwuu.supabase.co";
+var SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ3cXN2cm1qam9paHVobXZid3V1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQzNjQxNTMsImV4cCI6MjA5OTk0MDE1M30.VtdOnI169-erf48NpxLPCC0th6kHqBcsBuCauOx52HI";
+var sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+var CLE_ACTIF = "atelier_enfant_actif";
+
+var ICONES = {
+  'Français':'\u{1F4D6}', 'Mathématiques':'\u{1F4D0}', 'Sciences':'\u{1F52C}',
+  'Histoire':'\u{1F3DB}\uFE0F', 'Géographie':'\u{1F30D}', 'Anglais':'\u{1F1EC}\u{1F1E7}'
+};
+var ORDRE_MAT = ['Français','Mathématiques','Sciences','Histoire','Géographie','Anglais'];
+
+function esc(s){ var d=document.createElement('div'); d.textContent = s==null?'':s; return d.innerHTML; }
+function erreur(t){ var e=document.getElementById('msg'); e.textContent=t; e.className='msg show err'; }
+
+function niveauMaitrise(pct){
+  if(pct >= 90) return {t:'Brillant \u2B50', c:'n-violet'};
+  if(pct >= 80) return {t:'Bien maîtrisé \u{1F4AA}', c:'n-vert'};
+  if(pct >= 50) return {t:'En cours \u{1F4DA}', c:'n-orange'};
+  return {t:'À retravailler \u{1F501}', c:'n-rouge'};
+}
+
+(async function init(){
+  var s = await sb.auth.getSession();
+  if(!s.data.session){ window.location.href = "connexion.html"; return; }
+
+  var enfantId = localStorage.getItem(CLE_ACTIF);
+  if(!enfantId){ window.location.href = "ma-famille.html"; return; }
+
+  var re = await sb.from('enfants').select('prenom,classe').eq('id', enfantId).single();
+  if(re.error || !re.data){
+    localStorage.removeItem(CLE_ACTIF);
+    window.location.href = "ma-famille.html"; return;
+  }
+  document.getElementById('qui').innerHTML =
+    '\u{1F464} <strong>' + esc(re.data.prenom) + '</strong> · ' + esc(re.data.classe)
+    + ' &nbsp;<a href="ma-famille.html">changer</a>';
+
+  // Assignations
+  var ra = await sb.from('assignations').select('*').eq('enfant_id', enfantId)
+                   .order('assigne_le', {ascending:false});
+  var assigns = ra.error ? [] : (ra.data || []);
+
+  // Progression (dernier essai par fiche)
+  var rp = await sb.from('progression').select('*').eq('enfant_id', enfantId)
+                   .order('fait_le', {ascending:false});
+  var prog = {};
+  (rp.data || []).forEach(function(p){ if(!prog[p.fiche_code]) prog[p.fiche_code] = p; });
+
+  // Catalogue
+  var catalogue = {};
+  try{
+    var r = await fetch('fiches.json');
+    var data = await r.json();
+    ['6-9ans','9-12ans','12-15ans'].forEach(function(cy){
+      (data[cy] || []).forEach(function(f){ if(f && f.code) catalogue[f.code] = f; });
+    });
+  } catch(e){ erreur("Impossible de charger la liste des fiches."); }
+
+  document.getElementById('chargement').style.display = 'none';
+  document.getElementById('contenu').style.display = 'block';
+  rendre(assigns, prog, catalogue);
+})();
+
+function rendre(assigns, prog, catalogue){
+  var box = document.getElementById('contenu');
+
+  if(assigns.length === 0){
+    box.innerHTML = '<div class="matiere"><div class="vide">'
+      + '<span class="em">\u{1F389}</span>'
+      + '<h3>Aucun devoir pour le moment !</h3>'
+      + '<p>Tu peux explorer librement toutes les fiches du site.<br>'
+      + 'Si un adulte te prépare une leçon, elle apparaîtra ici.</p></div></div>';
+    return;
+  }
+
+  var aFaire = assigns.filter(function(a){ return a.statut==='a_faire' || a.statut==='a_refaire'; });
+
+  // Récapitulatif
+  var html = '<div class="recap">';
+  if(aFaire.length){
+    html += '<span class="gros">' + aFaire.length + '</span>'
+          + (aFaire.length > 1 ? 'leçons à faire' : 'leçon à faire');
+  } else {
+    html += '\u{1F389} Tout est fait ! Bravo !';
+  }
+  html += '</div>';
+
+  // Grouper par matière
+  var parMat = {};
+  assigns.forEach(function(a){
+    var f = catalogue[a.fiche_code];
+    var mat = (f && f.matiere) ? f.matiere : 'Autre';
+    if(!parMat[mat]) parMat[mat] = [];
+    parMat[mat].push(a);
+  });
+
+  var mats = ORDRE_MAT.filter(function(m){ return parMat[m]; })
+             .concat(Object.keys(parMat).filter(function(m){ return ORDRE_MAT.indexOf(m) === -1; }));
+
+  mats.forEach(function(mat){
+    var liste = parMat[mat];
+    // à faire d'abord
+    liste.sort(function(a,b){
+      var pa = (a.statut==='a_faire'||a.statut==='a_refaire') ? 0 : 1;
+      var pb = (b.statut==='a_faire'||b.statut==='a_refaire') ? 0 : 1;
+      return pa - pb;
+    });
+    var nbTodo = liste.filter(function(a){ return a.statut==='a_faire'||a.statut==='a_refaire'; }).length;
+
+    html += '<div class="matiere"><div class="mat-head">'
+          + '<span class="mat-ico">' + (ICONES[mat] || '\u{1F4C4}') + '</span>'
+          + '<span class="mat-nom">' + esc(mat) + '</span>'
+          + '<span class="mat-cpt">' + (nbTodo ? nbTodo + ' à faire' : 'terminé \u2713') + '</span>'
+          + '</div>';
+
+    liste.forEach(function(a){
+      var f = catalogue[a.fiche_code];
+      var d = prog[a.fiche_code];
+      var todo = (a.statut==='a_faire' || a.statut==='a_refaire');
+      var cls = todo ? 'd-todo' : (a.statut==='valide' ? 'd-valide' : 'd-fait');
+      var ico = todo ? '\u{1F4DA}' : (a.statut==='valide' ? '\u2705' : '\u2713');
+      var lien = (f && f.fichier) ? f.fichier : null;
+      var tag = lien ? 'a' : 'div';
+      var href = lien ? ' href="' + esc(lien) + '"' : '';
+
+      html += '<' + tag + ' class="devoir ' + cls + '"' + href + '>'
+            + '<span class="d-ico">' + ico + '</span>'
+            + '<span class="d-txt"><span class="d-titre">' + esc(f ? f.titre : a.fiche_code) + '</span>'
+            + '<span class="d-meta">' + esc(a.fiche_code)
+            + (f && f.niveau ? ' · ' + esc(f.niveau) : '')
+            + (a.statut === 'a_refaire' ? ' · à refaire' : '') + '</span></span>';
+
+      if(d){
+        var pct = Math.round(d.score / d.total * 100);
+        var n = niveauMaitrise(pct);
+        html += '<span class="d-score">' + d.score + '/' + d.total + '</span>'
+              + '<span class="niv ' + n.c + '">' + n.t + '</span>';
+      } else if(todo){
+        html += '<span class="niv n-todo">À faire</span>';
+      }
+      html += (lien ? '<span class="d-fleche">\u203A</span>' : '') + '</' + tag + '>';
+    });
+    html += '</div>';
+  });
+
+  box.innerHTML = html;
+}
+</script>
+</body>
+</html>
