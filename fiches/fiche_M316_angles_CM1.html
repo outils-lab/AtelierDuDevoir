@@ -306,6 +306,8 @@ body{font-family:'Nunito',sans-serif;background:#fffbeb;color:var(--text);font-s
 </div>
 </main>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
 <script>
 var G1=[
   {titre:"📐 Identifie les angles suivants.",etapes:[
@@ -395,10 +397,10 @@ var FREE_POOL=[
   {type:'jugement',data:{consigne:"Un angle droit a ses côtés perpendiculaires l'un à l'autre ?",a:"Oui ! Deux droites perpendiculaires forment un angle de 90° = droit","b":"Non, perpendiculaire ≠ droit",ok:"A",expl:"Oui ! Deux lignes perpendiculaires forment exactement 90°. C'est la définition de la perpendicularité."}},
   {type:'qcm',data:{q:"Combien d'angles droits dans un rectangle ?",opts:["4","2","1","0"],ok:0,expl:"Les 4 coins d'un rectangle sont des angles droits."}},
   {type:'qcm',data:{q:"Un angle obtus est plus grand que...",opts:["90°","180°","45°","0°"],ok:0,expl:"Obtus > 90° (et < 180°)."}},
-  {type:'jugement',data:{consigne:"Plus les côtés d'un angle sont longs, plus l'angle est grand ?",a:"Non ! La longueur des côtés ne change pas la mesure de l'angle","b:"Oui ! Côtés longs = grand angle",ok:"A",expl:"Non ! La mesure d'un angle dépend de l'écartement, pas de la longueur des côtés. Un angle aigu reste aigu même avec de très longs côtés."}},
+  {type:'jugement',data:{consigne:"Plus les côtés d'un angle sont longs, plus l'angle est grand ?",a:"Non ! La longueur des côtés ne change pas la mesure de l'angle",b:"Oui ! Côtés longs = grand angle",ok:"A",expl:"Non ! La mesure d'un angle dépend de l'écartement, pas de la longueur des côtés. Un angle aigu reste aigu même avec de très longs côtés."}},
   {type:'qcm',data:{q:"Quel angle forment les aiguilles d'une horloge à 3h ?",opts:["Droit (90°)","Aigu","Obtus","Plat"],ok:0,expl:"À 3h : grande aiguille au 12, petite au 3 → 90° = droit."}},
   {type:'qcm',data:{q:"Un angle plat mesure...",opts:["180°","90°","360°","270°"],ok:0,expl:"Angle plat = 180° = une ligne droite."}},
-  {type:'jugement',data:{consigne:"Un triangle peut avoir deux angles obtus ?",a:"Non ! La somme des angles d'un triangle = 180°. Deux obtus dépasseraient 180°","b:"Oui ! Un triangle peut avoir deux angles obtus",ok:"A",expl:"Non ! La somme des 3 angles d'un triangle = 180°. Si deux angles sont obtus (>90° chacun), leur somme dépasse déjà 180° → impossible !"}},
+  {type:'jugement',data:{consigne:"Un triangle peut avoir deux angles obtus ?",a:"Non ! La somme des angles d'un triangle = 180°. Deux obtus dépasseraient 180°",b:"Oui ! Un triangle peut avoir deux angles obtus",ok:"A",expl:"Non ! La somme des 3 angles d'un triangle = 180°. Si deux angles sont obtus (>90° chacun), leur somme dépasse déjà 180° → impossible !"}},
   {type:'qcm',data:{q:"Lequel est un angle aigu ?",opts:["60°","90°","120°","180°"],ok:0,expl:"60° < 90° → aigu. Les autres sont droit, obtus, plat."}},
   {type:'qcm',data:{q:"La lettre L majuscule a combien d'angles droits ?",opts:["1","2","0","4"],ok:0,expl:"La lettre L a un seul angle droit (le coin intérieur entre la base et la barre verticale)."}},
   {type:'jugement',data:{consigne:"Un angle de 91° est obtus ?",a:"Oui ! 91° > 90° → obtus, même si c'est juste un peu plus","b":"Non ! 91° ≈ 90° donc c'est un angle droit",ok:"A",expl:"Oui ! Dès que l'angle dépasse 90°, même d'un tout petit degré, c'est un angle obtus."}},
@@ -572,6 +574,7 @@ function initFree2(){
 
 function showBilan(){
   var g1n=G1[g1Idx]?G1[g1Idx].etapes.length:3,g2n=G2[g2Idx]?G2[g2Idx].etapes.length:3,tot=g1n+g2n+10;
+  if(typeof enregistrerProgression==='function'){ enregistrerProgression('M316', score, tot); }
   document.getElementById('bilan-pts').textContent=score;
   document.getElementById('bilan-sur').textContent='/ '+tot+' pts';
   var pct=score/tot,t,m;

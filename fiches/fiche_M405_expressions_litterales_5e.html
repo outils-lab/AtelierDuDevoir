@@ -302,6 +302,8 @@ body{font-family:'Lato',sans-serif;background:#f0fdfa;color:var(--text);font-siz
 </div>
 </main>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
 <script>
 // ════ GUIDÉ 1 — QCM par étape ════
 var G1=[
@@ -640,6 +642,7 @@ function initFree2(){
 
 function showBilan(){
   var g1Steps=G1[g1Idx]?G1[g1Idx].etapes.length:4,g2Steps=G2[g2Idx]?G2[g2Idx].etapes.length:4,total=g1Steps+g2Steps+10;
+  if(typeof enregistrerProgression==='function'){ enregistrerProgression('M405', score, total); }
   document.getElementById('bilan-score').textContent=score;
   document.getElementById('bilan-total-txt').textContent='/ '+total+' pts';
   var pct=score/total,title,msg;

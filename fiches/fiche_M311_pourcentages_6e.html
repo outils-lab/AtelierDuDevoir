@@ -432,6 +432,8 @@ body{font-family:'Nunito',sans-serif;background:#fff1f2;color:var(--text);font-s
 </div>
 
 </main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
 <script>
 var score=0,g1Idx=0,g2Idx=0,g1Tries=0,g2Tries=0;
 var f1Exs=[],f2Exs=[],f1Done=0,f2Done=0,_cb={};
@@ -765,6 +767,7 @@ function initFree2(){
 
 function showBilan(){
   var g1n=G1[g1Idx]?G1[g1Idx].etapes.length:3,g2n=G2[g2Idx]?G2[g2Idx].etapes.length:3,tot=g1n+g2n+10;
+  if(typeof enregistrerProgression==='function'){ enregistrerProgression('M311', score, tot); }
   document.getElementById('bilan-pts').textContent=score;
   document.getElementById('bilan-sur').textContent='/ '+tot+' pts';
   var pct=score/tot,t,m;

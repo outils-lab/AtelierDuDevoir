@@ -380,6 +380,8 @@ body{font-family:'Lato',sans-serif;background:#f0fdfa;color:var(--text);font-siz
 </div>
 </main>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
 <script>
 // ════ Tableaux SVG pour les guidés ════
 function tableSVG(titre, lignes, total) {
@@ -815,6 +817,7 @@ function initFree2(){
 
 function showBilan(){
   var g1Steps=G1[g1Idx]?G1[g1Idx].etapes.length:3,g2Steps=G2[g2Idx]?G2[g2Idx].etapes.length:3,total=g1Steps+g2Steps+10;
+  if(typeof enregistrerProgression==='function'){ enregistrerProgression('M411', score, total); }
   document.getElementById('bilan-score').textContent=score;
   document.getElementById('bilan-total-txt').textContent='/ '+total+' pts';
   var pct=score/total,title,msg;

@@ -307,6 +307,8 @@ body{font-family:'Lato',sans-serif;background:#fff1f2;color:var(--text);font-siz
 </div>
 </main>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
 <script>
 var G1=[
   {titre:"Résous : 2x + 3 = 11",svg:'<svg viewBox="0 0 260 110" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:8px auto;max-width:260px;background:#fff1f2;border-radius:8px;padding:4px;">  <!-- Pied de balance -->  <line x1="130" y1="100" x2="130" y2="50" stroke="#9f1239" stroke-width="3"/>  <polygon points="110,102 130,95 150,102" fill="#9f1239"/>  <!-- Bras horizontal -->  <line x1="40" y1="50" x2="220" y2="50" stroke="#9f1239" stroke-width="2.5"/>  <!-- Pivot -->  <circle cx="130" cy="50" r="4" fill="#9f1239"/>  <!-- Plateau gauche -->  <line x1="60" y1="50" x2="60" y2="70" stroke="#64748b" stroke-width="1.5"/>  <line x1="40" y1="70" x2="80" y2="70" stroke="#64748b" stroke-width="2"/>  <!-- Plateau droit -->  <line x1="200" y1="50" x2="200" y2="70" stroke="#64748b" stroke-width="1.5"/>  <line x1="180" y1="70" x2="220" y2="70" stroke="#64748b" stroke-width="2"/>  <!-- Contenu gauche -->  <text x="60" y="65" font-size="12" fill="#0369a1" font-weight="bold" text-anchor="middle">2x+3</text>  <!-- Contenu droit -->  <text x="200" y="65" font-size="12" fill="#0369a1" font-weight="bold" text-anchor="middle">11</text>  <!-- Signe = -->  <text x="130" y="38" font-size="14" fill="#9f1239" font-weight="bold" text-anchor="middle">=</text>  <!-- Cherche -->  <text x="130" y="92" font-size="10" fill="#9f1239" text-anchor="middle">Trouve x = ?</text></svg>',etapes:[
@@ -613,6 +615,7 @@ function initFree2(){
 
 function showBilan(){
   var g1Steps=G1[g1Idx]?G1[g1Idx].etapes.length:4,g2Steps=G2[g2Idx]?G2[g2Idx].etapes.length:3,total=g1Steps+g2Steps+10;
+  if(typeof enregistrerProgression==='function'){ enregistrerProgression('M406', score, total); }
   document.getElementById('bilan-score').textContent=score;
   document.getElementById('bilan-total-txt').textContent='/ '+total+' pts';
   var pct=score/total,title,msg;

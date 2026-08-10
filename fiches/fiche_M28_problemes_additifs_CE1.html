@@ -252,18 +252,20 @@ body{font-family:'Fredoka One',cursive;background:#f0fdf4;color:#1e293b;font-siz
   </div>
 </div>
 </main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
 <script>
 var G1=[
   {titre:"🧩 Problèmes additifs — série A",etapes:[
     {q:"🐟 Dans un aquarium il y a 9 poissons rouges et 6 poissons bleus. Combien y a-t-il de poissons EN TOUT ?",
      opts:["15 poissons (9+6)","3 poissons (9-6)","9 poissons","6 poissons"],ok:0,
      hint:'"En tout" → addition. 9 + 6 = ?',
-     expl_ok:"15 poissons ! 9 + 6 = 15. Le mot-indice "en tout" indique l'addition. 🎉",
+     expl_ok:"15 poissons ! 9 + 6 = 15. Le mot-indice « en tout » indique l'addition. 🎉",
      expl_ko:'"En tout" → addition. 9 + 6 = 15 poissons.'},
     {q:"🍎 Maman achète 14 pommes. Elle en utilise 5 pour une tarte. Combien en RESTE-T-IL ?",
      opts:["9 pommes (14-5)","19 pommes (14+5)","14 pommes","5 pommes"],ok:0,
      hint:'"Reste-t-il" → soustraction. 14 − 5 = ?',
-     expl_ok:"9 pommes ! 14 − 5 = 9. "Reste" indique la soustraction. 🌟",
+     expl_ok:"9 pommes ! 14 − 5 = 9. « Reste » indique la soustraction. 🌟",
      expl_ko:'"Reste-t-il" → soustraction. 14 − 5 = 9 pommes.'},
     {q:"🚌 Le matin, 23 élèves arrivent en bus. L'après-midi, 8 DE PLUS arrivent. Combien d'élèves EN TOUT ?",
      opts:["31 élèves (23+8)","15 élèves (23-8)","23 élèves","8 élèves"],ok:0,
@@ -275,12 +277,12 @@ var G1=[
     {q:"🎈 Lou a 30 € d'économies. Elle DÉPENSE 12 € pour un jouet. Combien lui RESTE-T-IL ?",
      opts:["18 € (30-12)","42 € (30+12)","30 €","12 €"],ok:0,
      hint:'"Dépense" et "reste-t-il" → soustraction. 30 − 12 = ?',
-     expl_ok:"18 € ! 30 − 12 = 18. "Dépense" indique qu'on enlève. 🌟",
+     expl_ok:"18 € ! 30 − 12 = 18. « Dépense » indique qu'on enlève. 🌟",
      expl_ko:'"Dépense" → soustraction. 30 − 12 = 18 €.'},
     {q:"📚 Théo lit 8 pages le matin et 11 pages le soir. Combien de pages a-t-il lues AU TOTAL ?",
      opts:["19 pages (8+11)","3 pages (11-8)","11 pages","8 pages"],ok:0,
      hint:'"Au total" → addition. 8 + 11 = ?',
-     expl_ok:"19 pages ! 8 + 11 = 19. "Au total" indique l'addition. 🎉",
+     expl_ok:"19 pages ! 8 + 11 = 19. « Au total » indique l'addition. 🎉",
      expl_ko:'"Au total" → addition. 8 + 11 = 19 pages.'},
     {q:"🌻 Un jardin a 25 fleurs. On en COUPE 9 pour un bouquet. Combien DE FLEURS RESTE-T-IL ?",
      opts:["16 fleurs (25-9)","34 fleurs (25+9)","25 fleurs","9 fleurs"],ok:0,
@@ -372,7 +374,7 @@ var G2=[
     {q:"🎂 Hugo a 8 ans. Sa sœur a 5 ans DE MOINS. Quel âge a sa sœur ?",
      opts:["3 ans (8-5)","13 ans (8+5)","8 ans","5 ans"],ok:0,
      hint:'"De moins" → soustraction. 8 − 5 = ?',
-     expl_ok:"3 ans ! 8 − 5 = 3. "De moins" → soustraction. 🎉",
+     expl_ok:"3 ans ! 8 − 5 = 3. « De moins » → soustraction. 🎉",
      expl_ko:'"De moins" → soustraction. 8 − 5 = 3 ans.'}
   ]},
   {titre:"✏️ Calculs et réponses",etapes:[
@@ -428,7 +430,8 @@ function initG1(){initG('g1');}function initG2(){initG('g2');}
 function buildFree(ex,i,prefix,cb){var card=document.createElement('div');card.className='free-card';card.id=prefix+'c'+i;var so=shuffle(ex.opts.map(function(o,oi){return{t:o,i:oi};}));card.innerHTML='<div class="free-num">Problème '+(i+1)+'</div><div class="free-q">'+ex.q+'</div><div class="free-opts" id="'+prefix+'fo'+i+'"></div><div class="free-fb" id="'+prefix+'ff'+i+'"></div>';setTimeout(function(){var ba=document.getElementById(prefix+'fo'+i);so.forEach(function(o){var btn=document.createElement('button');btn.className='free-opt';btn.textContent=o.t;btn.onclick=function(){if(card.classList.contains('done'))return;card.classList.add('done');ba.querySelectorAll('button').forEach(function(b){b.disabled=true;});var fb=document.getElementById(prefix+'ff'+i);if(o.i===ex.ok){btn.classList.add('ok');fb.className='free-fb show ok';fb.innerHTML='✅ '+ex.expl;addPt();}else{btn.classList.add('ko');ba.querySelectorAll('button').forEach(function(b,bi){if(bi===ex.ok)b.classList.add('reveal');});fb.className='free-fb show ko';fb.innerHTML='❌ '+ex.expl;}cb();};ba.appendChild(btn);});},0);return card;}
 function initFree1(){f1Exs=shuffle(FREE_POOL.slice()).slice(0,5);f1Done=0;var z=document.getElementById('free1-zone');z.innerHTML='';f1Exs.forEach(function(ex,i){_cb['f1'+i]=function(){f1Done++;if(f1Done>=5)setTimeout(function(){var b=document.getElementById('btn-free-to-free2');b.classList.add('show');b.scrollIntoView({behavior:'smooth',block:'nearest'});},600);};z.appendChild(buildFree(ex,i,'f1',_cb['f1'+i]));});}
 function initFree2(){var used=f1Exs.map(function(e){return e.q;});var pool=FREE_POOL.filter(function(e){return used.indexOf(e.q)<0;});f2Exs=shuffle(pool).slice(0,5);f2Done=0;var z=document.getElementById('free2-zone');z.innerHTML='';f2Exs.forEach(function(ex,i){_cb['f2'+i]=function(){f2Done++;if(f2Done>=5)setTimeout(function(){var b=document.getElementById('btn-free2-to-bilan');b.classList.add('show');b.scrollIntoView({behavior:'smooth',block:'nearest'});},600);};z.appendChild(buildFree(ex,i,'f2',_cb['f2'+i]));});}
-function showBilan(){var g1n=G1[g1Idx]?G1[g1Idx].etapes.length:3,g2n=G2[g2Idx]?G2[g2Idx].etapes.length:3,tot=g1n+g2n+10;document.getElementById('bilan-pts').textContent=score;document.getElementById('bilan-sur').textContent='/ '+tot+' pts';var pct=score/tot,t,m;if(pct>=.8){t='BRAVO ! 🎉🎊';m='Tu maîtrises les problèmes additifs ! Ugo est super fier de toi ! 🦉⭐';}else if(pct>=.5){t='Très bien ! 😊🌟';m:'"En tout" → + · "Il reste" → − · Lis toujours les mots-indices ! Continue !';}else{t='Bien essayé ! 💪';m:'"En tout"=+ · "Il reste"=− · Lis bien les mots-indices. Recommence ! 🦉';}document.getElementById('bilan-title').textContent=t;document.getElementById('bilan-msg').textContent=m;var s=[Math.ceil(tot*.33),Math.ceil(tot*.66),Math.ceil(tot*.89)];['etoile1','etoile2','etoile3'].forEach(function(id,i){var el=document.getElementById(id);if(score>=s[i]){(function(e,d){setTimeout(function(){e.classList.add('earned');},d);})(el,300+i*450);}else el.style.filter='grayscale(1)';});if(pct>=.5)confetti();}
+function showBilan(){var g1n=G1[g1Idx]?G1[g1Idx].etapes.length:3,g2n=G2[g2Idx]?G2[g2Idx].etapes.length:3,tot=g1n+g2n+10;
+  if(typeof enregistrerProgression==='function'){ enregistrerProgression('M28', score, tot); }document.getElementById('bilan-pts').textContent=score;document.getElementById('bilan-sur').textContent='/ '+tot+' pts';var pct=score/tot,t,m;if(pct>=.8){t='BRAVO ! 🎉🎊';m='Tu maîtrises les problèmes additifs ! Ugo est super fier de toi ! 🦉⭐';}else if(pct>=.5){t='Très bien ! 😊🌟';m:'"En tout" → + · "Il reste" → − · Lis toujours les mots-indices ! Continue !';}else{t='Bien essayé ! 💪';m:'"En tout"=+ · "Il reste"=− · Lis bien les mots-indices. Recommence ! 🦉';}document.getElementById('bilan-title').textContent=t;document.getElementById('bilan-msg').textContent=m;var s=[Math.ceil(tot*.33),Math.ceil(tot*.66),Math.ceil(tot*.89)];['etoile1','etoile2','etoile3'].forEach(function(id,i){var el=document.getElementById(id);if(score>=s[i]){(function(e,d){setTimeout(function(){e.classList.add('earned');},d);})(el,300+i*450);}else el.style.filter='grayscale(1)';});if(pct>=.5)confetti();}
 function confetti(){var cols=['#059669','#6ee7b7','#d97706','#0369a1','#7c3aed'];for(var i=0;i<65;i++){var el=document.createElement('div');el.className='confetti-piece';el.style.cssText='left:'+Math.random()*100+'vw;background:'+cols[Math.floor(Math.random()*cols.length)]+';animation-duration:'+(1.8+Math.random()*2.2)+'s;animation-delay:'+Math.random()*1.5+'s;width:'+(7+Math.random()*10)+'px;height:'+(7+Math.random()*10)+'px;border-radius:'+(Math.random()>.5?'50%':'4px')+';';document.body.appendChild(el);setTimeout(function(){if(el.parentNode)el.remove();},5000);}}
 </script>
 </body>

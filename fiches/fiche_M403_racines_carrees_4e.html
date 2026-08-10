@@ -295,6 +295,8 @@ body{font-family:'Lato',sans-serif;background:#ecfdf5;color:var(--text);font-siz
   </div>
 </div>
 </main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
 <script>
 var G1=[
   {titre:"Simplifie : √48",etapes:[
@@ -555,6 +557,7 @@ function initFree2(){
 
 function showBilan(){
   var g1Steps=G1[g1Idx]?G1[g1Idx].etapes.length:4,g2Steps=G2[g2Idx]?G2[g2Idx].etapes.length:4,total=g1Steps+g2Steps+10;
+  if(typeof enregistrerProgression==='function'){ enregistrerProgression('M403', score, total); }
   document.getElementById('bilan-score').textContent=score;
   document.getElementById('bilan-total-txt').textContent='/ '+total+' pts';
   var pct=score/total,title,msg;

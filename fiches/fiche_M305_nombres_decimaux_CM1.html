@@ -377,6 +377,8 @@ body{font-family:'Nunito',sans-serif;background:#fffbeb;color:var(--text);font-s
 </div>
 </main>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
 <script>
 var G1=[
   {titre:"🔢 Dans le nombre 4,37 : analyse chaque chiffre.",etapes:[
@@ -655,6 +657,7 @@ function initFree2(){
 
 function showBilan(){
   var g1n=G1[g1Idx]?G1[g1Idx].etapes.length:3,g2n=G2[g2Idx]?G2[g2Idx].etapes.length:3,tot=g1n+g2n+10;
+  if(typeof enregistrerProgression==='function'){ enregistrerProgression('M305', score, tot); }
   document.getElementById('bilan-pts').textContent=score;
   document.getElementById('bilan-sur').textContent='/ '+tot+' pts';
   var pct=score/tot,t,m;

@@ -383,6 +383,8 @@ body{font-family:'Lato',sans-serif;background:#fffbeb;color:var(--text);font-siz
 </div>
 </main>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
 <script>
 var G1=[
   {titre:"(MM')∥(BB'). OM=3, OB=9, OM'=4. Calcule OB'.",svg:'<svg viewBox="0 0 260 200" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:10px auto 4px;max-width:260px;background:#fffdf5;border-radius:8px;padding:4px;">  <!-- O sommet -->  <circle cx="130" cy="15" r="4" fill="#b45309"/>  <text x="118" y="12" font-size="11" fill="#b45309" font-weight="bold">O</text>  <!-- Droite gauche O→M→B -->  <line x1="130" y1="15" x2="50" y2="195" stroke="#94a3b8" stroke-width="1.5"/>  <!-- Droite droite O→M\'→B\' -->  <line x1="130" y1="15" x2="210" y2="195" stroke="#94a3b8" stroke-width="1.5"/>  <!-- Parallèle MM\' (à ~40% de la hauteur) -->  <line x1="82" y1="87" x2="178" y2="87" stroke="#b45309" stroke-width="2.2"/>  <!-- Parallèle BB\' (en bas) -->  <line x1="50" y1="185" x2="210" y2="185" stroke="#b45309" stroke-width="2.2"/>  <!-- Points M, M\', B, B\' -->  <circle cx="82" cy="87" r="3" fill="#b45309"/>  <circle cx="178" cy="87" r="3" fill="#b45309"/>  <circle cx="50" cy="185" r="3" fill="#0369a1"/>  <circle cx="210" cy="185" r="3" fill="#0369a1"/>  <!-- Labels points -->  <text x="66" y="85" font-size="10" fill="#b45309" font-weight="bold">M</text>  <text x="181" y="85" font-size="10" fill="#b45309" font-weight="bold">M\'</text>  <text x="36" y="195" font-size="10" fill="#0369a1" font-weight="bold">B</text>  <text x="213" y="195" font-size="10" fill="#0369a1" font-weight="bold">B\'</text>  <!-- Valeurs OM (gauche, segment O→M) -->  <text x="93" y="52" font-size="11" fill="#0369a1" font-weight="600">3</text>  <!-- Valeurs MB (gauche, segment M→B) -->  <text x="56" y="140" font-size="11" fill="#0369a1" font-weight="600" opacity=".7"></text>  <!-- Valeurs OB (gauche total, annoté au-dessus du segment) -->  <text x="62" y="107" font-size="10" fill="#64748b" font-style="italic">OB=9</text>  <!-- Valeurs OM\' (droite) -->  <text x="158" y="52" font-size="11" fill="#0369a1" font-weight="600">4</text>  <!-- Valeurs OB\' (droite) -->  <text x="178" y="107" font-size="10" fill="#64748b" font-style="italic">OB\'=?</text>  <!-- MM\' valeur -->  <text x="115" y="82" font-size="11" fill="#0369a1" font-weight="600" text-anchor="middle">–</text>  <!-- BB\' valeur -->  <text x="130" y="180" font-size="11" fill="#0369a1" font-weight="600" text-anchor="middle">–</text>  <!-- Indication parallèles -->  <text x="3" y="90" font-size="8" fill="#b45309" font-style="italic">∥</text>  <text x="3" y="188" font-size="8" fill="#b45309" font-style="italic">∥</text></svg>',etapes:[
@@ -683,6 +685,7 @@ function initFree2(){
 
 function showBilan(){
   var g1Steps=G1[g1Idx]?G1[g1Idx].etapes.length:3,g2Steps=G2[g2Idx]?G2[g2Idx].etapes.length:2,total=g1Steps+g2Steps+10;
+  if(typeof enregistrerProgression==='function'){ enregistrerProgression('M408', score, total); }
   document.getElementById('bilan-score').textContent=score;
   document.getElementById('bilan-total-txt').textContent='/ '+total+' pts';
   var pct=score/total,title,msg;

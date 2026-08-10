@@ -392,6 +392,8 @@ body{font-family:'Fredoka One',cursive;background:#f0f9ff;color:#1e293b;font-siz
 </div>
 </main>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
 <script>
 var G1=[
   {titre:"➖ 53 − 28, étape par étape",etapes:[
@@ -659,6 +661,7 @@ function initFree2(){
 }
 function showBilan(){
   var g1n=G1[g1Idx]?G1[g1Idx].etapes.length:3,g2n=G2[g2Idx]?G2[g2Idx].etapes.length:3,tot=g1n+g2n+10;
+  if(typeof enregistrerProgression==='function'){ enregistrerProgression('M09', score, tot); }
   document.getElementById('bilan-pts').textContent=score;
   document.getElementById('bilan-sur').textContent='/ '+tot+' pts';
   var pct=score/tot,t,m;
