@@ -698,6 +698,8 @@
 
 </div><!-- fin .main -->
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
 <script>
 // =============================================
 // VARIABLES GLOBALES
@@ -1148,6 +1150,7 @@ function checkClassify5Done() {}
 // BILAN
 // =============================================
 function showBilan() {
+  if(typeof enregistrerProgression==='function'){ enregistrerProgression('O301', score, TOTAL); }
   document.getElementById("exercices").style.display = "none";
   document.getElementById("bilan").style.display = "block";
   scrollToEl(document.getElementById("bilan"));
