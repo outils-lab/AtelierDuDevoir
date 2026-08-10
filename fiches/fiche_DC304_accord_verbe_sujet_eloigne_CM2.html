@@ -200,6 +200,8 @@
   </div>
 
 </div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
 <script>
 var phrasesLues = [
   "La couleur des feuilles... change en automne... point.",
@@ -296,6 +298,8 @@ function verifier() {
     : "💡 " + score + "/15 — Les corrections s'affichent en rouge. Repère bien le sujet réel de chaque verbe.";
   document.getElementById("btn-verif").disabled = true;
   document.getElementById("btn-to-bilan").classList.add("show");
+
+  if(typeof enregistrerProgression==='function'){ enregistrerProgression('DC304', score, 15); }
 }
 
 function goToPhase(phase) {

@@ -329,6 +329,8 @@
 
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
 <script>
 var phrasesLues = [
   "Mes parents... voulaient partir... virgule... mais il pleuvait encore... point.",
@@ -429,6 +431,8 @@ function verifier() {
 
   document.getElementById("btn-verif").disabled = true;
   document.getElementById("btn-to-bilan").classList.add("show");
+
+  if(typeof enregistrerProgression==='function'){ enregistrerProgression('DC302', score, 15); }
 }
 
 function goToPhase(phase) {

@@ -405,7 +405,9 @@
     </div>
   </div>
 
-  <script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
+<script>
     const dicteeTexts = [
       "Ces enfants... courent vers leurs parents... point.",
       "Ses affaires... sont sur la table... virgule... ou dans son cartable... point.",
@@ -502,6 +504,7 @@
       }
 
       document.getElementById('score-display').textContent = score;
+      if(typeof enregistrerProgression==='function'){ enregistrerProgression('DC301', score, 15); }
       document.getElementById('progress-fill').style.width = (score / 15 * 100) + '%';
 
       const fb = document.getElementById('feedback');

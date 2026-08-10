@@ -202,6 +202,8 @@
   </div>
 
 </div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
 <script>
 var phrasesLues = [
   "Vous avez dessiné... et colorié... pendant l'après-midi... point.",
@@ -298,6 +300,8 @@ function verifier() {
     : "💡 " + score + "/15 — Les corrections s'affichent en rouge. Utilise l'astuce vendre/vendu pour les prochaines fois.";
   document.getElementById("btn-verif").disabled = true;
   document.getElementById("btn-to-bilan").classList.add("show");
+
+  if(typeof enregistrerProgression==='function'){ enregistrerProgression('DC305', score, 15); }
 }
 
 function goToPhase(phase) {

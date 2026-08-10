@@ -351,6 +351,8 @@
   </div>
 
 </div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
 <script>
 var phrasesLues = [
   "Les petites filles... portaient de belles robes bleues... point.",
@@ -459,6 +461,8 @@ function verifier() {
     : "💡 " + score + "/15 — Les corrections s'affichent en rouge. Relis les adjectifs mal accordés.";
   document.getElementById("btn-verif").disabled = true;
   document.getElementById("btn-to-bilan").classList.add("show");
+
+  if(typeof enregistrerProgression==='function'){ enregistrerProgression('DC303', score, 15); }
 }
 
 function goToPhase(phase) {
