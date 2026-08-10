@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Espace parent – L'Atelier du Devoir</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bleu:#3B82F6;--vert:#10B981;--orange:#F59E0B;--violet:#8B5CF6;--rouge:#EF4444;
+  --texte:#2C3E50;--gris:#9aa5b1;
+}
+body{font-family:'Nunito',sans-serif;background:#F8F9FA;color:var(--texte);min-height:100vh;}
+
+.topbar{padding:16px 20px 0;display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+.mini-btn{display:inline-block;background:#fff;border:2.5px solid;border-radius:14px;padding:9px 18px;
+  font-family:'Fredoka One',cursive;font-size:.9rem;text-decoration:none;cursor:pointer;
+  transition:transform .13s,box-shadow .13s;}
+.mini-btn:hover{transform:translateY(-3px);box-shadow:0 8px 14px rgba(0,0,0,.12);}
+.mb-bleu{color:var(--bleu);border-color:var(--bleu);}
+.mb-violet{color:var(--violet);border-color:var(--violet);}
+.mb-rouge{color:var(--rouge);border-color:var(--rouge);}
+.spacer{flex:1;}
+
+.wrap{max-width:960px;margin:0 auto;padding:20px 16px 70px;}
+.tete{text-align:center;margin:10px 0 22px;}
+.tete h1{font-weight:900;font-size:2.3rem;line-height:1.1;}
+.tete h1 span{color:var(--violet);}
+.tete p{font-weight:700;font-size:.92rem;color:#6b7280;margin-top:6px;}
+.tete p::after{content:"";display:block;width:60px;height:3px;border-radius:3px;background:var(--violet);margin:8px auto 0;opacity:.55;}
+
+/* Sélecteur d'enfant */
+.enfants-tabs{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:24px;}
+.tab-enfant{background:#fff;border:2.5px solid #d7dde5;border-radius:16px;padding:11px 20px;
+  font-family:'Fredoka One',cursive;font-size:1rem;color:#9aa5b1;cursor:pointer;
+  transition:transform .13s,box-shadow .13s;}
+.tab-enfant:hover{transform:translateY(-3px);}
+.tab-enfant.actif{box-shadow:0 6px 14px rgba(0,0,0,.12);}
+.te-1.actif{color:var(--bleu);border-color:var(--bleu);}
+.te-2.actif{color:var(--vert);border-color:var(--vert);}
+.te-3.actif{color:var(--orange);border-color:var(--orange);}
+.te-4.actif{color:var(--violet);border-color:var(--violet);}
+
+/* Cartes de stats */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin-bottom:26px;}
+.stat-card{background:#fff;border:2.5px solid #e8ecf1;border-radius:18px;padding:18px 16px;text-align:center;}
+.stat-val{font-family:'Fredoka One',cursive;font-size:2rem;line-height:1.1;}
+.stat-lib{font-weight:800;font-size:.82rem;color:var(--gris);margin-top:4px;}
+.sc-bleu .stat-val{color:var(--bleu);} .sc-vert .stat-val{color:var(--vert);}
+.sc-orange .stat-val{color:var(--orange);} .sc-violet .stat-val{color:var(--violet);}
+
+/* Sections */
+.section{background:#fff;border:2.5px solid #e8ecf1;border-radius:20px;padding:20px 18px;margin-bottom:20px;}
+.section h2{font-family:'Fredoka One',cursive;font-size:1.15rem;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.section h2 .compteur{background:var(--rouge);color:#fff;border-radius:20px;padding:2px 10px;font-size:.78rem;font-family:'Nunito';font-weight:800;}
+
+/* Barres de progression par classe */
+.classe-ligne{margin-bottom:14px;}
+.cl-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px;}
+.cl-nom{font-family:'Fredoka One',cursive;font-size:1rem;}
+.cl-chiffres{font-weight:800;font-size:.83rem;color:var(--gris);}
+.barre{height:14px;background:#eef1f5;border-radius:10px;overflow:hidden;}
+.barre span{display:block;height:100%;border-radius:10px;transition:width .6s ease;}
+.cl-badge{display:inline-block;margin-top:5px;border-radius:20px;padding:3px 11px;font-weight:800;font-size:.74rem;}
+.b-gris{background:#f1f5f9;color:#94a3b8;} .b-orange{background:#fef3c7;color:#b45309;}
+.b-vert{background:#d1fae5;color:#047857;} .b-violet{background:#ede9fe;color:#6d28d9;}
+.classe-actuelle{border-left:4px solid var(--violet);padding-left:10px;}
+
+/* Liste de fiches */
+.fiche-item{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;
+  padding:11px 13px;border:2px solid #eef1f5;border-radius:14px;margin-bottom:9px;}
+.fi-gauche{flex:1;min-width:180px;}
+.fi-titre{font-weight:800;font-size:.93rem;}
+.fi-meta{font-weight:700;font-size:.76rem;color:var(--gris);margin-top:2px;}
+.fi-score{font-family:'Fredoka One',cursive;font-size:1.05rem;white-space:nowrap;}
+.niv{display:inline-block;border-radius:20px;padding:3px 10px;font-weight:800;font-size:.73rem;white-space:nowrap;}
+.n-rouge{background:#fee2e2;color:#b91c1c;} .n-orange{background:#fef3c7;color:#b45309;}
+.n-vert{background:#d1fae5;color:#047857;} .n-violet{background:#ede9fe;color:#6d28d9;}
+.progres-fleche{font-weight:800;font-size:.76rem;color:var(--vert);}
+
+.btn-mini{background:#fff;border:2px solid;border-radius:11px;padding:7px 13px;
+  font-family:'Nunito',sans-serif;font-weight:800;font-size:.8rem;cursor:pointer;white-space:nowrap;
+  transition:transform .12s;}
+.btn-mini:hover{transform:translateY(-2px);}
+.bm-vert{color:var(--vert);border-color:var(--vert);}
+.bm-orange{color:var(--orange);border-color:var(--orange);}
+.bm-bleu{color:var(--bleu);border-color:var(--bleu);}
+.bm-rouge{color:var(--rouge);border-color:var(--rouge);}
+
+.vide{text-align:center;padding:22px 10px;font-weight:700;color:var(--gris);font-size:.9rem;line-height:1.6;}
+
+/* Assignation */
+.recherche-zone{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:12px;}
+.recherche-zone input,.recherche-zone select{
+  background:#fff;border:2.5px solid #d7dde5;border-radius:14px;padding:11px 13px;
+  font-family:'Nunito',sans-serif;font-size:.95rem;font-weight:600;outline:none;}
+.recherche-zone input{flex:1;min-width:190px;}
+.recherche-zone input:focus,.recherche-zone select:focus{border-color:var(--bleu);}
+.resultats{max-height:330px;overflow-y:auto;}
+
+.msg{display:none;border-radius:14px;padding:12px 14px;margin-bottom:18px;font-size:.9rem;
+  font-weight:700;line-height:1.5;border:2.5px solid;background:#fff;}
+.msg.show{display:block;}
+.msg.err{border-color:var(--rouge);color:var(--rouge);}
+.msg.ok{border-color:var(--vert);color:#0d9464;}
+
+.chargement{text-align:center;padding:50px 20px;font-weight:800;color:var(--gris);}
+
+@media(max-width:520px){
+  .tete h1{font-size:1.9rem;}
+  .stat-val{font-size:1.6rem;}
+  .fiche-item{flex-direction:column;align-items:flex-start;}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="index.html" class="mini-btn mb-bleu">&#8592; Accueil</a>
+  <a href="ma-famille.html" class="mini-btn mb-violet">&#x1F465; Ma famille</a>
+  <span class="spacer"></span>
+  <button class="mini-btn mb-rouge" onclick="deconnexion()">Se déconnecter</button>
+</div>
+
+<div class="wrap">
+
+  <div class="tete">
+    <h1>Espace <span>parent</span></h1>
+    <p>Suis la progression de tes enfants</p>
+  </div>
+
+  <div class="msg" id="msg"></div>
+  <div id="chargement" class="chargement">Chargement des données…</div>
+
+  <div id="contenu" style="display:none;">
+
+    <div class="enfants-tabs" id="tabs"></div>
+
+    <!-- Statistiques globales -->
+    <div class="stats-grid" id="stats"></div>
+
+    <!-- À valider -->
+    <div class="section" id="sec-valider" style="display:none;">
+      <h2>&#x2705; À valider <span class="compteur" id="cpt-valider">0</span></h2>
+      <div id="liste-valider"></div>
+    </div>
+
+    <!-- Leçons assignées en attente -->
+    <div class="section" id="sec-assignees" style="display:none;">
+      <h2>&#x1F4DA; Leçons assignées</h2>
+      <div id="liste-assignees"></div>
+    </div>
+
+    <!-- Progression par classe -->
+    <div class="section">
+      <h2>&#x1F4CA; Avancement par classe</h2>
+      <div id="liste-classes"></div>
+    </div>
+
+    <!-- À retravailler -->
+    <div class="section">
+      <h2>&#x1F501; Fiches à retravailler</h2>
+      <div id="liste-retravailler"></div>
+    </div>
+
+    <!-- Dernières fiches faites -->
+    <div class="section">
+      <h2>&#x1F553; Dernières fiches faites</h2>
+      <div id="liste-recentes"></div>
+    </div>
+
+    <!-- Assigner une leçon -->
+    <div class="section">
+      <h2>&#x2795; Assigner une leçon</h2>
+      <div class="recherche-zone">
+        <input type="text" id="rech" placeholder="Cherche une notion : infinitif, fractions, pluriel…" oninput="chercher()">
+        <select id="filtre-classe" onchange="chercher()">
+          <option value="">Toutes les classes</option>
+          <option>CP</option><option>CE1</option><option>CE2</option>
+          <option>CM1</option><option>CM2</option><option>6e</option>
+          <option>5e</option><option>4e</option><option>3e</option>
+        </select>
+      </div>
+      <div class="resultats" id="resultats-recherche">
+        <div class="vide">Tape une notion ci-dessus pour trouver une fiche à assigner.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+var SUPABASE_URL = "https://rwqsvrmjjoihuhmvbwuu.supabase.co";
+var SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ3cXN2cm1qam9paHVobXZid3V1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQzNjQxNTMsImV4cCI6MjA5OTk0MDE1M30.VtdOnI169-erf48NpxLPCC0th6kHqBcsBuCauOx52HI";
+var sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+var ORDRE_CLASSES = ['CP','CE1','CE2','CM1','CM2','6e','5e','4e','3e'];
+var enfants = [], enfantSel = null;
+var toutesFiches = [];   // depuis fiches.json
+var progression = [];    // lignes de l'enfant sélectionné
+var assignations = [];
+
+function msg(t, type){
+  var el = document.getElementById('msg');
+  el.textContent = t; el.className = 'msg show ' + type;
+  setTimeout(function(){ el.className='msg'; }, 5000);
+}
+function esc(s){ var d=document.createElement('div'); d.textContent = s==null?'':s; return d.innerHTML; }
+
+function niveauMaitrise(pct){
+  if(pct >= 90) return {txt:"Brillant \u2B50", cls:"n-violet", coul:"#8B5CF6"};
+  if(pct >= 80) return {txt:"Bien maîtrisé \u{1F4AA}", cls:"n-vert", coul:"#10B981"};
+  if(pct >= 50) return {txt:"En cours \u{1F4DA}", cls:"n-orange", coul:"#F59E0B"};
+  return {txt:"À retravailler \u{1F501}", cls:"n-rouge", coul:"#EF4444"};
+}
+
+// ═══ Démarrage ═══
+(async function init(){
+  var s = await sb.auth.getSession();
+  if(!s.data.session){ window.location.href = "connexion.html"; return; }
+
+  // Charger fiches.json
+  try{
+    var r = await fetch('fiches.json');
+    var data = await r.json();
+    aplatir(data);
+  } catch(e){
+    msg("Impossible de charger la liste des fiches.", 'err');
+  }
+
+  var re = await sb.from('enfants').select('*').order('cree_le', {ascending:true});
+  document.getElementById('chargement').style.display = 'none';
+  document.getElementById('contenu').style.display = 'block';
+
+  if(re.error){ msg("Erreur de chargement : " + re.error.message, 'err'); return; }
+  enfants = re.data || [];
+
+  if(enfants.length === 0){
+    document.getElementById('contenu').innerHTML =
+      '<div class="section"><div class="vide">Aucun profil enfant pour le moment.<br><br>'
+      + '<a href="ma-famille.html" class="mini-btn mb-violet">Créer un profil enfant</a></div></div>';
+    return;
+  }
+
+  enfantSel = enfants[0].id;
+  afficherTabs();
+  await chargerEnfant();
+})();
+
+function aplatir(data){
+  toutesFiches = [];
+  Object.keys(data).forEach(function(cycle){
+    var arr = data[cycle];
+    if(!Array.isArray(arr)) return;
+    arr.forEach(function(f){
+      if(f && f.code) toutesFiches.push(f);
+    });
+  });
+}
+
+function afficherTabs(){
+  var c = document.getElementById('tabs');
+  c.innerHTML = '';
+  if(enfants.length < 2) { c.style.display = 'none'; }
+  enfants.forEach(function(e, i){
+    var b = document.createElement('button');
+    b.className = 'tab-enfant te-' + ((i%4)+1) + (e.id===enfantSel ? ' actif' : '');
+    b.textContent = e.prenom + ' · ' + e.classe;
+    b.onclick = function(){ enfantSel = e.id; afficherTabs(); chargerEnfant(); };
+    c.appendChild(b);
+  });
+}
+
+async function chargerEnfant(){
+  var rp = await sb.from('progression').select('*').eq('enfant_id', enfantSel).order('fait_le', {ascending:false});
+  progression = rp.error ? [] : (rp.data || []);
+  var ra = await sb.from('assignations').select('*').eq('enfant_id', enfantSel).order('assigne_le', {ascending:false});
+  assignations = ra.error ? [] : (ra.data || []);
+  rendre();
+}
+
+// Dernier résultat par fiche + historique
+function parFiche(){
+  var map = {};
+  progression.forEach(function(p){
+    if(!map[p.fiche_code]) map[p.fiche_code] = [];
+    map[p.fiche_code].push(p);
+  });
+  Object.keys(map).forEach(function(k){
+    map[k].sort(function(a,b){ return new Date(b.fait_le) - new Date(a.fait_le); });
+  });
+  return map;
+}
+
+function infoFiche(code){
+  for(var i=0;i<toutesFiches.length;i++){
+    if(toutesFiches[i].code === code) return toutesFiches[i];
+  }
+  return null;
+}
+
+function rendre(){
+  var enfant = enfants.filter(function(e){return e.id===enfantSel;})[0];
+  var map = parFiche();
+  var codes = Object.keys(map);
+
+  // ═══ Stats globales ═══
+  var ptsObtenus = 0, ptsPossibles = 0;
+  codes.forEach(function(c){
+    var d = map[c][0];
+    ptsObtenus += d.score; ptsPossibles += d.total;
+  });
+  var pctGlobal = ptsPossibles > 0 ? Math.round(ptsObtenus/ptsPossibles*100) : 0;
+  var fichesDispo = toutesFiches.filter(function(f){ return f.disponible; }).length;
+
+  document.getElementById('stats').innerHTML =
+      carteStat('sc-bleu', codes.length, 'fiches terminées')
+    + carteStat('sc-vert', ptsObtenus + '/' + ptsPossibles, 'points obtenus')
+    + carteStat('sc-violet', pctGlobal + '%', 'de réussite')
+    + carteStat('sc-orange', codes.filter(function(c){
+        var d=map[c][0]; return (d.score/d.total*100) < 80;
+      }).length, 'fiches à revoir');
+
+  // ═══ À valider ═══
+  var aValider = assignations.filter(function(a){ return a.statut === 'fait'; });
+  var secV = document.getElementById('sec-valider');
+  if(aValider.length){
+    secV.style.display = 'block';
+    document.getElementById('cpt-valider').textContent = aValider.length;
+    document.getElementById('liste-valider').innerHTML = aValider.map(function(a){
+      var d = map[a.fiche_code] ? map[a.fiche_code][0] : null;
+      var inf = infoFiche(a.fiche_code);
+      var pct = d ? Math.round(d.score/d.total*100) : 0;
+      var n = niveauMaitrise(pct);
+      return '<div class="fiche-item">'
+        + '<div class="fi-gauche"><div class="fi-titre">' + esc(inf ? inf.titre : a.fiche_code) + '</div>'
+        + '<div class="fi-meta">' + esc(a.fiche_code) + (inf ? ' · ' + esc(inf.niveau) : '') + '</div></div>'
+        + (d ? '<div class="fi-score">' + d.score + '/' + d.total + '</div><span class="niv ' + n.cls + '">' + n.txt + '</span>' : '')
+        + '<button class="btn-mini bm-vert" onclick="validerAssign(\'' + a.id + '\')">\u2713 Valider</button>'
+        + '<button class="btn-mini bm-orange" onclick="reassigner(\'' + a.id + '\')">\u21BA Réassigner</button>'
+        + '</div>';
+    }).join('');
+  } else { secV.style.display = 'none'; }
+
+  // ═══ Assignations en attente ═══
+  var enAttente = assignations.filter(function(a){ return a.statut==='a_faire' || a.statut==='a_refaire'; });
+  var secA = document.getElementById('sec-assignees');
+  if(enAttente.length){
+    secA.style.display = 'block';
+    document.getElementById('liste-assignees').innerHTML = enAttente.map(function(a){
+      var inf = infoFiche(a.fiche_code);
+      return '<div class="fiche-item">'
+        + '<div class="fi-gauche"><div class="fi-titre">' + esc(inf ? inf.titre : a.fiche_code) + '</div>'
+        + '<div class="fi-meta">' + esc(a.fiche_code) + (inf ? ' · ' + esc(inf.niveau) : '')
+        + (a.statut==='a_refaire' ? ' · à refaire' : '') + '</div></div>'
+        + '<button class="btn-mini bm-rouge" onclick="annulerAssign(\'' + a.id + '\')">Retirer</button>'
+        + '</div>';
+    }).join('');
+  } else { secA.style.display = 'none'; }
+
+  // ═══ Avancement par classe ═══
+  var html = '';
+  ORDRE_CLASSES.forEach(function(cl){
+    var fichesCl = toutesFiches.filter(function(f){
+      return f.disponible && f.niveau && f.niveau.split('/').indexOf(cl) !== -1;
+    });
+    if(fichesCl.length === 0) return;
+    var faites = fichesCl.filter(function(f){ return map[f.code]; });
+    var pct = Math.round(faites.length / fichesCl.length * 100);
+
+    var po=0, pp=0;
+    faites.forEach(function(f){ var d=map[f.code][0]; po+=d.score; pp+=d.total; });
+    var pctReussite = pp>0 ? Math.round(po/pp*100) : 0;
+
+    var badge = pct===0 ? {t:"À explorer", c:"b-gris"}
+              : pct<50 ? {t:"En progression", c:"b-orange"}
+              : pct<80 ? {t:"Solide", c:"b-vert"}
+              : {t:"La classe n'a plus de secrets \u2728", c:"b-violet"};
+    var coul = pct===0 ? '#cbd5e1' : pct<50 ? '#F59E0B' : pct<80 ? '#10B981' : '#8B5CF6';
+    var estSa = (enfant.classe === cl);
+
+    html += '<div class="classe-ligne' + (estSa ? ' classe-actuelle' : '') + '">'
+      + '<div class="cl-head"><span class="cl-nom">' + cl + (estSa ? ' \u2B50' : '') + '</span>'
+      + '<span class="cl-chiffres">' + faites.length + '/' + fichesCl.length + ' fiches'
+      + (pp>0 ? ' · ' + po + '/' + pp + ' pts (' + pctReussite + '%)' : '') + '</span></div>'
+      + '<div class="barre"><span style="width:' + pct + '%;background:' + coul + ';"></span></div>'
+      + '<span class="cl-badge ' + badge.c + '">' + badge.t + '</span></div>';
+  });
+  document.getElementById('liste-classes').innerHTML = html || '<div class="vide">Aucune fiche disponible.</div>';
+
+  // ═══ À retravailler ═══
+  var faibles = codes.filter(function(c){
+    var d = map[c][0]; return (d.score/d.total*100) < 80;
+  }).sort(function(a,b){
+    return (map[a][0].score/map[a][0].total) - (map[b][0].score/map[b][0].total);
+  });
+  document.getElementById('liste-retravailler').innerHTML = faibles.length
+    ? faibles.map(function(c){ return ligneFiche(c, map[c], true); }).join('')
+    : '<div class="vide">Rien à retravailler pour le moment \u{1F389}</div>';
+
+  // ═══ Dernières faites ═══
+  var recentes = codes.slice().sort(function(a,b){
+    return new Date(map[b][0].fait_le) - new Date(map[a][0].fait_le);
+  }).slice(0, 8);
+  document.getElementById('liste-recentes').innerHTML = recentes.length
+    ? recentes.map(function(c){ return ligneFiche(c, map[c], false); }).join('')
+    : '<div class="vide">Aucune fiche terminée pour le moment.<br>Les résultats apparaîtront ici automatiquement.</div>';
+}
+
+function carteStat(cls, val, lib){
+  return '<div class="stat-card ' + cls + '"><div class="stat-val">' + val + '</div>'
+       + '<div class="stat-lib">' + lib + '</div></div>';
+}
+
+function ligneFiche(code, essais, avecBouton){
+  var d = essais[0];
+  var inf = infoFiche(code);
+  var pct = Math.round(d.score/d.total*100);
+  var n = niveauMaitrise(pct);
+  var dt = new Date(d.fait_le);
+  var dateTxt = dt.toLocaleDateString('fr-FR', {day:'numeric', month:'short'});
+  var histo = '';
+  if(essais.length > 1){
+    var premier = essais[essais.length-1];
+    histo = '<div class="progres-fleche">' + essais.length + ' essais : '
+          + premier.score + '/' + premier.total + ' \u2192 ' + d.score + '/' + d.total + ' \u2728</div>';
+  }
+  return '<div class="fiche-item">'
+    + '<div class="fi-gauche"><div class="fi-titre">' + esc(inf ? inf.titre : code) + '</div>'
+    + '<div class="fi-meta">' + esc(code) + (inf ? ' · ' + esc(inf.niveau) : '') + ' · ' + dateTxt + '</div>'
+    + histo + '</div>'
+    + '<div class="fi-score">' + d.score + '/' + d.total + '</div>'
+    + '<span class="niv ' + n.cls + '">' + n.txt + '</span>'
+    + (avecBouton ? '<button class="btn-mini bm-bleu" onclick="assigner(\'' + code + '\')">Assigner</button>' : '')
+    + '</div>';
+}
+
+// ═══ Recherche & assignation ═══
+function chercher(){
+  var q = document.getElementById('rech').value.trim().toLowerCase();
+  var cl = document.getElementById('filtre-classe').value;
+  var box = document.getElementById('resultats-recherche');
+
+  if(!q && !cl){
+    box.innerHTML = '<div class="vide">Tape une notion ci-dessus pour trouver une fiche à assigner.</div>';
+    return;
+  }
+  var res = toutesFiches.filter(function(f){
+    if(!f.disponible) return false;
+    if(cl && (!f.niveau || f.niveau.split('/').indexOf(cl) === -1)) return false;
+    if(!q) return true;
+    var t = ((f.titre||'') + ' ' + (f.sous_titre||'') + ' ' + (f.code||'') + ' ' + (f.matiere||'') + ' ' + (f.categorie||'')).toLowerCase();
+    return t.indexOf(q) !== -1;
+  }).slice(0, 40);
+
+  if(res.length === 0){
+    box.innerHTML = '<div class="vide">Aucune fiche trouvée.</div>';
+    return;
+  }
+  var dejaAssign = assignations.filter(function(a){ return a.statut==='a_faire'||a.statut==='a_refaire'; })
+                               .map(function(a){ return a.fiche_code; });
+  box.innerHTML = res.map(function(f){
+    var deja = dejaAssign.indexOf(f.code) !== -1;
+    return '<div class="fiche-item">'
+      + '<div class="fi-gauche"><div class="fi-titre">' + esc(f.titre) + '</div>'
+      + '<div class="fi-meta">' + esc(f.code) + ' · ' + esc(f.niveau) + ' · ' + esc(f.matiere) + '</div></div>'
+      + (deja ? '<span class="niv n-orange">déjà assignée</span>'
+              : '<button class="btn-mini bm-bleu" onclick="assigner(\'' + f.code + '\')">+ Assigner</button>')
+      + '</div>';
+  }).join('');
+}
+
+async function assigner(code){
+  var r = await sb.from('assignations').insert({ enfant_id: enfantSel, fiche_code: code, statut: 'a_faire' });
+  if(r.error){ msg("Impossible d'assigner : " + r.error.message, 'err'); return; }
+  msg("Leçon " + code + " assignée \u{1F4DA}", 'ok');
+  await chargerEnfant();
+  chercher();
+}
+
+async function validerAssign(id){
+  var r = await sb.from('assignations').update({ statut: 'valide' }).eq('id', id);
+  if(r.error){ msg("Erreur : " + r.error.message, 'err'); return; }
+  msg("Résultat validé \u2705", 'ok');
+  await chargerEnfant();
+}
+
+async function reassigner(id){
+  var r = await sb.from('assignations').update({ statut: 'a_refaire', progression_id: null, fait_le: null }).eq('id', id);
+  if(r.error){ msg("Erreur : " + r.error.message, 'err'); return; }
+  msg("Leçon renvoyée à l'enfant \u21BA", 'ok');
+  await chargerEnfant();
+}
+
+async function annulerAssign(id){
+  var r = await sb.from('assignations').delete().eq('id', id);
+  if(r.error){ msg("Erreur : " + r.error.message, 'err'); return; }
+  msg("Assignation retirée.", 'ok');
+  await chargerEnfant();
+  chercher();
+}
+
+async function deconnexion(){
+  await sb.auth.signOut();
+  localStorage.removeItem('atelier_enfant_actif');
+  window.location.href = "index.html";
+}
+</script>
+</body>
+</html>
