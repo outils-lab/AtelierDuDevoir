@@ -434,6 +434,8 @@ body{font-family:'Nunito',sans-serif;background:#f0fdfa;color:var(--text);font-s
 
 </main>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
 <script>
 function printLecon(){document.body.classList.add('print-mode-lecon');setTimeout(function(){window.print();setTimeout(function(){document.body.classList.remove('print-mode-lecon');},600);},60);}
 function printEval(){document.body.classList.add('print-mode-eval');setTimeout(function(){window.print();setTimeout(function(){document.body.classList.remove('print-mode-eval');},600);},60);}
@@ -675,6 +677,7 @@ function verifyConjVerb(verbIdx,answers){
 }
 
 function showBilan(){
+  if(typeof enregistrerProgression==='function'){ enregistrerProgression('L302', score, 26); }
   document.getElementById('bilan-score').textContent=score;
   var pct=score/26;
   var title,msg;
