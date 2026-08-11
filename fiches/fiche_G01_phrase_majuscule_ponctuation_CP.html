@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>G01 — La phrase | L'Atelier du Devoir</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --acc:#059669;--acc-pale:#f0fdf4;--acc-mid:#6ee7b7;--acc-dark:#047857;
+  --mint:#059669;--mint-pale:#d1fae5;--mint-deep:#047857;
+  --coral:#dc2626;--coral-pale:#fee2e2;
+  --sun:#d97706;--sun-pale:#fef3c7;
+  --radius:20px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  font-family:'Fredoka One',cursive;
+  background:#f0fdf4;
+  color:#1e293b;
+  font-size:22px; /* grande police pour CP */
+  line-height:1.5;
+}
+.header{background:white;border-bottom:4px solid var(--acc-pale);position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.1);}
+.header-top{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;}
+.logo{font-size:1.1rem;color:var(--acc);text-decoration:none;}
+.score-badge{background:var(--acc);color:white;font-size:.9rem;padding:6px 16px;border-radius:20px;}
+.steps-wrap{padding:0 16px 8px;}
+.steps{display:flex;gap:5px;}
+.step{flex:1;height:10px;border-radius:10px;background:#a7f3d0;transition:all .4s;}
+.step.done{background:#10b981;}.step.active{background:var(--acc);}
+.main{max-width:640px;margin:0 auto;padding:18px 14px 100px;}
+.phase{display:none;}.phase.active{display:block;}
+
+/* Accroche */
+.accroche{background:white;border-radius:var(--radius);padding:22px 20px;margin-bottom:20px;border:3px solid var(--acc-pale);text-align:center;}
+.accroche .big-icon{font-size:4.5rem;margin-bottom:10px;}
+.accroche h1{font-size:1.9rem;color:var(--acc);margin-bottom:8px;}
+.accroche p{font-family:'Nunito',sans-serif;font-size:1rem;color:#64748b;margin-bottom:12px;}
+.meta-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
+.meta-tag{background:var(--acc-pale);border-radius:20px;padding:5px 16px;font-size:.8rem;color:var(--acc);}
+
+/* Leçon */
+.lecon-card{background:white;border-radius:var(--radius);padding:22px 18px;margin-bottom:18px;border:3px solid var(--acc-pale);}
+.lecon-card h2{font-size:1.3rem;color:var(--acc);margin-bottom:18px;}
+.lecon-block{display:none;}.lecon-block.revealed{display:block;}
+.bloc-titre{font-size:1.2rem;color:var(--acc);margin-bottom:16px;}
+.sep{margin:22px 0;border:none;border-top:3px dashed #a7f3d0;}
+
+/* Bulle Ugo */
+.ugo-box{background:white;border:3px solid var(--acc-pale);border-radius:var(--radius);padding:16px 18px;margin:14px 0;display:flex;gap:14px;align-items:flex-start;}
+.ugo-box .ugo{font-size:2.6rem;flex-shrink:0;}
+.ugo-box p{font-family:'Nunito',sans-serif;font-size:1rem;color:#475569;line-height:1.7;}
+.ugo-box p strong{color:var(--acc);}
+
+/* Grande phrase affichée */
+.phrase-demo{
+  font-family:'Fredoka One',cursive;
+  font-size:1.7rem;
+  background:var(--acc-pale);
+  border:3px solid var(--acc-mid);
+  border-radius:16px;
+  padding:18px 20px;
+  margin:16px 0;
+  text-align:center;
+  line-height:1.6;
+}
+.phrase-demo .maj{color:var(--acc);font-size:2rem;}
+.phrase-demo .pt{color:var(--coral);font-size:2rem;}
+
+/* Info box */
+.info-box{background:var(--acc-pale);border-left:6px solid var(--acc);border-radius:0 14px 14px 0;padding:14px 18px;margin:14px 0;font-family:'Nunito',sans-serif;font-size:1rem;line-height:1.9;}
+.info-box strong{color:var(--acc-dark);}
+
+/* Bouton compris — très large pour CP */
+.btn-compris{
+  margin-top:20px;padding:16px 36px;border-radius:40px;
+  font-size:1.2rem;background:var(--acc);color:white;border:none;
+  cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:10px;
+  box-shadow:0 4px 14px rgba(5,150,105,.35);
+}
+.btn-compris:hover{background:var(--acc-dark);transform:translateY(-2px);}
+.btn-compris:disabled{opacity:.4;cursor:default;transform:none;}
+
+/* ══ EXERCICES QCM ══ */
+.ex-card{background:white;border:3px solid var(--acc-pale);border-radius:var(--radius);padding:20px 18px;margin-bottom:16px;}
+.ex-num{font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:800;color:var(--acc);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;}
+.ex-consigne{font-family:'Nunito',sans-serif;font-size:1rem;color:#64748b;margin-bottom:14px;line-height:1.6;}
+.ex-q{
+  font-size:1.1rem;color:var(--acc-dark);
+  background:var(--acc-pale);border-radius:14px;
+  padding:14px 16px;margin-bottom:16px;
+  line-height:1.7;
+}
+
+/* Choix visuels — grands boutons pour petits doigts */
+.choix-grille{display:flex;flex-direction:column;gap:12px;}
+.choix-btn{
+  padding:16px 18px;border-radius:16px;
+  border:3px solid #a7f3d0;background:white;
+  font-family:'Fredoka One',cursive;font-size:1.1rem;
+  cursor:pointer;text-align:left;transition:all .2s;
+  min-height:56px;display:flex;align-items:center;gap:12px;
+  line-height:1.4;
+}
+.choix-btn:hover:not(:disabled){border-color:var(--acc);background:var(--acc-pale);}
+.choix-btn:disabled{cursor:default;}
+.choix-btn.ok{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.choix-btn.ko{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
+.choix-btn.reveal{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.choix-icone{font-size:1.6rem;flex-shrink:0;}
+
+/* Feedback */
+.ex-fb{
+  margin-top:12px;padding:13px 16px;border-radius:14px;
+  font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;
+  display:none;line-height:1.6;
+}
+.ex-fb.show{display:block;}
+.ex-fb.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.ex-fb.ko{background:var(--coral-pale);color:#b91c1c;}
+
+/* ══ EXERCICE TAPER SUR L'ERREUR ══ */
+.phrase-tap{
+  font-size:1.4rem;background:var(--acc-pale);
+  border:3px solid var(--acc-mid);border-radius:16px;
+  padding:18px;margin:14px 0;
+  display:flex;flex-wrap:wrap;gap:6px;align-items:baseline;
+  line-height:2;
+}
+.mot-tap{
+  display:inline-block;padding:6px 12px;border-radius:10px;
+  cursor:pointer;transition:all .2s;border:2px solid transparent;
+}
+.mot-tap:hover{background:var(--acc-mid);border-color:var(--acc);}
+.mot-tap.sel-ok{background:var(--mint-pale);border-color:var(--mint);color:var(--mint-deep);}
+.mot-tap.sel-ko{background:var(--coral-pale);border-color:var(--coral);color:var(--coral);}
+.mot-tap.deja-ok{background:var(--mint-pale);border-color:var(--mint);}
+.tap-consigne{font-family:'Nunito',sans-serif;font-size:.95rem;color:#64748b;margin-bottom:6px;}
+
+/* ══ EXERCICE VRAI/FAUX ══ */
+.vf-phrase{
+  font-size:1.3rem;background:var(--acc-pale);
+  border:3px solid var(--acc-mid);border-radius:16px;
+  padding:16px 18px;margin:14px 0;text-align:center;
+  line-height:1.6;
+}
+.vf-btns{display:flex;gap:14px;justify-content:center;margin-top:8px;}
+.vf-btn{
+  flex:1;max-width:180px;padding:18px 10px;border-radius:16px;
+  font-family:'Fredoka One',cursive;font-size:1.3rem;
+  border:3px solid #a7f3d0;background:white;
+  cursor:pointer;transition:all .2s;text-align:center;
+}
+.vf-btn:hover:not(:disabled){transform:translateY(-3px);}
+.vf-btn.ok{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.vf-btn.ko{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
+.vf-btn:disabled{cursor:default;}
+
+/* ══ BOUTON SUITE ══ */
+.btn-suite{
+  margin-top:18px;padding:15px 28px;border-radius:34px;
+  font-size:1.1rem;background:var(--acc);color:white;
+  border:none;cursor:pointer;display:none;align-items:center;gap:10px;
+  box-shadow:0 4px 14px rgba(5,150,105,.3);transition:all .2s;
+}
+.btn-suite.show{display:inline-flex;}
+.btn-suite:hover{background:var(--acc-dark);transform:translateY(-2px);}
+
+/* ══ RESET BOX ══ */
+.reset-box{background:white;border:3px solid var(--acc);border-radius:var(--radius);padding:22px;text-align:center;margin-bottom:16px;display:none;}
+.reset-box.show{display:block;}
+.reset-box .r-ugo{font-size:3.2rem;margin-bottom:8px;}
+.reset-box h3{font-size:1.3rem;color:var(--acc);margin-bottom:8px;}
+.reset-box p{font-family:'Nunito',sans-serif;font-size:.95rem;color:#64748b;margin-bottom:14px;line-height:1.7;}
+.btn-reset{padding:14px 28px;border-radius:30px;font-size:1rem;background:var(--acc);color:white;border:none;cursor:pointer;}
+
+/* ══ BILAN ══ */
+.bilan-card{background:white;border-radius:var(--radius);padding:30px 20px;text-align:center;border:3px solid var(--acc-pale);}
+.bilan-ugo{font-size:5rem;margin-bottom:10px;display:block;}
+.bilan-title{font-size:2rem;color:var(--acc);margin-bottom:8px;}
+.bilan-msg{font-family:'Nunito',sans-serif;font-size:1rem;color:#64748b;margin-bottom:22px;line-height:1.8;}
+.stars-row{display:flex;justify-content:center;gap:16px;margin-bottom:20px;}
+.star-big{font-size:3.2rem;filter:grayscale(1);transition:all .5s;}
+.star-big.earned{filter:none;animation:starPop .5s ease both;}
+@keyframes starPop{0%{transform:scale(0);}60%{transform:scale(1.3);}100%{transform:scale(1);}}
+.score-circle{width:120px;height:120px;border-radius:50%;background:var(--acc);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 22px;color:white;box-shadow:0 6px 20px rgba(5,150,105,.4);}
+.score-num{font-size:2.4rem;line-height:1;}
+.score-sub{font-family:'Nunito',sans-serif;font-size:.7rem;opacity:.85;}
+.memo{background:var(--acc-pale);border-radius:var(--radius);padding:18px;margin:18px 0;text-align:left;}
+.memo h3{font-size:.95rem;color:var(--acc);margin-bottom:12px;}
+.memo-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media(max-width:400px){.memo-grid{grid-template-columns:1fr;}}
+.memo-item{background:white;border-radius:12px;padding:12px 14px;border:2px solid var(--acc-pale);}
+.memo-item strong{color:var(--acc);display:block;margin-bottom:4px;font-size:1rem;}
+.memo-item span{font-family:'Nunito',sans-serif;font-size:.85rem;color:#475569;line-height:1.6;}
+.bilan-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:20px;}
+.btn-bilan{padding:14px 24px;border-radius:32px;font-size:1rem;cursor:pointer;border:none;transition:all .2s;}
+.btn-bilan.primary{background:var(--acc);color:white;}
+.btn-bilan.secondary{background:var(--acc-pale);color:var(--acc);border:3px solid var(--acc);}
+.btn-bilan:hover{transform:translateY(-2px);}
+.confetti-piece{position:fixed;border-radius:3px;top:-20px;animation:fall linear both;pointer-events:none;z-index:9999;}
+@keyframes fall{0%{transform:translateY(0) rotate(0deg);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="header-top">
+    <a href="../6-9ans.html" class="logo">🦉 L'Atelier du Devoir</a>
+    <div class="score-badge">⭐ <span id="score-display">0</span></div>
+  </div>
+  <div class="steps-wrap"><div class="steps">
+    <div class="step active" id="s0"></div>
+    <div class="step" id="s1"></div>
+    <div class="step" id="s2"></div>
+    <div class="step" id="s3"></div>
+    <div class="step" id="s4"></div>
+    <div class="step" id="s5"></div>
+  </div></div>
+</header>
+
+<main class="main">
+
+<!-- ═══ ACCROCHE ═══ -->
+<div class="accroche">
+  <div class="big-icon">📝</div>
+  <h1>La phrase !</h1>
+  <p style="font-family:'Nunito',sans-serif;">Une phrase commence par une <strong style="color:var(--acc)">grande lettre</strong> et finit par un <strong style="color:var(--coral)">point</strong>. 🌟</p>
+  <div class="meta-row">
+    <span class="meta-tag">CP</span>
+    <span class="meta-tag">⭐ Facile</span>
+    <span class="meta-tag">📝 Grammaire</span>
+  </div>
+</div>
+
+<!-- ═══ LEÇON ═══ -->
+<div class="phase active" id="phase-lecon">
+<div class="lecon-card">
+  <h2>📖 La leçon</h2>
+
+  <!-- BLOC 0 : La grande lettre -->
+  <div class="lecon-block revealed" id="bloc-0">
+    <div class="bloc-titre">① La grande lettre au début</div>
+    <div class="ugo-box">
+      <span class="ugo">🦉</span>
+      <p>Une phrase commence <strong>toujours</strong> par une <strong>grande lettre</strong> ! On appelle ça une <strong>majuscule</strong>. 😊</p>
+    </div>
+    <div class="phrase-demo">
+      <span class="maj">L</span>e chat dort.
+    </div>
+    <div style="text-align:center;font-family:'Nunito',sans-serif;font-size:.95rem;color:#64748b;margin-bottom:16px;">
+      👆 Le <strong style="color:var(--acc)">L</strong> est en majuscule → c'est le début de la phrase !
+    </div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin:14px 0;">
+      <div style="flex:1;min-width:140px;background:#f0fdf4;border:2px solid #6ee7b7;border-radius:14px;padding:14px;text-align:center;">
+        <div style="font-size:1.5rem;margin-bottom:6px;">✅</div>
+        <div style="font-family:'Fredoka One';font-size:1.15rem;color:var(--acc-dark);">Le soleil brille.</div>
+        <div style="font-family:'Nunito',sans-serif;font-size:.8rem;color:#64748b;margin-top:4px;">Grand <strong>L</strong> au début ✓</div>
+      </div>
+      <div style="flex:1;min-width:140px;background:#fff1f2;border:2px solid #fda4af;border-radius:14px;padding:14px;text-align:center;">
+        <div style="font-size:1.5rem;margin-bottom:6px;">❌</div>
+        <div style="font-family:'Fredoka One';font-size:1.15rem;color:#b91c1c;">le soleil brille.</div>
+        <div style="font-family:'Nunito',sans-serif;font-size:.8rem;color:#64748b;margin-top:4px;">Petit <strong>l</strong> → pas bon ✗</div>
+      </div>
+    </div>
+    <button class="btn-compris" onclick="revealBloc(1)">J'ai compris ! 🎉</button>
+  </div>
+
+  <!-- BLOC 1 : Le point à la fin -->
+  <div class="lecon-block" id="bloc-1">
+    <hr class="sep">
+    <div class="bloc-titre">② Le point à la fin</div>
+    <div class="ugo-box">
+      <span class="ugo">🦉</span>
+      <p>Une phrase finit <strong>toujours</strong> par un <strong>point</strong> ! C'est comme un feu rouge pour le lecteur 🔴 : il s'arrête.</p>
+    </div>
+    <div class="phrase-demo">
+      Le chien joue<span class="pt">.</span>
+    </div>
+    <div style="text-align:center;font-family:'Nunito',sans-serif;font-size:.95rem;color:#64748b;margin-bottom:16px;">
+      👆 Le <strong style="color:var(--coral)">point</strong> rouge montre la fin de la phrase !
+    </div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin:14px 0;">
+      <div style="flex:1;min-width:140px;background:#f0fdf4;border:2px solid #6ee7b7;border-radius:14px;padding:14px;text-align:center;">
+        <div style="font-size:1.5rem;margin-bottom:6px;">✅</div>
+        <div style="font-family:'Fredoka One';font-size:1.15rem;color:var(--acc-dark);">Il fait beau<span style="color:var(--coral)">.</span></div>
+        <div style="font-family:'Nunito',sans-serif;font-size:.8rem;color:#64748b;margin-top:4px;">Point rouge à la fin ✓</div>
+      </div>
+      <div style="flex:1;min-width:140px;background:#fff1f2;border:2px solid #fda4af;border-radius:14px;padding:14px;text-align:center;">
+        <div style="font-size:1.5rem;margin-bottom:6px;">❌</div>
+        <div style="font-family:'Fredoka One';font-size:1.15rem;color:#b91c1c;">Il fait beau</div>
+        <div style="font-family:'Nunito',sans-serif;font-size:.8rem;color:#64748b;margin-top:4px;">Pas de point → pas bon ✗</div>
+      </div>
+    </div>
+    <button class="btn-compris" onclick="revealBloc(2)">J'ai compris ! 🎉</button>
+  </div>
+
+  <!-- BLOC 2 : Résumé -->
+  <div class="lecon-block" id="bloc-2">
+    <hr class="sep">
+    <div class="bloc-titre">③ Les deux règles ensemble</div>
+    <div class="ugo-box">
+      <span class="ugo">🦉</span>
+      <p>Pour faire une <strong>vraie phrase</strong>, il faut les <strong>deux</strong> en même temps ! 🎯</p>
+    </div>
+    <div class="phrase-demo" style="font-size:1.6rem;">
+      <span class="maj">M</span>a sœur chante<span class="pt">.</span>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin:16px 0;">
+      <div style="background:#f0fdf4;border:2px solid #6ee7b7;border-radius:12px;padding:12px 16px;flex:1;min-width:120px;font-family:'Nunito',sans-serif;font-size:.92rem;text-align:center;">
+        <div style="font-size:1.6rem;">🔠</div>
+        <strong style="color:var(--acc)">Majuscule</strong><br>
+        <span style="color:#64748b;">au début</span>
+      </div>
+      <div style="background:#fff1f2;border:2px solid #fda4af;border-radius:12px;padding:12px 16px;flex:1;min-width:120px;font-family:'Nunito',sans-serif;font-size:.92rem;text-align:center;">
+        <div style="font-size:1.6rem;">🔴</div>
+        <strong style="color:var(--coral)">Point</strong><br>
+        <span style="color:#64748b;">à la fin</span>
+      </div>
+    </div>
+    <div class="info-box">
+      <strong>Je retiens :</strong><br>
+      🔠 <strong>Grande lettre</strong> (majuscule) = début de la phrase<br>
+      🔴 <strong>Point</strong> = fin de la phrase<br>
+      Sans les deux → ce n'est pas une vraie phrase !
+    </div>
+    <button class="btn-compris" onclick="goPhase('ex1',1)">Je joue ! 🚀</button>
+  </div>
+</div>
+</div><!-- /phase-lecon -->
+
+<!-- ═══ EXERCICE 1 : C'est une phrase ? (Vrai/Faux) ═══ -->
+<div class="phase" id="phase-ex1">
+  <div class="ugo-box"><span class="ugo">🦉</span>
+    <p>Est-ce que c'est une vraie phrase ? Appuie sur <strong>👍 OUI</strong> ou <strong>👎 NON</strong> ! 😊</p>
+  </div>
+  <div id="ex1-reset" class="reset-box">
+    <div class="r-ugo">🦉</div>
+    <h3>On recommence !</h3>
+    <p>Grande lettre au début + point à la fin = vraie phrase ! 💪</p>
+    <button class="btn-reset" onclick="initEx1()">↺ Réessayer !</button>
+  </div>
+  <div id="ex1-zone"></div>
+  <button class="btn-suite" id="btn-ex1-to-ex2" onclick="goPhase('ex2',2)">Super ! Suite 🌟</button>
+</div>
+
+<!-- ═══ EXERCICE 2 : Choisir la bonne phrase ═══ -->
+<div class="phase" id="phase-ex2">
+  <div class="ugo-box"><span class="ugo">🦉</span>
+    <p>Parmi les deux, <strong>laquelle est une vraie phrase</strong> ? Appuie dessus ! 🎯</p>
+  </div>
+  <div id="ex2-reset" class="reset-box">
+    <div class="r-ugo">🦉</div>
+    <h3>On recommence !</h3>
+    <p>Cherche la grande lettre au début et le point à la fin ! 💪</p>
+    <button class="btn-reset" onclick="initEx2()">↺ Réessayer !</button>
+  </div>
+  <div id="ex2-zone"></div>
+  <button class="btn-suite" id="btn-ex2-to-ex3" onclick="goPhase('ex3',3)">Super ! Suite 🌟</button>
+</div>
+
+<!-- ═══ EXERCICE 3 : Trouver ce qui manque ═══ -->
+<div class="phase" id="phase-ex3">
+  <div class="ugo-box"><span class="ugo">🦉</span>
+    <p>Qu'est-ce qui <strong>manque</strong> dans cette phrase ? 🔍</p>
+  </div>
+  <div id="ex3-reset" class="reset-box">
+    <div class="r-ugo">🦉</div>
+    <h3>On recommence !</h3>
+    <p>Regarde bien le début et la fin ! 💪</p>
+    <button class="btn-reset" onclick="initEx3()">↺ Réessayer !</button>
+  </div>
+  <div id="ex3-zone"></div>
+  <button class="btn-suite" id="btn-ex3-to-ex4" onclick="goPhase('ex4',4)">Super ! Suite 🌟</button>
+</div>
+
+<!-- ═══ EXERCICE 4 : Mélange libre ═══ -->
+<div class="phase" id="phase-ex4">
+  <div class="ugo-box"><span class="ugo">🦉</span>
+    <p><strong>5 dernières questions !</strong> Tu es presque expert ! 🏆</p>
+  </div>
+  <div id="ex4-zone"></div>
+  <button class="btn-suite" id="btn-ex4-to-bilan" onclick="goPhase('bilan',5)">🌟 Voir mon score !</button>
+</div>
+
+<!-- ═══ BILAN ═══ -->
+<div class="phase" id="phase-bilan">
+  <div class="bilan-card">
+    <span class="bilan-ugo">🦉</span>
+    <h2 class="bilan-title" id="bilan-title"></h2>
+    <p class="bilan-msg" id="bilan-msg"></p>
+    <div class="stars-row">
+      <span class="star-big" id="etoile1">⭐</span>
+      <span class="star-big" id="etoile2">⭐</span>
+      <span class="star-big" id="etoile3">⭐</span>
+    </div>
+    <div class="score-circle">
+      <span class="score-num" id="bilan-pts">0</span>
+      <span class="score-sub" id="bilan-sur">/ 0</span>
+    </div>
+    <div class="memo">
+      <h3>📝 Ce que j'ai appris</h3>
+      <div class="memo-grid">
+        <div class="memo-item">
+          <strong>🔠 Début</strong>
+          <span>Toujours une <strong>grande lettre</strong> (majuscule)</span>
+        </div>
+        <div class="memo-item">
+          <strong>🔴 Fin</strong>
+          <span>Toujours un <strong>point</strong> à la fin</span>
+        </div>
+        <div class="memo-item">
+          <strong>✅ Vraie phrase</strong>
+          <span>Les deux ensemble !</span>
+        </div>
+        <div class="memo-item">
+          <strong>❌ Pas une phrase</strong>
+          <span>S'il manque la majuscule ou le point</span>
+        </div>
+      </div>
+    </div>
+    <div class="bilan-btns">
+      <button class="btn-bilan secondary" onclick="location.reload()">↺ Recommencer</button>
+      <button class="btn-bilan primary" onclick="location.href='../6-9ans.html'">← Les fiches</button>
+    </div>
+  </div>
+</div>
+
+</main><!-- /main -->
+
+<script>
+var score = 0;
+var TOTAL_PTS = 0; // calculé dynamiquement
+
+/* ── helpers ── */
+function addPt(){score++;document.getElementById('score-display').textContent=score;}
+function updSteps(n){for(var i=0;i<6;i++){var s=document.getElementById('s'+i);if(!s)return;s.classList.remove('active','done');if(i<n)s.classList.add('done');else if(i===n)s.classList.add('active');}}
+function shuffle(a){var b=a.slice();for(var i=b.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=b[i];b[i]=b[j];b[j]=t;}return b;}
+function revealBloc(n){
+  var b=document.getElementById('bloc-'+n);if(!b)return;
+  var p=document.getElementById('bloc-'+(n-1));
+  if(p){var btn=p.querySelector('.btn-compris');if(btn){btn.textContent='✓ Compris !';btn.disabled=true;btn.style.opacity='.4';}}
+  b.classList.add('revealed');
+  setTimeout(function(){var hH=(document.querySelector('.header')||{offsetHeight:0}).offsetHeight;var r=b.getBoundingClientRect();window.scrollTo({top:window.pageYOffset+r.top-hH-16,behavior:'smooth'});},150);
+}
+function goPhase(ph,si){
+  document.querySelectorAll('.phase').forEach(function(p){p.classList.remove('active');});
+  var el=document.getElementById('phase-'+ph);
+  if(el){el.classList.add('active');setTimeout(function(){el.scrollIntoView({behavior:'smooth',block:'start'});},80);}
+  updSteps(si);
+  if(ph==='ex1')initEx1();
+  if(ph==='ex2')initEx2();
+  if(ph==='ex3')initEx3();
+  if(ph==='ex4')initEx4();
+  if(ph==='bilan')showBilan();
+}
+
+/* ══ EXERCICE 1 : Vrai / Faux — "C'est une phrase ?" ══
+   Critères : maj + point présents ou manquants.
+   Pool de 12 items, on en tire 4 aléatoirement.
+   1 pt par bonne réponse au premier coup.
+*/
+var EX1_POOL = [
+  // ok=true → c'est une phrase correcte
+  {txt:'Le chat dort.', ok:true, fb_ok:'Oui ! Grande lettre + point = vraie phrase. 🎉', fb_ko:'Si, c\'est une phrase ! Il y a le grand L et le point.'},
+  {txt:'Le chien joue.', ok:true, fb_ok:'Oui ! Grand L et point. 🌟', fb_ko:'C\'est une phrase : grand L et point à la fin !'},
+  {txt:'Ma maman chante.', ok:true, fb_ok:'Oui ! Grand M et point. 🎉', fb_ko:'Grand M + point = vraie phrase !'},
+  {txt:'Il pleut.', ok:true, fb_ok:'Oui ! Grand I et point. 🌟', fb_ko:'Grand I + point = vraie phrase.'},
+  {txt:'Les oiseaux volent.', ok:true, fb_ok:'Oui ! Grand L et point. 🎉', fb_ko:'Grand L + point = vraie phrase.'},
+  // manque majuscule
+  {txt:'le soleil brille.', ok:false, fb_ok:'Bravo ! Le l est petit → pas de majuscule. ❌', fb_ko:'Non ! Le l est petit : il manque la majuscule.'},
+  {txt:'mon chat joue.', ok:false, fb_ok:'Bravo ! Le m est petit → pas de majuscule. ❌', fb_ko:'Non ! Le m est petit : il faut écrire Mon.'},
+  {txt:'il fait chaud.', ok:false, fb_ok:'Bravo ! Le i est petit → pas de majuscule. ❌', fb_ko:'Non ! Le i est petit : il faut écrire Il.'},
+  // manque point
+  {txt:'Le lapin mange', ok:false, fb_ok:'Bravo ! Il manque le point à la fin. ❌', fb_ko:'Non ! Il manque le point à la fin.'},
+  {txt:'La fleur est belle', ok:false, fb_ok:'Bravo ! Il manque le point à la fin. ❌', fb_ko:'Non ! Il manque le point.'},
+  {txt:'Papa lit un livre', ok:false, fb_ok:'Bravo ! Il manque le point à la fin. ❌', fb_ko:'Non ! Il manque le point.'},
+  // manque les deux
+  {txt:'le chat mange', ok:false, fb_ok:'Bravo ! Pas de majuscule + pas de point. ❌', fb_ko:'Non ! Il manque la majuscule ET le point.'},
+];
+var ex1Items=[], ex1Idx=0, ex1Score=0, ex1Done=false;
+function initEx1(){
+  ex1Items=shuffle(EX1_POOL).slice(0,4);
+  ex1Idx=0;ex1Score=0;ex1Done=false;
+  document.getElementById('ex1-reset').classList.remove('show');
+  document.getElementById('btn-ex1-to-ex2').classList.remove('show');
+  renderEx1();
+}
+function renderEx1(){
+  var z=document.getElementById('ex1-zone');z.innerHTML='';
+  var item=ex1Items[ex1Idx];
+  var card=document.createElement('div');card.className='ex-card';
+  card.innerHTML='<div class="ex-num">Question '+(ex1Idx+1)+' / 4</div>'
+    +'<div class="ex-consigne">Est-ce une <strong>vraie phrase</strong> ?</div>'
+    +'<div class="vf-phrase">'+item.txt+'</div>'
+    +'<div class="vf-btns">'
+    +'<button class="vf-btn" id="btn-oui" onclick="checkEx1(true,this)">👍 OUI !</button>'
+    +'<button class="vf-btn" id="btn-non" onclick="checkEx1(false,this)">👎 NON</button>'
+    +'</div>'
+    +'<div class="ex-fb" id="ex1-fb"></div>';
+  z.appendChild(card);
+}
+function checkEx1(rep,btn){
+  var item=ex1Items[ex1Idx];
+  var fb=document.getElementById('ex1-fb');
+  document.getElementById('btn-oui').disabled=true;
+  document.getElementById('btn-non').disabled=true;
+  if(rep===item.ok){
+    btn.classList.add('ok');
+    fb.className='ex-fb show ok';fb.innerHTML='✅ '+item.fb_ok;
+    addPt();ex1Score++;
+  } else {
+    btn.classList.add('ko');
+    fb.className='ex-fb show ko';fb.innerHTML='❌ '+item.fb_ko;
+  }
+  ex1Idx++;
+  if(ex1Idx<4){
+    setTimeout(function(){renderEx1();},1400);
+  } else {
+    setTimeout(function(){
+      var b=document.getElementById('btn-ex1-to-ex2');b.classList.add('show');
+      b.scrollIntoView({behavior:'smooth',block:'nearest'});
+    },1400);
+  }
+}
+
+/* ══ EXERCICE 2 : Choisir la bonne phrase parmi deux ══
+   Pool de 6 paires, on en tire 4.
+   1 pt par bonne réponse.
+*/
+var EX2_POOL = [
+  {
+    a:'Le chat joue.',      a_ok:true,
+    b:'le chat joue.',      b_ok:false,
+    expl:'Grand L + point = vraie phrase !'
+  },
+  {
+    a:'ma sœur danse',      a_ok:false,
+    b:'Ma sœur danse.',     b_ok:true,
+    expl:'Grand M + point = vraie phrase !'
+  },
+  {
+    a:'Il fait beau.',      a_ok:true,
+    b:'Il fait beau',       b_ok:false,
+    expl:'Il faut un point à la fin !'
+  },
+  {
+    a:'les oiseaux chantent.', a_ok:false,
+    b:'Les oiseaux chantent.', b_ok:true,
+    expl:'Grand L + point = vraie phrase !'
+  },
+  {
+    a:'Papa lit.',          a_ok:true,
+    b:'Papa lit',           b_ok:false,
+    expl:'Papa lit. ← il y a un point !'
+  },
+  {
+    a:'la neige tombe',     a_ok:false,
+    b:'La neige tombe.',    b_ok:true,
+    expl:'Grand L + point = vraie phrase !'
+  },
+  {
+    a:'Mon chien court.',   a_ok:true,
+    b:'mon chien court.',   b_ok:false,
+    expl:'Grand M + point = vraie phrase !'
+  },
+  {
+    a:'Le soleil brille',   a_ok:false,
+    b:'Le soleil brille.',  b_ok:true,
+    expl:'Il manquait le point !'
+  },
+];
+var ex2Items=[], ex2Idx=0, ex2Done=false;
+function initEx2(){
+  ex2Items=shuffle(EX2_POOL).slice(0,4);
+  ex2Idx=0;ex2Done=false;
+  document.getElementById('ex2-reset').classList.remove('show');
+  document.getElementById('btn-ex2-to-ex3').classList.remove('show');
+  renderEx2();
+}
+function renderEx2(){
+  var z=document.getElementById('ex2-zone');z.innerHTML='';
+  var item=ex2Items[ex2Idx];
+  // Mélanger a/b aléatoirement
+  var opts=shuffle([{txt:item.a,ok:item.a_ok},{txt:item.b,ok:item.b_ok}]);
+  var card=document.createElement('div');card.className='ex-card';
+  card.innerHTML='<div class="ex-num">Question '+(ex2Idx+1)+' / 4</div>'
+    +'<div class="ex-consigne">Clique sur la <strong>vraie phrase</strong> 👇</div>'
+    +'<div class="choix-grille">'
+    +opts.map(function(o,oi){
+      return '<button class="choix-btn" onclick="checkEx2('+oi+',this)" id="ex2opt'+oi+'">'
+        +'<span class="choix-icone">📝</span>'
+        +'<span>'+o.txt+'</span>'
+        +'</button>';
+    }).join('')
+    +'</div>'
+    +'<div class="ex-fb" id="ex2-fb"></div>';
+  // stocker les opts pour pouvoir vérifier
+  card._opts=opts;
+  z.appendChild(card);
+  z._opts=opts;
+}
+function checkEx2(oi,btn){
+  var opts=document.getElementById('ex2-zone')._opts;
+  var chosen=opts[oi];
+  var fb=document.getElementById('ex2-fb');
+  document.querySelectorAll('#ex2-zone .choix-btn').forEach(function(b){b.disabled=true;});
+  var expl=ex2Items[ex2Idx].expl;
+  if(chosen.ok){
+    btn.classList.add('ok');
+    fb.className='ex-fb show ok';fb.innerHTML='✅ Bravo ! '+expl;
+    addPt();
+  } else {
+    btn.classList.add('ko');
+    // Révéler la bonne
+    document.querySelectorAll('#ex2-zone .choix-btn').forEach(function(b,bi){if(opts[bi].ok)b.classList.add('reveal');});
+    fb.className='ex-fb show ko';fb.innerHTML='❌ '+expl;
+  }
+  ex2Idx++;
+  if(ex2Idx<4){
+    setTimeout(function(){renderEx2();},1500);
+  } else {
+    setTimeout(function(){
+      var b=document.getElementById('btn-ex2-to-ex3');b.classList.add('show');
+      b.scrollIntoView({behavior:'smooth',block:'nearest'});
+    },1500);
+  }
+}
+
+/* ══ EXERCICE 3 : Qu'est-ce qui manque ? ══
+   Pool de 8 phrases défectueuses → choisir ce qui manque parmi 3 options.
+   1 pt par bonne réponse.
+*/
+var EX3_POOL = [
+  // manque majuscule
+  {txt:'le chat dort.',   opts:['La majuscule au début 🔠','Le point à la fin 🔴','Rien, c\'est bon ✅'], ok:0,
+   expl:'Le l est petit ! Il faut écrire Le avec un grand L.'},
+  {txt:'mon papa cuisine.',opts:['La majuscule au début 🔠','Le point à la fin 🔴','Rien, c\'est bon ✅'], ok:0,
+   expl:'Le m est petit ! Il faut écrire Mon avec un grand M.'},
+  {txt:'il neige.',       opts:['La majuscule au début 🔠','Le point à la fin 🔴','Rien, c\'est bon ✅'], ok:0,
+   expl:'Le i est petit ! Il faut écrire Il avec un grand I.'},
+  // manque point
+  {txt:'Le lapin saute',  opts:['La majuscule au début 🔠','Le point à la fin 🔴','Rien, c\'est bon ✅'], ok:1,
+   expl:'Il n\'y a pas de point à la fin ! Il faut écrire saute.'},
+  {txt:'Ma sœur chante',  opts:['La majuscule au début 🔠','Le point à la fin 🔴','Rien, c\'est bon ✅'], ok:1,
+   expl:'Il manque le point à la fin !'},
+  {txt:'Les fleurs poussent', opts:['La majuscule au début 🔠','Le point à la fin 🔴','Rien, c\'est bon ✅'], ok:1,
+   expl:'Il manque le point à la fin !'},
+  // correct (piège)
+  {txt:'Le soleil brille.', opts:['La majuscule au début 🔠','Le point à la fin 🔴','Rien, c\'est bon ✅'], ok:2,
+   expl:'Grand L + point → rien ne manque, c\'est parfait !'},
+  {txt:'Il mange du pain.', opts:['La majuscule au début 🔠','Le point à la fin 🔴','Rien, c\'est bon ✅'], ok:2,
+   expl:'Grand I + point → c\'est une vraie phrase, bravo !'},
+];
+var ex3Items=[], ex3Idx=0;
+function initEx3(){
+  ex3Items=shuffle(EX3_POOL).slice(0,4);
+  ex3Idx=0;
+  document.getElementById('ex3-reset').classList.remove('show');
+  document.getElementById('btn-ex3-to-ex4').classList.remove('show');
+  renderEx3();
+}
+function renderEx3(){
+  var z=document.getElementById('ex3-zone');z.innerHTML='';
+  var item=ex3Items[ex3Idx];
+  var card=document.createElement('div');card.className='ex-card';
+  // Options dans ordre fixe (logique pédagogique)
+  card.innerHTML='<div class="ex-num">Question '+(ex3Idx+1)+' / 4</div>'
+    +'<div class="ex-consigne">Qu\'est-ce qui <strong>manque</strong> dans cette phrase ?</div>'
+    +'<div class="vf-phrase">'+item.txt+'</div>'
+    +'<div class="choix-grille">'
+    +item.opts.map(function(o,oi){
+      return '<button class="choix-btn" onclick="checkEx3('+oi+',this)">'
+        +'<span style="font-size:1.4rem;">'+(oi===0?'🔠':oi===1?'🔴':'✅')+'</span>'
+        +'<span>'+o+'</span>'
+        +'</button>';
+    }).join('')
+    +'</div>'
+    +'<div class="ex-fb" id="ex3-fb"></div>';
+  z.appendChild(card);
+  z._item=item;
+}
+function checkEx3(oi,btn){
+  var item=document.getElementById('ex3-zone')._item;
+  var fb=document.getElementById('ex3-fb');
+  document.querySelectorAll('#ex3-zone .choix-btn').forEach(function(b){b.disabled=true;});
+  if(oi===item.ok){
+    btn.classList.add('ok');
+    fb.className='ex-fb show ok';fb.innerHTML='✅ Bravo ! '+item.expl;
+    addPt();
+  } else {
+    btn.classList.add('ko');
+    document.querySelectorAll('#ex3-zone .choix-btn')[item.ok].classList.add('reveal');
+    fb.className='ex-fb show ko';fb.innerHTML='❌ '+item.expl;
+  }
+  ex3Idx++;
+  if(ex3Idx<4){
+    setTimeout(function(){renderEx3();},1500);
+  } else {
+    setTimeout(function(){
+      var b=document.getElementById('btn-ex3-to-ex4');b.classList.add('show');
+      b.scrollIntoView({behavior:'smooth',block:'nearest'});
+    },1500);
+  }
+}
+
+/* ══ EXERCICE 4 : Mélange — 5 questions de types variés ══ */
+var EX4_POOL = [
+  {type:'vf', txt:'Les enfants rient.', ok:true, fb_ok:'Oui ! Grand L + point. 🎉', fb_ko:'Si, c\'est une phrase : grand L et point !'},
+  {type:'vf', txt:'les enfants jouent.', ok:false, fb_ok:'Bravo ! Pas de majuscule. ❌', fb_ko:'Non ! Le l est petit.'},
+  {type:'vf', txt:'La pluie tombe', ok:false, fb_ok:'Bravo ! Pas de point à la fin. ❌', fb_ko:'Non ! Il manque le point.'},
+  {type:'vf', txt:'Papa travaille.', ok:true, fb_ok:'Oui ! Grand P + point. 🌟', fb_ko:'Si ! Grand P et point.'},
+  {type:'vf', txt:'Mon ami court.', ok:true, fb_ok:'Oui ! Grand M + point. 🎉', fb_ko:'Si ! Grand M et point.'},
+  {type:'choix2',
+   a:'La neige est froide.',  a_ok:true,
+   b:'la neige est froide.',  b_ok:false,
+   expl:'Grand L + point = vraie phrase !'},
+  {type:'choix2',
+   a:'Il chante fort',        a_ok:false,
+   b:'Il chante fort.',       b_ok:true,
+   expl:'Il faut un point à la fin !'},
+  {type:'choix2',
+   a:'Les chats dorment.',    a_ok:true,
+   b:'les chats dorment.',    b_ok:false,
+   expl:'Grand L + point = vraie phrase !'},
+  {type:'manque', txt:'ma maman cuisine.',
+   opts:['La majuscule au début 🔠','Le point à la fin 🔴','Rien, c\'est bon ✅'], ok:0,
+   expl:'Le m est petit ! Il faut écrire Ma.'},
+  {type:'manque', txt:'Le cheval galope',
+   opts:['La majuscule au début 🔠','Le point à la fin 🔴','Rien, c\'est bon ✅'], ok:1,
+   expl:'Il manque le point à la fin !'},
+];
+var ex4Items=[], ex4Idx=0, ex4Count=0;
+function initEx4(){
+  ex4Items=shuffle(EX4_POOL).slice(0,5);
+  ex4Idx=0;ex4Count=0;
+  TOTAL_PTS=4+4+4+5; // ex1+ex2+ex3+ex4
+  document.getElementById('btn-ex4-to-bilan').classList.remove('show');
+  renderEx4();
+}
+function renderEx4(){
+  if(ex4Idx>=ex4Items.length){
+    setTimeout(function(){
+      var b=document.getElementById('btn-ex4-to-bilan');b.classList.add('show');
+      b.scrollIntoView({behavior:'smooth',block:'nearest'});
+    },600);
+    return;
+  }
+  var z=document.getElementById('ex4-zone');z.innerHTML='';
+  var item=ex4Items[ex4Idx];
+  var card=document.createElement('div');card.className='ex-card';
+  if(item.type==='vf'){
+    card.innerHTML='<div class="ex-num">Question '+(ex4Idx+1)+' / 5</div>'
+      +'<div class="ex-consigne">Est-ce une <strong>vraie phrase</strong> ?</div>'
+      +'<div class="vf-phrase">'+item.txt+'</div>'
+      +'<div class="vf-btns">'
+      +'<button class="vf-btn" onclick="checkEx4vf(true,this)">👍 OUI !</button>'
+      +'<button class="vf-btn" onclick="checkEx4vf(false,this)">👎 NON</button>'
+      +'</div>'
+      +'<div class="ex-fb" id="ex4-fb"></div>';
+    z.appendChild(card);z._item=item;
+  } else if(item.type==='choix2'){
+    var opts=shuffle([{txt:item.a,ok:item.a_ok},{txt:item.b,ok:item.b_ok}]);
+    card.innerHTML='<div class="ex-num">Question '+(ex4Idx+1)+' / 5</div>'
+      +'<div class="ex-consigne">Clique sur la <strong>vraie phrase</strong> 👇</div>'
+      +'<div class="choix-grille">'
+      +opts.map(function(o,oi){
+        return '<button class="choix-btn" onclick="checkEx4c('+oi+',this)">'
+          +'<span class="choix-icone">📝</span><span>'+o.txt+'</span></button>';
+      }).join('')
+      +'</div>'
+      +'<div class="ex-fb" id="ex4-fb"></div>';
+    z.appendChild(card);z._item=item;z._opts=opts;
+  } else {
+    card.innerHTML='<div class="ex-num">Question '+(ex4Idx+1)+' / 5</div>'
+      +'<div class="ex-consigne">Qu\'est-ce qui <strong>manque</strong> ?</div>'
+      +'<div class="vf-phrase">'+item.txt+'</div>'
+      +'<div class="choix-grille">'
+      +item.opts.map(function(o,oi){
+        return '<button class="choix-btn" onclick="checkEx4m('+oi+',this)">'
+          +'<span style="font-size:1.4rem;">'+(oi===0?'🔠':oi===1?'🔴':'✅')+'</span>'
+          +'<span>'+o+'</span></button>';
+      }).join('')
+      +'</div>'
+      +'<div class="ex-fb" id="ex4-fb"></div>';
+    z.appendChild(card);z._item=item;
+  }
+}
+function advEx4(){ex4Idx++;setTimeout(function(){renderEx4();},1400);}
+function checkEx4vf(rep,btn){
+  var item=document.getElementById('ex4-zone')._item;
+  var fb=document.getElementById('ex4-fb');
+  document.querySelectorAll('#ex4-zone .vf-btn').forEach(function(b){b.disabled=true;});
+  if(rep===item.ok){btn.classList.add('ok');fb.className='ex-fb show ok';fb.innerHTML='✅ '+item.fb_ok;addPt();}
+  else{btn.classList.add('ko');fb.className='ex-fb show ko';fb.innerHTML='❌ '+item.fb_ko;}
+  advEx4();
+}
+function checkEx4c(oi,btn){
+  var opts=document.getElementById('ex4-zone')._opts;
+  var item=document.getElementById('ex4-zone')._item;
+  var fb=document.getElementById('ex4-fb');
+  document.querySelectorAll('#ex4-zone .choix-btn').forEach(function(b){b.disabled=true;});
+  if(opts[oi].ok){btn.classList.add('ok');fb.className='ex-fb show ok';fb.innerHTML='✅ Bravo ! '+item.expl;addPt();}
+  else{btn.classList.add('ko');document.querySelectorAll('#ex4-zone .choix-btn').forEach(function(b,bi){if(opts[bi].ok)b.classList.add('reveal');});fb.className='ex-fb show ko';fb.innerHTML='❌ '+item.expl;}
+  advEx4();
+}
+function checkEx4m(oi,btn){
+  var item=document.getElementById('ex4-zone')._item;
+  var fb=document.getElementById('ex4-fb');
+  document.querySelectorAll('#ex4-zone .choix-btn').forEach(function(b){b.disabled=true;});
+  if(oi===item.ok){btn.classList.add('ok');fb.className='ex-fb show ok';fb.innerHTML='✅ Bravo ! '+item.expl;addPt();}
+  else{btn.classList.add('ko');document.querySelectorAll('#ex4-zone .choix-btn')[item.ok].classList.add('reveal');fb.className='ex-fb show ko';fb.innerHTML='❌ '+item.expl;}
+  advEx4();
+}
+
+/* ══ BILAN ══ */
+function showBilan(){
+  var tot=TOTAL_PTS||17;
+  document.getElementById('bilan-pts').textContent=score;
+  document.getElementById('bilan-sur').textContent='/ '+tot;
+  var pct=score/tot,t,m;
+  if(pct>=.8){t='BRAVO ! 🎉🎊';m='Tu connais super bien la phrase ! Ugo est très fier de toi ! 🦉⭐';}
+  else if(pct>=.5){t='Bien joué ! 😊🌟';m='Tu t\'en souviens presque : grande lettre au début, point à la fin ! Continue !';}
+  else{t='Bien essayé ! 💪';m:'Rappelle : grande lettre + point = vraie phrase. Recommence ! 🦉';}
+  document.getElementById('bilan-title').textContent=t;
+  document.getElementById('bilan-msg').textContent=m;
+  var s=[Math.ceil(tot*.33),Math.ceil(tot*.66),Math.ceil(tot*.89)];
+  ['etoile1','etoile2','etoile3'].forEach(function(id,i){
+    var el=document.getElementById(id);
+    if(score>=s[i]){(function(e,d){setTimeout(function(){e.classList.add('earned');},d);})(el,300+i*450);}
+    else el.style.filter='grayscale(1)';
+  });
+  if(pct>=.5)confetti();
+}
+function confetti(){
+  var cols=['#059669','#6ee7b7','#d97706','#7c3aed','#0369a1'];
+  for(var i=0;i<65;i++){
+    var el=document.createElement('div');el.className='confetti-piece';
+    el.style.cssText='left:'+Math.random()*100+'vw;background:'+cols[Math.floor(Math.random()*cols.length)]
+      +';animation-duration:'+(1.8+Math.random()*2.2)+'s;animation-delay:'+Math.random()*1.5+'s'
+      +';width:'+(7+Math.random()*10)+'px;height:'+(7+Math.random()*10)+'px'
+      +';border-radius:'+(Math.random()>.5?'50%':'4px')+';';
+    document.body.appendChild(el);
+    setTimeout(function(){if(el.parentNode)el.remove();},5000);
+  }
+}
+</script>
+</body>
+</html>
