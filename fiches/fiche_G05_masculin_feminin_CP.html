@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>G05 — Masculin et Féminin | L'Atelier du Devoir</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --acc:#7c3aed;--acc-pale:#f5f3ff;--acc-mid:#c4b5fd;--acc-dark:#5b21b6;
+  --ok:#059669;--ok-pale:#d1fae5;--ko:#dc2626;--ko-pale:#fee2e2;--radius:18px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Fredoka One',cursive;background:var(--acc-pale);color:#1e293b;font-size:22px;line-height:1.5;}
+.print-bar{display:flex;gap:8px;padding:8px 14px;background:#fff;border-bottom:2px solid var(--acc-pale);}
+.print-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:5px;padding:7px 10px;border-radius:12px;border:2px solid;background:white;font-family:'Nunito',sans-serif;font-size:.76rem;font-weight:700;cursor:pointer;}
+.print-btn-lecon{border-color:var(--acc);color:var(--acc);}
+.print-btn-eval{border-color:#0891b2;color:#0891b2;}
+.header{background:white;border-bottom:4px solid var(--acc-pale);position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.1);}
+.header-top{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;}
+.logo{font-size:1rem;color:var(--acc);text-decoration:none;}
+.score-badge{background:var(--acc);color:white;font-size:.88rem;padding:6px 16px;border-radius:20px;}
+.steps-wrap{padding:0 14px 9px;}
+.steps{display:flex;gap:4px;}
+.step{flex:1;height:9px;border-radius:5px;background:#e2e8f0;transition:background .35s;}
+.step.active{background:var(--acc-mid);}
+.step.done{background:var(--acc);}
+.steps-labels{display:flex;gap:4px;margin-top:3px;}
+.step-lbl{flex:1;font-size:.56rem;color:#94a3b8;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+main{max-width:660px;margin:0 auto;padding:16px 14px 80px;}
+.accroche{background:white;border-radius:var(--radius);padding:14px 16px;margin-bottom:14px;box-shadow:0 2px 10px rgba(0,0,0,.06);}
+.accroche h1{font-size:1.2rem;color:var(--acc);margin-bottom:4px;}
+.accroche p{font-size:.78rem;color:#64748b;font-family:'Nunito',sans-serif;}
+.meta-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+.meta-tag{background:var(--acc-pale);color:var(--acc-dark);font-size:.7rem;padding:3px 10px;border-radius:20px;font-family:'Nunito',sans-serif;font-weight:700;}
+.phase{display:none;}
+.phase.active{display:block;}
+.ugo-box{background:#fff7ed;border-radius:14px;padding:10px 14px;margin-bottom:12px;font-family:'Nunito',sans-serif;font-size:.82rem;color:#92400e;display:flex;gap:9px;align-items:flex-start;}
+.ugo-box .owl{font-size:1.5rem;flex-shrink:0;}
+.lecon-card{background:white;border-radius:var(--radius);padding:16px;box-shadow:0 2px 10px rgba(0,0,0,.06);}
+.lecon-card h2{font-size:1.05rem;color:var(--acc);margin-bottom:12px;}
+.lecon-block{display:none;}
+.lecon-block.revealed{display:block;}
+.lecon-subtitle{font-size:.82rem;color:var(--acc-dark);margin-bottom:8px;padding:5px 10px;background:var(--acc-pale);border-radius:8px;font-family:'Nunito',sans-serif;font-weight:800;}
+.regle-box{background:var(--acc-pale);border-left:5px solid var(--acc);border-radius:0 12px 12px 0;padding:10px 14px;margin:8px 0;font-size:.88rem;}
+.regle-box strong{color:var(--acc);}
+.ex-line{font-size:.78rem;color:#64748b;margin:.3rem 0 .3rem 14px;font-style:italic;font-family:'Nunito',sans-serif;}
+.genre-examples{display:flex;gap:10px;margin:8px 0;flex-wrap:wrap;}
+.genre-card{flex:1;min-width:130px;border-radius:12px;padding:10px 12px;font-size:.82rem;text-align:center;}
+.genre-card.masc{background:#eff6ff;border:3px solid #3b82f6;}
+.genre-card.masc .genre-tag{color:#1d4ed8;font-size:1.1rem;margin-bottom:4px;}
+.genre-card.fem{background:#fdf2f8;border:3px solid #db2777;}
+.genre-card.fem .genre-tag{color:#9d174d;font-size:1.1rem;margin-bottom:4px;}
+.btn-compris{display:block;margin:14px auto 0;background:var(--acc);color:white;border:none;border-radius:50px;padding:10px 28px;font-family:'Fredoka One',cursive;font-size:.95rem;cursor:pointer;transition:transform .12s,opacity .2s;}
+.btn-compris:active{transform:scale(.95);}
+.ex-card{background:white;border-radius:var(--radius);padding:16px;box-shadow:0 2px 10px rgba(0,0,0,.06);}
+.ex-card h3{font-size:.98rem;color:var(--acc);margin-bottom:5px;}
+.consigne{font-size:.77rem;color:#64748b;margin-bottom:11px;font-family:'Nunito',sans-serif;}
+.ex-progress{font-size:.76rem;color:var(--acc);font-family:'Nunito',sans-serif;font-weight:800;margin-bottom:8px;text-align:center;background:var(--acc-pale);padding:4px;border-radius:8px;}
+/* CP: mot affiché grand */
+.word-display{font-size:1.8rem;text-align:center;padding:14px;margin:8px 0 14px;background:#f8fafc;border-radius:14px;border:2px solid #e2e8f0;}
+/* CP: grands boutons ≥62px */
+.cp-opts{display:flex;flex-direction:column;gap:10px;}
+.cp-opts button{min-height:62px;background:#f8fafc;border:3px solid #e2e8f0;border-radius:14px;padding:10px 16px;font-family:'Fredoka One',cursive;font-size:1rem;text-align:center;cursor:pointer;transition:all .15s;}
+.cp-opts button.correct{background:var(--ok-pale);border-color:var(--ok);color:#065f46;}
+.cp-opts button.wrong{background:var(--ko-pale);border-color:var(--ko);color:#7f1d1d;}
+.cp-opts button.reveal{background:var(--ok-pale);border-color:var(--ok);color:#065f46;}
+.cp-opts button:disabled{cursor:default;}
+/* VF grands boutons */
+.vf-btns{display:flex;gap:12px;justify-content:center;}
+.btn-vf{flex:1;max-width:200px;min-height:64px;padding:12px 16px;border-radius:50px;border:3px solid;font-family:'Fredoka One',cursive;font-size:1rem;cursor:pointer;transition:all .15s;}
+.btn-vrai{background:var(--ok-pale);color:#065f46;border-color:var(--ok);}
+.btn-faux{background:var(--ko-pale);color:#7f1d1d;border-color:var(--ko);}
+.btn-vf.correct{transform:scale(1.06);box-shadow:0 0 0 3px rgba(5,150,105,.3);}
+.btn-vf.wrong{opacity:.5;}
+.btn-vf.reveal{transform:scale(1.06);box-shadow:0 0 0 3px rgba(5,150,105,.3);}
+.btn-vf:disabled{cursor:default;}
+.qcm-fb{display:none;font-family:'Nunito',sans-serif;font-size:.79rem;padding:8px 11px;border-radius:8px;margin-top:10px;}
+.qcm-fb.show{display:block;}
+.qcm-fb.ok{background:var(--ok-pale);color:#065f46;}
+.qcm-fb.ko{background:var(--ko-pale);color:#7f1d1d;}
+.btn-suite{display:none;margin:12px auto 0;background:var(--acc);color:white;border:none;border-radius:50px;padding:11px 28px;font-family:'Fredoka One',cursive;font-size:.95rem;cursor:pointer;}
+.btn-suite.show{display:block;}
+/* Pair display for Ex4 */
+.pair-display{display:flex;gap:12px;justify-content:center;margin:8px 0 14px;}
+.pair-btn{flex:1;max-width:200px;min-height:70px;border-radius:14px;border:3px solid var(--acc);background:white;color:var(--acc);font-family:'Fredoka One',cursive;font-size:1.05rem;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;transition:all .15s;}
+.pair-btn.correct{background:var(--ok-pale);border-color:var(--ok);color:#065f46;}
+.pair-btn.wrong{background:var(--ko-pale);border-color:var(--ko);color:#7f1d1d;}
+.pair-btn.reveal{background:var(--ok-pale);border-color:var(--ok);color:#065f46;}
+.pair-btn:disabled{cursor:default;}
+.bilan-card{background:white;border-radius:var(--radius);padding:22px 16px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,.1);}
+.bilan-stars-row{display:flex;justify-content:center;gap:6px;margin:.4rem 0 .8rem;}
+.etoile{font-size:2.8rem;opacity:.25;transition:opacity .5s,transform .5s;}
+.etoile.earned{opacity:1;transform:scale(1.2);}
+.bilan-score-row{font-size:2.2rem;color:var(--acc);font-weight:700;margin-bottom:.2rem;}
+.bilan-title{font-size:1.1rem;color:#1e293b;margin:.2rem 0 .4rem;}
+.bilan-msg{font-size:.85rem;color:#64748b;font-family:'Nunito',sans-serif;margin-bottom:1rem;}
+.memo-card{background:var(--acc-pale);border-radius:14px;padding:14px 16px;text-align:left;}
+.memo-card h3{font-size:.9rem;color:var(--acc);margin-bottom:10px;text-align:center;}
+.memo-item{display:flex;gap:7px;margin-bottom:7px;font-size:.8rem;font-family:'Nunito',sans-serif;}
+.memo-dot{color:var(--acc);flex-shrink:0;}
+.bilan-btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:16px;}
+.btn-act{padding:9px 18px;border-radius:50px;border:2px solid;background:white;font-family:'Nunito',sans-serif;font-weight:700;font-size:.82rem;cursor:pointer;}
+.btn-act.violet{border-color:var(--acc);color:var(--acc);}
+.btn-act.cyan{border-color:#0891b2;color:#0891b2;}
+.confetti-piece{position:fixed;border-radius:2px;top:-20px;animation:fall linear both;pointer-events:none;z-index:9999;}
+@keyframes fall{0%{transform:translateY(0) rotate(0);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
+.print-lecon-content,.print-eval-content{display:none;}
+@media print{.header,.print-bar,.accroche,.phase,.confetti-piece{display:none!important;}body{background:white;}@page{margin:14mm;}body.print-mode-lecon .print-lecon-content{display:block!important;}body.print-mode-eval .print-eval-content{display:block!important;}}
+</style>
+</head>
+<body>
+<div class="print-bar">
+  <button class="print-btn print-btn-lecon" onclick="printLecon()">📖 Imprimer la leçon</button>
+  <button class="print-btn print-btn-eval" onclick="printEval()">📝 Imprimer les exercices</button>
+</div>
+<header class="header">
+  <div class="header-top">
+    <a href="../6-9ans.html" class="logo">🦉 L'Atelier du Devoir</a>
+    <div class="score-badge">⭐ <span id="score-display">0</span> pts</div>
+  </div>
+  <div class="steps-wrap">
+    <div class="steps">
+      <div class="step active" id="s0"></div><div class="step" id="s1"></div>
+      <div class="step" id="s2"></div><div class="step" id="s3"></div>
+      <div class="step" id="s4"></div><div class="step" id="s5"></div>
+    </div>
+    <div class="steps-labels">
+      <div class="step-lbl">📖 Leçon</div><div class="step-lbl">✏️ Ex. 1</div>
+      <div class="step-lbl">✏️ Ex. 2</div><div class="step-lbl">🎯 Ex. 3</div>
+      <div class="step-lbl">🎯 Ex. 4</div><div class="step-lbl">🏆 Bilan</div>
+    </div>
+  </div>
+</header>
+<main>
+<div class="accroche">
+  <h1>🔵 Masculin et 🔴 Féminin</h1>
+  <p>UN chat, UNE fleur… Chaque mot a un genre ! Découvrons-le ensemble.</p>
+  <div class="meta-row">
+    <span class="meta-tag">📚 CP</span>
+    <span class="meta-tag">⏱️ ~15 min</span>
+    <span class="meta-tag">⭐ Facile</span>
+    <span class="meta-tag">🎯 Français — Grammaire</span>
+  </div>
+</div>
+
+<!-- LEÇON -->
+<div class="phase active" id="phase-lecon">
+  <div class="lecon-card">
+    <h2>📖 La leçon</h2>
+    <div class="lecon-block revealed" id="bloc-0">
+      <div class="lecon-subtitle">① Ugo fait ses courses</div>
+      <div class="ugo-box"><span class="owl">🦉</span><span>🛒 Ugo fait sa liste de courses. Il écrit : <em>"UN pain, UNE pomme, UN vélo, UNE fleur"</em>. Il s'arrête ! <em>'Pourquoi parfois UN et parfois UNE ?'</em> C'est parce que chaque mot a un <strong>genre</strong> ! 😲</span></div>
+      <div class="regle-box"><strong>🔵 Les mots masculins</strong> vont avec <strong>UN</strong> ou <strong>LE</strong>.</div>
+      <div class="genre-card masc"><div class="genre-tag">🔵 Masculin</div><em>UN chat 🐱 · UN livre 📚 · LE pain 🍞</em></div>
+      <button class="btn-compris" onclick="revealBloc(1)">J'ai compris ! 🎉</button>
+    </div>
+    <div class="lecon-block" id="bloc-1">
+      <div class="lecon-subtitle">② Les mots féminins</div>
+      <div class="regle-box"><strong>🔴 Les mots féminins</strong> vont avec <strong>UNE</strong> ou <strong>LA</strong>.</div>
+      <div class="genre-card fem"><div class="genre-tag">🔴 Féminin</div><em>UNE fleur 🌸 · UNE maison 🏠 · LA pomme 🍎</em></div>
+      <button class="btn-compris" onclick="revealBloc(2)">J'ai compris ! 🎉</button>
+    </div>
+    <div class="lecon-block" id="bloc-2">
+      <div class="lecon-subtitle">③ L'astuce de mémo</div>
+      <div class="ugo-box"><span class="owl">🦉</span><span>Mon astuce 🎵 : dis tout fort <strong>"un"</strong> ou <strong>"une"</strong> devant le mot ! Celui qui sonne bien, c'est le bon ! <em>UN chat ou UNE chat ?</em> → UN chat → masculin 🔵 !</span></div>
+      <div class="genre-examples">
+        <div class="genre-card masc"><div class="genre-tag">🔵 Masculin (UN / LE)</div>chat · chien · livre · soleil</div>
+        <div class="genre-card fem"><div class="genre-tag">🔴 Féminin (UNE / LA)</div>maison · fleur · pomme · table</div>
+      </div>
+      <button class="btn-compris" onclick="goPhase('ex1',1)">Je joue ! 🚀</button>
+    </div>
+  </div>
+</div>
+
+<!-- EX 1 : VF "X est masculin?" -->
+<div class="phase" id="phase-ex1">
+  <div class="ugo-box"><span class="owl">🦉</span><span>Lis le mot et dis si c'est <strong>masculin</strong> (UN) ! Pense : <em>'UN... ou UNE ?'</em> 😊</span></div>
+  <div class="ex-card">
+    <h3>✏️ Exercice 1 — C'est masculin ?</h3>
+    <p class="consigne">Regarde le mot. C'est masculin (UN) ? Réponds OUI ou NON ! (1 pt par question)</p>
+    <div id="ex1-cont"></div>
+    <button class="btn-suite" id="bs-ex1" onclick="goPhase('ex2',2)">Exercice 2 →</button>
+  </div>
+</div>
+
+<!-- EX 2 : choisir l'article UN ou UNE -->
+<div class="phase" id="phase-ex2">
+  <div class="ugo-box"><span class="owl">🦉</span><span>Dis tout fort <strong>"un"</strong> ou <strong>"une"</strong> devant le mot ! Celui qui sonne bien, c'est le bon article ! 🎵</span></div>
+  <div class="ex-card">
+    <h3>✏️ Exercice 2 — UN ou UNE ?</h3>
+    <p class="consigne">Choisis le bon article pour chaque mot. (1 pt par question)</p>
+    <div id="ex2-cont"></div>
+    <button class="btn-suite" id="bs-ex2" onclick="goPhase('ex3',3)">Exercice 3 →</button>
+  </div>
+</div>
+
+<!-- EX 3 : classer masculin/féminin -->
+<div class="phase" id="phase-ex3">
+  <div class="ugo-box"><span class="owl">🦉</span><span>Pour chaque mot, clique sur le bon genre ! 🔵 Masculin = UN/LE · 🔴 Féminin = UNE/LA 😊</span></div>
+  <div class="ex-card">
+    <h3>🎯 Exercice 3 — Masculin ou féminin ?</h3>
+    <p class="consigne">Regarde le mot et clique sur le bon genre. (1 pt par question)</p>
+    <div id="ex3-cont"></div>
+    <button class="btn-suite" id="bs-ex3" onclick="goPhase('ex4',4)">Exercice 4 →</button>
+  </div>
+</div>
+
+<!-- EX 4 : trouver le mot féminin -->
+<div class="phase" id="phase-ex4">
+  <div class="ugo-box"><span class="owl">🦉</span><span>Regarde les deux mots. Lequel va avec <strong>UNE</strong> ? C'est le mot <strong>féminin</strong> ! 🌸</span></div>
+  <div class="ex-card">
+    <h3>🎯 Exercice 4 — Trouve le mot féminin !</h3>
+    <p class="consigne">Clique sur le mot féminin (UNE). (1 pt par question)</p>
+    <div id="ex4-cont"></div>
+    <button class="btn-suite" id="bs-ex4" onclick="goPhase('bilan',5)">Voir mon bilan →</button>
+  </div>
+</div>
+
+<!-- BILAN -->
+<div class="phase" id="phase-bilan">
+  <div class="bilan-card">
+    <div style="font-size:2.2rem">🦉</div>
+    <div class="bilan-stars-row"><div class="etoile" id="etoile1">⭐</div><div class="etoile" id="etoile2">⭐</div><div class="etoile" id="etoile3">⭐</div></div>
+    <div class="bilan-score-row"><span id="bilan-pts">0</span> <span id="bilan-sur">/ 16</span> pts</div>
+    <div class="bilan-title" id="bilan-title"></div>
+    <div class="bilan-msg" id="bilan-msg"></div>
+    <hr style="margin:.8rem 0;border:none;border-top:2px solid var(--acc-pale)">
+    <div class="memo-card">
+      <h3>📝 Ce qu'il faut retenir</h3>
+      <div class="memo-item"><span class="memo-dot">🔵</span><span>Les mots <strong>masculins</strong> vont avec <em>un</em> ou <em>le</em> : un chat 🐱, un livre 📚…</span></div>
+      <div class="memo-item"><span class="memo-dot">🔴</span><span>Les mots <strong>féminins</strong> vont avec <em>une</em> ou <em>la</em> : une fleur 🌸, une maison 🏠…</span></div>
+      <div class="memo-item"><span class="memo-dot">🟡</span><span>L'astuce : dis <strong>"un"</strong> ou <strong>"une"</strong> devant le mot. Celui qui sonne bien → c'est le bon genre !</span></div>
+      <div class="memo-item"><span class="memo-dot">🟣</span><span>Chaque mot a <strong>un seul genre</strong> : il est soit masculin, soit féminin. Pas les deux !</span></div>
+    </div>
+    <div class="bilan-btns">
+      <button class="btn-act violet" onclick="printLecon()">📖 Imprimer la leçon</button>
+      <button class="btn-act cyan" onclick="printEval()">📝 Imprimer les exercices</button>
+    </div>
+  </div>
+</div>
+</main>
+
+<div class="print-lecon-content" style="font-family:'Fredoka One',cursive;color:#1e293b;font-size:17px;max-width:620px;margin:0 auto;">
+  <h1 style="color:#7c3aed;margin-bottom:6px;">G05 — Masculin et Féminin</h1>
+  <p style="font-family:'Nunito',sans-serif;font-size:.75rem;color:#64748b;margin-bottom:14px;">CP · Français — Grammaire · L'Atelier du Devoir</p>
+  <div style="background:#f5f3ff;border-left:5px solid #7c3aed;border-radius:0 10px 10px 0;padding:9px 13px;margin:8px 0;font-size:.87rem;"><strong style="color:#7c3aed;">🔵 Masculin</strong> = avec UN ou LE : un chat, un livre, le pain…</div>
+  <div style="background:#f5f3ff;border-left:5px solid #7c3aed;border-radius:0 10px 10px 0;padding:9px 13px;margin:8px 0;font-size:.87rem;"><strong style="color:#7c3aed;">🔴 Féminin</strong> = avec UNE ou LA : une fleur, une maison, la pomme…</div>
+  <div style="background:#f5f3ff;border-left:5px solid #7c3aed;border-radius:0 10px 10px 0;padding:9px 13px;margin:8px 0;font-size:.87rem;"><strong style="color:#7c3aed;">Astuce :</strong> dis "un" ou "une" devant le mot. Celui qui sonne bien, c'est le bon genre !</div>
+</div>
+
+<script>
+// ===== MOTEUR =====
+var score=0, TOTAL_PTS=4+4+4+4; // Ex1+Ex2+Ex3+Ex4
+
+function addPt(){score++;document.getElementById('score-display').textContent=score;}
+function updSteps(n){for(var i=0;i<6;i++){var s=document.getElementById('s'+i);if(!s)return;s.classList.remove('active','done');if(i<n)s.classList.add('done');else if(i===n)s.classList.add('active');}}
+function shuffle(a){var b=a.slice();for(var i=b.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=b[i];b[i]=b[j];b[j]=t;}return b;}
+
+function revealBloc(n){
+  var b=document.getElementById('bloc-'+n);if(!b)return;
+  var p=document.getElementById('bloc-'+(n-1));
+  if(p){var btn=p.querySelector('.btn-compris');if(btn){btn.textContent='✓ Compris !';btn.disabled=true;btn.style.opacity='.4';}}
+  b.classList.add('revealed');
+  setTimeout(function(){var hH=(document.querySelector('.header')||{offsetHeight:0}).offsetHeight;var r=b.getBoundingClientRect();window.scrollTo({top:window.pageYOffset+r.top-hH-16,behavior:'smooth'});},150);
+}
+
+function goPhase(ph,si){
+  document.querySelectorAll('.phase').forEach(function(p){p.classList.remove('active');});
+  var el=document.getElementById('phase-'+ph);
+  if(el){el.classList.add('active');setTimeout(function(){el.scrollIntoView({behavior:'smooth',block:'start'});},80);}
+  updSteps(si);
+  if(ph==='ex1')initEx1();if(ph==='ex2')initEx2();if(ph==='ex3')initEx3();if(ph==='ex4')initEx4();if(ph==='bilan')showBilan();
+}
+
+function showBilan(){
+  var tot=TOTAL_PTS;
+  document.getElementById('bilan-pts').textContent=score;
+  document.getElementById('bilan-sur').textContent='/ '+tot;
+  var pct=score/tot,t,m;
+  if(pct>=.9){t='Parfait ! 🎉🌟';m='Tu sais très bien choisir entre masculin et féminin. Ugo est super fier de toi !';}
+  else if(pct>=.66){t='Bien joué ! 😊⭐';m='Tu as bien compris ! Continue de t\'entraîner avec UN et UNE !';}
+  else if(pct>=.33){t='Bien essayé ! 💪';m='Continue ! L\'astuce : dis UN ou UNE devant le mot. Celui qui sonne bien, c\'est le bon !';}
+  else{t='Courage ! 🦉';m='C\'est difficile au début ! Relis la leçon avec l\'astuce d\'Ugo. Tu vas y arriver !';}
+  document.getElementById('bilan-title').textContent=t;
+  document.getElementById('bilan-msg').textContent=m;
+  var seuils=[Math.ceil(tot*.33),Math.ceil(tot*.66),Math.ceil(tot*.89)];
+  ['etoile1','etoile2','etoile3'].forEach(function(id,i){
+    var el=document.getElementById(id);
+    if(score>=seuils[i]){(function(e,d){setTimeout(function(){e.classList.add('earned');},d);})(el,300+i*450);}
+    else{el.style.filter='grayscale(1)';}
+  });
+  if(pct>=.5)confetti();
+}
+
+function confetti(){
+  var cols=['#7c3aed','#c4b5fd','#059669','#d97706','#db2777'];
+  for(var i=0;i<65;i++){(function(){var el=document.createElement('div');el.className='confetti-piece';el.style.cssText='left:'+Math.random()*100+'vw;background:'+cols[Math.floor(Math.random()*cols.length)]+';animation-duration:'+(1.8+Math.random()*2.2)+'s;animation-delay:'+Math.random()*1.5+'s;width:'+(7+Math.random()*10)+'px;height:'+(7+Math.random()*10)+'px;border-radius:'+(Math.random()>.5?'50%':'4px')+';';document.body.appendChild(el);setTimeout(function(){if(el.parentNode)el.remove();},5000);})();}
+}
+
+// ===== DONNÉES =====
+// Ex1 : VF "est masculin ?" - 4 masc + 4 fem
+var ex1MascPool=[
+  {word:"chat",emoji:"🐱",expl:"Chat → UN chat = masculin ! 🔵"},
+  {word:"livre",emoji:"📚",expl:"Livre → UN livre = masculin ! 🔵"},
+  {word:"chien",emoji:"🐶",expl:"Chien → UN chien = masculin ! 🔵"},
+  {word:"soleil",emoji:"☀️",expl:"Soleil → UN soleil = masculin ! 🔵"}
+];
+var ex1FemPool=[
+  {word:"maison",emoji:"🏠",expl:"Maison → UNE maison = féminin ! 🔴"},
+  {word:"fleur",emoji:"🌸",expl:"Fleur → UNE fleur = féminin ! 🔴"},
+  {word:"pomme",emoji:"🍎",expl:"Pomme → UNE pomme = féminin ! 🔴"},
+  {word:"table",emoji:"🪑",expl:"Table → UNE table = féminin ! 🔴"}
+];
+
+// Ex2 : choisir article UN ou UNE
+var ex2MascPool=[
+  {word:"vélo",emoji:"🚲",art:"un",expl:"Vélo → UN vélo = masculin ! 🔵"},
+  {word:"pain",emoji:"🍞",art:"un",expl:"Pain → UN pain = masculin ! 🔵"},
+  {word:"oiseau",emoji:"🐦",art:"un",expl:"Oiseau → UN oiseau = masculin ! 🔵"},
+  {word:"sac",emoji:"🎒",art:"un",expl:"Sac → UN sac = masculin ! 🔵"}
+];
+var ex2FemPool=[
+  {word:"nuit",emoji:"🌙",art:"une",expl:"Nuit → UNE nuit = féminin ! 🔴"},
+  {word:"école",emoji:"🏫",art:"une",expl:"École → UNE école = féminin ! 🔴"},
+  {word:"étoile",emoji:"⭐",art:"une",expl:"Étoile → UNE étoile = féminin ! 🔴"},
+  {word:"forêt",emoji:"🌳",art:"une",expl:"Forêt → UNE forêt = féminin ! 🔴"}
+];
+
+// Ex3 : classifier masc/fém
+var ex3MascPool=[
+  {word:"arbre",emoji:"🌲",genre:"masc",expl:"Arbre → UN arbre = masculin ! 🔵"},
+  {word:"crayon",emoji:"✏️",genre:"masc",expl:"Crayon → UN crayon = masculin ! 🔵"},
+  {word:"gâteau",emoji:"🎂",genre:"masc",expl:"Gâteau → UN gâteau = masculin ! 🔵"},
+  {word:"jardin",emoji:"🌻",genre:"masc",expl:"Jardin → UN jardin = masculin ! 🔵"}
+];
+var ex3FemPool=[
+  {word:"mer",emoji:"🌊",genre:"fem",expl:"Mer → UNE mer = féminin ! 🔴"},
+  {word:"porte",emoji:"🚪",genre:"fem",expl:"Porte → UNE porte = féminin ! 🔴"},
+  {word:"voiture",emoji:"🚗",genre:"fem",expl:"Voiture → UNE voiture = féminin ! 🔴"},
+  {word:"fête",emoji:"🎉",genre:"fem",expl:"Fête → UNE fête = féminin ! 🔴"}
+];
+
+// Ex4 : trouver le mot féminin parmi 2
+var ex4Pairs=[
+  {q:"Lequel est féminin ?",opts:[{label:"chat 🐱",word:"chat",fem:false},{label:"fleur 🌸",word:"fleur",fem:true}],cor:"fleur",expl:"Fleur → UNE fleur = féminin 🔴. Chat → UN chat = masculin 🔵."},
+  {q:"Lequel est féminin ?",opts:[{label:"pomme 🍎",word:"pomme",fem:true},{label:"vélo 🚲",word:"vélo",fem:false}],cor:"pomme",expl:"Pomme → UNE pomme = féminin 🔴. Vélo → UN vélo = masculin 🔵."},
+  {q:"Lequel est féminin ?",opts:[{label:"chien 🐶",word:"chien",fem:false},{label:"maison 🏠",word:"maison",fem:true}],cor:"maison",expl:"Maison → UNE maison = féminin 🔴. Chien → UN chien = masculin 🔵."},
+  {q:"Lequel est féminin ?",opts:[{label:"livre 📚",word:"livre",fem:false},{label:"étoile ⭐",word:"étoile",fem:true}],cor:"étoile",expl:"Étoile → UNE étoile = féminin 🔴. Livre → UN livre = masculin 🔵."},
+  {q:"Lequel est féminin ?",opts:[{label:"soleil ☀️",word:"soleil",fem:false},{label:"nuit 🌙",word:"nuit",fem:true}],cor:"nuit",expl:"Nuit → UNE nuit = féminin 🔴. Soleil → UN soleil = masculin 🔵."},
+  {q:"Lequel est féminin ?",opts:[{label:"pain 🍞",word:"pain",fem:false},{label:"école 🏫",word:"école",fem:true}],cor:"école",expl:"École → UNE école = féminin 🔴. Pain → UN pain = masculin 🔵."},
+  {q:"Lequel est féminin ?",opts:[{label:"oiseau 🐦",word:"oiseau",fem:false},{label:"forêt 🌳",word:"forêt",fem:true}],cor:"forêt",expl:"Forêt → UNE forêt = féminin 🔴. Oiseau → UN oiseau = masculin 🔵."},
+  {q:"Lequel est féminin ?",opts:[{label:"sac 🎒",word:"sac",fem:false},{label:"table 🪑",word:"table",fem:true}],cor:"table",expl:"Table → UNE table = féminin 🔴. Sac → UN sac = masculin 🔵."}
+];
+
+// ===== EX 1 : VF masculin ? =====
+var ex1Items=[],ex1Qi=0;
+function initEx1(){
+  ex1Items=shuffle(shuffle(ex1MascPool).slice(0,2).concat(shuffle(ex1FemPool).slice(0,2)));
+  ex1Qi=0;renderEx1();
+}
+function renderEx1(){
+  var item=ex1Items[ex1Qi];
+  var h='<div class="ex-progress">Question '+(ex1Qi+1)+' / 4</div>';
+  h+='<div class="word-display">'+item.emoji+' <strong>'+item.word+'</strong></div>';
+  h+='<p style="text-align:center;font-size:.88rem;color:#64748b;font-family:Nunito,sans-serif;margin-bottom:10px;">C\'est <strong>masculin</strong> (UN) ?</p>';
+  h+='<div class="vf-btns"><button class="btn-vf btn-vrai" onclick="checkEx1(this,true)">👍 OUI</button><button class="btn-vf btn-faux" onclick="checkEx1(this,false)">👎 NON</button></div>';
+  h+='<div class="qcm-fb" id="ex1-fb"></div>';
+  document.getElementById('ex1-cont').innerHTML=h;
+}
+function checkEx1(btn,choice){
+  var item=ex1Items[ex1Qi];var isMasc=(item.genre==='masc'||ex1MascPool.indexOf(item)>=0);
+  // check if item is in masc pool
+  var masc=false;for(var k=0;k<ex1MascPool.length;k++){if(ex1MascPool[k].word===item.word){masc=true;break;}}
+  var cont=document.getElementById('ex1-cont');var btns=cont.querySelectorAll('.btn-vf');
+  for(var i=0;i<btns.length;i++)btns[i].disabled=true;
+  var fb=document.getElementById('ex1-fb');
+  if(choice===masc){btn.classList.add('correct');fb.className='qcm-fb show ok';fb.innerHTML='✅ '+item.expl;addPt();}
+  else{btn.classList.add('wrong');for(var i=0;i<btns.length;i++){if((btns[i].classList.contains('btn-vrai')&&masc)||(btns[i].classList.contains('btn-faux')&&!masc))btns[i].classList.add('reveal');}fb.className='qcm-fb show ko';fb.innerHTML='❌ '+item.expl;}
+  ex1Qi++;
+  if(ex1Qi<4){setTimeout(renderEx1,1500);}else{setTimeout(function(){document.getElementById('bs-ex1').classList.add('show');},1500);}
+}
+
+// ===== EX 2 : UN ou UNE ? =====
+var ex2Items=[],ex2Qi=0;
+function initEx2(){
+  ex2Items=shuffle(shuffle(ex2MascPool).slice(0,2).concat(shuffle(ex2FemPool).slice(0,2)));
+  ex2Qi=0;renderEx2();
+}
+function renderEx2(){
+  var item=ex2Items[ex2Qi];
+  var h='<div class="ex-progress">Question '+(ex2Qi+1)+' / 4</div>';
+  h+='<div class="word-display">_____ '+item.emoji+' '+item.word+'</div>';
+  h+='<div class="vf-btns">';
+  var opts=shuffle([{label:"🔵 UN",val:"un"},{label:"🔴 UNE",val:"une"}]);
+  opts.forEach(function(o){h+='<button class="btn-vf" style="background:#f8fafc;border-color:#e2e8f0;color:#1e293b;" data-val="'+o.val+'" onclick="checkEx2(this)">'+o.label+'</button>';});
+  h+='</div><div class="qcm-fb" id="ex2-fb"></div>';
+  document.getElementById('ex2-cont').innerHTML=h;
+}
+function checkEx2(btn){
+  var item=ex2Items[ex2Qi];
+  var cont=document.getElementById('ex2-cont');var btns=cont.querySelectorAll('.btn-vf');
+  for(var i=0;i<btns.length;i++)btns[i].disabled=true;
+  var fb=document.getElementById('ex2-fb');
+  if(btn.dataset.val===item.art){btn.classList.add('correct');fb.className='qcm-fb show ok';fb.innerHTML='✅ '+item.expl;addPt();}
+  else{btn.classList.add('wrong');for(var i=0;i<btns.length;i++){if(btns[i].dataset.val===item.art)btns[i].classList.add('reveal');}fb.className='qcm-fb show ko';fb.innerHTML='❌ '+item.expl;}
+  ex2Qi++;
+  if(ex2Qi<4){setTimeout(renderEx2,1500);}else{setTimeout(function(){document.getElementById('bs-ex2').classList.add('show');},1500);}
+}
+
+// ===== EX 3 : classifier masc/fém =====
+var ex3Items=[],ex3Qi=0;
+function initEx3(){
+  ex3Items=shuffle(shuffle(ex3MascPool).slice(0,2).concat(shuffle(ex3FemPool).slice(0,2)));
+  ex3Qi=0;renderEx3();
+}
+function renderEx3(){
+  var item=ex3Items[ex3Qi];
+  var h='<div class="ex-progress">Question '+(ex3Qi+1)+' / 4</div>';
+  h+='<div class="word-display">'+item.emoji+' <strong>'+item.word+'</strong></div>';
+  h+='<div class="vf-btns">';
+  var opts=shuffle([{label:"🔵 Masculin\n(un/le)",val:"masc"},{label:"🔴 Féminin\n(une/la)",val:"fem"}]);
+  opts.forEach(function(o){h+='<button class="btn-vf" style="background:#f8fafc;border-color:#e2e8f0;color:#1e293b;white-space:pre;" data-val="'+o.val+'" onclick="checkEx3(this)">'+o.label+'</button>';});
+  h+='</div><div class="qcm-fb" id="ex3-fb"></div>';
+  document.getElementById('ex3-cont').innerHTML=h;
+}
+function checkEx3(btn){
+  var item=ex3Items[ex3Qi];
+  var cont=document.getElementById('ex3-cont');var btns=cont.querySelectorAll('.btn-vf');
+  for(var i=0;i<btns.length;i++)btns[i].disabled=true;
+  var fb=document.getElementById('ex3-fb');
+  if(btn.dataset.val===item.genre){btn.classList.add('correct');fb.className='qcm-fb show ok';fb.innerHTML='✅ '+item.expl;addPt();}
+  else{btn.classList.add('wrong');for(var i=0;i<btns.length;i++){if(btns[i].dataset.val===item.genre)btns[i].classList.add('reveal');}fb.className='qcm-fb show ko';fb.innerHTML='❌ '+item.expl;}
+  ex3Qi++;
+  if(ex3Qi<4){setTimeout(renderEx3,1500);}else{setTimeout(function(){document.getElementById('bs-ex3').classList.add('show');},1500);}
+}
+
+// ===== EX 4 : trouver le mot féminin =====
+var ex4Items=[],ex4Qi=0;
+function initEx4(){ex4Items=shuffle(ex4Pairs).slice(0,4);ex4Qi=0;renderEx4();}
+function renderEx4(){
+  var item=ex4Items[ex4Qi];
+  var opts=shuffle(item.opts.slice());
+  var h='<div class="ex-progress">Question '+(ex4Qi+1)+' / 4</div>';
+  h+='<p style="text-align:center;font-size:.9rem;margin-bottom:12px;">'+item.q+'</p>';
+  h+='<div class="pair-display" id="ex4-opts">';
+  opts.forEach(function(o){h+='<button class="pair-btn" data-val="'+o.word+'" onclick="checkEx4(this)">'+o.label+'</button>';});
+  h+='</div><div class="qcm-fb" id="ex4-fb"></div>';
+  document.getElementById('ex4-cont').innerHTML=h;
+}
+function checkEx4(btn){
+  var item=ex4Items[ex4Qi];
+  var opts=document.getElementById('ex4-opts').querySelectorAll('.pair-btn');
+  for(var i=0;i<opts.length;i++)opts[i].disabled=true;
+  var fb=document.getElementById('ex4-fb');
+  if(btn.dataset.val===item.cor){btn.classList.add('correct');fb.className='qcm-fb show ok';fb.innerHTML='✅ '+item.expl;addPt();}
+  else{btn.classList.add('wrong');for(var i=0;i<opts.length;i++){if(opts[i].dataset.val===item.cor)opts[i].classList.add('reveal');}fb.className='qcm-fb show ko';fb.innerHTML='❌ '+item.expl;}
+  ex4Qi++;
+  if(ex4Qi<4){setTimeout(renderEx4,1500);}else{setTimeout(function(){document.getElementById('bs-ex4').classList.add('show');},1500);}
+}
+
+// ===== PRINT =====
+function printLecon(){document.body.classList.add('print-mode-lecon');document.body.classList.remove('print-mode-eval');window.print();document.body.classList.remove('print-mode-lecon');}
+function printEval(){document.body.classList.add('print-mode-eval');document.body.classList.remove('print-mode-lecon');window.print();document.body.classList.remove('print-mode-eval');}
+</script>
+</body>
+</html>

@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>G07 — Les articles définis | L'Atelier du Devoir</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--acc:#0891b2;--acc-pale:#f0f9ff;--acc-mid:#bae6fd;--acc-dark:#0369a1;--ok:#059669;--ok-pale:#d1fae5;--ko:#dc2626;--ko-pale:#fee2e2;--radius:18px;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Fredoka One',cursive;background:var(--acc-pale);color:#1e293b;font-size:21px;line-height:1.5;}
+.print-bar{display:flex;gap:8px;padding:8px 14px;background:#fff;border-bottom:2px solid var(--acc-pale);}
+.print-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:5px;padding:7px 10px;border-radius:12px;border:2px solid;background:white;font-family:'Nunito',sans-serif;font-size:.76rem;font-weight:700;cursor:pointer;}
+.print-btn-lecon{border-color:var(--acc);color:var(--acc);}
+.print-btn-eval{border-color:#7c3aed;color:#7c3aed;}
+.header{background:white;border-bottom:4px solid var(--acc-pale);position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.1);}
+.header-top{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;}
+.logo{font-size:1rem;color:var(--acc);text-decoration:none;}
+.score-badge{background:var(--acc);color:white;font-size:.88rem;padding:6px 16px;border-radius:20px;}
+.steps-wrap{padding:0 14px 9px;}
+.steps{display:flex;gap:4px;}
+.step{flex:1;height:9px;border-radius:5px;background:#e2e8f0;transition:background .35s;}
+.step.active{background:var(--acc-mid);}
+.step.done{background:var(--acc);}
+.steps-labels{display:flex;gap:4px;margin-top:3px;}
+.step-lbl{flex:1;font-size:.56rem;color:#94a3b8;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+main{max-width:660px;margin:0 auto;padding:16px 14px 80px;}
+.accroche{background:white;border-radius:var(--radius);padding:14px 16px;margin-bottom:14px;box-shadow:0 2px 10px rgba(0,0,0,.06);}
+.accroche h1{font-size:1.2rem;color:var(--acc);margin-bottom:4px;}
+.accroche p{font-size:.78rem;color:#64748b;font-family:'Nunito',sans-serif;}
+.meta-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+.meta-tag{background:var(--acc-pale);color:var(--acc-dark);font-size:.7rem;padding:3px 10px;border-radius:20px;font-family:'Nunito',sans-serif;font-weight:700;}
+.phase{display:none;}
+.phase.active{display:block;}
+.ugo-box{background:#fff7ed;border-radius:14px;padding:10px 14px;margin-bottom:12px;font-family:'Nunito',sans-serif;font-size:.82rem;color:#92400e;display:flex;gap:9px;align-items:flex-start;}
+.ugo-box .owl{font-size:1.5rem;flex-shrink:0;}
+.lecon-card{background:white;border-radius:var(--radius);padding:16px;box-shadow:0 2px 10px rgba(0,0,0,.06);}
+.lecon-card h2{font-size:1.05rem;color:var(--acc);margin-bottom:12px;}
+.lecon-block{display:none;}
+.lecon-block.revealed{display:block;}
+.lecon-subtitle{font-size:.82rem;color:var(--acc-dark);margin-bottom:8px;padding:5px 10px;background:var(--acc-pale);border-radius:8px;font-family:'Nunito',sans-serif;font-weight:800;}
+.regle-box{background:var(--acc-pale);border-left:5px solid var(--acc);border-radius:0 12px 12px 0;padding:10px 14px;margin:8px 0;font-size:.88rem;}
+.regle-box strong{color:var(--acc);}
+.ex-line{font-size:.78rem;color:#64748b;margin:.3rem 0 .3rem 14px;font-style:italic;font-family:'Nunito',sans-serif;}
+.art-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0;}
+.art-card{border-radius:10px;padding:9px 11px;text-align:center;font-size:.85rem;}
+.art-card.le{background:#eff6ff;border:2px solid #3b82f6;color:#1e3a8a;}
+.art-card.la{background:#fdf2f8;border:2px solid #db2777;color:#9d174d;}
+.art-card.lapo{background:#f0fdf4;border:2px solid #059669;color:#065f46;}
+.art-card.les{background:#fffbeb;border:2px solid #d97706;color:#92400e;}
+.art-card strong{display:block;font-size:1.1rem;}
+.btn-compris{display:block;margin:14px auto 0;background:var(--acc);color:white;border:none;border-radius:50px;padding:10px 28px;font-family:'Fredoka One',cursive;font-size:.95rem;cursor:pointer;transition:transform .12s,opacity .2s;}
+.btn-compris:active{transform:scale(.95);}
+.ex-card{background:white;border-radius:var(--radius);padding:16px;box-shadow:0 2px 10px rgba(0,0,0,.06);}
+.ex-card h3{font-size:.98rem;color:var(--acc);margin-bottom:5px;}
+.consigne{font-size:.77rem;color:#64748b;margin-bottom:11px;font-family:'Nunito',sans-serif;}
+.ex-progress{font-size:.76rem;color:var(--acc);font-family:'Nunito',sans-serif;font-weight:800;margin-bottom:8px;text-align:center;background:var(--acc-pale);padding:4px;border-radius:8px;}
+.word-display{font-size:1.5rem;text-align:center;padding:13px;margin:8px 0 12px;background:#f8fafc;border-radius:14px;border:2px solid #e2e8f0;}
+.phrase-display{font-size:1rem;text-align:center;padding:11px 14px;margin:8px 0 12px;background:#f8fafc;border-radius:12px;border:2px solid #e2e8f0;font-family:'Nunito',sans-serif;}
+.blank{display:inline-block;min-width:40px;border-bottom:3px solid var(--acc);color:var(--acc);}
+.qcm-opts{display:flex;flex-direction:column;gap:7px;}
+.qcm-opts button{background:#f8fafc;border:2px solid #e2e8f0;border-radius:12px;padding:9px 14px;font-family:'Fredoka One',cursive;font-size:.95rem;text-align:center;cursor:pointer;transition:all .15s;}
+.qcm-opts button.correct{background:var(--ok-pale);border-color:var(--ok);color:#065f46;}
+.qcm-opts button.wrong{background:var(--ko-pale);border-color:var(--ko);color:#7f1d1d;}
+.qcm-opts button.reveal{background:var(--ok-pale);border-color:var(--ok);color:#065f46;}
+.qcm-opts button:disabled{cursor:default;}
+.vf-btns{display:flex;gap:12px;justify-content:center;}
+.btn-vf{flex:1;max-width:180px;min-height:56px;padding:10px 14px;border-radius:50px;border:3px solid;font-family:'Fredoka One',cursive;font-size:.95rem;cursor:pointer;transition:all .15s;}
+.btn-vrai{background:var(--ok-pale);color:#065f46;border-color:var(--ok);}
+.btn-faux{background:var(--ko-pale);color:#7f1d1d;border-color:var(--ko);}
+.btn-vf.correct{transform:scale(1.06);box-shadow:0 0 0 3px rgba(5,150,105,.3);}
+.btn-vf.wrong{opacity:.5;}
+.btn-vf.reveal{transform:scale(1.06);box-shadow:0 0 0 3px rgba(5,150,105,.3);}
+.btn-vf:disabled{cursor:default;}
+.qcm-fb{display:none;font-family:'Nunito',sans-serif;font-size:.79rem;padding:7px 10px;border-radius:8px;margin-top:8px;}
+.qcm-fb.show{display:block;}
+.qcm-fb.ok{background:var(--ok-pale);color:#065f46;}
+.qcm-fb.ko{background:var(--ko-pale);color:#7f1d1d;}
+.btn-suite{display:none;margin:12px auto 0;background:var(--acc);color:white;border:none;border-radius:50px;padding:10px 26px;font-family:'Fredoka One',cursive;font-size:.9rem;cursor:pointer;}
+.btn-suite.show{display:block;}
+.bilan-card{background:white;border-radius:var(--radius);padding:22px 16px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,.1);}
+.bilan-stars-row{display:flex;justify-content:center;gap:6px;margin:.4rem 0 .8rem;}
+.etoile{font-size:2.8rem;opacity:.25;transition:opacity .5s,transform .5s;}
+.etoile.earned{opacity:1;transform:scale(1.2);}
+.bilan-score-row{font-size:2.2rem;color:var(--acc);font-weight:700;margin-bottom:.2rem;}
+.bilan-title{font-size:1.1rem;color:#1e293b;margin:.2rem 0 .4rem;}
+.bilan-msg{font-size:.85rem;color:#64748b;font-family:'Nunito',sans-serif;margin-bottom:1rem;}
+.memo-card{background:var(--acc-pale);border-radius:14px;padding:14px 16px;text-align:left;}
+.memo-card h3{font-size:.9rem;color:var(--acc);margin-bottom:10px;text-align:center;}
+.memo-item{display:flex;gap:7px;margin-bottom:7px;font-size:.8rem;font-family:'Nunito',sans-serif;}
+.memo-dot{color:var(--acc);flex-shrink:0;}
+.bilan-btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:16px;}
+.btn-act{padding:9px 18px;border-radius:50px;border:2px solid;background:white;font-family:'Nunito',sans-serif;font-weight:700;font-size:.82rem;cursor:pointer;}
+.btn-act.cyan{border-color:var(--acc);color:var(--acc);}
+.btn-act.violet{border-color:#7c3aed;color:#7c3aed;}
+.confetti-piece{position:fixed;border-radius:2px;top:-20px;animation:fall linear both;pointer-events:none;z-index:9999;}
+@keyframes fall{0%{transform:translateY(0) rotate(0);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
+.print-lecon-content,.print-eval-content{display:none;}
+@media print{.header,.print-bar,.accroche,.phase,.confetti-piece{display:none!important;}body{background:white;}@page{margin:14mm;}body.print-mode-lecon .print-lecon-content{display:block!important;}body.print-mode-eval .print-eval-content{display:block!important;}}
+</style>
+</head>
+<body>
+<div class="print-bar">
+  <button class="print-btn print-btn-lecon" onclick="printLecon()">📖 Imprimer la leçon</button>
+  <button class="print-btn print-btn-eval" onclick="printEval()">📝 Imprimer les exercices</button>
+</div>
+<header class="header">
+  <div class="header-top">
+    <a href="../6-9ans.html" class="logo">🦉 L'Atelier du Devoir</a>
+    <div class="score-badge">⭐ <span id="score-display">0</span> pts</div>
+  </div>
+  <div class="steps-wrap">
+    <div class="steps"><div class="step active" id="s0"></div><div class="step" id="s1"></div><div class="step" id="s2"></div><div class="step" id="s3"></div><div class="step" id="s4"></div><div class="step" id="s5"></div></div>
+    <div class="steps-labels"><div class="step-lbl">📖 Leçon</div><div class="step-lbl">✏️ Ex. 1</div><div class="step-lbl">✏️ Ex. 2</div><div class="step-lbl">🎯 Ex. 3</div><div class="step-lbl">🎯 Ex. 4</div><div class="step-lbl">🏆 Bilan</div></div>
+  </div>
+</header>
+<main>
+<div class="accroche">
+  <h1>📖 LE · LA · L' · LES</h1>
+  <p>Les articles définis : comment bien choisir le bon ?</p>
+  <div class="meta-row"><span class="meta-tag">📚 CE1</span><span class="meta-tag">⏱️ ~15 min</span><span class="meta-tag">⭐⭐ Moyen</span><span class="meta-tag">🎯 Français — Grammaire</span></div>
+</div>
+
+<div class="phase active" id="phase-lecon">
+  <div class="lecon-card">
+    <h2>📖 La leçon</h2>
+    <div class="lecon-block revealed" id="bloc-0">
+      <div class="lecon-subtitle">① L'histoire de la bibliothèque</div>
+      <div class="ugo-box"><span class="owl">🦉</span><span>📚 Ugo entre dans une grande bibliothèque. Il lit les étiquettes : <em>"LE grand dictionnaire · LA belle encyclopédie · L'atlas · LES romans"</em>. 'Ce sont tous des articles définis !' explique la bibliothécaire. 'Ils montrent qu'on connaît déjà ces objets !'</span></div>
+      <div class="regle-box"><strong>LE</strong> → nom masculin singulier. &nbsp;<strong>LA</strong> → nom féminin singulier.</div>
+      <div class="art-grid">
+        <div class="art-card le"><strong>LE</strong>le chat 🐱<br>le livre 📚<br><span style="font-size:.68rem">masculin singulier</span></div>
+        <div class="art-card la"><strong>LA</strong>la fleur 🌸<br>la maison 🏠<br><span style="font-size:.68rem">féminin singulier</span></div>
+      </div>
+      <button class="btn-compris" onclick="revealBloc(1)">J'ai compris ! 🎉</button>
+    </div>
+    <div class="lecon-block" id="bloc-1">
+      <div class="lecon-subtitle">② L' et LES</div>
+      <div class="regle-box"><strong>L'</strong> → devant un mot qui commence par <strong>A, E, I, O, U</strong> ou <strong>H</strong> (remplace LE ou LA).</div>
+      <div class="art-grid">
+        <div class="art-card lapo"><strong>L'</strong>l'oiseau 🐦<br>l'école 🏫<br><span style="font-size:.68rem">voyelle ou h muet</span></div>
+        <div class="art-card les"><strong>LES</strong>les chats 🐱🐱<br>les fleurs 🌸🌸<br><span style="font-size:.68rem">toujours au pluriel</span></div>
+      </div>
+      <button class="btn-compris" onclick="revealBloc(2)">J'ai compris ! 🎉</button>
+    </div>
+    <div class="lecon-block" id="bloc-2">
+      <div class="lecon-subtitle">③ L'astuce de mémo</div>
+      <div class="ugo-box"><span class="owl">🦉</span><span>Mon astuce 🔍 : si le mot commence par une voyelle (A E I O U) ou H → c'est <strong>L'</strong>. Sinon → <strong>LE</strong> ou <strong>LA</strong> selon le genre. Plusieurs objets → toujours <strong>LES</strong> !</span></div>
+      <div class="art-grid">
+        <div class="art-card le"><strong>LE</strong>masculin singulier</div>
+        <div class="art-card la"><strong>LA</strong>féminin singulier</div>
+        <div class="art-card lapo"><strong>L'</strong>voyelle ou H</div>
+        <div class="art-card les"><strong>LES</strong>pluriel</div>
+      </div>
+      <button class="btn-compris" onclick="goPhase('ex1',1)">Je joue ! 🚀</button>
+    </div>
+  </div>
+</div>
+
+<div class="phase" id="phase-ex1">
+  <div class="ugo-box"><span class="owl">🦉</span><span>LE ou LA ? Le genre du mot t'aide ! Masculin → LE. Féminin → LA. 😊</span></div>
+  <div class="ex-card">
+    <h3>✏️ Exercice 1 — LE ou LA ?</h3>
+    <p class="consigne">Clique sur le bon article. (1 pt par question)</p>
+    <div id="ex1-cont"></div>
+    <button class="btn-suite" id="bs-ex1" onclick="goPhase('ex2',2)">Exercice 2 →</button>
+  </div>
+</div>
+
+<div class="phase" id="phase-ex2">
+  <div class="ugo-box"><span class="owl">🦉</span><span>Attention au pluriel ! Si c'est PLUSIEURS → <strong>LES</strong> ! Sinon → LE ou LA. 👀</span></div>
+  <div class="ex-card">
+    <h3>✏️ Exercice 2 — LE, LA ou LES ?</h3>
+    <p class="consigne">Choisis le bon article. (1 pt par question)</p>
+    <div id="ex2-cont"></div>
+    <button class="btn-suite" id="bs-ex2" onclick="goPhase('ex3',3)">Exercice 3 →</button>
+  </div>
+</div>
+
+<div class="phase" id="phase-ex3">
+  <div class="ugo-box"><span class="owl">🦉</span><span>Astuce pour L' : lis le mot qui suit. S'il commence par A, E, I, O, U ou H → <strong>L'</strong> ! 🔍</span></div>
+  <div class="ex-card">
+    <h3>🎯 Exercice 3 — LE, LA ou L' ?</h3>
+    <p class="consigne">Attention aux voyelles ! Choisis bien. (1 pt par question)</p>
+    <div id="ex3-cont"></div>
+    <button class="btn-suite" id="bs-ex3" onclick="goPhase('ex4',4)">Exercice 4 →</button>
+  </div>
+</div>
+
+<div class="phase" id="phase-ex4">
+  <div class="ugo-box"><span class="owl">🦉</span><span>Lis bien la phrase ! L'article est-il correct ? Pense à la voyelle et au pluriel ! 🦉</span></div>
+  <div class="ex-card">
+    <h3>🎯 Exercice 4 — L'article est correct ?</h3>
+    <p class="consigne">Lis la phrase et réponds Vrai ou Faux. (1 pt par question)</p>
+    <div id="ex4-cont"></div>
+    <button class="btn-suite" id="bs-ex4" onclick="goPhase('bilan',5)">Voir mon bilan →</button>
+  </div>
+</div>
+
+<div class="phase" id="phase-bilan">
+  <div class="bilan-card">
+    <div style="font-size:2.2rem">🦉</div>
+    <div class="bilan-stars-row"><div class="etoile" id="etoile1">⭐</div><div class="etoile" id="etoile2">⭐</div><div class="etoile" id="etoile3">⭐</div></div>
+    <div class="bilan-score-row"><span id="bilan-pts">0</span> <span id="bilan-sur">/ 16</span> pts</div>
+    <div class="bilan-title" id="bilan-title"></div>
+    <div class="bilan-msg" id="bilan-msg"></div>
+    <hr style="margin:.8rem 0;border:none;border-top:2px solid var(--acc-pale)">
+    <div class="memo-card">
+      <h3>📝 Ce qu'il faut retenir</h3>
+      <div class="memo-item"><span class="memo-dot">🔵</span><span><strong>LE</strong> → masculin singulier : <em>le chat, le livre, le soleil…</em></span></div>
+      <div class="memo-item"><span class="memo-dot">🔴</span><span><strong>LA</strong> → féminin singulier : <em>la fleur, la maison, la nuit…</em></span></div>
+      <div class="memo-item"><span class="memo-dot">🟢</span><span><strong>L'</strong> → devant voyelle (A E I O U) ou H : <em>l'oiseau, l'arbre, l'école…</em></span></div>
+      <div class="memo-item"><span class="memo-dot">🟡</span><span><strong>LES</strong> → toujours au pluriel : <em>les chats, les fleurs, les livres…</em></span></div>
+    </div>
+    <div class="bilan-btns"><button class="btn-act cyan" onclick="printLecon()">📖 Imprimer la leçon</button><button class="btn-act violet" onclick="printEval()">📝 Imprimer les exercices</button></div>
+  </div>
+</div>
+</main>
+<div class="print-lecon-content" style="font-family:'Fredoka One',cursive;color:#1e293b;font-size:17px;max-width:620px;margin:0 auto;">
+  <h1 style="color:#0891b2;margin-bottom:6px;">G07 — Les articles définis : LE · LA · L' · LES</h1>
+  <p style="font-family:'Nunito',sans-serif;font-size:.75rem;color:#64748b;margin-bottom:14px;">CE1 · Français — Grammaire · L'Atelier du Devoir</p>
+  <div style="background:#f0f9ff;border-left:5px solid #0891b2;border-radius:0 10px 10px 0;padding:9px 13px;margin:8px 0;font-size:.87rem;"><strong style="color:#0891b2;">LE</strong> → masculin singulier (le chat, le livre) &nbsp;|&nbsp; <strong style="color:#0891b2;">LA</strong> → féminin singulier (la fleur, la maison)</div>
+  <div style="background:#f0f9ff;border-left:5px solid #0891b2;border-radius:0 10px 10px 0;padding:9px 13px;margin:8px 0;font-size:.87rem;"><strong style="color:#0891b2;">L'</strong> → devant voyelle (A E I O U) ou H : l'oiseau, l'arbre, l'école, l'heure</div>
+  <div style="background:#f0f9ff;border-left:5px solid #0891b2;border-radius:0 10px 10px 0;padding:9px 13px;margin:8px 0;font-size:.87rem;"><strong style="color:#0891b2;">LES</strong> → toujours au pluriel : les chats, les fleurs, les livres…</div>
+</div>
+<script>
+var score=0, TOTAL_PTS=4+4+4+4;
+function addPt(){score++;document.getElementById('score-display').textContent=score;}
+function updSteps(n){for(var i=0;i<6;i++){var s=document.getElementById('s'+i);if(!s)return;s.classList.remove('active','done');if(i<n)s.classList.add('done');else if(i===n)s.classList.add('active');}}
+function shuffle(a){var b=a.slice();for(var i=b.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=b[i];b[i]=b[j];b[j]=t;}return b;}
+function revealBloc(n){
+  var b=document.getElementById('bloc-'+n);if(!b)return;
+  var p=document.getElementById('bloc-'+(n-1));
+  if(p){var btn=p.querySelector('.btn-compris');if(btn){btn.textContent='✓ Compris !';btn.disabled=true;btn.style.opacity='.4';}}
+  b.classList.add('revealed');
+  setTimeout(function(){var hH=(document.querySelector('.header')||{offsetHeight:0}).offsetHeight;var r=b.getBoundingClientRect();window.scrollTo({top:window.pageYOffset+r.top-hH-16,behavior:'smooth'});},150);
+}
+function goPhase(ph,si){
+  document.querySelectorAll('.phase').forEach(function(p){p.classList.remove('active');});
+  var el=document.getElementById('phase-'+ph);
+  if(el){el.classList.add('active');setTimeout(function(){el.scrollIntoView({behavior:'smooth',block:'start'});},80);}
+  updSteps(si);
+  if(ph==='ex1')initEx1();if(ph==='ex2')initEx2();if(ph==='ex3')initEx3();if(ph==='ex4')initEx4();if(ph==='bilan')showBilan();
+}
+function showBilan(){
+  var tot=TOTAL_PTS;
+  document.getElementById('bilan-pts').textContent=score;document.getElementById('bilan-sur').textContent='/ '+tot;
+  var pct=score/tot,t,m;
+  if(pct>=.9){t='Brillant(e) ! 🎉🌟';m='Tu maîtrises parfaitement LE, LA, L\' et LES. Ugo est fier de toi !';}
+  else if(pct>=.66){t='Très bien ! 😊⭐';m='Tu as bien compris ! Rappel : devant voyelle → L\', pluriel → LES.';}
+  else if(pct>=.33){t='Bien essayé ! 💪';m='Continue ! Pense à la voyelle pour L\' et au pluriel pour LES.';}
+  else{t='Courage ! 🦉';m='Relis la leçon ! LE/LA selon le genre, L\' devant voyelle, LES au pluriel.';}
+  document.getElementById('bilan-title').textContent=t;document.getElementById('bilan-msg').textContent=m;
+  var seuils=[Math.ceil(tot*.33),Math.ceil(tot*.66),Math.ceil(tot*.89)];
+  ['etoile1','etoile2','etoile3'].forEach(function(id,i){var el=document.getElementById(id);if(score>=seuils[i]){(function(e,d){setTimeout(function(){e.classList.add('earned');},d);})(el,300+i*450);}else{el.style.filter='grayscale(1)';}});
+  if(pct>=.5)confetti();
+}
+function confetti(){
+  var cols=['#0891b2','#bae6fd','#059669','#d97706','#7c3aed'];
+  for(var i=0;i<65;i++){(function(){var el=document.createElement('div');el.className='confetti-piece';el.style.cssText='left:'+Math.random()*100+'vw;background:'+cols[Math.floor(Math.random()*cols.length)]+';animation-duration:'+(1.8+Math.random()*2.2)+'s;animation-delay:'+Math.random()*1.5+'s;width:'+(7+Math.random()*10)+'px;height:'+(7+Math.random()*10)+'px;border-radius:'+(Math.random()>.5?'50%':'4px')+';';document.body.appendChild(el);setTimeout(function(){if(el.parentNode)el.remove();},5000);})();}
+}
+// DATA G07
+var ex1Pool=[
+  {word:"chat",emoji:"🐱",art:"le",expl:"Chat = masculin singulier → LE chat. 🔵"},
+  {word:"fleur",emoji:"🌸",art:"la",expl:"Fleur = féminin singulier → LA fleur. 🔴"},
+  {word:"livre",emoji:"📚",art:"le",expl:"Livre = masculin singulier → LE livre. 🔵"},
+  {word:"maison",emoji:"🏠",art:"la",expl:"Maison = féminin singulier → LA maison. 🔴"},
+  {word:"pain",emoji:"🍞",art:"le",expl:"Pain = masculin singulier → LE pain. 🔵"},
+  {word:"pomme",emoji:"🍎",art:"la",expl:"Pomme = féminin singulier → LA pomme. 🔴"},
+  {word:"soleil",emoji:"☀️",art:"le",expl:"Soleil = masculin singulier → LE soleil. 🔵"},
+  {word:"nuit",emoji:"🌙",art:"la",expl:"Nuit = féminin singulier → LA nuit. 🔴"}
+];
+var ex2Pool=[
+  {phrase:"___ chat joue.",art:"le",expl:"Chat = masculin singulier → LE chat. 🐱"},
+  {phrase:"___ fleurs sont belles.",art:"les",expl:"Fleurs = pluriel → LES fleurs. 🌸🌸"},
+  {phrase:"___ maison est grande.",art:"la",expl:"Maison = féminin singulier → LA maison. 🏠"},
+  {phrase:"___ livres sont lourds.",art:"les",expl:"Livres = pluriel → LES livres. 📚📚"},
+  {phrase:"___ vélo est rouge.",art:"le",expl:"Vélo = masculin singulier → LE vélo. 🚲"},
+  {phrase:"___ pomme est rouge.",art:"la",expl:"Pomme = féminin singulier → LA pomme. 🍎"},
+  {phrase:"___ chiens aboient.",art:"les",expl:"Chiens = pluriel → LES chiens. 🐶🐶"},
+  {phrase:"___ nuit est sombre.",art:"la",expl:"Nuit = féminin singulier → LA nuit. 🌙"}
+];
+var ex3Pool=[
+  {phrase:"___ oiseau chante.",art:"l'",expl:"Oiseau commence par O (voyelle) → L'oiseau. 🐦"},
+  {phrase:"___ arbre est grand.",art:"l'",expl:"Arbre commence par A (voyelle) → L'arbre. 🌳"},
+  {phrase:"___ chat dort.",art:"le",expl:"Chat commence par Ch (consonne), masculin → LE chat. 🐱"},
+  {phrase:"___ école est grande.",art:"l'",expl:"École commence par É (voyelle) → L'école. 🏫"},
+  {phrase:"___ fleur est belle.",art:"la",expl:"Fleur commence par F (consonne), féminin → LA fleur. 🌸"},
+  {phrase:"___ heure passe vite.",art:"l'",expl:"Heure commence par H muet → L'heure. ⏰"},
+  {phrase:"___ pain est chaud.",art:"le",expl:"Pain commence par P (consonne), masculin → LE pain. 🍞"},
+  {phrase:"___ araignée file sa toile.",art:"l'",expl:"Araignée commence par A (voyelle) → L'araignée. 🕷️"}
+];
+var ex4Pool=[
+  {phrase:"Le chat dort sur le tapis.",correct:true,expl:"Oui ! Chat = masculin singulier → LE chat. ✅"},
+  {phrase:"La oiseau chante dans l'arbre.",correct:false,expl:"Non ! Oiseau commence par O → L'oiseau, pas LA. ❌"},
+  {phrase:"Les fleurs du jardin sont belles.",correct:true,expl:"Oui ! Fleurs = pluriel → LES fleurs. ✅"},
+  {phrase:"Le école est ouverte.",correct:false,expl:"Non ! École commence par É → L'école, pas LE. ❌"},
+  {phrase:"La maison est rouge.",correct:true,expl:"Oui ! Maison = féminin singulier → LA maison. ✅"},
+  {phrase:"Le arbre est très haut.",correct:false,expl:"Non ! Arbre commence par A → L'arbre, pas LE. ❌"},
+  {phrase:"Les chiens courent dans le parc.",correct:true,expl:"Oui ! Chiens = pluriel → LES chiens. ✅"},
+  {phrase:"La livre est intéressant.",correct:false,expl:"Non ! Livre = masculin → LE livre, pas LA. ❌"}
+];
+// EX1: LE ou LA (2 options)
+var ex1Items=[],ex1Qi=0;
+function initEx1(){ex1Items=shuffle(ex1Pool).slice(0,4);ex1Qi=0;renderEx1();}
+function renderEx1(){
+  var item=ex1Items[ex1Qi];
+  var h='<div class="ex-progress">Question '+(ex1Qi+1)+' / 4</div>';
+  h+='<div class="word-display">'+item.emoji+' <strong>'+item.word+'</strong></div>';
+  h+='<div class="qcm-opts" id="ex1-opts">';
+  var opts=shuffle([{label:"LE",val:"le"},{label:"LA",val:"la"}]);
+  opts.forEach(function(o){h+='<button data-val="'+o.val+'" onclick="checkEx1(this)">'+o.label+'</button>';});
+  h+='</div><div class="qcm-fb" id="ex1-fb"></div>';
+  document.getElementById('ex1-cont').innerHTML=h;
+}
+function checkEx1(btn){
+  var item=ex1Items[ex1Qi];var opts=document.getElementById('ex1-cont').querySelectorAll('.qcm-opts button');for(var i=0;i<opts.length;i++)opts[i].disabled=true;
+  var fb=document.getElementById('ex1-fb');
+  if(btn.dataset.val===item.art){btn.classList.add('correct');fb.className='qcm-fb show ok';fb.innerHTML='✅ '+item.expl;addPt();}
+  else{btn.classList.add('wrong');for(var i=0;i<opts.length;i++){if(opts[i].dataset.val===item.art)opts[i].classList.add('reveal');}fb.className='qcm-fb show ko';fb.innerHTML='❌ '+item.expl;}
+  ex1Qi++;if(ex1Qi<4){setTimeout(renderEx1,1500);}else{setTimeout(function(){document.getElementById('bs-ex1').classList.add('show');},1500);}
+}
+// EX2: LE, LA ou LES (3 options)
+var ex2Items=[],ex2Qi=0;
+function initEx2(){ex2Items=shuffle(ex2Pool).slice(0,4);ex2Qi=0;renderEx2();}
+function renderEx2(){
+  var item=ex2Items[ex2Qi];
+  var h='<div class="ex-progress">Question '+(ex2Qi+1)+' / 4</div>';
+  h+='<p class="phrase-display">'+item.phrase.replace('___','<span class="blank">___</span>')+'</p>';
+  h+='<div class="qcm-opts" id="ex2-opts">';
+  var opts=shuffle(['le','la','les']);
+  opts.forEach(function(o){h+='<button data-val="'+o+'" onclick="checkEx2(this)">'+o.toUpperCase()+'</button>';});
+  h+='</div><div class="qcm-fb" id="ex2-fb"></div>';
+  document.getElementById('ex2-cont').innerHTML=h;
+}
+function checkEx2(btn){
+  var item=ex2Items[ex2Qi];var opts=document.getElementById('ex2-cont').querySelectorAll('.qcm-opts button');for(var i=0;i<opts.length;i++)opts[i].disabled=true;
+  var fb=document.getElementById('ex2-fb');
+  if(btn.dataset.val===item.art){btn.classList.add('correct');fb.className='qcm-fb show ok';fb.innerHTML='✅ '+item.expl;addPt();}
+  else{btn.classList.add('wrong');for(var i=0;i<opts.length;i++){if(opts[i].dataset.val===item.art)opts[i].classList.add('reveal');}fb.className='qcm-fb show ko';fb.innerHTML='❌ '+item.expl;}
+  ex2Qi++;if(ex2Qi<4){setTimeout(renderEx2,1500);}else{setTimeout(function(){document.getElementById('bs-ex2').classList.add('show');},1500);}
+}
+// EX3: LE, LA ou L' (3 options)
+var ex3Items=[],ex3Qi=0;
+function initEx3(){ex3Items=shuffle(ex3Pool).slice(0,4);ex3Qi=0;renderEx3();}
+function renderEx3(){
+  var item=ex3Items[ex3Qi];
+  var h='<div class="ex-progress">Question '+(ex3Qi+1)+' / 4</div>';
+  h+='<p class="phrase-display">'+item.phrase.replace('___','<span class="blank">___</span>')+'</p>';
+  h+='<div class="qcm-opts" id="ex3-opts">';
+  var opts=shuffle(['le','la',"l'"]);
+  opts.forEach(function(o){h+='<button data-val="'+o+'" onclick="checkEx3(this)">'+o.toUpperCase()+'</button>';});
+  h+='</div><div class="qcm-fb" id="ex3-fb"></div>';
+  document.getElementById('ex3-cont').innerHTML=h;
+}
+function checkEx3(btn){
+  var item=ex3Items[ex3Qi];var opts=document.getElementById('ex3-cont').querySelectorAll('.qcm-opts button');for(var i=0;i<opts.length;i++)opts[i].disabled=true;
+  var fb=document.getElementById('ex3-fb');
+  if(btn.dataset.val===item.art){btn.classList.add('correct');fb.className='qcm-fb show ok';fb.innerHTML='✅ '+item.expl;addPt();}
+  else{btn.classList.add('wrong');for(var i=0;i<opts.length;i++){if(opts[i].dataset.val===item.art)opts[i].classList.add('reveal');}fb.className='qcm-fb show ko';fb.innerHTML='❌ '+item.expl;}
+  ex3Qi++;if(ex3Qi<4){setTimeout(renderEx3,1500);}else{setTimeout(function(){document.getElementById('bs-ex3').classList.add('show');},1500);}
+}
+// EX4: VF
+var ex4Items=[],ex4Qi=0;
+function initEx4(){ex4Items=shuffle(ex4Pool).slice(0,4);ex4Qi=0;renderEx4();}
+function renderEx4(){
+  var item=ex4Items[ex4Qi];
+  var h='<div class="ex-progress">Question '+(ex4Qi+1)+' / 4</div>';
+  h+='<p class="phrase-display" style="font-style:italic;">'+item.phrase+'</p>';
+  h+='<div class="vf-btns"><button class="btn-vf btn-vrai" onclick="checkEx4(this,true)">👍 Vrai</button><button class="btn-vf btn-faux" onclick="checkEx4(this,false)">👎 Faux</button></div>';
+  h+='<div class="qcm-fb" id="ex4-fb"></div>';
+  document.getElementById('ex4-cont').innerHTML=h;
+}
+function checkEx4(btn,choice){
+  var item=ex4Items[ex4Qi];var cont=document.getElementById('ex4-cont');var btns=cont.querySelectorAll('.btn-vf');for(var i=0;i<btns.length;i++)btns[i].disabled=true;
+  var fb=document.getElementById('ex4-fb');
+  if(choice===item.correct){btn.classList.add('correct');fb.className='qcm-fb show ok';fb.innerHTML='✅ '+item.expl;addPt();}
+  else{btn.classList.add('wrong');for(var i=0;i<btns.length;i++){if((btns[i].classList.contains('btn-vrai')&&item.correct)||(btns[i].classList.contains('btn-faux')&&!item.correct))btns[i].classList.add('reveal');}fb.className='qcm-fb show ko';fb.innerHTML='❌ '+item.expl;}
+  ex4Qi++;if(ex4Qi<4){setTimeout(renderEx4,1500);}else{setTimeout(function(){document.getElementById('bs-ex4').classList.add('show');},1500);}
+}
+function printLecon(){document.body.classList.add('print-mode-lecon');document.body.classList.remove('print-mode-eval');window.print();document.body.classList.remove('print-mode-lecon');}
+function printEval(){document.body.classList.add('print-mode-eval');document.body.classList.remove('print-mode-lecon');window.print();document.body.classList.remove('print-mode-eval');}
+</script>
+</body>
+</html>
