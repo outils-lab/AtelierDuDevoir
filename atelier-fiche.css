@@ -212,3 +212,14 @@ body.cp{font-size:22px;}
 .kb-info{text-align:center;font-size:.76rem;font-weight:700;color:var(--gris);
   margin-bottom:7px;}
 @media(max-width:400px){ .kb-k{height:44px;font-size:.98rem;} .kb-row{gap:4px;} }
+
+/* Champ de saisie tactile (sans <input> : aucun clavier système possible) */
+.faux-input{display:inline-flex;align-items:center;min-height:50px;
+  border:2px solid #cbd5e1;border-radius:10px;padding:10px 14px;
+  font-family:'Nunito',sans-serif;font-size:1.05rem;font-weight:700;
+  background:#fff;cursor:pointer;word-break:break-word;
+  transition:border-color .15s,background .15s;}
+.faux-input.vide::before{content:"écris ici…";color:#cbd5e1;font-weight:600;}
+.faux-input.kb-cible{border-color:var(--accent);background:var(--accent-light);}
+.faux-input.ok{border-color:var(--vert)!important;background:var(--vert-bg);}
+.faux-input.ko{border-color:var(--rouge)!important;background:var(--rouge-bg);}

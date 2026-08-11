@@ -76,31 +76,78 @@ function clavierHTML(mode){
   return h;
 }
 
+
+function lireVal(e){ return e.tagName === 'INPUT' ? e.value : (e.dataset.val || ''); }
+function ecrireVal(e, v){
+  if(e.tagName === 'INPUT'){ e.value = v; }
+  else { e.dataset.val = v; e.textContent = v || ''; e.classList.toggle('vide', !v); }
+}
+function estDesactive(e){ return e.disabled || e.dataset.off === '1'; }
+
 function activerClavier(inp, kb){
+  if(inp.dataset.fige === '1') return;
   if(kbCible) kbCible.classList.remove('kb-cible');
   kbCible = inp;
   inp.classList.add('kb-cible');
   kb.classList.add('on');
+  setTimeout(function(){ kb.scrollIntoView({behavior:'smooth', block:'nearest'}); }, 120);
+}
+
+/* Remplace l'input par un faux champ (div) : aucun clavier système possible */
+function transformerEnFauxChamp(inp, kb){
+  var d = document.createElement('div');
+  d.className = 'faux-champ';
+  d.id = inp.id;
+  d.dataset.val = '';
+  d.dataset.ph = inp.getAttribute('placeholder') || 'écris ici…';
+  var mx = inp.getAttribute('maxlength');
+  if(mx) d.dataset.max = mx;
+  d.style.width = inp.style.width || '150px';
+  d.textContent = d.dataset.ph;
+  d.classList.add('vide');
+  d.addEventListener('click', function(){ activerClavier(d, kb); });
+  inp.parentNode.replaceChild(d, inp);
+  return d;
+}
+
+function majFauxChamp(d){
+  if(d.dataset.val === ''){ d.textContent = d.dataset.ph; d.classList.add('vide'); }
+  else { d.textContent = d.dataset.val; d.classList.remove('vide'); }
 }
 
 function brancherClavier(inp, kb){
-  inp.setAttribute('readonly','readonly');
-  inp.setAttribute('inputmode','none');
-  inp.style.cursor = 'pointer';
-  inp.addEventListener('click', function(){ activerClavier(inp, kb); });
-  inp.addEventListener('focus', function(){ activerClavier(inp, kb); });
+  inp.addEventListener('click', function(){
+    if(estDesactive(inp)) return;
+    activerClavier(inp, kb);
+  });
+  if(kb.dataset.pret === '1') return;
+  kb.dataset.pret = '1';
   kb.addEventListener('click', function(ev){
     var b = ev.target.closest('.kb-k');
-    if(!b || !kbCible || kbCible.disabled) return;
+    if(!b || !kbCible || estDesactive(kbCible)) return;
     ev.preventDefault();
-    var k = b.dataset.k;
-    if(k === '__del') kbCible.value = kbCible.value.slice(0,-1);
+    var k = b.dataset.k, v = lireVal(kbCible);
+    if(k === '__del') ecrireVal(kbCible, v.slice(0,-1));
     else {
-      var max = kbCible.getAttribute('maxlength');
-      if(max && kbCible.value.length >= parseInt(max,10)) return;
-      kbCible.value += k;
+      var max = kbCible.dataset.max;
+      if(max && v.length >= parseInt(max,10)) return;
+      ecrireVal(kbCible, v + k);
     }
   });
+}
+
+
+function champSaisie(i, ii, largeur, maxlen){
+  var id = 'in'+i+'-'+ii;
+  if(TACTILE){
+    return '<div class="faux-input vide" id="'+id+'" '
+         + (maxlen ? 'data-max="'+maxlen+'" ' : '')
+         + 'data-val="" style="width:'+largeur+';"></div>';
+  }
+  return '<input type="text" id="'+id+'" placeholder="écris ici…" '
+       + (maxlen ? 'maxlength="'+maxlen+'" data-max="'+maxlen+'" ' : '')
+       + 'style="width:'+largeur+';" autocomplete="off" autocorrect="off" '
+       + 'autocapitalize="off" spellcheck="false" data-lpignore="true">';
 }
 
 function monterClavier(ex, i){
@@ -237,10 +284,7 @@ function rendre(ex, i){
   else if(ex.type === 'saisie'){
     c.innerHTML = ex.items.map(function(it,ii){
       return '<div class="saisie-item"><div class="phrase">'+it.phrase+'</div>'
-        + '<input type="text" id="in'+i+'-'+ii+'" placeholder="écris ici…" '
-        + (ex.maxlen ? 'maxlength="'+ex.maxlen+'" ' : '')
-        + 'style="width:'+(ex.large?'100%':'130px')+';" autocomplete="off" autocorrect="off" '
-        + 'autocapitalize="off" spellcheck="false" data-lpignore="true">'
+        + champSaisie(i, ii, (ex.large?'100%':'150px'), ex.maxlen)
         + '<div class="expl" id="ex'+i+'-'+ii+'"></div></div>';
     }).join('') + (TACTILE ? '<div class="kb" id="kb'+i+'">'+clavierHTML(ex.clavier||'lettres')+'</div>' : '');
     if(TACTILE) monterClavier(ex, i);
@@ -261,8 +305,7 @@ function rendre(ex, i){
   else if(ex.type === 'conjtable'){
     c.innerHTML = ex.items.map(function(it,ii){
       return '<div class="saisie-item"><div class="phrase"><strong>'+esc(it.pronom)+'</strong></div>'
-        + '<input type="text" id="in'+i+'-'+ii+'" placeholder="écris ici…" style="width:180px;" '
-        + 'autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true">'
+        + champSaisie(i, ii, '200px', null)
         + '<div class="expl" id="ex'+i+'-'+ii+'"></div></div>';
     }).join('') + (TACTILE ? '<div class="kb" id="kb'+i+'">'+clavierHTML('lettres')+'</div>' : '');
     if(TACTILE) monterClavier(ex, i);
@@ -402,9 +445,10 @@ AF.verifier = function(i){
   else if(ex.type === 'saisie' || ex.type === 'conjtable'){
     ex.items.forEach(function(it,ii){
       var inp = el('in'+i+'-'+ii), ee = el('ex'+i+'-'+ii);
-      inp.disabled = true;
+      if(inp.tagName === 'INPUT') inp.disabled = true; else inp.dataset.off = '1';
       var attendus = Array.isArray(it.rep) ? it.rep : [it.rep];
-      var bon = attendus.some(function(a){ return memeReponse(inp.value, a, ex.strict); });
+      var saisi = lireVal(inp);
+      var bon = attendus.some(function(a){ return memeReponse(saisi, a, ex.strict); });
       if(bon){ pts++; inp.classList.add('ok'); }
       else inp.classList.add('ko');
       ee.innerHTML = (bon?'\u2705 ':'\u274C Réponse : '+esc(attendus[0])+'. ') + (it.expl||'');
