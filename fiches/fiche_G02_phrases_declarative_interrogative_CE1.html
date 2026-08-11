@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>G02 — Phrases déclarative et interrogative | L'Atelier du Devoir</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --acc:#0369a1;--acc-pale:#f0f9ff;--acc-mid:#7dd3fc;--acc-dark:#075985;
+  --mint:#059669;--mint-pale:#d1fae5;--mint-deep:#047857;
+  --coral:#dc2626;--coral-pale:#fee2e2;
+  --sun:#d97706;--sun-pale:#fef3c7;
+  --violet:#7c3aed;--violet-pale:#f5f3ff;
+  --radius:20px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Fredoka One',cursive;background:#f0f9ff;color:#1e293b;font-size:21px;line-height:1.5;}
+.header{background:white;border-bottom:4px solid var(--acc-pale);position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.1);}
+.header-top{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;}
+.logo{font-size:1.1rem;color:var(--acc);text-decoration:none;}
+.score-badge{background:var(--acc);color:white;font-size:.9rem;padding:6px 16px;border-radius:20px;}
+.steps-wrap{padding:0 16px 8px;}
+.steps{display:flex;gap:5px;}
+.step{flex:1;height:10px;border-radius:10px;background:#bae6fd;transition:all .4s;}
+.step.done{background:#10b981;}.step.active{background:var(--acc);}
+.main{max-width:640px;margin:0 auto;padding:18px 14px 100px;}
+.phase{display:none;}.phase.active{display:block;}
+
+/* Accroche */
+.accroche{background:white;border-radius:var(--radius);padding:22px 20px;margin-bottom:20px;border:3px solid var(--acc-pale);text-align:center;}
+.accroche .big-icon{font-size:4.5rem;margin-bottom:10px;}
+.accroche h1{font-size:1.85rem;color:var(--acc);margin-bottom:8px;}
+.accroche p{font-family:'Nunito',sans-serif;font-size:1rem;color:#64748b;margin-bottom:12px;}
+.meta-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
+.meta-tag{background:var(--acc-pale);border-radius:20px;padding:5px 16px;font-size:.8rem;color:var(--acc);}
+
+/* Leçon */
+.lecon-card{background:white;border-radius:var(--radius);padding:22px 18px;margin-bottom:18px;border:3px solid var(--acc-pale);}
+.lecon-card h2{font-size:1.3rem;color:var(--acc);margin-bottom:18px;}
+.lecon-block{display:none;}.lecon-block.revealed{display:block;}
+.bloc-titre{font-size:1.2rem;color:var(--acc);margin-bottom:16px;}
+.sep{margin:22px 0;border:none;border-top:3px dashed #bae6fd;}
+
+/* Bulle Ugo */
+.ugo-box{background:white;border:3px solid var(--acc-pale);border-radius:var(--radius);padding:16px 18px;margin:14px 0;display:flex;gap:14px;align-items:flex-start;}
+.ugo-box .ugo{font-size:2.6rem;flex-shrink:0;}
+.ugo-box p{font-family:'Nunito',sans-serif;font-size:1rem;color:#475569;line-height:1.7;}
+.ugo-box p strong{color:var(--acc);}
+
+/* Carte type de phrase */
+.type-card{border-radius:18px;padding:20px 18px;margin:12px 0;}
+.type-card.decl{background:#f0f9ff;border:3px solid var(--acc-mid);}
+.type-card.inter{background:var(--violet-pale);border:3px solid #c4b5fd;}
+.type-card .tc-head{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+.type-card .tc-icon{font-size:2.2rem;}
+.type-card .tc-titre{font-size:1.15rem;}
+.type-card.decl .tc-titre{color:var(--acc-dark);}
+.type-card.inter .tc-titre{color:var(--violet);}
+.type-card .tc-phrase{
+  font-size:1.3rem;
+  border-radius:12px;padding:14px 16px;margin:8px 0;
+  line-height:1.6;
+}
+.type-card.decl .tc-phrase{background:white;border:2px solid var(--acc-mid);}
+.type-card.inter .tc-phrase{background:white;border:2px solid #c4b5fd;}
+.type-card .tc-signe{font-size:1.1rem;margin-top:8px;font-family:'Nunito',sans-serif;}
+.type-card.decl .tc-signe{color:var(--acc-dark);}
+.type-card.inter .tc-signe{color:var(--violet);}
+.pt-decl{color:var(--acc);font-size:1.5rem;font-weight:900;}
+.pt-inter{color:var(--violet);font-size:1.5rem;font-weight:900;}
+
+.info-box{background:var(--acc-pale);border-left:6px solid var(--acc);border-radius:0 14px 14px 0;padding:14px 18px;margin:14px 0;font-family:'Nunito',sans-serif;font-size:1rem;line-height:1.9;}
+.info-box strong{color:var(--acc-dark);}
+
+/* Comparaison côte à côte */
+.compare-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0;}
+.compare-cell{border-radius:14px;padding:14px;text-align:center;}
+.compare-cell.decl{background:#f0f9ff;border:2px solid var(--acc-mid);}
+.compare-cell.inter{background:var(--violet-pale);border:2px solid #c4b5fd;}
+.compare-cell .cc-icon{font-size:1.8rem;margin-bottom:6px;}
+.compare-cell .cc-label{font-size:.85rem;font-family:'Nunito',sans-serif;font-weight:800;}
+.compare-cell.decl .cc-label{color:var(--acc-dark);}
+.compare-cell.inter .cc-label{color:var(--violet);}
+.compare-cell .cc-phrase{font-size:1rem;margin-top:8px;line-height:1.6;}
+
+/* Bouton compris */
+.btn-compris{margin-top:20px;padding:16px 36px;border-radius:40px;font-size:1.15rem;background:var(--acc);color:white;border:none;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:10px;box-shadow:0 4px 14px rgba(3,105,161,.35);}
+.btn-compris:hover{background:var(--acc-dark);transform:translateY(-2px);}
+.btn-compris:disabled{opacity:.4;cursor:default;transform:none;}
+
+/* Exercices */
+.ex-card{background:white;border:3px solid var(--acc-pale);border-radius:var(--radius);padding:20px 18px;margin-bottom:16px;}
+.ex-num{font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:800;color:var(--acc);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;}
+.ex-consigne{font-family:'Nunito',sans-serif;font-size:1rem;color:#64748b;margin-bottom:14px;line-height:1.6;}
+.phrase-affichee{font-size:1.3rem;background:var(--acc-pale);border:3px solid var(--acc-mid);border-radius:14px;padding:14px 16px;margin:12px 0;text-align:center;line-height:1.6;}
+
+/* Boutons de choix — très grands */
+.choix-grille{display:flex;flex-direction:column;gap:12px;}
+.choix-grille.horizontal{flex-direction:row;}
+.choix-btn{
+  padding:18px 16px;border-radius:16px;
+  border:3px solid #bae6fd;background:white;
+  font-family:'Fredoka One',cursive;font-size:1.1rem;
+  cursor:pointer;text-align:left;transition:all .2s;
+  min-height:60px;display:flex;align-items:center;gap:14px;line-height:1.4;
+}
+.choix-btn.large{flex:1;justify-content:center;text-align:center;font-size:1.2rem;padding:20px 12px;}
+.choix-btn:hover:not(:disabled){border-color:var(--acc);background:var(--acc-pale);}
+.choix-btn:disabled{cursor:default;}
+.choix-btn.ok{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.choix-btn.ko{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
+.choix-btn.reveal{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.choix-icone{font-size:1.7rem;flex-shrink:0;}
+
+/* Feedback */
+.ex-fb{margin-top:12px;padding:13px 16px;border-radius:14px;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;display:none;line-height:1.6;}
+.ex-fb.show{display:block;}
+.ex-fb.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.ex-fb.ko{background:var(--coral-pale);color:#b91c1c;}
+
+/* Exercice saisie — ex5 CE1 simplifié */
+.saisie-phrase{font-size:1.2rem;background:var(--acc-pale);border:3px solid var(--acc-mid);border-radius:14px;padding:14px 16px;margin:12px 0;line-height:1.7;}
+.saisie-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:10px;}
+.saisie-input{
+  border:3px solid var(--acc);border-radius:12px;
+  padding:11px 16px;font-family:'Fredoka One',cursive;font-size:1.1rem;
+  color:#1e293b;background:white;outline:none;
+  flex:1;min-width:80px;max-width:120px;text-align:center;
+}
+.saisie-input:disabled{border-color:#bae6fd;background:#f8fafc;}
+.saisie-input.ok{border-color:var(--mint);background:var(--mint-pale);}
+.saisie-input.ko{border-color:var(--coral);}
+.btn-verif{padding:11px 20px;border-radius:24px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.95rem;background:var(--acc);color:white;border:none;cursor:pointer;}
+.btn-verif:disabled{opacity:.4;cursor:not-allowed;}
+
+/* Bouton suite */
+.btn-suite{margin-top:18px;padding:15px 28px;border-radius:34px;font-size:1.1rem;background:var(--acc);color:white;border:none;cursor:pointer;display:none;align-items:center;gap:10px;box-shadow:0 4px 14px rgba(3,105,161,.3);transition:all .2s;}
+.btn-suite.show{display:inline-flex;}
+.btn-suite:hover{background:var(--acc-dark);transform:translateY(-2px);}
+
+/* Reset */
+.reset-box{background:white;border:3px solid var(--acc);border-radius:var(--radius);padding:22px;text-align:center;margin-bottom:16px;display:none;}
+.reset-box.show{display:block;}
+.reset-box .r-ugo{font-size:3.2rem;margin-bottom:8px;}
+.reset-box h3{font-size:1.3rem;color:var(--acc);margin-bottom:8px;}
+.reset-box p{font-family:'Nunito',sans-serif;font-size:.95rem;color:#64748b;margin-bottom:14px;line-height:1.7;}
+.btn-reset{padding:14px 28px;border-radius:30px;font-size:1rem;background:var(--acc);color:white;border:none;cursor:pointer;}
+
+/* Bilan */
+.bilan-card{background:white;border-radius:var(--radius);padding:30px 20px;text-align:center;border:3px solid var(--acc-pale);}
+.bilan-ugo{font-size:5rem;margin-bottom:10px;display:block;}
+.bilan-title{font-size:2rem;color:var(--acc);margin-bottom:8px;}
+.bilan-msg{font-family:'Nunito',sans-serif;font-size:1rem;color:#64748b;margin-bottom:22px;line-height:1.8;}
+.stars-row{display:flex;justify-content:center;gap:16px;margin-bottom:20px;}
+.star-big{font-size:3.2rem;filter:grayscale(1);transition:all .5s;}
+.star-big.earned{filter:none;animation:starPop .5s ease both;}
+@keyframes starPop{0%{transform:scale(0);}60%{transform:scale(1.3);}100%{transform:scale(1);}}
+.score-circle{width:120px;height:120px;border-radius:50%;background:var(--acc);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 22px;color:white;box-shadow:0 6px 20px rgba(3,105,161,.4);}
+.score-num{font-size:2.4rem;line-height:1;}
+.score-sub{font-family:'Nunito',sans-serif;font-size:.7rem;opacity:.85;}
+.memo{background:var(--acc-pale);border-radius:var(--radius);padding:18px;margin:18px 0;text-align:left;}
+.memo h3{font-size:.95rem;color:var(--acc);margin-bottom:12px;}
+.memo-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media(max-width:400px){.memo-grid{grid-template-columns:1fr;}.compare-row{grid-template-columns:1fr;}.choix-grille.horizontal{flex-direction:column;}}
+.memo-item{background:white;border-radius:12px;padding:12px 14px;border:2px solid var(--acc-pale);}
+.memo-item strong{color:var(--acc);display:block;margin-bottom:4px;font-size:1rem;}
+.memo-item span{font-family:'Nunito',sans-serif;font-size:.85rem;color:#475569;line-height:1.6;}
+.bilan-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:20px;}
+.btn-bilan{padding:14px 24px;border-radius:32px;font-size:1rem;cursor:pointer;border:none;transition:all .2s;}
+.btn-bilan.primary{background:var(--acc);color:white;}
+.btn-bilan.secondary{background:var(--acc-pale);color:var(--acc);border:3px solid var(--acc);}
+.btn-bilan:hover{transform:translateY(-2px);}
+.confetti-piece{position:fixed;border-radius:3px;top:-20px;animation:fall linear both;pointer-events:none;z-index:9999;}
+@keyframes fall{0%{transform:translateY(0) rotate(0deg);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-top">
+    <a href="../6-9ans.html" class="logo">🦉 L'Atelier du Devoir</a>
+    <div class="score-badge">⭐ <span id="score-display">0</span></div>
+  </div>
+  <div class="steps-wrap"><div class="steps">
+    <div class="step active" id="s0"></div><div class="step" id="s1"></div>
+    <div class="step" id="s2"></div><div class="step" id="s3"></div>
+    <div class="step" id="s4"></div><div class="step" id="s5"></div>
+  </div></div>
+</header>
+
+<main class="main">
+
+<!-- ACCROCHE -->
+<div class="accroche">
+  <div class="big-icon">🔄</div>
+  <h1>Les types de phrases !</h1>
+  <p style="font-family:'Nunito',sans-serif;">On <strong style="color:var(--acc)">dit</strong> quelque chose… ou on <strong style="color:var(--violet)">pose une question</strong> ? 🌟</p>
+  <div class="meta-row">
+    <span class="meta-tag">CE1</span>
+    <span class="meta-tag">⭐ Facile</span>
+    <span class="meta-tag">📝 Grammaire</span>
+  </div>
+</div>
+
+<!-- ═══ LEÇON ═══ -->
+<div class="phase active" id="phase-lecon">
+<div class="lecon-card">
+  <h2>📖 La leçon</h2>
+
+  <!-- BLOC 0 : phrase déclarative -->
+  <div class="lecon-block revealed" id="bloc-0">
+    <div class="bloc-titre">① La phrase déclarative</div>
+    <div class="ugo-box"><span class="ugo">🦉</span>
+      <p>La phrase <strong>déclarative</strong> dit quelque chose, donne une information. Elle se termine par un <strong>point</strong> 🔵. C'est le type de phrase le plus courant !</p>
+    </div>
+    <div class="type-card decl">
+      <div class="tc-head">
+        <span class="tc-icon">💬</span>
+        <span class="tc-titre">Je <strong>dis</strong> quelque chose</span>
+      </div>
+      <div class="tc-phrase">Le chat boit du lait<span class="pt-decl">.</span></div>
+      <div class="tc-phrase">Ma maman cuisine<span class="pt-decl">.</span></div>
+      <div class="tc-phrase">Il fait beau aujourd'hui<span class="pt-decl">.</span></div>
+      <div class="tc-signe">📌 Se termine par un <strong>point</strong> ( . )</div>
+    </div>
+    <div class="info-box">
+      <strong>Phrase déclarative</strong> = je <em>déclare</em>, j'annonce quelque chose.<br>
+      Elle donne une <strong>information</strong> sur quelqu'un ou quelque chose.<br>
+      Signe de ponctuation : le <strong>point ( . )</strong>
+    </div>
+    <button class="btn-compris" onclick="revealBloc(1)">J'ai compris ! 🎉</button>
+  </div>
+
+  <!-- BLOC 1 : phrase interrogative -->
+  <div class="lecon-block" id="bloc-1">
+    <hr class="sep">
+    <div class="bloc-titre">② La phrase interrogative</div>
+    <div class="ugo-box"><span class="ugo">🦉</span>
+      <p>La phrase <strong>interrogative</strong> pose une <strong>question</strong>. Elle attend une réponse ! Elle se termine toujours par un <strong>point d'interrogation</strong> ❓.</p>
+    </div>
+    <div class="type-card inter">
+      <div class="tc-head">
+        <span class="tc-icon">❓</span>
+        <span class="tc-titre">Je <strong>pose une question</strong></span>
+      </div>
+      <div class="tc-phrase">Est-ce que le chat boit du lait<span class="pt-inter">?</span></div>
+      <div class="tc-phrase">Où est ma maman<span class="pt-inter">?</span></div>
+      <div class="tc-phrase">Fait-il beau aujourd'hui<span class="pt-inter">?</span></div>
+      <div class="tc-signe">📌 Se termine par un <strong>point d'interrogation</strong> ( ? )</div>
+    </div>
+    <div style="background:var(--violet-pale);border-left:6px solid var(--violet);border-radius:0 14px 14px 0;padding:14px 18px;margin:14px 0;font-family:'Nunito',sans-serif;font-size:1rem;line-height:1.9;">
+      <strong style="color:var(--violet);">Mots indices de la question :</strong><br>
+      <strong>Est-ce que…, Qui…, Quoi…, Où…, Quand…, Comment…, Pourquoi…</strong><br>
+      → Ces mots en début de phrase = presque toujours une question !
+    </div>
+    <button class="btn-compris" onclick="revealBloc(2)">J'ai compris ! 🎉</button>
+  </div>
+
+  <!-- BLOC 2 : comparaison et résumé -->
+  <div class="lecon-block" id="bloc-2">
+    <hr class="sep">
+    <div class="bloc-titre">③ Côte à côte — déclarative vs interrogative</div>
+    <div class="ugo-box"><span class="ugo">🦉</span>
+      <p>Regarde ! La <strong>même idée</strong> peut être une déclaration ou une question. C'est le signe de ponctuation qui change tout ! 👀</p>
+    </div>
+    <div class="compare-row">
+      <div class="compare-cell decl">
+        <div class="cc-icon">💬</div>
+        <div class="cc-label">DÉCLARATIVE</div>
+        <div class="cc-phrase">Le chien court<span class="pt-decl">.</span></div>
+        <div style="font-family:'Nunito',sans-serif;font-size:.8rem;color:#64748b;margin-top:6px;">Je dis quelque chose</div>
+      </div>
+      <div class="compare-cell inter">
+        <div class="cc-icon">❓</div>
+        <div class="cc-label">INTERROGATIVE</div>
+        <div class="cc-phrase">Le chien court-il<span class="pt-inter">?</span></div>
+        <div style="font-family:'Nunito',sans-serif;font-size:.8rem;color:#64748b;margin-top:6px;">Je pose une question</div>
+      </div>
+    </div>
+    <div class="compare-row">
+      <div class="compare-cell decl">
+        <div class="cc-phrase">Tom mange une pomme<span class="pt-decl">.</span></div>
+      </div>
+      <div class="compare-cell inter">
+        <div class="cc-phrase">Mange-t-il une pomme<span class="pt-inter">?</span></div>
+      </div>
+    </div>
+    <div class="info-box">
+      <strong>Je retiens :</strong><br>
+      💬 <strong>Déclarative</strong> → donne une info → se termine par <strong>.</strong><br>
+      ❓ <strong>Interrogative</strong> → pose une question → se termine par <strong>?</strong>
+    </div>
+    <button class="btn-compris" onclick="goPhase('ex1',1)">Je joue ! 🚀</button>
+  </div>
+</div>
+</div>
+
+<!-- ═══ EX 1 : Trier — déclarative ou interrogative ? ═══ -->
+<div class="phase" id="phase-ex1">
+  <div class="ugo-box"><span class="ugo">🦉</span>
+    <p>Lis la phrase. C'est une <strong>💬 déclaration</strong> ou une <strong>❓ question</strong> ? Appuie sur le bon bouton !</p>
+  </div>
+  <div id="ex1-reset" class="reset-box">
+    <div class="r-ugo">🦉</div><h3>On recommence !</h3>
+    <p>Point ( . ) = déclarative · Point d'interrogation ( ? ) = interrogative ! 💪</p>
+    <button class="btn-reset" onclick="initEx1()">↺ Réessayer !</button>
+  </div>
+  <div id="ex1-zone"></div>
+  <button class="btn-suite" id="btn-ex1-to-ex2" onclick="goPhase('ex2',2)">Super ! Suite 🌟</button>
+</div>
+
+<!-- ═══ EX 2 : Trouver le bon signe de ponctuation ═══ -->
+<div class="phase" id="phase-ex2">
+  <div class="ugo-box"><span class="ugo">🦉</span>
+    <p>Quel signe faut-il à la fin ? Choisis <strong>.</strong> ou <strong>?</strong> ! 🎯</p>
+  </div>
+  <div id="ex2-reset" class="reset-box">
+    <div class="r-ugo">🦉</div><h3>On recommence !</h3>
+    <p>Si ça pose une question → ? · Si ça dit quelque chose → . 💪</p>
+    <button class="btn-reset" onclick="initEx2()">↺ Réessayer !</button>
+  </div>
+  <div id="ex2-zone"></div>
+  <button class="btn-suite" id="btn-ex2-to-ex3" onclick="goPhase('ex3',3)">Super ! Suite 🌟</button>
+</div>
+
+<!-- ═══ EX 3 : Choisir la bonne version ═══ -->
+<div class="phase" id="phase-ex3">
+  <div class="ugo-box"><span class="ugo">🦉</span>
+    <p>Voici deux phrases. Laquelle correspond à la <strong>consigne</strong> ? 🔍</p>
+  </div>
+  <div id="ex3-reset" class="reset-box">
+    <div class="r-ugo">🦉</div><h3>On recommence !</h3>
+    <p>Lis bien si on demande une déclaration ou une question ! 💪</p>
+    <button class="btn-reset" onclick="initEx3()">↺ Réessayer !</button>
+  </div>
+  <div id="ex3-zone"></div>
+  <button class="btn-suite" id="btn-ex3-to-ex4" onclick="goPhase('ex4',4)">Super ! Suite 🌟</button>
+</div>
+
+<!-- ═══ EX 4 : Saisie — CE1 : écrire le bon signe ═══ -->
+<div class="phase" id="phase-ex4">
+  <div class="ugo-box"><span class="ugo">🦉</span>
+    <p>Écris le bon signe de ponctuation à la fin : <strong>.</strong> ou <strong>?</strong> — à toi ! ✏️</p>
+  </div>
+  <div id="ex4-zone"></div>
+  <button class="btn-suite" id="btn-ex4-to-bilan" onclick="goPhase('bilan',5)">🌟 Voir mon score !</button>
+</div>
+
+<!-- ═══ BILAN ═══ -->
+<div class="phase" id="phase-bilan">
+  <div class="bilan-card">
+    <span class="bilan-ugo">🦉</span>
+    <h2 class="bilan-title" id="bilan-title"></h2>
+    <p class="bilan-msg" id="bilan-msg"></p>
+    <div class="stars-row">
+      <span class="star-big" id="etoile1">⭐</span>
+      <span class="star-big" id="etoile2">⭐</span>
+      <span class="star-big" id="etoile3">⭐</span>
+    </div>
+    <div class="score-circle">
+      <span class="score-num" id="bilan-pts">0</span>
+      <span class="score-sub" id="bilan-sur">/ 0</span>
+    </div>
+    <div class="memo">
+      <h3>📝 Ce que j'ai appris</h3>
+      <div class="memo-grid">
+        <div class="memo-item"><strong>💬 Déclarative</strong><span>Donne une info<br>Finit par un <strong>.</strong></span></div>
+        <div class="memo-item"><strong>❓ Interrogative</strong><span>Pose une question<br>Finit par un <strong>?</strong></span></div>
+        <div class="memo-item"><strong>Mots indices</strong><span>Est-ce que, Où, Qui, Quand, Comment, Pourquoi → question !</span></div>
+        <div class="memo-item"><strong>Astuce</strong><span>Regarde le dernier signe : <strong>.</strong> ou <strong>?</strong></span></div>
+      </div>
+    </div>
+    <div class="bilan-btns">
+      <button class="btn-bilan secondary" onclick="location.reload()">↺ Recommencer</button>
+      <button class="btn-bilan primary" onclick="location.href='../6-9ans.html'">← Les fiches</button>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<script>
+var score=0, TOTAL_PTS=17;
+
+function addPt(){score++;document.getElementById('score-display').textContent=score;}
+function updSteps(n){for(var i=0;i<6;i++){var s=document.getElementById('s'+i);if(!s)return;s.classList.remove('active','done');if(i<n)s.classList.add('done');else if(i===n)s.classList.add('active');}}
+function shuffle(a){var b=a.slice();for(var i=b.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=b[i];b[i]=b[j];b[j]=t;}return b;}
+function revealBloc(n){
+  var b=document.getElementById('bloc-'+n);if(!b)return;
+  var p=document.getElementById('bloc-'+(n-1));
+  if(p){var btn=p.querySelector('.btn-compris');if(btn){btn.textContent='✓ Compris !';btn.disabled=true;btn.style.opacity='.4';}}
+  b.classList.add('revealed');
+  setTimeout(function(){var hH=(document.querySelector('.header')||{offsetHeight:0}).offsetHeight;var r=b.getBoundingClientRect();window.scrollTo({top:window.pageYOffset+r.top-hH-16,behavior:'smooth'});},150);
+}
+function goPhase(ph,si){
+  document.querySelectorAll('.phase').forEach(function(p){p.classList.remove('active');});
+  var el=document.getElementById('phase-'+ph);
+  if(el){el.classList.add('active');setTimeout(function(){el.scrollIntoView({behavior:'smooth',block:'start'});},80);}
+  updSteps(si);
+  if(ph==='ex1')initEx1();
+  if(ph==='ex2')initEx2();
+  if(ph==='ex3')initEx3();
+  if(ph==='ex4')initEx4();
+  if(ph==='bilan')showBilan();
+}
+
+/* ══ EX 1 : Déclarative ou interrogative ? (5 items, 1 pt chacun) ══ */
+var EX1_POOL=[
+  {txt:'Le soleil brille.',          type:'decl', fb_ok:'Déclarative ! Elle dit quelque chose. Le point le confirme. 🎉', fb_ko:'C\'est une déclarative : elle dit quelque chose et finit par un point.'},
+  {txt:'Est-ce que tu aimes le foot ?',type:'inter',fb_ok:'Interrogative ! Elle pose une question. Le ? le confirme. 🌟', fb_ko:'C\'est une interrogative : elle pose une question avec "Est-ce que" et finit par ?.'},
+  {txt:'Mon chat s\'appelle Minou.',   type:'decl', fb_ok:'Déclarative ! Elle donne une information. 🎉', fb_ko:'Déclarative : elle donne l\'information que le chat s\'appelle Minou.'},
+  {txt:'Où est mon cartable ?',       type:'inter',fb_ok:'Interrogative ! "Où" au début et ? à la fin. 🌟', fb_ko:'Interrogative : "Où" est un mot indice de question, et il y a un ?.'},
+  {txt:'La maîtresse arrive.',        type:'decl', fb_ok:'Déclarative ! Elle annonce quelque chose. 🎉', fb_ko:'Déclarative : elle annonce que la maîtresse arrive.'},
+  {txt:'Pourquoi tu pleures ?',       type:'inter',fb_ok:'Interrogative ! "Pourquoi" + ? = question. 🌟', fb_ko:'"Pourquoi" et ? → c\'est une question, donc interrogative.'},
+  {txt:'Les enfants jouent dans la cour.',type:'decl',fb_ok:'Déclarative ! Elle donne une information. 🎉', fb_ko:'Déclarative : elle informe que les enfants jouent dans la cour.'},
+  {txt:'Comment tu t\'appelles ?',    type:'inter',fb_ok:'Interrogative ! "Comment" + ? = question. 🌟', fb_ko:'"Comment" et ? → c\'est une question, donc interrogative.'},
+  {txt:'Papa lit un livre.',          type:'decl', fb_ok:'Déclarative ! Elle dit ce que fait papa. 🎉', fb_ko:'Déclarative : elle informe sur ce que fait papa.'},
+  {txt:'Qui a mangé mon gâteau ?',    type:'inter',fb_ok:'Interrogative ! "Qui" + ? = question. 🌟', fb_ko:'"Qui" et ? → c\'est une question, donc interrogative.'},
+];
+var ex1Items=[],ex1Idx=0;
+function initEx1(){
+  ex1Items=shuffle(EX1_POOL).slice(0,5);ex1Idx=0;
+  document.getElementById('ex1-reset').classList.remove('show');
+  document.getElementById('btn-ex1-to-ex2').classList.remove('show');
+  renderEx1();
+}
+function renderEx1(){
+  var z=document.getElementById('ex1-zone');z.innerHTML='';
+  var item=ex1Items[ex1Idx];
+  var card=document.createElement('div');card.className='ex-card';
+  card.innerHTML='<div class="ex-num">Question '+(ex1Idx+1)+' / 5</div>'
+    +'<div class="ex-consigne">Cette phrase est une <strong>déclaration</strong> ou une <strong>question</strong> ?</div>'
+    +'<div class="phrase-affichee">'+item.txt+'</div>'
+    +'<div class="choix-grille horizontal">'
+    +'<button class="choix-btn large" onclick="checkEx1(\'decl\',this)">💬 Déclaration</button>'
+    +'<button class="choix-btn large" style="border-color:#c4b5fd;" onclick="checkEx1(\'inter\',this)">❓ Question</button>'
+    +'</div>'
+    +'<div class="ex-fb" id="ex1-fb"></div>';
+  z.appendChild(card);z._item=item;
+}
+function checkEx1(rep,btn){
+  var item=document.getElementById('ex1-zone')._item;
+  var fb=document.getElementById('ex1-fb');
+  document.querySelectorAll('#ex1-zone .choix-btn').forEach(function(b){b.disabled=true;});
+  if(rep===item.type){
+    btn.classList.add('ok');
+    fb.className='ex-fb show ok';fb.innerHTML='✅ '+item.fb_ok;addPt();
+  } else {
+    btn.classList.add('ko');
+    document.querySelectorAll('#ex1-zone .choix-btn').forEach(function(b){if((rep==='decl'&&b.textContent.includes('Question'))||(rep==='inter'&&b.textContent.includes('Décla')))b.classList.add('reveal');});
+    fb.className='ex-fb show ko';fb.innerHTML='❌ '+item.fb_ko;
+  }
+  ex1Idx++;
+  if(ex1Idx<5)setTimeout(function(){renderEx1();},1500);
+  else setTimeout(function(){var b=document.getElementById('btn-ex1-to-ex2');b.classList.add('show');b.scrollIntoView({behavior:'smooth',block:'nearest'});},1500);
+}
+
+/* ══ EX 2 : Quel signe de ponctuation ? (5 items, 1 pt chacun) ══ */
+var EX2_POOL=[
+  {txt:'Les fleurs sont belles ___',signe:'.',expl:'C\'est une déclaration → on met un point.'},
+  {txt:'Où vas-tu ___',            signe:'?',expl:'"Où" + question → on met un point d\'interrogation.'},
+  {txt:'Mon chien s\'appelle Rex ___',signe:'.',expl:'C\'est une déclaration → on met un point.'},
+  {txt:'Est-ce que tu viens ___',  signe:'?',expl:'"Est-ce que" → c\'est une question → on met ?.'},
+  {txt:'Il neige dehors ___',      signe:'.',expl:'C\'est une déclaration → on met un point.'},
+  {txt:'Quand arrive le train ___',signe:'?',expl:'"Quand" → c\'est une question → on met ?.'},
+  {txt:'Je mange une pomme ___',   signe:'.',expl:'C\'est une déclaration → on met un point.'},
+  {txt:'Qui a sonné à la porte ___',signe:'?',expl:'"Qui" → c\'est une question → on met ?.'},
+  {txt:'Le ciel est bleu ___',     signe:'.',expl:'C\'est une déclaration → on met un point.'},
+  {txt:'Comment tu vas ___',       signe:'?',expl:'"Comment" → c\'est une question → on met ?.'},
+];
+var ex2Items=[],ex2Idx=0;
+function initEx2(){
+  ex2Items=shuffle(EX2_POOL).slice(0,4);ex2Idx=0;
+  document.getElementById('ex2-reset').classList.remove('show');
+  document.getElementById('btn-ex2-to-ex3').classList.remove('show');
+  renderEx2();
+}
+function renderEx2(){
+  var z=document.getElementById('ex2-zone');z.innerHTML='';
+  var item=ex2Items[ex2Idx];
+  var card=document.createElement('div');card.className='ex-card';
+  card.innerHTML='<div class="ex-num">Question '+(ex2Idx+1)+' / 4</div>'
+    +'<div class="ex-consigne">Quel signe faut-il mettre à la fin ?</div>'
+    +'<div class="phrase-affichee">'+item.txt+'</div>'
+    +'<div class="choix-grille horizontal">'
+    +'<button class="choix-btn large" style="font-size:1.8rem;" onclick="checkEx2(\'.\',this)"> . </button>'
+    +'<button class="choix-btn large" style="font-size:1.8rem;border-color:#c4b5fd;" onclick="checkEx2(\'?\',this)"> ? </button>'
+    +'</div>'
+    +'<div class="ex-fb" id="ex2-fb"></div>';
+  z.appendChild(card);z._item=item;
+}
+function checkEx2(rep,btn){
+  var item=document.getElementById('ex2-zone')._item;
+  var fb=document.getElementById('ex2-fb');
+  document.querySelectorAll('#ex2-zone .choix-btn').forEach(function(b){b.disabled=true;});
+  if(rep===item.signe){
+    btn.classList.add('ok');fb.className='ex-fb show ok';fb.innerHTML='✅ Bravo ! '+item.expl;addPt();
+  } else {
+    btn.classList.add('ko');
+    document.querySelectorAll('#ex2-zone .choix-btn').forEach(function(b){if(b.textContent.trim()===item.signe)b.classList.add('reveal');});
+    fb.className='ex-fb show ko';fb.innerHTML='❌ '+item.expl;
+  }
+  ex2Idx++;
+  if(ex2Idx<4)setTimeout(function(){renderEx2();},1500);
+  else setTimeout(function(){var b=document.getElementById('btn-ex2-to-ex3');b.classList.add('show');b.scrollIntoView({behavior:'smooth',block:'nearest'});},1500);
+}
+
+/* ══ EX 3 : Choisir la phrase qui correspond à la consigne (4 items) ══ */
+var EX3_POOL=[
+  {
+    consigne:'Trouve la phrase <strong>déclarative</strong> 💬',
+    opts:['Le lapin mange des carottes.','Est-ce que le lapin mange ?'],
+    ok:0, expl:'Point simple = déclarative !'
+  },
+  {
+    consigne:'Trouve la phrase <strong>interrogative</strong> ❓',
+    opts:['Mon frère joue au foot.','Où joue mon frère ?'],
+    ok:1, expl:'"Où" + ? = interrogative !'
+  },
+  {
+    consigne:'Trouve la phrase <strong>déclarative</strong> 💬',
+    opts:['Pourquoi pleut-il ?','La pluie tombe sur le jardin.'],
+    ok:1, expl:'Aucun mot question + point simple = déclarative !'
+  },
+  {
+    consigne:'Trouve la phrase <strong>interrogative</strong> ❓',
+    opts:['Quand est-ce que tu rentres ?','Je rentre à 17 heures.'],
+    ok:0, expl:'"Quand" + ? = interrogative !'
+  },
+  {
+    consigne:'Trouve la phrase <strong>déclarative</strong> 💬',
+    opts:['Qui a mangé mon dessert ?','Maman a préparé le dessert.'],
+    ok:1, expl:'Pas de mot question + point simple = déclarative !'
+  },
+  {
+    consigne:'Trouve la phrase <strong>interrogative</strong> ❓',
+    opts:['Le train arrive à midi.','Comment s\'appelle ton chien ?'],
+    ok:1, expl:'"Comment" + ? = interrogative !'
+  },
+];
+var ex3Items=[],ex3Idx=0;
+function initEx3(){
+  ex3Items=shuffle(EX3_POOL).slice(0,4);ex3Idx=0;
+  document.getElementById('ex3-reset').classList.remove('show');
+  document.getElementById('btn-ex3-to-ex4').classList.remove('show');
+  renderEx3();
+}
+function renderEx3(){
+  var z=document.getElementById('ex3-zone');z.innerHTML='';
+  var item=ex3Items[ex3Idx];
+  var opts=shuffle(item.opts.map(function(o,oi){return{txt:o,oi:oi};}));
+  var card=document.createElement('div');card.className='ex-card';
+  card.innerHTML='<div class="ex-num">Question '+(ex3Idx+1)+' / 4</div>'
+    +'<div class="ex-consigne">'+item.consigne+'</div>'
+    +'<div class="choix-grille">'
+    +opts.map(function(o,i){
+      return '<button class="choix-btn" onclick="checkEx3('+o.oi+',this)">'
+        +'<span class="choix-icone">📝</span><span>'+o.txt+'</span></button>';
+    }).join('')
+    +'</div>'
+    +'<div class="ex-fb" id="ex3-fb"></div>';
+  z.appendChild(card);z._item=item;z._opts=opts;
+}
+function checkEx3(oi,btn){
+  var item=document.getElementById('ex3-zone')._item;
+  var fb=document.getElementById('ex3-fb');
+  document.querySelectorAll('#ex3-zone .choix-btn').forEach(function(b){b.disabled=true;});
+  if(oi===item.ok){
+    btn.classList.add('ok');fb.className='ex-fb show ok';fb.innerHTML='✅ Bravo ! '+item.expl;addPt();
+  } else {
+    btn.classList.add('ko');
+    // révéler la bonne
+    document.querySelectorAll('#ex3-zone .choix-btn').forEach(function(b){
+      if(b.querySelector('span:last-child').textContent===item.opts[item.ok])b.classList.add('reveal');
+    });
+    fb.className='ex-fb show ko';fb.innerHTML='❌ '+item.expl;
+  }
+  ex3Idx++;
+  if(ex3Idx<4)setTimeout(function(){renderEx3();},1500);
+  else setTimeout(function(){var b=document.getElementById('btn-ex3-to-ex4');b.classList.add('show');b.scrollIntoView({behavior:'smooth',block:'nearest'});},1500);
+}
+
+/* ══ EX 4 : Saisie du signe — 3 items (CE1) ══ */
+var EX4_ITEMS=[
+  {
+    avant:'Les enfants rient',apres:'',
+    signe:'.', consigne:'Écris le signe de ponctuation qui manque à la fin (. ou ?)',
+    expl:'C\'est une déclaration → il faut un point ( . )'
+  },
+  {
+    avant:'Où habites-tu',apres:'',
+    signe:'?', consigne:'Écris le signe de ponctuation qui manque à la fin (. ou ?)',
+    expl:'"Où" → c\'est une question → il faut un point d\'interrogation ( ? )'
+  },
+  {
+    avant:'Ma sœur aime le chocolat',apres:'',
+    signe:'.', consigne:'Écris le signe de ponctuation qui manque à la fin (. ou ?)',
+    expl:'C\'est une déclaration → il faut un point ( . )'
+  },
+];
+var ex4Idx=0,ex4Done=false;
+function initEx4(){
+  ex4Idx=0;ex4Done=false;
+  document.getElementById('btn-ex4-to-bilan').classList.remove('show');
+  renderEx4();
+}
+function renderEx4(){
+  var z=document.getElementById('ex4-zone');z.innerHTML='';
+  if(ex4Idx>=EX4_ITEMS.length){
+    setTimeout(function(){var b=document.getElementById('btn-ex4-to-bilan');b.classList.add('show');b.scrollIntoView({behavior:'smooth',block:'nearest'});},400);
+    return;
+  }
+  var item=EX4_ITEMS[ex4Idx];
+  var card=document.createElement('div');card.className='ex-card';
+  card.innerHTML='<div class="ex-num">Question '+(ex4Idx+1)+' / 3</div>'
+    +'<div class="ex-consigne">'+item.consigne+'</div>'
+    +'<div class="saisie-phrase">'+item.avant+' <span style="color:var(--coral);font-weight:900;font-size:1.4rem;">___</span></div>'
+    +'<div class="saisie-row">'
+    +'<input class="saisie-input" id="ex4-inp" type="text" maxlength="1" placeholder="?" autocomplete="off" autocorrect="off" spellcheck="false">'
+    +'<button class="btn-verif" onclick="checkEx4()">Vérifier ✓</button>'
+    +'</div>'
+    +'<div class="ex-fb" id="ex4-fb"></div>';
+  z.appendChild(card);z._item=item;
+  // Soumettre aussi avec Entrée
+  setTimeout(function(){
+    var inp=document.getElementById('ex4-inp');
+    if(inp)inp.addEventListener('keydown',function(e){if(e.key==='Enter')checkEx4();});
+  },50);
+}
+function checkEx4(){
+  var item=document.getElementById('ex4-zone')._item;
+  var inp=document.getElementById('ex4-inp');
+  var fb=document.getElementById('ex4-fb');
+  if(!inp||!fb)return;
+  var val=inp.value.trim();
+  inp.disabled=true;document.querySelector('#ex4-zone .btn-verif').disabled=true;
+  if(val===item.signe){
+    inp.classList.add('ok');fb.className='ex-fb show ok';fb.innerHTML='✅ Bravo ! '+item.expl;addPt();
+  } else {
+    inp.classList.add('ko');
+    fb.className='ex-fb show ko';fb.innerHTML='❌ Il fallait écrire <strong>'+item.signe+'</strong>. '+item.expl;
+  }
+  ex4Idx++;
+  setTimeout(function(){renderEx4();},1600);
+}
+
+/* ══ BILAN ══ */
+// Total : ex1=5 + ex2=4 + ex3=4 + ex4=3 = 16 pts (+ 1 bonus leçon = affichage sur 16)
+function showBilan(){
+  TOTAL_PTS=16;
+  document.getElementById('bilan-pts').textContent=score;
+  document.getElementById('bilan-sur').textContent='/ '+TOTAL_PTS;
+  var pct=score/TOTAL_PTS,t,m;
+  if(pct>=.8){t='BRAVO ! 🎉🎊';m='Tu sais reconnaître les phrases déclaratives et interrogatives ! Ugo est très fier ! 🦉⭐';}
+  else if(pct>=.5){t='Bien joué ! 😊🌟';m='Rappelle : . = déclarative, ? = interrogative. Tu vas y arriver ! Continue !';}
+  else{t='Bien essayé ! 💪';m:'Point ( . ) = déclaration · Point d\'interrogation ( ? ) = question. Recommence ! 🦉';}
+  document.getElementById('bilan-title').textContent=t;
+  document.getElementById('bilan-msg').textContent=m;
+  var s=[Math.ceil(TOTAL_PTS*.33),Math.ceil(TOTAL_PTS*.66),Math.ceil(TOTAL_PTS*.89)];
+  ['etoile1','etoile2','etoile3'].forEach(function(id,i){
+    var el=document.getElementById(id);
+    if(score>=s[i]){(function(e,d){setTimeout(function(){e.classList.add('earned');},d);})(el,300+i*450);}
+    else el.style.filter='grayscale(1)';
+  });
+  if(pct>=.5)confetti();
+}
+function confetti(){
+  var cols=['#0369a1','#7dd3fc','#7c3aed','#d97706','#059669'];
+  for(var i=0;i<65;i++){
+    var el=document.createElement('div');el.className='confetti-piece';
+    el.style.cssText='left:'+Math.random()*100+'vw;background:'+cols[Math.floor(Math.random()*cols.length)]
+      +';animation-duration:'+(1.8+Math.random()*2.2)+'s;animation-delay:'+Math.random()*1.5+'s'
+      +';width:'+(7+Math.random()*10)+'px;height:'+(7+Math.random()*10)+'px'
+      +';border-radius:'+(Math.random()>.5?'50%':'4px')+';';
+    document.body.appendChild(el);
+    setTimeout(function(){if(el.parentNode)el.remove();},5000);
+  }
+}
+</script>
+</body>
+</html>
