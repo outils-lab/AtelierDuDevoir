@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L'infinitif et le verbe conjugué – CE1</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Nunito',sans-serif;background:#fafaf8;color:#1e293b;font-size:18px;min-height:100vh;}
+:root{--accent:#c2410c;--accent-light:#fff7ed;--accent-mid:#fed7aa;}
+
+/* ── PHASES ── */
+.phase{display:none;}
+.phase.active{display:block;}
+
+/* ── HEADER ── */
+.site-header{background:var(--accent);color:#fff;padding:12px 20px;display:flex;align-items:center;gap:12px;}
+.site-header a{color:#fff;text-decoration:none;font-weight:700;font-size:15px;}
+.site-header span{font-weight:800;font-size:17px;}
+
+/* ── ACCROCHE ── */
+.accroche{background:linear-gradient(135deg,var(--accent) 0%,#ea580c 100%);color:#fff;padding:32px 20px 24px;text-align:center;}
+.accroche h1{font-size:1.7rem;font-weight:800;margin-bottom:8px;}
+.accroche p{font-size:1rem;opacity:.9;}
+.meta-tags{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:16px;}
+.meta-tag{background:rgba(255,255,255,.25);border-radius:20px;padding:4px 12px;font-size:.85rem;font-weight:700;}
+
+/* ── LEÇON ── */
+.lecon-wrap{max-width:680px;margin:0 auto;padding:20px 16px;}
+.lecon-block{background:#fff;border-radius:16px;border-left:5px solid var(--accent);padding:20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.06);display:none;}
+.lecon-block.revealed{display:block;}
+.lecon-block h2{color:var(--accent);font-size:1.1rem;font-weight:800;margin-bottom:10px;}
+.lecon-block p{line-height:1.6;margin-bottom:8px;font-size:1rem;}
+.lecon-block .exemple{background:var(--accent-light);border-radius:10px;padding:10px 14px;margin:8px 0;font-size:.95rem;}
+.lecon-block .highlight{color:var(--accent);font-weight:800;}
+.lecon-block .astuce{background:#f0fdf4;border-left:4px solid #16a34a;border-radius:8px;padding:10px 14px;margin:8px 0;font-size:.9rem;}
+.ugo-bubble{background:#fff3cd;border-radius:14px;padding:12px 16px;margin:10px 0;display:flex;align-items:flex-start;gap:10px;font-size:.9rem;}
+.ugo-bubble .ugo-icon{font-size:1.6rem;flex-shrink:0;}
+
+.btn-compris{display:none;background:var(--accent);color:#fff;border:none;border-radius:14px;padding:14px 28px;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;margin:12px auto 0;display:block;width:fit-content;}
+.btn-compris:hover{background:#9a3412;}
+.btn-suite{display:none;background:var(--accent);color:#fff;border:none;border-radius:14px;padding:14px 28px;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;margin:16px auto;display:block;}
+.btn-suite:hover{background:#9a3412;}
+.btn-suite.show{display:block;}
+
+/* ── EXERCICES ── */
+.ex-wrap{max-width:680px;margin:0 auto;padding:20px 16px;}
+.ex-header{background:var(--accent);color:#fff;border-radius:14px;padding:14px 18px;margin-bottom:18px;}
+.ex-header h2{font-size:1.1rem;font-weight:800;}
+.ex-header p{font-size:.85rem;opacity:.9;margin-top:4px;}
+.score-bar{background:#fff;border-radius:12px;padding:10px 16px;margin-bottom:16px;text-align:center;font-weight:700;font-size:.95rem;box-shadow:0 2px 6px rgba(0,0,0,.06);}
+
+/* QCM */
+.qcm-card{background:#fff;border-radius:14px;padding:16px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.06);}
+.qcm-card .question{font-weight:700;font-size:1rem;margin-bottom:12px;line-height:1.5;}
+.qcm-card .phrase-ex{font-size:.95rem;font-style:italic;background:var(--accent-light);border-radius:8px;padding:8px 12px;margin-bottom:10px;}
+.qcm-options{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.qcm-btn{background:#f1f5f9;border:2px solid #e2e8f0;border-radius:12px;padding:10px 8px;font-family:'Nunito',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;transition:all .2s;}
+.qcm-btn:hover{border-color:var(--accent);background:var(--accent-light);}
+.qcm-btn.correct{background:#dcfce7;border-color:#16a34a;color:#15803d;}
+.qcm-btn.wrong{background:#fee2e2;border-color:#dc2626;color:#dc2626;}
+.qcm-feedback{display:none;border-radius:10px;padding:8px 12px;margin-top:8px;font-size:.88rem;font-weight:600;}
+.qcm-feedback.show{display:block;}
+.qcm-feedback.ok{background:#dcfce7;color:#15803d;}
+.qcm-feedback.ko{background:#fee2e2;color:#dc2626;}
+
+/* DRAG tap-to-select */
+.drag-pool{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;}
+.chip{background:#fff;border:2px solid var(--accent-mid);border-radius:20px;padding:7px 14px;font-family:'Nunito',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;transition:all .2s;user-select:none;}
+.chip:hover{background:var(--accent-light);}
+.chip.selected{background:var(--accent);color:#fff;border-color:var(--accent);}
+.chip.used{opacity:.35;pointer-events:none;}
+.drag-phrases{display:flex;flex-direction:column;gap:10px;}
+.drag-item{background:#fff;border-radius:12px;padding:12px 14px;box-shadow:0 1px 6px rgba(0,0,0,.07);display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.drag-item .phrase-txt{flex:1;font-size:.95rem;min-width:140px;}
+.drop-zone{border:2px dashed #cbd5e1;border-radius:10px;min-width:90px;min-height:34px;display:flex;align-items:center;justify-content:center;font-size:.85rem;color:#94a3b8;padding:4px 8px;cursor:pointer;transition:all .2s;}
+.drop-zone.filled{border-color:var(--accent);background:var(--accent-light);color:var(--accent);font-weight:700;}
+.drop-zone.correct-zone{border-color:#16a34a;background:#dcfce7;color:#15803d;}
+.drop-zone.wrong-zone{border-color:#dc2626;background:#fee2e2;color:#dc2626;}
+.drag-expl{display:none;font-size:.82rem;font-weight:600;margin-top:4px;width:100%;}
+.drag-expl.show{display:block;}
+.drag-expl.ok{color:#15803d;}
+.drag-expl.ko{color:#dc2626;}
+.btn-verif{background:#0891b2;color:#fff;border:none;border-radius:12px;padding:12px 24px;font-family:'Nunito',sans-serif;font-size:.95rem;font-weight:800;cursor:pointer;margin-top:12px;display:block;}
+.btn-verif:hover{background:#0e7490;}
+
+/* SAISIE */
+.saisie-item{background:#fff;border-radius:12px;padding:14px;margin-bottom:12px;box-shadow:0 1px 6px rgba(0,0,0,.07);}
+.saisie-item .phrase-saisie{font-size:.95rem;margin-bottom:8px;line-height:1.6;}
+.saisie-item input{border:2px solid #cbd5e1;border-radius:10px;padding:8px 12px;font-family:'Nunito',sans-serif;font-size:.95rem;width:110px;outline:none;}
+.saisie-item input:focus{border-color:var(--accent);}
+.saisie-item input.correct-input{border-color:#16a34a;background:#dcfce7;}
+.saisie-item input.wrong-input{border-color:#dc2626;background:#fee2e2;}
+.saisie-feedback{display:none;font-size:.85rem;font-weight:600;margin-top:6px;}
+.saisie-feedback.show{display:block;}
+.saisie-feedback.ok{color:#15803d;}
+.saisie-feedback.ko{color:#dc2626;}
+
+/* ── BILAN ── */
+.bilan-wrap{max-width:680px;margin:0 auto;padding:24px 16px;text-align:center;}
+.bilan-card{background:#fff;border-radius:20px;padding:28px 20px;box-shadow:0 4px 20px rgba(0,0,0,.08);}
+.stars{font-size:2.5rem;margin:16px 0;}
+.star{display:inline-block;filter:grayscale(1);transition:filter .3s,transform .3s;}
+.star.earned{filter:none;animation:starPop .4s ease;}
+@keyframes starPop{0%{transform:scale(0)}60%{transform:scale(1.3)}100%{transform:scale(1)}}
+.score-big{font-size:2.2rem;font-weight:800;color:var(--accent);margin:10px 0;}
+.bilan-msg{font-size:1rem;margin:8px 0 16px;color:#475569;}
+.memo{background:var(--accent-light);border-radius:14px;padding:16px;margin-top:16px;text-align:left;}
+.memo h3{color:var(--accent);font-weight:800;margin-bottom:8px;}
+.memo p{font-size:.9rem;line-height:1.6;}
+.btn-retry{background:var(--accent);color:#fff;border:none;border-radius:14px;padding:13px 28px;font-family:'Nunito',sans-serif;font-size:.95rem;font-weight:800;cursor:pointer;margin-top:16px;}
+
+/* ── PRINT BAR ── */
+.print-bar{position:fixed;bottom:16px;right:16px;display:flex;flex-direction:column;gap:8px;z-index:100;}
+.print-btn{background:#fff;border:2px solid var(--accent);color:var(--accent);border-radius:12px;padding:8px 14px;font-family:'Nunito',sans-serif;font-size:.8rem;font-weight:700;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.1);}
+.print-btn:hover{background:var(--accent);color:#fff;}
+
+@media print{.print-bar,.site-header,.btn-compris,.btn-suite,.btn-verif,.btn-retry{display:none!important;}}
+@media(max-width:480px){
+  .qcm-options{grid-template-columns:1fr;}
+  .accroche h1{font-size:1.4rem;}
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <a href="../ce1.html">← CE1</a>
+  <span>L'Atelier du Devoir</span>
+</header>
+
+<!-- ═══════════════════ PHASE 0 : LEÇON ═══════════════════ -->
+<div id="phase0" class="phase active">
+  <div class="accroche">
+    <div style="display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:10px;">
+      <span style="font-size:2.8rem;">🦉</span>
+      <div style="text-align:left;">
+        <h1 style="font-size:1.5rem;margin-bottom:4px;">L'infinitif et le verbe conjugué</h1>
+        <p style="font-size:.9rem;opacity:.9;">Tu vas apprendre à reconnaître la forme du verbe.<br>C'est plus simple qu'il n'y paraît — promis ! 😊</p>
+      </div>
+    </div>
+    <div class="meta-tags">
+      <span class="meta-tag">CE1</span>
+      <span class="meta-tag">Conjugaison</span>
+      <span class="meta-tag">15 min</span>
+      <span class="meta-tag">16 pts</span>
+    </div>
+  </div>
+
+  <div class="lecon-wrap">
+
+    <!-- BLOC 0 -->
+    <div id="bloc0" class="lecon-block revealed">
+      <h2>📖 Bloc 1 — L'infinitif : la forme de base</h2>
+      <p>Le <span class="highlight">verbe à l'infinitif</span> est la forme de base du verbe. C'est le mot qu'on trouve dans le dictionnaire. <strong>Il n'est pas conjugué</strong> : il ne change pas selon la personne.</p>
+      <div class="exemple">
+        🔍 Dans le dictionnaire : <strong>chanter</strong>, <strong>finir</strong>, <strong>prendre</strong>
+      </div>
+      <p>On reconnaît l'infinitif à sa terminaison :</p>
+      <div class="exemple">
+        🟠 <strong>-er</strong> → chant<strong>er</strong>, mang<strong>er</strong>, sauter<br>
+        🟠 <strong>-ir</strong> → fin<strong>ir</strong>, part<strong>ir</strong>, grandir<br>
+        🟠 <strong>-re</strong> → pren<strong>dre</strong>, écrire, lire
+      </div>
+      <div class="ugo-bubble">
+        <span class="ugo-icon">🦉</span>
+        <span>Ugo : L'infinitif ne change jamais ! Il reste toujours pareil, peu importe qui parle.</span>
+      </div>
+      <button class="btn-compris" onclick="revealBloc(1)">J'ai compris ! →</button>
+    </div>
+
+    <!-- BLOC 1 -->
+    <div id="bloc1" class="lecon-block">
+      <h2>🔄 Bloc 2 — Le verbe conjugué</h2>
+      <p>Le <span class="highlight">verbe conjugué</span> change selon la personne qui parle ou dont on parle.</p>
+      <div class="exemple">
+        <strong>chanter</strong> (infinitif) →
+        <table style="margin-top:8px;border-collapse:collapse;width:100%;">
+          <tr><td style="padding:3px 8px;color:#64748b;">Je</td><td style="padding:3px 8px;font-weight:700;">chante</td><td style="padding:3px 8px;color:#64748b;">Nous</td><td style="padding:3px 8px;font-weight:700;">chantons</td></tr>
+          <tr><td style="padding:3px 8px;color:#64748b;">Tu</td><td style="padding:3px 8px;font-weight:700;">chantes</td><td style="padding:3px 8px;color:#64748b;">Vous</td><td style="padding:3px 8px;font-weight:700;">chantez</td></tr>
+          <tr><td style="padding:3px 8px;color:#64748b;">Il / Elle</td><td style="padding:3px 8px;font-weight:700;">chante</td><td style="padding:3px 8px;color:#64748b;">Ils / Elles</td><td style="padding:3px 8px;font-weight:700;">chantent</td></tr>
+        </table>
+      </div>
+      <p>Le verbe conjugué s'accorde toujours avec un <span class="highlight">sujet</span>.</p>
+      <div class="exemple">
+        👤 <strong>Léa</strong> mange une pomme. → <em>mange</em> est conjugué<br>
+        🏃 Les enfants <strong>courent</strong> vite. → <em>courent</em> est conjugué
+      </div>
+      <button class="btn-compris" onclick="revealBloc(2)">J'ai compris ! →</button>
+    </div>
+
+    <!-- BLOC 2 -->
+    <div id="bloc2" class="lecon-block">
+      <h2>🔑 Bloc 3 — L'astuce du « je veux… »</h2>
+      <p>Pour savoir si un verbe est à l'<strong>infinitif</strong>, essaie de mettre <span class="highlight">« je veux… »</span> avant lui.</p>
+      <div class="exemple">
+        ✅ Je veux <strong>chanter</strong> → ça marche → <strong>infinitif</strong><br>
+        ❌ Je veux <strong>chante</strong> → ça ne marche pas → <strong>conjugué</strong>
+      </div>
+      <div class="astuce">
+        💡 <strong>Astuce :</strong> Si on peut dire « je veux + verbe » sans que ça sonne bizarre → c'est l'infinitif !
+      </div>
+      <div class="ugo-bubble">
+        <span class="ugo-icon">🦉</span>
+        <span>Ugo : Entraîne-toi avec des verbes de ta vie quotidienne : « je veux manger ? » → oui → infinitif !</span>
+      </div>
+      <button class="btn-compris" onclick="startEx()">Aux exercices ! 💪</button>
+    </div>
+
+  </div><!-- /lecon-wrap -->
+</div><!-- /phase0 -->
+
+<!-- ═══════════════════ PHASE 1 : EX1 (QCM) ═══════════════════ -->
+<div id="phase1" class="phase">
+  <div class="ex-wrap">
+    <div class="ex-header">
+      <h2>Exercice 1 — Infinitif ou conjugué ?</h2>
+      <p>Le verbe en gras est-il à l'infinitif ou conjugué ?</p>
+    </div>
+    <div class="score-bar">Score : <span id="score-ex1">0</span> / 4 pts</div>
+    <div id="qcm1-container"></div>
+    <button class="btn-suite" id="btn-ex1-suite" onclick="goPhase(2)">Exercice suivant →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════ PHASE 2 : EX2 (QCM) ═══════════════════ -->
+<div id="phase2" class="phase">
+  <div class="ex-wrap">
+    <div class="ex-header">
+      <h2>Exercice 2 — Trouve l'infinitif</h2>
+      <p>Parmi les 3 mots, lequel est à l'infinitif ?</p>
+    </div>
+    <div class="score-bar">Score : <span id="score-ex2">0</span> / 4 pts</div>
+    <div id="qcm2-container"></div>
+    <button class="btn-suite" id="btn-ex2-suite" onclick="goPhase(3)">Exercice suivant →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════ PHASE 3 : EX3 (DRAG) ═══════════════════ -->
+<div id="phase3" class="phase">
+  <div class="ex-wrap">
+    <div class="ex-header">
+      <h2>Exercice 3 — Range les verbes</h2>
+      <p>Tape sur le verbe, puis tape sur la bonne colonne.</p>
+    </div>
+    <div class="score-bar">Score : <span id="score-ex3">0</span> / 4 pts</div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
+      <div style="background:#fff7ed;border:2px solid #fed7aa;border-radius:12px;padding:12px;text-align:center;">
+        <div style="font-weight:800;color:#c2410c;margin-bottom:8px;">🔵 Infinitif</div>
+        <div id="col-inf" class="drag-col" onclick="dropToCol('inf')" style="min-height:80px;"></div>
+      </div>
+      <div style="background:#f0fdf4;border:2px solid #bbf7d0;border-radius:12px;padding:12px;text-align:center;">
+        <div style="font-weight:800;color:#16a34a;margin-bottom:8px;">🟢 Conjugué</div>
+        <div id="col-conj" class="drag-col" onclick="dropToCol('conj')" style="min-height:80px;"></div>
+      </div>
+    </div>
+
+    <div class="drag-pool" id="pool3"></div>
+    <div id="ex3-feedback" style="display:none;border-radius:10px;padding:10px;margin-top:8px;font-weight:600;font-size:.9rem;"></div>
+    <button class="btn-verif" onclick="verifyEx3()">Vérifier ✓</button>
+    <button class="btn-suite" id="btn-ex3-suite" onclick="goPhase(4)">Exercice suivant →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════ PHASE 4 : EX4 (SAISIE) ═══════════════════ -->
+<div id="phase4" class="phase">
+  <div class="ex-wrap">
+    <div class="ex-header">
+      <h2>Exercice 4 — L'infinitif du verbe</h2>
+      <p>Écris l'infinitif du verbe conjugué souligné.</p>
+    </div>
+    <div class="score-bar">Score : <span id="score-ex4">0</span> / 4 pts</div>
+    <div id="saisie4-container"></div>
+    <button class="btn-verif" onclick="verifyEx4()">Vérifier ✓</button>
+    <button class="btn-suite" id="btn-ex4-suite" onclick="showBilan()">Voir mon bilan 🏆</button>
+  </div>
+</div>
+
+<!-- ═══════════════════ PHASE 5 : BILAN ═══════════════════ -->
+<div id="phase5" class="phase">
+  <div class="bilan-wrap">
+    <div class="bilan-card">
+      <div style="font-size:2rem;">🏆</div>
+      <div class="stars">
+        <span class="star" id="star1">⭐</span>
+        <span class="star" id="star2">⭐</span>
+        <span class="star" id="star3">⭐</span>
+      </div>
+      <div class="score-big" id="bilan-score">0 / 16</div>
+      <div class="bilan-msg" id="bilan-msg"></div>
+      <div class="memo">
+        <h3>📖 À retenir</h3>
+        <p>✏️ <strong>L'infinitif</strong> est la forme de base du verbe (chanter, finir, prendre).<br>
+        🔄 <strong>Le verbe conjugué</strong> change avec le sujet (je chante, il chante…).<br>
+        🔑 <strong>Astuce :</strong> « je veux + verbe » → si ça marche, c'est l'infinitif !</p>
+      </div>
+      <button class="btn-retry" onclick="location.reload()">🔄 Recommencer</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── BARRE IMPRESSION ── -->
+<div class="print-bar">
+  <button class="print-btn" onclick="printLecon()">📖 Leçon</button>
+  <button class="print-btn" onclick="printExercices()">📝 Exercices</button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
+<script>
+// ══════════════════════════════════════════
+//  DONNÉES
+// ══════════════════════════════════════════
+
+// EX1 — infinitif ou conjugué ?
+var q1Data = [
+  {phrase:"Les enfants <strong>jouent</strong> dans le jardin.",correct:"conjugué",expl:"« jouent » change avec les enfants → conjugué."},
+  {phrase:"Léa aime <strong>chanter</strong> le matin.",correct:"infinitif",expl:"« chanter » est la forme de base → infinitif."},
+  {phrase:"Mon chat <strong>dort</strong> sur le canapé.",correct:"conjugué",expl:"« dort » s'accorde avec mon chat → conjugué."},
+  {phrase:"Il faut <strong>finir</strong> ses devoirs.",correct:"infinitif",expl:"Je veux finir → ça marche → infinitif."},
+];
+
+// EX2 — lequel est l'infinitif ?
+var q2Data = [
+  {opts:["mangeons","manger","mangez"],correct:"manger",expl:"« manger » se termine par -er → infinitif."},
+  {opts:["partir","partent","partons"],correct:"partir",expl:"« partir » se termine par -ir → infinitif."},
+  {opts:["lit","lire","lisent"],correct:"lire",expl:"« lire » se termine par -re → infinitif."},
+  {opts:["prenons","prendre","prennent"],correct:"prendre",expl:"« prendre » se termine par -re → infinitif."},
+];
+
+// EX3 — classer en infinitif / conjugué
+var ex3Items = [
+  {word:"courir",cat:"inf"},
+  {word:"nous mangeons",cat:"conj"},
+  {word:"écrire",cat:"inf"},
+  {word:"elle chante",cat:"conj"},
+  {word:"voir",cat:"inf"},
+  {word:"ils finissent",cat:"conj"},
+  {word:"dormir",cat:"inf"},
+  {word:"tu joues",cat:"conj"},
+];
+
+// EX4 — trouver l'infinitif d'un verbe conjugué
+var saisie4Data = [
+  {phrase:"Tom <u>mange</u> une pomme.",answer:"manger",expl:"mange → infinitif : manger"},
+  {phrase:"Nous <u>partons</u> à l'école.",answer:"partir",expl:"partons → infinitif : partir"},
+  {phrase:"Elle <u>lit</u> un livre.",answer:"lire",expl:"lit → infinitif : lire"},
+  {phrase:"Les oiseaux <u>chantent</u>.",answer:"chanter",expl:"chantent → infinitif : chanter"},
+];
+
+// ══════════════════════════════════════════
+//  ÉTAT
+// ══════════════════════════════════════════
+var score = 0;
+var TOTAL_PTS = 4 + 4 + 4 + 4; // = 16
+var ex1Done=0, ex2Done=0, ex3Verified=false, ex4Verified=false;
+var ex3Selected=null;
+var ex3Placed={}; // word → col
+
+// ══════════════════════════════════════════
+//  NAVIGATION PHASES
+// ══════════════════════════════════════════
+function goPhase(n){
+  document.querySelectorAll('.phase').forEach(function(p){p.classList.remove('active');});
+  var ph=document.getElementById('phase'+n);
+  ph.classList.add('active');
+  setTimeout(function(){ph.scrollIntoView({behavior:'smooth',block:'start'});},150);
+}
+
+function revealBloc(n){
+  var b=document.getElementById('bloc'+n);
+  if(b){b.classList.add('revealed');}
+  // masquer bouton du bloc précédent
+  var prev=document.getElementById('bloc'+(n-1));
+  if(prev){var btn=prev.querySelector('.btn-compris');if(btn)btn.style.display='none';}
+  setTimeout(function(){b.scrollIntoView({behavior:'smooth',block:'start'});},150);
+}
+
+function startEx(){
+  goPhase(1);
+}
+
+// ══════════════════════════════════════════
+//  EX1 — QCM infinitif ou conjugué
+// ══════════════════════════════════════════
+function shuffle(a){
+  var arr=a.slice();
+  for(var i=arr.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=arr[i];arr[i]=arr[j];arr[j]=t;}
+  return arr;
+}
+
+function buildQcm1(){
+  var c=document.getElementById('qcm1-container');
+  var options=['infinitif','conjugué'];
+  q1Data.forEach(function(q,i){
+    var opts=shuffle(options);
+    var card=document.createElement('div');
+    card.className='qcm-card';
+    card.innerHTML='<div class="question">Le verbe en gras est :</div>'
+      +'<div class="phrase-ex">'+q.phrase+'</div>'
+      +'<div class="qcm-options">'
+      +opts.map(function(o){return '<button class="qcm-btn" data-q="'+i+'" data-val="'+o+'" onclick="answerQ1(this,'+i+')">'+o+'</button>';}).join('')
+      +'</div>'
+      +'<div class="qcm-feedback" id="fb1-'+i+'"></div>';
+    c.appendChild(card);
+  });
+}
+
+function answerQ1(btn,i){
+  var card=btn.closest('.qcm-card');
+  if(card.dataset.done) return;
+  card.dataset.done='1';
+  var btns=card.querySelectorAll('.qcm-btn');
+  btns.forEach(function(b){b.disabled=true;});
+  var val=btn.dataset.val;
+  var correct=q1Data[i].correct;
+  var fb=document.getElementById('fb1-'+i);
+  if(val===correct){
+    btn.classList.add('correct');
+    score++;
+    document.getElementById('score-ex1').textContent=score;
+    fb.textContent='✅ '+q1Data[i].expl;
+    fb.className='qcm-feedback show ok';
+  } else {
+    btn.classList.add('wrong');
+    btns.forEach(function(b){if(b.dataset.val===correct)b.classList.add('correct');});
+    fb.textContent='❌ '+q1Data[i].expl;
+    fb.className='qcm-feedback show ko';
+  }
+  ex1Done++;
+  if(ex1Done===q1Data.length){
+    setTimeout(function(){document.getElementById('btn-ex1-suite').classList.add('show');},400);
+  }
+}
+
+// ══════════════════════════════════════════
+//  EX2 — QCM trouve l'infinitif
+// ══════════════════════════════════════════
+function buildQcm2(){
+  var c=document.getElementById('qcm2-container');
+  q2Data.forEach(function(q,i){
+    var opts=shuffle(q.opts);
+    var card=document.createElement('div');
+    card.className='qcm-card';
+    card.innerHTML='<div class="question">Lequel est à l\'infinitif ?</div>'
+      +'<div class="qcm-options">'
+      +opts.map(function(o){return '<button class="qcm-btn" data-q="'+i+'" data-val="'+o+'" onclick="answerQ2(this,'+i+')">'+o+'</button>';}).join('')
+      +'</div>'
+      +'<div class="qcm-feedback" id="fb2-'+i+'"></div>';
+    c.appendChild(card);
+  });
+}
+
+function answerQ2(btn,i){
+  var card=btn.closest('.qcm-card');
+  if(card.dataset.done) return;
+  card.dataset.done='1';
+  var btns=card.querySelectorAll('.qcm-btn');
+  btns.forEach(function(b){b.disabled=true;});
+  var val=btn.dataset.val;
+  var correct=q2Data[i].correct;
+  var fb=document.getElementById('fb2-'+i);
+  if(val===correct){
+    btn.classList.add('correct');
+    score++;
+    document.getElementById('score-ex2').textContent=score-ex1Done;
+    fb.textContent='✅ '+q2Data[i].expl;
+    fb.className='qcm-feedback show ok';
+  } else {
+    btn.classList.add('wrong');
+    btns.forEach(function(b){if(b.dataset.val===correct)b.classList.add('correct');});
+    fb.textContent='❌ '+q2Data[i].expl;
+    fb.className='qcm-feedback show ko';
+  }
+  ex2Done++;
+  if(ex2Done===q2Data.length){
+    setTimeout(function(){document.getElementById('btn-ex2-suite').classList.add('show');},400);
+  }
+}
+
+// score ex2 relatif
+var scoreEx1Final=0, scoreEx2Final=0;
+
+// ══════════════════════════════════════════
+//  EX3 — classement tap-to-select
+// ══════════════════════════════════════════
+function buildEx3(){
+  var pool=document.getElementById('pool3');
+  var items=shuffle(ex3Items);
+  items.forEach(function(it){
+    var chip=document.createElement('button');
+    chip.className='chip';
+    chip.textContent=it.word;
+    chip.dataset.cat=it.cat;
+    chip.onclick=function(){
+      if(ex3Verified) return;
+      document.querySelectorAll('#pool3 .chip').forEach(function(c){c.classList.remove('selected');});
+      chip.classList.add('selected');
+      ex3Selected=chip;
+    };
+    pool.appendChild(chip);
+  });
+}
+
+function dropToCol(col){
+  if(!ex3Selected||ex3Verified) return;
+  ex3Placed[ex3Selected.textContent]=col;
+  ex3Selected.classList.add('used');
+  ex3Selected.classList.remove('selected');
+  var colEl=document.getElementById('col-'+col);
+  var tag=document.createElement('span');
+  tag.style.cssText='display:inline-block;background:#fff;border:2px solid #e2e8f0;border-radius:20px;padding:4px 10px;margin:3px;font-size:.85rem;font-weight:700;';
+  tag.textContent=ex3Selected.textContent;
+  colEl.appendChild(tag);
+  ex3Selected=null;
+}
+
+function verifyEx3(){
+  if(ex3Verified) return;
+  var pts=0;
+  ex3Items.forEach(function(it){
+    var placed=ex3Placed[it.word];
+    var tags=document.querySelectorAll('#col-'+it.cat+' span');
+    // on va juste compter les bons placements
+  });
+  // recalcul propre : comparer ex3Placed avec ex3Items
+  ex3Items.forEach(function(it){
+    if(ex3Placed[it.word]===it.cat) pts++;
+  });
+  // score partiel sur 4 (8 items → 0.5 pt chacun, on arrondit → on les compte sur 4 en /2)
+  var ex3Score=Math.round(pts/2);
+  score+=ex3Score;
+  document.getElementById('score-ex3').textContent=ex3Score;
+  var fb=document.getElementById('ex3-feedback');
+  fb.style.display='block';
+  if(pts===8){
+    fb.style.background='#dcfce7';fb.style.color='#15803d';
+    fb.textContent='✅ Parfait ! Tu as classé tous les verbes correctement.';
+  } else {
+    fb.style.background='#fee2e2';fb.style.color='#dc2626';
+    fb.textContent='❌ '+pts+' verbe(s) sur 8 bien placé(s). Revois la leçon si besoin.';
+  }
+  ex3Verified=true;
+  setTimeout(function(){document.getElementById('btn-ex3-suite').classList.add('show');},400);
+}
+
+// ══════════════════════════════════════════
+//  EX4 — saisie infinitif
+// ══════════════════════════════════════════
+function buildSaisie4(){
+  var c=document.getElementById('saisie4-container');
+  saisie4Data.forEach(function(q,i){
+    var div=document.createElement('div');
+    div.className='saisie-item';
+    div.innerHTML='<div class="phrase-saisie">'+q.phrase+'</div>'
+      +'<input type="text" id="inp4-'+i+'" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false">'
+      +'<div class="saisie-feedback" id="sfb4-'+i+'"></div>';
+    c.appendChild(div);
+  });
+}
+
+function ns(s){return(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,' ').trim();}
+
+function verifyEx4(){
+  if(ex4Verified) return;
+  var pts=0;
+  saisie4Data.forEach(function(q,i){
+    var inp=document.getElementById('inp4-'+i);
+    var fb=document.getElementById('sfb4-'+i);
+    inp.disabled=true;
+    if(ns(inp.value)===ns(q.answer)){
+      pts++;
+      inp.className='saisie-item input correct-input';
+      fb.textContent='✅ '+q.expl;
+      fb.className='saisie-feedback show ok';
+    } else {
+      inp.className='saisie-item input wrong-input';
+      fb.textContent='❌ Réponse : '+q.answer+'. '+q.expl;
+      fb.className='saisie-feedback show ko';
+    }
+  });
+  score+=pts;
+  document.getElementById('score-ex4').textContent=pts;
+  ex4Verified=true;
+  setTimeout(function(){document.getElementById('btn-ex4-suite').classList.add('show');},400);
+}
+
+// ══════════════════════════════════════════
+//  BILAN
+// ══════════════════════════════════════════
+function showBilan(){
+  if(typeof enregistrerProgression==='function'){ enregistrerProgression('C01', score, TOTAL_PTS); }
+  goPhase(5);
+  document.getElementById('bilan-score').textContent=score+' / '+TOTAL_PTS;
+  var pct=score/TOTAL_PTS;
+  var msg='';
+  if(pct>=0.9) msg='Brillant ⭐ Tu maîtrises parfaitement !';
+  else if(pct>=0.8) msg='Bien maîtrisé 💪 Excellent travail !';
+  else if(pct>=0.5) msg='En cours 📚 Continue comme ça !';
+  else msg='À retravailler 🔁 Relis la leçon et réessaie !';
+  document.getElementById('bilan-msg').textContent=msg;
+
+  // étoiles avec IIFE anti-closure
+  var seuils=[Math.ceil(TOTAL_PTS*0.33),Math.ceil(TOTAL_PTS*0.66),Math.ceil(TOTAL_PTS*0.89)];
+  ['star1','star2','star3'].forEach(function(id,i){
+    var el=document.getElementById(id);
+    if(score>=seuils[i]){
+      (function(elem,delay){setTimeout(function(){elem.classList.add('earned');},delay);})(el,300+i*400);
+    }
+  });
+
+  // confettis
+  (function(){
+    if(score<Math.ceil(TOTAL_PTS*0.5)) return;
+    var colors=['#c2410c','#ea580c','#fbbf24','#16a34a','#0891b2'];
+    for(var k=0;k<40;k++){
+      (function(delay,color,left){
+        setTimeout(function(){
+          var d=document.createElement('div');
+          d.style.cssText='position:fixed;top:-10px;left:'+left+'%;width:8px;height:8px;background:'+color+';border-radius:50%;pointer-events:none;z-index:9999;animation:fall '+(1.2+Math.random())+'s ease-in forwards;';
+          document.body.appendChild(d);
+          setTimeout(function(){d.remove();},2000);
+        },delay);
+      })(k*60, colors[k%colors.length], Math.random()*100);
+    }
+  })();
+}
+
+// animation confetti
+var style=document.createElement('style');
+style.textContent='@keyframes fall{0%{transform:translateY(0) rotate(0);}100%{transform:translateY(100vh) rotate(720deg);opacity:0;}}';
+document.head.appendChild(style);
+
+// ══════════════════════════════════════════
+//  PRINT
+// ══════════════════════════════════════════
+function printLecon(){
+  var w=window.open('','_blank');
+  w.document.write('<html><head><title>Leçon C01</title><style>body{font-family:Nunito,sans-serif;padding:20px;font-size:14px;}h1{color:#c2410c;}h2{color:#c2410c;margin-top:16px;}.bloc{margin-bottom:14px;border-left:4px solid #c2410c;padding-left:12px;}.ex{background:#fff7ed;padding:8px;border-radius:6px;margin:6px 0;}</style></head><body>');
+  w.document.write('<h1>✏️ L\'infinitif et le verbe conjugué — CE1</h1>');
+  w.document.write('<div class="bloc"><h2>Bloc 1 — L\'infinitif</h2><p>Le verbe à l\'infinitif est la forme de base. On le trouve dans le dictionnaire.<br>Terminaisons : <strong>-er</strong> (chanter), <strong>-ir</strong> (finir), <strong>-re</strong> (prendre).</p></div>');
+  w.document.write('<div class="bloc"><h2>Bloc 2 — Le verbe conjugué</h2><p>Le verbe conjugué change avec le sujet : je chante, tu chantes, il chante…</p></div>');
+  w.document.write('<div class="bloc"><h2>Bloc 3 — Astuce « je veux… »</h2><p>Si on peut dire « je veux + verbe » → c\'est l\'infinitif !<br><span class="ex">Je veux chanter ✅ → infinitif | Je veux chante ❌ → conjugué</span></p></div>');
+  w.document.write('</body></html>');
+  w.document.close();w.print();
+}
+
+function printExercices(){
+  var w=window.open('','_blank');
+  w.document.write('<html><head><title>Exercices C01</title><style>body{font-family:Nunito,sans-serif;padding:20px;font-size:13px;}h1{color:#c2410c;}h2{color:#c2410c;margin-top:16px;}.item{margin:8px 0;padding:6px 0;border-bottom:1px solid #eee;}.blank{display:inline-block;width:80px;border-bottom:2px solid #333;}</style></head><body>');
+  w.document.write('<h1>Exercices — L\'infinitif et le verbe conjugué</h1>');
+  w.document.write('<h2>Ex 1 — Infinitif ou conjugué ?</h2>');
+  q1Data.forEach(function(q,i){w.document.write('<div class="item">'+(i+1)+'. '+q.phrase.replace(/<[^>]+>/g,function(m){return m.includes('strong')?m:'';})+'<br>□ infinitif &nbsp;&nbsp; □ conjugué</div>');});
+  w.document.write('<h2>Ex 2 — Trouve l\'infinitif</h2>');
+  q2Data.forEach(function(q,i){w.document.write('<div class="item">'+(i+1)+'. '+q.opts.join(' &nbsp;|&nbsp; ')+'</div>');});
+  w.document.write('<h2>Ex 3 — Classe les verbes</h2>');
+  w.document.write('<p>INFINITIF : ________________ | CONJUGUÉ : ________________</p>');
+  ex3Items.forEach(function(it){w.document.write('<span style="margin:4px;border:1px solid #ccc;border-radius:8px;padding:3px 8px;">'+it.word+'</span> ');});
+  w.document.write('<h2>Ex 4 — Écris l\'infinitif</h2>');
+  saisie4Data.forEach(function(q,i){w.document.write('<div class="item">'+(i+1)+'. '+q.phrase.replace(/<u>/g,'').replace(/<\/u>/g,'')+'&nbsp; Infinitif : <span class="blank"></span></div>');});
+  w.document.write('</body></html>');
+  w.document.close();w.print();
+}
+
+// ══════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════
+buildQcm1();
+buildQcm2();
+buildEx3();
+buildSaisie4();
+
+// Corriger les scores relatifs affichés par exercice
+// ex2 score doit être relatif (pts de ex2 seulement)
+// Patch : on sauvegarde le score avant chaque ex
+var scoreBeforeEx = [0,0,0,0];
+document.getElementById('btn-ex1-suite').addEventListener('click',function(){scoreBeforeEx[1]=score;});
+document.getElementById('btn-ex2-suite').addEventListener('click',function(){scoreBeforeEx[2]=score;});
+document.getElementById('btn-ex3-suite').addEventListener('click',function(){scoreBeforeEx[3]=score;});
+
+// Patch affichages relatifs
+var _answerQ1=answerQ1;
+answerQ1=function(btn,i){
+  _answerQ1(btn,i);
+  document.getElementById('score-ex1').textContent=score-scoreBeforeEx[0];
+};
+var _answerQ2=answerQ2;
+answerQ2=function(btn,i){
+  _answerQ2(btn,i);
+  document.getElementById('score-ex2').textContent=score-scoreBeforeEx[1];
+};
+</script>
+</body>
+</html>

@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Présent d'être et avoir – CE1</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Nunito',sans-serif;background:#fafaf8;color:#1e293b;font-size:18px;min-height:100vh;}
+:root{--accent:#4338ca;--accent-light:#eef2ff;--accent-mid:#c7d2fe;}
+
+.phase{display:none;}
+.phase.active{display:block;}
+
+.site-header{background:var(--accent);color:#fff;padding:12px 20px;display:flex;align-items:center;gap:12px;}
+.site-header a{color:#fff;text-decoration:none;font-weight:700;font-size:15px;}
+.site-header span{font-weight:800;font-size:17px;}
+
+.accroche{background:linear-gradient(135deg,var(--accent) 0%,#6366f1 100%);color:#fff;padding:28px 20px 22px;text-align:center;}
+.accroche-inner{display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:12px;}
+.accroche-inner .ugo-big{font-size:3rem;flex-shrink:0;}
+.accroche-inner .accroche-text{text-align:left;}
+.accroche-inner h1{font-size:1.45rem;font-weight:800;margin-bottom:4px;}
+.accroche-inner p{font-size:.9rem;opacity:.9;line-height:1.5;}
+.meta-tags{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:14px;}
+.meta-tag{background:rgba(255,255,255,.25);border-radius:20px;padding:4px 12px;font-size:.85rem;font-weight:700;}
+
+.lecon-wrap{max-width:680px;margin:0 auto;padding:20px 16px;}
+.lecon-block{background:#fff;border-radius:16px;border-left:5px solid var(--accent);padding:20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.06);display:none;}
+.lecon-block.revealed{display:block;}
+.lecon-block h2{color:var(--accent);font-size:1.1rem;font-weight:800;margin-bottom:10px;}
+.lecon-block p{line-height:1.6;margin-bottom:8px;font-size:1rem;}
+.lecon-block .exemple{background:var(--accent-light);border-radius:10px;padding:10px 14px;margin:8px 0;font-size:.95rem;}
+.highlight{color:var(--accent);font-weight:800;}
+.astuce{background:#f0fdf4;border-left:4px solid #16a34a;border-radius:8px;padding:10px 14px;margin:8px 0;font-size:.9rem;}
+.ugo-bubble{background:#fff3cd;border-radius:14px;padding:12px 16px;margin:10px 0;display:flex;align-items:flex-start;gap:10px;font-size:.9rem;}
+.ugo-bubble .ugo-icon{font-size:1.6rem;flex-shrink:0;}
+
+/* Tableau conjugaison */
+.conj-table{width:100%;border-collapse:collapse;margin:10px 0;font-size:.95rem;}
+.conj-table td{padding:5px 10px;}
+.conj-table td:nth-child(1),.conj-table td:nth-child(3){color:#64748b;width:90px;}
+.conj-table td:nth-child(2),.conj-table td:nth-child(4){font-weight:800;color:var(--accent);}
+.conj-table tr:nth-child(odd){background:rgba(99,102,241,.05);border-radius:6px;}
+
+.btn-compris{background:var(--accent);color:#fff;border:none;border-radius:14px;padding:14px 28px;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;margin:12px auto 0;display:block;width:fit-content;}
+.btn-compris:hover{background:#3730a3;}
+.btn-suite{display:none;background:var(--accent);color:#fff;border:none;border-radius:14px;padding:14px 28px;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;margin:16px auto;display:none;}
+.btn-suite.show{display:block;}
+
+.ex-wrap{max-width:680px;margin:0 auto;padding:20px 16px;}
+.ex-header{background:var(--accent);color:#fff;border-radius:14px;padding:14px 18px;margin-bottom:18px;}
+.ex-header h2{font-size:1.1rem;font-weight:800;}
+.ex-header p{font-size:.85rem;opacity:.9;margin-top:4px;}
+.score-bar{background:#fff;border-radius:12px;padding:10px 16px;margin-bottom:16px;text-align:center;font-weight:700;font-size:.95rem;box-shadow:0 2px 6px rgba(0,0,0,.06);}
+
+.qcm-card{background:#fff;border-radius:14px;padding:16px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.06);}
+.qcm-card .question{font-weight:700;font-size:1rem;margin-bottom:10px;line-height:1.5;}
+.qcm-card .phrase-ex{font-size:.95rem;font-style:italic;background:var(--accent-light);border-radius:8px;padding:8px 12px;margin-bottom:10px;}
+.qcm-options{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.qcm-btn{background:#f1f5f9;border:2px solid #e2e8f0;border-radius:12px;padding:10px 8px;font-family:'Nunito',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;transition:all .2s;}
+.qcm-btn:hover{border-color:var(--accent);background:var(--accent-light);}
+.qcm-btn.correct{background:#dcfce7;border-color:#16a34a;color:#15803d;}
+.qcm-btn.wrong{background:#fee2e2;border-color:#dc2626;color:#dc2626;}
+.qcm-feedback{display:none;border-radius:10px;padding:8px 12px;margin-top:8px;font-size:.88rem;font-weight:600;}
+.qcm-feedback.show{display:block;}
+.qcm-feedback.ok{background:#dcfce7;color:#15803d;}
+.qcm-feedback.ko{background:#fee2e2;color:#dc2626;}
+
+/* Drag tap-to-select */
+.drag-pool{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;}
+.chip{background:#fff;border:2px solid var(--accent-mid);border-radius:20px;padding:7px 14px;font-family:'Nunito',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;transition:all .2s;user-select:none;}
+.chip:hover{background:var(--accent-light);}
+.chip.selected{background:var(--accent);color:#fff;border-color:var(--accent);}
+.chip.used{opacity:.35;pointer-events:none;}
+.drag-phrases{display:flex;flex-direction:column;gap:10px;}
+.drag-item{background:#fff;border-radius:12px;padding:12px 14px;box-shadow:0 1px 6px rgba(0,0,0,.07);display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.drag-item .phrase-txt{font-size:.95rem;flex:1;min-width:120px;}
+.drop-zone{border:2px dashed #cbd5e1;border-radius:10px;min-width:80px;min-height:34px;display:flex;align-items:center;justify-content:center;font-size:.85rem;color:#94a3b8;padding:4px 8px;cursor:pointer;transition:all .2s;}
+.drop-zone.filled{border-color:var(--accent);background:var(--accent-light);color:var(--accent);font-weight:700;}
+.drop-zone.correct-zone{border-color:#16a34a;background:#dcfce7;color:#15803d;}
+.drop-zone.wrong-zone{border-color:#dc2626;background:#fee2e2;color:#dc2626;}
+.drag-expl{display:none;font-size:.82rem;font-weight:600;margin-top:4px;width:100%;}
+.drag-expl.show{display:block;}
+.drag-expl.ok{color:#15803d;}
+.drag-expl.ko{color:#dc2626;}
+.btn-verif{background:#0891b2;color:#fff;border:none;border-radius:12px;padding:12px 24px;font-family:'Nunito',sans-serif;font-size:.95rem;font-weight:800;cursor:pointer;margin-top:12px;display:block;}
+.btn-verif:hover{background:#0e7490;}
+.btn-verif:disabled{opacity:.5;cursor:default;}
+
+/* Saisie */
+.saisie-item{background:#fff;border-radius:12px;padding:14px;margin-bottom:12px;box-shadow:0 1px 6px rgba(0,0,0,.07);}
+.saisie-item .phrase-saisie{font-size:.95rem;margin-bottom:8px;line-height:1.6;}
+.saisie-item input{border:2px solid #cbd5e1;border-radius:10px;padding:8px 12px;font-family:'Nunito',sans-serif;font-size:.95rem;width:120px;outline:none;}
+.saisie-item input:focus{border-color:var(--accent);}
+.saisie-item input.correct-input{border-color:#16a34a;background:#dcfce7;}
+.saisie-item input.wrong-input{border-color:#dc2626;background:#fee2e2;}
+.saisie-feedback{display:none;font-size:.85rem;font-weight:600;margin-top:6px;}
+.saisie-feedback.show{display:block;}
+.saisie-feedback.ok{color:#15803d;}
+.saisie-feedback.ko{color:#dc2626;}
+
+/* Bilan */
+.bilan-wrap{max-width:680px;margin:0 auto;padding:24px 16px;text-align:center;}
+.bilan-card{background:#fff;border-radius:20px;padding:28px 20px;box-shadow:0 4px 20px rgba(0,0,0,.08);}
+.stars{font-size:2.5rem;margin:16px 0;}
+.star{display:inline-block;filter:grayscale(1);transition:filter .3s,transform .3s;}
+.star.earned{filter:none;}
+@keyframes starPop{0%{transform:scale(0)}60%{transform:scale(1.3)}100%{transform:scale(1)}}
+.score-big{font-size:2.2rem;font-weight:800;color:var(--accent);margin:10px 0;}
+.bilan-msg{font-size:1rem;margin:8px 0 16px;color:#475569;}
+.memo{background:var(--accent-light);border-radius:14px;padding:16px;margin-top:16px;text-align:left;}
+.memo h3{color:var(--accent);font-weight:800;margin-bottom:8px;}
+.memo p{font-size:.9rem;line-height:1.7;}
+.btn-retry{background:var(--accent);color:#fff;border:none;border-radius:14px;padding:13px 28px;font-family:'Nunito',sans-serif;font-size:.95rem;font-weight:800;cursor:pointer;margin-top:16px;}
+
+.print-bar{position:fixed;bottom:16px;right:16px;display:flex;flex-direction:column;gap:8px;z-index:100;}
+.print-btn{background:#fff;border:2px solid var(--accent);color:var(--accent);border-radius:12px;padding:8px 14px;font-family:'Nunito',sans-serif;font-size:.8rem;font-weight:700;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.1);}
+.print-btn:hover{background:var(--accent);color:#fff;}
+
+@media print{.print-bar,.site-header,.btn-compris,.btn-suite,.btn-verif,.btn-retry{display:none!important;}}
+@media(max-width:480px){.qcm-options{grid-template-columns:1fr;}.accroche-inner{flex-direction:column;text-align:center;}.accroche-inner .accroche-text{text-align:center;}}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <a href="../ce1.html">← CE1</a>
+  <span>L'Atelier du Devoir</span>
+</header>
+
+<!-- ═══ PHASE 0 — LEÇON ═══ -->
+<div id="phase0" class="phase active">
+  <div class="accroche">
+    <div class="accroche-inner">
+      <span class="ugo-big">🦉</span>
+      <div class="accroche-text">
+        <h1>Être et avoir au présent</h1>
+        <p>Ces deux verbes sont les plus importants de la langue française.<br>On les utilise dans presque toutes les phrases !</p>
+      </div>
+    </div>
+    <div class="meta-tags">
+      <span class="meta-tag">CE1</span>
+      <span class="meta-tag">Conjugaison</span>
+      <span class="meta-tag">15 min</span>
+      <span class="meta-tag">16 pts</span>
+    </div>
+  </div>
+
+  <div class="lecon-wrap">
+
+    <!-- BLOC 0 -->
+    <div id="bloc0" class="lecon-block revealed">
+      <h2>📖 Bloc 1 — Le verbe ÊTRE au présent</h2>
+      <p>Le verbe <span class="highlight">être</span> est un verbe très important. Il sert à dire <strong>ce qu'on est</strong> ou <strong>où on est</strong>.</p>
+      <div class="exemple">
+        <table class="conj-table">
+          <tr><td>Je</td><td>suis</td><td>Nous</td><td>sommes</td></tr>
+          <tr><td>Tu</td><td>es</td><td>Vous</td><td>êtes</td></tr>
+          <tr><td>Il / Elle</td><td>est</td><td>Ils / Elles</td><td>sont</td></tr>
+        </table>
+      </div>
+      <div class="exemple">
+        👧 Je <strong>suis</strong> contente. · Il <strong>est</strong> grand. · Nous <strong>sommes</strong> à l'école.
+      </div>
+      <div class="ugo-bubble">
+        <span class="ugo-icon">🦉</span>
+        <span>Ugo : Attention ! Le verbe <em>être</em> est irrégulier : ses formes changent beaucoup. Il faut les apprendre par cœur !</span>
+      </div>
+      <button class="btn-compris" onclick="revealBloc(1)">J'ai compris ! →</button>
+    </div>
+
+    <!-- BLOC 1 -->
+    <div id="bloc1" class="lecon-block">
+      <h2>📖 Bloc 2 — Le verbe AVOIR au présent</h2>
+      <p>Le verbe <span class="highlight">avoir</span> sert à dire <strong>ce qu'on possède</strong> ou à former d'autres temps (comme le passé composé).</p>
+      <div class="exemple">
+        <table class="conj-table">
+          <tr><td>J'</td><td>ai</td><td>Nous</td><td>avons</td></tr>
+          <tr><td>Tu</td><td>as</td><td>Vous</td><td>avez</td></tr>
+          <tr><td>Il / Elle</td><td>a</td><td>Ils / Elles</td><td>ont</td></tr>
+        </table>
+      </div>
+      <div class="exemple">
+        🎒 J'<strong>ai</strong> un cartable. · Elle <strong>a</strong> un chat. · Ils <strong>ont</strong> faim.
+      </div>
+      <div class="ugo-bubble">
+        <span class="ugo-icon">🦉</span>
+        <span>Ugo : Remarque que « je » devient « j' » devant <em>ai</em> parce que <em>ai</em> commence par une voyelle. C'est la règle de l'élision !</span>
+      </div>
+      <button class="btn-compris" onclick="revealBloc(2)">J'ai compris ! →</button>
+    </div>
+
+    <!-- BLOC 2 -->
+    <div id="bloc2" class="lecon-block">
+      <h2>🔑 Bloc 3 — Être ou Avoir ?</h2>
+      <p>Comment choisir entre <span class="highlight">être</span> et <span class="highlight">avoir</span> ?</p>
+      <div class="astuce">
+        💙 <strong>ÊTRE</strong> → on parle de ce qu'on est, de comment on est, ou d'où on est.<br>
+        <em>Je suis fatigué. Elle est à Paris.</em>
+      </div>
+      <div class="astuce" style="background:#fff7ed;border-color:#ea580c;">
+        🟠 <strong>AVOIR</strong> → on parle de ce qu'on possède ou ressent.<br>
+        <em>J'ai un livre. Tu as froid.</em>
+      </div>
+      <div class="ugo-bubble">
+        <span class="ugo-icon">🦉</span>
+        <span>Ugo : Astuce mémo — <strong>ÊTRE</strong> = état ou lieu · <strong>AVOIR</strong> = possession. Ces deux verbes vont t'accompagner toute ta vie scolaire !</span>
+      </div>
+      <button class="btn-compris" onclick="startEx()">Aux exercices ! 💪</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══ PHASE 1 — EX1 QCM être ═══ -->
+<div id="phase1" class="phase">
+  <div class="ex-wrap">
+    <div class="ex-header">
+      <h2>Exercice 1 — Conjugue ÊTRE</h2>
+      <p>Quelle est la bonne forme du verbe être ?</p>
+    </div>
+    <div class="score-bar">Score : <span id="score-ex1">0</span> / 4 pts</div>
+    <div id="qcm1-container"></div>
+    <button class="btn-suite" id="btn-ex1-suite" onclick="goPhase(2)">Exercice suivant →</button>
+  </div>
+</div>
+
+<!-- ═══ PHASE 2 — EX2 QCM avoir ═══ -->
+<div id="phase2" class="phase">
+  <div class="ex-wrap">
+    <div class="ex-header">
+      <h2>Exercice 2 — Conjugue AVOIR</h2>
+      <p>Quelle est la bonne forme du verbe avoir ?</p>
+    </div>
+    <div class="score-bar">Score : <span id="score-ex2">0</span> / 4 pts</div>
+    <div id="qcm2-container"></div>
+    <button class="btn-suite" id="btn-ex2-suite" onclick="goPhase(3)">Exercice suivant →</button>
+  </div>
+</div>
+
+<!-- ═══ PHASE 3 — EX3 DRAG être/avoir ═══ -->
+<div id="phase3" class="phase">
+  <div class="ex-wrap">
+    <div class="ex-header">
+      <h2>Exercice 3 — Être ou Avoir ?</h2>
+      <p>Tape sur la forme, puis tape sur la bonne case de la phrase.</p>
+    </div>
+    <div class="score-bar">Score : <span id="score-ex3">0</span> / 4 pts</div>
+    <div class="drag-pool" id="pool3"></div>
+    <div class="drag-phrases" id="drag3-phrases"></div>
+    <button class="btn-verif" id="btn-verif3" onclick="verifyEx3()">Vérifier ✓</button>
+    <button class="btn-suite" id="btn-ex3-suite" onclick="goPhase(4)">Exercice suivant →</button>
+  </div>
+</div>
+
+<!-- ═══ PHASE 4 — EX4 SAISIE ═══ -->
+<div id="phase4" class="phase">
+  <div class="ex-wrap">
+    <div class="ex-header">
+      <h2>Exercice 4 — Écris la bonne forme</h2>
+      <p>Complète avec être ou avoir au présent.</p>
+    </div>
+    <div class="score-bar">Score : <span id="score-ex4">0</span> / 4 pts</div>
+    <div id="saisie4-container"></div>
+    <button class="btn-verif" id="btn-verif4" onclick="verifyEx4()">Vérifier ✓</button>
+    <button class="btn-suite" id="btn-ex4-suite" onclick="showBilan()">Voir mon bilan 🏆</button>
+  </div>
+</div>
+
+<!-- ═══ PHASE 5 — BILAN ═══ -->
+<div id="phase5" class="phase">
+  <div class="bilan-wrap">
+    <div class="bilan-card">
+      <div style="font-size:2rem;">🏆</div>
+      <div class="stars">
+        <span class="star" id="star1">⭐</span>
+        <span class="star" id="star2">⭐</span>
+        <span class="star" id="star3">⭐</span>
+      </div>
+      <div class="score-big" id="bilan-score">0 / 16</div>
+      <div class="bilan-msg" id="bilan-msg"></div>
+      <div class="memo">
+        <h3>📖 À retenir</h3>
+        <p>
+          💙 <strong>ÊTRE</strong> : je suis · tu es · il est · nous sommes · vous êtes · ils sont<br>
+          🟠 <strong>AVOIR</strong> : j'ai · tu as · il a · nous avons · vous avez · ils ont<br>
+          🔑 ÊTRE = état ou lieu · AVOIR = possession ou sensation
+        </p>
+      </div>
+      <button class="btn-retry" onclick="location.reload()">🔄 Recommencer</button>
+    </div>
+  </div>
+</div>
+
+<div class="print-bar">
+  <button class="print-btn" onclick="printLecon()">📖 Leçon</button>
+  <button class="print-btn" onclick="printExercices()">📝 Exercices</button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
+<script>
+// ══ DONNÉES ══
+
+var q1Data = [
+  {sujet:"Léa",correct:"est",opts:["es","est","sont"],expl:"Léa = elle → elle est."},
+  {sujet:"Nous",correct:"sommes",opts:["sont","êtes","sommes"],expl:"Nous → nous sommes."},
+  {sujet:"Tu",correct:"es",opts:["est","es","suis"],expl:"Tu → tu es."},
+  {sujet:"Ils",correct:"sont",opts:["êtes","sont","sommes"],expl:"Ils → ils sont."},
+];
+
+var q2Data = [
+  {sujet:"J'",correct:"ai",opts:["as","ai","a"],expl:"Je → j'ai (élision devant voyelle)."},
+  {sujet:"Vous",correct:"avez",opts:["avons","ont","avez"],expl:"Vous → vous avez."},
+  {sujet:"Elle",correct:"a",opts:["ai","as","a"],expl:"Elle → elle a."},
+  {sujet:"Nous",correct:"avons",opts:["avez","avons","ont"],expl:"Nous → nous avons."},
+];
+
+// EX3 — drag : compléter avec être ou avoir (formes mélangées)
+var drag3Data = [
+  {avant:"Mon frère",apres:"très grand.",answer:"est",expl:"Mon frère = il → il est."},
+  {avant:"Nous",apres:"un chien.",answer:"avons",expl:"Nous → nous avons."},
+  {avant:"Tu",apres:"fatigué ?",answer:"es",expl:"Tu → tu es."},
+  {avant:"Elles",apres:"de la chance.",answer:"ont",expl:"Elles → elles ont."},
+];
+
+var drag3Pool = ["est","avons","es","ont","suis","avez","sommes","a"];
+
+// EX4 — saisie
+var saisie4Data = [
+  {phrase:"Je _____ content aujourd'hui.",answer:"suis",expl:"Je → je suis (verbe être)."},
+  {phrase:"Vous _____ un beau jardin.",answer:"avez",expl:"Vous → vous avez (verbe avoir)."},
+  {phrase:"Il _____ à la maison.",answer:"est",expl:"Il → il est (verbe être)."},
+  {phrase:"Ils _____ deux chats.",answer:"ont",expl:"Ils → ils ont (verbe avoir)."},
+];
+
+// ══ ÉTAT ══
+var score = 0;
+var TOTAL_PTS = 4 + 4 + 4 + 4; // = 16
+var ex1Done=0, ex2Done=0, ex3Verified=false, ex4Verified=false;
+var drag3Selected=null, drag3Placed={};
+var scoreSnap=[0,0,0,0];
+
+// ══ NAVIGATION ══
+function goPhase(n){
+  document.querySelectorAll('.phase').forEach(function(p){p.classList.remove('active');});
+  var ph=document.getElementById('phase'+n);
+  ph.classList.add('active');
+  setTimeout(function(){ph.scrollIntoView({behavior:'smooth',block:'start'});},150);
+}
+
+function revealBloc(n){
+  var b=document.getElementById('bloc'+n);
+  if(b) b.classList.add('revealed');
+  var prev=document.getElementById('bloc'+(n-1));
+  if(prev){var btn=prev.querySelector('.btn-compris');if(btn)btn.style.display='none';}
+  setTimeout(function(){b.scrollIntoView({behavior:'smooth',block:'start'});},150);
+}
+
+function startEx(){ scoreSnap[0]=score; goPhase(1); }
+
+// ══ UTILS ══
+function shuffle(a){
+  var arr=a.slice();
+  for(var i=arr.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=arr[i];arr[i]=arr[j];arr[j]=t;}
+  return arr;
+}
+
+// ══ EX1 — QCM ÊTRE ══
+function buildQcm1(){
+  var c=document.getElementById('qcm1-container');
+  q1Data.forEach(function(q,i){
+    var opts=shuffle(q.opts);
+    var card=document.createElement('div');
+    card.className='qcm-card';
+    card.innerHTML='<div class="question"><strong>'+q.sujet+'</strong> _____ </div>'
+      +'<div class="qcm-options">'
+      +opts.map(function(o){return '<button class="qcm-btn" onclick="answerQ1(this,'+i+')" data-val="'+o+'">'+o+'</button>';}).join('')
+      +'</div><div class="qcm-feedback" id="fb1-'+i+'"></div>';
+    c.appendChild(card);
+  });
+}
+
+function answerQ1(btn,i){
+  var card=btn.closest('.qcm-card');
+  if(card.dataset.done) return;
+  card.dataset.done='1';
+  card.querySelectorAll('.qcm-btn').forEach(function(b){
+    b.disabled=true;
+    if(b.dataset.val===q1Data[i].correct) b.classList.add('correct');
+  });
+  var fb=document.getElementById('fb1-'+i);
+  if(btn.dataset.val===q1Data[i].correct){
+    score++; document.getElementById('score-ex1').textContent=score-scoreSnap[0];
+    fb.textContent='✅ '+q1Data[i].expl; fb.className='qcm-feedback show ok';
+  } else {
+    btn.classList.add('wrong');
+    fb.textContent='❌ '+q1Data[i].expl; fb.className='qcm-feedback show ko';
+  }
+  ex1Done++;
+  if(ex1Done===q1Data.length) setTimeout(function(){
+    scoreSnap[1]=score;
+    document.getElementById('btn-ex1-suite').classList.add('show');
+  },400);
+}
+
+// ══ EX2 — QCM AVOIR ══
+function buildQcm2(){
+  var c=document.getElementById('qcm2-container');
+  q2Data.forEach(function(q,i){
+    var opts=shuffle(q.opts);
+    var card=document.createElement('div');
+    card.className='qcm-card';
+    card.innerHTML='<div class="question"><strong>'+q.sujet+'</strong> _____ </div>'
+      +'<div class="qcm-options">'
+      +opts.map(function(o){return '<button class="qcm-btn" onclick="answerQ2(this,'+i+')" data-val="'+o+'">'+o+'</button>';}).join('')
+      +'</div><div class="qcm-feedback" id="fb2-'+i+'"></div>';
+    c.appendChild(card);
+  });
+}
+
+function answerQ2(btn,i){
+  var card=btn.closest('.qcm-card');
+  if(card.dataset.done) return;
+  card.dataset.done='1';
+  card.querySelectorAll('.qcm-btn').forEach(function(b){
+    b.disabled=true;
+    if(b.dataset.val===q2Data[i].correct) b.classList.add('correct');
+  });
+  var fb=document.getElementById('fb2-'+i);
+  if(btn.dataset.val===q2Data[i].correct){
+    score++; document.getElementById('score-ex2').textContent=score-scoreSnap[1];
+    fb.textContent='✅ '+q2Data[i].expl; fb.className='qcm-feedback show ok';
+  } else {
+    btn.classList.add('wrong');
+    fb.textContent='❌ '+q2Data[i].expl; fb.className='qcm-feedback show ko';
+  }
+  ex2Done++;
+  if(ex2Done===q2Data.length) setTimeout(function(){
+    scoreSnap[2]=score;
+    document.getElementById('btn-ex2-suite').classList.add('show');
+  },400);
+}
+
+// ══ EX3 — DRAG tap-to-select ══
+function buildEx3(){
+  var pool=document.getElementById('pool3');
+  shuffle(drag3Pool).forEach(function(w){
+    var chip=document.createElement('button');
+    chip.className='chip'; chip.textContent=w;
+    chip.onclick=function(){
+      if(ex3Verified) return;
+      document.querySelectorAll('#pool3 .chip').forEach(function(c){c.classList.remove('selected');});
+      chip.classList.add('selected'); drag3Selected=chip;
+    };
+    pool.appendChild(chip);
+  });
+
+  var cont=document.getElementById('drag3-phrases');
+  drag3Data.forEach(function(d,i){
+    var item=document.createElement('div');
+    item.className='drag-item';
+    item.innerHTML='<span class="phrase-txt">'+d.avant+'</span>'
+      +'<span class="drop-zone" id="dz3-'+i+'" onclick="dropDz3('+i+')">…</span>'
+      +'<span class="phrase-txt">'+d.apres+'</span>'
+      +'<div class="drag-expl" id="de3-'+i+'"></div>';
+    cont.appendChild(item);
+  });
+}
+
+function dropDz3(i){
+  if(!drag3Selected||ex3Verified) return;
+  var dz=document.getElementById('dz3-'+i);
+  // libérer la case précédente si déjà remplie
+  if(drag3Placed[i]){
+    var oldChip=drag3Placed[i];
+    oldChip.classList.remove('used'); oldChip.classList.remove('selected');
+  }
+  dz.textContent=drag3Selected.textContent;
+  dz.classList.add('filled');
+  drag3Placed[i]=drag3Selected;
+  drag3Selected.classList.add('used'); drag3Selected.classList.remove('selected');
+  drag3Selected=null;
+}
+
+function verifyEx3(){
+  if(ex3Verified) return;
+  ex3Verified=true;
+  var pts=0;
+  drag3Data.forEach(function(d,i){
+    var dz=document.getElementById('dz3-'+i);
+    var de=document.getElementById('de3-'+i);
+    var placed=drag3Placed[i]?drag3Placed[i].textContent:'';
+    if(placed===d.answer){
+      pts++; dz.classList.add('correct-zone');
+      de.textContent='✅ '+d.expl; de.className='drag-expl show ok';
+    } else {
+      dz.classList.add('wrong-zone');
+      de.textContent='❌ Réponse : '+d.answer+'. '+d.expl; de.className='drag-expl show ko';
+    }
+  });
+  score+=pts; scoreSnap[3]=score;
+  document.getElementById('score-ex3').textContent=pts;
+  document.getElementById('btn-verif3').disabled=true;
+  setTimeout(function(){document.getElementById('btn-ex3-suite').classList.add('show');},400);
+}
+
+// ══ EX4 — SAISIE ══
+function buildSaisie4(){
+  var c=document.getElementById('saisie4-container');
+  saisie4Data.forEach(function(q,i){
+    var div=document.createElement('div');
+    div.className='saisie-item';
+    div.innerHTML='<div class="phrase-saisie">'+q.phrase+'</div>'
+      +'<input type="text" id="inp4-'+i+'" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false">'
+      +'<div class="saisie-feedback" id="sfb4-'+i+'"></div>';
+    c.appendChild(div);
+  });
+}
+
+function ns(s){return(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,' ').trim();}
+
+function verifyEx4(){
+  if(ex4Verified) return;
+  ex4Verified=true;
+  var pts=0;
+  saisie4Data.forEach(function(q,i){
+    var inp=document.getElementById('inp4-'+i);
+    var fb=document.getElementById('sfb4-'+i);
+    inp.disabled=true;
+    if(ns(inp.value)===ns(q.answer)){
+      pts++; inp.classList.add('correct-input');
+      fb.textContent='✅ '+q.expl; fb.className='saisie-feedback show ok';
+    } else {
+      inp.classList.add('wrong-input');
+      fb.textContent='❌ Réponse : '+q.answer+'. '+q.expl; fb.className='saisie-feedback show ko';
+    }
+  });
+  score+=pts;
+  document.getElementById('score-ex4').textContent=pts;
+  document.getElementById('btn-verif4').disabled=true;
+  setTimeout(function(){document.getElementById('btn-ex4-suite').classList.add('show');},400);
+}
+
+// ══ BILAN ══
+function showBilan(){
+  if(typeof enregistrerProgression==='function'){ enregistrerProgression('C02', score, TOTAL_PTS); }
+  goPhase(5);
+  document.getElementById('bilan-score').textContent=score+' / '+TOTAL_PTS;
+  var pct=score/TOTAL_PTS;
+  var msg = pct>=0.9 ? 'Brillant ⭐ Tu connais être et avoir sur le bout des doigts !'
+           : pct>=0.8 ? 'Bien maîtrisé 💪 Très bon travail !'
+           : pct>=0.5 ? 'En cours 📚 Continue, tu progresses !'
+           : 'À retravailler 🔁 Relis les tableaux et réessaie !';
+  document.getElementById('bilan-msg').textContent=msg;
+
+  var seuils=[Math.ceil(TOTAL_PTS*0.33),Math.ceil(TOTAL_PTS*0.66),Math.ceil(TOTAL_PTS*0.89)];
+  ['star1','star2','star3'].forEach(function(id,i){
+    var el=document.getElementById(id);
+    if(score>=seuils[i]){
+      (function(elem,delay){
+        setTimeout(function(){elem.classList.add('earned');elem.style.animation='starPop .4s ease';},delay);
+      })(el,300+i*400);
+    }
+  });
+
+  if(score>=Math.ceil(TOTAL_PTS*0.5)){
+    var colors=['#4338ca','#6366f1','#fbbf24','#16a34a','#0891b2'];
+    for(var k=0;k<40;k++){
+      (function(delay,color,left){
+        setTimeout(function(){
+          var d=document.createElement('div');
+          d.style.cssText='position:fixed;top:-10px;left:'+left+'%;width:8px;height:8px;background:'+color+';border-radius:50%;pointer-events:none;z-index:9999;animation:fall '+(1.2+Math.random())+'s ease-in forwards;';
+          document.body.appendChild(d);
+          setTimeout(function(){d.remove();},2000);
+        },delay);
+      })(k*60,colors[k%colors.length],Math.random()*100);
+    }
+  }
+}
+
+var styleEl=document.createElement('style');
+styleEl.textContent='@keyframes fall{0%{transform:translateY(0) rotate(0);}100%{transform:translateY(100vh) rotate(720deg);opacity:0;}}';
+document.head.appendChild(styleEl);
+
+// ══ PRINT ══
+function printLecon(){
+  var w=window.open('','_blank');
+  w.document.write('<html><head><title>Leçon C02</title><style>body{font-family:sans-serif;padding:20px;font-size:13px;}h1,h2{color:#4338ca;}table{border-collapse:collapse;width:60%;margin:8px 0;}td{padding:4px 10px;border:1px solid #ddd;}</style></head><body>');
+  w.document.write('<h1>Être et avoir au présent — CE1</h1>');
+  w.document.write('<h2>ÊTRE</h2><table><tr><td>Je suis</td><td>Nous sommes</td></tr><tr><td>Tu es</td><td>Vous êtes</td></tr><tr><td>Il/Elle est</td><td>Ils/Elles sont</td></tr></table>');
+  w.document.write('<h2>AVOIR</h2><table><tr><td>J\'ai</td><td>Nous avons</td></tr><tr><td>Tu as</td><td>Vous avez</td></tr><tr><td>Il/Elle a</td><td>Ils/Elles ont</td></tr></table>');
+  w.document.write('<p><strong>ÊTRE</strong> = état ou lieu · <strong>AVOIR</strong> = possession</p>');
+  w.document.write('</body></html>');
+  w.document.close(); w.print();
+}
+
+function printExercices(){
+  var w=window.open('','_blank');
+  w.document.write('<html><head><title>Exercices C02</title><style>body{font-family:sans-serif;padding:20px;font-size:13px;}h1,h2{color:#4338ca;}.item{margin:8px 0;}.blank{display:inline-block;width:70px;border-bottom:2px solid #333;margin:0 4px;}</style></head><body>');
+  w.document.write('<h1>Exercices — Être et avoir au présent</h1>');
+  w.document.write('<h2>Ex 1 — Conjugue ÊTRE</h2>');
+  q1Data.forEach(function(q,i){w.document.write('<div class="item">'+(i+1)+'. <strong>'+q.sujet+'</strong> <span class="blank"></span> [ '+q.opts.join(' / ')+' ]</div>');});
+  w.document.write('<h2>Ex 2 — Conjugue AVOIR</h2>');
+  q2Data.forEach(function(q,i){w.document.write('<div class="item">'+(i+1)+'. <strong>'+q.sujet+'</strong> <span class="blank"></span> [ '+q.opts.join(' / ')+' ]</div>');});
+  w.document.write('<h2>Ex 3 — Être ou Avoir ?</h2>');
+  drag3Data.forEach(function(d,i){w.document.write('<div class="item">'+(i+1)+'. '+d.avant+' <span class="blank"></span> '+d.apres+'</div>');});
+  w.document.write('<h2>Ex 4 — Écris la bonne forme</h2>');
+  saisie4Data.forEach(function(q,i){w.document.write('<div class="item">'+(i+1)+'. '+q.phrase+'</div>');});
+  w.document.write('</body></html>');
+  w.document.close(); w.print();
+}
+
+// ══ INIT ══
+buildQcm1();
+buildQcm2();
+buildEx3();
+buildSaisie4();
+</script>
+</body>
+</html>
