@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Le futur simple – CE2</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Nunito',sans-serif;background:#fafaf8;color:#1e293b;font-size:18px;min-height:100vh;}
+:root{--accent:#b45309;--accent-light:#fffbeb;--accent-mid:#fde68a;}
+.phase{display:none;}.phase.active{display:block;}
+.site-header{background:var(--accent);color:#fff;padding:12px 20px;display:flex;align-items:center;gap:12px;}
+.site-header a{color:#fff;text-decoration:none;font-weight:700;font-size:15px;}
+.site-header span{font-weight:800;font-size:17px;}
+.accroche{background:linear-gradient(135deg,var(--accent) 0%,#d97706 100%);color:#fff;padding:28px 20px 22px;}
+.accroche-inner{display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:12px;max-width:600px;margin-left:auto;margin-right:auto;}
+.ugo-big{font-size:3rem;flex-shrink:0;}
+.accroche-text h1{font-size:1.45rem;font-weight:800;margin-bottom:4px;}
+.accroche-text p{font-size:.9rem;opacity:.9;line-height:1.5;}
+.meta-tags{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:14px;}
+.meta-tag{background:rgba(255,255,255,.25);border-radius:20px;padding:4px 12px;font-size:.85rem;font-weight:700;}
+.lecon-wrap{max-width:680px;margin:0 auto;padding:20px 16px;}
+.lecon-block{background:#fff;border-radius:16px;border-left:5px solid var(--accent);padding:20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.06);display:none;}
+.lecon-block.revealed{display:block;}
+.lecon-block h2{color:var(--accent);font-size:1.1rem;font-weight:800;margin-bottom:10px;}
+.lecon-block p{line-height:1.6;margin-bottom:8px;font-size:1rem;}
+.exemple{background:var(--accent-light);border-radius:10px;padding:10px 14px;margin:8px 0;font-size:.95rem;}
+.highlight{color:var(--accent);font-weight:800;}
+.astuce{background:#f0fdf4;border-left:4px solid #16a34a;border-radius:8px;padding:10px 14px;margin:8px 0;font-size:.9rem;}
+.ugo-bubble{background:#fff3cd;border-radius:14px;padding:12px 16px;margin:10px 0;display:flex;align-items:flex-start;gap:10px;font-size:.9rem;}
+.ugo-icon{font-size:1.6rem;flex-shrink:0;}
+.term-box{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0;}
+.term{background:var(--accent);color:#fff;border-radius:8px;padding:3px 10px;font-weight:800;font-size:.88rem;}
+.conj-table{width:100%;border-collapse:collapse;margin:10px 0;font-size:.95rem;}
+.conj-table td{padding:5px 10px;}
+.conj-table td:nth-child(1),.conj-table td:nth-child(3){color:#64748b;width:90px;}
+.conj-table td:nth-child(2),.conj-table td:nth-child(4){font-weight:800;color:var(--accent);}
+.conj-table tr:nth-child(odd){background:rgba(180,83,9,.05);}
+.btn-compris{background:var(--accent);color:#fff;border:none;border-radius:14px;padding:14px 28px;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;margin:12px auto 0;display:block;width:fit-content;}
+.btn-compris:hover{background:#92400e;}
+.btn-suite{display:none;background:var(--accent);color:#fff;border:none;border-radius:14px;padding:14px 28px;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;margin:16px auto;}
+.btn-suite.show{display:block;}
+.ex-wrap{max-width:680px;margin:0 auto;padding:20px 16px;}
+.ex-header{background:var(--accent);color:#fff;border-radius:14px;padding:14px 18px;margin-bottom:18px;}
+.ex-header h2{font-size:1.1rem;font-weight:800;}
+.ex-header p{font-size:.85rem;opacity:.9;margin-top:4px;}
+.score-bar{background:#fff;border-radius:12px;padding:10px 16px;margin-bottom:16px;text-align:center;font-weight:700;font-size:.95rem;box-shadow:0 2px 6px rgba(0,0,0,.06);}
+.qcm-card{background:#fff;border-radius:14px;padding:16px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.06);}
+.qcm-card .question{font-weight:700;font-size:1rem;margin-bottom:10px;line-height:1.5;}
+.phrase-ex{font-size:.95rem;background:var(--accent-light);border-radius:8px;padding:8px 12px;margin-bottom:10px;}
+.qcm-options{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.qcm-btn{background:#f1f5f9;border:2px solid #e2e8f0;border-radius:12px;padding:10px 8px;font-family:'Nunito',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;transition:all .2s;}
+.qcm-btn:hover{border-color:var(--accent);background:var(--accent-light);}
+.qcm-btn.correct{background:#dcfce7;border-color:#16a34a;color:#15803d;}
+.qcm-btn.wrong{background:#fee2e2;border-color:#dc2626;color:#dc2626;}
+.qcm-feedback{display:none;border-radius:10px;padding:8px 12px;margin-top:8px;font-size:.88rem;font-weight:600;}
+.qcm-feedback.show{display:block;}
+.qcm-feedback.ok{background:#dcfce7;color:#15803d;}
+.qcm-feedback.ko{background:#fee2e2;color:#dc2626;}
+.drag-pool{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;}
+.chip{background:#fff;border:2px solid var(--accent-mid);border-radius:20px;padding:7px 14px;font-family:'Nunito',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;transition:all .2s;user-select:none;}
+.chip:hover{background:var(--accent-light);}
+.chip.selected{background:var(--accent);color:#fff;border-color:var(--accent);}
+.chip.used{opacity:.35;pointer-events:none;}
+.drag-phrases{display:flex;flex-direction:column;gap:10px;}
+.drag-item{background:#fff;border-radius:12px;padding:12px 14px;box-shadow:0 1px 6px rgba(0,0,0,.07);display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.phrase-txt{font-size:.95rem;}
+.drop-zone{border:2px dashed #cbd5e1;border-radius:10px;min-width:100px;min-height:34px;display:flex;align-items:center;justify-content:center;font-size:.85rem;color:#94a3b8;padding:4px 8px;cursor:pointer;transition:all .2s;}
+.drop-zone.filled{border-color:var(--accent);background:var(--accent-light);color:var(--accent);font-weight:700;}
+.drop-zone.correct-zone{border-color:#16a34a;background:#dcfce7;color:#15803d;}
+.drop-zone.wrong-zone{border-color:#dc2626;background:#fee2e2;color:#dc2626;}
+.drag-expl{display:none;font-size:.82rem;font-weight:600;margin-top:4px;width:100%;}
+.drag-expl.show{display:block;}
+.drag-expl.ok{color:#15803d;}
+.drag-expl.ko{color:#dc2626;}
+.saisie-item{background:#fff;border-radius:12px;padding:14px;margin-bottom:12px;box-shadow:0 1px 6px rgba(0,0,0,.07);}
+.phrase-saisie{font-size:.95rem;margin-bottom:8px;line-height:1.6;}
+.saisie-item input{border:2px solid #cbd5e1;border-radius:10px;padding:8px 12px;font-family:'Nunito',sans-serif;font-size:.95rem;width:140px;outline:none;}
+.saisie-item input:focus{border-color:var(--accent);}
+.correct-input{border-color:#16a34a!important;background:#dcfce7;}
+.wrong-input{border-color:#dc2626!important;background:#fee2e2;}
+.saisie-feedback{display:none;font-size:.85rem;font-weight:600;margin-top:6px;}
+.saisie-feedback.show{display:block;}
+.saisie-feedback.ok{color:#15803d;}
+.saisie-feedback.ko{color:#dc2626;}
+.btn-verif{background:#0891b2;color:#fff;border:none;border-radius:12px;padding:12px 24px;font-family:'Nunito',sans-serif;font-size:.95rem;font-weight:800;cursor:pointer;margin-top:12px;display:block;}
+.btn-verif:hover{background:#0e7490;}
+.btn-verif:disabled{opacity:.5;cursor:default;}
+.bilan-wrap{max-width:680px;margin:0 auto;padding:24px 16px;text-align:center;}
+.bilan-card{background:#fff;border-radius:20px;padding:28px 20px;box-shadow:0 4px 20px rgba(0,0,0,.08);}
+.stars{font-size:2.5rem;margin:16px 0;}
+.star{display:inline-block;filter:grayscale(1);transition:filter .3s,transform .3s;}
+.star.earned{filter:none;}
+@keyframes starPop{0%{transform:scale(0)}60%{transform:scale(1.3)}100%{transform:scale(1)}}
+.score-big{font-size:2.2rem;font-weight:800;color:var(--accent);margin:10px 0;}
+.bilan-msg{font-size:1rem;margin:8px 0 16px;color:#475569;}
+.memo{background:var(--accent-light);border-radius:14px;padding:16px;margin-top:16px;text-align:left;}
+.memo h3{color:var(--accent);font-weight:800;margin-bottom:8px;}
+.memo p{font-size:.9rem;line-height:1.8;}
+.btn-retry{background:var(--accent);color:#fff;border:none;border-radius:14px;padding:13px 28px;font-family:'Nunito',sans-serif;font-size:.95rem;font-weight:800;cursor:pointer;margin-top:16px;}
+.print-bar{position:fixed;bottom:16px;right:16px;display:flex;flex-direction:column;gap:8px;z-index:100;}
+.print-btn{background:#fff;border:2px solid var(--accent);color:var(--accent);border-radius:12px;padding:8px 14px;font-family:'Nunito',sans-serif;font-size:.8rem;font-weight:700;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.1);}
+.print-btn:hover{background:var(--accent);color:#fff;}
+@media print{.print-bar,.site-header,.btn-compris,.btn-suite,.btn-verif,.btn-retry{display:none!important;}}
+@media(max-width:480px){.qcm-options{grid-template-columns:1fr;}.accroche-inner{flex-direction:column;text-align:center;}}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <a href="../ce2.html">&#8592; CE2</a>
+  <span>L'Atelier du Devoir</span>
+</header>
+
+<!-- PHASE 0 : LECON -->
+<div id="phase0" class="phase active">
+  <div class="accroche">
+    <div class="accroche-inner">
+      <span class="ugo-big">&#x1F989;</span>
+      <div class="accroche-text">
+        <h1>Le futur simple</h1>
+        <p>Pour parler de ce qui va se passer demain ou plus tard,<br>on utilise le futur simple. C'est facile à former ! &#x1F31F;</p>
+      </div>
+    </div>
+    <div class="meta-tags">
+      <span class="meta-tag">CE2</span>
+      <span class="meta-tag">Conjugaison</span>
+      <span class="meta-tag">15 min</span>
+      <span class="meta-tag">16 pts</span>
+    </div>
+  </div>
+
+  <div class="lecon-wrap">
+
+    <!-- BLOC 0 -->
+    <div id="bloc0" class="lecon-block revealed">
+      <h2>&#x1F4D6; Bloc 1 — À quoi sert le futur simple ?</h2>
+      <p>On utilise le <span class="highlight">futur simple</span> pour parler d'une action qui va se passer <strong>dans le futur</strong>.</p>
+      <div class="exemple">
+        &#x1F4C5; Demain, je <strong>chanterai</strong> en classe.<br>
+        &#x1F4C5; L'année prochaine, nous <strong>partirons</strong> en vacances.<br>
+        &#x1F4C5; Tu <strong>grandiras</strong> encore.
+      </div>
+      <div class="ugo-bubble">
+        <span class="ugo-icon">&#x1F989;</span>
+        <span>Ugo : Des indices pour repérer le futur : <em>demain</em>, <em>bientôt</em>, <em>l'année prochaine</em>, <em>dans quelques jours</em>… Ces mots annoncent souvent un futur !</span>
+      </div>
+      <button class="btn-compris" onclick="revealBloc(1)">J'ai compris ! &#x2192;</button>
+    </div>
+
+    <!-- BLOC 1 -->
+    <div id="bloc1" class="lecon-block">
+      <h2>&#x1F4D6; Bloc 2 — La règle : infinitif + terminaisons</h2>
+      <p>Pour former le futur simple, on prend <strong>l'infinitif</strong> du verbe et on ajoute les <span class="highlight">terminaisons du futur</span> :</p>
+      <div class="term-box">
+        <span class="term">je → -ai</span>
+        <span class="term">tu → -as</span>
+        <span class="term">il/elle → -a</span>
+        <span class="term">nous → -ons</span>
+        <span class="term">vous → -ez</span>
+        <span class="term">ils/elles → -ont</span>
+      </div>
+      <div class="exemple">
+        <strong>chanter</strong> &#x2192; infinitif garde son -er
+        <table class="conj-table">
+          <tr><td>Je</td><td>chanter<strong>ai</strong></td><td>Nous</td><td>chanter<strong>ons</strong></td></tr>
+          <tr><td>Tu</td><td>chanter<strong>as</strong></td><td>Vous</td><td>chanter<strong>ez</strong></td></tr>
+          <tr><td>Il / Elle</td><td>chanter<strong>a</strong></td><td>Ils / Elles</td><td>chanter<strong>ont</strong></td></tr>
+        </table>
+      </div>
+      <div class="ugo-bubble">
+        <span class="ugo-icon">&#x1F989;</span>
+        <span>Ugo : Pour les verbes en -re, on enlève le -e final avant d'ajouter les terminaisons. Exemple : prendr<strong>e</strong> &#x2192; prendr- &#x2192; je prendrai.</span>
+      </div>
+      <button class="btn-compris" onclick="revealBloc(2)">J'ai compris ! &#x2192;</button>
+    </div>
+
+    <!-- BLOC 2 -->
+    <div id="bloc2" class="lecon-block">
+      <h2>&#x1F511; Bloc 3 — Futurs irréguliers</h2>
+      <p>Quelques verbes très courants ont un <span class="highlight">radical irrégulier</span> au futur :</p>
+      <div class="exemple">
+        être &#x2192; <strong>ser-</strong> &nbsp; (je serai)<br>
+        avoir &#x2192; <strong>aur-</strong> &nbsp; (tu auras)<br>
+        aller &#x2192; <strong>ir-</strong> &nbsp;&nbsp; (il ira)<br>
+        faire &#x2192; <strong>fer-</strong> &nbsp; (nous ferons)<br>
+        venir &#x2192; <strong>viendr-</strong> (vous viendrez)<br>
+        pouvoir &#x2192; <strong>pourr-</strong> (ils pourront)
+      </div>
+      <div class="astuce">
+        &#x1F4A1; <strong>Astuce :</strong> Même pour les irréguliers, les terminaisons restent toujours les mêmes : <strong>-ai, -as, -a, -ons, -ez, -ont</strong>.
+      </div>
+      <button class="btn-compris" onclick="startEx()">Aux exercices ! &#x1F4AA;</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- PHASE 1 : EX1 -->
+<div id="phase1" class="phase">
+  <div class="ex-wrap">
+    <div class="ex-header">
+      <h2>Exercice 1 — Reconnaître le futur</h2>
+      <p>Cette phrase est-elle au futur simple ou au présent ?</p>
+    </div>
+    <div class="score-bar">Score : <span id="score-ex1">0</span> / 4 pts</div>
+    <div id="qcm1-container"></div>
+    <button class="btn-suite" id="btn-ex1-suite" onclick="goPhase(2)">Exercice suivant &#x2192;</button>
+  </div>
+</div>
+
+<!-- PHASE 2 : EX2 -->
+<div id="phase2" class="phase">
+  <div class="ex-wrap">
+    <div class="ex-header">
+      <h2>Exercice 2 — La bonne terminaison</h2>
+      <p>Choisis la bonne forme du verbe au futur simple.</p>
+    </div>
+    <div class="score-bar">Score : <span id="score-ex2">0</span> / 4 pts</div>
+    <div id="qcm2-container"></div>
+    <button class="btn-suite" id="btn-ex2-suite" onclick="goPhase(3)">Exercice suivant &#x2192;</button>
+  </div>
+</div>
+
+<!-- PHASE 3 : EX3 DRAG -->
+<div id="phase3" class="phase">
+  <div class="ex-wrap">
+    <div class="ex-header">
+      <h2>Exercice 3 — Complète la phrase</h2>
+      <p>Tape sur la bonne forme au futur, puis tape sur la case.</p>
+    </div>
+    <div class="score-bar">Score : <span id="score-ex3">0</span> / 4 pts</div>
+    <div class="drag-pool" id="pool3"></div>
+    <div class="drag-phrases" id="drag3-phrases"></div>
+    <button class="btn-verif" id="btn-verif3" onclick="verifyEx3()">Vérifier &#x2713;</button>
+    <button class="btn-suite" id="btn-ex3-suite" onclick="goPhase(4)">Exercice suivant &#x2192;</button>
+  </div>
+</div>
+
+<!-- PHASE 4 : EX4 SAISIE -->
+<div id="phase4" class="phase">
+  <div class="ex-wrap">
+    <div class="ex-header">
+      <h2>Exercice 4 — Conjugue au futur</h2>
+      <p>Conjugue le verbe entre parenthèses au futur simple.</p>
+    </div>
+    <div class="score-bar">Score : <span id="score-ex4">0</span> / 4 pts</div>
+    <div id="saisie4-container"></div>
+    <button class="btn-verif" id="btn-verif4" onclick="verifyEx4()">Vérifier &#x2713;</button>
+    <button class="btn-suite" id="btn-ex4-suite" onclick="showBilan()">Voir mon bilan &#x1F3C6;</button>
+  </div>
+</div>
+
+<!-- PHASE 5 : BILAN -->
+<div id="phase5" class="phase">
+  <div class="bilan-wrap">
+    <div class="bilan-card">
+      <div style="font-size:2rem;">&#x1F3C6;</div>
+      <div class="stars">
+        <span class="star" id="star1">&#x2B50;</span>
+        <span class="star" id="star2">&#x2B50;</span>
+        <span class="star" id="star3">&#x2B50;</span>
+      </div>
+      <div class="score-big" id="bilan-score">0 / 16</div>
+      <div class="bilan-msg" id="bilan-msg"></div>
+      <div class="memo">
+        <h3>&#x1F4D6; À retenir</h3>
+        <p>
+          &#x1F4C5; Futur = infinitif + terminaisons <strong>-ai -as -a -ons -ez -ont</strong>.<br>
+          &#x1F4CC; Verbes en -re : enlever le -e final (prendr- &#x2192; je prendrai).<br>
+          &#x1F534; Irréguliers : être&#x2192;ser- · avoir&#x2192;aur- · aller&#x2192;ir- · faire&#x2192;fer-<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;venir&#x2192;viendr- · pouvoir&#x2192;pourr-
+        </p>
+      </div>
+      <button class="btn-retry" onclick="location.reload()">&#x1F504; Recommencer</button>
+    </div>
+  </div>
+</div>
+
+<div class="print-bar">
+  <button class="print-btn" onclick="printLecon()">&#x1F4D6; Leçon</button>
+  <button class="print-btn" onclick="printExercices()">&#x1F4DD; Exercices</button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
+<script>
+var q1Data=[
+  {phrase:"Demain, je <strong>chanterai</strong> sur scène.",correct:"futur simple",opts:["présent","futur simple"],expl:"Chanterai = chanter + -ai : c'est le futur simple."},
+  {phrase:"Les enfants <strong>jouent</strong> dans la cour.",correct:"présent",opts:["futur simple","présent"],expl:"Jouent = présent. Pas de terminaison en -ai/-as/-a…"},
+  {phrase:"Vous <strong>partirez</strong> en vacances bientôt.",correct:"futur simple",opts:["présent","futur simple"],expl:"Partirez = partir + -ez : c'est le futur simple."},
+  {phrase:"Elle <strong>finit</strong> son repas.",correct:"présent",opts:["futur simple","présent"],expl:"Finit = présent du verbe finir. Pas de futur ici."},
+];
+
+var q2Data=[
+  {phrase:"Nous (jouer) → Nous <strong>___</strong> au parc demain.",correct:"jouerons",opts:["jouons","jouerons","jouerez"],expl:"Nous + jouer au futur : nous jouerons (jouer + -ons)."},
+  {phrase:"Tu (finir) → Tu <strong>___</strong> tes devoirs ce soir.",correct:"finiras",opts:["finiras","finira","finis"],expl:"Tu + finir au futur : tu finiras (finir + -as)."},
+  {phrase:"Ils (prendre) → Ils <strong>___</strong> le train.",correct:"prendront",opts:["prendront","prendez","prenons"],expl:"Ils + prendre au futur : ils prendront (prendr- + -ont)."},
+  {phrase:"Je (être) → Je <strong>___</strong> médecin plus tard.",correct:"serai",opts:["sererai","serai","serias"],expl:"Je + être au futur : je serai (radical irrégulier : ser-)."},
+];
+
+var drag3Data=[
+  {avant:"Elle",apres:"à Paris l'année prochaine.",answer:"ira",expl:"Elle + aller au futur : elle ira (radical irrégulier : ir-)."},
+  {avant:"Nous",apres:"un gâteau pour ton anniversaire.",answer:"ferons",expl:"Nous + faire au futur : nous ferons (radical irrégulier : fer-)."},
+  {avant:"Tu",apres:"bientôt plus vite que moi.",answer:"courras",expl:"Tu + courir au futur : tu courras (radical irrégulier : courr-)."},
+  {avant:"Vous",apres:"la réponse bientôt.",answer:"aurez",expl:"Vous + avoir au futur : vous aurez (radical irrégulier : aur-)."},
+];
+var drag3Pool=["ira","ferons","courras","aurez","iront","ferez","courra","aurai"];
+
+var saisie4Data=[
+  {phrase:"Je (chanter) → Je _____ cette chanson demain.",answer:"chanterai",expl:"Je + chanter au futur : je chanterai (chanter + -ai)."},
+  {phrase:"Ils (venir) → Ils _____ nous voir ce week-end.",answer:"viendront",expl:"Ils + venir au futur : ils viendront (radical : viendr- + -ont)."},
+  {phrase:"Elle (avoir) → Elle _____ dix ans bientôt.",answer:"aura",expl:"Elle + avoir au futur : elle aura (radical : aur- + -a)."},
+  {phrase:"Nous (partir) → Nous _____ tôt demain matin.",answer:"partirons",expl:"Nous + partir au futur : nous partirons (partir + -ons)."},
+];
+
+var score=0;
+var TOTAL_PTS=4+4+4+4;
+var ex1Done=0,ex2Done=0,ex3Verified=false,ex4Verified=false;
+var drag3Selected=null,drag3Placed={};
+var scoreSnap=[0,0,0,0];
+
+function goPhase(n){
+  document.querySelectorAll('.phase').forEach(function(p){p.classList.remove('active');});
+  var ph=document.getElementById('phase'+n);
+  ph.classList.add('active');
+  setTimeout(function(){ph.scrollIntoView({behavior:'smooth',block:'start'});},150);
+}
+function revealBloc(n){
+  var b=document.getElementById('bloc'+n);
+  if(b) b.classList.add('revealed');
+  var prev=document.getElementById('bloc'+(n-1));
+  if(prev){var btn=prev.querySelector('.btn-compris');if(btn)btn.style.display='none';}
+  setTimeout(function(){b.scrollIntoView({behavior:'smooth',block:'start'});},150);
+}
+function startEx(){scoreSnap[0]=score;goPhase(1);}
+function shuffle(a){
+  var arr=a.slice();
+  for(var i=arr.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=arr[i];arr[i]=arr[j];arr[j]=t;}
+  return arr;
+}
+
+function buildQcm1(){
+  var c=document.getElementById('qcm1-container');
+  q1Data.forEach(function(q,i){
+    var opts=shuffle(q.opts);
+    var card=document.createElement('div');
+    card.className='qcm-card';
+    card.innerHTML='<div class="question phrase-ex">'+q.phrase+'</div>'
+      +'<div class="qcm-options">'+opts.map(function(o){return '<button class="qcm-btn" onclick="answerQ1(this,'+i+')" data-val="'+o+'">'+o+'</button>';}).join('')+'</div>'
+      +'<div class="qcm-feedback" id="fb1-'+i+'"></div>';
+    c.appendChild(card);
+  });
+}
+function answerQ1(btn,i){
+  var card=btn.closest('.qcm-card');
+  if(card.dataset.done) return;
+  card.dataset.done='1';
+  card.querySelectorAll('.qcm-btn').forEach(function(b){b.disabled=true;if(b.dataset.val===q1Data[i].correct)b.classList.add('correct');});
+  var fb=document.getElementById('fb1-'+i);
+  if(btn.dataset.val===q1Data[i].correct){
+    score++;document.getElementById('score-ex1').textContent=score-scoreSnap[0];
+    fb.textContent='✅ '+q1Data[i].expl;fb.className='qcm-feedback show ok';
+  } else {
+    btn.classList.add('wrong');
+    fb.textContent='❌ '+q1Data[i].expl;fb.className='qcm-feedback show ko';
+  }
+  ex1Done++;
+  if(ex1Done===q1Data.length) setTimeout(function(){scoreSnap[1]=score;document.getElementById('btn-ex1-suite').classList.add('show');},400);
+}
+
+function buildQcm2(){
+  var c=document.getElementById('qcm2-container');
+  q2Data.forEach(function(q,i){
+    var opts=shuffle(q.opts);
+    var card=document.createElement('div');
+    card.className='qcm-card';
+    card.innerHTML='<div class="question phrase-ex">'+q.phrase+'</div>'
+      +'<div class="qcm-options">'+opts.map(function(o){return '<button class="qcm-btn" onclick="answerQ2(this,'+i+')" data-val="'+o+'">'+o+'</button>';}).join('')+'</div>'
+      +'<div class="qcm-feedback" id="fb2-'+i+'"></div>';
+    c.appendChild(card);
+  });
+}
+function answerQ2(btn,i){
+  var card=btn.closest('.qcm-card');
+  if(card.dataset.done) return;
+  card.dataset.done='1';
+  card.querySelectorAll('.qcm-btn').forEach(function(b){b.disabled=true;if(b.dataset.val===q2Data[i].correct)b.classList.add('correct');});
+  var fb=document.getElementById('fb2-'+i);
+  if(btn.dataset.val===q2Data[i].correct){
+    score++;document.getElementById('score-ex2').textContent=score-scoreSnap[1];
+    fb.textContent='✅ '+q2Data[i].expl;fb.className='qcm-feedback show ok';
+  } else {
+    btn.classList.add('wrong');
+    fb.textContent='❌ '+q2Data[i].expl;fb.className='qcm-feedback show ko';
+  }
+  ex2Done++;
+  if(ex2Done===q2Data.length) setTimeout(function(){scoreSnap[2]=score;document.getElementById('btn-ex2-suite').classList.add('show');},400);
+}
+
+function buildEx3(){
+  var pool=document.getElementById('pool3');
+  shuffle(drag3Pool).forEach(function(w){
+    var chip=document.createElement('button');
+    chip.className='chip';chip.textContent=w;
+    chip.onclick=function(){
+      if(ex3Verified) return;
+      document.querySelectorAll('#pool3 .chip').forEach(function(c){c.classList.remove('selected');});
+      chip.classList.add('selected');drag3Selected=chip;
+    };
+    pool.appendChild(chip);
+  });
+  var cont=document.getElementById('drag3-phrases');
+  drag3Data.forEach(function(d,i){
+    var item=document.createElement('div');
+    item.className='drag-item';
+    item.innerHTML='<span class="phrase-txt">'+d.avant+'</span>'
+      +'<span class="drop-zone" id="dz3-'+i+'" onclick="dropDz3('+i+')">…</span>'
+      +'<span class="phrase-txt">'+d.apres+'</span>'
+      +'<div class="drag-expl" id="de3-'+i+'"></div>';
+    cont.appendChild(item);
+  });
+}
+function dropDz3(i){
+  if(!drag3Selected||ex3Verified) return;
+  var dz=document.getElementById('dz3-'+i);
+  if(drag3Placed[i]) drag3Placed[i].classList.remove('used');
+  dz.textContent=drag3Selected.textContent;
+  dz.classList.add('filled');
+  drag3Placed[i]=drag3Selected;
+  drag3Selected.classList.add('used');drag3Selected.classList.remove('selected');
+  drag3Selected=null;
+}
+function verifyEx3(){
+  if(ex3Verified) return;
+  ex3Verified=true;
+  var pts=0;
+  drag3Data.forEach(function(d,i){
+    var dz=document.getElementById('dz3-'+i);
+    var de=document.getElementById('de3-'+i);
+    var placed=drag3Placed[i]?drag3Placed[i].textContent:'';
+    if(placed===d.answer){
+      pts++;dz.classList.add('correct-zone');
+      de.textContent='✅ '+d.expl;de.className='drag-expl show ok';
+    } else {
+      dz.classList.add('wrong-zone');
+      de.textContent='❌ Réponse : '+d.answer+'. '+d.expl;de.className='drag-expl show ko';
+    }
+  });
+  score+=pts;scoreSnap[3]=score;
+  document.getElementById('score-ex3').textContent=pts;
+  document.getElementById('btn-verif3').disabled=true;
+  setTimeout(function(){document.getElementById('btn-ex3-suite').classList.add('show');},400);
+}
+
+function buildSaisie4(){
+  var c=document.getElementById('saisie4-container');
+  saisie4Data.forEach(function(q,i){
+    var div=document.createElement('div');
+    div.className='saisie-item';
+    div.innerHTML='<div class="phrase-saisie">'+q.phrase+'</div>'
+      +'<input type="text" id="inp4-'+i+'" placeholder="écris ici…" autocomplete="off" autocorrect="off" spellcheck="false">'
+      +'<div class="saisie-feedback" id="sfb4-'+i+'"></div>';
+    c.appendChild(div);
+  });
+}
+function ns(s){return(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,' ').trim();}
+function verifyEx4(){
+  if(ex4Verified) return;
+  ex4Verified=true;
+  var pts=0;
+  saisie4Data.forEach(function(q,i){
+    var inp=document.getElementById('inp4-'+i);
+    var fb=document.getElementById('sfb4-'+i);
+    inp.disabled=true;
+    if(ns(inp.value)===ns(q.answer)){
+      pts++;inp.classList.add('correct-input');
+      fb.textContent='✅ '+q.expl;fb.className='saisie-feedback show ok';
+    } else {
+      inp.classList.add('wrong-input');
+      fb.textContent='❌ Réponse : '+q.answer+'. '+q.expl;fb.className='saisie-feedback show ko';
+    }
+  });
+  score+=pts;
+  document.getElementById('score-ex4').textContent=pts;
+  document.getElementById('btn-verif4').disabled=true;
+  setTimeout(function(){document.getElementById('btn-ex4-suite').classList.add('show');},400);
+}
+
+function showBilan(){
+  if(typeof enregistrerProgression==='function'){ enregistrerProgression('C07', score, TOTAL_PTS); }
+  goPhase(5);
+  document.getElementById('bilan-score').textContent=score+' / '+TOTAL_PTS;
+  var pct=score/TOTAL_PTS;
+  var msg=pct>=0.9?'Brillant ⭐ Tu maîtrises le futur simple !'
+    :pct>=0.8?'Bien maîtrisé 💪 Excellent travail !'
+    :pct>=0.5?'En cours 📚 Continue, tu y es presque !'
+    :'À retravailler 🔁 Relis la leçon et réessaie !';
+  document.getElementById('bilan-msg').textContent=msg;
+  var seuils=[Math.ceil(TOTAL_PTS*0.33),Math.ceil(TOTAL_PTS*0.66),Math.ceil(TOTAL_PTS*0.89)];
+  ['star1','star2','star3'].forEach(function(id,i){
+    var el=document.getElementById(id);
+    if(score>=seuils[i]){
+      (function(elem,delay){setTimeout(function(){elem.classList.add('earned');elem.style.animation='starPop .4s ease';},delay);})(el,300+i*400);
+    }
+  });
+  if(score>=Math.ceil(TOTAL_PTS*0.5)){
+    var colors=['#b45309','#d97706','#fbbf24','#16a34a','#0369a1'];
+    for(var k=0;k<40;k++){
+      (function(delay,color,left){
+        setTimeout(function(){
+          var d=document.createElement('div');
+          d.style.cssText='position:fixed;top:-10px;left:'+left+'%;width:8px;height:8px;background:'+color+';border-radius:50%;pointer-events:none;z-index:9999;animation:fall '+(1.2+Math.random())+'s ease-in forwards;';
+          document.body.appendChild(d);setTimeout(function(){d.remove();},2000);
+        },delay);
+      })(k*60,colors[k%colors.length],Math.random()*100);
+    }
+  }
+}
+
+var styleEl=document.createElement('style');
+styleEl.textContent='@keyframes fall{0%{transform:translateY(0) rotate(0);}100%{transform:translateY(100vh) rotate(720deg);opacity:0;}}';
+document.head.appendChild(styleEl);
+
+function printLecon(){
+  var w=window.open('','_blank');
+  w.document.write('<html><head><title>Leçon C07</title><style>body{font-family:sans-serif;padding:20px;font-size:13px;}h1,h2{color:#b45309;}table{border-collapse:collapse;width:65%;margin:8px 0;}td{padding:4px 10px;border:1px solid #ddd;}</style></head><body>');
+  w.document.write('<h1>Le futur simple — CE2</h1>');
+  w.document.write('<p><strong>Règle :</strong> infinitif + terminaisons -ai -as -a -ons -ez -ont</p>');
+  w.document.write('<h2>Exemple : chanter</h2><table><tr><td>Je chanterai</td><td>Nous chanterons</td></tr><tr><td>Tu chanteras</td><td>Vous chanterez</td></tr><tr><td>Il chantera</td><td>Ils chanteront</td></tr></table>');
+  w.document.write('<h2>Irréguliers</h2><p>être→ser- · avoir→aur- · aller→ir- · faire→fer- · venir→viendr- · pouvoir→pourr-</p>');
+  w.document.write('</body></html>');
+  w.document.close();w.print();
+}
+function printExercices(){
+  var w=window.open('','_blank');
+  w.document.write('<html><head><title>Exercices C07</title><style>body{font-family:sans-serif;padding:20px;font-size:13px;}h1,h2{color:#b45309;}.item{margin:8px 0;}.blank{display:inline-block;width:90px;border-bottom:2px solid #333;margin:0 4px;}</style></head><body>');
+  w.document.write('<h1>Exercices — Le futur simple</h1>');
+  w.document.write('<h2>Ex 1 — Futur ou présent ?</h2>');
+  q1Data.forEach(function(q,i){w.document.write('<div class="item">'+(i+1)+'. '+q.phrase.replace(/<[^>]+>/g,'')+'<br>[ présent / futur simple ]</div>');});
+  w.document.write('<h2>Ex 2 — La bonne terminaison</h2>');
+  q2Data.forEach(function(q,i){w.document.write('<div class="item">'+(i+1)+'. '+q.phrase.replace(/<[^>]+>/g,'').replace(/&#x2192;/g,'→')+'<br>[ '+q.opts.join(' / ')+' ]</div>');});
+  w.document.write('<h2>Ex 3 — Complète la phrase</h2>');
+  drag3Data.forEach(function(d,i){w.document.write('<div class="item">'+(i+1)+'. '+d.avant+' <span class="blank"></span> '+d.apres+'</div>');});
+  w.document.write('<h2>Ex 4 — Conjugue au futur</h2>');
+  saisie4Data.forEach(function(q,i){w.document.write('<div class="item">'+(i+1)+'. '+q.phrase.replace(/&#x2192;/g,'→')+'</div>');});
+  w.document.write('</body></html>');
+  w.document.close();w.print();
+}
+
+buildQcm1();
+buildQcm2();
+buildEx3();
+buildSaisie4();
+</script>
+</body>
+</html>
