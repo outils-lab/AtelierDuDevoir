@@ -249,6 +249,8 @@ main{max-width:660px;margin:0 auto;padding:16px 14px 80px;}
   <div style="background:#f5f3ff;border-left:5px solid #7c3aed;border-radius:0 10px 10px 0;padding:9px 13px;margin:8px 0;font-size:.87rem;"><strong style="color:#7c3aed;">Astuce :</strong> dis "un" ou "une" devant le mot. Celui qui sonne bien, c'est le bon genre !</div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
 <script>
 // ===== MOTEUR =====
 var score=0, TOTAL_PTS=4+4+4+4; // Ex1+Ex2+Ex3+Ex4
@@ -275,6 +277,7 @@ function goPhase(ph,si){
 
 function showBilan(){
   var tot=TOTAL_PTS;
+  if(typeof enregistrerProgression==='function'){ enregistrerProgression('G05', score, tot); }
   document.getElementById('bilan-pts').textContent=score;
   document.getElementById('bilan-sur').textContent='/ '+tot;
   var pct=score/tot,t,m;

@@ -428,6 +428,8 @@ body{
 
 </main><!-- /main -->
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
 <script>
 var score = 0;
 var TOTAL_PTS = 0; // calculé dynamiquement
@@ -816,6 +818,7 @@ function checkEx4m(oi,btn){
 /* ══ BILAN ══ */
 function showBilan(){
   var tot=TOTAL_PTS||17;
+  if(typeof enregistrerProgression==='function'){ enregistrerProgression('G01', score, tot); }
   document.getElementById('bilan-pts').textContent=score;
   document.getElementById('bilan-sur').textContent='/ '+tot;
   var pct=score/tot,t,m;

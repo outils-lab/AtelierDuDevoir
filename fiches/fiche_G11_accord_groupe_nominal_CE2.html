@@ -220,6 +220,8 @@ main{max-width:660px;margin:0 auto;padding:16px 14px 80px;}
   <div style="background:#fff7ed;border-left:5px solid #ea580c;border-radius:0 10px 10px 0;padding:9px 13px;margin:8px 0;font-size:.87rem;"><strong style="color:#ea580c;">vieux</strong> → vieille (fém) · vieil (devant voyelle/h) · vieilles (fém. plur.)</div>
   <div style="background:#fff7ed;border-left:5px solid #ea580c;border-radius:0 10px 10px 0;padding:9px 13px;margin:8px 0;font-size:.87rem;"><strong style="color:#ea580c;">nouveau</strong> → nouvelle (fém) · nouvel (devant voyelle/h) · nouveaux (masc. plur.)</div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
 <script>
 var score=0, TOTAL_PTS=4+4+4+4;
 function addPt(){score++;document.getElementById('score-display').textContent=score;}
@@ -241,6 +243,7 @@ function goPhase(ph,si){
 }
 function showBilan(){
   var tot=TOTAL_PTS;
+  if(typeof enregistrerProgression==='function'){ enregistrerProgression('G11', score, tot); }
   document.getElementById('bilan-pts').textContent=score;document.getElementById('bilan-sur').textContent='/ '+tot;
   var pct=score/tot,t,m;
   if(pct>=.9){t='Brillant(e) ! 🎉🌟';m="Tu maîtrises les accords complexes du groupe nominal. Excellent !";}

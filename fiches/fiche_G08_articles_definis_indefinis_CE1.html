@@ -214,6 +214,8 @@ main{max-width:660px;margin:0 auto;padding:16px 14px 80px;}
   <div style="background:#f0fdfa;border-left:5px solid #0d9488;border-radius:0 10px 10px 0;padding:9px 13px;margin:8px 0;font-size:.87rem;"><strong style="color:#0d9488;">🎯 Défini</strong> = le, la, l', les → on parle d'un objet précis. <em>Je caresse le chat de Zoé.</em></div>
   <div style="background:#f0fdfa;border-left:5px solid #0d9488;border-radius:0 10px 10px 0;padding:9px 13px;margin:8px 0;font-size:.87rem;"><strong style="color:#0d9488;">Astuce :</strong> On présente d'abord avec un/une, puis on reprend avec le/la quand on sait lequel !</div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
 <script>
 var score=0, TOTAL_PTS=4+4+4+4;
 function addPt(){score++;document.getElementById('score-display').textContent=score;}
@@ -235,6 +237,7 @@ function goPhase(ph,si){
 }
 function showBilan(){
   var tot=TOTAL_PTS;
+  if(typeof enregistrerProgression==='function'){ enregistrerProgression('G08', score, tot); }
   document.getElementById('bilan-pts').textContent=score;document.getElementById('bilan-sur').textContent='/ '+tot;
   var pct=score/tot,t,m;
   if(pct>=.9){t='Brillant(e) ! 🎉🌟';m='Tu maîtrises parfaitement les articles définis et indéfinis. Félicitations !';}

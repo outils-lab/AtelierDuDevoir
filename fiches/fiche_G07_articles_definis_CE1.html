@@ -223,6 +223,8 @@ main{max-width:660px;margin:0 auto;padding:16px 14px 80px;}
   <div style="background:#f0f9ff;border-left:5px solid #0891b2;border-radius:0 10px 10px 0;padding:9px 13px;margin:8px 0;font-size:.87rem;"><strong style="color:#0891b2;">L'</strong> → devant voyelle (A E I O U) ou H : l'oiseau, l'arbre, l'école, l'heure</div>
   <div style="background:#f0f9ff;border-left:5px solid #0891b2;border-radius:0 10px 10px 0;padding:9px 13px;margin:8px 0;font-size:.87rem;"><strong style="color:#0891b2;">LES</strong> → toujours au pluriel : les chats, les fleurs, les livres…</div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
 <script>
 var score=0, TOTAL_PTS=4+4+4+4;
 function addPt(){score++;document.getElementById('score-display').textContent=score;}
@@ -244,6 +246,7 @@ function goPhase(ph,si){
 }
 function showBilan(){
   var tot=TOTAL_PTS;
+  if(typeof enregistrerProgression==='function'){ enregistrerProgression('G07', score, tot); }
   document.getElementById('bilan-pts').textContent=score;document.getElementById('bilan-sur').textContent='/ '+tot;
   var pct=score/tot,t,m;
   if(pct>=.9){t='Brillant(e) ! 🎉🌟';m='Tu maîtrises parfaitement LE, LA, L\' et LES. Ugo est fier de toi !';}

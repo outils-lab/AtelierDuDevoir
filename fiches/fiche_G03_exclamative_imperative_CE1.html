@@ -327,6 +327,8 @@ main{max-width:660px;margin:0 auto;padding:16px 14px 80px;}
   <div style="background:#fdf2f8;border-left:5px solid #db2777;border-radius:0 10px 10px 0;padding:9px 13px;margin:8px 0;font-size:.87rem;"><strong style="color:#db2777;">Astuce :</strong> cherche le sujet ! Pas de sujet + verbe en premier → impérative. Émotion + Que/Comme/Quel → exclamative.</div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
 <script>
 // ========== MOTEUR ==========
 var score=0, TOTAL_PTS=16;
@@ -373,6 +375,7 @@ function goPhase(ph,si){
 
 function showBilan(){
   var tot=TOTAL_PTS;
+  if(typeof enregistrerProgression==='function'){ enregistrerProgression('G03', score, tot); }
   document.getElementById('bilan-pts').textContent=score;
   document.getElementById('bilan-sur').textContent='/ '+tot+' pts';
   var pct=score/tot,t,m;

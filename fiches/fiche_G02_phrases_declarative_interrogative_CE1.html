@@ -380,6 +380,8 @@ body{font-family:'Fredoka One',cursive;background:#f0f9ff;color:#1e293b;font-siz
 
 </main>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
 <script>
 var score=0, TOTAL_PTS=17;
 
@@ -648,6 +650,7 @@ function checkEx4(){
 /* ══ BILAN ══ */
 // Total : ex1=5 + ex2=4 + ex3=4 + ex4=3 = 16 pts (+ 1 bonus leçon = affichage sur 16)
 function showBilan(){
+  if(typeof enregistrerProgression==='function'){ enregistrerProgression('G02', score, TOTAL_PTS); }
   TOTAL_PTS=16;
   document.getElementById('bilan-pts').textContent=score;
   document.getElementById('bilan-sur').textContent='/ '+TOTAL_PTS;
