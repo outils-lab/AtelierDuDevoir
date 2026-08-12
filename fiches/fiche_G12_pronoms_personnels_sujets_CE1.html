@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>G12 — Les pronoms personnels sujets | L'Atelier du Devoir</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--acc:#16a34a;--acc-pale:#f0fdf4;--acc-mid:#86efac;--acc-dark:#14532d;--ok:#059669;--ok-pale:#d1fae5;--ko:#dc2626;--ko-pale:#fee2e2;--radius:18px;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Fredoka One',cursive;background:var(--acc-pale);color:#1e293b;font-size:21px;line-height:1.5;}
+.print-bar{display:flex;gap:8px;padding:8px 14px;background:#fff;border-bottom:2px solid var(--acc-pale);}
+.print-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:5px;padding:7px 10px;border-radius:12px;border:2px solid;background:white;font-family:'Nunito',sans-serif;font-size:.76rem;font-weight:700;cursor:pointer;}
+.print-btn-lecon{border-color:var(--acc);color:var(--acc);}
+.print-btn-eval{border-color:#0891b2;color:#0891b2;}
+.header{background:white;border-bottom:4px solid var(--acc-pale);position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.1);}
+.header-top{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;}
+.logo{font-size:1rem;color:var(--acc);text-decoration:none;}
+.score-badge{background:var(--acc);color:white;font-size:.88rem;padding:6px 16px;border-radius:20px;}
+.steps-wrap{padding:0 14px 9px;}
+.steps{display:flex;gap:4px;}
+.step{flex:1;height:9px;border-radius:5px;background:#e2e8f0;transition:background .35s;}
+.step.active{background:var(--acc-mid);}
+.step.done{background:var(--acc);}
+.steps-labels{display:flex;gap:4px;margin-top:3px;}
+.step-lbl{flex:1;font-size:.56rem;color:#94a3b8;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+main{max-width:660px;margin:0 auto;padding:16px 14px 80px;}
+.accroche{background:white;border-radius:var(--radius);padding:14px 16px;margin-bottom:14px;box-shadow:0 2px 10px rgba(0,0,0,.06);}
+.accroche h1{font-size:1.15rem;color:var(--acc);margin-bottom:4px;}
+.accroche p{font-size:.78rem;color:#64748b;font-family:'Nunito',sans-serif;}
+.meta-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+.meta-tag{background:var(--acc-pale);color:var(--acc-dark);font-size:.7rem;padding:3px 10px;border-radius:20px;font-family:'Nunito',sans-serif;font-weight:700;}
+.phase{display:none;}
+.phase.active{display:block;}
+.ugo-box{background:#fff7ed;border-radius:14px;padding:10px 14px;margin-bottom:12px;font-family:'Nunito',sans-serif;font-size:.82rem;color:#92400e;display:flex;gap:9px;align-items:flex-start;}
+.ugo-box .owl{font-size:1.5rem;flex-shrink:0;}
+.lecon-card{background:white;border-radius:var(--radius);padding:16px;box-shadow:0 2px 10px rgba(0,0,0,.06);}
+.lecon-card h2{font-size:1.05rem;color:var(--acc);margin-bottom:12px;}
+.lecon-block{display:none;}
+.lecon-block.revealed{display:block;}
+.lecon-subtitle{font-size:.82rem;color:var(--acc-dark);margin-bottom:8px;padding:5px 10px;background:var(--acc-pale);border-radius:8px;font-family:'Nunito',sans-serif;font-weight:800;}
+.regle-box{background:var(--acc-pale);border-left:5px solid var(--acc);border-radius:0 12px 12px 0;padding:10px 14px;margin:8px 0;font-size:.88rem;}
+.regle-box strong{color:var(--acc);}
+.ex-line{font-size:.78rem;color:#64748b;margin:.3rem 0 .3rem 14px;font-style:italic;font-family:'Nunito',sans-serif;}
+.pron-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0;}
+.pron-card{border-radius:10px;padding:9px 11px;text-align:center;font-size:.82rem;}
+.pron-card.sing{background:#f0fdf4;border:2px solid var(--acc);}
+.pron-card.plur{background:#ecfdf5;border:2px solid #059669;}
+.pron-card strong{display:block;font-size:1rem;margin-bottom:3px;color:var(--acc-dark);}
+.pron-demo{display:flex;gap:8px;align-items:center;margin:6px 0;font-size:.85rem;font-family:'Nunito',sans-serif;}
+.pron-badge{background:var(--acc);color:white;border-radius:6px;padding:3px 8px;font-family:'Fredoka One',cursive;font-size:.88rem;}
+.btn-compris{display:block;margin:14px auto 0;background:var(--acc);color:white;border:none;border-radius:50px;padding:10px 28px;font-family:'Fredoka One',cursive;font-size:.95rem;cursor:pointer;transition:transform .12s,opacity .2s;}
+.btn-compris:active{transform:scale(.95);}
+.ex-card{background:white;border-radius:var(--radius);padding:16px;box-shadow:0 2px 10px rgba(0,0,0,.06);}
+.ex-card h3{font-size:.98rem;color:var(--acc);margin-bottom:5px;}
+.consigne{font-size:.77rem;color:#64748b;margin-bottom:11px;font-family:'Nunito',sans-serif;}
+.ex-progress{font-size:.76rem;color:var(--acc);font-family:'Nunito',sans-serif;font-weight:800;margin-bottom:8px;text-align:center;background:var(--acc-pale);padding:4px;border-radius:8px;}
+.word-display{font-size:1.4rem;text-align:center;padding:13px;margin:8px 0 12px;background:#f8fafc;border-radius:14px;border:2px solid #e2e8f0;}
+.phrase-display{font-size:.95rem;text-align:center;padding:11px 14px;margin:8px 0 12px;background:#f8fafc;border-radius:12px;border:2px solid #e2e8f0;font-family:'Nunito',sans-serif;}
+.qcm-opts{display:flex;flex-direction:column;gap:7px;}
+.qcm-opts button{background:#f8fafc;border:2px solid #e2e8f0;border-radius:12px;padding:9px 14px;font-family:'Fredoka One',cursive;font-size:.95rem;text-align:center;cursor:pointer;transition:all .15s;}
+.qcm-opts button.correct{background:var(--ok-pale);border-color:var(--ok);color:#065f46;}
+.qcm-opts button.wrong{background:var(--ko-pale);border-color:var(--ko);color:#7f1d1d;}
+.qcm-opts button.reveal{background:var(--ok-pale);border-color:var(--ok);color:#065f46;}
+.qcm-opts button:disabled{cursor:default;}
+.vf-btns{display:flex;gap:12px;justify-content:center;}
+.btn-vf{flex:1;max-width:180px;min-height:54px;padding:10px 14px;border-radius:50px;border:3px solid;font-family:'Fredoka One',cursive;font-size:.95rem;cursor:pointer;transition:all .15s;}
+.btn-vrai{background:var(--ok-pale);color:#065f46;border-color:var(--ok);}
+.btn-faux{background:var(--ko-pale);color:#7f1d1d;border-color:var(--ko);}
+.btn-vf.correct{transform:scale(1.06);box-shadow:0 0 0 3px rgba(5,150,105,.3);}
+.btn-vf.wrong{opacity:.5;}
+.btn-vf.reveal{transform:scale(1.06);box-shadow:0 0 0 3px rgba(5,150,105,.3);}
+.btn-vf:disabled{cursor:default;}
+.qcm-fb{display:none;font-family:'Nunito',sans-serif;font-size:.79rem;padding:7px 10px;border-radius:8px;margin-top:8px;}
+.qcm-fb.show{display:block;}
+.qcm-fb.ok{background:var(--ok-pale);color:#065f46;}
+.qcm-fb.ko{background:var(--ko-pale);color:#7f1d1d;}
+.btn-suite{display:none;margin:12px auto 0;background:var(--acc);color:white;border:none;border-radius:50px;padding:10px 26px;font-family:'Fredoka One',cursive;font-size:.9rem;cursor:pointer;}
+.btn-suite.show{display:block;}
+.bilan-card{background:white;border-radius:var(--radius);padding:22px 16px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,.1);}
+.bilan-stars-row{display:flex;justify-content:center;gap:6px;margin:.4rem 0 .8rem;}
+.etoile{font-size:2.8rem;opacity:.25;transition:opacity .5s,transform .5s;}
+.etoile.earned{opacity:1;transform:scale(1.2);}
+.bilan-score-row{font-size:2.2rem;color:var(--acc);font-weight:700;margin-bottom:.2rem;}
+.bilan-title{font-size:1.1rem;color:#1e293b;margin:.2rem 0 .4rem;}
+.bilan-msg{font-size:.85rem;color:#64748b;font-family:'Nunito',sans-serif;margin-bottom:1rem;}
+.memo-card{background:var(--acc-pale);border-radius:14px;padding:14px 16px;text-align:left;}
+.memo-card h3{font-size:.9rem;color:var(--acc);margin-bottom:10px;text-align:center;}
+.memo-item{display:flex;gap:7px;margin-bottom:7px;font-size:.8rem;font-family:'Nunito',sans-serif;}
+.memo-dot{color:var(--acc);flex-shrink:0;}
+.bilan-btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:16px;}
+.btn-act{padding:9px 18px;border-radius:50px;border:2px solid;background:white;font-family:'Nunito',sans-serif;font-weight:700;font-size:.82rem;cursor:pointer;}
+.btn-act.vert{border-color:var(--acc);color:var(--acc);}
+.btn-act.cyan{border-color:#0891b2;color:#0891b2;}
+.confetti-piece{position:fixed;border-radius:2px;top:-20px;animation:fall linear both;pointer-events:none;z-index:9999;}
+@keyframes fall{0%{transform:translateY(0) rotate(0);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
+.print-lecon-content,.print-eval-content{display:none;}
+@media print{.header,.print-bar,.accroche,.phase,.confetti-piece{display:none!important;}body{background:white;}@page{margin:14mm;}body.print-mode-lecon .print-lecon-content{display:block!important;}body.print-mode-eval .print-eval-content{display:block!important;}}
+</style>
+</head>
+<body>
+<div class="print-bar">
+  <button class="print-btn print-btn-lecon" onclick="printLecon()">📖 Imprimer la leçon</button>
+  <button class="print-btn print-btn-eval" onclick="printEval()">📝 Imprimer les exercices</button>
+</div>
+<header class="header">
+  <div class="header-top">
+    <a href="../ce1.html" class="logo">🦉 L'Atelier du Devoir</a>
+    <div class="score-badge">⭐ <span id="score-display">0</span> pts</div>
+  </div>
+  <div class="steps-wrap">
+    <div class="steps"><div class="step active" id="s0"></div><div class="step" id="s1"></div><div class="step" id="s2"></div><div class="step" id="s3"></div><div class="step" id="s4"></div><div class="step" id="s5"></div></div>
+    <div class="steps-labels"><div class="step-lbl">📖 Leçon</div><div class="step-lbl">✏️ Ex. 1</div><div class="step-lbl">✏️ Ex. 2</div><div class="step-lbl">🎯 Ex. 3</div><div class="step-lbl">🎯 Ex. 4</div><div class="step-lbl">🏆 Bilan</div></div>
+  </div>
+</header>
+<main>
+<div class="accroche">
+  <h1>🗣️ Les pronoms personnels sujets</h1>
+  <p>Je, tu, il, elle, nous, vous, ils, elles — les mots qui remplacent les noms !</p>
+  <div class="meta-row"><span class="meta-tag">📚 CE1 / CE2</span><span class="meta-tag">⏱️ ~15 min</span><span class="meta-tag">⭐⭐ Moyen</span><span class="meta-tag">🎯 Français — Grammaire</span></div>
+</div>
+
+<div class="phase active" id="phase-lecon">
+  <div class="lecon-card">
+    <h2>📖 La leçon</h2>
+    <div class="lecon-block revealed" id="bloc-0">
+      <div class="lecon-subtitle">① L'histoire des amis d'Ugo</div>
+      <div class="ugo-box"><span class="owl">🦉</span><span>🗣️ Ugo joue avec ses amis. Au lieu de dire tout le temps : <em>"Ugo court, Léa saute, Ugo et Léa rigolent"</em>, on dit : <em>"IL court, ELLE saute, ILS rigolent"</em>. Ces petits mots magiques s'appellent des <strong>pronoms</strong> !</span></div>
+      <div class="regle-box"><strong>Le pronom personnel sujet</strong> remplace un nom pour éviter les répétitions. Il s'accorde avec le nom remplacé.</div>
+      <div class="pron-grid">
+        <div class="pron-card sing"><strong>Singulier</strong><div class="pron-demo"><span class="pron-badge">JE</span><span>moi</span></div><div class="pron-demo"><span class="pron-badge">TU</span><span>toi</span></div><div class="pron-demo"><span class="pron-badge">IL/ELLE</span><span>lui/elle</span></div></div>
+        <div class="pron-card plur"><strong>Pluriel</strong><div class="pron-demo"><span class="pron-badge">NOUS</span><span>nous</span></div><div class="pron-demo"><span class="pron-badge">VOUS</span><span>vous</span></div><div class="pron-demo"><span class="pron-badge">ILS/ELLES</span><span>eux/elles</span></div></div>
+      </div>
+      <button class="btn-compris" onclick="revealBloc(1)">J'ai compris ! 🎉</button>
+    </div>
+    <div class="lecon-block" id="bloc-1">
+      <div class="lecon-subtitle">② IL ou ELLE ? ILS ou ELLES ?</div>
+      <div class="regle-box"><strong>IL</strong> → masculin singulier. <strong>ELLE</strong> → féminin singulier.<br><strong>ILS</strong> → plusieurs (masc. ou mélangé). <strong>ELLES</strong> → plusieurs féminins uniquement.</div>
+      <p class="ex-line">Le chat → <strong>il</strong> dort. La fleur → <strong>elle</strong> pousse. 🌸</p>
+      <p class="ex-line">Les garçons → <strong>ils</strong> jouent. Les filles → <strong>elles</strong> chantent. 🎵</p>
+      <p class="ex-line">💡 Garçons + filles mélangés → toujours <strong>ILS</strong> !</p>
+      <button class="btn-compris" onclick="revealBloc(2)">J'ai compris ! 🎉</button>
+    </div>
+    <div class="lecon-block" id="bloc-2">
+      <div class="lecon-subtitle">③ NOUS ou VOUS ?</div>
+      <div class="ugo-box"><span class="owl">🦉</span><span><strong>NOUS</strong> = toi + moi (ou d'autres + moi). <strong>VOUS</strong> = toi + d'autres personnes (pas moi). Mon astuce : "Et moi ?" → NOUS. "Pas moi" → VOUS ! 😊</span></div>
+      <p class="ex-line">Ugo et moi → <strong>nous</strong> jouons. Toi et ta sœur → <strong>vous</strong> dansez. 💃</p>
+      <button class="btn-compris" onclick="goPhase('ex1',1)">Je joue ! 🚀</button>
+    </div>
+  </div>
+</div>
+
+<div class="phase" id="phase-ex1">
+  <div class="ugo-box"><span class="owl">🦉</span><span>Quel pronom remplace ce nom ? Pense au genre (masculin/féminin) et au nombre (singulier/pluriel) ! 🗣️</span></div>
+  <div class="ex-card">
+    <h3>✏️ Exercice 1 — Quel pronom remplace ce nom ?</h3>
+    <p class="consigne">Clique sur le bon pronom. (1 pt par question)</p>
+    <div id="ex1-cont"></div>
+    <button class="btn-suite" id="bs-ex1" onclick="goPhase('ex2',2)">Exercice 2 →</button>
+  </div>
+</div>
+
+<div class="phase" id="phase-ex2">
+  <div class="ugo-box"><span class="owl">🦉</span><span>Lis le contexte entre parenthèses. Qui parle ? Pense à NOUS (= et moi) ou VOUS (= pas moi) ! 😊</span></div>
+  <div class="ex-card">
+    <h3>✏️ Exercice 2 — Quel pronom dans cette phrase ?</h3>
+    <p class="consigne">Clique sur le bon pronom. (1 pt par question)</p>
+    <div id="ex2-cont"></div>
+    <button class="btn-suite" id="bs-ex2" onclick="goPhase('ex3',3)">Exercice 3 →</button>
+  </div>
+</div>
+
+<div class="phase" id="phase-ex3">
+  <div class="ugo-box"><span class="owl">🦉</span><span>Ce pronom est-il correct ? Rappel : garçon/masc. → IL. Fille/fém. → ELLE. Plusieurs = ILS (ou ELLES si que des filles). 🔍</span></div>
+  <div class="ex-card">
+    <h3>🎯 Exercice 3 — Ce pronom est correct ?</h3>
+    <p class="consigne">Lis et réponds Oui ou Non. (1 pt par question)</p>
+    <div id="ex3-cont"></div>
+    <button class="btn-suite" id="bs-ex3" onclick="goPhase('ex4',4)">Exercice 4 →</button>
+  </div>
+</div>
+
+<div class="phase" id="phase-ex4">
+  <div class="ugo-box"><span class="owl">🦉</span><span>Lis la phrase complète et choisis le pronom qui convient pour remplacer le nom souligné ! 🌟</span></div>
+  <div class="ex-card">
+    <h3>🎯 Exercice 4 — Complète avec le bon pronom !</h3>
+    <p class="consigne">Clique sur le bon pronom. (1 pt par question)</p>
+    <div id="ex4-cont"></div>
+    <button class="btn-suite" id="bs-ex4" onclick="goPhase('bilan',5)">Voir mon bilan →</button>
+  </div>
+</div>
+
+<div class="phase" id="phase-bilan">
+  <div class="bilan-card">
+    <div style="font-size:2.2rem">🦉</div>
+    <div class="bilan-stars-row"><div class="etoile" id="etoile1">⭐</div><div class="etoile" id="etoile2">⭐</div><div class="etoile" id="etoile3">⭐</div></div>
+    <div class="bilan-score-row"><span id="bilan-pts">0</span> <span id="bilan-sur">/ 16</span> pts</div>
+    <div class="bilan-title" id="bilan-title"></div>
+    <div class="bilan-msg" id="bilan-msg"></div>
+    <hr style="margin:.8rem 0;border:none;border-top:2px solid var(--acc-pale)">
+    <div class="memo-card">
+      <h3>📝 Ce qu'il faut retenir</h3>
+      <div class="memo-item"><span class="memo-dot">🟢</span><span>Singulier : <strong>je</strong> (moi) · <strong>tu</strong> (toi) · <strong>il</strong> (masc.) · <strong>elle</strong> (fém.)</span></div>
+      <div class="memo-item"><span class="memo-dot">🟢</span><span>Pluriel : <strong>nous</strong> (et moi) · <strong>vous</strong> (pas moi) · <strong>ils</strong> (plusieurs masc.) · <strong>elles</strong> (plusieurs fém.)</span></div>
+      <div class="memo-item"><span class="memo-dot">🟢</span><span>Garçons + filles → <strong>ILS</strong> (le masculin l'emporte). Que des filles → <strong>ELLES</strong>.</span></div>
+      <div class="memo-item"><span class="memo-dot">💡</span><span>Astuce NOUS/VOUS : "Et moi dans le groupe ?" → NOUS. "Pas moi" → VOUS.</span></div>
+    </div>
+    <div class="bilan-btns"><button class="btn-act vert" onclick="printLecon()">📖 Imprimer</button><button class="btn-act cyan" onclick="printEval()">📝 Exercices</button></div>
+  </div>
+</div>
+</main>
+<div class="print-lecon-content" style="font-family:'Fredoka One',cursive;color:#1e293b;font-size:17px;max-width:620px;margin:0 auto;">
+  <h1 style="color:#16a34a;margin-bottom:6px;">G12 — Les pronoms personnels sujets</h1>
+  <p style="font-family:'Nunito',sans-serif;font-size:.75rem;color:#64748b;margin-bottom:14px;">CE1 / CE2 · Français — Grammaire · L'Atelier du Devoir</p>
+  <div style="background:#f0fdf4;border-left:5px solid #16a34a;border-radius:0 10px 10px 0;padding:9px 13px;margin:8px 0;font-size:.87rem;"><strong style="color:#16a34a;">Singulier :</strong> je · tu · il (masc.) · elle (fém.)</div>
+  <div style="background:#f0fdf4;border-left:5px solid #16a34a;border-radius:0 10px 10px 0;padding:9px 13px;margin:8px 0;font-size:.87rem;"><strong style="color:#16a34a;">Pluriel :</strong> nous · vous · ils (masc. ou mixte) · elles (fém. uniquement)</div>
+  <div style="background:#f0fdf4;border-left:5px solid #16a34a;border-radius:0 10px 10px 0;padding:9px 13px;margin:8px 0;font-size:.87rem;"><strong style="color:#16a34a;">Astuce :</strong> garçons + filles → ILS. Que des filles → ELLES. Et moi dans le groupe → NOUS.</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
+<script>
+var score=0, TOTAL_PTS=4+4+4+4;
+function addPt(){score++;document.getElementById('score-display').textContent=score;}
+function updSteps(n){for(var i=0;i<6;i++){var s=document.getElementById('s'+i);if(!s)return;s.classList.remove('active','done');if(i<n)s.classList.add('done');else if(i===n)s.classList.add('active');}}
+function shuffle(a){var b=a.slice();for(var i=b.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=b[i];b[i]=b[j];b[j]=t;}return b;}
+function revealBloc(n){
+  var b=document.getElementById('bloc-'+n);if(!b)return;
+  var p=document.getElementById('bloc-'+(n-1));
+  if(p){var btn=p.querySelector('.btn-compris');if(btn){btn.textContent='✓ Compris !';btn.disabled=true;btn.style.opacity='.4';}}
+  b.classList.add('revealed');
+  setTimeout(function(){var hH=(document.querySelector('.header')||{offsetHeight:0}).offsetHeight;var r=b.getBoundingClientRect();window.scrollTo({top:window.pageYOffset+r.top-hH-16,behavior:'smooth'});},150);
+}
+function goPhase(ph,si){
+  document.querySelectorAll('.phase').forEach(function(p){p.classList.remove('active');});
+  var el=document.getElementById('phase-'+ph);
+  if(el){el.classList.add('active');setTimeout(function(){el.scrollIntoView({behavior:'smooth',block:'start'});},80);}
+  updSteps(si);
+  if(ph==='ex1')initEx1();if(ph==='ex2')initEx2();if(ph==='ex3')initEx3();if(ph==='ex4')initEx4();if(ph==='bilan')showBilan();
+}
+function showBilan(){
+  var tot=TOTAL_PTS;
+  if(typeof enregistrerProgression==='function'){ enregistrerProgression('G12', score, tot); }
+  document.getElementById('bilan-pts').textContent=score;document.getElementById('bilan-sur').textContent='/ '+tot;
+  var pct=score/tot,t,m;
+  if(pct>=.9){t='Brillant(e) ! 🎉🌟';m="Tu maîtrises tous les pronoms personnels sujets. Ugo est fier de toi !";}
+  else if(pct>=.66){t='Très bien ! 😊⭐';m="Bon travail ! Rappel : IL/ELLE au singulier, ILS/ELLES au pluriel.";}
+  else if(pct>=.33){t='Bien essayé ! 💪';m="Continue ! Pense au genre et au nombre pour choisir le bon pronom.";}
+  else{t='Courage ! 🦉';m="Relis la leçon ! Je, tu, il, elle (sing.) · nous, vous, ils, elles (plur.).";}
+  document.getElementById('bilan-title').textContent=t;document.getElementById('bilan-msg').textContent=m;
+  var seuils=[Math.ceil(tot*.33),Math.ceil(tot*.66),Math.ceil(tot*.89)];
+  ['etoile1','etoile2','etoile3'].forEach(function(id,i){var el=document.getElementById(id);if(score>=seuils[i]){(function(e,d){setTimeout(function(){e.classList.add('earned');},d);})(el,300+i*450);}else{el.style.filter='grayscale(1)';}});
+  if(pct>=.5)confetti();
+}
+function confetti(){
+  var cols=['#16a34a','#86efac','#d97706','#7c3aed','#be185d'];
+  for(var i=0;i<65;i++){(function(){var el=document.createElement('div');el.className='confetti-piece';el.style.cssText='left:'+Math.random()*100+'vw;background:'+cols[Math.floor(Math.random()*cols.length)]+';animation-duration:'+(1.8+Math.random()*2.2)+'s;animation-delay:'+Math.random()*1.5+'s;width:'+(7+Math.random()*10)+'px;height:'+(7+Math.random()*10)+'px;border-radius:'+(Math.random()>.5?'50%':'4px')+';';document.body.appendChild(el);setTimeout(function(){if(el.parentNode)el.remove();},5000);})();}
+}
+// DATA G12
+var ex1Pool=[
+  {noun:"le chat 🐱",opts:["il","elle","ils"],cor:"il",expl:"Chat = masculin singulier → IL dort. 🐱"},
+  {noun:"la fleur 🌸",opts:["il","elle","elles"],cor:"elle",expl:"Fleur = féminin singulier → ELLE pousse. 🌸"},
+  {noun:"les enfants 👦👧",opts:["il","ils","elles"],cor:"ils",expl:"Enfants = plusieurs (mixte) → ILS jouent. 👦👧"},
+  {noun:"Léa 👧",opts:["il","elle","elles"],cor:"elle",expl:"Léa = une fille → ELLE chante. 👧"},
+  {noun:"Paul 👦",opts:["il","elle","ils"],cor:"il",expl:"Paul = un garçon → IL court. 👦"},
+  {noun:"les filles 👧👧",opts:["ils","elles","il"],cor:"elles",expl:"Filles = plusieurs féminin → ELLES dansent. 👧👧"},
+  {noun:"Ugo 🦉",opts:["il","elle","ils"],cor:"il",expl:"Ugo = masculin → IL vole. 🦉"},
+  {noun:"les chats 🐱🐱",opts:["il","ils","elles"],cor:"ils",expl:"Chats = plusieurs masculin → ILS ronronnent. 🐱🐱"}
+];
+var ex2Pool=[
+  {phrase:"___ joue au foot. (Paul)",opts:["Il","Elle","Ils"],cor:"Il",expl:"Paul = garçon → IL joue au foot. 👦"},
+  {phrase:"___ aime la musique. (Léa)",opts:["Il","Elle","Ils"],cor:"Elle",expl:"Léa = fille → ELLE aime la musique. 👧"},
+  {phrase:"___ courons vite. (Ugo et moi)",opts:["Nous","Vous","Ils"],cor:"Nous",expl:"Ugo et moi = nous deux → NOUS courons. 🏃"},
+  {phrase:"___ regardent la télé. (les garçons)",opts:["Il","Ils","Elles"],cor:"Ils",expl:"Les garçons = plusieurs → ILS regardent. 📺"},
+  {phrase:"___ chantez bien. (toi et tes amis)",opts:["Nous","Vous","Ils"],cor:"Vous",expl:"Toi et tes amis, pas moi → VOUS chantez. 🎵"},
+  {phrase:"___ dort dans son nid. (le petit oiseau)",opts:["Il","Elle","Ils"],cor:"Il",expl:"L'oiseau = masculin → IL dort. 🐦"},
+  {phrase:"___ poussent dans le jardin. (les fleurs)",opts:["Ils","Elles","Elle"],cor:"Elles",expl:"Les fleurs = féminin pluriel → ELLES poussent. 🌸"},
+  {phrase:"___ aimes les frites ? (toi)",opts:["Je","Tu","Il"],cor:"Tu",expl:"Toi = tu → TU aimes les frites ? 🍟"}
+];
+var ex3OkPool=[
+  {phrase:"Le chien → Il aboie fort.",correct:true,expl:"Oui ! Chien = masculin → IL aboie. ✅"},
+  {phrase:"Les filles → Elles chantent.",correct:true,expl:"Oui ! Filles = féminin pluriel → ELLES chantent. ✅"},
+  {phrase:"Ugo et moi → Nous jouons.",correct:true,expl:"Oui ! Ugo et moi = nous → NOUS jouons. ✅"},
+  {phrase:"La maison → Elle est belle.",correct:true,expl:"Oui ! Maison = féminin → ELLE est belle. ✅"}
+];
+var ex3KoPool=[
+  {phrase:"La fille → Il chante.",correct:false,expl:"Non ! Fille = féminin → ELLE chante (pas il). ❌"},
+  {phrase:"Les garçons → Elles jouent.",correct:false,expl:"Non ! Garçons = masculin → ILS jouent (pas elles). ❌"},
+  {phrase:"Le chat → Elle dort.",correct:false,expl:"Non ! Chat = masculin → IL dort (pas elle). ❌"},
+  {phrase:"Toi et moi → Vous jouez.",correct:false,expl:"Non ! Toi et moi = nous → NOUS jouons (pas vous). ❌"}
+];
+var ex4Pool=[
+  {phrase:"Les oiseaux dorment dans leur nid. ___ dorment.",opts:["Il","Ils","Elles"],cor:"Ils",expl:"Les oiseaux = masculin pluriel → ILS dorment. 🐦🐦"},
+  {phrase:"Papa mange une pomme. ___ mange bien.",opts:["Il","Elle","Ils"],cor:"Il",expl:"Papa = masculin → IL mange. 👨"},
+  {phrase:"Léa et Emma chantent. ___ chantent bien.",opts:["Ils","Elles","Nous"],cor:"Elles",expl:"Léa et Emma = deux filles → ELLES chantent. 👧👧"},
+  {phrase:"Mon frère et moi jouons. ___ jouons ensemble.",opts:["Nous","Vous","Ils"],cor:"Nous",expl:"Mon frère et moi = nous deux → NOUS jouons. 🎮"},
+  {phrase:"La lune brille dans le ciel. ___ est belle.",opts:["Il","Elle","Ils"],cor:"Elle",expl:"La lune = féminin → ELLE brille. 🌙"},
+  {phrase:"Les chats ronronnent. ___ ronronnent fort.",opts:["Il","Ils","Elles"],cor:"Ils",expl:"Les chats = masculin pluriel → ILS ronronnent. 🐱🐱"},
+  {phrase:"Maman cuisine un gâteau. ___ cuisine bien.",opts:["Il","Elle","Elles"],cor:"Elle",expl:"Maman = féminin → ELLE cuisine. 👩‍🍳"},
+  {phrase:"Toi et ta sœur dansez. ___ dansez très bien.",opts:["Nous","Vous","Ils"],cor:"Vous",expl:"Toi et ta sœur (pas moi) → VOUS dansez. 💃"}
+];
+// EX1
+var ex1Items=[],ex1Qi=0;
+function initEx1(){ex1Items=shuffle(ex1Pool).slice(0,4);ex1Qi=0;renderEx1();}
+function renderEx1(){
+  var item=ex1Items[ex1Qi];
+  var h='<div class="ex-progress">Question '+(ex1Qi+1)+' / 4</div>';
+  h+='<div class="word-display">'+item.noun+'</div>';
+  h+='<div class="qcm-opts" id="ex1-opts">';
+  shuffle(item.opts.slice()).forEach(function(o){h+='<button data-val="'+o+'" onclick="checkEx1(this)">'+o+'</button>';});
+  h+='</div><div class="qcm-fb" id="ex1-fb"></div>';
+  document.getElementById('ex1-cont').innerHTML=h;
+}
+function checkEx1(btn){
+  var item=ex1Items[ex1Qi];var opts=document.getElementById('ex1-cont').querySelectorAll('.qcm-opts button');for(var i=0;i<opts.length;i++)opts[i].disabled=true;
+  var fb=document.getElementById('ex1-fb');
+  if(btn.dataset.val===item.cor){btn.classList.add('correct');fb.className='qcm-fb show ok';fb.innerHTML='✅ '+item.expl;addPt();}
+  else{btn.classList.add('wrong');for(var i=0;i<opts.length;i++){if(opts[i].dataset.val===item.cor)opts[i].classList.add('reveal');}fb.className='qcm-fb show ko';fb.innerHTML='❌ '+item.expl;}
+  ex1Qi++;if(ex1Qi<4){setTimeout(renderEx1,1500);}else{setTimeout(function(){document.getElementById('bs-ex1').classList.add('show');},1500);}
+}
+// EX2
+var ex2Items=[],ex2Qi=0;
+function initEx2(){ex2Items=shuffle(ex2Pool).slice(0,4);ex2Qi=0;renderEx2();}
+function renderEx2(){
+  var item=ex2Items[ex2Qi];
+  var h='<div class="ex-progress">Question '+(ex2Qi+1)+' / 4</div>';
+  h+='<div class="phrase-display">'+item.phrase+'</div>';
+  h+='<div class="qcm-opts" id="ex2-opts">';
+  shuffle(item.opts.slice()).forEach(function(o){h+='<button data-val="'+o+'" onclick="checkEx2(this)">'+o+'</button>';});
+  h+='</div><div class="qcm-fb" id="ex2-fb"></div>';
+  document.getElementById('ex2-cont').innerHTML=h;
+}
+function checkEx2(btn){
+  var item=ex2Items[ex2Qi];var opts=document.getElementById('ex2-cont').querySelectorAll('.qcm-opts button');for(var i=0;i<opts.length;i++)opts[i].disabled=true;
+  var fb=document.getElementById('ex2-fb');
+  if(btn.dataset.val===item.cor){btn.classList.add('correct');fb.className='qcm-fb show ok';fb.innerHTML='✅ '+item.expl;addPt();}
+  else{btn.classList.add('wrong');for(var i=0;i<opts.length;i++){if(opts[i].dataset.val===item.cor)opts[i].classList.add('reveal');}fb.className='qcm-fb show ko';fb.innerHTML='❌ '+item.expl;}
+  ex2Qi++;if(ex2Qi<4){setTimeout(renderEx2,1500);}else{setTimeout(function(){document.getElementById('bs-ex2').classList.add('show');},1500);}
+}
+// EX3 VF
+var ex3Items=[],ex3Qi=0;
+function initEx3(){ex3Items=shuffle(shuffle(ex3OkPool).slice(0,2).concat(shuffle(ex3KoPool).slice(0,2)));ex3Qi=0;renderEx3();}
+function renderEx3(){
+  var item=ex3Items[ex3Qi];
+  var h='<div class="ex-progress">Question '+(ex3Qi+1)+' / 4</div>';
+  h+='<div class="phrase-display" style="font-size:.95rem;"><em>'+item.phrase+'</em></div>';
+  h+='<div class="vf-btns"><button class="btn-vf btn-vrai" onclick="checkEx3(this,true)">👍 Oui</button><button class="btn-vf btn-faux" onclick="checkEx3(this,false)">👎 Non</button></div>';
+  h+='<div class="qcm-fb" id="ex3-fb"></div>';
+  document.getElementById('ex3-cont').innerHTML=h;
+}
+function checkEx3(btn,choice){
+  var item=ex3Items[ex3Qi];var cont=document.getElementById('ex3-cont');var btns=cont.querySelectorAll('.btn-vf');for(var i=0;i<btns.length;i++)btns[i].disabled=true;
+  var fb=document.getElementById('ex3-fb');
+  if(choice===item.correct){btn.classList.add('correct');fb.className='qcm-fb show ok';fb.innerHTML='✅ '+item.expl;addPt();}
+  else{btn.classList.add('wrong');for(var i=0;i<btns.length;i++){if((btns[i].classList.contains('btn-vrai')&&item.correct)||(btns[i].classList.contains('btn-faux')&&!item.correct))btns[i].classList.add('reveal');}fb.className='qcm-fb show ko';fb.innerHTML='❌ '+item.expl;}
+  ex3Qi++;if(ex3Qi<4){setTimeout(renderEx3,1500);}else{setTimeout(function(){document.getElementById('bs-ex3').classList.add('show');},1500);}
+}
+// EX4
+var ex4Items=[],ex4Qi=0;
+function initEx4(){ex4Items=shuffle(ex4Pool).slice(0,4);ex4Qi=0;renderEx4();}
+function renderEx4(){
+  var item=ex4Items[ex4Qi];var opts=shuffle(item.opts.slice());
+  var h='<div class="ex-progress">Question '+(ex4Qi+1)+' / 4</div>';
+  h+='<div class="phrase-display" style="font-size:.9rem;">'+item.phrase+'</div>';
+  h+='<div class="qcm-opts" id="ex4-opts">';
+  opts.forEach(function(o){h+='<button data-val="'+o+'" onclick="checkEx4(this)">'+o+'</button>';});
+  h+='</div><div class="qcm-fb" id="ex4-fb"></div>';
+  document.getElementById('ex4-cont').innerHTML=h;
+}
+function checkEx4(btn){
+  var item=ex4Items[ex4Qi];var opts=document.getElementById('ex4-cont').querySelectorAll('.qcm-opts button');for(var i=0;i<opts.length;i++)opts[i].disabled=true;
+  var fb=document.getElementById('ex4-fb');
+  if(btn.dataset.val===item.cor){btn.classList.add('correct');fb.className='qcm-fb show ok';fb.innerHTML='✅ '+item.expl;addPt();}
+  else{btn.classList.add('wrong');for(var i=0;i<opts.length;i++){if(opts[i].dataset.val===item.cor)opts[i].classList.add('reveal');}fb.className='qcm-fb show ko';fb.innerHTML='❌ '+item.expl;}
+  ex4Qi++;if(ex4Qi<4){setTimeout(renderEx4,1500);}else{setTimeout(function(){document.getElementById('bs-ex4').classList.add('show');},1500);}
+}
+function printLecon(){document.body.classList.add('print-mode-lecon');document.body.classList.remove('print-mode-eval');window.print();document.body.classList.remove('print-mode-lecon');}
+function printEval(){document.body.classList.add('print-mode-eval');document.body.classList.remove('print-mode-lecon');window.print();document.body.classList.remove('print-mode-eval');}
+</script>
+</body>
+</html>

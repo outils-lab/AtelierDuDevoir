@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>G13 — Identifier le verbe | L'Atelier du Devoir</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--acc:#f59e0b;--acc-pale:#fffbeb;--acc-mid:#fcd34d;--acc-dark:#92400e;--ok:#059669;--ok-pale:#d1fae5;--ko:#dc2626;--ko-pale:#fee2e2;--radius:18px;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Fredoka One',cursive;background:var(--acc-pale);color:#1e293b;font-size:21px;line-height:1.5;}
+.print-bar{display:flex;gap:8px;padding:8px 14px;background:#fff;border-bottom:2px solid var(--acc-pale);}
+.print-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:5px;padding:7px 10px;border-radius:12px;border:2px solid;background:white;font-family:'Nunito',sans-serif;font-size:.76rem;font-weight:700;cursor:pointer;}
+.print-btn-lecon{border-color:var(--acc);color:var(--acc-dark);}
+.print-btn-eval{border-color:#0891b2;color:#0891b2;}
+.header{background:white;border-bottom:4px solid var(--acc-pale);position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.1);}
+.header-top{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;}
+.logo{font-size:1rem;color:var(--acc-dark);text-decoration:none;}
+.score-badge{background:var(--acc);color:white;font-size:.88rem;padding:6px 16px;border-radius:20px;}
+.steps-wrap{padding:0 14px 9px;}
+.steps{display:flex;gap:4px;}
+.step{flex:1;height:9px;border-radius:5px;background:#e2e8f0;transition:background .35s;}
+.step.active{background:var(--acc-mid);}
+.step.done{background:var(--acc);}
+.steps-labels{display:flex;gap:4px;margin-top:3px;}
+.step-lbl{flex:1;font-size:.56rem;color:#94a3b8;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+main{max-width:660px;margin:0 auto;padding:16px 14px 80px;}
+.accroche{background:white;border-radius:var(--radius);padding:14px 16px;margin-bottom:14px;box-shadow:0 2px 10px rgba(0,0,0,.06);}
+.accroche h1{font-size:1.15rem;color:var(--acc-dark);margin-bottom:4px;}
+.accroche p{font-size:.78rem;color:#64748b;font-family:'Nunito',sans-serif;}
+.meta-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+.meta-tag{background:var(--acc-pale);color:var(--acc-dark);font-size:.7rem;padding:3px 10px;border-radius:20px;font-family:'Nunito',sans-serif;font-weight:700;}
+.phase{display:none;}
+.phase.active{display:block;}
+.ugo-box{background:#fff7ed;border-radius:14px;padding:10px 14px;margin-bottom:12px;font-family:'Nunito',sans-serif;font-size:.82rem;color:#92400e;display:flex;gap:9px;align-items:flex-start;}
+.ugo-box .owl{font-size:1.5rem;flex-shrink:0;}
+.lecon-card{background:white;border-radius:var(--radius);padding:16px;box-shadow:0 2px 10px rgba(0,0,0,.06);}
+.lecon-card h2{font-size:1.05rem;color:var(--acc-dark);margin-bottom:12px;}
+.lecon-block{display:none;}
+.lecon-block.revealed{display:block;}
+.lecon-subtitle{font-size:.82rem;color:var(--acc-dark);margin-bottom:8px;padding:5px 10px;background:var(--acc-pale);border-radius:8px;font-family:'Nunito',sans-serif;font-weight:800;}
+.regle-box{background:var(--acc-pale);border-left:5px solid var(--acc);border-radius:0 12px 12px 0;padding:10px 14px;margin:8px 0;font-size:.88rem;}
+.regle-box strong{color:var(--acc-dark);}
+.ex-line{font-size:.78rem;color:#64748b;margin:.3rem 0 .3rem 14px;font-style:italic;font-family:'Nunito',sans-serif;}
+.demo-phrase{text-align:center;padding:10px;background:#f8fafc;border-radius:10px;margin:8px 0;font-size:1rem;}
+.demo-verb{display:inline-block;background:var(--acc);color:white;border-radius:6px;padding:2px 8px;}
+.demo-sub{display:inline-block;background:#eff6ff;color:#1e3a8a;border-radius:6px;padding:2px 8px;border:2px solid #3b82f6;}
+.trick-box{background:#fffbeb;border:2px dashed var(--acc);border-radius:12px;padding:10px 14px;margin:8px 0;font-size:.82rem;font-family:'Nunito',sans-serif;}
+.trick-box strong{color:var(--acc-dark);}
+.btn-compris{display:block;margin:14px auto 0;background:var(--acc);color:white;border:none;border-radius:50px;padding:10px 28px;font-family:'Fredoka One',cursive;font-size:.95rem;cursor:pointer;transition:transform .12s,opacity .2s;}
+.btn-compris:active{transform:scale(.95);}
+.ex-card{background:white;border-radius:var(--radius);padding:16px;box-shadow:0 2px 10px rgba(0,0,0,.06);}
+.ex-card h3{font-size:.98rem;color:var(--acc-dark);margin-bottom:5px;}
+.consigne{font-size:.77rem;color:#64748b;margin-bottom:11px;font-family:'Nunito',sans-serif;}
+.ex-progress{font-size:.76rem;color:var(--acc-dark);font-family:'Nunito',sans-serif;font-weight:800;margin-bottom:8px;text-align:center;background:var(--acc-pale);padding:4px;border-radius:8px;}
+.phrase-display{font-size:1rem;text-align:center;padding:11px 14px;margin:8px 0 6px;background:#f8fafc;border-radius:12px;border:2px solid #e2e8f0;font-family:'Nunito',sans-serif;}
+.word-row{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:10px 0 12px;}
+.word-btn{background:#f8fafc;border:2px solid #e2e8f0;border-radius:10px;padding:8px 14px;font-family:'Fredoka One',cursive;font-size:.92rem;cursor:pointer;transition:all .15s;}
+.word-btn.correct{background:var(--ok-pale);border-color:var(--ok);color:#065f46;}
+.word-btn.wrong{background:var(--ko-pale);border-color:var(--ko);color:#7f1d1d;}
+.word-btn.reveal{background:var(--ok-pale);border-color:var(--ok);color:#065f46;}
+.word-btn:disabled{cursor:default;}
+.mot-highlight{display:inline-block;background:var(--acc);color:white;border-radius:8px;padding:3px 12px;font-size:1.05rem;}
+.qcm-opts{display:flex;flex-direction:column;gap:7px;}
+.qcm-opts button{background:#f8fafc;border:2px solid #e2e8f0;border-radius:12px;padding:9px 14px;font-family:'Fredoka One',cursive;font-size:.88rem;text-align:center;cursor:pointer;transition:all .15s;}
+.qcm-opts button.correct{background:var(--ok-pale);border-color:var(--ok);color:#065f46;}
+.qcm-opts button.wrong{background:var(--ko-pale);border-color:var(--ko);color:#7f1d1d;}
+.qcm-opts button.reveal{background:var(--ok-pale);border-color:var(--ok);color:#065f46;}
+.qcm-opts button:disabled{cursor:default;}
+.vf-btns{display:flex;gap:12px;justify-content:center;}
+.btn-vf{flex:1;max-width:180px;min-height:54px;padding:10px 14px;border-radius:50px;border:3px solid;font-family:'Fredoka One',cursive;font-size:.95rem;cursor:pointer;transition:all .15s;}
+.btn-vrai{background:var(--ok-pale);color:#065f46;border-color:var(--ok);}
+.btn-faux{background:var(--ko-pale);color:#7f1d1d;border-color:var(--ko);}
+.btn-vf.correct{transform:scale(1.06);box-shadow:0 0 0 3px rgba(5,150,105,.3);}
+.btn-vf.wrong{opacity:.5;}
+.btn-vf.reveal{transform:scale(1.06);box-shadow:0 0 0 3px rgba(5,150,105,.3);}
+.btn-vf:disabled{cursor:default;}
+.qcm-fb{display:none;font-family:'Nunito',sans-serif;font-size:.79rem;padding:7px 10px;border-radius:8px;margin-top:8px;}
+.qcm-fb.show{display:block;}
+.qcm-fb.ok{background:var(--ok-pale);color:#065f46;}
+.qcm-fb.ko{background:var(--ko-pale);color:#7f1d1d;}
+.btn-suite{display:none;margin:12px auto 0;background:var(--acc);color:white;border:none;border-radius:50px;padding:10px 26px;font-family:'Fredoka One',cursive;font-size:.9rem;cursor:pointer;}
+.btn-suite.show{display:block;}
+.bilan-card{background:white;border-radius:var(--radius);padding:22px 16px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,.1);}
+.bilan-stars-row{display:flex;justify-content:center;gap:6px;margin:.4rem 0 .8rem;}
+.etoile{font-size:2.8rem;opacity:.25;transition:opacity .5s,transform .5s;}
+.etoile.earned{opacity:1;transform:scale(1.2);}
+.bilan-score-row{font-size:2.2rem;color:var(--acc-dark);font-weight:700;margin-bottom:.2rem;}
+.bilan-title{font-size:1.1rem;color:#1e293b;margin:.2rem 0 .4rem;}
+.bilan-msg{font-size:.85rem;color:#64748b;font-family:'Nunito',sans-serif;margin-bottom:1rem;}
+.memo-card{background:var(--acc-pale);border-radius:14px;padding:14px 16px;text-align:left;}
+.memo-card h3{font-size:.9rem;color:var(--acc-dark);margin-bottom:10px;text-align:center;}
+.memo-item{display:flex;gap:7px;margin-bottom:7px;font-size:.8rem;font-family:'Nunito',sans-serif;}
+.memo-dot{color:var(--acc-dark);flex-shrink:0;}
+.bilan-btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:16px;}
+.btn-act{padding:9px 18px;border-radius:50px;border:2px solid;background:white;font-family:'Nunito',sans-serif;font-weight:700;font-size:.82rem;cursor:pointer;}
+.btn-act.amber{border-color:var(--acc-dark);color:var(--acc-dark);}
+.btn-act.cyan{border-color:#0891b2;color:#0891b2;}
+.confetti-piece{position:fixed;border-radius:2px;top:-20px;animation:fall linear both;pointer-events:none;z-index:9999;}
+@keyframes fall{0%{transform:translateY(0) rotate(0);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
+.print-lecon-content{display:none;}
+@media print{.header,.print-bar,.accroche,.phase,.confetti-piece{display:none!important;}body{background:white;}@page{margin:14mm;}body.print-mode-lecon .print-lecon-content{display:block!important;}}
+</style>
+</head>
+<body>
+<div class="print-bar">
+  <button class="print-btn print-btn-lecon" onclick="printLecon()">📖 Imprimer la leçon</button>
+  <button class="print-btn print-btn-eval" onclick="window.print()">📝 Imprimer les exercices</button>
+</div>
+<header class="header">
+  <div class="header-top">
+    <a href="../cp.html" class="logo">🦉 L'Atelier du Devoir</a>
+    <div class="score-badge">⭐ <span id="score-display">0</span> pts</div>
+  </div>
+  <div class="steps-wrap">
+    <div class="steps"><div class="step active" id="s0"></div><div class="step" id="s1"></div><div class="step" id="s2"></div><div class="step" id="s3"></div><div class="step" id="s4"></div><div class="step" id="s5"></div></div>
+    <div class="steps-labels"><div class="step-lbl">📖 Leçon</div><div class="step-lbl">✏️ Ex. 1</div><div class="step-lbl">✏️ Ex. 2</div><div class="step-lbl">🎯 Ex. 3</div><div class="step-lbl">🎯 Ex. 4</div><div class="step-lbl">🏆 Bilan</div></div>
+  </div>
+</header>
+<main>
+<div class="accroche">
+  <h1>🔍 Identifier le verbe dans la phrase</h1>
+  <p>Le verbe dit ce que fait ou ce qu'est le sujet. C'est lui le chef !</p>
+  <div class="meta-row"><span class="meta-tag">📚 CP / CE1</span><span class="meta-tag">⏱️ ~15 min</span><span class="meta-tag">⭐⭐ Moyen</span><span class="meta-tag">🎯 Français — Grammaire</span></div>
+</div>
+
+<div class="phase active" id="phase-lecon">
+  <div class="lecon-card">
+    <h2>📖 La leçon</h2>
+    <div class="lecon-block revealed" id="bloc-0">
+      <div class="lecon-subtitle">① Ugo repère le verbe !</div>
+      <div class="ugo-box"><span class="owl">🦉</span><span>🔍 Ugo lit : "Le chat dort." Il cherche le verbe. Il pose la question : <em>"Le chat fait quoi ?"</em> → Il <strong>DORT</strong>. DORT = le verbe ! Le verbe dit ce que fait le sujet.</span></div>
+      <div class="demo-phrase">"Le chat <span class="demo-verb">dort</span>."</div>
+      <div class="regle-box"><strong>Le verbe</strong> = le mot qui dit ce que fait ou ce qu'est le sujet.<br>Pour le trouver : pose la question <strong>"Qui ou quoi + fait/est... ?"</strong></div>
+      <button class="btn-compris" onclick="revealBloc(1)">J'ai compris ! 🎉</button>
+    </div>
+    <div class="lecon-block" id="bloc-1">
+      <div class="lecon-subtitle">② Le truc pour trouver le verbe</div>
+      <div class="trick-box"><strong>✨ Le truc d'Ugo :</strong> Dis la phrase au passé ou au futur. Le mot qui change = c'est le verbe !<br><em>"Le chat DORT." → "Le chat DORMAIT." → "Le chat DORMIRA."</em><br>DORT / DORMAIT / DORMIRA → c'est bien le verbe !</div>
+      <p class="ex-line">→ "Les enfants <strong>jouent</strong>." → hier : "Les enfants <strong>jouaient</strong>." ✅</p>
+      <p class="ex-line">→ "Tu <strong>chantes</strong> bien." → hier : "Tu <strong>chantais</strong> bien." ✅</p>
+      <button class="btn-compris" onclick="revealBloc(2)">J'ai compris ! 🎉</button>
+    </div>
+    <div class="lecon-block" id="bloc-2">
+      <div class="lecon-subtitle">③ Verbe d'action ou verbe d'état ?</div>
+      <div class="ugo-box"><span class="owl">🦉</span><span>Certains verbes disent ce qu'on <strong>fait</strong> (courir, manger, jouer…). D'autres disent ce qu'on <strong>est</strong> (être, sembler, paraître…). Les deux sont des verbes ! 🦉</span></div>
+      <div class="demo-phrase">"Il <span class="demo-verb">court</span> vite." &nbsp;·&nbsp; "Elle <span class="demo-verb">est</span> belle."</div>
+      <button class="btn-compris" onclick="goPhase('ex1',1)">Je joue ! 🚀</button>
+    </div>
+  </div>
+</div>
+
+<div class="phase" id="phase-ex1">
+  <div class="ugo-box"><span class="owl">🦉</span><span>Clique sur le mot qui est le verbe ! Pour t'aider : pose la question "Qui fait quoi ?" 🔍</span></div>
+  <div class="ex-card">
+    <h3>✏️ Exercice 1 — Clique sur le verbe !</h3>
+    <p class="consigne">Lis la phrase. Clique sur le verbe. (1 pt par question)</p>
+    <div id="ex1-cont"></div>
+    <button class="btn-suite" id="bs-ex1" onclick="goPhase('ex2',2)">Exercice 2 →</button>
+  </div>
+</div>
+
+<div class="phase" id="phase-ex2">
+  <div class="ugo-box"><span class="owl">🦉</span><span>Parmi ces trois mots, lequel est le verbe ? Pense à changer la phrase au passé — le verbe change ! 🕐</span></div>
+  <div class="ex-card">
+    <h3>✏️ Exercice 2 — Quel mot est le verbe ?</h3>
+    <p class="consigne">Clique sur le verbe parmi les 3 mots. (1 pt par question)</p>
+    <div id="ex2-cont"></div>
+    <button class="btn-suite" id="bs-ex2" onclick="goPhase('ex3',3)">Exercice 3 →</button>
+  </div>
+</div>
+
+<div class="phase" id="phase-ex3">
+  <div class="ugo-box"><span class="owl">🦉</span><span>Je te montre un mot souligné dans la phrase. Est-ce que ce mot est le verbe ? Dis OUI ou NON ! 🔎</span></div>
+  <div class="ex-card">
+    <h3>🎯 Exercice 3 — Ce mot est-il le verbe ?</h3>
+    <p class="consigne">Lis et réponds Oui ou Non. (1 pt par question)</p>
+    <div id="ex3-cont"></div>
+    <button class="btn-suite" id="bs-ex3" onclick="goPhase('ex4',4)">Exercice 4 →</button>
+  </div>
+</div>
+
+<div class="phase" id="phase-ex4">
+  <div class="ugo-box"><span class="owl">🦉</span><span>Phrases un peu plus longues ! Le verbe est toujours là. Pose la question : "Qui + fait quoi ?" 🌟</span></div>
+  <div class="ex-card">
+    <h3>🎯 Exercice 4 — Trouve encore le verbe !</h3>
+    <p class="consigne">Clique sur le verbe dans la phrase. (1 pt par question)</p>
+    <div id="ex4-cont"></div>
+    <button class="btn-suite" id="bs-ex4" onclick="goPhase('bilan',5)">Voir mon bilan →</button>
+  </div>
+</div>
+
+<div class="phase" id="phase-bilan">
+  <div class="bilan-card">
+    <div style="font-size:2.2rem">🦉</div>
+    <div class="bilan-stars-row"><div class="etoile" id="etoile1">⭐</div><div class="etoile" id="etoile2">⭐</div><div class="etoile" id="etoile3">⭐</div></div>
+    <div class="bilan-score-row"><span id="bilan-pts">0</span> <span id="bilan-sur">/ 16</span> pts</div>
+    <div class="bilan-title" id="bilan-title"></div>
+    <div class="bilan-msg" id="bilan-msg"></div>
+    <hr style="margin:.8rem 0;border:none;border-top:2px solid var(--acc-pale)">
+    <div class="memo-card">
+      <h3>📝 Ce qu'il faut retenir</h3>
+      <div class="memo-item"><span class="memo-dot">🔶</span><span>Le verbe dit ce que <strong>fait</strong> ou ce qu'<strong>est</strong> le sujet.</span></div>
+      <div class="memo-item"><span class="memo-dot">🔶</span><span>Pour trouver le verbe : pose la question <strong>"Qui + fait/est quoi ?"</strong></span></div>
+      <div class="memo-item"><span class="memo-dot">🔶</span><span>Truc : change la phrase au passé. Le mot qui change = le verbe !</span></div>
+      <div class="memo-item"><span class="memo-dot">💡</span><span>Exemples : court, mange, dort, chante, joue, lit, est, semble…</span></div>
+    </div>
+    <div class="bilan-btns"><button class="btn-act amber" onclick="printLecon()">📖 Imprimer</button><button class="btn-act cyan" onclick="window.print()">📝 Exercices</button></div>
+  </div>
+</div>
+</main>
+<div class="print-lecon-content" style="font-family:'Fredoka One',cursive;color:#1e293b;font-size:17px;max-width:620px;margin:0 auto;">
+  <h1 style="color:#92400e;margin-bottom:6px;">G13 — Identifier le verbe dans la phrase</h1>
+  <p style="font-family:'Nunito',sans-serif;font-size:.75rem;color:#64748b;margin-bottom:14px;">CP / CE1 · Français — Grammaire · L'Atelier du Devoir</p>
+  <div style="background:#fffbeb;border-left:5px solid #f59e0b;border-radius:0 10px 10px 0;padding:9px 13px;margin:8px 0;font-size:.87rem;"><strong style="color:#92400e;">Le verbe</strong> = le mot qui dit ce que fait ou ce qu'est le sujet.</div>
+  <div style="background:#fffbeb;border-left:5px solid #f59e0b;border-radius:0 10px 10px 0;padding:9px 13px;margin:8px 0;font-size:.87rem;"><strong style="color:#92400e;">Pour le trouver :</strong> pose la question "Qui + fait quoi ?" · OU change la phrase au passé : le mot qui change = le verbe !</div>
+  <div style="background:#fffbeb;border-left:5px solid #f59e0b;border-radius:0 10px 10px 0;padding:9px 13px;margin:8px 0;font-size:.87rem;"><strong style="color:#92400e;">Exemples :</strong> "Le chat <u>dort</u>." · "Elle <u>chante</u>." · "Les enfants <u>jouent</u>."</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
+<script>
+var score=0, TOTAL_PTS=4+4+4+4;
+function addPt(){score++;document.getElementById('score-display').textContent=score;}
+function updSteps(n){for(var i=0;i<6;i++){var s=document.getElementById('s'+i);if(!s)return;s.classList.remove('active','done');if(i<n)s.classList.add('done');else if(i===n)s.classList.add('active');}}
+function shuffle(a){var b=a.slice();for(var i=b.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=b[i];b[i]=b[j];b[j]=t;}return b;}
+function revealBloc(n){
+  var b=document.getElementById('bloc-'+n);if(!b)return;
+  var p=document.getElementById('bloc-'+(n-1));
+  if(p){var btn=p.querySelector('.btn-compris');if(btn){btn.textContent='✓ Compris !';btn.disabled=true;btn.style.opacity='.4';}}
+  b.classList.add('revealed');
+  setTimeout(function(){var hH=(document.querySelector('.header')||{offsetHeight:0}).offsetHeight;var r=b.getBoundingClientRect();window.scrollTo({top:window.pageYOffset+r.top-hH-16,behavior:'smooth'});},150);
+}
+function goPhase(ph,si){
+  document.querySelectorAll('.phase').forEach(function(p){p.classList.remove('active');});
+  var el=document.getElementById('phase-'+ph);
+  if(el){el.classList.add('active');setTimeout(function(){el.scrollIntoView({behavior:'smooth',block:'start'});},80);}
+  updSteps(si);
+  if(ph==='ex1')initEx1();if(ph==='ex2')initEx2();if(ph==='ex3')initEx3();if(ph==='ex4')initEx4();if(ph==='bilan')showBilan();
+}
+function showBilan(){
+  var tot=TOTAL_PTS;
+  if(typeof enregistrerProgression==='function'){ enregistrerProgression('G13', score, tot); }
+  document.getElementById('bilan-pts').textContent=score;document.getElementById('bilan-sur').textContent='/ '+tot;
+  var pct=score/tot,t,m;
+  if(pct>=.9){t='Brillant(e) ! 🎉🌟';m="Tu trouves le verbe sans hésiter. Bravo, champion(ne) !";}
+  else if(pct>=.66){t='Très bien ! 😊⭐';m="Bon travail ! Rappel : 'Qui fait quoi ?' → le mot qui répond = le verbe.";}
+  else if(pct>=.33){t='Bien essayé ! 💪';m="Continue ! Change la phrase au passé : le mot qui change = le verbe.";}
+  else{t='Courage ! 🦉';m="Relis la leçon ! Le verbe dit ce que fait le sujet.";}
+  document.getElementById('bilan-title').textContent=t;document.getElementById('bilan-msg').textContent=m;
+  var seuils=[Math.ceil(tot*.33),Math.ceil(tot*.66),Math.ceil(tot*.89)];
+  ['etoile1','etoile2','etoile3'].forEach(function(id,i){var el=document.getElementById(id);if(score>=seuils[i]){(function(e,d){setTimeout(function(){e.classList.add('earned');},d);})(el,300+i*450);}else{el.style.filter='grayscale(1)';}});
+  if(pct>=.5)confetti();
+}
+function confetti(){
+  var cols=['#f59e0b','#fcd34d','#059669','#7c3aed','#be185d'];
+  for(var i=0;i<65;i++){(function(){var el=document.createElement('div');el.className='confetti-piece';el.style.cssText='left:'+Math.random()*100+'vw;background:'+cols[Math.floor(Math.random()*cols.length)]+';animation-duration:'+(1.8+Math.random()*2.2)+'s;animation-delay:'+Math.random()*1.5+'s;width:'+(7+Math.random()*10)+'px;height:'+(7+Math.random()*10)+'px;border-radius:'+(Math.random()>.5?'50%':'4px')+';';document.body.appendChild(el);setTimeout(function(){if(el.parentNode)el.remove();},5000);})();}
+}
+// DATA
+var ex1Pool=[
+  {sentence:"Le chat dort.",verb:"dort",expl:"DORT = le verbe. Le chat fait quoi ? Il dort. ✅"},
+  {sentence:"Elle chante bien.",verb:"chante",expl:"CHANTE = le verbe. Elle fait quoi ? Elle chante. ✅"},
+  {sentence:"Ugo vole haut.",verb:"vole",expl:"VOLE = le verbe. Ugo fait quoi ? Il vole. ✅"},
+  {sentence:"Les enfants jouent.",verb:"jouent",expl:"JOUENT = le verbe. Ils font quoi ? Ils jouent. ✅"},
+  {sentence:"Il mange une pomme.",verb:"mange",expl:"MANGE = le verbe. Il fait quoi ? Il mange. ✅"},
+  {sentence:"Le chien court vite.",verb:"court",expl:"COURT = le verbe. Le chien fait quoi ? Il court. ✅"},
+  {sentence:"Tu sautes haut.",verb:"sautes",expl:"SAUTES = le verbe. Tu fais quoi ? Tu sautes. ✅"},
+  {sentence:"Nous lisons un livre.",verb:"lisons",expl:"LISONS = le verbe. Nous faisons quoi ? Nous lisons. ✅"}
+];
+var ex2Pool=[
+  {sentence:"Le chien court vite.",opts:["chien","court","vite"],cor:"court",expl:"COURT = le verbe. Le chien fait quoi ? Il court. ✅"},
+  {sentence:"Elle mange une pomme.",opts:["elle","pomme","mange"],cor:"mange",expl:"MANGE = le verbe. Elle fait quoi ? Elle mange. ✅"},
+  {sentence:"La fleur pousse.",opts:["fleur","la","pousse"],cor:"pousse",expl:"POUSSE = le verbe. La fleur fait quoi ? Elle pousse. ✅"},
+  {sentence:"Les chats ronronnent.",opts:["chats","les","ronronnent"],cor:"ronronnent",expl:"RONRONNENT = le verbe. Les chats font quoi ? Ils ronronnent. ✅"},
+  {sentence:"Tu danses bien.",opts:["tu","danses","bien"],cor:"danses",expl:"DANSES = le verbe. Tu fais quoi ? Tu danses. ✅"},
+  {sentence:"Nous chantons fort.",opts:["nous","chantons","fort"],cor:"chantons",expl:"CHANTONS = le verbe. Nous faisons quoi ? Nous chantons. ✅"},
+  {sentence:"Le soleil brille.",opts:["soleil","le","brille"],cor:"brille",expl:"BRILLE = le verbe. Le soleil fait quoi ? Il brille. ✅"},
+  {sentence:"Ils arrivent vite.",opts:["ils","vite","arrivent"],cor:"arrivent",expl:"ARRIVENT = le verbe. Ils font quoi ? Ils arrivent. ✅"}
+];
+var ex3OkPool=[
+  {sentence:"Le chat dort.",mot:"dort",correct:true,expl:"Oui ! DORT = le verbe. Le chat fait quoi ? Il dort. ✅"},
+  {sentence:"Elle chante.",mot:"chante",correct:true,expl:"Oui ! CHANTE = le verbe. Elle fait quoi ? Elle chante. ✅"},
+  {sentence:"Les enfants jouent.",mot:"jouent",correct:true,expl:"Oui ! JOUENT = le verbe. Ils font quoi ? Ils jouent. ✅"},
+  {sentence:"Tu cours vite.",mot:"cours",correct:true,expl:"Oui ! COURS = le verbe. Tu fais quoi ? Tu cours. ✅"}
+];
+var ex3KoPool=[
+  {sentence:"Le chat dort.",mot:"chat",correct:false,expl:"Non ! CHAT = le sujet. Le verbe = DORT (le chat fait quoi ?). ❌"},
+  {sentence:"Elle chante bien.",mot:"bien",correct:false,expl:"Non ! BIEN = comment elle chante. Le verbe = CHANTE. ❌"},
+  {sentence:"Le chien court vite.",mot:"chien",correct:false,expl:"Non ! CHIEN = le sujet. Le verbe = COURT. ❌"},
+  {sentence:"Nous lisons un livre.",mot:"livre",correct:false,expl:"Non ! LIVRE = ce qu'on lit. Le verbe = LISONS. ❌"}
+];
+var ex4Pool=[
+  {sentence:"Le petit chat blanc dort.",verb:"dort",expl:"DORT = le verbe. Le petit chat blanc fait quoi ? Il dort. ✅"},
+  {sentence:"Ugo et ses amis jouent.",verb:"jouent",expl:"JOUENT = le verbe. Ugo et ses amis font quoi ? Ils jouent. ✅"},
+  {sentence:"La fleur rouge pousse.",verb:"pousse",expl:"POUSSE = le verbe. La fleur rouge fait quoi ? Elle pousse. ✅"},
+  {sentence:"Les oiseaux chantent fort.",verb:"chantent",expl:"CHANTENT = le verbe. Les oiseaux font quoi ? Ils chantent. ✅"},
+  {sentence:"Ma soeur mange une pomme.",verb:"mange",expl:"MANGE = le verbe. Ma soeur fait quoi ? Elle mange. ✅"},
+  {sentence:"Ils courent dans le parc.",verb:"courent",expl:"COURENT = le verbe. Ils font quoi ? Ils courent. ✅"},
+  {sentence:"Le soleil brille dans le ciel.",verb:"brille",expl:"BRILLE = le verbe. Le soleil fait quoi ? Il brille. ✅"},
+  {sentence:"Vous lisez un grand livre.",verb:"lisez",expl:"LISEZ = le verbe. Vous faites quoi ? Vous lisez. ✅"}
+];
+// EX1 tap-to-select
+var ex1Items=[],ex1Qi=0;
+function initEx1(){ex1Items=shuffle(ex1Pool).slice(0,4);ex1Qi=0;renderEx1();}
+function renderEx1(){
+  var item=ex1Items[ex1Qi];var words=item.sentence.split(' ');
+  var h='<div class="ex-progress">Question '+(ex1Qi+1)+' / 4</div>';
+  h+='<div class="word-row" id="ex1-words">';
+  words.forEach(function(w){var c=w.replace(/[.,!?]/g,'').toLowerCase();h+='<button class="word-btn" data-word="'+c+'" onclick="checkEx1Word(this)">'+w+'</button>';});
+  h+='</div><div class="qcm-fb" id="ex1-fb"></div>';
+  document.getElementById('ex1-cont').innerHTML=h;
+}
+function checkEx1Word(btn){
+  var item=ex1Items[ex1Qi];var words=document.getElementById('ex1-words').querySelectorAll('.word-btn');for(var i=0;i<words.length;i++)words[i].disabled=true;
+  var fb=document.getElementById('ex1-fb');
+  if(btn.dataset.word===item.verb){btn.classList.add('correct');fb.className='qcm-fb show ok';fb.innerHTML='✅ '+item.expl;addPt();}
+  else{btn.classList.add('wrong');for(var i=0;i<words.length;i++){if(words[i].dataset.word===item.verb)words[i].classList.add('reveal');}fb.className='qcm-fb show ko';fb.innerHTML='❌ '+item.expl;}
+  ex1Qi++;if(ex1Qi<4){setTimeout(renderEx1,1500);}else{setTimeout(function(){document.getElementById('bs-ex1').classList.add('show');},1500);}
+}
+// EX2 QCM
+var ex2Items=[],ex2Qi=0;
+function initEx2(){ex2Items=shuffle(ex2Pool).slice(0,4);ex2Qi=0;renderEx2();}
+function renderEx2(){
+  var item=ex2Items[ex2Qi];var opts=shuffle(item.opts.slice());
+  var h='<div class="ex-progress">Question '+(ex2Qi+1)+' / 4</div>';
+  h+='<div class="phrase-display"><em>'+item.sentence+'</em></div>';
+  h+='<div class="qcm-opts" id="ex2-opts">';
+  opts.forEach(function(o){h+='<button data-val="'+o+'" onclick="checkEx2(this)">'+o+'</button>';});
+  h+='</div><div class="qcm-fb" id="ex2-fb"></div>';
+  document.getElementById('ex2-cont').innerHTML=h;
+}
+function checkEx2(btn){
+  var item=ex2Items[ex2Qi];var opts=document.getElementById('ex2-cont').querySelectorAll('.qcm-opts button');for(var i=0;i<opts.length;i++)opts[i].disabled=true;
+  var fb=document.getElementById('ex2-fb');
+  if(btn.dataset.val===item.cor){btn.classList.add('correct');fb.className='qcm-fb show ok';fb.innerHTML='✅ '+item.expl;addPt();}
+  else{btn.classList.add('wrong');for(var i=0;i<opts.length;i++){if(opts[i].dataset.val===item.cor)opts[i].classList.add('reveal');}fb.className='qcm-fb show ko';fb.innerHTML='❌ '+item.expl;}
+  ex2Qi++;if(ex2Qi<4){setTimeout(renderEx2,1500);}else{setTimeout(function(){document.getElementById('bs-ex2').classList.add('show');},1500);}
+}
+// EX3 VF
+var ex3Items=[],ex3Qi=0;
+function initEx3(){ex3Items=shuffle(shuffle(ex3OkPool).slice(0,2).concat(shuffle(ex3KoPool).slice(0,2)));ex3Qi=0;renderEx3();}
+function renderEx3(){
+  var item=ex3Items[ex3Qi];
+  var h='<div class="ex-progress">Question '+(ex3Qi+1)+' / 4</div>';
+  h+='<div class="phrase-display"><em>'+item.sentence+'</em><br>Le mot : <span class="mot-highlight">'+item.mot+'</span><br><span style="font-size:.75rem;font-family:Nunito,sans-serif;color:#64748b;">→ Est-ce le verbe ?</span></div>';
+  h+='<div class="vf-btns"><button class="btn-vf btn-vrai" onclick="checkEx3(this,true)">👍 Oui</button><button class="btn-vf btn-faux" onclick="checkEx3(this,false)">👎 Non</button></div>';
+  h+='<div class="qcm-fb" id="ex3-fb"></div>';
+  document.getElementById('ex3-cont').innerHTML=h;
+}
+function checkEx3(btn,choice){
+  var item=ex3Items[ex3Qi];var cont=document.getElementById('ex3-cont');var btns=cont.querySelectorAll('.btn-vf');for(var i=0;i<btns.length;i++)btns[i].disabled=true;
+  var fb=document.getElementById('ex3-fb');
+  if(choice===item.correct){btn.classList.add('correct');fb.className='qcm-fb show ok';fb.innerHTML='✅ '+item.expl;addPt();}
+  else{btn.classList.add('wrong');for(var i=0;i<btns.length;i++){if((btns[i].classList.contains('btn-vrai')&&item.correct)||(btns[i].classList.contains('btn-faux')&&!item.correct))btns[i].classList.add('reveal');}fb.className='qcm-fb show ko';fb.innerHTML='❌ '+item.expl;}
+  ex3Qi++;if(ex3Qi<4){setTimeout(renderEx3,1500);}else{setTimeout(function(){document.getElementById('bs-ex3').classList.add('show');},1500);}
+}
+// EX4 tap-to-select (longer sentences)
+var ex4Items=[],ex4Qi=0;
+function initEx4(){ex4Items=shuffle(ex4Pool).slice(0,4);ex4Qi=0;renderEx4();}
+function renderEx4(){
+  var item=ex4Items[ex4Qi];var words=item.sentence.split(' ');
+  var h='<div class="ex-progress">Question '+(ex4Qi+1)+' / 4</div>';
+  h+='<div class="word-row" id="ex4-words">';
+  words.forEach(function(w){var c=w.replace(/[.,!?]/g,'').toLowerCase();h+='<button class="word-btn" data-word="'+c+'" onclick="checkEx4Word(this)">'+w+'</button>';});
+  h+='</div><div class="qcm-fb" id="ex4-fb"></div>';
+  document.getElementById('ex4-cont').innerHTML=h;
+}
+function checkEx4Word(btn){
+  var item=ex4Items[ex4Qi];var words=document.getElementById('ex4-words').querySelectorAll('.word-btn');for(var i=0;i<words.length;i++)words[i].disabled=true;
+  var fb=document.getElementById('ex4-fb');
+  if(btn.dataset.word===item.verb){btn.classList.add('correct');fb.className='qcm-fb show ok';fb.innerHTML='✅ '+item.expl;addPt();}
+  else{btn.classList.add('wrong');for(var i=0;i<words.length;i++){if(words[i].dataset.word===item.verb)words[i].classList.add('reveal');}fb.className='qcm-fb show ko';fb.innerHTML='❌ '+item.expl;}
+  ex4Qi++;if(ex4Qi<4){setTimeout(renderEx4,1500);}else{setTimeout(function(){document.getElementById('bs-ex4').classList.add('show');},1500);}
+}
+function printLecon(){document.body.classList.add('print-mode-lecon');window.print();document.body.classList.remove('print-mode-lecon');}
+</script>
+</body>
+</html>
