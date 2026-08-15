@@ -161,6 +161,39 @@ function monterClavier(ex, i){
   }, 0);
 }
 
+
+/* ═══ DICTÉE : synthèse vocale ═══ */
+var voixFR = null;
+function chargerVoix(){
+  if(!window.speechSynthesis) return;
+  var vs = speechSynthesis.getVoices();
+  var pref = ['Thomas','Amélie','Aurélie','Julie'];
+  for(var i=0;i<pref.length;i++){
+    for(var j=0;j<vs.length;j++){
+      if(vs[j].name.indexOf(pref[i]) !== -1){ voixFR = vs[j]; return; }
+    }
+  }
+  for(var k=0;k<vs.length;k++){ if(vs[k].lang === 'fr-FR'){ voixFR = vs[k]; return; } }
+  for(var m=0;m<vs.length;m++){ if(vs[m].lang.indexOf('fr') === 0){ voixFR = vs[m]; return; } }
+}
+if(window.speechSynthesis){
+  chargerVoix();
+  speechSynthesis.onvoiceschanged = chargerVoix;
+}
+function dire(texte, lent){
+  if(!window.speechSynthesis) return;
+  speechSynthesis.cancel();
+  setTimeout(function(){
+    var u = new SpeechSynthesisUtterance(texte);
+    if(voixFR) u.voice = voixFR;
+    u.lang = 'fr-FR';
+    u.rate = lent ? 0.28 : 0.55;
+    u.pitch = lent ? 0.95 : 1.05;
+    speechSynthesis.speak(u);
+  }, 80);
+}
+window.AFdire = dire;
+
 /* ═══ CONSTRUCTION DE LA PAGE ═══ */
 function construire(){
   var accent2 = F.accent2 || F.accent;
@@ -169,6 +202,7 @@ function construire(){
                  + ';--accent-mid:'+(F.accentMid||'#e2e8f0')+';--accent2:'+accent2+';}';
   document.head.appendChild(st);
   if(F.niveau === 'CP') document.body.classList.add('cp');
+  if(F.cycle === 4) document.body.classList.add('c4');
 
   var h = '';
 
@@ -189,11 +223,38 @@ function construire(){
   h += '<div class="lecon-wrap">';
   F.lecon.forEach(function(b,i){
     h += '<div id="bloc'+i+'" class="lecon-block'+(i===0?' revealed':'')+'">'
-       + '<h2>'+b.titre+'</h2>' + b.html;
+       + '<h2>'+b.titre+'</h2>'
+       + (b.analogie ? '<div class="analogie">'+b.analogie+'</div>' : '')
+       + b.html;
     if(b.ugo) h += '<div class="ugo-bubble"><span class="ugo-icon">\u{1F989}</span><span>Ugo : '+b.ugo+'</span></div>';
     var dernier = (i === F.lecon.length-1);
-    h += '<button class="btn-compris" onclick="'+(dernier?'AF.startEx()':'AF.revealBloc('+(i+1)+')')+'">'
-       + (dernier ? 'Aux exercices ! \u{1F4AA}' : 'J\'ai compris ! \u2192') + '</button></div>';
+    if(b.questions && b.questions.length){
+      h += '<div class="ctrl" id="ctrl'+i+'">'
+         + '<div class="ctrl-titre">\u{1F50E} Vérifions que tu as bien lu</div>'
+         + '<div class="ctrl-sous">La leçon reste juste au-dessus : tu peux la relire.</div>'
+         + b.questions.map(function(q,qi){
+             return '<div class="ctrl-q" id="cq'+i+'-'+qi+'">'
+               + '<div class="ctrl-txt">'+q.q+'</div><div class="ctrl-opts">'
+               + shuffle(q.options).map(function(o){
+                   return '<button class="ctrl-btn" data-v="'+esc(o)+'" '
+                        + 'onclick="AF.ctrl('+i+','+qi+',this)">'+o+'</button>';
+                 }).join('')
+               + '</div><div class="fb" id="cfb'+i+'-'+qi+'"></div></div>';
+           }).join('')
+         + '<div class="ctrl-bilan" id="cbil'+i+'"></div></div>';
+      h += '<button class="btn-compris" id="btnbloc'+i+'" style="display:none;" onclick="'
+         + (dernier?'AF.startEx()':'AF.revealBloc('+(i+1)+')')+'">'
+         + (dernier
+              ? (F.cycle === 4 ? '\u2713 Leçon comprise — Aux exercices' : 'Aux exercices ! \u{1F4AA}')
+              : (F.cycle === 4 ? 'Bloc suivant \u2192' : 'J\'ai compris ! \u2192'))
+         + '</button></div>';
+    } else {
+      h += '<button class="btn-compris" onclick="'+(dernier?'AF.startEx()':'AF.revealBloc('+(i+1)+')')+'">'
+         + (dernier
+              ? (F.cycle === 4 ? '\u2713 Leçon comprise — Aux exercices' : 'Aux exercices ! \u{1F4AA}')
+              : (F.cycle === 4 ? 'Bloc suivant \u2192' : 'J\'ai compris ! \u2192'))
+         + '</button></div>';
+    }
   });
   h += '</div></div>';
 
@@ -205,7 +266,7 @@ function construire(){
        + '<p>'+esc(ex.consigne)+'</p></div>'
        + '<div class="score-bar">Score : <span id="sc'+i+'">0</span> / '+ex.pts+' pts</div>'
        + '<div id="ex'+i+'"></div>';
-    if(ex.type==='drag'||ex.type==='classify'||ex.type==='saisie'||ex.type==='conjtable')
+    if(ex.type==='drag'||ex.type==='classify'||ex.type==='saisie'||ex.type==='conjtable'||ex.type==='dictee')
       h += '<button class="btn-verif" id="verif'+i+'" onclick="AF.verifier('+i+')">Vérifier \u2713</button>';
     h += '<button class="btn-suite" id="next'+i+'" onclick="'
        + (dernier ? 'AF.bilan()' : 'AF.goPhase('+(n+1)+')') + '">'
@@ -302,6 +363,20 @@ function rendre(ex, i){
     }).join('');
   }
 
+  else if(ex.type === 'dictee'){
+    c.innerHTML = ex.items.map(function(it,ii){
+      return '<div class="saisie-item dictee-item">'
+        + '<div class="dictee-head"><span class="dictee-num">' + (ii+1) + '</span>'
+        + '<button type="button" class="btn-ecoute" onclick="AF.ecouter(' + i + ',' + ii + ',false)">'
+        + '\u{1F50A} Écouter</button>'
+        + '<button type="button" class="btn-ecoute lent" onclick="AF.ecouter(' + i + ',' + ii + ',true)">'
+        + '\u{1F422} Lentement</button></div>'
+        + champSaisie(i, ii, '100%', null)
+        + '<div class="expl" id="ex'+i+'-'+ii+'"></div></div>';
+    }).join('') + (TACTILE ? '<div class="kb" id="kb'+i+'">'+clavierHTML('lettres')+'</div>' : '');
+    if(TACTILE) monterClavier(ex, i);
+  }
+
   else if(ex.type === 'conjtable'){
     c.innerHTML = ex.items.map(function(it,ii){
       return '<div class="saisie-item"><div class="phrase"><strong>'+esc(it.pronom)+'</strong></div>'
@@ -330,6 +405,70 @@ AF.goPhase = function(n){
 };
 
 AF.startEx = function(){ AF.goPhase(1); };
+
+
+/* ═══ Questions de contrôle de lecture ═══ */
+var ctrlEtat = {};
+
+AF.ctrl = function(bi, qi, btn){
+  var card = el('cq'+bi+'-'+qi);
+  if(card.dataset.done) return;
+  card.dataset.done = '1';
+  var q = F.lecon[bi].questions[qi];
+  card.querySelectorAll('.ctrl-btn').forEach(function(b){
+    b.disabled = true;
+    if(b.dataset.v === q.bonne) b.classList.add('correct');
+  });
+  var bon = (btn.dataset.v === q.bonne);
+  if(!bon) btn.classList.add('wrong');
+  var fb = el('cfb'+bi+'-'+qi);
+  fb.innerHTML = (bon ? '\u2705 ' : '\u274C ') + (q.expl || '');
+  fb.className = 'fb show ' + (bon ? 'ok' : 'ko');
+
+  if(!ctrlEtat[bi]) ctrlEtat[bi] = {ok:0, ko:0, total:F.lecon[bi].questions.length};
+  ctrlEtat[bi][bon ? 'ok' : 'ko']++;
+
+  var e = ctrlEtat[bi];
+  if(e.ok + e.ko === e.total){
+    var bil = el('cbil'+bi);
+    if(e.ko === 0){
+      bil.innerHTML = '\u{1F389} <strong>Parfait !</strong> Tu as bien lu la leçon.';
+      bil.className = 'ctrl-bilan ok show';
+      el('btnbloc'+bi).style.display = 'block';
+    } else {
+      var cible = (bi === 0) ? 0 : bi - 1;
+      var txt = (bi === 0)
+        ? 'Relis ce bloc attentivement, puis réessaie.'
+        : 'Relis le bloc précédent, puis reviens ici.';
+      bil.innerHTML = '\u{1F4D6} <strong>' + e.ko + ' réponse' + (e.ko>1?'s':'')
+        + ' à revoir.</strong><br>' + txt
+        + '<br><button class="ctrl-retry" onclick="AF.reprendre('+bi+','+cible+')">'
+        + '\u21BA Relire et réessayer</button>';
+      bil.className = 'ctrl-bilan ko show';
+    }
+  }
+};
+
+AF.reprendre = function(bi, cible){
+  // Réinitialiser les questions du bloc ET remélanger les options
+  // (sinon l'enfant retient juste la position du bouton vert précédent)
+  ctrlEtat[bi] = null;
+  var b = F.lecon[bi];
+  b.questions.forEach(function(q,qi){
+    var card = el('cq'+bi+'-'+qi);
+    card.dataset.done = '';
+    var opts = card.querySelector('.ctrl-opts');
+    opts.innerHTML = shuffle(q.options).map(function(o){
+      return '<button class="ctrl-btn" data-v="'+esc(o)+'" '
+           + 'onclick="AF.ctrl('+bi+','+qi+',this)">'+o+'</button>';
+    }).join('');
+    el('cfb'+bi+'-'+qi).className = 'fb';
+  });
+  el('cbil'+bi).className = 'ctrl-bilan';
+  // Remonter au bloc demandé
+  var d = el('bloc'+cible);
+  if(d) setTimeout(function(){ d.scrollIntoView({behavior:'smooth',block:'start'}); }, 150);
+};
 
 AF.qcm = function(i, qi, btn){
   var card = el('q'+i+'-'+qi);
@@ -405,6 +544,13 @@ AF.place = function(i, colId){
   etats[i].sel = null;
 };
 
+
+AF.ecouter = function(i, ii, lent){
+  var ex = F.exercices[i];
+  var t = ex.items[ii].lu || ex.items[ii].rep;
+  dire(t, lent);
+};
+
 AF.verifier = function(i){
   if(etats[i].verifie) return;
   etats[i].verifie = true;
@@ -442,7 +588,7 @@ AF.verifier = function(i){
     fbg.className = 'fb show ' + (justes===ex.items.length?'ok':'ko');
   }
 
-  else if(ex.type === 'saisie' || ex.type === 'conjtable'){
+  else if(ex.type === 'saisie' || ex.type === 'conjtable' || ex.type === 'dictee'){
     ex.items.forEach(function(it,ii){
       var inp = el('in'+i+'-'+ii), ee = el('ex'+i+'-'+ii);
       if(inp.tagName === 'INPUT') inp.disabled = true; else inp.dataset.off = '1';
