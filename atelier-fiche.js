@@ -48,6 +48,7 @@ F.exercices.forEach(function(ex){
 
 /* ═══ CLAVIER VIRTUEL (anti écriture intuitive sur mobile) ═══ */
 var TACTILE = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+var ordreDictee = {};
 var kbCible = null;
 
 var KB_LETTRES = [
@@ -364,15 +365,19 @@ function rendre(ex, i){
   }
 
   else if(ex.type === 'dictee'){
-    c.innerHTML = ex.items.map(function(it,ii){
+    // Ordre mélangé à chaque chargement : l'enfant ne peut pas mémoriser une séquence.
+    // ordreDictee[i] mappe la position affichée (ii) vers l'index réel dans ex.items.
+    if(!ordreDictee[i]) ordreDictee[i] = shuffle(ex.items.map(function(_,idx){ return idx; }));
+    var ordre = ordreDictee[i];
+    c.innerHTML = ordre.map(function(reel,ii){
       return '<div class="saisie-item dictee-item">'
         + '<div class="dictee-head"><span class="dictee-num">' + (ii+1) + '</span>'
-        + '<button type="button" class="btn-ecoute" onclick="AF.ecouter(' + i + ',' + ii + ',false)">'
+        + '<button type="button" class="btn-ecoute" onclick="AF.ecouter(' + i + ',' + reel + ',false)">'
         + '\u{1F50A} Écouter</button>'
-        + '<button type="button" class="btn-ecoute lent" onclick="AF.ecouter(' + i + ',' + ii + ',true)">'
+        + '<button type="button" class="btn-ecoute lent" onclick="AF.ecouter(' + i + ',' + reel + ',true)">'
         + '\u{1F422} Lentement</button></div>'
-        + champSaisie(i, ii, '100%', null)
-        + '<div class="expl" id="ex'+i+'-'+ii+'"></div></div>';
+        + champSaisie(i, reel, '100%', null)
+        + '<div class="expl" id="ex'+i+'-'+reel+'"></div></div>';
     }).join('') + (TACTILE ? '<div class="kb" id="kb'+i+'">'+clavierHTML('lettres')+'</div>' : '');
     if(TACTILE) monterClavier(ex, i);
   }
@@ -597,7 +602,9 @@ AF.verifier = function(i){
       var bon = attendus.some(function(a){ return memeReponse(saisi, a, ex.strict); });
       if(bon){ pts++; inp.classList.add('ok'); }
       else inp.classList.add('ko');
-      ee.innerHTML = (bon?'\u2705 ':'\u274C Réponse : '+esc(attendus[0])+'. ') + (it.expl||'');
+      var rep0 = esc(attendus[0]);
+      var sepRep = /[.!?]$/.test(rep0) ? ' ' : '. ';
+      ee.innerHTML = (bon?'\u2705 ':'\u274C Réponse : '+rep0+sepRep) + (it.expl||'');
       ee.className = 'expl show ' + (bon?'ok':'ko');
     });
   }
