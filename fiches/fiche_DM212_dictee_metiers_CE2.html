@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Dictée — Les métiers – CE2</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../atelier-fiche.css">
+</head>
+<body>
+<script>
+window.FICHE = {
+  code:'DM212', niveau:'CE2', matiere:'Français', categorie:'Dictées mots',
+  duree:'14 min', retour:'ce2.html',
+  accent:'#7c2d12', accent2:'#c2410c', accentLight:'#fff7ed', accentMid:'#fed7aa',
+  titre:'Dictée : les métiers 👩‍🚒',
+  ugoIntro:"Les m\u00e9tiers changent au f\u00e9minin !<br>\u00c9coute bien la fin de chaque mot. \u{1F477}",
+  msgBrillant:'Tu écris les métiers sans faute !',
+
+  lecon:[
+    { titre:'\u{1F4D6} Les mots à écrire',
+      html:'<div class="exemple" style="font-size:1.12rem;line-height:2.1;text-align:center;">'
+        +'\u{1F468}\u200D\u{1F3EB} le <strong>maître</strong> &nbsp;·&nbsp; \u{1F469}\u200D\u2695\uFE0F la <strong>doctoresse</strong><br>'
+        +'\u{1F469}\u200D\u{1F692} la <strong>pompière</strong> &nbsp;·&nbsp; \u{1F9D1}\u200D\u{1F373} le <strong>cuisinier</strong><br>'
+        +'\u{1F468}\u200D\u{1F33E} le <strong>fermier</strong></div>'
+        +'<div class="astuce">\u{1F4A1} Beaucoup de métiers en <strong>-ier</strong> font <strong>-ière</strong> au féminin :<br>'
+        +'<em>cuisinier \u2192 cuisinière · fermier \u2192 fermière</em></div>',
+      ugo:'Écoute bien la fin du mot : <em>-ier</em> ou <em>-ière</em> ? Ça change tout !' },
+
+    { titre:'\u{1F511} Les pièges à éviter',
+      html:'<div class="exemple">'
+        +'\u26A0\uFE0F <strong>maître</strong> \u2192 accent circonflexe sur le <strong>î</strong><br>'
+        +'\u26A0\uFE0F <strong>doctoresse</strong> \u2192 deux <strong>ss</strong> pour le son [s]<br>'
+        +'\u26A0\uFE0F <strong>pompière</strong> \u2192 <strong>m</strong> devant le p, accent grave sur le <strong>è</strong><br>'
+        +'\u26A0\uFE0F <strong>cuisinier</strong> \u2192 le <strong>s</strong> entre voyelles fait [z]</div>'
+        +'<div class="astuce">\u{1F4A1} <strong>pompière</strong> : encore la règle du m devant b et p ! '
+        +'po<strong>m</strong>pière.</div>',
+      ugo:'Trois règles se cachent ici : l\'accent, la double consonne et le m devant p. Reste concentré !' }
+  ],
+
+  memo:'\u{1F477} Les métiers :<br>'
+      +'le <strong>maître</strong> · la <strong>doctoresse</strong> · la <strong>pompière</strong> · '
+      +'le <strong>cuisinier</strong> · le <strong>fermier</strong><br>'
+      +'\u26A0\uFE0F maître prend un accent circonflexe · -ier devient -ière au féminin',
+
+  exercices:[
+    { type:'dictee', titre:'Écris les mots', consigne:'Écoute chaque mot et écris-le.',
+      items:[
+        { rep:'maître',      lu:'maître',      expl:'le <strong>maître</strong>, accent circonflexe' },
+        { rep:'doctoresse',  lu:'doctoresse',  expl:'la <strong>doctoresse</strong>, avec deux ss' },
+        { rep:'pompière',    lu:'pompière',    expl:'la <strong>pompière</strong>, m devant le p' },
+        { rep:'cuisinier',   lu:'cuisinier',   expl:'le <strong>cuisinier</strong>, s qui fait [z]' },
+        { rep:'fermier',     lu:'fermier',     expl:'le <strong>fermier</strong>' }
+      ]},
+    { type:'dictee', titre:'Écris les phrases', consigne:'Écoute la phrase entière, puis écris-la.',
+      large:true,
+      items:[
+        { rep:"La fermière nourrit les animaux.", lu:'La fermière nourrit les animaux. point',
+          expl:'<strong>fermière</strong> au féminin. <strong>animaux</strong> prend un x au pluriel.' },
+        { rep:"Le cuisinier prépare le repas.", lu:'Le cuisinier prépare le repas. point',
+          expl:'<strong>prépare</strong> avec deux accents aigus. <strong>repas</strong> a un s muet.' }
+      ]}
+  ]
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
+<script src="../atelier-fiche.js"></script>
+</body>
+</html>

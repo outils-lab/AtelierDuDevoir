@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Dictée — Homophones a/à et est/et – CE1</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../atelier-fiche.css">
+</head>
+<body>
+<script>
+window.FICHE = {
+  code:'DM210', niveau:'CE1', matiere:'Français', categorie:'Dictées mots',
+  duree:'14 min', retour:'ce1.html',
+  accent:'#0e7490', accent2:'#0891b2', accentLight:'#ecfeff', accentMid:'#a5f3fc',
+  titre:'Dictée : a / à et est / et',
+  ugoIntro:"Attention aux petits mots qui se ressemblent !<br>R\u00e9fl\u00e9chis avant d\'\u00e9crire. \u{1F3AF}",
+  msgBrillant:'Tu ne confonds plus a/à ni est/et !',
+
+  lecon:[
+    { titre:'\u{1F4D6} Rappel : a ou à ?',
+      html:'<div class="compare-grid">'
+        +'<div class="compare-card" style="border-color:#0e7490;background:#ecfeff;">'
+        +'<h4 style="color:#0e7490;">a</h4><p>Verbe <strong>avoir</strong>.</p>'
+        +'<p style="margin-top:6px;">On peut dire <em>avait</em>.<br><em>Il <strong>a</strong> faim.</em></p></div>'
+        +'<div class="compare-card" style="border-color:#b45309;background:#fffbeb;">'
+        +'<h4 style="color:#b45309;">à</h4><p><strong>Préposition</strong> (lieu, moment).</p>'
+        +'<p style="margin-top:6px;">On ne peut pas dire <em>avait</em>.<br><em>Il va <strong>à</strong> l\'école.</em></p></div></div>',
+      ugo:'Le test : remplace par <em>avait</em>. Si ça marche, c\'est <strong>a</strong> sans accent !' },
+
+    { titre:'\u{1F4D6} Rappel : est ou et ?',
+      html:'<div class="compare-grid">'
+        +'<div class="compare-card" style="border-color:#be123c;background:#fff1f2;">'
+        +'<h4 style="color:#be123c;">est</h4><p>Verbe <strong>être</strong>.</p>'
+        +'<p style="margin-top:6px;">On peut dire <em>était</em>.<br><em>Le ciel <strong>est</strong> bleu.</em></p></div>'
+        +'<div class="compare-card" style="border-color:#15803d;background:#f0fdf4;">'
+        +'<h4 style="color:#15803d;">et</h4><p>Mot de <strong>liaison</strong>.</p>'
+        +'<p style="margin-top:6px;">On peut dire <em>et puis</em>.<br><em>Tom <strong>et</strong> Léa.</em></p></div></div>',
+      ugo:'Deux tests simples : <em>était</em> pour <strong>est</strong>, <em>et puis</em> pour <strong>et</strong>.' },
+
+    { titre:'\u{1F511} Avant d\'écrire',
+      html:'<div class="astuce">\u{1F4A1} Dans la dictée, prends le temps de te poser la question '
+        +'pour chaque petit mot :<br><br>'
+        +'\u2022 Je peux dire <em>avait</em> ? \u2192 <strong>a</strong> &nbsp;|&nbsp; sinon \u2192 <strong>à</strong><br>'
+        +'\u2022 Je peux dire <em>était</em> ? \u2192 <strong>est</strong> &nbsp;|&nbsp; '
+        +'je peux dire <em>et puis</em> ? \u2192 <strong>et</strong></div>'
+        +'<div class="exemple">\u{1F4CC} <em>Léa <strong>a</strong> un chat <strong>et</strong> il <strong>est</strong> noir.</em><br>'
+        +'a = avait \u2714 &nbsp;|&nbsp; et = et puis \u2714 &nbsp;|&nbsp; est = était \u2714</div>' }
+  ],
+
+  memo:'\u{1F535} <strong>a</strong> = verbe avoir (avait) &nbsp;|&nbsp; \u{1F7E1} <strong>à</strong> = préposition<br>'
+      +'\u{1F534} <strong>est</strong> = verbe être (était) &nbsp;|&nbsp; \u{1F7E2} <strong>et</strong> = et puis<br>'
+      +'\u{1F4A1} Teste chaque petit mot avant de l\'écrire !',
+
+  exercices:[
+    { type:'dictee', titre:'Écris les phrases', consigne:'Écoute la phrase entière, puis écris-la.',
+      large:true,
+      items:[
+        { rep:"Léa a un chat.", lu:'Léa a un chat. point',
+          expl:'Léa <em>avait</em> un chat \u2192 <strong>a</strong> sans accent.' },
+        { rep:"Il va à la mer.", lu:'Il va à la mer. point',
+          expl:'On ne peut pas dire <em>avait la mer</em> \u2192 <strong>à</strong> avec accent.' },
+        { rep:"Le chien est gentil.", lu:'Le chien est gentil. point',
+          expl:'Le chien <em>était</em> gentil \u2192 <strong>est</strong>.' }
+      ]},
+    { type:'dictee', titre:'Encore deux phrases', consigne:'Attention, il y a plusieurs petits mots !',
+      large:true,
+      items:[
+        { rep:"Tom et Léa sont amis.", lu:'Tom et Léa sont amis. point',
+          expl:'Tom <em>et puis</em> Léa \u2192 <strong>et</strong>. <strong>amis</strong> prend un s.' },
+        { rep:"Papa a mal à la tête.", lu:'Papa a mal à la tête. point',
+          expl:'Papa <em>avait</em> mal \u2192 <strong>a</strong>. Puis <strong>à</strong> la tête (préposition).' }
+      ]}
+  ]
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
+<script src="../atelier-fiche.js"></script>
+</body>
+</html>

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Les connecteurs logiques – 4e</title>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Playfair+Display:wght@600;700&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../atelier-fiche.css">
+</head>
+<body>
+<script>
+window.FICHE = {
+  code:'L404', niveau:'4e', cycle:4, matiere:'Français', categorie:'Lexique',
+  duree:'18 min', retour:'4e.html',
+  accent:'#1e40af', accent2:'#2563eb', accentLight:'#eff6ff', accentMid:'#bfdbfe',
+  titre:'Les connecteurs logiques',
+  ugoIntro:"Ces petits mots indiquent au lecteur le chemin du raisonnement.",
+  msgBrillant:'Tu articules un raisonnement avec précision.',
+
+  lecon:[
+    { titre:'À quoi ils servent',
+      analogie:"Des panneaux sur une route : ils annoncent le virage avant qu'on l'aborde.",
+      html:'<div class="exemple" style="line-height:1.9;">'
+        +'\u274C Il pleut. Je sors. Je prends un parapluie.<br>'
+        +'\u2705 Il pleut, <strong>donc</strong> je prends un parapluie <strong>avant de</strong> sortir.</div>'
+        +'<p>Sans connecteur, le lecteur doit deviner le lien. Avec, la relation est '
+        +'<strong>explicite</strong> : cause, conséquence, opposition, addition.</p>',
+      ugo:'Un texte sans connecteur oblige le lecteur à travailler à votre place.',
+      questions:[
+        { q:'À quoi sert un connecteur logique ?',
+          options:["à expliciter le lien entre deux idées","à allonger la phrase","à décorer le texte"],
+          bonne:"à expliciter le lien entre deux idées",
+          expl:'Il indique la relation : cause, conséquence, opposition…' },
+        { q:'Dans « Il pleut, donc je prends un parapluie », quel lien exprime « donc » ?',
+          options:['une conséquence','une opposition','une addition'],
+          bonne:'une conséquence',
+          expl:'La pluie entraîne la prise du parapluie.' },
+        { q:'Sans connecteur, que doit faire le lecteur ?',
+          options:['deviner le lien','lire plus vite','sauter la phrase'],
+          bonne:'deviner le lien',
+          expl:'La relation reste implicite et peut être mal comprise.' }
+      ]},
+
+    { titre:'Cause, conséquence, but',
+      analogie:"Trois questions distinctes : pourquoi ? avec quel résultat ? dans quelle intention ?",
+      html:'<table class="tbl"><tr><th>Relation</th><th>Connecteurs</th><th>Exemple</th></tr>'
+        +'<tr><td><strong>Cause</strong><br><em>pourquoi ?</em></td>'
+        +'<td>car, parce que, puisque, en effet, grâce à</td>'
+        +'<td>Il réussit <strong>parce qu\'</strong>il travaille.</td></tr>'
+        +'<tr><td><strong>Conséquence</strong><br><em>quel résultat ?</em></td>'
+        +'<td>donc, ainsi, par conséquent, c\'est pourquoi</td>'
+        +'<td>Il travaille, <strong>donc</strong> il réussit.</td></tr>'
+        +'<tr><td><strong>But</strong><br><em>quelle intention ?</em></td>'
+        +'<td>afin de, pour que, dans le but de</td>'
+        +'<td>Il travaille <strong>pour</strong> réussir.</td></tr></table>'
+        +'<p>Cause et conséquence disent la même chose dans l\'ordre inverse. Le but, lui, '
+        +'exprime une <strong>intention</strong>, pas un fait accompli.</p>',
+      ugo:'Le but suppose une volonté ; la conséquence, non.',
+      questions:[
+        { q:'« Parce que » exprime :',
+          options:['la cause','la conséquence','le but'],
+          bonne:'la cause',
+          expl:'Il répond à la question <em>pourquoi ?</em>' },
+        { q:'Quelle différence entre conséquence et but ?',
+          options:["le but exprime une intention","le but est toujours au passé","aucune"],
+          bonne:"le but exprime une intention",
+          expl:'La conséquence est un fait, le but une volonté.' },
+        { q:'« Par conséquent » introduit :',
+          options:['une conséquence','une cause','une opposition'],
+          bonne:'une conséquence',
+          expl:'Il annonce le résultat de ce qui précède.' }
+      ]},
+
+    { titre:'Opposition, addition, ordre',
+      analogie:"Les autres panneaux du raisonnement : contredire, ajouter, ordonner.",
+      html:'<table class="tbl"><tr><th>Relation</th><th>Connecteurs</th></tr>'
+        +'<tr><td><strong>Opposition</strong></td>'
+        +'<td>mais, cependant, pourtant, néanmoins, en revanche, or</td></tr>'
+        +'<tr><td><strong>Concession</strong></td>'
+        +'<td>certes… mais, bien que, même si, malgré</td></tr>'
+        +'<tr><td><strong>Addition</strong></td>'
+        +'<td>de plus, en outre, par ailleurs, également</td></tr>'
+        +'<tr><td><strong>Ordre</strong></td>'
+        +'<td>d\'abord, ensuite, puis, enfin</td></tr>'
+        +'<tr><td><strong>Illustration</strong></td>'
+        +'<td>par exemple, ainsi, notamment</td></tr></table>'
+        +'<p><strong>Bien que</strong> et <strong>malgré</strong> sont suivis du subjonctif ou d\'un nom : '
+        +'<em>bien qu\'il pleuve</em>, <em>malgré la pluie</em>.</p>',
+      ugo:'Les connecteurs d\'ordre structurent visiblement un développement.',
+      questions:[
+        { q:'« Cependant » exprime :',
+          options:['une opposition','une addition','une cause'],
+          bonne:'une opposition',
+          expl:'Il introduit une idée contraire à ce qui précède.' },
+        { q:'Quel connecteur ouvre une énumération ordonnée ?',
+          options:["d'abord",'donc','car'],
+          bonne:"d'abord",
+          expl:'Il annonce le premier élément d\'une série.' },
+        { q:'« Bien que » est suivi :',
+          options:['du subjonctif',"de l'indicatif",'d\'un infinitif'],
+          bonne:'du subjonctif',
+          expl:'<em>Bien qu\'il pleuve</em>, et non <em>bien qu\'il pleut</em>.' }
+      ]},
+
+    { titre:'Les erreurs à éviter',
+      analogie:"Un mauvais panneau égare plus sûrement qu'une absence de panneau.",
+      html:'<div class="exemple" style="line-height:1.9;">'
+        +'\u274C Il pleut, <em>donc</em> je sors sans manteau. \u2192 le lien est faux<br>'
+        +'\u274C <em>Malgré</em> qu\'il pleuve \u2192 tournure incorrecte, écrire <strong>bien qu\'</strong>il pleuve<br>'
+        +'\u274C <em>Au contraire</em> répété trois fois \u2192 varier les connecteurs</div>'
+        +'<p>Un connecteur mal choisi crée un raisonnement absurde. Vérifiez toujours que la '
+        +'relation annoncée est bien celle qui existe entre les deux idées.</p>',
+      questions:[
+        { q:'Quelle est la forme correcte ?',
+          options:["bien qu'il pleuve","malgré qu'il pleuve"],
+          bonne:"bien qu'il pleuve",
+          expl:'<em>Malgré que</em> est une tournure fautive.' },
+        { q:'Que produit un connecteur mal choisi ?',
+          options:['un raisonnement absurde','une phrase plus longue','un effet de style'],
+          bonne:'un raisonnement absurde',
+          expl:'<em>Il pleut donc je sors sans manteau</em> annonce un lien qui n\'existe pas.' },
+        { q:'Que faut-il faire des connecteurs dans un texte ?',
+          options:['les varier','les répéter','les supprimer'],
+          bonne:'les varier',
+          expl:'Répéter le même connecteur alourdit et lasse.' }
+      ]}
+  ],
+
+  memo:'<strong>Cause</strong> (pourquoi ?) : car, parce que, puisque, en effet.<br>'
+      +'<strong>Conséquence</strong> (quel résultat ?) : donc, ainsi, par conséquent.<br>'
+      +'<strong>But</strong> (quelle intention ?) : afin de, pour que.<br>'
+      +'<strong>Opposition</strong> : mais, cependant, pourtant, or. '
+      +'<strong>Concession</strong> : certes… mais, bien que.<br>'
+      +'<strong>Addition</strong> : de plus, en outre. <strong>Ordre</strong> : d\'abord, ensuite, enfin.',
+
+  exercices:[
+    { type:'qcm', titre:'Identifier la relation',
+      consigne:'Quelle relation logique ce connecteur exprime-t-il ?',
+      items:[
+        { phrase:'<em>Il a révisé, <strong>par conséquent</strong> il a réussi.</em>',
+          bonne:'conséquence', options:['cause','conséquence','opposition'],
+          expl:'Le succès résulte de la révision.' },
+        { phrase:'<em>Il est parti tôt <strong>afin d\'</strong>éviter les embouteillages.</em>',
+          bonne:'but', options:['but','cause','addition'],
+          expl:'Il exprime l\'intention qui motive le départ.' },
+        { phrase:'<em>Le film est long, <strong>néanmoins</strong> il ne lasse jamais.</em>',
+          bonne:'opposition', options:['addition','opposition','conséquence'],
+          expl:'La seconde idée contredit ce qu\'on attendait de la première.' },
+        { phrase:'<em>Il travaille peu, <strong>puisqu\'</strong>il est en vacances.</em>',
+          bonne:'cause', options:['conséquence','but','cause'],
+          expl:'Les vacances expliquent le peu de travail.' }
+      ]},
+
+    { type:'classify', titre:'Lier ou opposer ?',
+      consigne:'Classez chaque connecteur selon la relation qu\'il exprime.',
+      pts:4,
+      cols:[
+        {id:'lien', nom:'Cause ou conséquence', couleur:'#1e40af', fond:'#eff6ff'},
+        {id:'opp', nom:'Opposition ou concession', couleur:'#9a3412', fond:'#fff7ed'}
+      ],
+      items:[
+        {mot:'donc', cat:'lien'},        {mot:'cependant', cat:'opp'},
+        {mot:'parce que', cat:'lien'},   {mot:'bien que', cat:'opp'},
+        {mot:'par conséquent', cat:'lien'}, {mot:'en revanche', cat:'opp'},
+        {mot:'puisque', cat:'lien'},     {mot:'pourtant', cat:'opp'}
+      ]},
+
+    { type:'drag', titre:'Compléter le raisonnement',
+      consigne:'Sélectionnez le connecteur, puis placez-le dans la phrase.',
+      pool:['donc','Bien que','pour','cependant'],
+      items:[
+        { avant:'Il n\'a pas révisé,', apres:'il a échoué.', rep:'donc',
+          expl:'L\'échec résulte du manque de révision \u2192 conséquence.' },
+        { avant:'', apres:'la pluie tombe, la course est maintenue.', rep:'Bien que',
+          expl:'Concession suivie du subjonctif. Devant une voyelle, on écrirait <em>bien qu\'</em>.' },
+        { avant:'Il s\'entraîne chaque jour', apres:'progresser.', rep:'pour',
+          expl:'Intention \u2192 connecteur de but.' },
+        { avant:'Le trajet est long ;', apres:', le paysage est superbe.', rep:'cependant',
+          expl:'Opposition entre l\'inconvénient et l\'avantage.' }
+      ]},
+
+    { type:'jugement', titre:'Juger la pertinence',
+      consigne:'Choisissez la phrase dont le lien logique est correct.',
+      items:[
+        { consigne:'Relation de conséquence :',
+          bonne:"La route est verglacée, donc il faut ralentir.",
+          mauvaise:"La route est verglacée, donc il faut accélérer.",
+          expl:'Le connecteur doit annoncer une conséquence cohérente.' },
+        { consigne:'Forme correcte de la concession :',
+          bonne:"Bien qu'il soit fatigué, il termine son exercice.",
+          mauvaise:"Malgré qu'il soit fatigué, il termine son exercice.",
+          expl:'<em>Malgré que</em> est fautif ; on écrit <em>bien que</em> + subjonctif.' },
+        { consigne:'Relation de cause :',
+          bonne:"Il a réussi parce qu'il s'est préparé sérieusement.",
+          mauvaise:"Il a réussi donc il s'est préparé sérieusement.",
+          expl:'La préparation est la cause, pas la conséquence du succès.' },
+        { consigne:'Variété des connecteurs :',
+          bonne:"D'abord il range, ensuite il révise, enfin il se repose.",
+          mauvaise:"Donc il range, donc il révise, donc il se repose.",
+          expl:'Une énumération appelle des connecteurs d\'ordre, non la répétition de <em>donc</em>.' }
+      ]}
+  ]
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
+<script src="../atelier-fiche.js"></script>
+</body>
+</html>

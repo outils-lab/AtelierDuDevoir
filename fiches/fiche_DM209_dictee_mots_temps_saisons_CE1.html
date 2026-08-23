@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Dictée — Le temps et les saisons – CE1</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../atelier-fiche.css">
+</head>
+<body>
+<script>
+window.FICHE = {
+  code:'DM209', niveau:'CE1', matiere:'Français', categorie:'Dictées mots',
+  duree:'12 min', retour:'ce1.html',
+  accent:'#0369a1', accent2:'#0284c7', accentLight:'#f0f9ff', accentMid:'#bae6fd',
+  titre:'Dictée : le temps et les saisons ☀️',
+  ugoIntro:"Le soleil, la pluie, les saisons…<br>\u00c9coute bien et \u00e9cris ces mots. \u{1F324}\uFE0F",
+  msgBrillant:'Tu écris le temps et les saisons sans faute !',
+
+  lecon:[
+    { titre:'\u{1F4D6} Les mots à écrire',
+      html:'<div class="exemple" style="font-size:1.15rem;line-height:2.1;text-align:center;">'
+        +'\u2600\uFE0F le <strong>soleil</strong> &nbsp;·&nbsp; \u{1F327}\uFE0F la <strong>pluie</strong><br>'
+        +'\u2744\uFE0F l\'<strong>hiver</strong> &nbsp;·&nbsp; \u{1F337} le <strong>printemps</strong></div>'
+        +'<div class="astuce">\u{1F4A1} <strong>printemps</strong> finit par <strong>ps</strong> qu\'on n\'entend pas. '
+        +'C\'est un mot à apprendre par cœur !</div>',
+      ugo:'On écrit <strong>l\'hiver</strong> car le h est muet : le <em>le</em> devient <strong>l\'</strong>.' },
+
+    { titre:'\u{1F511} Les pièges à éviter',
+      html:'<div class="exemple">'
+        +'\u26A0\uFE0F <strong>soleil</strong> \u2192 le son [eil] s\'écrit <strong>eil</strong><br>'
+        +'\u26A0\uFE0F <strong>pluie</strong> \u2192 <strong>ui</strong> puis un <strong>e</strong> final<br>'
+        +'\u26A0\uFE0F <strong>hiver</strong> \u2192 commence par un <strong>h</strong> muet<br>'
+        +'\u26A0\uFE0F <strong>printemps</strong> \u2192 <strong>m</strong> devant le p, et <strong>ps</strong> muet à la fin</div>'
+        +'<div class="astuce">\u{1F4A1} Encore la règle du <strong>m</strong> devant <strong>b</strong> et <strong>p</strong> : '
+        +'pri<strong>n</strong>te<strong>m</strong>ps.</div>',
+      ugo:'Certains mots ne s\'expliquent pas, il faut les photographier avec les yeux. Printemps en fait partie !' }
+  ],
+
+  memo:'\u2600\uFE0F Le temps et les saisons :<br>'
+      +'le <strong>soleil</strong> · la <strong>pluie</strong> · l\'<strong>hiver</strong> · le <strong>printemps</strong><br>'
+      +'\u26A0\uFE0F printemps finit par ps muet · hiver commence par un h muet',
+
+  exercices:[
+    { type:'dictee', titre:'Écris les mots', consigne:'Écoute chaque mot et écris-le.',
+      items:[
+        { rep:'soleil',    lu:'soleil',    expl:'le <strong>soleil</strong>, avec eil' },
+        { rep:'pluie',     lu:'pluie',     expl:'la <strong>pluie</strong>, avec ui et un e final' },
+        { rep:'hiver',     lu:'hiver',     expl:'l\'<strong>hiver</strong>, avec un h muet' },
+        { rep:'printemps', lu:'printemps', expl:'le <strong>printemps</strong>, avec ps muet à la fin' }
+      ]},
+    { type:'dictee', titre:'Écris les phrases', consigne:'Écoute la phrase entière, puis écris-la.',
+      large:true,
+      items:[
+        { rep:'Le soleil brille.', lu:'Le soleil brille. point',
+          expl:'<strong>brille</strong> s\'écrit avec deux l.' },
+        { rep:'Il pleut ce matin.', lu:'Il pleut ce matin. point',
+          expl:'<strong>pleut</strong> vient du verbe pleuvoir : il pleut, avec un t.' }
+      ]}
+  ]
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
+<script src="../atelier-fiche.js"></script>
+</body>
+</html>

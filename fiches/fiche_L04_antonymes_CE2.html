@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Les antonymes – CE2</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../atelier-fiche.css">
+</head>
+<body>
+<script>
+window.FICHE = {
+  code:'L04', niveau:'CE2', matiere:'Français', categorie:'Lexique',
+  duree:'15 min', retour:'ce2.html',
+  accent:'#be185d', accent2:'#db2777', accentLight:'#fdf2f8', accentMid:'#fbcfe8',
+  titre:'Les antonymes',
+  ugoIntro:"Chaud \u2194 froid, grand \u2194 petit…<br>Les mots contraires, c\'est les antonymes ! \u2194\uFE0F",
+  msgBrillant:'Tu trouves les contraires en un clin d\'œil !',
+
+  lecon:[
+    { titre:'\u{1F4D6} Bloc 1 — Qu\'est-ce qu\'un antonyme ?',
+      html:'<p>Deux mots sont <span class="highlight">antonymes</span> quand ils ont '
+        +'un sens <strong>opposé</strong>.</p>'
+        +'<div class="exemple" style="text-align:center;line-height:2.2;">'
+        +'\u2600\uFE0F <strong>chaud</strong> \u2194 <strong>froid</strong> \u2744\uFE0F<br>'
+        +'\u{1F418} <strong>grand</strong> \u2194 <strong>petit</strong> \u{1F42D}<br>'
+        +'\u{1F600} <strong>content</strong> \u2194 <strong>triste</strong> \u{1F622}<br>'
+        +'\u2B06\uFE0F <strong>monter</strong> \u2194 <strong>descendre</strong> \u2B07\uFE0F</div>'
+        +'<div class="astuce">\u{1F4A1} Ne confonds pas !<br>'
+        +'<strong>Synonyme</strong> = même sens (content = joyeux)<br>'
+        +'<strong>Antonyme</strong> = sens contraire (content \u2194 triste)</div>',
+      ugo:'Antonyme, contraire, opposé : ce sont trois façons de dire la même chose. Retiens celui que tu préfères !' },
+
+    { titre:'\u{1F4D6} Bloc 2 — Fabriquer un contraire avec un préfixe',
+      html:'<p>Souvent, il suffit d\'ajouter un <strong>préfixe</strong> pour obtenir le contraire :</p>'
+        +'<table class="tbl"><tr><th>Préfixe</th><th>Exemples</th></tr>'
+        +'<tr><td><strong>dé-</strong></td><td>faire \u2192 <strong>dé</strong>faire · coller \u2192 <strong>dé</strong>coller</td></tr>'
+        +'<tr><td><strong>in-</strong></td><td>utile \u2192 <strong>in</strong>utile · connu \u2192 <strong>in</strong>connu</td></tr>'
+        +'<tr><td><strong>im-</strong></td><td>possible \u2192 <strong>im</strong>possible · poli \u2192 <strong>im</strong>poli</td></tr>'
+        +'<tr><td><strong>mal-</strong></td><td>heureux \u2192 <strong>mal</strong>heureux · honnête \u2192 <strong>mal</strong>honnête</td></tr>'
+        +'</table>'
+        +'<div class="astuce">\u26A0\uFE0F On met <strong>im-</strong> devant les mots qui commencent par <strong>p</strong>, <strong>b</strong> ou <strong>m</strong> :<br>'
+        +'im<strong>p</strong>ossible · im<strong>b</strong>uvable · im<strong>m</strong>angeable</div>',
+      ugo:'Petit truc : essaie <em>in-</em> d\'abord. Si le mot commence par p, b ou m, alors c\'est <em>im-</em> !' },
+
+    { titre:'\u{1F511} Bloc 3 — Des contraires sans préfixe',
+      html:'<p>Beaucoup de contraires sont des mots <strong>complètement différents</strong> :</p>'
+        +'<div class="conj-grid">'
+        +'<div class="conj-col"><h4>Adjectifs</h4>'
+        +'<div>vieux \u2194 jeune</div><div>rapide \u2194 lent</div>'
+        +'<div>propre \u2194 sale</div><div>lourd \u2194 léger</div></div>'
+        +'<div class="conj-col"><h4>Verbes</h4>'
+        +'<div>ouvrir \u2194 fermer</div><div>donner \u2194 prendre</div>'
+        +'<div>partir \u2194 arriver</div><div>rire \u2194 pleurer</div></div></div>'
+        +'<div class="exemple">\u{1F4CC} Certains mots ont plusieurs contraires selon le contexte :<br>'
+        +'<em>fort</em> \u2194 <em>faible</em> (la force) &nbsp;|&nbsp; <em>fort</em> \u2194 <em>doux</em> (le bruit)</div>' }
+  ],
+
+  memo:'\u2194\uFE0F Des <strong>antonymes</strong> sont des mots de sens <strong>contraire</strong>.<br>'
+      +'&nbsp;&nbsp;&nbsp;&nbsp;<em>chaud \u2194 froid · grand \u2194 petit · monter \u2194 descendre</em><br>'
+      +'\u{1F527} Avec un <strong>préfixe</strong> : <em>dé-</em> (défaire) · <em>in-</em> (inutile) · '
+      +'<em>im-</em> devant p/b/m (impossible) · <em>mal-</em> (malheureux)<br>'
+      +'\u26A0\uFE0F Synonyme = même sens · Antonyme = sens contraire',
+
+  exercices:[
+    { type:'qcm', titre:'Trouve le contraire',
+      consigne:'Quel mot a le sens opposé ?',
+      items:[
+        { phrase:'<strong>chaud</strong>', bonne:'froid', options:['tiède','froid','brûlant','doux'],
+          expl:'<em>froid</em> est l\'exact contraire de chaud.' },
+        { phrase:'<strong>ouvrir</strong>', bonne:'fermer', options:['pousser','fermer','tirer','entrer'],
+          expl:'<em>fermer</em> est le contraire d\'ouvrir.' },
+        { phrase:'<strong>lourd</strong>', bonne:'léger', options:['gros','léger','solide','plein'],
+          expl:'<em>léger</em> est le contraire de lourd.' },
+        { phrase:'<strong>arriver</strong>', bonne:'partir', options:['rester','marcher','partir','courir'],
+          expl:'<em>partir</em> est le contraire d\'arriver.' }
+      ]},
+
+    { type:'drag', titre:'Ajoute le préfixe du contraire',
+      consigne:'Tape sur un préfixe, puis tape sur la case devant le mot.',
+      pool:['dé','in','im','mal'],
+      items:[
+        { avant:'', apres:'coller (contraire de coller)', rep:'dé',
+          expl:'<em>dé-</em> \u2192 décoller.' },
+        { avant:'', apres:'utile (contraire d\'utile)', rep:'in',
+          expl:'<em>in-</em> \u2192 inutile.' },
+        { avant:'', apres:'poli (contraire de poli)', rep:'im',
+          expl:'<em>im-</em> devant un <strong>p</strong> \u2192 impoli.' },
+        { avant:'', apres:'honnête (contraire d\'honnête)', rep:'mal',
+          expl:'<em>mal-</em> \u2192 malhonnête.' }
+      ]},
+
+    { type:'classify', titre:'Synonyme ou antonyme ?',
+      consigne:'Tape sur une paire de mots, puis tape sur la bonne colonne.',
+      pts:4,
+      cols:[
+        {id:'syn', nom:'\u{1F91D} Synonymes', couleur:'#0369a1', fond:'#f0f9ff'},
+        {id:'ant', nom:'\u2194\uFE0F Antonymes', couleur:'#be185d', fond:'#fdf2f8'}
+      ],
+      items:[
+        {mot:'grand / petit', cat:'ant'}, {mot:'joli / beau', cat:'syn'},
+        {mot:'content / triste', cat:'ant'}, {mot:'rapide / vif', cat:'syn'},
+        {mot:'monter / descendre', cat:'ant'}, {mot:'maison / demeure', cat:'syn'},
+        {mot:'propre / sale', cat:'ant'}, {mot:'bavarder / discuter', cat:'syn'}
+      ]},
+
+    { type:'saisie', titre:'Écris le contraire',
+      consigne:'Trouve le mot de sens opposé.',
+      maxlen:14,
+      items:[
+        { phrase:'le contraire de <strong>jour</strong>', rep:['nuit'],
+          expl:'<em>nuit</em> est le contraire de jour.' },
+        { phrase:'le contraire de <strong>possible</strong>', rep:['impossible'],
+          expl:'On ajoute <em>im-</em> devant le p \u2192 impossible.' },
+        { phrase:'le contraire de <strong>vieux</strong>', rep:['jeune','neuf'],
+          expl:'<em>jeune</em> (pour une personne) ou <em>neuf</em> (pour un objet).' },
+        { phrase:'le contraire de <strong>rire</strong>', rep:['pleurer'],
+          expl:'<em>pleurer</em> est le contraire de rire.' }
+      ]}
+  ]
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
+<script src="../atelier-fiche.js"></script>
+</body>
+</html>

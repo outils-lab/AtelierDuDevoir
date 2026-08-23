@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Dictée — La ville et les transports – CE2</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../atelier-fiche.css">
+</head>
+<body>
+<script>
+window.FICHE = {
+  code:'DM211', niveau:'CE2', matiere:'Français', categorie:'Dictées mots',
+  duree:'14 min', retour:'ce2.html',
+  accent:'#334155', accent2:'#475569', accentLight:'#f8fafc', accentMid:'#cbd5e1',
+  titre:'Dictée : la ville 🚌',
+  ugoIntro:"Les mots de la ville et des transports.<br>\u00c9coute bien, certains cachent des pi\u00e8ges ! \u{1F686}",
+  msgBrillant:'Tu écris les mots de la ville sans faute !',
+
+  lecon:[
+    { titre:'\u{1F4D6} Les mots à écrire',
+      html:'<div class="exemple" style="font-size:1.12rem;line-height:2.1;text-align:center;">'
+        +'\u{1F6E3}\uFE0F la <strong>rue</strong> &nbsp;·&nbsp; \u{1F3EA} le <strong>magasin</strong><br>'
+        +'\u{1F68C} l\'<strong>autobus</strong> &nbsp;·&nbsp; \u{1F686} le <strong>train</strong><br>'
+        +'\u{1F6B2} la <strong>bicyclette</strong></div>'
+        +'<div class="astuce">\u{1F4A1} <strong>bicyclette</strong> est un mot long : '
+        +'<em>bi · cy · clette</em>. Le <strong>y</strong> se prononce comme un i.</div>',
+      ugo:'Le <strong>c</strong> devant le <strong>y</strong> fait le son [s] : bi<strong>cy</strong>clette. Comme dans <em>cycle</em> !' },
+
+    { titre:'\u{1F511} Les pièges à éviter',
+      html:'<div class="exemple">'
+        +'\u26A0\uFE0F <strong>magasin</strong> \u2192 un seul <strong>s</strong> qui fait [z] entre voyelles<br>'
+        +'\u26A0\uFE0F <strong>autobus</strong> \u2192 le <strong>s</strong> final se prononce<br>'
+        +'\u26A0\uFE0F <strong>train</strong> \u2192 le son [in] s\'écrit <strong>ain</strong><br>'
+        +'\u26A0\uFE0F <strong>bicyclette</strong> \u2192 un <strong>y</strong> et deux <strong>t</strong></div>'
+        +'<div class="astuce">\u{1F4A1} Souviens-toi : entre deux voyelles, <strong>un seul s</strong> fait [z]. '
+        +'C\'est pour ça que <em>magasin</em> se dit « magazin » !</div>',
+      ugo:'Si on écrivait <em>magassin</em> avec deux s, on dirait « magaSSin ». Un seul s suffit !' }
+  ],
+
+  memo:'\u{1F68C} La ville et les transports :<br>'
+      +'la <strong>rue</strong> · le <strong>magasin</strong> · l\'<strong>autobus</strong> · '
+      +'le <strong>train</strong> · la <strong>bicyclette</strong><br>'
+      +'\u26A0\uFE0F magasin : un seul s (son [z]) · bicyclette : un y et deux t',
+
+  exercices:[
+    { type:'dictee', titre:'Écris les mots', consigne:'Écoute chaque mot et écris-le.',
+      items:[
+        { rep:'rue',         lu:'rue',         expl:'la <strong>rue</strong>' },
+        { rep:'magasin',     lu:'magasin',     expl:'le <strong>magasin</strong>, un seul s qui fait [z]' },
+        { rep:'autobus',     lu:'autobus',     expl:'l\'<strong>autobus</strong>' },
+        { rep:'train',       lu:'train',       expl:'le <strong>train</strong>, avec ain' },
+        { rep:'bicyclette',  lu:'bicyclette',  expl:'la <strong>bicyclette</strong>, avec y et deux t' }
+      ]},
+    { type:'dictee', titre:'Écris les phrases', consigne:'Écoute la phrase entière, puis écris-la.',
+      large:true,
+      items:[
+        { rep:"L'autobus arrive à l'heure.", lu:"L'autobus arrive à l'heure. point",
+          expl:'Deux élisions : <strong>l\'</strong>autobus et <strong>l\'</strong>heure (h muet).' },
+        { rep:"Je traverse la rue.", lu:'Je traverse la rue. point',
+          expl:'<strong>traverse</strong> s\'écrit avec un seul s qui fait [s] après le r.' }
+      ]}
+  ]
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
+<script src="../atelier-fiche.js"></script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Dictée — La nature – CE1</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../atelier-fiche.css">
+</head>
+<body>
+<script>
+window.FICHE = {
+  code:'DM206', niveau:'CE1', matiere:'Français', categorie:'Dictées mots',
+  duree:'12 min', retour:'ce1.html',
+  accent:'#166534', accent2:'#16a34a', accentLight:'#f0fdf4', accentMid:'#bbf7d0',
+  titre:'Dictée : la nature 🌳',
+  ugoIntro:"Des mots de la nature, puis deux petites phrases.<br>\u00c9coute bien, tu peux r\u00e9\u00e9couter ! \u{1F343}",
+  msgBrillant:'Tu écris les mots de la nature sans faute !',
+
+  lecon:[
+    { titre:'\u{1F4D6} Les mots de la nature',
+      html:'<div class="exemple" style="font-size:1.15rem;line-height:2.1;text-align:center;">'
+        +'\u{1F333} l\'<strong>arbre</strong> &nbsp;·&nbsp; \u{1F33C} la <strong>fleur</strong><br>'
+        +'\u{1F343} la <strong>feuille</strong> &nbsp;·&nbsp; \u{1F30A} la <strong>rivière</strong></div>'
+        +'<div class="astuce">\u{1F4A1} On écrit <strong>l\'arbre</strong> et non « le arbre » : devant une voyelle, '
+        +'le <em>le</em> devient <strong>l\'</strong>.</div>',
+      ugo:'Regarde bien <strong>feuille</strong> : le son [euil] s\'écrit e-u-i-l-l-e. C\'est un mot à retenir !' },
+
+    { titre:'\u{1F511} Les pièges à éviter',
+      html:'<div class="exemple">'
+        +'\u26A0\uFE0F <strong>arbre</strong> \u2192 deux <strong>r</strong> se suivent : a-r-b-r-e<br>'
+        +'\u26A0\uFE0F <strong>feuille</strong> \u2192 <strong>euille</strong> avec deux l<br>'
+        +'\u26A0\uFE0F <strong>rivière</strong> \u2192 accent grave sur le <strong>è</strong><br>'
+        +'\u26A0\uFE0F <strong>oiseaux</strong> au pluriel \u2192 <strong>x</strong> et non s</div>'
+        +'<div class="astuce">\u{1F4A1} Dans les phrases, n\'oublie pas la <strong>majuscule</strong> au début '
+        +'et le <strong>point</strong> à la fin !</div>',
+      ugo:'Une phrase commence toujours par une majuscule et finit par un point. Ne l\'oublie jamais !' }
+  ],
+
+  memo:'\u{1F333} Les mots de la nature :<br>'
+      +'l\'<strong>arbre</strong> · la <strong>fleur</strong> · la <strong>feuille</strong> · la <strong>rivière</strong><br>'
+      +'\u26A0\uFE0F feuille s\'écrit e-u-i-l-l-e · rivière prend un accent grave<br>'
+      +'\u{1F4CC} Une phrase : majuscule au début, point à la fin.',
+
+  exercices:[
+    { type:'dictee', titre:'Écris les mots', consigne:'Écoute chaque mot et écris-le.',
+      items:[
+        { rep:'arbre',   lu:'arbre',   expl:'l\'<strong>arbre</strong>' },
+        { rep:'fleur',   lu:'fleur',   expl:'la <strong>fleur</strong>' },
+        { rep:'feuille', lu:'feuille', expl:'la <strong>feuille</strong>, avec euille' },
+        { rep:'rivière', lu:'rivière', expl:'la <strong>rivière</strong>, accent grave sur le è' }
+      ]},
+    { type:'dictee', titre:'Écris les phrases', consigne:'Écoute la phrase entière, puis écris-la.',
+      large:true,
+      items:[
+        { rep:'Le vent souffle.', lu:'Le vent souffle. point',
+          expl:'Majuscule au début, point à la fin. <strong>vent</strong> a un t muet.' },
+        { rep:'Les oiseaux chantent.', lu:'Les oiseaux chantent. point',
+          expl:'<strong>oiseaux</strong> prend un x au pluriel, <strong>chantent</strong> prend -ent.' }
+      ]}
+  ]
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
+<script src="../atelier-fiche.js"></script>
+</body>
+</html>

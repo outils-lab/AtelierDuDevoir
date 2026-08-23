@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Radical, préfixe et suffixe – CE2</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../atelier-fiche.css">
+</head>
+<body>
+<script>
+window.FICHE = {
+  code:'L02', niveau:'CE2', matiere:'Français', categorie:'Lexique',
+  duree:'15 min', retour:'ce2.html',
+  accent:'#c2410c', accent2:'#ea580c', accentLight:'#fff7ed', accentMid:'#fed7aa',
+  titre:'Radical, préfixe et suffixe',
+  ugoIntro:"Un mot, c\'est comme un train \u{1F686} :<br>il a une locomotive et parfois des wagons !",
+  msgBrillant:'Tu démontes les mots comme un pro !',
+
+  lecon:[
+    { titre:'\u{1F4D6} Bloc 1 — Les trois morceaux d\'un mot',
+      html:'<p>Beaucoup de mots sont construits avec <strong>trois parties</strong> :</p>'
+        +'<div class="exemple" style="text-align:center;font-size:1.15rem;line-height:2;">'
+        +'<span style="background:#dbeafe;padding:4px 10px;border-radius:8px;">re</span>'
+        +'<span style="background:#fed7aa;padding:4px 10px;border-radius:8px;font-weight:800;">chauff</span>'
+        +'<span style="background:#d1fae5;padding:4px 10px;border-radius:8px;">er</span><br>'
+        +'<span style="font-size:.85rem;color:#64748b;">préfixe &nbsp;&nbsp; RADICAL &nbsp;&nbsp; suffixe</span></div>'
+        +'<div class="exemple">'
+        +'\u{1F7E0} <strong>Le radical</strong> : la partie principale, celle qui porte le sens.<br>'
+        +'&nbsp;&nbsp;&nbsp;&nbsp;<em>chauff</em> \u2192 l\'idée de chaleur<br><br>'
+        +'\u{1F535} <strong>Le préfixe</strong> : se place <strong>avant</strong> le radical.<br>'
+        +'&nbsp;&nbsp;&nbsp;&nbsp;<em>re-</em> \u2192 refaire l\'action<br><br>'
+        +'\u{1F7E2} <strong>Le suffixe</strong> : se place <strong>après</strong> le radical.<br>'
+        +'&nbsp;&nbsp;&nbsp;&nbsp;<em>-er</em> \u2192 c\'est un verbe</div>',
+      ugo:'Le <strong>radical</strong> est toujours là, c\'est le cœur du mot. Le préfixe et le suffixe sont des ajouts : parfois il y en a, parfois non !' },
+
+    { titre:'\u{1F4D6} Bloc 2 — Ce que change un préfixe',
+      html:'<p>Le préfixe modifie le <strong>sens</strong> du mot :</p>'
+        +'<table class="tbl"><tr><th>Préfixe</th><th>Sens</th><th>Exemples</th></tr>'
+        +'<tr><td><strong>re-</strong></td><td>faire à nouveau</td><td>refaire, redire, relire</td></tr>'
+        +'<tr><td><strong>dé-</strong></td><td>le contraire</td><td>défaire, décoller, démonter</td></tr>'
+        +'<tr><td><strong>in-</strong> / <strong>im-</strong></td><td>le contraire</td><td>incorrect, impossible</td></tr>'
+        +'<tr><td><strong>para-</strong></td><td>qui protège de</td><td>parapluie, parasol</td></tr>'
+        +'</table>'
+        +'<div class="astuce">\u{1F4A1} <em>faire</em> \u2192 <em><strong>re</strong>faire</em> (encore) \u2192 <em><strong>dé</strong>faire</em> (le contraire).<br>'
+        +'Le radical ne bouge pas, seul le début change !</div>',
+      ugo:'Un <strong>parapluie</strong>, c\'est ce qui te protège (para) de la pluie. Un <strong>parasol</strong>, du soleil. Malin, non ?' },
+
+    { titre:'\u{1F511} Bloc 3 — Ce que change un suffixe',
+      html:'<p>Le suffixe change souvent la <strong>nature</strong> du mot :</p>'
+        +'<table class="tbl"><tr><th>Suffixe</th><th>Donne</th><th>Exemples</th></tr>'
+        +'<tr><td><strong>-eur</strong> / <strong>-euse</strong></td><td>celui qui fait</td><td>chanteur, danseuse</td></tr>'
+        +'<tr><td><strong>-ette</strong></td><td>petit</td><td>maisonnette, fillette</td></tr>'
+        +'<tr><td><strong>-able</strong></td><td>qu\'on peut</td><td>lavable, mangeable</td></tr>'
+        +'<tr><td><strong>-age</strong></td><td>l\'action</td><td>lavage, jardinage</td></tr>'
+        +'</table>'
+        +'<div class="exemple">\u{1F686} Un mot peut avoir les deux !<br>'
+        +'<em><strong>re</strong> · chauff · <strong>age</strong></em> \u2192 le rechauffage<br>'
+        +'<em><strong>in</strong> · répar · <strong>able</strong></em> \u2192 irréparable</div>' }
+  ],
+
+  memo:'\u{1F686} Un mot = <strong>préfixe</strong> + <strong>RADICAL</strong> + <strong>suffixe</strong><br>'
+      +'&nbsp;&nbsp;&nbsp;&nbsp;<em>re · chauff · er</em><br>'
+      +'\u{1F7E0} Le <strong>radical</strong> porte le sens (toujours présent)<br>'
+      +'\u{1F535} Le <strong>préfixe</strong> est avant : <em>re-</em> (encore) · <em>dé-</em>, <em>in-</em> (contraire)<br>'
+      +'\u{1F7E2} Le <strong>suffixe</strong> est après : <em>-eur</em> (celui qui) · <em>-ette</em> (petit) · <em>-able</em> (qu\'on peut)',
+
+  exercices:[
+    { type:'classify', titre:'Préfixe ou suffixe ?',
+      consigne:'Tape sur une partie de mot, puis tape sur la bonne colonne.',
+      pts:4,
+      cols:[
+        {id:'p', nom:'\u{1F535} Préfixe (avant)', couleur:'#3B82F6', fond:'#eff6ff'},
+        {id:'s', nom:'\u{1F7E2} Suffixe (après)', couleur:'#16a34a', fond:'#f0fdf4'}
+      ],
+      items:[
+        {mot:'re-', cat:'p'}, {mot:'-eur', cat:'s'},
+        {mot:'dé-', cat:'p'}, {mot:'-ette', cat:'s'},
+        {mot:'in-', cat:'p'}, {mot:'-able', cat:'s'},
+        {mot:'para-', cat:'p'}, {mot:'-age', cat:'s'}
+      ]},
+
+    { type:'qcm', titre:'Trouve le radical',
+      consigne:'Quelle est la partie principale du mot ?',
+      items:[
+        { phrase:'<strong>refaire</strong>', bonne:'faire', options:['re','faire','aire','ref'],
+          expl:'<em>re-</em> est le préfixe, le radical est <strong>faire</strong>.' },
+        { phrase:'<strong>jardinage</strong>', bonne:'jardin', options:['age','jardinag','jardin','din'],
+          expl:'<em>-age</em> est le suffixe, le radical est <strong>jardin</strong>.' },
+        { phrase:'<strong>chanteuse</strong>', bonne:'chant', options:['euse','chanteu','chant','ante'],
+          expl:'<em>-euse</em> est le suffixe, le radical est <strong>chant</strong>.' },
+        { phrase:'<strong>déplacer</strong>', bonne:'plac', options:['dé','placer','plac','déplac'],
+          expl:'<em>dé-</em> est le préfixe, <em>-er</em> le suffixe : le radical est <strong>plac</strong>.' }
+      ]},
+
+    { type:'drag', titre:'Ajoute le bon préfixe',
+      consigne:'Tape sur un préfixe, puis tape sur la case devant le mot.',
+      pool:['re','dé','im','para'],
+      items:[
+        { avant:'', apres:'lire (lire une deuxième fois)', rep:'re',
+          expl:'<em>re-</em> signifie « à nouveau » \u2192 relire.' },
+        { avant:'', apres:'coller (le contraire de coller)', rep:'dé',
+          expl:'<em>dé-</em> marque le contraire \u2192 décoller.' },
+        { avant:'', apres:'possible (qui ne se peut pas)', rep:'im',
+          expl:'<em>im-</em> marque le contraire \u2192 impossible.' },
+        { avant:'', apres:'sol (qui protège du soleil)', rep:'para',
+          expl:'<em>para-</em> signifie « qui protège de » \u2192 parasol.' }
+      ]},
+
+    { type:'saisie', titre:'Fabrique le mot',
+      consigne:'Écris le mot complet demandé.',
+      maxlen:14,
+      items:[
+        { phrase:'Radical <strong>laver</strong> + suffixe <strong>-age</strong> \u2192 l\'action de laver',
+          rep:'lavage', expl:'lav + age \u2192 <strong>lavage</strong>.' },
+        { phrase:'Préfixe <strong>re-</strong> + radical <strong>voir</strong> \u2192 voir à nouveau',
+          rep:'revoir', expl:'re + voir \u2192 <strong>revoir</strong>.' },
+        { phrase:'Radical <strong>maison</strong> + suffixe <strong>-nette</strong> \u2192 une petite maison',
+          rep:'maisonnette', expl:'maison + nette \u2192 <strong>maisonnette</strong>.' },
+        { phrase:'Préfixe <strong>dé-</strong> + radical <strong>monter</strong> \u2192 le contraire de monter',
+          rep:'démonter', expl:'dé + monter \u2192 <strong>démonter</strong>.' }
+      ]}
+  ]
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
+<script src="../atelier-fiche.js"></script>
+</body>
+</html>

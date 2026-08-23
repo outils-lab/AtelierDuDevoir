@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Dictée — Accords complexes dans le GN – 5e</title>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Playfair+Display:wght@600;700&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../atelier-fiche.css">
+</head>
+<body>
+<script>
+window.FICHE = {
+  code:'DC401', niveau:'5e', cycle:4, matiere:'Français', categorie:'Dictées phrases',
+  duree:'18 min', retour:'5e.html',
+  accent:'#166534', accent2:'#16a34a', accentLight:'#f0fdf4', accentMid:'#bbf7d0',
+  titre:'Dictée : accords complexes dans le GN',
+  ugoIntro:"Cinq phrases o\u00f9 l\'accord ne s\'entend pas mais s\'\u00e9crit.",
+  msgBrillant:'Tu maîtrises les accords les plus délicats du groupe nominal.',
+
+  lecon:[
+    { titre:'Adjectifs de couleur',
+      analogie:"Une couleur empruntée à un objet garde la rigidité de cet objet : elle ne bouge plus.",
+      html:'<div class="exemple" style="line-height:1.9;">'
+        +'des robes <strong>vertes</strong> \u2192 adjectif simple, il s\'accorde<br>'
+        +'des robes <strong>vert clair</strong> \u2192 couleur composée, invariable<br>'
+        +'des robes <strong>marron</strong> \u2192 nom employé comme couleur, invariable</div>'
+        +'<p>Restent variables : <em>rose, mauve, écarlate, fauve, pourpre</em>, devenus de vrais adjectifs.</p>',
+      ugo:'Marron, orange et cerise sont d\'abord des noms.',
+      questions:[
+        { q:'« des robes vert clair » : l\'adjectif s\'accorde-t-il ?',
+          options:['non, couleur composée invariable','oui, comme tout adjectif'],
+          bonne:'non, couleur composée invariable',
+          expl:'Une couleur composée de deux mots reste invariable.' },
+        { q:'Pourquoi « marron » est-il invariable ?',
+          options:["c'est un nom employé comme couleur","c'est un adjectif étranger","il finit par une consonne"],
+          bonne:"c'est un nom employé comme couleur",
+          expl:'Le marron est d\'abord un fruit.' },
+        { q:'Quel adjectif de couleur s\'accorde normalement ?',
+          options:['rose','orange','marron'],
+          bonne:'rose',
+          expl:'<em>rose</em>, <em>mauve</em>, <em>écarlate</em> et <em>fauve</em> sont devenus de vrais adjectifs.' }
+      ]},
+
+    { titre:'Demi, nu, ci-joint',
+      analogie:"Placés avant le nom, ces mots restent figés ; placés après, ils s'assouplissent.",
+      html:'<div class="exemple" style="line-height:1.9;">'
+        +'une <strong>demi</strong>-heure \u2192 avant : invariable<br>'
+        +'deux heures et <strong>demie</strong> \u2192 après : s\'accorde<br>'
+        +'<strong>nu</strong>-pieds \u2192 avant : invariable<br>'
+        +'les pieds <strong>nus</strong> \u2192 après : s\'accorde</div>'
+        +'<p>Même logique pour <em>ci-joint</em> : invariable en tête de phrase, variable après le nom.</p>',
+      ugo:'La position dans la phrase commande l\'accord.',
+      questions:[
+        { q:'« une demi-heure » : pourquoi <em>demi</em> ne s\'accorde-t-il pas ?',
+          options:["il est placé avant le nom","heure est féminin","c'est une exception isolée"],
+          bonne:"il est placé avant le nom",
+          expl:'Avant le nom, <em>demi</em> reste invariable.' },
+        { q:'Comment écrit-on « deux heures et demi… » ?',
+          options:['demie','demi','demies'],
+          bonne:'demie',
+          expl:'Placé après, il s\'accorde avec <em>heure</em>, féminin singulier.' },
+        { q:'« les pieds nu… » :',
+          options:['nus','nu'],
+          bonne:'nus',
+          expl:'Placé après le nom, <em>nu</em> s\'accorde.' }
+      ]},
+
+    { titre:'Les noms composés',
+      analogie:"Dans un nom composé, seuls les éléments qui peuvent varier prennent la marque du pluriel.",
+      html:'<div class="exemple" style="line-height:1.9;">'
+        +'des <strong>coffres-forts</strong> \u2192 nom + adjectif : les deux s\'accordent<br>'
+        +'des <strong>ouvre-boîtes</strong> \u2192 verbe + nom : le verbe reste invariable<br>'
+        +'des <strong>arcs-en-ciel</strong> \u2192 seul le premier nom varie</div>'
+        +'<p>Un <strong>verbe</strong> ou une <strong>préposition</strong> ne prennent jamais la marque du pluriel.</p>',
+      ugo:'Repérez la nature de chaque élément avant d\'accorder.',
+      questions:[
+        { q:'Dans « des ouvre-boîtes », pourquoi « ouvre » ne varie-t-il pas ?',
+          options:["c'est un verbe","c'est un nom singulier","il finit par un e"],
+          bonne:"c'est un verbe",
+          expl:'Un verbe ne prend jamais la marque du pluriel.' },
+        { q:'Comment écrit-on le pluriel de « arc-en-ciel » ?',
+          options:['arcs-en-ciel','arc-en-ciels','arcs-en-ciels'],
+          bonne:'arcs-en-ciel',
+          expl:'Seul le premier nom varie ; <em>en</em> et <em>ciel</em> restent.' },
+        { q:'Dans « coffre-fort », quels éléments s\'accordent ?',
+          options:['les deux','le premier seulement','aucun'],
+          bonne:'les deux',
+          expl:'Nom + adjectif : tous deux prennent la marque du pluriel.' }
+      ]}
+  ],
+
+  memo:'<strong>Couleurs</strong> : composées ou issues d\'un nom \u2192 invariables '
+      +'(<em>vert clair, marron</em>). Exceptions variables : rose, mauve, écarlate, fauve.<br>'
+      +'<strong>Demi, nu</strong> : invariables avant le nom, variables après.<br>'
+      +'<strong>Noms composés</strong> : verbes et prépositions ne varient jamais.',
+
+  exercices:[
+    { type:'dictee', titre:'Écrivez les phrases',
+      consigne:'Écoutez chaque phrase, puis écrivez-la.',
+      large:true,
+      items:[
+        { rep:"Elle porte des chaussures marron.",
+          lu:'Elle porte des chaussures marron. point',
+          expl:'<strong>marron</strong> est un nom employé comme couleur \u2192 invariable.' },
+        { rep:"Les rideaux vert clair encadrent la fenêtre.",
+          lu:'Les rideaux vert clair encadrent la fenêtre. point',
+          expl:'Couleur composée \u2192 <strong>vert clair</strong> reste invariable.' },
+        { rep:"Il a patienté deux heures et demie.",
+          lu:'Il a patienté deux heures et demie. point',
+          expl:'Placé après, <strong>demie</strong> s\'accorde avec <em>heure</em>.' }
+      ]},
+
+    { type:'dictee', titre:'Deux phrases plus exigeantes',
+      consigne:'Attention aux noms composés et à la position des mots.',
+      large:true,
+      items:[
+        { rep:"Les enfants marchaient pieds nus sur le sable.",
+          lu:'Les enfants marchaient pieds nus sur le sable. point',
+          expl:'<strong>nus</strong> suit le nom \u2192 il s\'accorde avec <em>pieds</em>.' },
+        { rep:"Deux arcs-en-ciel traversaient le ciel gris.",
+          lu:'Deux arcs-en-ciel traversaient le ciel gris. point',
+          expl:'Seul le premier nom varie : <strong>arcs-en-ciel</strong>.' }
+      ]}
+  ]
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
+<script src="../atelier-fiche.js"></script>
+</body>
+</html>

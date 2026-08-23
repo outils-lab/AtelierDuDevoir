@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Dictée — La nourriture – CE1</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../atelier-fiche.css">
+</head>
+<body>
+<script>
+window.FICHE = {
+  code:'DM207', niveau:'CE1', matiere:'Français', categorie:'Dictées mots',
+  duree:'12 min', retour:'ce1.html',
+  accent:'#c2410c', accent2:'#ea580c', accentLight:'#fff7ed', accentMid:'#fed7aa',
+  titre:'Dictée : la nourriture 🍎',
+  ugoIntro:"Des mots qui donnent faim !<br>\u00c9coute-les bien, puis \u00e9cris-les. \u{1F35E}",
+  msgBrillant:'Tu écris les mots de la nourriture sans faute !',
+
+  lecon:[
+    { titre:'\u{1F4D6} Les mots à écrire',
+      html:'<div class="exemple" style="font-size:1.15rem;line-height:2.1;text-align:center;">'
+        +'\u{1F35E} le <strong>pain</strong> &nbsp;·&nbsp; \u{1F34E} la <strong>pomme</strong><br>'
+        +'\u{1F9C0} le <strong>fromage</strong> &nbsp;·&nbsp; \u{1F955} la <strong>carotte</strong></div>'
+        +'<div class="astuce">\u{1F4A1} <strong>pomme</strong> et <strong>carotte</strong> ont une '
+        +'<strong>double consonne</strong> : po-<strong>mm</strong>-e, caro-<strong>tt</strong>-e.</div>',
+      ugo:'Les doubles consonnes s\'entendent à peine, mais il ne faut pas les oublier !' },
+
+    { titre:'\u{1F511} Les pièges à éviter',
+      html:'<div class="exemple">'
+        +'\u26A0\uFE0F <strong>pain</strong> \u2192 le son [in] s\'écrit <strong>ain</strong><br>'
+        +'\u26A0\uFE0F <strong>pomme</strong> \u2192 deux <strong>m</strong><br>'
+        +'\u26A0\uFE0F <strong>fromage</strong> \u2192 le <strong>g</strong> fait [j] devant le e<br>'
+        +'\u26A0\uFE0F <strong>carotte</strong> \u2192 deux <strong>t</strong></div>'
+        +'<div class="astuce">\u{1F4A1} Dans la phrase, pense à l\'<strong>accord</strong> : '
+        +'<em>des pommes</em> prend un s !</div>',
+      ugo:'Quand il y a plusieurs choses, n\'oublie pas le -s du pluriel !' }
+  ],
+
+  memo:'\u{1F34E} Les mots de la nourriture :<br>'
+      +'le <strong>pain</strong> · la <strong>pomme</strong> · le <strong>fromage</strong> · la <strong>carotte</strong><br>'
+      +'\u26A0\uFE0F pomme prend deux m · carotte prend deux t · pain s\'écrit ain',
+
+  exercices:[
+    { type:'dictee', titre:'Écris les mots', consigne:'Écoute chaque mot et écris-le.',
+      items:[
+        { rep:'pain',     lu:'pain',     expl:'le <strong>pain</strong>, avec ain' },
+        { rep:'pomme',    lu:'pomme',    expl:'la <strong>pomme</strong>, avec deux m' },
+        { rep:'fromage',  lu:'fromage',  expl:'le <strong>fromage</strong>' },
+        { rep:'carotte',  lu:'carotte',  expl:'la <strong>carotte</strong>, avec deux t' }
+      ]},
+    { type:'dictee', titre:'Écris les phrases', consigne:'Écoute la phrase entière, puis écris-la.',
+      large:true,
+      items:[
+        { rep:'Je mange une pomme.', lu:'Je mange une pomme. point',
+          expl:'Majuscule et point. <strong>pomme</strong> avec deux m.' },
+        { rep:'Papa coupe le pain.', lu:'Papa coupe le pain. point',
+          expl:'<strong>Papa</strong> prend une majuscule ici car il commence la phrase.' }
+      ]}
+  ]
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
+<script src="../atelier-fiche.js"></script>
+</body>
+</html>

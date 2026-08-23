@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Vivant ou non-vivant ? – CP</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../atelier-fiche.css">
+</head>
+<body>
+<script>
+window.FICHE = {
+  code:'S01', niveau:'CP', matiere:'Sciences', categorie:'Vivant',
+  duree:'15 min', retour:'cp.html',
+  accent:'#0f766e', accent2:'#14b8a6', accentLight:'#f0fdfa', accentMid:'#99f6e4',
+  titre:'Vivant ou non-vivant ?',
+  ugoIntro:"Un caillou, un chat, une fleur\u2026<br>Lequel est vivant ? \u{1F50D}",
+  msgBrillant:'Tu reconnais les êtres vivants du premier coup !',
+
+  lecon:[
+    { titre:'\u{1F50D} Bloc 1 — Regarde bien',
+      html:'<div class="compare-grid">'
+        +'<div class="compare-card" style="border-color:#0f766e;background:#f0fdfa;">'
+        +'<h4 style="color:#0f766e;font-size:1.7rem;">\u{1F431} \u{1F33C} \u{1F9D2}</h4>'
+        +'<p>Ils naissent. Ils grandissent. Ils mangent.</p></div>'
+        +'<div class="compare-card" style="border-color:#78716c;background:#fafaf9;">'
+        +'<h4 style="color:#78716c;font-size:1.7rem;">\u{1FAA8} \u{1F6B2} \u{1FA91}</h4>'
+        +'<p>Ils ne naissent pas. Ils ne grandissent pas.</p></div></div>'
+        +'<p>Le chat est <span class="highlight">vivant</span>. La fleur aussi. L\'enfant aussi.</p>'
+        +'<p>Le vélo ne naît pas. On dit : <span class="highlight">non-vivant</span>.</p>',
+      ugo:'Pose-toi la question : est-ce que ça naît ? est-ce que ça grandit ?',
+      questions:[
+        { q:'Le chat est :', options:['vivant','non-vivant'],
+          bonne:'vivant', expl:'Il naît et il grandit.' },
+        { q:'Le vélo est :', options:['non-vivant','vivant'],
+          bonne:'non-vivant', expl:'Il ne naît pas.' },
+        { q:'Un être vivant :', options:['naît et grandit','ne change jamais'],
+          bonne:'naît et grandit', expl:'Comme le chat et la fleur.' }
+      ] },
+
+    { titre:'\u{1F331} Bloc 2 — La vie du poussin',
+      html:'<div class="exemple" style="text-align:center;padding:8px;">'
+        +'<strong>De l\'œuf à la poule</strong>'
+        +'<svg viewBox="0 0 320 342" width="100%" style="max-width:360px;display:block;margin:6px auto 0;" '
+        +'font-family="Nunito,sans-serif" role="img" aria-label="Les cinq étapes de la vie d\'un poussin">'
+        +'<rect x="6" y="4" width="308" height="54" rx="13" fill="#ffffff" stroke="#0f766e" stroke-width="2"/>'
+        +'<circle cx="32" cy="31" r="13" fill="#0f766e"/>'
+        +'<text x="32" y="36" text-anchor="middle" font-size="15" font-weight="800" fill="#ffffff">1</text>'
+        +'<text x="54" y="39" font-size="22">\u{1F423}</text>'
+        +'<text x="88" y="28" font-size="16" font-weight="800" fill="#0f766e">il naît</text>'
+        +'<text x="88" y="47" font-size="12.5" fill="#57534e">il sort de l\'œuf</text>'
+        +'<path d="M32 60 L32 66" stroke="#0f766e" stroke-width="2.5"/>'
+        +'<path d="M27 65 L32 72 L37 65 Z" fill="#0f766e"/>'
+        +'<rect x="6" y="74" width="308" height="54" rx="13" fill="#ffffff" stroke="#0f766e" stroke-width="2"/>'
+        +'<circle cx="32" cy="101" r="13" fill="#0f766e"/>'
+        +'<text x="32" y="106" text-anchor="middle" font-size="15" font-weight="800" fill="#ffffff">2</text>'
+        +'<text x="54" y="109" font-size="22">\u{1F33E}</text>'
+        +'<text x="88" y="98" font-size="16" font-weight="800" fill="#0f766e">il se nourrit</text>'
+        +'<text x="88" y="117" font-size="12.5" fill="#57534e">il picore des graines</text>'
+        +'<path d="M32 130 L32 136" stroke="#0f766e" stroke-width="2.5"/>'
+        +'<path d="M27 135 L32 142 L37 135 Z" fill="#0f766e"/>'
+        +'<rect x="6" y="144" width="308" height="54" rx="13" fill="#ffffff" stroke="#0f766e" stroke-width="2"/>'
+        +'<circle cx="32" cy="171" r="13" fill="#0f766e"/>'
+        +'<text x="32" y="176" text-anchor="middle" font-size="15" font-weight="800" fill="#ffffff">3</text>'
+        +'<text x="54" y="179" font-size="22">\u{1F414}</text>'
+        +'<text x="88" y="168" font-size="16" font-weight="800" fill="#0f766e">il grandit</text>'
+        +'<text x="88" y="187" font-size="12.5" fill="#57534e">il devient adulte</text>'
+        +'<path d="M32 200 L32 206" stroke="#0f766e" stroke-width="2.5"/>'
+        +'<path d="M27 205 L32 212 L37 205 Z" fill="#0f766e"/>'
+        +'<rect x="6" y="214" width="308" height="54" rx="13" fill="#ffffff" stroke="#0f766e" stroke-width="2"/>'
+        +'<circle cx="32" cy="241" r="13" fill="#0f766e"/>'
+        +'<text x="32" y="246" text-anchor="middle" font-size="15" font-weight="800" fill="#ffffff">4</text>'
+        +'<text x="54" y="249" font-size="22">\u{1F95A}</text>'
+        +'<text x="88" y="238" font-size="16" font-weight="800" fill="#0f766e">il se reproduit</text>'
+        +'<text x="88" y="257" font-size="12.5" fill="#57534e">il a des petits</text>'
+        +'<path d="M32 270 L32 276" stroke="#a8a29e" stroke-width="2.5"/>'
+        +'<path d="M27 275 L32 282 L37 275 Z" fill="#a8a29e"/>'
+        +'<rect x="6" y="284" width="308" height="54" rx="13" fill="#ffffff" stroke="#a8a29e" stroke-width="2"/>'
+        +'<circle cx="32" cy="311" r="13" fill="#78716c"/>'
+        +'<text x="32" y="316" text-anchor="middle" font-size="15" font-weight="800" fill="#ffffff">5</text>'
+        +'<text x="88" y="308" font-size="16" font-weight="800" fill="#57534e">il meurt</text>'
+        +'<text x="88" y="327" font-size="12.5" fill="#78716c">à la fin de sa vie</text>'
+        +'</svg></div>'
+        +'<p>Tous les êtres vivants font pareil.</p>'
+        +'<p>Le chat aussi. Toi aussi !</p>'
+        +'<div class="astuce">\u{1F4A1} Les 5 étapes : naître, se nourrir, grandir, se reproduire, mourir.</div>',
+      ugo:'Cinq mots à retenir. Le poussin les fait tous, dans l\'ordre !',
+      questions:[
+        { q:'Sortir de l\'œuf, c\'est :', options:['naître','grandir'],
+          bonne:'naître', expl:'C\'est la première étape.' },
+        { q:'Manger des graines, c\'est :', options:['se nourrir','se reproduire'],
+          bonne:'se nourrir', expl:'C\'est la deuxième étape.' },
+        { q:'Avoir des petits, c\'est :', options:['se reproduire','naître'],
+          bonne:'se reproduire', expl:'La poule pond des œufs.' }
+      ] },
+
+    { titre:'\u26A0\uFE0F Bloc 3 — Le piège de bouger',
+      html:'<div class="exemple" style="line-height:2;">'
+        +'\u{1F697} La voiture bouge. Elle n\'est pas vivante.<br>'
+        +'\u{1F333} L\'arbre ne bouge pas. Il est vivant.</div>'
+        +'<p>Bouger ne suffit pas.</p>'
+        +'<p>Demande plutôt : est-ce que ça grandit ?</p>'
+        +'<div class="astuce">\u{1F4A1} La plante reste en place. Mais elle est vivante !</div>',
+      ugo:'Attention : un train bouge très vite, et pourtant il n\'est pas vivant.',
+      questions:[
+        { q:'La voiture bouge. Elle est :', options:['non-vivante','vivante'],
+          bonne:'non-vivante', expl:'Elle ne grandit pas.' },
+        { q:'L\'arbre ne bouge pas. Il est :', options:['vivant','non-vivant'],
+          bonne:'vivant', expl:'Il grandit chaque année.' },
+        { q:'La bonne question, c\'est :', options:['est-ce que ça grandit ?','est-ce que ça bouge ?'],
+          bonne:'est-ce que ça grandit ?', expl:'Bouger ne suffit pas.' }
+      ] }
+  ],
+
+  memo:'\u{1F331} Un <strong>être vivant</strong> naît, se nourrit, grandit, se reproduit et meurt.<br>'
+      +'\u{1FAA8} Un objet <strong>non-vivant</strong> ne fait rien de tout cela.<br>'
+      +'\u26A0\uFE0F Bouger ne veut pas dire vivant. La plante est vivante !',
+
+  exercices:[
+    { type:'qcm', titre:'Vivant ou non-vivant ?', consigne:'Choisis pour chaque image.',
+      items:[
+        { phrase:'<span style="font-size:2.2rem;">\u{1F41F}</span><br>le poisson', q:'',
+          bonne:'vivant', options:['vivant','non-vivant'],
+          expl:'Le poisson naît et grandit.' },
+        { phrase:'<span style="font-size:2.2rem;">\u{1F4D5}</span><br>le livre', q:'',
+          bonne:'non-vivant', options:['non-vivant','vivant'],
+          expl:'Le livre ne grandit pas.' },
+        { phrase:'<span style="font-size:2.2rem;">\u{1F33B}</span><br>le tournesol', q:'',
+          bonne:'vivant', options:['vivant','non-vivant'],
+          expl:'Le tournesol pousse et grandit.' },
+        { phrase:'<span style="font-size:2.2rem;">\u26BD</span><br>le ballon', q:'',
+          bonne:'non-vivant', options:['non-vivant','vivant'],
+          expl:'Le ballon ne se nourrit pas.' }
+      ]},
+
+    { type:'classify', titre:'Range chaque étiquette',
+      consigne:'Tape sur une étiquette, puis sur la bonne colonne.',
+      pts:6,
+      cols:[
+        {id:'viv', nom:'\u{1F331} Vivant', couleur:'#0f766e', fond:'#f0fdfa'},
+        {id:'non', nom:'\u{1FAA8} Non-vivant', couleur:'#78716c', fond:'#fafaf9'}
+      ],
+      items:[
+        {mot:'\u{1F431} le chat', cat:'viv'},
+        {mot:'\u{1F6B2} le vélo', cat:'non'},
+        {mot:'\u{1F41D} l\'abeille', cat:'viv'},
+        {mot:'\u{1FA91} la chaise', cat:'non'},
+        {mot:'\u{1F337} la tulipe', cat:'viv'},
+        {mot:'\u{1F944} la cuillère', cat:'non'}
+      ]},
+
+    { type:'drag', titre:'Les étapes de la vie',
+      consigne:'Tape sur un mot, puis sur la case de la phrase.',
+      pool:['naît','se nourrit','grandit','se reproduit','meurt'],
+      items:[
+        { avant:'\u{1F423} Le poussin', apres:'.', rep:'naît',
+          expl:'Sortir de l\'œuf, c\'est naître.' },
+        { avant:'\u{1F33E} Il', apres:'de graines.', rep:'se nourrit',
+          expl:'Manger, c\'est se nourrir.' },
+        { avant:'\u{1F414} Il', apres:'vite.', rep:'grandit',
+          expl:'Il devient de plus en plus grand.' },
+        { avant:'\u{1F95A} La poule', apres:'.', rep:'se reproduit',
+          expl:'Elle pond des œufs.' },
+        { avant:'Très vieille, elle', apres:'.', rep:'meurt',
+          expl:'C\'est la fin de sa vie.' }
+      ]},
+
+    { type:'jugement', titre:'Qui a raison ?', consigne:'Tape sur la bonne phrase.',
+      items:[
+        { consigne:'\u{1F333} L\'arbre est-il vivant ?',
+          bonne:'Oui, il grandit.',
+          mauvaise:'Non, il ne bouge pas.',
+          expl:'Un arbre grandit chaque année.' },
+        { consigne:'\u{1F697} La voiture est-elle vivante ?',
+          bonne:'Non, elle ne grandit pas.',
+          mauvaise:'Oui, elle bouge.',
+          expl:'Bouger ne suffit pas.' },
+        { consigne:'\u2601\uFE0F Le nuage est-il vivant ?',
+          bonne:'Non, il ne mange pas.',
+          mauvaise:'Oui, il change de forme.',
+          expl:'Le nuage ne se nourrit pas.' },
+        { consigne:'\u{1F41B} La chenille est-elle vivante ?',
+          bonne:'Oui, elle mange et grandit.',
+          mauvaise:'Non, elle est trop petite.',
+          expl:'Même petite, elle est vivante.' }
+      ]}
+  ]
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
+<script src="../atelier-fiche.js"></script>
+</body>
+</html>

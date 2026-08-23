@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Dictée — Plus-que-parfait et concordance – 4e</title>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Playfair+Display:wght@600;700&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../atelier-fiche.css">
+</head>
+<body>
+<script>
+window.FICHE = {
+  code:'DC403', niveau:'4e', cycle:4, matiere:'Français', categorie:'Dictées phrases',
+  duree:'18 min', retour:'4e.html',
+  accent:'#6b21a8', accent2:'#7e22ce', accentLight:'#faf5ff', accentMid:'#e9d5ff',
+  titre:'Dictée : plus-que-parfait et concordance',
+  ugoIntro:"Situer une action avant une autre : c\'est le r\u00f4le du plus-que-parfait.",
+  msgBrillant:'Tu articules les temps du récit avec justesse.',
+
+  lecon:[
+    { titre:'Le plus-que-parfait',
+      analogie:"Un passé derrière le passé : l'action a eu lieu avant celle qu'on raconte.",
+      html:'<div class="exemple" style="line-height:1.9;">'
+        +'Quand il <strong>arriva</strong>, elle <strong>était</strong> déjà <strong>partie</strong>.<br>'
+        +'<span style="color:#6b7280;font-size:.9rem;">le départ précède l\'arrivée</span></div>'
+        +'<p>Formation : auxiliaire <strong>être</strong> ou <strong>avoir</strong> à l\'<strong>imparfait</strong> '
+        +'+ participe passé. <em>j\'avais mangé</em>, <em>elle était venue</em>.</p>',
+      ugo:'L\'auxiliaire est toujours à l\'imparfait.',
+      questions:[
+        { q:'Comment se forme le plus-que-parfait ?',
+          options:["auxiliaire à l'imparfait + participe passé","auxiliaire au présent + infinitif","imparfait seul"],
+          bonne:"auxiliaire à l'imparfait + participe passé",
+          expl:'<em>j\'avais mangé</em>, <em>elle était venue</em>.' },
+        { q:'Que marque le plus-que-parfait ?',
+          options:["une action antérieure à une autre action passée","une action future","une habitude présente"],
+          bonne:"une action antérieure à une autre action passée",
+          expl:'C\'est un passé situé avant un autre passé.' },
+        { q:'Dans « elle était partie », quel est l\'auxiliaire ?',
+          options:['être','avoir'],
+          bonne:'être',
+          expl:'<em>partir</em> se conjugue avec l\'auxiliaire être.' }
+      ]},
+
+    { titre:'L\'accord du participe passé',
+      analogie:"Deux auxiliaires, deux logiques d'accord qu'il faut distinguer avant d'écrire.",
+      html:'<div class="exemple" style="line-height:1.9;">'
+        +'Elles <strong>étaient</strong> <strong>arrivées</strong> tôt. \u2192 être : accord avec le sujet<br>'
+        +'Les lettres qu\'il <strong>avait</strong> <strong>écrites</strong>. \u2192 avoir : accord avec le COD placé avant<br>'
+        +'Il <strong>avait</strong> <strong>écrit</strong> des lettres. \u2192 COD placé après : pas d\'accord</div>',
+      ugo:'Avec avoir, cherchez le COD avant de décider.',
+      questions:[
+        { q:'Avec l\'auxiliaire être, l\'accord se fait avec :',
+          options:['le sujet','le COD','rien'],
+          bonne:'le sujet',
+          expl:'<em>Elles étaient arrivées</em>.' },
+        { q:'Avec avoir, quand le participe s\'accorde-t-il ?',
+          options:['si le COD est placé avant','toujours','jamais'],
+          bonne:'si le COD est placé avant',
+          expl:'<em>Les lettres qu\'il avait écrites</em>.' },
+        { q:'« Il avait écrit des lettres » : pourquoi pas d\'accord ?',
+          options:['le COD est placé après','lettres est féminin','avoir ne s\'accorde jamais'],
+          bonne:'le COD est placé après',
+          expl:'L\'accord n\'a lieu que si le COD précède le verbe.' }
+      ]},
+
+    { titre:'La concordance dans le récit',
+      analogie:"Les temps du récit forment un système : chacun situe l'action par rapport aux autres.",
+      html:'<table class="tbl"><tr><th>Temps</th><th>Rôle dans le récit</th></tr>'
+        +'<tr><td><strong>Plus-que-parfait</strong></td><td>action antérieure</td></tr>'
+        +'<tr><td><strong>Imparfait</strong></td><td>décor, habitude, action en cours</td></tr>'
+        +'<tr><td><strong>Passé simple</strong></td><td>action ponctuelle qui fait avancer le récit</td></tr></table>'
+        +'<p>Après <strong>que</strong> introduisant une pensée passée, on emploie le plus-que-parfait : '
+        +'<em>il pensait qu\'elle était partie</em>.</p>',
+      questions:[
+        { q:'Quel temps décrit le décor d\'un récit ?',
+          options:["l'imparfait",'le passé simple','le plus-que-parfait'],
+          bonne:"l'imparfait",
+          expl:'Il installe la situation et les actions en cours.' },
+        { q:'Quel temps fait avancer le récit ?',
+          options:['le passé simple',"l'imparfait",'le présent'],
+          bonne:'le passé simple',
+          expl:'Il marque les actions ponctuelles et successives.' },
+        { q:'« Il pensait qu\'elle ___ partie » :',
+          options:['était','est','sera'],
+          bonne:'était',
+          expl:'Plus-que-parfait après un verbe de pensée au passé.' }
+      ]}
+  ],
+
+  memo:'<strong>Plus-que-parfait</strong> = auxiliaire à l\'imparfait + participe passé. '
+      +'Il marque une action antérieure à une autre action passée.<br>'
+      +'<strong>Accord</strong> : avec <em>être</em> \u2192 le sujet ; avec <em>avoir</em> \u2192 le COD placé avant.<br>'
+      +'<strong>Récit</strong> : plus-que-parfait (avant) · imparfait (décor) · passé simple (action).',
+
+  exercices:[
+    { type:'dictee', titre:'Écrivez les phrases',
+      consigne:'Écoutez chaque phrase, puis écrivez-la.',
+      large:true,
+      items:[
+        { rep:"Quand elle arriva, les invités étaient déjà partis.",
+          lu:'Quand elle arriva virgule les invités étaient déjà partis. point',
+          expl:'<strong>étaient partis</strong> : plus-que-parfait, accord avec le sujet <em>invités</em>.' },
+        { rep:"Il relut les pages qu'il avait écrites la veille.",
+          lu:"Il relut les pages qu'il avait écrites la veille. point",
+          expl:'COD <em>que</em> = les pages, placé avant \u2192 <strong>écrites</strong>.' },
+        { rep:"Nous avions oublié de fermer la fenêtre.",
+          lu:'Nous avions oublié de fermer la fenêtre. point',
+          expl:'Pas de COD avant le verbe \u2192 <strong>oublié</strong> invariable.' }
+      ]},
+
+    { type:'dictee', titre:'Deux phrases de récit',
+      consigne:'Attention à l\'articulation des temps.',
+      large:true,
+      items:[
+        { rep:"La neige avait recouvert le village que nous traversions.",
+          lu:'La neige avait recouvert le village que nous traversions. point',
+          expl:'<strong>avait recouvert</strong> : COD placé après \u2192 pas d\'accord. '
+             +'<em>traversions</em> à l\'imparfait décrit l\'action en cours.' },
+        { rep:"Elles étaient rentrées avant que l'orage n'éclate.",
+          lu:"Elles étaient rentrées avant que l'orage n'éclate. point",
+          expl:'<strong>rentrées</strong> s\'accorde avec <em>elles</em>. '
+             +'<em>avant que</em> impose le subjonctif : <strong>éclate</strong>.' }
+      ]}
+  ]
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
+<script src="../atelier-fiche.js"></script>
+</body>
+</html>

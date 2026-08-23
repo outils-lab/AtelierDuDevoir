@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Synonymes vs Antonymes – CE2</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../atelier-fiche.css">
+</head>
+<body>
+<script>
+window.FICHE = {
+  code:'L05', niveau:'CE2', matiere:'Français', categorie:'Lexique',
+  duree:'15 min', retour:'ce2.html',
+  accent:'#6d28d9', accent2:'#7c3aed', accentLight:'#f5f3ff', accentMid:'#ddd6fe',
+  titre:'Synonymes ou antonymes ?',
+  ugoIntro:"Pareil ou contraire ? Apprends \u00e0 ne plus<br>jamais confondre ces deux familles ! \u{1F9E0}",
+  msgBrillant:'Tu distingues parfaitement les deux !',
+
+  lecon:[
+    { titre:'\u{1F4D6} Bloc 1 — Deux mots à ne pas mélanger',
+      html:'<div class="compare-grid">'
+        +'<div class="compare-card" style="border-color:#0369a1;background:#f0f9ff;">'
+        +'<h4 style="color:#0369a1;">\u{1F91D} SYNONYMES</h4>'
+        +'<p><strong>Même</strong> sens. Les deux mots veulent dire la même chose.</p>'
+        +'<p style="margin-top:6px;"><em>content = joyeux<br>maison = demeure<br>rapide = vif</em></p></div>'
+        +'<div class="compare-card" style="border-color:#be185d;background:#fdf2f8;">'
+        +'<h4 style="color:#be185d;">\u2194\uFE0F ANTONYMES</h4>'
+        +'<p><strong>Sens opposé</strong>. Les deux mots disent le contraire.</p>'
+        +'<p style="margin-top:6px;"><em>content \u2194 triste<br>grand \u2194 petit<br>ouvrir \u2194 fermer</em></p></div></div>'
+        +'<div class="astuce">\u{1F4A1} Un moyen de retenir :<br>'
+        +'<strong>SYN</strong>onyme \u2192 <strong>SIM</strong>ilaire (pareil)<br>'
+        +'<strong>ANT</strong>onyme \u2192 <strong>ANT</strong>i, contre (contraire)</div>',
+      ugo:'Le préfixe <em>syn-</em> veut dire « ensemble » et <em>anti-</em> veut dire « contre ». Les mots eux-mêmes te donnent l\'indice !' },
+
+    { titre:'\u{1F4D6} Bloc 2 — La méthode du test',
+      html:'<p>Pour savoir si deux mots sont synonymes ou antonymes, fais ce <strong>test simple</strong> :</p>'
+        +'<div class="exemple">'
+        +'\u{1F50D} Remplace le premier mot par le second dans une phrase.<br><br>'
+        +'<strong>joli</strong> et <strong>beau</strong><br>'
+        +'&nbsp;&nbsp;<em>Ce dessin est joli</em> \u2192 <em>Ce dessin est beau</em><br>'
+        +'&nbsp;&nbsp;\u2705 Le sens ne change pas \u2192 <strong>SYNONYMES</strong></div>'
+        +'<div class="exemple">'
+        +'<strong>joli</strong> et <strong>laid</strong><br>'
+        +'&nbsp;&nbsp;<em>Ce dessin est joli</em> \u2192 <em>Ce dessin est laid</em><br>'
+        +'&nbsp;&nbsp;\u274C Le sens devient l\'inverse \u2192 <strong>ANTONYMES</strong></div>',
+      ugo:'Si la phrase garde son sens : synonymes. Si elle dit le contraire : antonymes. Si elle n\'a plus de sens du tout : ce ne sont ni l\'un ni l\'autre !' },
+
+    { titre:'\u{1F511} Bloc 3 — Un même mot, les deux à la fois',
+      html:'<p>Chaque mot possède des synonymes <strong>et</strong> des antonymes :</p>'
+        +'<table class="tbl"><tr><th>Mot</th><th>\u{1F91D} Synonymes</th><th>\u2194\uFE0F Antonymes</th></tr>'
+        +'<tr><td><strong>grand</strong></td><td>immense, vaste</td><td>petit, minuscule</td></tr>'
+        +'<tr><td><strong>content</strong></td><td>joyeux, ravi</td><td>triste, fâché</td></tr>'
+        +'<tr><td><strong>rapide</strong></td><td>vif, véloce</td><td>lent, mou</td></tr>'
+        +'<tr><td><strong>propre</strong></td><td>net, impeccable</td><td>sale, crasseux</td></tr>'
+        +'</table>'
+        +'<div class="astuce">\u{1F4DA} Quand tu écris, ces deux familles t\'aident :<br>'
+        +'les <strong>synonymes</strong> évitent les répétitions,<br>'
+        +'les <strong>antonymes</strong> créent des oppositions fortes.</div>' }
+  ],
+
+  memo:'\u{1F91D} <strong>Synonymes</strong> = même sens \u2192 <em>content = joyeux</em><br>'
+      +'\u2194\uFE0F <strong>Antonymes</strong> = sens contraire \u2192 <em>content \u2194 triste</em><br>'
+      +'\u{1F50D} <strong>Le test :</strong> remplace le mot dans une phrase.<br>'
+      +'&nbsp;&nbsp;&nbsp;&nbsp;Le sens reste \u2192 synonymes · Le sens s\'inverse \u2192 antonymes',
+
+  exercices:[
+    { type:'classify', titre:'Range chaque paire',
+      consigne:'Tape sur une paire de mots, puis tape sur la bonne colonne.',
+      pts:4,
+      cols:[
+        {id:'syn', nom:'\u{1F91D} Synonymes', couleur:'#0369a1', fond:'#f0f9ff'},
+        {id:'ant', nom:'\u2194\uFE0F Antonymes', couleur:'#be185d', fond:'#fdf2f8'}
+      ],
+      items:[
+        {mot:'chaud / froid', cat:'ant'}, {mot:'triste / malheureux', cat:'syn'},
+        {mot:'énorme / immense', cat:'syn'}, {mot:'lourd / léger', cat:'ant'},
+        {mot:'partir / arriver', cat:'ant'}, {mot:'bavarder / discuter', cat:'syn'},
+        {mot:'sale / propre', cat:'ant'}, {mot:'rapide / véloce', cat:'syn'}
+      ]},
+
+    { type:'qcm', titre:'Synonyme ou antonyme ?',
+      consigne:'Quelle relation unit ces deux mots ?',
+      items:[
+        { phrase:'<strong>calme</strong> et <strong>tranquille</strong>', bonne:'synonymes',
+          options:['synonymes','antonymes'],
+          expl:'<em>Une mer calme</em> \u2192 <em>une mer tranquille</em> : le sens ne change pas.' },
+        { phrase:'<strong>monter</strong> et <strong>descendre</strong>', bonne:'antonymes',
+          options:['synonymes','antonymes'],
+          expl:'Ces deux verbes désignent des mouvements opposés.' },
+        { phrase:'<strong>fatigué</strong> et <strong>épuisé</strong>', bonne:'synonymes',
+          options:['antonymes','synonymes'],
+          expl:'<em>épuisé</em> veut dire très fatigué : même idée, en plus fort.' },
+        { phrase:'<strong>jeune</strong> et <strong>vieux</strong>', bonne:'antonymes',
+          options:['antonymes','synonymes'],
+          expl:'Ces deux adjectifs disent le contraire l\'un de l\'autre.' }
+      ]},
+
+    { type:'drag', titre:'Complète le tableau',
+      consigne:'Tape sur un mot, puis tape sur la case qui convient.',
+      pool:['immense','minuscule','joyeux','fâché'],
+      items:[
+        { avant:'Un synonyme de <strong>grand</strong> :', apres:'', rep:'immense',
+          expl:'<em>immense</em> a le même sens que grand.' },
+        { avant:'Un antonyme de <strong>grand</strong> :', apres:'', rep:'minuscule',
+          expl:'<em>minuscule</em> est le contraire de grand.' },
+        { avant:'Un synonyme de <strong>content</strong> :', apres:'', rep:'joyeux',
+          expl:'<em>joyeux</em> a le même sens que content.' },
+        { avant:'Un antonyme de <strong>content</strong> :', apres:'', rep:'fâché',
+          expl:'<em>fâché</em> est le contraire de content.' }
+      ]},
+
+    { type:'jugement', titre:'Choisis la bonne phrase',
+      consigne:'Tape sur la phrase où le mot est bien employé.',
+      items:[
+        { consigne:'On cherche un SYNONYME de « rapide » :',
+          bonne:'Ce coureur est très véloce.',
+          mauvaise:'Ce coureur est très lent.',
+          expl:'<em>véloce</em> = rapide (synonyme). <em>lent</em> serait l\'antonyme.' },
+        { consigne:'On cherche un ANTONYME de « propre » :',
+          bonne:'Ses chaussures sont sales.',
+          mauvaise:'Ses chaussures sont impeccables.',
+          expl:'<em>sale</em> est le contraire de propre. <em>impeccable</em> en est un synonyme.' },
+        { consigne:'On cherche un SYNONYME de « maison » :',
+          bonne:'Ils habitent une belle demeure.',
+          mauvaise:'Ils habitent une belle prairie.',
+          expl:'<em>demeure</em> = maison. Une <em>prairie</em> est un champ d\'herbe.' },
+        { consigne:'On cherche un ANTONYME de « ouvrir » :',
+          bonne:'Il faut fermer la fenêtre.',
+          mauvaise:'Il faut entrouvrir la fenêtre.',
+          expl:'<em>fermer</em> est le contraire d\'ouvrir. <em>entrouvrir</em> c\'est ouvrir un peu.' }
+      ]}
+  ]
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
+<script src="../atelier-fiche.js"></script>
+</body>
+</html>

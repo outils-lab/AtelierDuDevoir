@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Dictée de mots — L'école – CP</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../atelier-fiche.css">
+</head>
+<body>
+<script>
+window.FICHE = {
+  code:'DM202', niveau:'CP', matiere:'Français', categorie:'Dictées mots',
+  duree:'10 min', retour:'cp.html',
+  accent:'#1d4ed8', accent2:'#3b82f6', accentLight:'#eff6ff', accentMid:'#bfdbfe',
+  titre:"Dictée : l'école \u270F\uFE0F",
+  ugoIntro:"Les mots de la classe, tu les vois tous les jours !<br>\u00c9coute bien et \u00e9cris-les. \u{1F4DA}",
+  msgBrillant:"Tu connais bien les mots de l'école !",
+
+  lecon:[
+    { titre:'\u{1F4D6} Les mots de la classe',
+      html:'<div class="exemple" style="font-size:1.25rem;line-height:2.2;text-align:center;">'
+        +'\u{1F4D5} le <strong>livre</strong><br>'
+        +'\u270F\uFE0F le <strong>crayon</strong><br>'
+        +'\u{1F392} le <strong>cartable</strong><br>'
+        +'\u{1F4D0} la <strong>règle</strong><br>'
+        +'\u{1F58A}\uFE0F le <strong>stylo</strong></div>',
+      ugo:'Ces mots sont dans ton cartable tous les jours ! Regarde-les bien avant d\'écrire.' },
+
+    { titre:'\u{1F511} Les pièges à éviter',
+      html:'<div class="exemple">'
+        +'\u26A0\uFE0F <strong>crayon</strong> \u2192 on écrit <strong>cr</strong> puis <strong>ay</strong><br>'
+        +'\u26A0\uFE0F <strong>règle</strong> \u2192 il y a un accent sur le <strong>è</strong><br>'
+        +'\u26A0\uFE0F <strong>cartable</strong> \u2192 attention, il est long : car-ta-ble</div>'
+        +'<div class="astuce">\u{1F4A1} Pour les mots longs, coupe-les en morceaux : <em>car · ta · ble</em></div>',
+      ugo:'Découper le mot en syllabes, c\'est le secret pour ne rien oublier !' }
+  ],
+
+  memo:'\u270F\uFE0F Les mots de l\'école :<br>'
+      +'le <strong>livre</strong> · le <strong>crayon</strong> · le <strong>cartable</strong> · '
+      +'la <strong>règle</strong> · le <strong>stylo</strong><br>'
+      +'\u26A0\uFE0F règle prend un accent grave · crayon s\'écrit avec ay',
+
+  exercices:[
+    { type:'dictee', titre:'Écris les mots', consigne:'Écoute chaque mot et écris-le.',
+      items:[
+        { rep:'livre',    lu:'livre',    expl:'le <strong>livre</strong>' },
+        { rep:'crayon',   lu:'crayon',   expl:'le <strong>crayon</strong>, avec ay' },
+        { rep:'cartable', lu:'cartable', expl:'le <strong>cartable</strong> : car-ta-ble' },
+        { rep:'règle',    lu:'règle',    expl:'la <strong>règle</strong>, avec un accent grave' },
+        { rep:'stylo',    lu:'stylo',    expl:'le <strong>stylo</strong>' }
+      ]}
+  ]
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
+<script src="../atelier-fiche.js"></script>
+</body>
+</html>

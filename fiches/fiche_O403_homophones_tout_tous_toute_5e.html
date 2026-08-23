@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Homophones : tout / tous / toute(s) – 5e</title>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Playfair+Display:wght@600;700&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../atelier-fiche.css">
+</head>
+<body>
+<script>
+window.FICHE = {
+  code:'O403', niveau:'5e', cycle:4, matiere:'Français', categorie:'Orthographe',
+  duree:'18 min', retour:'5e.html',
+  accent:'#1e3a5f', accent2:'#2c5282', accentLight:'#f0f4f8', accentMid:'#bfd3e6',
+  titre:'tout, tous, toute, toutes',
+  ugoIntro:"Un seul mot, quatre formes, trois natures diff\u00e9rentes.",
+  msgBrillant:'Tu identifies la nature de « tout » sans hésiter.',
+
+  lecon:[
+    { titre:'Trois natures possibles',
+      analogie:"Un même mot peut changer de rôle selon sa place, comme un acteur qui change de costume.",
+      html:'<table class="tbl"><tr><th>Nature</th><th>Rôle</th><th>Exemple</th></tr>'
+        +'<tr><td><strong>Déterminant</strong></td><td>devant un nom</td>'
+        +'<td><strong>tous</strong> les élèves</td></tr>'
+        +'<tr><td><strong>Pronom</strong></td><td>remplace un nom</td>'
+        +'<td><strong>Tous</strong> sont venus.</td></tr>'
+        +'<tr><td><strong>Adverbe</strong></td><td>signifie « entièrement »</td>'
+        +'<td>Elle est <strong>tout</strong> étonnée.</td></tr></table>'
+        +'<div class="astuce">Seuls le déterminant et le pronom s\'accordent. '
+        +'L\'adverbe est <strong>presque toujours</strong> invariable.</div>',
+      ugo:'Commence toujours par identifier la nature : l\'accord en découle.' },
+
+    { titre:'Déterminant et pronom : l\'accord',
+      analogie:"Ces deux emplois se comportent comme des adjectifs : ils suivent le nom qu'ils accompagnent.",
+      html:'<div class="conj-grid">'
+        +'<div class="conj-col"><h4>Masculin</h4>'
+        +'<div>singulier : <strong>tout</strong> le monde</div>'
+        +'<div>pluriel : <strong>tous</strong> les jours</div></div>'
+        +'<div class="conj-col"><h4>Féminin</h4>'
+        +'<div>singulier : <strong>toute</strong> la nuit</div>'
+        +'<div>pluriel : <strong>toutes</strong> les fleurs</div></div></div>'
+        +'<div class="exemple">Pronom : <em>Ils sont <strong>tous</strong> là.</em> \u2192 '
+        +'le s se prononce.<br>Déterminant : <em><strong>tous</strong> les jours</em> \u2192 '
+        +'le s ne se prononce pas.</div>',
+      ugo:'Au pluriel masculin, la forme est <em>tous</em> dans les deux cas.' },
+
+    { titre:'L\'adverbe : le cas particulier',
+      analogie:"Un adverbe modifie un adjectif ; normalement il ne bouge pas. Ici, une exception phonétique s'impose.",
+      html:'<p>Devant un adjectif, <strong>tout</strong> signifie « entièrement » et reste '
+        +'<strong>invariable</strong> :</p>'
+        +'<div class="exemple">Elle est <strong>tout</strong> heureuse.<br>'
+        +'Ils sont <strong>tout</strong> étonnés.<br>Elles sont <strong>tout</strong> émues.</div>'
+        +'<div class="astuce"><strong>Exception :</strong> devant un adjectif féminin commençant par '
+        +'une <strong>consonne</strong> ou un <strong>h aspiré</strong>, il s\'accorde pour des raisons '
+        +'de prononciation.<br>Elle est <strong>toute</strong> petite.<br>'
+        +'Elles sont <strong>toutes</strong> honteuses.</div>',
+      ugo:'Devant une voyelle, l\'adverbe reste invariable : <em>toute émue</em> serait fautif.' },
+
+    { titre:'La méthode de reconnaissance',
+      analogie:"Trois questions successives suffisent à trancher n'importe quel cas.",
+      html:'<div class="exemple">'
+        +'<strong>1.</strong> Suit-il un nom ? \u2192 <strong>déterminant</strong>, il s\'accorde.<br>'
+        +'<strong>2.</strong> Remplace-t-il un nom ? \u2192 <strong>pronom</strong>, il s\'accorde.<br>'
+        +'<strong>3.</strong> Précède-t-il un adjectif ? \u2192 <strong>adverbe</strong>, invariable '
+        +'(sauf féminin + consonne).</div>'
+        +'<div class="astuce">Test de l\'adverbe : remplacez par <em>entièrement</em> ou <em>tout à fait</em>. '
+        +'Si la phrase garde son sens, c\'est un adverbe.</div>' }
+  ],
+
+  memo:'<strong>Déterminant</strong> (devant un nom) : tout / tous / toute / toutes \u2014 s\'accorde.<br>'
+      +'<strong>Pronom</strong> (remplace un nom) : s\'accorde également.<br>'
+      +'<strong>Adverbe</strong> (devant un adjectif, = entièrement) : <strong>invariable</strong>.<br>'
+      +'&nbsp;&nbsp;<em>Elle est tout étonnée</em> \u2014 mais <em>Elle est toute petite</em> '
+      +'(féminin + consonne).',
+
+  exercices:[
+    { type:'qcm', titre:'Identifier la nature',
+      consigne:'Quelle est la nature du mot en gras ?',
+      items:[
+        { phrase:'<strong>Tous</strong> les matins, il court.', bonne:'déterminant',
+          options:['déterminant','pronom','adverbe'],
+          expl:'Il précède le nom <em>matins</em> \u2192 déterminant.' },
+        { phrase:'Elle est <strong>tout</strong> émue.', bonne:'adverbe',
+          options:['déterminant','adverbe','pronom'],
+          expl:'Il précède l\'adjectif <em>émue</em> et signifie « entièrement » \u2192 adverbe.' },
+        { phrase:'<strong>Toutes</strong> sont arrivées.', bonne:'pronom',
+          options:['adverbe','pronom','déterminant'],
+          expl:'Il remplace un nom féminin pluriel \u2192 pronom.' },
+        { phrase:'Il a lu <strong>tout</strong> le roman.', bonne:'déterminant',
+          options:['pronom','adverbe','déterminant'],
+          expl:'Il précède le nom <em>roman</em> \u2192 déterminant.' }
+      ]},
+
+    { type:'drag', titre:'Compléter avec la forme correcte',
+      consigne:'Sélectionnez la forme, puis placez-la dans la phrase.',
+      pool:['tout','tous','toute','toutes'],
+      items:[
+        { avant:'Elle est', apres:'contente de son résultat.', rep:'toute',
+          expl:'Adverbe devant un adjectif féminin commençant par une consonne \u2192 accord : <strong>toute</strong>.' },
+        { avant:'', apres:'les invités sont partis.', rep:'tous',
+          expl:'Déterminant masculin pluriel devant <em>invités</em>.' },
+        { avant:'Il a relu', apres:'le chapitre.', rep:'tout',
+          expl:'Déterminant masculin singulier devant <em>chapitre</em>.' },
+        { avant:'', apres:'les élèves ont réussi.', rep:'toutes',
+          expl:'Déterminant féminin pluriel devant <em>élèves</em> au féminin.' }
+      ]},
+
+    { type:'saisie', titre:'Écrire la forme attendue',
+      consigne:'Écrivez tout, tous, toute ou toutes.',
+      maxlen:7,
+      items:[
+        { phrase:'Elles sont ___ surprises par la nouvelle.', rep:['tout'],
+          expl:'Adverbe devant une voyelle \u2192 invariable : <strong>tout</strong>.' },
+        { phrase:'Elle est ___ pâle depuis ce matin.', rep:['toute'],
+          expl:'Adverbe devant un adjectif féminin à consonne \u2192 <strong>toute</strong>.' },
+        { phrase:'___ les spectateurs applaudissent.', rep:['Tous','tous'],
+          expl:'Déterminant masculin pluriel \u2192 <strong>Tous</strong>.' },
+        { phrase:'J\'ai relu ___ mes notes hier soir.', rep:['toutes'],
+          expl:'Déterminant féminin pluriel devant <em>notes</em> \u2192 <strong>toutes</strong>.' }
+      ]},
+
+    { type:'jugement', titre:'Juger la pertinence',
+      consigne:'Choisissez la phrase correctement orthographiée.',
+      items:[
+        { consigne:'Adverbe devant un adjectif féminin à voyelle :',
+          bonne:'Les enfants sont tout étonnés du spectacle.',
+          mauvaise:'Les enfants sont tous étonnés du spectacle.',
+          expl:'<em>tout</em> signifie ici « entièrement » \u2192 adverbe invariable.' },
+        { consigne:'Adverbe devant un adjectif féminin à consonne :',
+          bonne:'Elle est toute petite pour son âge.',
+          mauvaise:'Elle est tout petite pour son âge.',
+          expl:'Exception phonétique : féminin + consonne \u2192 <em>toute</em>.' },
+        { consigne:'Pronom sujet au féminin pluriel :',
+          bonne:'Toutes ont rendu leur copie à temps.',
+          mauvaise:'Tout ont rendu leur copie à temps.',
+          expl:'Pronom remplaçant un nom féminin pluriel \u2192 <em>Toutes</em>.' },
+        { consigne:'Déterminant devant un nom masculin singulier :',
+          bonne:'Il a passé tout son temps à réviser.',
+          mauvaise:'Il a passé tous son temps à réviser.',
+          expl:'Déterminant masculin singulier devant <em>temps</em> \u2192 <em>tout</em>.' }
+      ]}
+  ]
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
+<script src="../atelier-fiche.js"></script>
+</body>
+</html>

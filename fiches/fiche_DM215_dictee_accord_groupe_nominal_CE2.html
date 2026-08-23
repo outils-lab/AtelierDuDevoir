@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Dictée — L'accord dans le groupe nominal – CE2</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../atelier-fiche.css">
+</head>
+<body>
+<script>
+window.FICHE = {
+  code:'DM215', niveau:'CE2', matiere:'Français', categorie:'Dictées mots',
+  duree:'15 min', retour:'ce2.html',
+  accent:'#a16207', accent2:'#ca8a04', accentLight:'#fefce8', accentMid:'#fde68a',
+  titre:"Dictée : l'accord dans le groupe",
+  ugoIntro:"Quand le nom change, tout le groupe suit !<br>Fais bien attention aux terminaisons. \u{1F517}",
+  msgBrillant:'Tu accordes parfaitement les groupes nominaux !',
+
+  lecon:[
+    { titre:'\u{1F4D6} Tout le groupe s\'accorde',
+      html:'<p>Dans un groupe nominal, le <strong>déterminant</strong> et l\'<strong>adjectif</strong> '
+        +'s\'accordent avec le <strong>nom</strong>.</p>'
+        +'<div class="exemple" style="line-height:2.1;">'
+        +'\u{1F431} <strong>le</strong> petit chat &nbsp;\u2192&nbsp; <strong>les</strong> petit<strong>s</strong> chat<strong>s</strong><br>'
+        +'\u{1F33C} <strong>une</strong> jolie fleur &nbsp;\u2192&nbsp; <strong>des</strong> joli<strong>es</strong> fleur<strong>s</strong></div>'
+        +'<div class="astuce">\u{1F4A1} Si le nom est au <strong>pluriel</strong>, le déterminant '
+        +'et l\'adjectif prennent aussi un <strong>-s</strong> !</div>',
+      ugo:'C\'est le <strong>nom</strong> qui commande : tous les autres mots du groupe lui obéissent !' },
+
+    { titre:'\u{1F4D6} Le féminin aussi',
+      html:'<div class="exemple" style="line-height:2.1;">'
+        +'\u{1F466} un grand garçon &nbsp;\u2192&nbsp; \u{1F467} une grand<strong>e</strong> fille<br>'
+        +'\u{1F466}\u{1F466} des grand<strong>s</strong> garçons &nbsp;\u2192&nbsp; '
+        +'\u{1F467}\u{1F467} des grand<strong>es</strong> filles</div>'
+        +'<div class="astuce">\u{1F4A1} Au <strong>féminin pluriel</strong>, l\'adjectif prend '
+        +'<strong>-es</strong> : le <em>-e</em> du féminin, puis le <em>-s</em> du pluriel.</div>',
+      ugo:'Souviens-toi de l\'ordre : d\'abord le -e du féminin, ensuite le -s du pluriel. Jamais l\'inverse !' },
+
+    { titre:'\u{1F511} La méthode en dictée',
+      html:'<div class="exemple">'
+        +'\u0031\uFE0F\u20E3 Je repère le <strong>nom</strong> du groupe.<br>'
+        +'\u0032\uFE0F\u20E3 Je me demande : masculin ou féminin ? singulier ou pluriel ?<br>'
+        +'\u0033\uFE0F\u20E3 J\'accorde le <strong>déterminant</strong> et l\'<strong>adjectif</strong>.</div>'
+        +'<div class="exemple">\u{1F4CC} <em>Les petites souris grises.</em><br>'
+        +'nom = <strong>souris</strong> (féminin pluriel) \u2192 <em>les</em>, <em>petit<strong>es</strong></em>, '
+        +'<em>gris<strong>es</strong></em></div>'
+        +'<div class="astuce">\u26A0\uFE0F <strong>souris</strong> s\'écrit pareil au singulier et au pluriel : '
+        +'c\'est le déterminant qui te renseigne !</div>' }
+  ],
+
+  memo:'\u{1F517} Dans le groupe nominal, tout s\'accorde avec le <strong>nom</strong> :<br>'
+      +'&nbsp;&nbsp;&nbsp;&nbsp;<em>le petit chat \u2192 les petits chats</em><br>'
+      +'&nbsp;&nbsp;&nbsp;&nbsp;<em>une jolie fleur \u2192 des jolies fleurs</em><br>'
+      +'\u26A0\uFE0F Féminin pluriel : <strong>-es</strong> (le -e puis le -s)',
+
+  exercices:[
+    { type:'dictee', titre:'Écris les phrases', consigne:'Attention aux accords dans chaque groupe.',
+      large:true,
+      items:[
+        { rep:"Les petits chats dorment.", lu:'Les petits chats dorment. point',
+          expl:'<em>chats</em> masculin pluriel \u2192 <strong>les petits chats</strong>, tout prend un s.' },
+        { rep:"Elle cueille des jolies fleurs.", lu:'Elle cueille des jolies fleurs. point',
+          expl:'<em>fleurs</em> féminin pluriel \u2192 <strong>jolies</strong> avec -es.' },
+        { rep:"Je vois une grande maison.", lu:'Je vois une grande maison. point',
+          expl:'<em>maison</em> féminin singulier \u2192 <strong>grande</strong> avec un -e.' }
+      ]},
+    { type:'dictee', titre:'Encore deux phrases', consigne:'Repère bien le nom de chaque groupe.',
+      large:true,
+      items:[
+        { rep:"Les vieux arbres sont hauts.", lu:'Les vieux arbres sont hauts. point',
+          expl:'<em>arbres</em> masculin pluriel \u2192 <strong>vieux</strong> (déjà en x), <strong>hauts</strong> avec un s.' },
+        { rep:"Des grandes filles jouent.", lu:'Des grandes filles jouent. point',
+          expl:'<em>filles</em> féminin pluriel \u2192 <strong>grandes</strong> avec -es.' }
+      ]}
+  ]
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
+<script src="../atelier-fiche.js"></script>
+</body>
+</html>

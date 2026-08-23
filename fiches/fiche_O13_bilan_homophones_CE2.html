@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Les 4 homophones : bilan – CE2</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../atelier-fiche.css">
+</head>
+<body>
+<script>
+window.FICHE = {
+  code:'O13', niveau:'CE2', matiere:'Français', categorie:'Orthographe',
+  duree:'18 min', retour:'ce2.html',
+  accent:'#7c3aed', accent2:'#8b5cf6', accentLight:'#f5f3ff', accentMid:'#ddd6fe',
+  titre:'Les 4 homophones : bilan',
+  ugoIntro:"a/\u00e0, est/et, on/ont, son/sont…<br>Tu les connais tous ! On v\u00e9rifie ensemble ? \u{1F4AA}",
+  msgBrillant:'Tu jongles avec les quatre homophones !',
+
+  lecon:[
+    { titre:'\u{1F4D6} Bloc 1 — Le grand tableau',
+      html:'<p>Voici les <span class="highlight">4 paires</span> que tu as apprises :</p>'
+        +'<table class="tbl"><tr><th>Mot</th><th>Ce que c\'est</th><th>Astuce</th></tr>'
+        +'<tr><td><strong>a</strong></td><td>verbe avoir</td><td>on peut dire <em>avait</em></td></tr>'
+        +'<tr><td><strong>\u00e0</strong></td><td>préposition</td><td>lieu, moment</td></tr>'
+        +'<tr><td><strong>est</strong></td><td>verbe être</td><td>on peut dire <em>était</em></td></tr>'
+        +'<tr><td><strong>et</strong></td><td>mot de liaison</td><td>on peut dire <em>et puis</em></td></tr>'
+        +'<tr><td><strong>on</strong></td><td>pronom sujet</td><td>on peut dire <em>nous</em></td></tr>'
+        +'<tr><td><strong>ont</strong></td><td>verbe avoir (ils)</td><td>on peut dire <em>avaient</em></td></tr>'
+        +'<tr><td><strong>son</strong></td><td>déterminant</td><td>on peut dire <em>mon</em></td></tr>'
+        +'<tr><td><strong>sont</strong></td><td>verbe être (ils)</td><td>on peut dire <em>étaient</em></td></tr>'
+        +'</table>',
+      ugo:'Tu remarques quelque chose ? Les mots avec un <strong>t</strong> à la fin (est, ont, sont) sont presque toujours des <strong>verbes</strong> !' },
+
+    { titre:'\u{1F4D6} Bloc 2 — Le réflexe qui marche à tous les coups',
+      html:'<p>Devant un doute, pose-toi <strong>une seule question</strong> : est-ce que je peux mettre le mot au passé ?</p>'
+        +'<div class="exemple">'
+        +'<strong>a</strong> \u2192 <em>avait</em> &nbsp;·&nbsp; <strong>est</strong> \u2192 <em>était</em><br>'
+        +'<strong>ont</strong> \u2192 <em>avaient</em> &nbsp;·&nbsp; <strong>sont</strong> \u2192 <em>étaient</em></div>'
+        +'<p>Si le passé fonctionne, c\'est un <strong>verbe</strong> : on écrit la forme avec le <strong>t</strong> (sauf pour <em>a</em>).</p>'
+        +'<div class="astuce">\u{1F4A1} Si le passé ne marche pas, c\'est l\'autre mot :<br>'
+        +'<strong>\u00e0</strong> (préposition) · <strong>et</strong> (liaison) · <strong>on</strong> (pronom) · <strong>son</strong> (déterminant)</div>',
+      ugo:'Un seul réflexe pour les quatre paires : essaie le passé. C\'est la clé qui ouvre toutes les portes !' },
+
+    { titre:'\u{1F511} Bloc 3 — Attention aux pièges',
+      html:'<p>Dans une même phrase, tu peux trouver plusieurs homophones :</p>'
+        +'<div class="exemple">'
+        +'\u{1F4CC} <em>Il <strong>a</strong> donné <strong>son</strong> livre <strong>\u00e0</strong> Léa <strong>et</strong> elle <strong>est</strong> contente.</em><br><br>'
+        +'\u{1F50D} <em>a</em> = avait \u2714 &nbsp;|&nbsp; <em>son</em> = mon \u2714 &nbsp;|&nbsp; <em>\u00e0</em> = préposition<br>'
+        +'<em>et</em> = et puis \u2714 &nbsp;|&nbsp; <em>est</em> = était \u2714</div>'
+        +'<div class="astuce">\u26A0\uFE0F Traite les mots <strong>un par un</strong>, sans te presser. Chaque mot a sa propre astuce.</div>' }
+  ],
+
+  memo:'\u{1F511} <strong>Le réflexe :</strong> essaie de mettre au passé.<br>'
+      +'\u2705 Ça marche \u2192 c\'est un verbe : <strong>a</strong> (avait) · <strong>est</strong> (était) · <strong>ont</strong> (avaient) · <strong>sont</strong> (étaient)<br>'
+      +'\u274C Ça ne marche pas \u2192 <strong>\u00e0</strong> (préposition) · <strong>et</strong> (et puis) · <strong>on</strong> (nous) · <strong>son</strong> (mon)',
+
+  exercices:[
+    { type:'classify', titre:'Verbe ou pas verbe ?',
+      consigne:'Tape sur un mot, puis tape sur la bonne colonne.',
+      pts:4,
+      cols:[
+        {id:'v', nom:'\u{1F7E3} C\'est un verbe', couleur:'#7c3aed', fond:'#f5f3ff'},
+        {id:'n', nom:'\u{1F7E1} Ce n\'est pas un verbe', couleur:'#ca8a04', fond:'#fefce8'}
+      ],
+      items:[
+        {mot:'est', cat:'v'}, {mot:'et', cat:'n'},
+        {mot:'ont', cat:'v'}, {mot:'on', cat:'n'},
+        {mot:'sont', cat:'v'}, {mot:'son', cat:'n'},
+        {mot:'a', cat:'v'}, {mot:'\u00e0', cat:'n'}
+      ]},
+
+    { type:'qcm', titre:'Choisis le bon mot', consigne:'Quel mot complète correctement la phrase ?',
+      items:[
+        { phrase:'Les enfants ___ fini leurs devoirs.', bonne:'ont', options:['on','ont'],
+          expl:'Les enfants <em>avaient</em> fini \u2192 verbe avoir \u2192 <strong>ont</strong>.' },
+        { phrase:'Elle range ___ manteau ___ ses gants.', bonne:'son / et', options:['son / et','sont / est','son / est'],
+          expl:'<em>mon</em> manteau \u2192 son. <em>et puis</em> ses gants \u2192 et.' },
+        { phrase:'Il va ___ la piscine.', bonne:'\u00e0', options:['a','\u00e0'],
+          expl:'On ne peut pas dire <em>avait la piscine</em> \u2192 préposition \u2192 <strong>\u00e0</strong>.' },
+        { phrase:'Mon chien ___ très gentil.', bonne:'est', options:['et','est'],
+          expl:'Mon chien <em>était</em> gentil \u2192 verbe être \u2192 <strong>est</strong>.' }
+      ]},
+
+    { type:'jugement', titre:'Repère la phrase correcte',
+      consigne:'Tape directement sur la phrase bien écrite.',
+      items:[
+        { consigne:'Quelle phrase est correcte ?',
+          bonne:'On a trouvé son ballon et il est content.',
+          mauvaise:'Ont à trouvé sont ballon est il et content.',
+          expl:'<em>nous</em> a trouvé \u2192 on. <em>avait</em> trouvé \u2192 a. <em>mon</em> ballon \u2192 son.' },
+        { consigne:'Quelle phrase est correcte ?',
+          bonne:'Ils sont partis à midi et ont oublié son sac.',
+          mauvaise:'Ils son partis a midi est on oublié sont sac.',
+          expl:'<em>étaient</em> partis \u2192 sont. <em>avaient</em> oublié \u2192 ont.' },
+        { consigne:'Quelle phrase est correcte ?',
+          bonne:'Papa est allé à Paris et a pris son train.',
+          mauvaise:'Papa et allé a Paris est à pris sont train.',
+          expl:'<em>était</em> allé \u2192 est. <em>avait</em> pris \u2192 a. <em>mon</em> train \u2192 son.' },
+        { consigne:'Quelle phrase est correcte ?',
+          bonne:'On est prêts et les valises sont dans la voiture.',
+          mauvaise:'Ont et prêts est les valises son dans la voiture.',
+          expl:'<em>nous</em> est prêts \u2192 on. <em>étaient</em> dans \u2192 sont.' }
+      ]},
+
+    { type:'saisie', titre:'Complète le texte',
+      consigne:'Écris le mot qui manque : a, à, est, et, on, ont, son ou sont.',
+      maxlen:4, strict:true,
+      items:[
+        { phrase:'Léa ___ oublié ses clés.', rep:'a',
+          expl:'Léa <em>avait</em> oublié \u2192 verbe avoir \u2192 a.' },
+        { phrase:'Nous partons ___ la montagne.', rep:'\u00e0',
+          expl:'On ne peut pas dire <em>avait la montagne</em> \u2192 préposition \u2192 à.' },
+        { phrase:'Mes cousins ___ arrivés hier.', rep:'sont',
+          expl:'Mes cousins <em>étaient</em> arrivés \u2192 verbe être \u2192 sont.' },
+        { phrase:'En rangeant sa chambre, elle ___ retrouvé son cahier.', rep:'a',
+          expl:'Elle <em>avait</em> retrouvé \u2192 verbe avoir \u2192 a.' }
+      ]}
+  ]
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
+<script src="../atelier-fiche.js"></script>
+</body>
+</html>

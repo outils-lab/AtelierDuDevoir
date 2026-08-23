@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La marque du féminin : le -e – CP/CE1</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Nunito',sans-serif;background:#fafaf8;color:#1e293b;font-size:22px;min-height:100vh;}
+:root{--accent:#db2777;--accent-light:#fdf2f8;--accent-mid:#fbcfe8;}
+.phase{display:none;}.phase.active{display:block;}
+.site-header{background:var(--accent);color:#fff;padding:12px 20px;display:flex;align-items:center;gap:12px;}
+.site-header a{color:#fff;text-decoration:none;font-weight:700;font-size:16px;}
+.site-header span{font-weight:800;font-size:18px;}
+.accroche{background:linear-gradient(135deg,var(--accent) 0%,#ec4899 100%);color:#fff;padding:28px 20px 22px;}
+.accroche-inner{display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:12px;max-width:600px;margin-left:auto;margin-right:auto;}
+.ugo-big{font-size:3.5rem;flex-shrink:0;}
+.accroche-text h1{font-size:1.6rem;font-weight:800;margin-bottom:4px;}
+.accroche-text p{font-size:1rem;opacity:.9;line-height:1.5;}
+.meta-tags{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:14px;}
+.meta-tag{background:rgba(255,255,255,.25);border-radius:20px;padding:5px 14px;font-size:.9rem;font-weight:700;}
+.lecon-wrap{max-width:680px;margin:0 auto;padding:20px 16px;}
+.lecon-block{background:#fff;border-radius:16px;border-left:5px solid var(--accent);padding:20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.06);display:none;}
+.lecon-block.revealed{display:block;}
+.lecon-block h2{color:var(--accent);font-size:1.15rem;font-weight:800;margin-bottom:10px;}
+.lecon-block p{line-height:1.6;margin-bottom:10px;font-size:1.05rem;}
+.exemple{background:var(--accent-light);border-radius:12px;padding:12px 16px;margin:10px 0;font-size:1rem;}
+.highlight{color:var(--accent);font-weight:800;}
+.ugo-bubble{background:#fff3cd;border-radius:14px;padding:12px 16px;margin:10px 0;display:flex;align-items:flex-start;gap:10px;font-size:.95rem;}
+.ugo-icon{font-size:1.8rem;flex-shrink:0;}
+.paire{display:flex;gap:12px;flex-wrap:wrap;margin:10px 0;}
+.mot-card{background:#fff;border:3px solid var(--accent-mid);border-radius:14px;padding:10px 18px;font-size:1.1rem;font-weight:800;text-align:center;min-width:100px;}
+.mot-card .e-mark{color:var(--accent);}
+.btn-compris{background:var(--accent);color:#fff;border:none;border-radius:16px;padding:16px 32px;font-family:'Nunito',sans-serif;font-size:1.1rem;font-weight:800;cursor:pointer;margin:14px auto 0;display:block;min-height:56px;width:fit-content;}
+.btn-compris:hover{background:#9d174d;}
+.btn-suite{display:none;background:var(--accent);color:#fff;border:none;border-radius:16px;padding:16px 32px;font-family:'Nunito',sans-serif;font-size:1.1rem;font-weight:800;cursor:pointer;margin:16px auto;min-height:56px;}
+.btn-suite.show{display:block;}
+.ex-wrap{max-width:680px;margin:0 auto;padding:20px 16px;}
+.ex-header{background:var(--accent);color:#fff;border-radius:14px;padding:14px 18px;margin-bottom:18px;}
+.ex-header h2{font-size:1.1rem;font-weight:800;}
+.ex-header p{font-size:.9rem;opacity:.9;margin-top:4px;}
+.score-bar{background:#fff;border-radius:12px;padding:10px 16px;margin-bottom:16px;text-align:center;font-weight:700;font-size:1rem;box-shadow:0 2px 6px rgba(0,0,0,.06);}
+/* QCM */
+.qcm-card{background:#fff;border-radius:16px;padding:18px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.06);}
+.qcm-card .question{font-weight:700;font-size:1.05rem;margin-bottom:12px;line-height:1.5;}
+.qcm-options{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.qcm-btn{background:#f1f5f9;border:3px solid #e2e8f0;border-radius:14px;padding:14px 10px;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;transition:all .2s;min-height:56px;}
+.qcm-btn:hover{border-color:var(--accent);background:var(--accent-light);}
+.qcm-btn.correct{background:#dcfce7;border-color:#16a34a;color:#15803d;}
+.qcm-btn.wrong{background:#fee2e2;border-color:#dc2626;color:#dc2626;}
+.qcm-feedback{display:none;border-radius:10px;padding:10px 14px;margin-top:10px;font-size:.9rem;font-weight:600;}
+.qcm-feedback.show{display:block;}
+.qcm-feedback.ok{background:#dcfce7;color:#15803d;}
+.qcm-feedback.ko{background:#fee2e2;color:#dc2626;}
+/* CLASSIFICATION */
+.classify-wrap{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0;}
+.classify-col{border-radius:14px;padding:12px;text-align:center;}
+.classify-col h4{font-size:1rem;font-weight:800;margin-bottom:10px;}
+.classify-col.masc{background:#eff6ff;border:3px solid #3b82f6;}
+.classify-col.masc h4{color:#1d4ed8;}
+.classify-col.fem{background:var(--accent-light);border:3px solid var(--accent);}
+.classify-col.fem h4{color:var(--accent);}
+.classify-slot{min-height:48px;display:flex;align-items:center;justify-content:center;}
+.classify-pool{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:14px 0;}
+.classify-chip{background:#fff;border:3px solid #cbd5e1;border-radius:14px;padding:10px 18px;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;transition:all .2s;min-height:56px;display:flex;align-items:center;}
+.classify-chip:hover{border-color:var(--accent);background:var(--accent-light);}
+.classify-chip.placed-masc{background:#eff6ff;border-color:#3b82f6;color:#1d4ed8;}
+.classify-chip.placed-fem{background:var(--accent-light);border-color:var(--accent);color:var(--accent);}
+.classify-chip.correct-chip{background:#dcfce7;border-color:#16a34a;color:#15803d;}
+.classify-chip.wrong-chip{background:#fee2e2;border-color:#dc2626;color:#dc2626;}
+.classify-feedback{display:none;font-size:.88rem;font-weight:600;margin-top:6px;text-align:center;}
+.classify-feedback.show{display:block;}
+.classify-feedback.ok{color:#15803d;}
+.classify-feedback.ko{color:#dc2626;}
+.btn-verif{background:#0891b2;color:#fff;border:none;border-radius:14px;padding:14px 28px;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;margin-top:14px;display:block;min-height:56px;}
+.btn-verif:hover{background:#0e7490;}
+.btn-verif:disabled{opacity:.5;cursor:default;}
+/* BILAN */
+.bilan-wrap{max-width:680px;margin:0 auto;padding:24px 16px;text-align:center;}
+.bilan-card{background:#fff;border-radius:20px;padding:28px 20px;box-shadow:0 4px 20px rgba(0,0,0,.08);}
+.stars{font-size:2.8rem;margin:16px 0;}
+.star{display:inline-block;filter:grayscale(1);transition:filter .3s,transform .3s;}
+.star.earned{filter:none;}
+@keyframes starPop{0%{transform:scale(0)}60%{transform:scale(1.3)}100%{transform:scale(1)}}
+.score-big{font-size:2.2rem;font-weight:800;color:var(--accent);margin:10px 0;}
+.bilan-msg{font-size:1.05rem;margin:8px 0 16px;color:#475569;}
+.memo{background:var(--accent-light);border-radius:14px;padding:16px;margin-top:16px;text-align:left;}
+.memo h3{color:var(--accent);font-weight:800;margin-bottom:8px;}
+.memo p{font-size:.95rem;line-height:1.8;}
+.btn-retry{background:var(--accent);color:#fff;border:none;border-radius:16px;padding:14px 30px;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;margin-top:16px;min-height:56px;}
+.print-bar{position:fixed;bottom:16px;right:16px;display:flex;flex-direction:column;gap:8px;z-index:100;}
+.print-btn{background:#fff;border:2px solid var(--accent);color:var(--accent);border-radius:12px;padding:8px 14px;font-family:'Nunito',sans-serif;font-size:.8rem;font-weight:700;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.1);}
+.print-btn:hover{background:var(--accent);color:#fff;}
+@media print{.print-bar,.site-header,.btn-compris,.btn-suite,.btn-verif,.btn-retry{display:none!important;}}
+@media(max-width:480px){.qcm-options{grid-template-columns:1fr;}.accroche-inner{flex-direction:column;text-align:center;}.classify-wrap{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <a href="../cp.html">&#8592; CP</a>
+  <span>L'Atelier du Devoir</span>
+</header>
+
+<!-- PHASE 0 : LECON -->
+<div id="phase0" class="phase active">
+  <div class="accroche">
+    <div class="accroche-inner">
+      <span class="ugo-big">&#x1F989;</span>
+      <div class="accroche-text">
+        <h1>La marque du féminin ✨</h1>
+        <p>Comment sait-on qu'un mot est féminin ?<br>Il y a souvent un <strong>-e</strong> à la fin ! &#x1F338;</p>
+      </div>
+    </div>
+    <div class="meta-tags">
+      <span class="meta-tag">CP / CE1</span>
+      <span class="meta-tag">Orthographe</span>
+      <span class="meta-tag">10 min</span>
+      <span class="meta-tag">12 pts</span>
+    </div>
+  </div>
+
+  <div class="lecon-wrap">
+
+    <!-- BLOC 0 -->
+    <div id="bloc0" class="lecon-block revealed">
+      <h2>&#x1F4D6; Bloc 1 — Masculin et féminin</h2>
+      <p>Les mots ont un <span class="highlight">genre</span> : masculin &#x1F466; ou féminin &#x1F467;.</p>
+      <div class="exemple">
+        &#x1F466; un ami &nbsp;&nbsp;&nbsp; &#x1F467; une ami<strong class="highlight">e</strong><br>
+        &#x1F466; un chat &nbsp;&nbsp; &#x1F467; une chat<strong class="highlight">e</strong>
+      </div>
+      <p>Au féminin, on ajoute souvent un <span class="highlight">-e</span> à la fin du mot !</p>
+      <div class="ugo-bubble">
+        <span class="ugo-icon">&#x1F989;</span>
+        <span>Ugo : Le -e à la fin du mot, c'est le signe du féminin ! Comme une petite couronne pour les mots au féminin. 👑</span>
+      </div>
+      <button class="btn-compris" onclick="revealBloc(1)">J'ai compris ! &#x2192;</button>
+    </div>
+
+    <!-- BLOC 1 -->
+    <div id="bloc1" class="lecon-block">
+      <h2>&#x1F4D6; Bloc 2 — Des paires masculin / féminin</h2>
+      <p>Regarde ces paires de mots :</p>
+      <div class="paire">
+        <div class="mot-card">&#x1F466; petit</div>
+        <div style="display:flex;align-items:center;font-size:1.4rem;">&#x2192;</div>
+        <div class="mot-card">&#x1F467; petit<span class="e-mark">e</span></div>
+      </div>
+      <div class="paire">
+        <div class="mot-card">&#x1F466; grand</div>
+        <div style="display:flex;align-items:center;font-size:1.4rem;">&#x2192;</div>
+        <div class="mot-card">&#x1F467; grand<span class="e-mark">e</span></div>
+      </div>
+      <div class="paire">
+        <div class="mot-card">&#x1F466; brun</div>
+        <div style="display:flex;align-items:center;font-size:1.4rem;">&#x2192;</div>
+        <div class="mot-card">&#x1F467; brun<span class="e-mark">e</span></div>
+      </div>
+      <div class="ugo-bubble">
+        <span class="ugo-icon">&#x1F989;</span>
+        <span>Ugo : Quand on prononce le féminin, on entend parfois la dernière consonne ! <em>gran<strong>d</strong></em> vs <em>grand<strong>e</strong></em> — tu entends le D à la fin au féminin ?</span>
+      </div>
+      <button class="btn-compris" onclick="revealBloc(2)">J'ai compris ! &#x2192;</button>
+    </div>
+
+    <!-- BLOC 2 -->
+    <div id="bloc2" class="lecon-block">
+      <h2>&#x1F511; Bloc 3 — Les articles révèlent le genre</h2>
+      <p>Les articles <span class="highlight">un / le</span> annoncent le masculin.<br>Les articles <span class="highlight">une / la</span> annoncent le féminin.</p>
+      <div class="exemple">
+        &#x1F466; <strong>un</strong> garçon · <strong>le</strong> chien · <strong>un</strong> ami<br>
+        &#x1F467; <strong>une</strong> fille · <strong>la</strong> chatte · <strong>une</strong> amie
+      </div>
+      <div class="ugo-bubble">
+        <span class="ugo-icon">&#x1F989;</span>
+        <span>Ugo : Astuce rapide — si tu hésites, mets <em>une</em> devant le mot. Si ça marche, c'est féminin !</span>
+      </div>
+      <button class="btn-compris" onclick="startEx()">Aux exercices ! &#x1F4AA;</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- PHASE 1 : EX1 QCM masculin/féminin -->
+<div id="phase1" class="phase">
+  <div class="ex-wrap">
+    <div class="ex-header">
+      <h2>Exercice 1 — Masculin ou féminin ?</h2>
+      <p>Regarde le mot et dis si c'est masculin ou féminin.</p>
+    </div>
+    <div class="score-bar">Score : <span id="score-ex1">0</span> / 4 pts</div>
+    <div id="qcm1-container"></div>
+    <button class="btn-suite" id="btn-ex1-suite" onclick="goPhase(2)">Exercice suivant &#x2192;</button>
+  </div>
+</div>
+
+<!-- PHASE 2 : EX2 QCM trouver le féminin -->
+<div id="phase2" class="phase">
+  <div class="ex-wrap">
+    <div class="ex-header">
+      <h2>Exercice 2 — Le mot au féminin</h2>
+      <p>Quel est le mot au féminin ?</p>
+    </div>
+    <div class="score-bar">Score : <span id="score-ex2">0</span> / 4 pts</div>
+    <div id="qcm2-container"></div>
+    <button class="btn-suite" id="btn-ex2-suite" onclick="goPhase(3)">Exercice suivant &#x2192;</button>
+  </div>
+</div>
+
+<!-- PHASE 3 : EX3 CLASSIFICATION -->
+<div id="phase3" class="phase">
+  <div class="ex-wrap">
+    <div class="ex-header">
+      <h2>Exercice 3 — Range les mots</h2>
+      <p>Tape sur un mot et choisis sa colonne.</p>
+    </div>
+    <div class="score-bar">Score : <span id="score-ex3">0</span> / 4 pts</div>
+
+    <div class="classify-wrap">
+      <div class="classify-col masc">
+        <h4>&#x1F466; Masculin</h4>
+        <div id="col-masc" style="display:flex;flex-direction:column;gap:6px;min-height:60px;"></div>
+      </div>
+      <div class="classify-col fem">
+        <h4>&#x1F467; Féminin</h4>
+        <div id="col-fem" style="display:flex;flex-direction:column;gap:6px;min-height:60px;"></div>
+      </div>
+    </div>
+
+    <div class="classify-pool" id="pool3"></div>
+
+    <div id="classify-global-fb" style="display:none;border-radius:10px;padding:10px;margin-top:8px;font-weight:600;font-size:.9rem;text-align:center;"></div>
+    <button class="btn-verif" id="btn-verif3" onclick="verifyEx3()">Vérifier &#x2713;</button>
+    <button class="btn-suite" id="btn-ex3-suite" onclick="showBilan()">Voir mon bilan &#x1F3C6;</button>
+  </div>
+</div>
+
+<!-- PHASE 4 : BILAN -->
+<div id="phase4" class="phase">
+  <div class="bilan-wrap">
+    <div class="bilan-card">
+      <div style="font-size:2.5rem;">&#x1F3C6;</div>
+      <div class="stars">
+        <span class="star" id="star1">&#x2B50;</span>
+        <span class="star" id="star2">&#x2B50;</span>
+        <span class="star" id="star3">&#x2B50;</span>
+      </div>
+      <div class="score-big" id="bilan-score">0 / 12</div>
+      <div class="bilan-msg" id="bilan-msg"></div>
+      <div class="memo">
+        <h3>&#x1F4D6; À retenir</h3>
+        <p>
+          &#x1F338; Au féminin, on ajoute souvent un <strong>-e</strong> à la fin.<br>
+          &#x1F466; Masculin : un / le &nbsp;&nbsp; &#x1F467; Féminin : une / la<br>
+          &#x1F4A1; Astuce : mets <em>une</em> devant — si ça marche, c'est féminin !
+        </p>
+      </div>
+      <button class="btn-retry" onclick="location.reload()">&#x1F504; Recommencer</button>
+    </div>
+  </div>
+</div>
+
+<div class="print-bar">
+  <button class="print-btn" onclick="printLecon()">&#x1F4D6; Leçon</button>
+  <button class="print-btn" onclick="printExercices()">&#x1F4DD; Exercices</button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
+<script>
+// EX1 — masculin ou féminin ?
+var q1Data=[
+  {mot:"🌸 une petite",correct:"féminin",opts:["masculin","féminin"],expl:"Une petite : une = article féminin, petite se termine par -e."},
+  {mot:"👦 un grand",correct:"masculin",opts:["féminin","masculin"],expl:"Un grand : un = article masculin, grand sans -e final."},
+  {mot:"👧 la chatte",correct:"féminin",opts:["masculin","féminin"],expl:"La chatte : la = article féminin, chatte se termine par -e."},
+  {mot:"👦 le chat",correct:"masculin",opts:["féminin","masculin"],expl:"Le chat : le = article masculin, chat sans -e final."},
+];
+
+// EX2 — lequel est au féminin ?
+var q2Data=[
+  {opts:["ami","amie","amis"],correct:"amie",expl:"Amie se termine par -e : c'est le féminin d'ami."},
+  {opts:["grande","grand","grands"],correct:"grande",expl:"Grande se termine par -e : c'est le féminin de grand."},
+  {opts:["bruns","brun","brune"],correct:"brune",expl:"Brune se termine par -e : c'est le féminin de brun."},
+  {opts:["petite","petit","petits"],correct:"petite",expl:"Petite se termine par -e : c'est le féminin de petit."},
+];
+
+// EX3 — classification masculin/féminin
+var ex3Items=[
+  {word:"une amie",cat:"fem"},
+  {word:"un ami",cat:"masc"},
+  {word:"la chatte",cat:"fem"},
+  {word:"le chat",cat:"masc"},
+  {word:"une grande",cat:"fem"},
+  {word:"un grand",cat:"masc"},
+  {word:"la brune",cat:"fem"},
+  {word:"le brun",cat:"masc"},
+];
+
+var score=0;
+var TOTAL_PTS=4+4+4;
+var ex1Done=0,ex2Done=0,ex3Verified=false;
+var ex3Selected=null,ex3Placed={};
+var scoreSnap=[0,0,0];
+
+function goPhase(n){
+  document.querySelectorAll('.phase').forEach(function(p){p.classList.remove('active');});
+  var ph=document.getElementById('phase'+n);
+  ph.classList.add('active');
+  setTimeout(function(){ph.scrollIntoView({behavior:'smooth',block:'start'});},150);
+}
+function revealBloc(n){
+  var b=document.getElementById('bloc'+n);
+  if(b) b.classList.add('revealed');
+  var prev=document.getElementById('bloc'+(n-1));
+  if(prev){var btn=prev.querySelector('.btn-compris');if(btn)btn.style.display='none';}
+  setTimeout(function(){b.scrollIntoView({behavior:'smooth',block:'start'});},150);
+}
+function startEx(){scoreSnap[0]=score;goPhase(1);}
+function shuffle(a){
+  var arr=a.slice();
+  for(var i=arr.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=arr[i];arr[i]=arr[j];arr[j]=t;}
+  return arr;
+}
+
+// EX1
+function buildQcm1(){
+  var c=document.getElementById('qcm1-container');
+  q1Data.forEach(function(q,i){
+    var opts=shuffle(q.opts);
+    var card=document.createElement('div');
+    card.className='qcm-card';
+    card.innerHTML='<div class="question" style="font-size:1.3rem;text-align:center;padding:8px 0;">'+q.mot+'</div>'
+      +'<div class="qcm-options">'+opts.map(function(o){return '<button class="qcm-btn" onclick="answerQ1(this,'+i+')" data-val="'+o+'">'+o+'</button>';}).join('')+'</div>'
+      +'<div class="qcm-feedback" id="fb1-'+i+'"></div>';
+    c.appendChild(card);
+  });
+}
+function answerQ1(btn,i){
+  var card=btn.closest('.qcm-card');
+  if(card.dataset.done) return;
+  card.dataset.done='1';
+  card.querySelectorAll('.qcm-btn').forEach(function(b){b.disabled=true;if(b.dataset.val===q1Data[i].correct)b.classList.add('correct');});
+  var fb=document.getElementById('fb1-'+i);
+  if(btn.dataset.val===q1Data[i].correct){
+    score++;document.getElementById('score-ex1').textContent=score-scoreSnap[0];
+    fb.textContent='✅ '+q1Data[i].expl;fb.className='qcm-feedback show ok';
+  } else {
+    btn.classList.add('wrong');
+    fb.textContent='❌ '+q1Data[i].expl;fb.className='qcm-feedback show ko';
+  }
+  ex1Done++;
+  if(ex1Done===q1Data.length) setTimeout(function(){scoreSnap[1]=score;document.getElementById('btn-ex1-suite').classList.add('show');},400);
+}
+
+// EX2
+function buildQcm2(){
+  var c=document.getElementById('qcm2-container');
+  q2Data.forEach(function(q,i){
+    var opts=shuffle(q.opts);
+    var card=document.createElement('div');
+    card.className='qcm-card';
+    card.innerHTML='<div class="question">Lequel est au féminin ?</div>'
+      +'<div class="qcm-options">'+opts.map(function(o){return '<button class="qcm-btn" onclick="answerQ2(this,'+i+')" data-val="'+o+'">'+o+'</button>';}).join('')+'</div>'
+      +'<div class="qcm-feedback" id="fb2-'+i+'"></div>';
+    c.appendChild(card);
+  });
+}
+function answerQ2(btn,i){
+  var card=btn.closest('.qcm-card');
+  if(card.dataset.done) return;
+  card.dataset.done='1';
+  card.querySelectorAll('.qcm-btn').forEach(function(b){b.disabled=true;if(b.dataset.val===q2Data[i].correct)b.classList.add('correct');});
+  var fb=document.getElementById('fb2-'+i);
+  if(btn.dataset.val===q2Data[i].correct){
+    score++;document.getElementById('score-ex2').textContent=score-scoreSnap[1];
+    fb.textContent='✅ '+q2Data[i].expl;fb.className='qcm-feedback show ok';
+  } else {
+    btn.classList.add('wrong');
+    fb.textContent='❌ '+q2Data[i].expl;fb.className='qcm-feedback show ko';
+  }
+  ex2Done++;
+  if(ex2Done===q2Data.length) setTimeout(function(){scoreSnap[2]=score;document.getElementById('btn-ex2-suite').classList.add('show');},400);
+}
+
+// EX3 — classification par tap
+function buildEx3(){
+  var pool=document.getElementById('pool3');
+  shuffle(ex3Items).forEach(function(it,idx){
+    var chip=document.createElement('button');
+    chip.className='classify-chip';
+    chip.textContent=it.word;
+    chip.dataset.cat=it.cat;
+    chip.dataset.idx=idx;
+    chip.onclick=function(){
+      if(ex3Verified) return;
+      document.querySelectorAll('.classify-chip').forEach(function(c){c.style.outline='';});
+      chip.style.outline='3px solid #be185d';
+      ex3Selected=chip;
+    };
+    pool.appendChild(chip);
+  });
+
+  document.getElementById('col-masc').onclick=function(){placeChip('masc');};
+  document.getElementById('col-fem').onclick=function(){placeChip('fem');};
+}
+
+function placeChip(col){
+  if(!ex3Selected||ex3Verified) return;
+  ex3Selected.style.outline='';
+  var key=ex3Selected.dataset.idx;
+  if(ex3Placed[key]) {
+    // retirer de l'ancienne colonne
+    var old=document.getElementById('placed-'+key);
+    if(old) old.remove();
+  }
+  ex3Placed[key]={col:col,word:ex3Selected.textContent,cat:ex3Selected.dataset.cat};
+  ex3Selected.style.opacity='.35';
+  ex3Selected.style.pointerEvents='none';
+
+  var tag=document.createElement('div');
+  tag.id='placed-'+key;
+  tag.style.cssText='background:#fff;border:2px solid #e2e8f0;border-radius:10px;padding:6px 12px;font-size:.9rem;font-weight:700;margin:3px;';
+  tag.textContent=ex3Selected.textContent;
+  document.getElementById('col-'+col).appendChild(tag);
+  ex3Selected=null;
+}
+
+function verifyEx3(){
+  if(ex3Verified) return;
+  ex3Verified=true;
+  var pts=0;
+  var total=ex3Items.length;
+  Object.keys(ex3Placed).forEach(function(key){
+    var p=ex3Placed[key];
+    var tag=document.getElementById('placed-'+key);
+    if(p.col===p.cat){
+      pts++;
+      if(tag){tag.style.background='#dcfce7';tag.style.borderColor='#16a34a';tag.style.color='#15803d';}
+    } else {
+      if(tag){tag.style.background='#fee2e2';tag.style.borderColor='#dc2626';tag.style.color='#dc2626';}
+    }
+  });
+  // score sur 4 : arrondi sur 8 items placés
+  var ex3Score=Math.round(pts/2);
+  score+=ex3Score;
+  var fb=document.getElementById('classify-global-fb');
+  fb.style.display='block';
+  if(pts===total){
+    fb.style.background='#dcfce7';fb.style.color='#15803d';
+    fb.textContent='✅ Parfait ! Tous les mots sont bien rangés !';
+  } else {
+    fb.style.background='#fee2e2';fb.style.color='#dc2626';
+    fb.textContent='❌ '+pts+' mots sur '+total+' bien placés. Regarde le -e pour le féminin !';
+  }
+  document.getElementById('score-ex3').textContent=ex3Score;
+  document.getElementById('btn-verif3').disabled=true;
+  setTimeout(function(){document.getElementById('btn-ex3-suite').classList.add('show');},400);
+}
+
+function showBilan(){
+  if(typeof enregistrerProgression==='function'){ enregistrerProgression('O01', score, TOTAL_PTS); }
+  goPhase(4);
+  document.getElementById('bilan-score').textContent=score+' / '+TOTAL_PTS;
+  var pct=score/TOTAL_PTS;
+  var msg=pct>=0.9?'Brillant ⭐ Tu connais bien le féminin !'
+    :pct>=0.8?'Bien maîtrisé 💪 Super travail !'
+    :pct>=0.5?'En cours 📚 Continue, tu progresses !'
+    :'À retravailler 🔁 Relis la leçon et réessaie !';
+  document.getElementById('bilan-msg').textContent=msg;
+  var seuils=[Math.ceil(TOTAL_PTS*0.33),Math.ceil(TOTAL_PTS*0.66),Math.ceil(TOTAL_PTS*0.89)];
+  ['star1','star2','star3'].forEach(function(id,i){
+    var el=document.getElementById(id);
+    if(score>=seuils[i]){
+      (function(elem,delay){setTimeout(function(){elem.classList.add('earned');elem.style.animation='starPop .4s ease';},delay);})(el,300+i*400);
+    }
+  });
+  if(score>=Math.ceil(TOTAL_PTS*0.5)){
+    var colors=['#db2777','#ec4899','#fbbf24','#16a34a','#7c3aed'];
+    for(var k=0;k<40;k++){
+      (function(delay,color,left){
+        setTimeout(function(){
+          var d=document.createElement('div');
+          d.style.cssText='position:fixed;top:-10px;left:'+left+'%;width:8px;height:8px;background:'+color+';border-radius:50%;pointer-events:none;z-index:9999;animation:fall '+(1.2+Math.random())+'s ease-in forwards;';
+          document.body.appendChild(d);setTimeout(function(){d.remove();},2000);
+        },delay);
+      })(k*60,colors[k%colors.length],Math.random()*100);
+    }
+  }
+}
+
+var styleEl=document.createElement('style');
+styleEl.textContent='@keyframes fall{0%{transform:translateY(0) rotate(0);}100%{transform:translateY(100vh) rotate(720deg);opacity:0;}}';
+document.head.appendChild(styleEl);
+
+function printLecon(){
+  var w=window.open('','_blank');
+  w.document.write('<html><head><title>Leçon O01</title><style>body{font-family:sans-serif;padding:20px;font-size:14px;}h1,h2{color:#db2777;}</style></head><body>');
+  w.document.write('<h1>La marque du féminin : le -e — CP/CE1</h1>');
+  w.document.write('<h2>Règle</h2><p>Au féminin, on ajoute souvent un <strong>-e</strong> à la fin du mot.</p>');
+  w.document.write('<h2>Exemples</h2><p>petit &#x2192; petite &nbsp;|&nbsp; grand &#x2192; grande &nbsp;|&nbsp; ami &#x2192; amie &nbsp;|&nbsp; brun &#x2192; brune</p>');
+  w.document.write('<h2>Articles</h2><p>Masculin : un / le &nbsp;&nbsp; Féminin : une / la</p>');
+  w.document.write('<p><strong>Astuce :</strong> mets <em>une</em> devant le mot. Si ça marche, c\'est féminin !</p>');
+  w.document.write('</body></html>');
+  w.document.close();w.print();
+}
+function printExercices(){
+  var w=window.open('','_blank');
+  w.document.write('<html><head><title>Exercices O01</title><style>body{font-family:sans-serif;padding:20px;font-size:14px;}h1,h2{color:#db2777;}.item{margin:10px 0;}</style></head><body>');
+  w.document.write('<h1>Exercices — La marque du féminin</h1>');
+  w.document.write('<h2>Ex 1 — Masculin ou féminin ?</h2>');
+  q1Data.forEach(function(q,i){w.document.write('<div class="item">'+(i+1)+'. '+q.mot.replace(/<[^>]+>/g,'')+'<br>&#x25A1; masculin &nbsp;&nbsp; &#x25A1; féminin</div>');});
+  w.document.write('<h2>Ex 2 — Lequel est au féminin ?</h2>');
+  q2Data.forEach(function(q,i){w.document.write('<div class="item">'+(i+1)+'. '+q.opts.join(' / ')+'</div>');});
+  w.document.write('<h2>Ex 3 — Range les mots</h2>');
+  w.document.write('<p>Masculin : _______ | Féminin : _______</p>');
+  ex3Items.forEach(function(it){w.document.write('<span style="margin:4px;border:1px solid #ccc;border-radius:6px;padding:3px 8px;">'+it.word+'</span> ');});
+  w.document.write('</body></html>');
+  w.document.close();w.print();
+}
+
+buildQcm1();
+buildQcm2();
+buildEx3();
+</script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Dictée — Homophones avancés tout / quel – 5e</title>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Playfair+Display:wght@600;700&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../atelier-fiche.css">
+</head>
+<body>
+<script>
+window.FICHE = {
+  code:'DC402', niveau:'5e', cycle:4, matiere:'Français', categorie:'Dictées phrases',
+  duree:'18 min', retour:'5e.html',
+  accent:'#1e3a5f', accent2:'#2c5282', accentLight:'#f0f4f8', accentMid:'#bfd3e6',
+  titre:'Dictée : tout et quel',
+  ugoIntro:"Identifier la nature avant d\'\u00e9crire : c\'est tout le travail.",
+  msgBrillant:'Tu identifies la nature avant d\'accorder.',
+
+  lecon:[
+    { titre:'tout : trois natures',
+      analogie:"Un même mot change de rôle selon sa place, et l'accord en découle.",
+      html:'<div class="exemple" style="line-height:1.9;">'
+        +'<strong>tous</strong> les élèves \u2192 déterminant, s\'accorde<br>'
+        +'<strong>Tous</strong> sont venus \u2192 pronom, s\'accorde<br>'
+        +'Elle est <strong>tout</strong> étonnée \u2192 adverbe, invariable</div>'
+        +'<p>Exception de l\'adverbe : devant un adjectif féminin commençant par une '
+        +'<strong>consonne</strong>, il s\'accorde \u2014 <em>elle est <strong>toute</strong> petite</em>.</p>',
+      ugo:'Test de l\'adverbe : remplacez par « entièrement ».',
+      questions:[
+        { q:'Devant un adjectif, « tout » est :',
+          options:['un adverbe','un déterminant','un pronom'],
+          bonne:'un adverbe',
+          expl:'Il signifie alors « entièrement ».' },
+        { q:'« Elle est tout émue » : pourquoi pas « toute » ?',
+          options:['émue commence par une voyelle','émue est masculin','c\'est une faute'],
+          bonne:'émue commence par une voyelle',
+          expl:'L\'accord ne se fait que devant une consonne ou un h aspiré.' },
+        { q:'« Elle est ___ petite » :',
+          options:['toute','tout'],
+          bonne:'toute',
+          expl:'Adjectif féminin commençant par une consonne \u2192 accord.' }
+      ]},
+
+    { titre:'quel ou qu\'elle',
+      analogie:"L'apostrophe signale toujours deux mots soudés : que + elle.",
+      html:'<div class="exemple" style="line-height:1.9;">'
+        +'<strong>Quelle</strong> heure est-il ? \u2192 un seul mot, s\'accorde<br>'
+        +'Je crois <strong>qu\'elle</strong> viendra \u2192 deux mots : que + elle</div>'
+        +'<p>Le test : remplacez par <strong>qu\'il</strong>. Si la phrase reste correcte, '
+        +'écrivez <em>qu\'elle</em>.</p>',
+      ugo:'Un seul test, appliqué systématiquement.',
+      questions:[
+        { q:'Quel test permet de trancher ?',
+          options:["remplacer par qu'il","compter les syllabes","chercher le verbe"],
+          bonne:"remplacer par qu'il",
+          expl:'Si la phrase reste correcte, c\'est <em>qu\'elle</em>.' },
+        { q:'« Je pense ___ a raison » :',
+          options:["qu'elle",'quelle'],
+          bonne:"qu'elle",
+          expl:'<em>Je pense qu\'il a raison</em> fonctionne.' },
+        { q:'« ___ sont vos intentions ? » :',
+          options:['Quelles',"Qu'elles"],
+          bonne:'Quelles',
+          expl:'Accord avec <em>intentions</em>, féminin pluriel.' }
+      ]},
+
+    { titre:'Quand les deux se croisent',
+      analogie:"Une phrase peut réunir les deux difficultés : les traiter l'une après l'autre.",
+      html:'<div class="exemple" style="line-height:1.9;">'
+        +'<em><strong>Quelles</strong> que soient les difficultés, elles sont <strong>tout</strong> à fait '
+        +'capables de les surmonter.</em></div>'
+        +'<p><strong>Quel que</strong> s\'écrit en deux mots et s\'accorde avec le sujet qui suit : '
+        +'<em>quelles que soient</em>, <em>quel que soit</em>.</p>',
+      questions:[
+        { q:'« Quel que » s\'écrit :',
+          options:['en deux mots','en un seul mot','avec un trait d\'union'],
+          bonne:'en deux mots',
+          expl:'<em>Quel que soit</em>, <em>quelles que soient</em>.' },
+        { q:'Avec quoi « quel que » s\'accorde-t-il ?',
+          options:['le sujet qui suit',"le verbe","rien, il est invariable"],
+          bonne:'le sujet qui suit',
+          expl:'<em>Quelles que soient les difficultés</em>.' },
+        { q:'Dans « tout à fait », « tout » est :',
+          options:['un adverbe','un déterminant'],
+          bonne:'un adverbe',
+          expl:'La locution <em>tout à fait</em> est invariable.' }
+      ]}
+  ],
+
+  memo:'<strong>tout</strong> déterminant ou pronom \u2192 s\'accorde. Adverbe (= entièrement) \u2192 invariable, '
+      +'sauf devant un adjectif féminin à consonne : <em>toute petite</em>.<br>'
+      +'<strong>quel(s)/quelle(s)</strong> : un seul mot, s\'accorde. '
+      +'<strong>qu\'elle</strong> : que + elle (test : <em>qu\'il</em>).<br>'
+      +'<strong>quel que</strong> : deux mots, accord avec le sujet qui suit.',
+
+  exercices:[
+    { type:'dictee', titre:'Écrivez les phrases',
+      consigne:'Écoutez chaque phrase, puis écrivez-la.',
+      large:true,
+      items:[
+        { rep:"Toutes les élèves ont rendu leur devoir.",
+          lu:'Toutes les élèves ont rendu leur devoir. point',
+          expl:'Déterminant féminin pluriel \u2192 <strong>Toutes</strong>.' },
+        { rep:"Elle est tout étonnée de sa réussite.",
+          lu:'Elle est tout étonnée de sa réussite. point',
+          expl:'Adverbe devant une voyelle \u2192 <strong>tout</strong> invariable.' },
+        { rep:"Je crois qu'elle a compris la leçon.",
+          lu:"Je crois qu'elle a compris la leçon. point",
+          expl:'<em>Je crois qu\'il a compris</em> fonctionne \u2192 <strong>qu\'elle</strong>.' }
+      ]},
+
+    { type:'dictee', titre:'Deux phrases à double difficulté',
+      consigne:'Chaque phrase réunit les deux points étudiés.',
+      large:true,
+      items:[
+        { rep:"Quelles sont les raisons qu'elle a données ?",
+          lu:"Quelles sont les raisons qu'elle a données ? point d'interrogation",
+          expl:'<strong>Quelles</strong> s\'accorde avec <em>raisons</em> ; <strong>qu\'elle</strong> = que + elle. '
+             +'<em>données</em> s\'accorde avec le COD placé avant.' },
+        { rep:"Elle est toute petite mais tout à fait décidée.",
+          lu:'Elle est toute petite mais tout à fait décidée. point',
+          expl:'<strong>toute</strong> devant une consonne ; <strong>tout à fait</strong> reste invariable.' }
+      ]}
+  ]
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
+<script src="../atelier-fiche.js"></script>
+</body>
+</html>

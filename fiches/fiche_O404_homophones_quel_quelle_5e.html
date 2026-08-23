@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Homophones : quel(s) / quelle(s) / qu'elle(s) – 5e</title>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Playfair+Display:wght@600;700&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../atelier-fiche.css">
+</head>
+<body>
+<script>
+window.FICHE = {
+  code:'O404', niveau:'5e', cycle:4, matiere:'Français', categorie:'Orthographe',
+  duree:'18 min', retour:'5e.html',
+  accent:'#5b21b6', accent2:'#7c3aed', accentLight:'#f5f3ff', accentMid:'#ddd6fe',
+  titre:"quel, quelle, qu'elle",
+  ugoIntro:"Une m\u00eame prononciation, deux constructions grammaticales sans rapport.",
+  msgBrillant:'Tu distingues parfaitement les deux constructions.',
+
+  lecon:[
+    { titre:'Deux mots ou un seul ?',
+      analogie:"D'un côté un mot unique qui accompagne un nom ; de l'autre, deux mots soudés par une apostrophe.",
+      html:'<div class="compare-grid">'
+        +'<div class="compare-card" style="border-color:#5b21b6;background:#f5f3ff;">'
+        +'<h4 style="color:#5b21b6;">quel / quelle</h4>'
+        +'<p><strong>Un seul mot</strong> : déterminant ou adjectif interrogatif-exclamatif.</p>'
+        +'<p style="margin-top:6px;"><em><strong>Quelle</strong> heure est-il ?<br>'
+        +'<strong>Quel</strong> beau paysage !</em></p></div>'
+        +'<div class="compare-card" style="border-color:#b45309;background:#fffbeb;">'
+        +'<h4 style="color:#b45309;">qu\'elle</h4>'
+        +'<p><strong>Deux mots</strong> : la conjonction <em>que</em> élidée + le pronom <em>elle</em>.</p>'
+        +'<p style="margin-top:6px;"><em>Je crois <strong>qu\'elle</strong> viendra.</em></p></div></div>',
+      ugo:'L\'apostrophe signale toujours une élision : que + elle.' },
+
+    { titre:'Le test de substitution',
+      analogie:"Remplacer par un masculin révèle instantanément la structure de la phrase.",
+      html:'<p>Remplacez par <strong>qu\'il</strong> :</p>'
+        +'<div class="exemple">'
+        +'\u2713 Je pense <strong>qu\'elle</strong> a raison. \u2192 Je pense <strong>qu\'il</strong> a raison.<br>'
+        +'<span style="color:#6b7280;font-size:.9rem;">La phrase reste correcte \u2192 <strong>qu\'elle</strong></span><br><br>'
+        +'\u2717 <strong>Quelle</strong> chance ! \u2192 <strong>Qu\'il</strong> chance ! '
+        +'<span style="color:#6b7280;font-size:.9rem;">\u2192 impossible \u2192 <strong>quelle</strong></span></div>'
+        +'<div class="astuce">Ce test fonctionne dans tous les cas : c\'est le plus fiable.</div>',
+      ugo:'Un seul test, appliqué systématiquement, suffit à trancher.' },
+
+    { titre:'L\'accord de quel',
+      analogie:"Déterminant ou attribut, quel se règle toujours sur le nom auquel il se rapporte.",
+      html:'<div class="conj-grid">'
+        +'<div class="conj-col"><h4>Masculin</h4>'
+        +'<div>singulier : <strong>quel</strong> livre</div>'
+        +'<div>pluriel : <strong>quels</strong> livres</div></div>'
+        +'<div class="conj-col"><h4>Féminin</h4>'
+        +'<div>singulier : <strong>quelle</strong> idée</div>'
+        +'<div>pluriel : <strong>quelles</strong> idées</div></div></div>'
+        +'<div class="exemple">Il peut être séparé du nom par le verbe <em>être</em> :<br>'
+        +'<strong>Quelles</strong> sont vos intentions ? \u2192 accord avec <em>intentions</em>.</div>',
+      ugo:'Même éloigné du nom, quel s\'accorde avec lui.' },
+
+    { titre:'Une confusion voisine : quelque',
+      analogie:"Un mot proche par le son, mais qui appartient à une autre famille.",
+      html:'<p>Ne confondez pas avec <strong>quelque</strong>, déterminant indéfini :</p>'
+        +'<div class="exemple">'
+        +'<strong>Quelques</strong> élèves sont absents. \u2192 déterminant, s\'accorde<br>'
+        +'<strong>Quelque</strong> difficile que soit l\'exercice… \u2192 adverbe, invariable</div>'
+        +'<div class="astuce">Retenez la distinction principale : <em>quel</em> interroge ou s\'exclame, '
+        +'<em>quelque</em> exprime une quantité indéterminée.</div>' }
+  ],
+
+  memo:'<strong>quel / quelle / quels / quelles</strong> : un seul mot, s\'accorde avec le nom.<br>'
+      +'&nbsp;&nbsp;<em>Quelle heure est-il ? — Quels sont vos projets ?</em><br>'
+      +'<strong>qu\'elle / qu\'elles</strong> : que + elle, deux mots.<br>'
+      +'&nbsp;&nbsp;<em>Je crois qu\'elle viendra.</em><br>'
+      +'<strong>Le test :</strong> remplacez par <em>qu\'il</em>. Si la phrase tient, c\'est <em>qu\'elle</em>.',
+
+  exercices:[
+    { type:'qcm', titre:'Appliquer le test',
+      consigne:'Quelle forme convient dans cette phrase ?',
+      items:[
+        { phrase:'___ est ton livre préféré ?', bonne:'Quel',
+          options:['Quel',"Qu'elle",'Quelle'],
+          expl:'<em>Qu\'il est ton livre</em> est impossible \u2192 déterminant masculin : <strong>Quel</strong>.' },
+        { phrase:'Je sais ___ réussira son examen.', bonne:"qu'elle",
+          options:['quelle','quel',"qu'elle"],
+          expl:'<em>Je sais qu\'il réussira</em> fonctionne \u2192 <strong>qu\'elle</strong>.' },
+        { phrase:'___ belle journée nous avons eue !', bonne:'Quelle',
+          options:["Qu'elle",'Quelle','Quels'],
+          expl:'Adjectif exclamatif devant un nom féminin singulier \u2192 <strong>Quelle</strong>.' },
+        { phrase:'___ sont les raisons de ce retard ?', bonne:'Quelles',
+          options:['Quelle',"Qu'elles",'Quelles'],
+          expl:'Accord avec <em>raisons</em>, féminin pluriel \u2192 <strong>Quelles</strong>.' }
+      ]},
+
+    { type:'classify', titre:'Un mot ou deux mots ?',
+      consigne:'Classez chaque énoncé selon la construction employée.',
+      pts:4,
+      cols:[
+        {id:'un', nom:'quel(s) / quelle(s)', couleur:'#5b21b6', fond:'#f5f3ff'},
+        {id:'deux', nom:"qu'elle(s)", couleur:'#b45309', fond:'#fffbeb'}
+      ],
+      items:[
+        {mot:'___ heure part le train ?', cat:'un'},
+        {mot:'Je crois ___ a raison.', cat:'deux'},
+        {mot:'___ magnifique spectacle !', cat:'un'},
+        {mot:'Il faut ___ vienne demain.', cat:'deux'},
+        {mot:'___ sont vos projets ?', cat:'un'},
+        {mot:'Je doute ___ accepte.', cat:'deux'},
+        {mot:'À ___ moment arrives-tu ?', cat:'un'},
+        {mot:'On dit ___ est partie.', cat:'deux'}
+      ]},
+
+    { type:'saisie', titre:'Écrire la forme correcte',
+      consigne:"Écrivez quel, quelle, quels, quelles ou qu'elle.",
+      maxlen:9,
+      items:[
+        { phrase:'___ sont tes matières préférées ?', rep:['Quelles','quelles'],
+          expl:'Accord avec <em>matières</em>, féminin pluriel \u2192 <strong>Quelles</strong>.' },
+        { phrase:'Je pense ___ a compris la leçon.', rep:["qu'elle"],
+          expl:'Test : <em>qu\'il a compris</em> fonctionne \u2192 <strong>qu\'elle</strong>.' },
+        { phrase:'___ courage il a montré !', rep:['Quel','quel'],
+          expl:'Adjectif exclamatif devant <em>courage</em>, masculin singulier \u2192 <strong>Quel</strong>.' },
+        { phrase:'___ livres as-tu empruntés ?', rep:['Quels','quels'],
+          expl:'Accord avec <em>livres</em>, masculin pluriel \u2192 <strong>Quels</strong>.' }
+      ]},
+
+    { type:'jugement', titre:'Juger la pertinence',
+      consigne:'Choisissez la phrase correctement orthographiée.',
+      items:[
+        { consigne:'Proposition subordonnée :',
+          bonne:"J'espère qu'elle arrivera avant la nuit.",
+          mauvaise:"J'espère quelle arrivera avant la nuit.",
+          expl:'<em>J\'espère qu\'il arrivera</em> fonctionne \u2192 <em>qu\'elle</em> en deux mots.' },
+        { consigne:'Phrase interrogative :',
+          bonne:'Quelle décision as-tu prise finalement ?',
+          mauvaise:"Qu'elle décision as-tu prise finalement ?",
+          expl:'Déterminant interrogatif devant <em>décision</em> \u2192 <em>Quelle</em>.' },
+        { consigne:'Attribut séparé du nom :',
+          bonne:'Quelles sont les conséquences de ce choix ?',
+          mauvaise:"Qu'elles sont les conséquences de ce choix ?",
+          expl:'Accord avec <em>conséquences</em>, féminin pluriel \u2192 <em>Quelles</em>.' },
+        { consigne:'Après un verbe d\'opinion :',
+          bonne:'Nous savons qu\'elles reviendront bientôt.',
+          mauvaise:'Nous savons quelles reviendront bientôt.',
+          expl:'<em>Nous savons qu\'ils reviendront</em> fonctionne \u2192 <em>qu\'elles</em>.' }
+      ]}
+  ]
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
+<script src="../atelier-fiche.js"></script>
+</body>
+</html>

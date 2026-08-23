@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Le présent de l'indicatif – CE2 | L'Atelier du Devoir</title>
+<title>Le présent de l'indicatif – CE1 | L'Atelier du Devoir</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
 <style>
@@ -17,33 +17,33 @@
   --radius:16px;--radius-lg:24px;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Nunito',sans-serif;background:#f0fbff;color:var(--text);font-size:17px;line-height:1.6;}
+html{font-size:21px;}
+body{font-family:'Nunito',sans-serif;background:#f0fbff;color:var(--text);font-size:1rem;line-height:1.6;}
 
 /* ── HEADER ── */
 .header{background:white;border-bottom:3px solid var(--sky-pale);padding:0;position:sticky;top:0;z-index:100;box-shadow:0 4px 20px rgba(79,189,223,.12);}
 .header-top{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;}
-.logo{font-family:'Fredoka One',cursive;font-size:1.2rem;color:var(--sky);text-decoration:none;display:flex;align-items:center;gap:6px;}
-.score-badge{background:var(--yellow);color:var(--text);font-weight:900;font-size:.9rem;padding:6px 14px;border-radius:50px;display:flex;align-items:center;gap:6px;}
+.logo{font-family:'Fredoka One',cursive;font-size:1rem;color:var(--sky);text-decoration:none;display:flex;align-items:center;gap:6px;}
+.score-badge{background:var(--yellow);color:var(--text);font-weight:900;font-size:.85rem;padding:6px 14px;border-radius:50px;display:flex;align-items:center;gap:6px;}
 .progress-bar-wrap{padding:0 20px 10px;}
 .steps{display:flex;gap:6px;align-items:center;}
 .step{flex:1;height:8px;border-radius:50px;background:var(--sky-pale);transition:background .5s,transform .3s;}
 .step.done{background:var(--mint);}
 .step.active{background:var(--sky);transform:scaleY(1.3);}
-.step-label{font-size:.7rem;font-weight:800;color:var(--text-light);text-align:center;margin-top:4px;letter-spacing:.04em;}
 .steps-labels{display:flex;gap:6px;}
-.step-lbl{flex:1;font-size:.65rem;font-weight:800;color:var(--text-light);text-align:center;padding-top:2px;}
+.step-lbl{flex:1;font-size:.6rem;font-weight:800;color:var(--text-light);text-align:center;padding-top:2px;}
 
 /* ── MAIN ── */
 .main{max-width:760px;margin:0 auto;padding:24px 16px 80px;}
 
 /* ── ACCROCHE ── */
 .accroche{background:linear-gradient(135deg,#daf6ff,#e8fff7);border-radius:var(--radius-lg);padding:24px 28px;margin-bottom:28px;display:flex;gap:20px;align-items:center;}
-.accroche-mascot{font-size:3.5rem;flex-shrink:0;animation:float 3s ease-in-out infinite;}
+.accroche-mascot{font-size:2.8rem;flex-shrink:0;animation:float 3s ease-in-out infinite;}
 @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
-.accroche-text h1{font-family:'Fredoka One',cursive;font-size:1.6rem;color:var(--sky);margin-bottom:6px;}
-.accroche-text p{color:var(--text-light);font-size:.95rem;}
+.accroche-text h1{font-family:'Fredoka One',cursive;font-size:1.4rem;color:var(--sky);margin-bottom:6px;}
+.accroche-text p{color:var(--text-light);font-size:.92rem;}
 .fiche-meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;}
-.meta-tag{background:white;border-radius:50px;padding:4px 12px;font-size:.75rem;font-weight:800;color:var(--text-light);display:inline-flex;align-items:center;gap:4px;}
+.meta-tag{background:white;border-radius:50px;padding:4px 12px;font-size:.72rem;font-weight:800;color:var(--text-light);display:inline-flex;align-items:center;gap:4px;}
 
 /* ── PHASES ── */
 .phase{display:none;}
@@ -51,34 +51,36 @@ body{font-family:'Nunito',sans-serif;background:#f0fbff;color:var(--text);font-s
 
 /* ── LECON ── */
 .lecon-card{background:white;border-radius:var(--radius-lg);padding:24px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);}
-.lecon-card h2{font-family:'Fredoka One',cursive;font-size:1.3rem;color:var(--sky);margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+.lecon-card h2{font-family:'Fredoka One',cursive;font-size:1.25rem;color:var(--sky);margin-bottom:16px;display:flex;align-items:center;gap:8px;}
 .lecon-block{display:none;}
 .lecon-block.revealed{display:block;}
 .usage-list{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:16px;}
 .usage-item{background:var(--sky-pale);border-radius:12px;padding:12px 16px;display:flex;align-items:flex-start;gap:12px;}
-.usage-icon{font-size:1.4rem;flex-shrink:0;}
+.usage-icon{font-size:1.3rem;flex-shrink:0;}
 .usage-text strong{color:var(--sky-deep);}
 
-.conj-section{margin-bottom:20px;}
-.conj-section h3{font-family:'Fredoka One',cursive;font-size:1.1rem;margin-bottom:12px;}
-.conj-table{width:100%;border-collapse:separate;border-spacing:0 6px;}
-.conj-table tr td{padding:8px 14px;background:var(--sky-pale);font-size:.9rem;}
-.conj-table tr td:first-child{border-radius:10px 0 0 10px;font-weight:700;color:var(--text-light);width:40%;}
-.conj-table tr td:last-child{border-radius:0 10px 10px 0;}
-.conj-table tr td span.ending{font-weight:900;color:var(--sky-deep);background:white;padding:1px 4px;border-radius:4px;}
-.conj-table.green tr td{background:var(--mint-pale);}
-.conj-table.green tr td span.ending{color:var(--mint-deep);}
-.conj-table.yellow tr td{background:var(--yellow-pale);}
-.conj-table.yellow tr td span.ending{color:var(--yellow-deep);}
-.conj-table.coral tr td{background:var(--coral-pale);}
-.conj-table.coral tr td span.ending{color:var(--coral);}
-.conj-table.violet tr td{background:var(--violet-pale);}
-.conj-table.violet tr td span.ending{color:var(--violet);}
+/* ── Conjugaison : deux colonnes singulier / pluriel, sans <table> ── */
+.conj-2col{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media(max-width:500px){.conj-2col{grid-template-columns:1fr;}}
+.conj-col{background:var(--sky-pale);border-radius:var(--radius);padding:12px 14px;}
+.conj-col h4{font-family:'Fredoka One',cursive;font-size:.9rem;color:var(--sky-deep);margin-bottom:8px;text-align:center;}
+.conj-row-item{display:flex;align-items:baseline;gap:8px;padding:4px 0;font-size:.9rem;}
+.conj-pron{min-width:80px;color:var(--text-light);font-weight:700;}
+.conj-form{font-weight:700;}
+.conj-form b{font-weight:900;color:var(--sky-deep);background:white;padding:1px 5px;border-radius:4px;}
+.conj-col.green{background:var(--mint-pale);}
+.conj-col.green h4{color:var(--mint-deep);}
+.conj-col.yellow{background:var(--yellow-pale);}
+.conj-col.yellow h4{color:var(--yellow-deep);}
+.conj-col.coral{background:var(--coral-pale);}
+.conj-col.coral h4{color:var(--coral);}
+.conj-col.violet{background:var(--violet-pale);}
+.conj-col.violet h4{color:var(--violet);}
 
 .irr-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
 @media(max-width:500px){.irr-grid{grid-template-columns:1fr;}}
 .irr-card{border-radius:var(--radius);padding:14px;}
-.irr-card h4{font-family:'Fredoka One',cursive;font-size:1rem;margin-bottom:8px;}
+.irr-card h4{font-family:'Fredoka One',cursive;font-size:.95rem;margin-bottom:8px;}
 .irr-card.blue{background:var(--sky-pale);}
 .irr-card.blue h4{color:var(--sky-deep);}
 .irr-card.green{background:var(--mint-pale);}
@@ -87,118 +89,135 @@ body{font-family:'Nunito',sans-serif;background:#f0fbff;color:var(--text);font-s
 .irr-card.yellow h4{color:var(--yellow-deep);}
 .irr-card.coral{background:var(--coral-pale);}
 .irr-card.coral h4{color:var(--coral);}
-.irr-table{width:100%;font-size:.82rem;}
-.irr-table td{padding:3px 6px;}
-.irr-table td:first-child{color:var(--text-light);font-weight:700;width:45%;}
-.irr-table td:last-child{font-weight:800;}
+.irr-cols{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.irr-sub{font-size:.68rem;font-weight:900;color:var(--text-light);letter-spacing:.04em;margin-bottom:3px;}
+.irr-line{font-size:.78rem;padding:2px 0;}
+.irr-line span{color:var(--text-light);font-weight:700;}
+.irr-line b{font-weight:900;}
 
-.astuce{background:var(--yellow-pale);border-left:4px solid var(--yellow-deep);border-radius:0 12px 12px 0;padding:12px 16px;margin-top:12px;font-size:.88rem;}
+.astuce{background:var(--yellow-pale);border-left:4px solid var(--yellow-deep);border-radius:0 12px 12px 0;padding:12px 16px;margin-top:12px;font-size:.85rem;}
 .astuce strong{color:var(--yellow-deep);}
 
-.btn-compris{margin-top:20px;padding:13px 28px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.95rem;background:linear-gradient(135deg,var(--sky),var(--mint));color:white;border:none;cursor:pointer;box-shadow:0 4px 16px rgba(79,189,223,.35);transition:all .2s;display:inline-flex;align-items:center;gap:8px;}
+.btn-compris{margin-top:20px;padding:13px 28px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.92rem;background:linear-gradient(135deg,var(--sky),var(--mint));color:white;border:none;cursor:pointer;box-shadow:0 4px 16px rgba(79,189,223,.35);transition:all .2s;align-items:center;gap:8px;min-height:52px;}
 .btn-compris:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(79,189,223,.45);}
+
+/* ── QUESTIONS DE CONTRÔLE DE LECTURE ── */
+.ctrl{background:#fbfeff;border:2.5px dashed var(--sky);border-radius:var(--radius-lg);padding:18px 16px;margin-top:18px;}
+.ctrl-titre{font-family:'Fredoka One',cursive;font-size:1rem;color:var(--sky-deep);margin-bottom:2px;}
+.ctrl-sous{font-size:.78rem;color:var(--text-light);font-weight:700;margin-bottom:14px;}
+.ctrl-q{background:white;border-radius:14px;padding:14px;margin-bottom:10px;box-shadow:0 2px 8px rgba(0,0,0,.05);}
+.ctrl-txt{font-weight:800;font-size:.92rem;margin-bottom:10px;line-height:1.5;}
+.ctrl-opts{display:flex;flex-wrap:wrap;gap:8px;}
+.ctrl-btn{flex:1;min-width:120px;padding:12px 10px;border-radius:12px;border:2.5px solid var(--sky-pale);background:white;font-family:'Nunito',sans-serif;font-weight:700;font-size:.88rem;cursor:pointer;transition:all .2s;min-height:50px;}
+.ctrl-btn:hover:not(:disabled){border-color:var(--sky);background:var(--sky-pale);}
+.ctrl-btn.correct{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.ctrl-btn.wrong{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
+.ctrl-fb{display:none;margin-top:10px;padding:10px 14px;border-radius:12px;font-size:.82rem;font-weight:700;line-height:1.5;}
+.ctrl-fb.show{display:block;}
+.ctrl-fb.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.ctrl-fb.ko{background:var(--coral-pale);color:#c0392b;}
+.ctrl-bilan{display:none;margin-top:8px;padding:14px 16px;border-radius:14px;font-size:.88rem;font-weight:700;line-height:1.55;}
+.ctrl-bilan.show{display:block;}
+.ctrl-bilan.ok{background:var(--mint-pale);color:var(--mint-deep);}
+.ctrl-bilan.ko{background:var(--yellow-pale);color:#b9770e;border:2px solid var(--yellow-deep);}
+.ctrl-retry{margin-top:10px;padding:11px 22px;border-radius:50px;border:none;background:var(--yellow-deep);color:white;font-family:'Nunito',sans-serif;font-weight:800;font-size:.85rem;cursor:pointer;min-height:46px;}
+.ctrl-retry:hover{filter:brightness(.93);}
 
 /* ── MASCOT MESSAGE ── */
 .mascot-msg{background:white;border-radius:var(--radius-lg);padding:16px 20px;margin:16px 0;display:flex;align-items:flex-start;gap:14px;box-shadow:0 4px 16px rgba(0,0,0,.06);}
-.mascot-msg .emo{font-size:2.2rem;flex-shrink:0;}
-.mascot-msg p{font-size:.92rem;color:var(--text-light);}
+.mascot-msg .emo{font-size:2rem;flex-shrink:0;}
+.mascot-msg p{font-size:.88rem;color:var(--text-light);}
 .mascot-msg p strong{color:var(--text);}
 
 /* ── EX HEADER ── */
 .ex-header{margin-bottom:20px;}
-.ex-header h2{font-family:'Fredoka One',cursive;font-size:1.4rem;color:var(--text);margin-bottom:4px;}
-.ex-header p{color:var(--text-light);font-size:.9rem;}
-.ex-num{display:inline-block;background:var(--sky);color:white;font-weight:900;font-size:.75rem;padding:3px 10px;border-radius:50px;margin-bottom:8px;letter-spacing:.06em;}
+.ex-header h2{font-family:'Fredoka One',cursive;font-size:1.3rem;color:var(--text);margin-bottom:4px;}
+.ex-header p{color:var(--text-light);font-size:.86rem;}
+.ex-num{display:inline-block;background:var(--sky);color:white;font-weight:900;font-size:.7rem;padding:3px 10px;border-radius:50px;margin-bottom:8px;letter-spacing:.06em;}
 
 /* ── QCM ── */
-.qcm-question{background:white;border-radius:var(--radius-lg);padding:24px;box-shadow:0 4px 20px rgba(0,0,0,.06);margin-bottom:16px;}
+.qcm-question{background:white;border-radius:var(--radius-lg);padding:22px;box-shadow:0 4px 20px rgba(0,0,0,.06);margin-bottom:16px;}
 .qcm-question.answered{pointer-events:none;}
-.qcm-sentence{font-size:1.1rem;font-weight:700;margin-bottom:18px;line-height:1.6;}
+.qcm-sentence{font-size:1.05rem;font-weight:700;margin-bottom:18px;line-height:1.6;}
 .qcm-sentence .blank{display:inline-block;min-width:80px;border-bottom:3px solid var(--sky);padding:0 6px;text-align:center;color:var(--sky);font-weight:900;}
 .qcm-options{display:flex;flex-direction:column;gap:10px;}
-.qcm-opt{padding:12px 20px;border-radius:12px;border:2.5px solid var(--sky-pale);background:white;font-family:'Nunito',sans-serif;font-weight:700;font-size:.95rem;cursor:pointer;text-align:left;transition:all .2s;display:flex;align-items:center;gap:10px;}
+.qcm-opt{padding:13px 20px;border-radius:12px;border:2.5px solid var(--sky-pale);background:white;font-family:'Nunito',sans-serif;font-weight:700;font-size:.92rem;cursor:pointer;text-align:left;transition:all .2s;display:flex;align-items:center;gap:10px;min-height:52px;}
 .qcm-opt:hover{border-color:var(--sky);background:var(--sky-pale);}
 .qcm-opt.correct{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
 .qcm-opt.wrong{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
 .qcm-opt.reveal{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
-.qcm-feedback{margin-top:14px;padding:12px 16px;border-radius:12px;font-size:.9rem;font-weight:700;display:none;}
+.qcm-feedback{margin-top:14px;padding:12px 16px;border-radius:12px;font-size:.86rem;font-weight:700;display:none;}
 .qcm-feedback.show{display:flex;align-items:flex-start;gap:10px;}
 .qcm-feedback.ok{background:var(--mint-pale);color:var(--mint-deep);}
 .qcm-feedback.ko{background:var(--coral-pale);color:#c0392b;}
 
-.btn-suivant{margin-top:16px;padding:12px 24px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.9rem;background:var(--sky);color:white;border:none;cursor:pointer;transition:all .2s;display:none;align-items:center;gap:8px;}
+.btn-suivant{margin-top:16px;padding:12px 24px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.86rem;background:var(--sky);color:white;border:none;cursor:pointer;transition:all .2s;display:none;align-items:center;gap:8px;min-height:50px;}
 .btn-suivant.show{display:inline-flex;}
 .btn-suivant:hover{background:var(--sky-deep);}
 
-/* ── WORD BANK ── */
+/* ── BANQUE DE MOTS (tap-to-select) ── */
 .banque-intro{background:white;border-radius:var(--radius-lg);padding:20px 24px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);}
-.bank-words{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0;}
-.word-chip{padding:10px 18px;border-radius:50px;border:2.5px solid var(--sky);background:white;font-weight:800;font-size:.9rem;cursor:pointer;transition:all .2s;color:var(--sky-deep);}
-.word-chip:hover{background:var(--sky-pale);transform:translateY(-2px);}
-.word-chip.used{opacity:.3;pointer-events:none;text-decoration:line-through;}
-.word-chip.selected{background:var(--sky);color:white;transform:scale(1.05);}
-
-.blank-sentences{display:flex;flex-direction:column;gap:12px;margin-top:16px;}
-.blank-row{background:var(--sky-pale);border-radius:14px;padding:14px 18px;display:flex;align-items:center;flex-wrap:wrap;gap:6px;font-size:1rem;font-weight:600;}
 .word-chips{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0;min-height:50px;padding:10px;background:var(--sky-pale);border-radius:12px;}
-.word-chip{padding:10px 18px;border-radius:50px;border:2.5px solid var(--sky);background:white;font-weight:800;font-size:.92rem;cursor:grab;color:var(--sky-deep);transition:all .2s;user-select:none;-webkit-user-select:none;}
-.word-chip:active{cursor:grabbing;}
+.word-chip{padding:11px 18px;border-radius:50px;border:2.5px solid var(--sky);background:white;font-family:'Nunito',sans-serif;font-weight:800;font-size:.9rem;color:var(--sky-deep);cursor:pointer;transition:all .2s;user-select:none;-webkit-user-select:none;min-height:48px;}
+.word-chip.selected{background:var(--sky);color:white;transform:scale(1.05);}
 .word-chip.used{opacity:.22;pointer-events:none;}
 .drop-sentences{display:flex;flex-direction:column;gap:12px;}
-.drop-row{background:var(--sky-pale);border-radius:14px;padding:14px 18px;display:flex;align-items:center;flex-wrap:wrap;gap:8px;font-size:1rem;font-weight:600;}
-.drop-zone{display:inline-flex;align-items:center;justify-content:center;min-width:110px;height:36px;border:2.5px dashed var(--sky);border-radius:8px;background:white;color:var(--sky-deep);font-weight:900;font-size:.92rem;padding:0 10px;transition:all .25s;cursor:pointer;}
-.drop-zone.drag-over{border-color:var(--sky-deep);background:var(--sky-pale);transform:scale(1.05);border-style:solid;}
+.drop-row{background:var(--sky-pale);border-radius:14px;padding:14px 18px;display:flex;align-items:center;flex-wrap:wrap;gap:8px;font-size:.98rem;font-weight:600;}
+.drop-zone{display:inline-flex;align-items:center;justify-content:center;min-width:110px;height:40px;border:2.5px dashed var(--sky);border-radius:8px;background:white;color:var(--sky-deep);font-weight:900;font-size:.9rem;padding:0 10px;transition:all .25s;cursor:pointer;}
 .drop-zone.filled{border-style:solid;border-color:var(--sky-deep);}
 .drop-zone.correct{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);cursor:default;border-style:solid;}
-.drop-zone.wrong{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);border-style:solid;font-size:.78rem;}
+.drop-zone.wrong{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);border-style:solid;font-size:.72rem;}
 
-.btn-verifier{margin-top:20px;padding:13px 28px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.95rem;background:linear-gradient(135deg,var(--sky),var(--mint));color:white;border:none;cursor:pointer;box-shadow:0 4px 16px rgba(79,189,223,.35);transition:all .2s;}
+.btn-verifier{margin-top:20px;padding:13px 28px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.92rem;background:linear-gradient(135deg,var(--sky),var(--mint));color:white;border:none;cursor:pointer;box-shadow:0 4px 16px rgba(79,189,223,.35);transition:all .2s;min-height:52px;}
 .btn-verifier:hover{transform:translateY(-2px);}
 .btn-verifier:disabled{opacity:.5;cursor:not-allowed;transform:none;}
 
-.banque-feedback{margin-top:16px;padding:14px 18px;border-radius:14px;font-size:.9rem;display:none;}
+.banque-feedback{margin-top:16px;padding:14px 18px;border-radius:14px;font-size:.86rem;display:none;}
 .banque-feedback.show{display:block;}
 .banque-feedback.ok{background:var(--mint-pale);color:var(--mint-deep);}
 .banque-feedback.ko{background:var(--coral-pale);color:#c0392b;}
 
 /* ── DÉFI ── */
-.defi-card{background:white;border-radius:var(--radius-lg);padding:24px;box-shadow:0 4px 20px rgba(0,0,0,.06);margin-bottom:16px;}
-.defi-sentence{font-size:1rem;font-weight:600;margin-bottom:12px;color:var(--text-light);}
+.defi-card{background:white;border-radius:var(--radius-lg);padding:22px;box-shadow:0 4px 20px rgba(0,0,0,.06);margin-bottom:16px;}
+.defi-sentence{font-size:.98rem;font-weight:700;margin-bottom:12px;}
+.defi-sentence .blank{display:inline-block;min-width:70px;border-bottom:3px solid var(--sky);padding:0 6px;}
 .defi-opts{display:flex;gap:10px;flex-wrap:wrap;}
-.defi-opt{padding:9px 20px;border-radius:50px;border:2.5px solid var(--sky-pale);background:white;font-family:'Nunito',sans-serif;font-weight:700;font-size:.9rem;cursor:pointer;transition:all .2s;}
+.defi-opt{padding:11px 20px;border-radius:50px;border:2.5px solid var(--sky-pale);background:white;font-family:'Nunito',sans-serif;font-weight:700;font-size:.88rem;cursor:pointer;transition:all .2s;min-height:48px;}
 .defi-opt:hover{border-color:var(--sky);background:var(--sky-pale);}
-.defi-opt.correct{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
+.defi-opt.correct,.defi-opt.reveal{border-color:var(--mint);background:var(--mint-pale);color:var(--mint-deep);}
 .defi-opt.wrong{border-color:var(--coral);background:var(--coral-pale);color:var(--coral);}
 
 /* ── BILAN ── */
 .bilan-card{background:white;border-radius:var(--radius-lg);padding:32px 28px;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,.08);}
-.bilan-mascot{font-size:4rem;margin-bottom:12px;display:block;animation:bigFloat 2s ease-in-out infinite;}
+.bilan-mascot{font-size:3rem;margin-bottom:12px;display:block;animation:bigFloat 2s ease-in-out infinite;}
 @keyframes bigFloat{0%,100%{transform:translateY(0) scale(1);}50%{transform:translateY(-12px) scale(1.05);}}
-.bilan-title{font-family:'Fredoka One',cursive;font-size:2rem;margin-bottom:8px;}
-.bilan-msg{color:var(--text-light);font-size:1rem;margin-bottom:24px;}
+.bilan-title{font-family:'Fredoka One',cursive;font-size:1.6rem;margin-bottom:8px;}
+.bilan-msg{color:var(--text-light);font-size:.95rem;margin-bottom:24px;}
 .stars-row{display:flex;justify-content:center;gap:12px;margin-bottom:24px;}
-.star-big{font-size:3rem;filter:grayscale(1);transition:filter .5s,transform .5s;}
+.star-big{font-size:2.4rem;filter:grayscale(1);transition:filter .5s,transform .5s;}
 .star-big.earned{filter:none;animation:starPop .5s ease both;}
 @keyframes starPop{0%{transform:scale(0);}60%{transform:scale(1.3);}100%{transform:scale(1);}}
 .score-circle{width:110px;height:110px;border-radius:50%;background:linear-gradient(135deg,var(--sky),var(--mint));display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 24px;color:white;}
-.score-num{font-family:'Fredoka One',cursive;font-size:2rem;line-height:1;}
-.score-max{font-size:.75rem;opacity:.85;}
+.score-num{font-family:'Fredoka One',cursive;font-size:1.7rem;line-height:1;}
+.score-max{font-size:.7rem;opacity:.85;}
 
 .memo-card{background:linear-gradient(135deg,var(--sky-pale),var(--mint-pale));border-radius:var(--radius-lg);padding:20px 24px;margin:24px 0;text-align:left;border:2px solid rgba(79,189,223,.2);}
-.memo-card h3{font-family:'Fredoka One',cursive;font-size:1.1rem;color:var(--sky-deep);margin-bottom:12px;text-align:center;}
+.memo-card h3{font-family:'Fredoka One',cursive;font-size:1.05rem;color:var(--sky-deep);margin-bottom:12px;text-align:center;}
 .memo-rules{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 @media(max-width:480px){.memo-rules{grid-template-columns:1fr;}}
-.memo-rule{background:white;border-radius:10px;padding:10px 12px;font-size:.82rem;}
-.memo-rule strong{color:var(--sky-deep);display:block;margin-bottom:4px;}
-.memo-conj{font-size:.78rem;color:var(--text-light);}
-.memo-conj b{color:var(--text);}
+.memo-rule{background:white;border-radius:10px;padding:10px 12px;font-size:.78rem;}
+.memo-rule strong{color:var(--sky-deep);display:block;margin-bottom:6px;}
+.memo-cols{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.memo-sub{font-size:.66rem;font-weight:900;color:var(--text-light);letter-spacing:.04em;margin-bottom:2px;}
+.memo-line{font-size:.74rem;color:var(--text-light);padding:1px 0;}
+.memo-line b{color:var(--text);}
 
 .bilan-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:20px;}
-.btn-retry{padding:12px 24px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.9rem;background:var(--sky-pale);color:var(--sky-deep);border:2px solid var(--sky);cursor:pointer;transition:all .2s;}
+.btn-retry{padding:12px 24px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.86rem;background:var(--sky-pale);color:var(--sky-deep);border:2px solid var(--sky);cursor:pointer;transition:all .2s;min-height:50px;}
 .btn-retry:hover{background:var(--sky);color:white;}
-.btn-print{padding:12px 24px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.9rem;background:var(--mint);color:white;border:none;cursor:pointer;box-shadow:0 4px 12px rgba(107,207,176,.4);transition:all .2s;}
+.btn-print{padding:12px 24px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.86rem;background:var(--mint);color:white;border:none;cursor:pointer;box-shadow:0 4px 12px rgba(107,207,176,.4);transition:all .2s;min-height:50px;}
 .btn-print:hover{background:var(--mint-deep);}
-.btn-home{padding:12px 24px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.9rem;background:var(--sky);color:white;border:none;cursor:pointer;box-shadow:0 4px 12px rgba(79,189,223,.4);transition:all .2s;}
+.btn-home{padding:12px 24px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.86rem;background:var(--sky);color:white;border:none;cursor:pointer;box-shadow:0 4px 12px rgba(79,189,223,.4);transition:all .2s;min-height:50px;}
 .btn-home:hover{background:var(--sky-deep);}
 
 /* ── CONFETTI ── */
@@ -207,7 +226,7 @@ body{font-family:'Nunito',sans-serif;background:#f0fbff;color:var(--text);font-s
 
 /* ── PRINT ── */
 @media print{
-  .header,.accroche,.phase:not(#phase-bilan),.btn-print,.btn-retry,.btn-home,.bilan-btns{display:none!important;}
+  .header,.phase:not(#phase-bilan),.btn-print,.btn-retry,.btn-home,.bilan-btns{display:none!important;}
   #phase-bilan{display:block!important;}
   body{background:white;}
 }
@@ -229,6 +248,7 @@ body{font-family:'Nunito',sans-serif;background:#f0fbff;color:var(--text);font-s
       <div class="step" id="step-3"></div>
       <div class="step" id="step-4"></div>
       <div class="step" id="step-5"></div>
+      <div class="step" id="step-6"></div>
     </div>
     <div class="steps-labels">
       <div class="step-lbl">📖 Leçon</div>
@@ -236,6 +256,7 @@ body{font-family:'Nunito',sans-serif;background:#f0fbff;color:var(--text);font-s
       <div class="step-lbl">✏️ Entr. 2</div>
       <div class="step-lbl">🖊️ Exerc. 1</div>
       <div class="step-lbl">🖊️ Exerc. 2</div>
+      <div class="step-lbl">🏆 Défi</div>
       <div class="step-lbl">⭐ Bilan</div>
     </div>
   </div>
@@ -244,23 +265,23 @@ body{font-family:'Nunito',sans-serif;background:#f0fbff;color:var(--text);font-s
 <!-- MAIN -->
 <main class="main">
 
-  <!-- ACCROCHE -->
-  <div class="accroche">
-    <div class="accroche-mascot">🦉</div>
-    <div class="accroche-text">
-      <h1>Le présent de l'indicatif</h1>
-      <p>Imagine que tu es journaliste pour un jour ! Pour écrire ton article sur la vie d'aujourd'hui, tu as besoin du <strong>présent de l'indicatif</strong>. C'est le temps qui parle de <em>maintenant</em> !</p>
-      <div class="fiche-meta">
-        <span class="meta-tag">📚 CE2</span>
-        <span class="meta-tag">⏱️ ~20 minutes</span>
-        <span class="meta-tag">⭐ 14 points</span>
-        <span class="meta-tag">🎯 Français</span>
-      </div>
-    </div>
-  </div>
-
   <!-- ══════════ PHASE : LEÇON ══════════ -->
   <div class="phase active" id="phase-lecon">
+
+    <!-- ACCROCHE -->
+    <div class="accroche">
+      <div class="accroche-mascot">🦉</div>
+      <div class="accroche-text">
+        <h1>Le présent de l'indicatif</h1>
+        <p>Le présent, c'est le temps de <strong>maintenant</strong> : ce qui se passe pendant que tu parles !</p>
+        <div class="fiche-meta">
+          <span class="meta-tag">📚 CE1</span>
+          <span class="meta-tag">⏱️ ~20 minutes</span>
+          <span class="meta-tag">⭐ <span id="meta-pts">18</span> points</span>
+          <span class="meta-tag">🖋️ Français</span>
+        </div>
+      </div>
+    </div>
 
     <div class="lecon-card">
       <h2>📖 La leçon</h2>
@@ -271,36 +292,56 @@ body{font-family:'Nunito',sans-serif;background:#f0fbff;color:var(--text);font-s
         <ul class="usage-list">
           <li class="usage-item">
             <span class="usage-icon">⏰</span>
-            <span><strong>Ce qui se passe maintenant :</strong><br>"Je <strong style='color:var(--sky-deep)'>mange</strong> une pomme 🍎"</span>
+            <span class="usage-text"><strong>Ce qui se passe maintenant :</strong><br>« Je <strong style="color:var(--sky-deep)">mange</strong> une pomme 🍎 »</span>
           </li>
           <li class="usage-item">
             <span class="usage-icon">🔄</span>
-            <span><strong>Ce qui se répète :</strong><br>"Chaque matin, je <strong style='color:var(--sky-deep)'>me brosse</strong> les dents 🦷"</span>
+            <span class="usage-text"><strong>Ce qui se répète :</strong><br>« Chaque matin, je <strong style="color:var(--sky-deep)">me brosse</strong> les dents 🦷 »</span>
           </li>
           <li class="usage-item">
-            <span class="usage-icon">✅</span>
-            <span><strong>Ce qui est toujours vrai :</strong><br>"Le Soleil <strong style='color:var(--sky-deep)'>brille</strong> ☀️"</span>
+            <span class="usage-icon">🌍</span>
+            <span class="usage-text"><strong>Ce qui est toujours vrai :</strong><br>« Le Soleil <strong style="color:var(--sky-deep)">brille</strong> ☀️ »</span>
           </li>
         </ul>
-        <button class="btn-compris" onclick="revealBloc(1)">J'ai compris ! → Voir les terminaisons 📋</button>
+
+        <div class="ctrl" id="ctrl-0">
+          <div class="ctrl-titre">🔎 Vérifions que tu as bien lu</div>
+          <div class="ctrl-sous">La leçon reste juste au-dessus : tu peux la relire.</div>
+          <div id="ctrl-q-0"></div>
+          <div class="ctrl-bilan" id="ctrl-bilan-0"></div>
+        </div>
+
+        <button class="btn-compris" id="btn-bloc-0" style="display:none;" onclick="revealBloc(1)">J'ai compris ! → Voir les terminaisons 📋</button>
       </div>
 
       <!-- BLOC 2 -->
       <div class="lecon-block" id="bloc-1">
         <hr style="margin:20px 0;border:none;border-top:2px solid var(--sky-pale);">
         <h3 style="color:var(--sky-deep);font-family:'Fredoka One',cursive;margin-bottom:12px;">② Les verbes du 1<sup>er</sup> groupe (en <em>-er</em>)</h3>
-        <div class="conj-section">
-          <table class="conj-table">
-            <tr><td>je</td><td>chant<span class="ending">e</span></td></tr>
-            <tr><td>tu</td><td>chant<span class="ending">es</span></td></tr>
-            <tr><td>il / elle</td><td>chant<span class="ending">e</span></td></tr>
-            <tr><td>nous</td><td>chant<span class="ending">ons</span></td></tr>
-            <tr><td>vous</td><td>chant<span class="ending">ez</span></td></tr>
-            <tr><td>ils / elles</td><td>chant<span class="ending">ent</span></td></tr>
-          </table>
-          <div class="astuce">💡 <strong>Astuce :</strong> Retire <em>-er</em> et ajoute les terminaisons : <strong>-e · -es · -e · -ons · -ez · -ent</strong></div>
+        <div class="conj-2col">
+          <div class="conj-col">
+            <h4>Singulier</h4>
+            <div class="conj-row-item"><span class="conj-pron">je</span><span class="conj-form">chant<b>e</b></span></div>
+            <div class="conj-row-item"><span class="conj-pron">tu</span><span class="conj-form">chant<b>es</b></span></div>
+            <div class="conj-row-item"><span class="conj-pron">il / elle</span><span class="conj-form">chant<b>e</b></span></div>
+          </div>
+          <div class="conj-col">
+            <h4>Pluriel</h4>
+            <div class="conj-row-item"><span class="conj-pron">nous</span><span class="conj-form">chant<b>ons</b></span></div>
+            <div class="conj-row-item"><span class="conj-pron">vous</span><span class="conj-form">chant<b>ez</b></span></div>
+            <div class="conj-row-item"><span class="conj-pron">ils / elles</span><span class="conj-form">chant<b>ent</b></span></div>
+          </div>
         </div>
-        <button class="btn-compris" onclick="revealBloc(2)">Suivant → Les verbes irréguliers 🔀</button>
+        <div class="astuce">💡 <strong>Astuce :</strong> retire <em>-er</em>, puis ajoute la terminaison.</div>
+
+        <div class="ctrl" id="ctrl-1">
+          <div class="ctrl-titre">🔎 Vérifions que tu as bien lu</div>
+          <div class="ctrl-sous">La leçon reste juste au-dessus : tu peux la relire.</div>
+          <div id="ctrl-q-1"></div>
+          <div class="ctrl-bilan" id="ctrl-bilan-1"></div>
+        </div>
+
+        <button class="btn-compris" id="btn-bloc-1" style="display:none;" onclick="revealBloc(2)">Suivant → Les verbes irréguliers 🔑</button>
       </div>
 
       <!-- BLOC 3 -->
@@ -310,52 +351,84 @@ body{font-family:'Nunito',sans-serif;background:#f0fbff;color:var(--text);font-s
         <div class="irr-grid">
           <div class="irr-card blue">
             <h4>ÊTRE</h4>
-            <table class="irr-table">
-              <tr><td>je</td><td>suis</td></tr>
-              <tr><td>tu</td><td>es</td></tr>
-              <tr><td>il/elle</td><td>est</td></tr>
-              <tr><td>nous</td><td>sommes</td></tr>
-              <tr><td>vous</td><td>êtes</td></tr>
-              <tr><td>ils/elles</td><td>sont</td></tr>
-            </table>
+            <div class="irr-cols">
+              <div>
+                <div class="irr-sub">SINGULIER</div>
+                <div class="irr-line"><span>je</span> <b>suis</b></div>
+                <div class="irr-line"><span>tu</span> <b>es</b></div>
+                <div class="irr-line"><span>il / elle</span> <b>est</b></div>
+              </div>
+              <div>
+                <div class="irr-sub">PLURIEL</div>
+                <div class="irr-line"><span>nous</span> <b>sommes</b></div>
+                <div class="irr-line"><span>vous</span> <b>êtes</b></div>
+                <div class="irr-line"><span>ils / elles</span> <b>sont</b></div>
+              </div>
+            </div>
           </div>
           <div class="irr-card green">
             <h4>AVOIR</h4>
-            <table class="irr-table">
-              <tr><td>j'</td><td>ai</td></tr>
-              <tr><td>tu</td><td>as</td></tr>
-              <tr><td>il/elle</td><td>a</td></tr>
-              <tr><td>nous</td><td>avons</td></tr>
-              <tr><td>vous</td><td>avez</td></tr>
-              <tr><td>ils/elles</td><td>ont</td></tr>
-            </table>
+            <div class="irr-cols">
+              <div>
+                <div class="irr-sub">SINGULIER</div>
+                <div class="irr-line"><span>j'</span> <b>ai</b></div>
+                <div class="irr-line"><span>tu</span> <b>as</b></div>
+                <div class="irr-line"><span>il / elle</span> <b>a</b></div>
+              </div>
+              <div>
+                <div class="irr-sub">PLURIEL</div>
+                <div class="irr-line"><span>nous</span> <b>avons</b></div>
+                <div class="irr-line"><span>vous</span> <b>avez</b></div>
+                <div class="irr-line"><span>ils / elles</span> <b>ont</b></div>
+              </div>
+            </div>
           </div>
           <div class="irr-card yellow">
             <h4>ALLER</h4>
-            <table class="irr-table">
-              <tr><td>je</td><td>vais</td></tr>
-              <tr><td>tu</td><td>vas</td></tr>
-              <tr><td>il/elle</td><td>va</td></tr>
-              <tr><td>nous</td><td>allons</td></tr>
-              <tr><td>vous</td><td>allez</td></tr>
-              <tr><td>ils/elles</td><td>vont</td></tr>
-            </table>
+            <div class="irr-cols">
+              <div>
+                <div class="irr-sub">SINGULIER</div>
+                <div class="irr-line"><span>je</span> <b>vais</b></div>
+                <div class="irr-line"><span>tu</span> <b>vas</b></div>
+                <div class="irr-line"><span>il / elle</span> <b>va</b></div>
+              </div>
+              <div>
+                <div class="irr-sub">PLURIEL</div>
+                <div class="irr-line"><span>nous</span> <b>allons</b></div>
+                <div class="irr-line"><span>vous</span> <b>allez</b></div>
+                <div class="irr-line"><span>ils / elles</span> <b>vont</b></div>
+              </div>
+            </div>
           </div>
           <div class="irr-card coral">
             <h4>FAIRE</h4>
-            <table class="irr-table">
-              <tr><td>je</td><td>fais</td></tr>
-              <tr><td>tu</td><td>fais</td></tr>
-              <tr><td>il/elle</td><td>fait</td></tr>
-              <tr><td>nous</td><td>faisons</td></tr>
-              <tr><td>vous</td><td>faites</td></tr>
-              <tr><td>ils/elles</td><td>font</td></tr>
-            </table>
+            <div class="irr-cols">
+              <div>
+                <div class="irr-sub">SINGULIER</div>
+                <div class="irr-line"><span>je</span> <b>fais</b></div>
+                <div class="irr-line"><span>tu</span> <b>fais</b></div>
+                <div class="irr-line"><span>il / elle</span> <b>fait</b></div>
+              </div>
+              <div>
+                <div class="irr-sub">PLURIEL</div>
+                <div class="irr-line"><span>nous</span> <b>faisons</b></div>
+                <div class="irr-line"><span>vous</span> <b>faites</b></div>
+                <div class="irr-line"><span>ils / elles</span> <b>font</b></div>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="astuce" style="margin-top:14px;">🦉 <strong>Ugo te dit :</strong> Ces 4 verbes sont très utilisés en français. Entraîne-toi à les réciter tous les jours !</div>
-        <button class="btn-compris" onclick="startExercises()" style="background:linear-gradient(135deg,var(--yellow-deep),var(--coral));">
-          ✅ Leçon apprise ! → Je commence les exercices 🚀
+        <div class="astuce" style="margin-top:14px;">🦉 <strong>Ugo te dit :</strong> ces quatre verbes servent tous les jours. Récite-les à voix haute !</div>
+
+        <div class="ctrl" id="ctrl-2">
+          <div class="ctrl-titre">🔎 Vérifions que tu as bien lu</div>
+          <div class="ctrl-sous">La leçon reste juste au-dessus : tu peux la relire.</div>
+          <div id="ctrl-q-2"></div>
+          <div class="ctrl-bilan" id="ctrl-bilan-2"></div>
+        </div>
+
+        <button class="btn-compris" id="btn-bloc-2" style="display:none;background:linear-gradient(135deg,var(--yellow-deep),var(--coral));" onclick="startExercises()">
+          ✅ Leçon apprise ! → Je commence les exercices
         </button>
       </div>
 
@@ -366,7 +439,7 @@ body{font-family:'Nunito',sans-serif;background:#f0fbff;color:var(--text);font-s
   <div class="phase" id="phase-ex1">
     <div class="mascot-msg">
       <span class="emo">🦉</span>
-      <p><strong>Super, la leçon est terminée !</strong> Maintenant, mettons tout ça en pratique. Pour chaque phrase, clique sur la <strong>bonne conjugaison</strong>. Tu peux relire la leçon si tu veux !</p>
+      <p><strong>Super, la leçon est terminée !</strong> Pour chaque phrase, clique sur la <strong>bonne conjugaison</strong>.</p>
     </div>
     <div class="ex-num">ENTRAÎNEMENT 1 / 2</div>
     <div class="ex-header">
@@ -381,11 +454,11 @@ body{font-family:'Nunito',sans-serif;background:#f0fbff;color:var(--text);font-s
   <div class="phase" id="phase-ex2">
     <div class="mascot-msg">
       <span class="emo">🦉</span>
-      <p><strong>Excellent !</strong> Maintenant les verbes <strong>être et avoir</strong>. Ce sont des verbes irréguliers très importants !</p>
+      <p><strong>Excellent !</strong> Maintenant les verbes <strong>être</strong> et <strong>avoir</strong>.</p>
     </div>
     <div class="ex-num">ENTRAÎNEMENT 2 / 2</div>
     <div class="ex-header">
-      <h2>Être ou Avoir ?</h2>
+      <h2>Être ou avoir ?</h2>
       <p>Choisis la bonne forme du verbe.</p>
     </div>
     <div id="qcm2-container"></div>
@@ -396,26 +469,21 @@ body{font-family:'Nunito',sans-serif;background:#f0fbff;color:var(--text);font-s
   <div class="phase" id="phase-banque1">
     <div class="mascot-msg">
       <span class="emo">🦉</span>
-      <p><strong>Très bien !</strong> Maintenant, complète les phrases avec les mots de la banque. <strong>Clique d'abord sur un mot</strong>, puis clique sur le blanc où tu veux le mettre !</p>
+      <p><strong>Très bien !</strong> <strong>Clique d'abord sur un mot</strong>, puis clique sur la case où tu veux le mettre.</p>
     </div>
     <div class="ex-num">EXERCICE 1 / 2</div>
     <div class="ex-header">
       <h2>Complète avec les bons mots</h2>
-      <p>Verbes du 1er groupe (-er) — utilise chaque mot une seule fois.</p>
+      <p>Verbes du 1<sup>er</sup> groupe (-er) — un mot par phrase.</p>
     </div>
     <div class="banque-intro">
       <strong>🎒 Banque de mots :</strong>
-      <div class="word-chips" id="pool1">
-        <div class="word-chip" draggable="true" data-word="chantent" ondragstart="onDS(event,1)" ontouchstart="onTS(event)" ontouchmove="onTM(event)" ontouchend="onTE(event,1)">chantent</div>
-        <div class="word-chip" draggable="true" data-word="mangez"   ondragstart="onDS(event,1)" ontouchstart="onTS(event)" ontouchmove="onTM(event)" ontouchend="onTE(event,1)">mangez</div>
-        <div class="word-chip" draggable="true" data-word="regardes" ondragstart="onDS(event,1)" ontouchstart="onTS(event)" ontouchmove="onTM(event)" ontouchend="onTE(event,1)">regardes</div>
-        <div class="word-chip" draggable="true" data-word="jouons"   ondragstart="onDS(event,1)" ontouchstart="onTS(event)" ontouchmove="onTM(event)" ontouchend="onTE(event,1)">jouons</div>
-      </div>
+      <div class="word-chips" id="pool1"></div>
       <div class="drop-sentences" id="banque1-sentences">
-        <div class="drop-row">Tu <span class="drop-zone" data-bank="1" data-idx="0" ondragover="onDO(event)" ondragleave="onDL(event)" ondrop="onDP(event,1)"></span> la télé le soir.</div>
-        <div class="drop-row">Nous <span class="drop-zone" data-bank="1" data-idx="1" ondragover="onDO(event)" ondragleave="onDL(event)" ondrop="onDP(event,1)"></span> ensemble au foot.</div>
-        <div class="drop-row">Ils <span class="drop-zone" data-bank="1" data-idx="2" ondragover="onDO(event)" ondragleave="onDL(event)" ondrop="onDP(event,1)"></span> une chanson.</div>
-        <div class="drop-row">Vous <span class="drop-zone" data-bank="1" data-idx="3" ondragover="onDO(event)" ondragleave="onDL(event)" ondrop="onDP(event,1)"></span> des pâtes ce soir ?</div>
+        <div class="drop-row">Tu <span class="drop-zone" data-bank="1" data-idx="0" onclick="dropWord(1,0)"></span> la télé le soir.</div>
+        <div class="drop-row">Nous <span class="drop-zone" data-bank="1" data-idx="1" onclick="dropWord(1,1)"></span> ensemble au foot.</div>
+        <div class="drop-row">Ils <span class="drop-zone" data-bank="1" data-idx="2" onclick="dropWord(1,2)"></span> une chanson.</div>
+        <div class="drop-row">Vous <span class="drop-zone" data-bank="1" data-idx="3" onclick="dropWord(1,3)"></span> des pâtes ce soir ?</div>
       </div>
       <button class="btn-verifier" id="btn-verif1" onclick="verifyBanque(1)" disabled>✅ Vérifier mes réponses</button>
       <div class="banque-feedback" id="banque1-feedback"></div>
@@ -427,46 +495,41 @@ body{font-family:'Nunito',sans-serif;background:#f0fbff;color:var(--text);font-s
   <div class="phase" id="phase-banque2">
     <div class="mascot-msg">
       <span class="emo">🦉</span>
-      <p>Dernière ligne droite ! Cette fois, les verbes sont <strong>irréguliers</strong>. Tu te souviens de tes tables ? 💪</p>
+      <p>Dernière ligne droite ! Cette fois, les verbes sont <strong>irréguliers</strong>. 💪</p>
     </div>
     <div class="ex-num">EXERCICE 2 / 2</div>
     <div class="ex-header">
       <h2>Verbes irréguliers</h2>
-      <p>Être, Avoir, Aller, Faire — à toi de jouer !</p>
+      <p>Être, avoir, aller, faire — à toi de jouer !</p>
     </div>
     <div class="banque-intro">
       <strong>🎒 Banque de mots :</strong>
-      <div class="word-chips" id="pool2">
-        <div class="word-chip" draggable="true" data-word="allons" ondragstart="onDS(event,2)" ontouchstart="onTS(event)" ontouchmove="onTM(event)" ontouchend="onTE(event,2)">allons</div>
-        <div class="word-chip" draggable="true" data-word="sont"   ondragstart="onDS(event,2)" ontouchstart="onTS(event)" ontouchmove="onTM(event)" ontouchend="onTE(event,2)">sont</div>
-        <div class="word-chip" draggable="true" data-word="fait"   ondragstart="onDS(event,2)" ontouchstart="onTS(event)" ontouchmove="onTM(event)" ontouchend="onTE(event,2)">fait</div>
-        <div class="word-chip" draggable="true" data-word="as"     ondragstart="onDS(event,2)" ontouchstart="onTS(event)" ontouchmove="onTM(event)" ontouchend="onTE(event,2)">as</div>
-      </div>
+      <div class="word-chips" id="pool2"></div>
       <div class="drop-sentences" id="banque2-sentences">
-        <div class="drop-row">Mon petit frère <span class="drop-zone" data-bank="2" data-idx="0" ondragover="onDO(event)" ondragleave="onDL(event)" ondrop="onDP(event,2)"></span> ses devoirs.</div>
-        <div class="drop-row">Nous <span class="drop-zone" data-bank="2" data-idx="1" ondragover="onDO(event)" ondragleave="onDL(event)" ondrop="onDP(event,2)"></span> au parc ce weekend.</div>
-        <div class="drop-row">Tu <span class="drop-zone" data-bank="2" data-idx="2" ondragover="onDO(event)" ondragleave="onDL(event)" ondrop="onDP(event,2)"></span> un super dessin !</div>
-        <div class="drop-row">Les fleurs <span class="drop-zone" data-bank="2" data-idx="3" ondragover="onDO(event)" ondragleave="onDL(event)" ondrop="onDP(event,2)"></span> très belles.</div>
+        <div class="drop-row">Mon petit frère <span class="drop-zone" data-bank="2" data-idx="0" onclick="dropWord(2,0)"></span> ses devoirs.</div>
+        <div class="drop-row">Nous <span class="drop-zone" data-bank="2" data-idx="1" onclick="dropWord(2,1)"></span> au parc ce week-end.</div>
+        <div class="drop-row">Tu <span class="drop-zone" data-bank="2" data-idx="2" onclick="dropWord(2,2)"></span> un super dessin !</div>
+        <div class="drop-row">Les fleurs <span class="drop-zone" data-bank="2" data-idx="3" onclick="dropWord(2,3)"></span> très belles.</div>
       </div>
       <button class="btn-verifier" id="btn-verif2" onclick="verifyBanque(2)" disabled>✅ Vérifier mes réponses</button>
       <div class="banque-feedback" id="banque2-feedback"></div>
     </div>
-    <button class="btn-suivant" id="btn-to-defi" onclick="goToPhase('defi',5)">🌟 Voir mon bilan</button>
+    <button class="btn-suivant" id="btn-to-defi" onclick="goToPhase('defi',5)">Suite → Défi bonus 🏆</button>
   </div>
 
-  <!-- ══════════ PHASE : DÉFI OPTIONNEL ══════════ -->
+  <!-- ══════════ PHASE : DÉFI ══════════ -->
   <div class="phase" id="phase-defi">
     <div class="mascot-msg">
       <span class="emo">🦉</span>
-      <p>🏆 <strong>Défi bonus !</strong> Ce n'est pas obligatoire, mais tu peux gagner des points supplémentaires ! Choisis la bonne forme pour chaque phrase.</p>
+      <p>🏆 <strong>Défi bonus !</strong> Quatre points de plus à gagner. Choisis la bonne forme.</p>
     </div>
-    <div class="ex-num">⭐ DÉFI BONUS</div>
+    <div class="ex-num">🏆 DÉFI BONUS</div>
     <div class="ex-header">
       <h2>Trouve la bonne forme !</h2>
       <p>Clique sur le mot qui convient dans chaque phrase.</p>
     </div>
     <div id="defi-container"></div>
-    <button class="btn-compris" id="btn-to-bilan" onclick="goToPhase('bilan',5)" style="background:linear-gradient(135deg,var(--yellow-deep),var(--coral));margin-top:8px;">
+    <button class="btn-suivant" id="btn-to-bilan" onclick="goToPhase('bilan',6)" style="background:linear-gradient(135deg,var(--yellow-deep),var(--coral));">
       🏁 Voir mon bilan final !
     </button>
   </div>
@@ -484,7 +547,7 @@ body{font-family:'Nunito',sans-serif;background:#f0fbff;color:var(--text);font-s
       </div>
       <div class="score-circle">
         <span class="score-num" id="bilan-score">0</span>
-        <span class="score-max" id="bilan-max">/ 14 pts</span>
+        <span class="score-max" id="bilan-max">/ 18 pts</span>
       </div>
 
       <!-- MÉMO CARTE -->
@@ -492,20 +555,72 @@ body{font-family:'Nunito',sans-serif;background:#f0fbff;color:var(--text);font-s
         <h3>🗒️ Mon mémo — Le présent de l'indicatif</h3>
         <div class="memo-rules">
           <div class="memo-rule">
-            <strong>Verbes en -er (1er gr.)</strong>
-            <div class="memo-conj">je <b>-e</b> · tu <b>-es</b> · il <b>-e</b><br>nous <b>-ons</b> · vous <b>-ez</b> · ils <b>-ent</b></div>
+            <strong>Verbes en -er (1<sup>er</sup> gr.)</strong>
+            <div class="memo-cols">
+              <div>
+                <div class="memo-sub">SINGULIER</div>
+                <div class="memo-line">je <b>-e</b></div>
+                <div class="memo-line">tu <b>-es</b></div>
+                <div class="memo-line">il / elle <b>-e</b></div>
+              </div>
+              <div>
+                <div class="memo-sub">PLURIEL</div>
+                <div class="memo-line">nous <b>-ons</b></div>
+                <div class="memo-line">vous <b>-ez</b></div>
+                <div class="memo-line">ils / elles <b>-ent</b></div>
+              </div>
+            </div>
           </div>
           <div class="memo-rule">
             <strong>ÊTRE</strong>
-            <div class="memo-conj">je <b>suis</b> · tu <b>es</b> · il <b>est</b><br>nous <b>sommes</b> · vous <b>êtes</b> · ils <b>sont</b></div>
+            <div class="memo-cols">
+              <div>
+                <div class="memo-sub">SINGULIER</div>
+                <div class="memo-line">je <b>suis</b></div>
+                <div class="memo-line">tu <b>es</b></div>
+                <div class="memo-line">il / elle <b>est</b></div>
+              </div>
+              <div>
+                <div class="memo-sub">PLURIEL</div>
+                <div class="memo-line">nous <b>sommes</b></div>
+                <div class="memo-line">vous <b>êtes</b></div>
+                <div class="memo-line">ils / elles <b>sont</b></div>
+              </div>
+            </div>
           </div>
           <div class="memo-rule">
             <strong>AVOIR</strong>
-            <div class="memo-conj">j' <b>ai</b> · tu <b>as</b> · il <b>a</b><br>nous <b>avons</b> · vous <b>avez</b> · ils <b>ont</b></div>
+            <div class="memo-cols">
+              <div>
+                <div class="memo-sub">SINGULIER</div>
+                <div class="memo-line">j' <b>ai</b></div>
+                <div class="memo-line">tu <b>as</b></div>
+                <div class="memo-line">il / elle <b>a</b></div>
+              </div>
+              <div>
+                <div class="memo-sub">PLURIEL</div>
+                <div class="memo-line">nous <b>avons</b></div>
+                <div class="memo-line">vous <b>avez</b></div>
+                <div class="memo-line">ils / elles <b>ont</b></div>
+              </div>
+            </div>
           </div>
           <div class="memo-rule">
             <strong>ALLER · FAIRE</strong>
-            <div class="memo-conj">je <b>vais</b> / je <b>fais</b><br>tu <b>vas</b> / tu <b>fais</b><br>ils <b>vont</b> / ils <b>font</b></div>
+            <div class="memo-cols">
+              <div>
+                <div class="memo-sub">SINGULIER</div>
+                <div class="memo-line">je <b>vais</b> / <b>fais</b></div>
+                <div class="memo-line">tu <b>vas</b> / <b>fais</b></div>
+                <div class="memo-line">il / elle <b>va</b> / <b>fait</b></div>
+              </div>
+              <div>
+                <div class="memo-sub">PLURIEL</div>
+                <div class="memo-line">nous <b>allons</b> / <b>faisons</b></div>
+                <div class="memo-line">vous <b>allez</b> / <b>faites</b></div>
+                <div class="memo-line">ils / elles <b>vont</b> / <b>font</b></div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -513,7 +628,7 @@ body{font-family:'Nunito',sans-serif;background:#f0fbff;color:var(--text);font-s
       <div class="bilan-btns">
         <button class="btn-retry" onclick="restartFiche()">🔄 Recommencer</button>
         <button class="btn-print" onclick="window.print()">🖨️ Imprimer le mémo</button>
-        <button class="btn-home" onclick="location.href='../6-9ans.html'">🏠 Retour aux fiches</button>
+        <button class="btn-home" onclick="location.href='../ce1.html'">🏠 Retour aux fiches</button>
       </div>
     </div>
   </div>
@@ -524,8 +639,45 @@ body{font-family:'Nunito',sans-serif;background:#f0fbff;color:var(--text);font-s
 <script src="../atelier-progression.js"></script>
 <script>
 // ═══════════════════════════════════════════════════
-// DONNÉES DES EXERCICES
+// DONNÉES
 // ═══════════════════════════════════════════════════
+
+const ctrlData = [
+  [
+    { q:'« Je mange une pomme » : cela se passe quand ?',
+      options:['maintenant','hier','demain'], answer:'maintenant',
+      explanation:'Premier cas de la leçon : ce qui se passe maintenant.' },
+    { q:'Quel exemple se répète chaque jour ?',
+      options:['Chaque matin, je me brosse les dents','Le Soleil brille'],
+      answer:'Chaque matin, je me brosse les dents',
+      explanation:'« Chaque matin » montre une action qui revient.' },
+    { q:'« Le Soleil brille » est une chose :',
+      options:['toujours vraie','jamais vraie'], answer:'toujours vraie',
+      explanation:'Troisième cas de la leçon : ce qui est toujours vrai.' }
+  ],
+  [
+    { q:'Avec « nous », la terminaison est :',
+      options:['-ons','-ez','-ent'], answer:'-ons',
+      explanation:'Dans la colonne pluriel : nous chantons.' },
+    { q:'Avec « tu », la terminaison est :',
+      options:['-es','-e','-ent'], answer:'-es',
+      explanation:'Dans la colonne singulier : tu chantes.' },
+    { q:'Pour conjuguer un verbe en -er, on retire d\'abord :',
+      options:['-er','-ons'], answer:'-er',
+      explanation:'L\'astuce le dit : on retire -er, puis on ajoute la terminaison.' }
+  ],
+  [
+    { q:'Le verbe ÊTRE avec « nous » :',
+      options:['sommes','êtes','sont'], answer:'sommes',
+      explanation:'Carte ÊTRE, colonne pluriel : nous sommes.' },
+    { q:'Le verbe AVOIR avec « ils » :',
+      options:['ont','avons','as'], answer:'ont',
+      explanation:'Carte AVOIR, colonne pluriel : ils ont.' },
+    { q:'Le verbe FAIRE avec « vous » :',
+      options:['faites','faisons','font'], answer:'faites',
+      explanation:'Carte FAIRE, colonne pluriel : vous faites.' }
+  ]
+];
 
 const qcm1 = [
   {
@@ -533,45 +685,45 @@ const qcm1 = [
     verb: 'aller',
     options: ['a', 'va', 'allons'],
     answer: 'va',
-    explanation: '"Hugo" = il → <strong>il va</strong> (verbe ALLER)'
+    explanation: '« Hugo » = il → <strong>il va</strong> (verbe ALLER).'
   },
   {
     sentence: 'Les oiseaux ___ dans les arbres.',
     verb: 'chanter',
     options: ['chantez', 'chantons', 'chantent'],
     answer: 'chantent',
-    explanation: '"Les oiseaux" = ils → <strong>ils chantent</strong> (verbe CHANTER, 1er groupe)'
+    explanation: '« Les oiseaux » = ils → <strong>ils chantent</strong> (1<sup>er</sup> groupe).'
   },
   {
     sentence: "Vous ___ du football après l'école ?",
     verb: 'jouer',
     options: ['jouent', 'jouons', 'jouez'],
     answer: 'jouez',
-    explanation: '"Vous" → <strong>vous jouez</strong> (verbe JOUER, terminaison -ez)'
+    explanation: '« Vous » → <strong>vous jouez</strong> (terminaison -ez).'
   }
 ];
 
 const qcm2 = [
   {
-    sentence: "Je ___ prêt(e) pour l'aventure !",
+    sentence: "Je ___ prêt pour l'aventure !",
     verb: 'être',
     options: ['est', 'suis', 'sommes'],
     answer: 'suis',
-    explanation: '"Je" + ÊTRE → <strong>je suis</strong>'
+    explanation: '« Je » + ÊTRE → <strong>je suis</strong>.'
   },
   {
     sentence: 'Nous ___ un beau jardin.',
     verb: 'avoir',
     options: ['ont', 'avons', 'avez'],
     answer: 'avons',
-    explanation: '"Nous" + AVOIR → <strong>nous avons</strong>'
+    explanation: '« Nous » + AVOIR → <strong>nous avons</strong>.'
   },
   {
-    sentence: "Tu ___ fatigué(e) aujourd'hui ?",
+    sentence: "Tu ___ fatigué aujourd'hui ?",
     verb: 'être',
     options: ['est', 'êtes', 'es'],
     answer: 'es',
-    explanation: '"Tu" + ÊTRE → <strong>tu es</strong>'
+    explanation: '« Tu » + ÊTRE → <strong>tu es</strong>.'
   }
 ];
 
@@ -584,407 +736,498 @@ const defi = [
     options: ['joue', 'jouent'],
     after: 'dans le jardin.',
     answer: 'jouent',
-    explanation: '"Léa et Tom" = ils/elles → <strong>jouent</strong>'
+    explanation: '« Léa et Tom » = ils → <strong>jouent</strong>.'
   },
   {
     before: 'Je',
     options: ['chante', 'chantez'],
     after: 'sous la pluie.',
     answer: 'chante',
-    explanation: '"Je" → <strong>chante</strong> (terminaison -e)'
+    explanation: '« Je » → <strong>chante</strong> (terminaison -e).'
   },
   {
     before: 'Vous',
     options: ['allons', 'allez'],
     after: 'au cinéma ce soir ?',
     answer: 'allez',
-    explanation: '"Vous" + ALLER → <strong>allez</strong>'
+    explanation: '« Vous » + ALLER → <strong>allez</strong>.'
   },
   {
     before: 'Ma mère',
     options: ['fait', 'faites'],
     after: 'un gâteau au chocolat.',
     answer: 'fait',
-    explanation: '"Ma mère" = elle → <strong>fait</strong> (verbe FAIRE)'
+    explanation: '« Ma mère » = elle → <strong>fait</strong> (verbe FAIRE).'
   }
 ];
 
 // ═══════════════════════════════════════════════════
-// ÉTAT
+// ÉTAT — total calculé, jamais codé en dur
 // ═══════════════════════════════════════════════════
 
+const TOTAL = qcm1.length + qcm2.length + banque1Answers.length
+            + banque2Answers.length + defi.length;
+
 let score = 0;
-let maxScore = 14;
-var drag1Filled = [null, null, null, null];
-var drag2Filled = [null, null, null, null];
-var draggedChip = null;
-var touchChip = null, touchClone = null;
-let qcm1Done = 0, qcm2Done = 0;
-let defiScore = 0;
+let qcm1Done = 0, qcm2Done = 0, defiDone = 0;
+let drag1Filled = [null, null, null, null];
+let drag2Filled = [null, null, null, null];
+let selectedChip = null;
+let banqueVerifiee = { 1: false, 2: false };
+let ctrlState = [];
+
+function shuffle(a){
+  const r = a.slice();
+  for(let i = r.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    const t = r[i]; r[i] = r[j]; r[j] = t;
+  }
+  return r;
+}
+function esc(s){ const d = document.createElement('div'); d.textContent = s == null ? '' : s; return d.innerHTML; }
+function majScore(){ document.getElementById('score-display').textContent = score; }
+
+// ═══════════════════════════════════════════════════
+// QUESTIONS DE CONTRÔLE DE LECTURE
+// ═══════════════════════════════════════════════════
+
+function buildCtrl(bi){
+  const cont = document.getElementById('ctrl-q-' + bi);
+  cont.innerHTML = ctrlData[bi].map(function(q, qi){
+    return '<div class="ctrl-q" id="ctrl-' + bi + '-' + qi + '">'
+      + '<div class="ctrl-txt">' + q.q + '</div><div class="ctrl-opts">'
+      + shuffle(q.options).map(function(o){
+          return '<button class="ctrl-btn" data-v="' + esc(o) + '" '
+               + 'onclick="answerCtrl(' + bi + ',' + qi + ',this)">' + esc(o) + '</button>';
+        }).join('')
+      + '</div><div class="ctrl-fb" id="ctrl-fb-' + bi + '-' + qi + '"></div></div>';
+  }).join('');
+  ctrlState[bi] = { ok: 0, ko: 0, total: ctrlData[bi].length };
+  const bil = document.getElementById('ctrl-bilan-' + bi);
+  bil.className = 'ctrl-bilan'; bil.innerHTML = '';
+  document.getElementById('btn-bloc-' + bi).style.display = 'none';
+}
+
+function answerCtrl(bi, qi, btn){
+  const card = document.getElementById('ctrl-' + bi + '-' + qi);
+  if(card.dataset.done) return;
+  card.dataset.done = '1';
+  const q = ctrlData[bi][qi];
+  const bon = (btn.dataset.v === q.answer);
+  card.querySelectorAll('.ctrl-btn').forEach(function(b){
+    b.disabled = true;
+    if(b.dataset.v === q.answer) b.classList.add('correct');
+  });
+  if(!bon) btn.classList.add('wrong');
+  const fb = document.getElementById('ctrl-fb-' + bi + '-' + qi);
+  fb.innerHTML = (bon ? '✅ ' : '❌ ') + q.explanation;
+  fb.className = 'ctrl-fb show ' + (bon ? 'ok' : 'ko');
+
+  const st = ctrlState[bi];
+  st[bon ? 'ok' : 'ko']++;
+  if(st.ok + st.ko < st.total) return;
+
+  const bil = document.getElementById('ctrl-bilan-' + bi);
+  if(st.ko === 0){
+    bil.innerHTML = '🎉 <strong>Parfait !</strong> Tu as bien lu la leçon.';
+    bil.className = 'ctrl-bilan ok show';
+    document.getElementById('btn-bloc-' + bi).style.display = 'inline-flex';
+  } else {
+    const cible = (bi === 0) ? 0 : bi - 1;
+    const txt = (bi === 0)
+      ? 'Relis ce bloc tranquillement, puis réessaie.'
+      : 'Relis le bloc précédent, puis reviens ici.';
+    bil.innerHTML = '📖 <strong>' + st.ko + ' réponse' + (st.ko > 1 ? 's' : '')
+      + ' à revoir.</strong><br>' + txt
+      + '<br><button class="ctrl-retry" onclick="reprendreCtrl(' + bi + ',' + cible + ')">'
+      + '↺ Relire et réessayer</button>';
+    bil.className = 'ctrl-bilan ko show';
+  }
+}
+
+function reprendreCtrl(bi, cible){
+  buildCtrl(bi);
+  scrollToBloc(document.getElementById('bloc-' + cible));
+}
 
 // ═══════════════════════════════════════════════════
 // LEÇON
 // ═══════════════════════════════════════════════════
 
-function revealBloc(n) {
-  const bloc = document.getElementById('bloc-' + n);
+function scrollToBloc(bloc){
   if(!bloc) return;
-
-  // Cache le bouton cliqué pour que ce soit clair qu'il a été pris en compte
-  const prevBloc = document.getElementById('bloc-' + (n-1));
-  if(prevBloc) {
-    const btn = prevBloc.querySelector('.btn-compris');
-    if(btn) { btn.textContent = '✅ Compris !'; btn.disabled = true; btn.style.opacity = '.5'; }
-  }
-
-  bloc.classList.add('revealed');
-
-  // Scroll en tenant compte de la hauteur du header sticky
-  setTimeout(() => {
+  setTimeout(function(){
     const header = document.querySelector('.header');
     const headerH = header ? header.offsetHeight : 0;
     const rect = bloc.getBoundingClientRect();
-    const scrollTop = window.pageYOffset + rect.top - headerH - 20;
-    window.scrollTo({ top: scrollTop, behavior: 'smooth' });
+    window.scrollTo({ top: window.pageYOffset + rect.top - headerH - 20, behavior: 'smooth' });
+  }, 150);
+}
 
-    // Flash de mise en évidence
-    bloc.style.transition = 'background .3s';
-    bloc.style.background = '#daf6ff';
-    setTimeout(() => { bloc.style.background = ''; }, 800);
-  }, 50);
+function revealBloc(n){
+  const bloc = document.getElementById('bloc-' + n);
+  if(!bloc) return;
+  const prev = document.getElementById('bloc-' + (n - 1));
+  if(prev){
+    const btn = prev.querySelector('.btn-compris');
+    if(btn){ btn.style.display = 'none'; }
+  }
+  bloc.classList.add('revealed');
+  buildCtrl(n);
+  scrollToBloc(bloc);
 }
 
 // ═══════════════════════════════════════════════════
 // NAVIGATION PHASES
 // ═══════════════════════════════════════════════════
 
-function startExercises() {
+function startExercises(){
   goToPhase('ex1', 1);
-  buildQCM('qcm1-container', qcm1, 1, 'btn-to-ex2');
+  buildQCM('qcm1-container', qcm1, 1);
 }
 
-function goToPhase(phase, stepIdx) {
-  document.querySelectorAll('.phase').forEach(p => p.classList.remove('active'));
+function goToPhase(phase, stepIdx){
+  document.querySelectorAll('.phase').forEach(function(p){ p.classList.remove('active'); });
   document.getElementById('phase-' + phase).classList.add('active');
   updateSteps(stepIdx);
-  window.scrollTo({top:0, behavior:'smooth'});
-  if(phase === 'ex2') buildQCM('qcm2-container', qcm2, 2, 'btn-to-banque1');
+  setTimeout(function(){ window.scrollTo({ top: 0, behavior: 'smooth' }); }, 150);
+  if(phase === 'ex2') buildQCM('qcm2-container', qcm2, 2);
+  if(phase === 'banque1') buildPool(1);
+  if(phase === 'banque2') buildPool(2);
   if(phase === 'defi') buildDefi();
   if(phase === 'bilan') showBilan();
 }
 
-function updateSteps(active) {
-  for(let i = 0; i < 6; i++) {
+function updateSteps(active){
+  for(let i = 0; i < 7; i++){
     const s = document.getElementById('step-' + i);
-    s.classList.remove('active','done');
+    s.classList.remove('active', 'done');
     if(i < active) s.classList.add('done');
     else if(i === active) s.classList.add('active');
   }
 }
 
 // ═══════════════════════════════════════════════════
-// QCM
+// QCM — index seulement dans les onclick
 // ═══════════════════════════════════════════════════
 
-function buildQCM(containerId, data, exNum, nextBtnId) {
+function buildQCM(containerId, data, exNum){
   const container = document.getElementById(containerId);
-  container.innerHTML = '';
-  data.forEach((q, qi) => {
-    const div = document.createElement('div');
-    div.className = 'qcm-question';
-    div.id = 'qcm-q-' + exNum + '-' + qi;
-    div.innerHTML = `
-      <div class="qcm-sentence">${q.sentence.replace('___','<span class="blank">___</span>')} <em style="color:var(--text-light);font-size:.8rem;">(${q.verb})</em></div>
-      <div class="qcm-options">
-        ${q.options.map((opt,oi) => `<button class="qcm-opt" onclick="answerQCM(${exNum},${qi},${oi},'${opt}','${q.answer}',this)">${opt}</button>`).join('')}
-      </div>
-      <div class="qcm-feedback" id="qcm-fb-${exNum}-${qi}"></div>
-    `;
-    container.appendChild(div);
-  });
+  container.innerHTML = data.map(function(q, qi){
+    return '<div class="qcm-question" id="qcm-q-' + exNum + '-' + qi + '">'
+      + '<div class="qcm-sentence">'
+      + q.sentence.replace('___', '<span class="blank">___</span>')
+      + ' <em style="color:var(--text-light);font-size:.78rem;">(' + q.verb + ')</em></div>'
+      + '<div class="qcm-options">'
+      + shuffle(q.options).map(function(opt){
+          return '<button class="qcm-opt" data-v="' + esc(opt) + '" '
+               + 'onclick="answerQCM(' + exNum + ',' + qi + ',this)">' + esc(opt) + '</button>';
+        }).join('')
+      + '</div><div class="qcm-feedback" id="qcm-fb-' + exNum + '-' + qi + '"></div></div>';
+  }).join('');
 }
 
-function answerQCM(exNum, qi, optIdx, chosen, correct, btn) {
+function answerQCM(exNum, qi, btn){
   const qDiv = document.getElementById('qcm-q-' + exNum + '-' + qi);
   if(qDiv.classList.contains('answered')) return;
   qDiv.classList.add('answered');
 
-  const opts = qDiv.querySelectorAll('.qcm-opt');
-  const fb = document.getElementById('qcm-fb-' + exNum + '-' + qi);
   const data = exNum === 1 ? qcm1 : qcm2;
+  const q = data[qi];
+  const fb = document.getElementById('qcm-fb-' + exNum + '-' + qi);
+  const bon = (btn.dataset.v === q.answer);
 
-  if(chosen === correct) {
+  qDiv.querySelectorAll('.qcm-opt').forEach(function(o){
+    if(o.dataset.v === q.answer && o !== btn){
+      o.classList.add('reveal');
+      o.innerHTML = '✅ ' + esc(q.answer);
+    }
+  });
+
+  if(bon){
     btn.classList.add('correct');
-    btn.innerHTML = '✅ ' + btn.textContent;
+    btn.innerHTML = '✅ ' + esc(q.answer);
     fb.className = 'qcm-feedback show ok';
-    fb.innerHTML = '✅ <span>Bravo ! ' + data[qi].explanation + '</span>';
+    fb.innerHTML = '<span>Bravo ! ' + q.explanation + '</span>';
     score++;
-    document.getElementById('score-display').textContent = score;
-    if(exNum === 1) qcm1Done++;
-    else qcm2Done++;
+    majScore();
   } else {
     btn.classList.add('wrong');
-    btn.innerHTML = '❌ ' + btn.textContent;
-    // Reveal correct
-    opts.forEach(o => {
-      if(o.textContent.trim() === correct || o.textContent.includes(correct)) {
-        o.classList.add('reveal');
-        o.innerHTML = '✅ ' + correct;
-      }
-    });
+    btn.innerHTML = '❌ ' + esc(btn.dataset.v);
     fb.className = 'qcm-feedback show ko';
-    fb.innerHTML = '💡 <span>Pas encore ! ' + data[qi].explanation + '</span>';
-    if(exNum === 1) qcm1Done++;
-    else qcm2Done++;
+    fb.innerHTML = '<span>💡 Pas encore ! ' + q.explanation + '</span>';
   }
 
-  const total = exNum === 1 ? qcm1.length : qcm2.length;
+  if(exNum === 1) qcm1Done++; else qcm2Done++;
   const done = exNum === 1 ? qcm1Done : qcm2Done;
   const nextBtn = exNum === 1 ? 'btn-to-ex2' : 'btn-to-banque1';
-  if(done >= total) {
-    setTimeout(() => {
-      document.getElementById(nextBtn).classList.add('show');
-      document.getElementById(nextBtn).scrollIntoView({behavior:'smooth',block:'nearest'});
+  if(done >= data.length){
+    setTimeout(function(){
+      const b = document.getElementById(nextBtn);
+      b.classList.add('show');
+      b.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }, 600);
   }
 }
 
 // ═══════════════════════════════════════════════════
-// BANQUE DE MOTS
+// BANQUE DE MOTS — tap-to-select uniquement
 // ═══════════════════════════════════════════════════
 
-// ── DRAG MOUSE ─────────────────────────────────
-function onDS(e, bank) {
-  draggedChip = e.currentTarget;
-  e.dataTransfer.setData('text/plain', draggedChip.dataset.word);
-  draggedChip.classList.add('dragging');
+function buildPool(bank){
+  const pool = document.getElementById('pool' + bank);
+  if(pool.dataset.built === '1') return;
+  pool.dataset.built = '1';
+  const mots = bank === 1 ? banque1Answers : banque2Answers;
+  pool.innerHTML = shuffle(mots).map(function(w){
+    return '<button class="word-chip" data-word="' + esc(w) + '" '
+         + 'onclick="pickWord(' + bank + ',this)">' + esc(w) + '</button>';
+  }).join('');
 }
-function onDO(e) { e.preventDefault(); e.currentTarget.classList.add('drag-over'); }
-function onDL(e) { e.currentTarget.classList.remove('drag-over'); }
-function onDP(e, bank) {
-  e.preventDefault();
-  var zone = e.currentTarget; zone.classList.remove('drag-over');
-  if (!draggedChip) return;
-  var word = draggedChip.dataset.word;
-  var idx = parseInt(zone.dataset.idx);
-  var filled = bank === 1 ? drag1Filled : drag2Filled;
-  if (filled[idx]) returnToPool(filled[idx], bank);
-  filled[idx] = word; zone.textContent = word; zone.classList.add('filled');
-  draggedChip.classList.add('used'); draggedChip.classList.remove('dragging');
-  draggedChip = null;
-  checkDragBtn(bank);
+
+function pickWord(bank, chip){
+  document.getElementById('pool' + bank).querySelectorAll('.word-chip')
+    .forEach(function(c){ c.classList.remove('selected'); });
+  chip.classList.add('selected');
+  selectedChip = chip;
 }
-// ── DRAG TOUCH ─────────────────────────────────
-function onTS(e) {
-  touchChip = e.currentTarget;
-  var t = e.touches[0];
-  touchClone = touchChip.cloneNode(true);
-  touchClone.style.cssText = 'position:fixed;z-index:9999;pointer-events:none;opacity:.8;padding:10px 18px;border-radius:50px;border:2.5px solid var(--sky);background:white;font-weight:800;font-size:.92rem;color:var(--sky-deep);';
-  setCP(t.clientX, t.clientY); document.body.appendChild(touchClone);
-}
-function onTM(e) {
-  e.preventDefault(); if (!touchClone) return;
-  var t = e.touches[0]; setCP(t.clientX, t.clientY);
-  document.querySelectorAll('.drop-zone').forEach(function(z) { z.classList.remove('drag-over'); });
-  var el = document.elementFromPoint(t.clientX, t.clientY);
-  if (el && el.classList.contains('drop-zone')) el.classList.add('drag-over');
-}
-function onTE(e, bank) {
-  if (touchClone) { touchClone.remove(); touchClone = null; }
-  if (!touchChip) return;
-  var t = e.changedTouches[0];
-  var el = document.elementFromPoint(t.clientX, t.clientY);
-  if (el && el.classList.contains('drop-zone')) {
-    var idx = parseInt(el.dataset.idx);
-    var word = touchChip.dataset.word;
-    var filled = bank === 1 ? drag1Filled : drag2Filled;
-    if (filled[idx]) returnToPool(filled[idx], bank);
-    filled[idx] = word; el.textContent = word; el.classList.add('filled'); el.classList.remove('drag-over');
-    touchChip.classList.add('used'); checkDragBtn(bank);
+
+function dropWord(bank, idx){
+  const zone = document.querySelector('[data-bank="' + bank + '"][data-idx="' + idx + '"]');
+  const filled = bank === 1 ? drag1Filled : drag2Filled;
+  if(banqueVerifiee[bank]) return;
+
+  // Sans mot sélectionné : on vide la case et on rend le mot à la banque
+  if(!selectedChip){
+    if(filled[idx]){
+      returnToPool(filled[idx], bank);
+      filled[idx] = null;
+      zone.textContent = '';
+      zone.classList.remove('filled');
+      checkVerifBtn(bank);
+    }
+    return;
   }
-  touchChip = null;
-}
-function setCP(x, y) { if (touchClone) { touchClone.style.left=(x-60)+'px'; touchClone.style.top=(y-20)+'px'; } }
-function returnToPool(word, bank) {
-  document.getElementById('pool'+bank).querySelectorAll('.word-chip').forEach(function(c) {
-    if (c.dataset.word === word) c.classList.remove('used');
-  });
-}
-function checkDragBtn(bank) {
-  var filled = bank === 1 ? drag1Filled : drag2Filled;
-  document.getElementById('btn-verif' + bank).disabled = !filled.every(function(f) { return f !== null; });
+  if(filled[idx]) returnToPool(filled[idx], bank);
+  const word = selectedChip.dataset.word;
+  filled[idx] = word;
+  zone.textContent = word;
+  zone.classList.add('filled');
+  selectedChip.classList.add('used');
+  selectedChip.classList.remove('selected');
+  selectedChip = null;
+  checkVerifBtn(bank);
 }
 
-function verifyBanque(bankNum) {
-  var filled = bankNum === 1 ? drag1Filled : drag2Filled;
-  var answers = bankNum === 1 ? banque1Answers : banque2Answers;
-  var fb = document.getElementById('banque' + bankNum + '-feedback');
-  var correct = 0;
+function returnToPool(word, bank){
+  const chips = document.getElementById('pool' + bank).querySelectorAll('.word-chip');
+  for(let i = 0; i < chips.length; i++){
+    if(chips[i].dataset.word === word && chips[i].classList.contains('used')){
+      chips[i].classList.remove('used');
+      return;
+    }
+  }
+}
 
-  document.querySelectorAll('[data-bank="' + bankNum + '"].drop-zone').forEach(function(zone) {
-    var i = parseInt(zone.dataset.idx);
-    zone.classList.remove('filled', 'drag-over');
-    if (filled[i] === answers[i]) {
+function checkVerifBtn(bank){
+  const filled = bank === 1 ? drag1Filled : drag2Filled;
+  document.getElementById('btn-verif' + bank).disabled =
+    !filled.every(function(f){ return f !== null; });
+}
+
+function verifyBanque(bankNum){
+  const btn = document.getElementById('btn-verif' + bankNum);
+  if(btn.disabled || banqueVerifiee[bankNum]) return;
+  btn.disabled = true;
+  banqueVerifiee[bankNum] = true;
+
+  const filled = bankNum === 1 ? drag1Filled : drag2Filled;
+  const answers = bankNum === 1 ? banque1Answers : banque2Answers;
+  const fb = document.getElementById('banque' + bankNum + '-feedback');
+  let correct = 0;
+
+  document.querySelectorAll('[data-bank="' + bankNum + '"].drop-zone').forEach(function(zone){
+    const i = parseInt(zone.dataset.idx, 10);
+    zone.classList.remove('filled');
+    if(filled[i] === answers[i]){
       zone.classList.add('correct');
-      correct++;
-      score++;
+      correct++; score++;
     } else {
       zone.classList.add('wrong');
-      zone.textContent = (filled[i] || '?') + ' ✗ → ' + answers[i];
+      zone.textContent = (filled[i] || '…') + ' → ' + answers[i];
     }
   });
 
-  document.getElementById('score-display').textContent = score;
-  document.getElementById('btn-verif' + bankNum).disabled = true;
+  majScore();
+  document.getElementById('pool' + bankNum).style.pointerEvents = 'none';
 
-  if(correct === 4) {
+  if(correct === answers.length){
     fb.className = 'banque-feedback show ok';
-    fb.innerHTML = '✅ Parfait ! Les 4 mots sont au bon endroit. Bravo ! 🎉';
+    fb.innerHTML = '✅ Parfait ! Les 4 mots sont au bon endroit. 🎉';
   } else {
     fb.className = 'banque-feedback show ko';
-    fb.innerHTML = `💡 ${correct}/4 bons mots. Les corrections sont affichées en rouge. Regarde bien les pronoms pour trouver la bonne terminaison !`;
+    fb.innerHTML = '💡 ' + correct + '/4 bons mots. Regarde bien le pronom de chaque phrase.';
   }
 
   const nextBtn = bankNum === 1 ? 'btn-to-banque2' : 'btn-to-defi';
-  setTimeout(() => {
-    document.getElementById(nextBtn).classList.add('show');
-  }, 800);
+  setTimeout(function(){ document.getElementById(nextBtn).classList.add('show'); }, 800);
 }
 
 // ═══════════════════════════════════════════════════
 // DÉFI
 // ═══════════════════════════════════════════════════
 
-function buildDefi() {
+function buildDefi(){
   const container = document.getElementById('defi-container');
-  container.innerHTML = '';
-  defi.forEach((q, qi) => {
-    const div = document.createElement('div');
-    div.className = 'defi-card';
-    div.id = 'defi-' + qi;
-    div.innerHTML = `
-      <div class="defi-sentence">${q.before} [ ? ] ${q.after}</div>
-      <div class="defi-opts">
-        ${q.options.map(opt => `<button class="defi-opt" onclick="answerDefi(${qi},'${opt}','${q.answer}','${q.explanation}',this)">${opt}</button>`).join('')}
-      </div>
-      <div class="qcm-feedback" id="defi-fb-${qi}"></div>
-    `;
-    container.appendChild(div);
-  });
+  container.innerHTML = defi.map(function(q, qi){
+    return '<div class="defi-card" id="defi-' + qi + '">'
+      + '<div class="defi-sentence">' + q.before
+      + ' <span class="blank"></span> ' + q.after + '</div>'
+      + '<div class="defi-opts">'
+      + shuffle(q.options).map(function(opt){
+          return '<button class="defi-opt" data-v="' + esc(opt) + '" '
+               + 'onclick="answerDefi(' + qi + ',this)">' + esc(opt) + '</button>';
+        }).join('')
+      + '</div><div class="qcm-feedback" id="defi-fb-' + qi + '"></div></div>';
+  }).join('');
 }
 
-let defiDone = 0;
-function answerDefi(qi, chosen, correct, explanation, btn) {
+function answerDefi(qi, btn){
   const card = document.getElementById('defi-' + qi);
   if(card.classList.contains('answered')) return;
   card.classList.add('answered');
-  const fb = document.getElementById('defi-fb-' + qi);
+  card.style.pointerEvents = 'none';
 
-  if(chosen === correct) {
+  const q = defi[qi];
+  const fb = document.getElementById('defi-fb-' + qi);
+  const bon = (btn.dataset.v === q.answer);
+
+  card.querySelectorAll('.defi-opt').forEach(function(o){
+    if(o.dataset.v === q.answer && o !== btn){
+      o.classList.add('reveal');
+      o.innerHTML = '✅ ' + esc(q.answer);
+    }
+  });
+
+  if(bon){
     btn.classList.add('correct');
-    btn.textContent = '✅ ' + btn.textContent;
+    btn.innerHTML = '✅ ' + esc(q.answer);
     fb.className = 'qcm-feedback show ok';
-    fb.innerHTML = '✅ <span>' + explanation + '</span>';
-    defiScore++;
+    fb.innerHTML = '<span>' + q.explanation + '</span>';
     score++;
-    document.getElementById('score-display').textContent = score;
+    majScore();
   } else {
     btn.classList.add('wrong');
-    btn.textContent = '❌ ' + btn.textContent;
-    card.querySelectorAll('.defi-opt').forEach(o => {
-      if(o.textContent.trim() === correct) { o.classList.add('reveal'); o.textContent = '✅ ' + correct; }
-    });
+    btn.innerHTML = '❌ ' + esc(btn.dataset.v);
     fb.className = 'qcm-feedback show ko';
-    fb.innerHTML = '💡 <span>' + explanation + '</span>';
+    fb.innerHTML = '<span>💡 ' + q.explanation + '</span>';
   }
+
   defiDone++;
-  maxScore = 14 + defiDone; // update max as questions answered
+  if(defiDone >= defi.length){
+    setTimeout(function(){ document.getElementById('btn-to-bilan').classList.add('show'); }, 600);
+  }
 }
 
 // ═══════════════════════════════════════════════════
 // BILAN
 // ═══════════════════════════════════════════════════
 
-function showBilan() {
-  const baseMax = 14;
-  if(typeof enregistrerProgression==='function'){ enregistrerProgression('C03', score, baseMax); }
-  const pct = Math.round((score / Math.max(baseMax, score)) * 100);
+function showBilan(){
+  if(typeof enregistrerProgression === 'function'){ enregistrerProgression('C03', score, TOTAL); }
   document.getElementById('bilan-score').textContent = score;
-  document.getElementById('bilan-max').textContent = '/ ' + (defiScore > 0 ? (baseMax + defi.length) : baseMax) + ' pts';
+  document.getElementById('bilan-max').textContent = '/ ' + TOTAL + ' pts';
 
-  let mascot = '🦉', title = '', msg = '';
-  if(score >= 12) {
-    mascot='🦉🌟'; title='Excellent travail !'; msg="Tu maîtrises très bien le présent de l'indicatif. Continue comme ça !";
-  } else if(score >= 9) {
-    mascot='🦉'; title='Très bien !'; msg='Tu as bien compris les bases. Relis la leçon sur les verbes irréguliers pour être au top !';
-  } else if(score >= 6) {
-    mascot='🦉'; title='Bonne tentative !'; msg='Tu as des bonnes bases. Relis la leçon et réessaie — tu peux faire encore mieux !';
+  const seuils = [Math.ceil(TOTAL * 0.33), Math.ceil(TOTAL * 0.66), Math.ceil(TOTAL * 0.89)];
+  let title, msg;
+  if(score >= seuils[2]){
+    title = 'Excellent travail !';
+    msg = "Tu maîtrises très bien le présent de l'indicatif. Continue comme ça !";
+  } else if(score >= seuils[1]){
+    title = 'Très bien !';
+    msg = 'Tu as bien compris les bases. Relis les verbes irréguliers pour être au top !';
+  } else if(score >= seuils[0]){
+    title = 'Bonne tentative !';
+    msg = 'Tu as de bonnes bases. Relis la leçon et réessaie : tu peux faire encore mieux !';
   } else {
-    mascot="🦉"; title="Continue à t'entraîner !"; msg="C'est difficile, mais ne lâche pas ! Relis bien la leçon et recommence. Tu vas y arriver !";
+    title = "Continue à t'entraîner !";
+    msg = "C'est difficile, mais ne lâche pas ! Relis bien la leçon et recommence.";
   }
-
-  document.getElementById('bilan-mascot').textContent = mascot;
   document.getElementById('bilan-title').textContent = title;
   document.getElementById('bilan-msg').textContent = msg;
 
-  // Stars animation
-  const stars = [
-    {id:'star1', threshold:6},
-    {id:'star2', threshold:9},
-    {id:'star3', threshold:12}
-  ];
-  stars.forEach((s, i) => {
-    const el = document.getElementById(s.id);
-    if(score >= s.threshold) {
-      setTimeout(() => el.classList.add('earned'), 300 + i * 400);
-    } else {
-      el.style.filter = 'grayscale(1)';
+  ['star1', 'star2', 'star3'].forEach(function(id, i){
+    const e = document.getElementById(id);
+    if(score >= seuils[i]){
+      (function(elem, delay){
+        setTimeout(function(){ elem.classList.add('earned'); }, delay);
+      })(e, 300 + i * 400);
     }
   });
 
-  if(score >= 9) launchConfetti();
+  if(score >= seuils[1]) launchConfetti();
 }
 
-function launchConfetti() {
-  const colors = ['#4FBDDF','#FFD93D','#6BCFB0','#FF8A65','#9B8AFF'];
-  for(let i = 0; i < 60; i++) {
-    const el = document.createElement('div');
-    el.className = 'confetti-piece';
-    el.style.left = Math.random()*100 + 'vw';
-    el.style.background = colors[Math.floor(Math.random()*colors.length)];
-    el.style.animationDuration = (1.5 + Math.random()*2) + 's';
-    el.style.animationDelay = Math.random()*1.5 + 's';
-    el.style.width = el.style.height = (8+Math.random()*8)+'px';
-    el.style.borderRadius = Math.random()>0.5 ? '50%' : '2px';
-    document.body.appendChild(el);
-    setTimeout(() => el.remove(), 4000);
+function launchConfetti(){
+  const colors = ['#4FBDDF', '#FFD93D', '#6BCFB0', '#FF8A65', '#9B8AFF'];
+  for(let i = 0; i < 60; i++){
+    const e = document.createElement('div');
+    e.className = 'confetti-piece';
+    e.style.left = Math.random() * 100 + 'vw';
+    e.style.background = colors[Math.floor(Math.random() * colors.length)];
+    e.style.animationDuration = (1.5 + Math.random() * 2) + 's';
+    e.style.animationDelay = Math.random() * 1.5 + 's';
+    e.style.width = e.style.height = (8 + Math.random() * 8) + 'px';
+    e.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    document.body.appendChild(e);
+    setTimeout(function(){ e.remove(); }, 4000);
   }
 }
 
-function restartFiche() {
-  score = 0; qcm1Done = 0; qcm2Done = 0; defiDone = 0; defiScore = 0;
-  drag1Filled = [null,null,null,null]; drag2Filled = [null,null,null,null];
-  selectedWord = null; selectedWordEl = null;
-  document.getElementById('score-display').textContent = '0';
-  // Reset lecon blocks
-  document.querySelectorAll('.lecon-block').forEach((b,i) => {
-    if(i>0) b.classList.remove('revealed');
+// ═══════════════════════════════════════════════════
+// RECOMMENCER
+// ═══════════════════════════════════════════════════
+
+function restartFiche(){
+  score = 0; qcm1Done = 0; qcm2Done = 0; defiDone = 0;
+  drag1Filled = [null, null, null, null];
+  drag2Filled = [null, null, null, null];
+  selectedChip = null;
+  banqueVerifiee = { 1: false, 2: false };
+  majScore();
+
+  document.querySelectorAll('.lecon-block').forEach(function(b, i){
+    if(i > 0) b.classList.remove('revealed');
   });
-  // Reset btn-suivants
-  document.querySelectorAll('.btn-suivant').forEach(b => b.classList.remove('show'));
-  // Reset word chips
-  document.querySelectorAll('.word-chip').forEach(function(c) { c.classList.remove('used'); });
-  document.querySelectorAll('.drop-zone').forEach(function(z) { z.textContent=''; z.className='drop-zone'; });
-  ['pool1','pool2'].forEach(function(id){ var p=document.getElementById(id); if(p) p.style.pointerEvents=''; });
-  // Reset blanks
-  document.querySelectorAll('.blank-box').forEach(b => {
-    b.textContent=''; b.className='blank-box';
+  document.querySelectorAll('.btn-suivant').forEach(function(b){ b.classList.remove('show'); });
+  buildCtrl(0);
+
+  [1, 2].forEach(function(bank){
+    const pool = document.getElementById('pool' + bank);
+    pool.dataset.built = '';
+    pool.innerHTML = '';
+    pool.style.pointerEvents = '';
   });
-  document.querySelectorAll('.btn-verifier').forEach(b => b.disabled=true);
-  document.querySelectorAll('.banque-feedback').forEach(f => { f.className='banque-feedback'; f.innerHTML=''; });
-  document.querySelectorAll('.star-big').forEach(s => s.classList.remove('earned'));
+  document.querySelectorAll('.drop-zone').forEach(function(z){
+    z.textContent = '';
+    z.className = 'drop-zone';
+  });
+  document.querySelectorAll('.btn-verifier').forEach(function(b){ b.disabled = true; });
+  document.querySelectorAll('.banque-feedback').forEach(function(f){
+    f.className = 'banque-feedback'; f.innerHTML = '';
+  });
+  document.querySelectorAll('.star-big').forEach(function(s){ s.classList.remove('earned'); });
+
   goToPhase('lecon', 0);
 }
+
+// ═══════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════
+
+document.getElementById('meta-pts').textContent = TOTAL;
+document.getElementById('bilan-max').textContent = '/ ' + TOTAL + ' pts';
+buildCtrl(0);
 </script>
 </body>
 </html>

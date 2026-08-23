@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Les synonymes – CE2</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../atelier-fiche.css">
+</head>
+<body>
+<script>
+window.FICHE = {
+  code:'L03', niveau:'CE2', matiere:'Français', categorie:'Lexique',
+  duree:'15 min', retour:'ce2.html',
+  accent:'#0369a1', accent2:'#0284c7', accentLight:'#f0f9ff', accentMid:'#bae6fd',
+  titre:'Les synonymes',
+  ugoIntro:"Des mots diff\u00e9rents qui veulent dire<br>la m\u00eame chose : les synonymes ! \u{1F91D}",
+  msgBrillant:'Ton vocabulaire s\'enrichit à vue d\'œil !',
+
+  lecon:[
+    { titre:'\u{1F4D6} Bloc 1 — Qu\'est-ce qu\'un synonyme ?',
+      html:'<p>Deux mots sont <span class="highlight">synonymes</span> quand ils ont '
+        +'<strong>le même sens</strong> ou presque.</p>'
+        +'<div class="exemple">'
+        +'\u{1F60A} <strong>content</strong> = <strong>joyeux</strong> = <strong>heureux</strong><br>'
+        +'\u{1F3E0} <strong>maison</strong> = <strong>habitation</strong> = <strong>logement</strong><br>'
+        +'\u{1F634} <strong>fatigué</strong> = <strong>épuisé</strong> = <strong>las</strong></div>'
+        +'<p>On peut remplacer l\'un par l\'autre sans changer le sens de la phrase :</p>'
+        +'<div class="exemple">Léa est <strong>contente</strong>. \u2192 Léa est <strong>joyeuse</strong>. \u2714</div>',
+      ugo:'Les synonymes sont comme des amis qui se ressemblent : ils peuvent se remplacer sans que personne ne s\'en aperçoive !' },
+
+    { titre:'\u{1F4D6} Bloc 2 — À quoi ça sert ?',
+      html:'<p>Les synonymes servent à <strong>éviter les répétitions</strong> :</p>'
+        +'<div class="exemple" style="background:#fee2e2;">'
+        +'\u274C <em>J\'ai vu un <strong>gros</strong> chien avec un <strong>gros</strong> collier '
+        +'et de <strong>grosses</strong> pattes.</em></div>'
+        +'<div class="exemple" style="background:#dcfce7;">'
+        +'\u2705 <em>J\'ai vu un <strong>gros</strong> chien avec un <strong>large</strong> collier '
+        +'et d\'<strong>énormes</strong> pattes.</em></div>'
+        +'<p>Ils permettent aussi d\'être plus <strong>précis</strong> :</p>'
+        +'<div class="exemple">Au lieu de <em>marcher</em>, on peut dire :<br>'
+        +'<strong>flâner</strong> (lentement) · <strong>courir</strong> (vite) · <strong>trottiner</strong> (à petits pas)</div>',
+      ugo:'Quand tu écris une histoire, cherche des synonymes : ton texte sera bien plus agréable à lire !' },
+
+    { titre:'\u{1F511} Bloc 3 — Attention aux nuances',
+      html:'<p>Les synonymes ne sont pas <strong>toujours</strong> interchangeables :</p>'
+        +'<div class="exemple">'
+        +'\u{1F4A7} <strong>petit</strong> et <strong>minuscule</strong> sont synonymes…<br>'
+        +'mais <em>minuscule</em> est beaucoup plus fort !<br><br>'
+        +'\u{1F4A7} <strong>content</strong> et <strong>ravi</strong> aussi…<br>'
+        +'mais <em>ravi</em> exprime une plus grande joie.</div>'
+        +'<div class="astuce">\u{1F4A1} Choisis le synonyme qui correspond le mieux à ce que tu veux dire.<br>'
+        +'Un chaton n\'est pas <em>minuscule</em>, il est <em>petit</em>. Une fourmi, elle, est <em>minuscule</em> !</div>' }
+  ],
+
+  memo:'\u{1F91D} Des <strong>synonymes</strong> sont des mots différents qui ont <strong>le même sens</strong>.<br>'
+      +'&nbsp;&nbsp;&nbsp;&nbsp;<em>content = joyeux = heureux</em><br>'
+      +'\u2728 Ils servent à <strong>éviter les répétitions</strong> et à être plus <strong>précis</strong>.<br>'
+      +'\u26A0\uFE0F Attention aux nuances : <em>petit</em> et <em>minuscule</em> ne sont pas de la même force.',
+
+  exercices:[
+    { type:'qcm', titre:'Trouve le synonyme',
+      consigne:'Quel mot veut dire la même chose ?',
+      items:[
+        { phrase:'<strong>rapide</strong>', bonne:'vif', options:['lent','vif','lourd','calme'],
+          expl:'<em>vif</em> signifie « qui va vite » : c\'est un synonyme de rapide.' },
+        { phrase:'<strong>joli</strong>', bonne:'beau', options:['laid','beau','grand','vieux'],
+          expl:'<em>beau</em> et <em>joli</em> ont le même sens.' },
+        { phrase:'<strong>triste</strong>', bonne:'malheureux', options:['gai','malheureux','drôle','fort'],
+          expl:'<em>malheureux</em> exprime la même idée que triste.' },
+        { phrase:'<strong>bavarder</strong>', bonne:'discuter', options:['crier','écouter','discuter','chanter'],
+          expl:'<em>discuter</em> et <em>bavarder</em> veulent dire parler avec quelqu\'un.' }
+      ]},
+
+    { type:'jugement', titre:'La bonne nuance',
+      consigne:'Tape sur la phrase qui sonne le mieux.',
+      items:[
+        { consigne:'Pour parler d\'une fourmi :',
+          bonne:'Une fourmi minuscule traverse le chemin.',
+          mauvaise:'Une fourmi énorme traverse le chemin.',
+          expl:'Une fourmi est très petite : <em>minuscule</em> convient parfaitement.' },
+        { consigne:'Pour parler d\'un enfant qui reçoit un cadeau :',
+          bonne:'Il est ravi de son cadeau.',
+          mauvaise:'Il est vexé de son cadeau.',
+          expl:'<em>ravi</em> exprime une grande joie : c\'est le bon synonyme de content.' },
+        { consigne:'Pour parler d\'une promenade tranquille :',
+          bonne:'Nous flânons dans le parc.',
+          mauvaise:'Nous fonçons dans le parc.',
+          expl:'<em>flâner</em> = marcher lentement, sans se presser.' },
+        { consigne:'Pour parler d\'une montagne :',
+          bonne:'Cette montagne est immense.',
+          mauvaise:'Cette montagne est minuscule.',
+          expl:'<em>immense</em> convient à une montagne, qui est très grande.' }
+      ]},
+
+    { type:'drag', titre:'Remplace le mot répété',
+      consigne:'Tape sur un synonyme, puis tape sur la case pour éviter la répétition.',
+      pool:['énorme','ravi','superbe','rapide'],
+      items:[
+        { avant:'Le chien est gros et son collier est', apres:'.', rep:'énorme',
+          expl:'<em>énorme</em> évite de répéter « gros ».' },
+        { avant:'Il est content, sa sœur est', apres:'aussi.', rep:'ravi',
+          expl:'<em>ravi</em> évite de répéter « content ».' },
+        { avant:'Ce tableau est beau, celui-ci est', apres:'.', rep:'superbe',
+          expl:'<em>superbe</em> évite de répéter « beau ».' },
+        { avant:'La voiture est rapide, le train est', apres:'.', rep:'rapide',
+          expl:'<em>rapide</em> est le synonyme correct ici.' }
+      ]},
+
+    { type:'saisie', titre:'Écris un synonyme',
+      consigne:'Trouve un mot qui veut dire la même chose.',
+      maxlen:12,
+      items:[
+        { phrase:'un autre mot pour <strong>content</strong>',
+          rep:['joyeux','heureux','ravi','gai'],
+          expl:'joyeux, heureux, ravi ou gai conviennent.' },
+        { phrase:'un autre mot pour <strong>maison</strong>',
+          rep:['habitation','logement','demeure','logis'],
+          expl:'habitation, logement ou demeure conviennent.' },
+        { phrase:'un autre mot pour <strong>rapide</strong>',
+          rep:['vif','veloce','prompt','vite'],
+          expl:'vif ou véloce conviennent.' },
+        { phrase:'un autre mot pour <strong>petit</strong>',
+          rep:['minuscule','menu','miniature','tout petit'],
+          expl:'minuscule ou menu conviennent.' }
+      ]}
+  ]
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
+<script src="../atelier-fiche.js"></script>
+</body>
+</html>

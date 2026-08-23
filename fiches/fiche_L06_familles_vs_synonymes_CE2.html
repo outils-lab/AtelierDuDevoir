@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Familles de mots vs synonymes – CE2</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../atelier-fiche.css">
+</head>
+<body>
+<script>
+window.FICHE = {
+  code:'L06', niveau:'CE2', matiere:'Français', categorie:'Lexique',
+  duree:'15 min', retour:'ce2.html',
+  accent:'#047857', accent2:'#059669', accentLight:'#ecfdf5', accentMid:'#a7f3d0',
+  titre:'Familles de mots ou synonymes ?',
+  ugoIntro:"Deux fa\u00e7ons de relier les mots :<br>par la forme ou par le sens. Comparons ! \u{1F50D}",
+  msgBrillant:'Tu ne confonds plus forme et sens !',
+
+  lecon:[
+    { titre:'\u{1F4D6} Bloc 1 — Deux liens différents',
+      html:'<div class="compare-grid">'
+        +'<div class="compare-card" style="border-color:#0d9488;background:#f0fdfa;">'
+        +'<h4 style="color:#0d9488;">\u{1F333} FAMILLE DE MOTS</h4>'
+        +'<p>Les mots partagent la <strong>même partie</strong> (le radical).</p>'
+        +'<p style="margin-top:6px;"><em><strong>dent</strong> · <strong>dent</strong>iste · <strong>dent</strong>aire</em></p>'
+        +'<p style="margin-top:6px;font-size:.82rem;color:#64748b;">On les reconnaît à l\'œil : ils se ressemblent.</p></div>'
+        +'<div class="compare-card" style="border-color:#0369a1;background:#f0f9ff;">'
+        +'<h4 style="color:#0369a1;">\u{1F91D} SYNONYMES</h4>'
+        +'<p>Les mots ont le <strong>même sens</strong>, mais s\'écrivent différemment.</p>'
+        +'<p style="margin-top:6px;"><em>maison · demeure · logement</em></p>'
+        +'<p style="margin-top:6px;font-size:.82rem;color:#64748b;">On les reconnaît au sens : ils ne se ressemblent pas.</p></div></div>',
+      ugo:'Famille = même <strong>look</strong>. Synonymes = même <strong>idée</strong>. C\'est la grande différence entre les deux !' },
+
+    { titre:'\u{1F4D6} Bloc 2 — Attention, ce n\'est pas la même chose !',
+      html:'<div class="exemple">'
+        +'\u{1F333} <strong>Famille de « chant »</strong> : chant, chanteur, chanson, chantonner<br>'
+        +'&nbsp;&nbsp;&nbsp;\u2192 Ils se ressemblent, mais ne veulent pas dire la même chose !<br>'
+        +'&nbsp;&nbsp;&nbsp;<em>un chanteur</em> \u2260 <em>une chanson</em></div>'
+        +'<div class="exemple">'
+        +'\u{1F91D} <strong>Synonymes de « chanson »</strong> : mélodie, air, morceau<br>'
+        +'&nbsp;&nbsp;&nbsp;\u2192 Ils ne se ressemblent pas, mais disent la même chose !<br>'
+        +'&nbsp;&nbsp;&nbsp;<em>une jolie chanson</em> = <em>une jolie mélodie</em></div>'
+        +'<div class="astuce">\u26A0\uFE0F Erreur fréquente : croire que les mots d\'une même famille sont synonymes.<br>'
+        +'<em>dentiste</em> et <em>dentaire</em> sont de la même famille, mais on ne peut pas les échanger !</div>',
+      ugo:'Une famille de mots, c\'est comme une vraie famille : ils se ressemblent, mais chacun est différent !' },
+
+    { titre:'\u{1F511} Bloc 3 — La question à se poser',
+      html:'<p>Devant deux mots, pose-toi <strong>ces deux questions</strong> :</p>'
+        +'<div class="exemple">'
+        +'\u0031\uFE0F\u20E3 <strong>Ont-ils une partie commune ?</strong><br>'
+        +'&nbsp;&nbsp;&nbsp;OUI \u2192 même <strong>famille</strong><br><br>'
+        +'\u0032\uFE0F\u20E3 <strong>Veulent-ils dire la même chose ?</strong><br>'
+        +'&nbsp;&nbsp;&nbsp;OUI \u2192 <strong>synonymes</strong></div>'
+        +'<div class="exemple">\u{1F4CC} Exemples à tester :<br>'
+        +'<em>fleur / fleuriste</em> \u2192 partie commune ✔, sens différent \u2192 <strong>famille</strong><br>'
+        +'<em>fleur / rose</em> \u2192 rien de commun, sens proche \u2192 ni l\'un ni l\'autre vraiment<br>'
+        +'<em>vélo / bicyclette</em> \u2192 rien de commun, même sens \u2192 <strong>synonymes</strong></div>' }
+  ],
+
+  memo:'\u{1F333} <strong>Famille de mots</strong> = même <strong>radical</strong> (la forme se ressemble)<br>'
+      +'&nbsp;&nbsp;&nbsp;&nbsp;<em>dent · dentiste · dentaire</em><br>'
+      +'\u{1F91D} <strong>Synonymes</strong> = même <strong>sens</strong> (l\'écriture est différente)<br>'
+      +'&nbsp;&nbsp;&nbsp;&nbsp;<em>maison · demeure · logement</em><br>'
+      +'\u26A0\uFE0F Les mots d\'une même famille ne sont <strong>pas</strong> synonymes !',
+
+  exercices:[
+    { type:'qcm', titre:'Quel lien entre ces mots ?',
+      consigne:'Ces deux mots sont-ils de la même famille ou synonymes ?',
+      items:[
+        { phrase:'<strong>terre</strong> et <strong>terrain</strong>', bonne:'même famille',
+          options:['même famille','synonymes'],
+          expl:'Ils partagent le radical <em>terr</em> : c\'est une famille de mots.' },
+        { phrase:'<strong>voiture</strong> et <strong>automobile</strong>', bonne:'synonymes',
+          options:['même famille','synonymes'],
+          expl:'Rien de commun dans l\'écriture, mais le même sens : synonymes.' },
+        { phrase:'<strong>jardin</strong> et <strong>jardinier</strong>', bonne:'même famille',
+          options:['synonymes','même famille'],
+          expl:'Radical commun <em>jardin</em> : même famille (un jardinier n\'est pas un jardin !).' },
+        { phrase:'<strong>vélo</strong> et <strong>bicyclette</strong>', bonne:'synonymes',
+          options:['synonymes','même famille'],
+          expl:'Écritures totalement différentes, même objet désigné : synonymes.' }
+      ]},
+
+    { type:'classify', titre:'Range les paires',
+      consigne:'Tape sur une paire, puis tape sur la bonne colonne.',
+      pts:4,
+      cols:[
+        {id:'fam', nom:'\u{1F333} Même famille', couleur:'#0d9488', fond:'#f0fdfa'},
+        {id:'syn', nom:'\u{1F91D} Synonymes', couleur:'#0369a1', fond:'#f0f9ff'}
+      ],
+      items:[
+        {mot:'chant / chanteur', cat:'fam'}, {mot:'maison / demeure', cat:'syn'},
+        {mot:'lait / laitier', cat:'fam'}, {mot:'content / joyeux', cat:'syn'},
+        {mot:'fleur / fleuriste', cat:'fam'}, {mot:'route / chaussée', cat:'syn'},
+        {mot:'dent / dentaire', cat:'fam'}, {mot:'rapide / vif', cat:'syn'}
+      ]},
+
+    { type:'jugement', titre:'Repère l\'affirmation juste',
+      consigne:'Tape sur la phrase correcte.',
+      items:[
+        { consigne:'À propos de « chanteur » et « chanson » :',
+          bonne:'Ces mots sont de la même famille, mais ne veulent pas dire la même chose.',
+          mauvaise:'Ces mots sont synonymes, on peut les échanger dans une phrase.',
+          expl:'Même radical <em>chant</em> \u2192 famille. Mais un chanteur n\'est pas une chanson !' },
+        { consigne:'À propos de « bateau » et « navire » :',
+          bonne:'Ces mots sont synonymes : ils désignent la même chose.',
+          mauvaise:'Ces mots sont de la même famille : ils ont le même radical.',
+          expl:'<em>bateau</em> et <em>navire</em> ne se ressemblent pas du tout, mais désignent le même objet.' },
+        { consigne:'À propos de « laitier » et « laitage » :',
+          bonne:'Ces mots viennent tous les deux de la famille de « lait ».',
+          mauvaise:'Ces mots sont synonymes de « lait ».',
+          expl:'Même famille (radical <em>lait</em>), mais un <em>laitier</em> est une personne et un <em>laitage</em> un aliment.' },
+        { consigne:'À propos de « joli » et « beau » :',
+          bonne:'Ces mots sont synonymes : on peut les remplacer l\'un par l\'autre.',
+          mauvaise:'Ces mots sont de la même famille : ils partagent un radical.',
+          expl:'Aucune partie commune dans l\'écriture, mais le même sens : ce sont des synonymes.' }
+      ]},
+
+    { type:'saisie', titre:'Trouve le mot demandé',
+      consigne:'Écris le mot qui correspond à la consigne.',
+      maxlen:14,
+      items:[
+        { phrase:'Un mot de la <strong>famille</strong> de « dent » (la personne qui soigne)',
+          rep:['dentiste'], expl:'<em>dentiste</em> partage le radical <strong>dent</strong>.' },
+        { phrase:'Un <strong>synonyme</strong> de « maison »',
+          rep:['demeure','logement','habitation','logis'],
+          expl:'demeure, logement ou habitation conviennent.' },
+        { phrase:'Un mot de la <strong>famille</strong> de « jardin » (celui qui s\'en occupe)',
+          rep:['jardinier'], expl:'<em>jardinier</em> partage le radical <strong>jardin</strong>.' },
+        { phrase:'Un <strong>synonyme</strong> de « vélo »',
+          rep:['bicyclette','bicycle'], expl:'<em>bicyclette</em> désigne le même objet.' }
+      ]}
+  ]
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
+<script src="../atelier-fiche.js"></script>
+</body>
+</html>

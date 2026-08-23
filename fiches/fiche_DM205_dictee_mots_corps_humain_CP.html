@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Dictée de mots — Le corps humain – CP</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../atelier-fiche.css">
+</head>
+<body>
+<script>
+window.FICHE = {
+  code:'DM205', niveau:'CP', matiere:'Français', categorie:'Dictées mots',
+  duree:'10 min', retour:'cp.html',
+  accent:'#be123c', accent2:'#e11d48', accentLight:'#fff1f2', accentMid:'#fecdd3',
+  titre:'Dictée : le corps 🧒',
+  ugoIntro:"Les parties de ton corps, tu les connais par cœur !<br>Maintenant, apprends \u00e0 les \u00e9crire. \u{1F44B}",
+  msgBrillant:'Tu écris les parties du corps sans faute !',
+
+  lecon:[
+    { titre:'\u{1F4D6} Les parties du corps',
+      html:'<div class="exemple" style="font-size:1.25rem;line-height:2.2;text-align:center;">'
+        +'\u{1F9B5} la <strong>jambe</strong><br>'
+        +'\u{1F450} la <strong>main</strong><br>'
+        +'\u{1F441}\uFE0F l\'<strong>œil</strong><br>'
+        +'\u{1F444} la <strong>bouche</strong><br>'
+        +'\u{1F9B6} le <strong>pied</strong></div>',
+      ugo:'Touche chaque partie de ton corps en lisant son nom : ça aide à s\'en souvenir !' },
+
+    { titre:'\u{1F511} Les pièges à éviter',
+      html:'<div class="exemple">'
+        +'\u26A0\uFE0F <strong>jambe</strong> \u2192 on écrit <strong>am</strong> avant le b<br>'
+        +'\u26A0\uFE0F <strong>main</strong> \u2192 on écrit <strong>ain</strong> pour le son [in]<br>'
+        +'\u26A0\uFE0F <strong>pied</strong> \u2192 il finit par un <strong>d</strong> muet<br>'
+        +'\u26A0\uFE0F <strong>bouche</strong> \u2192 avec <strong>ou</strong> et <strong>ch</strong></div>'
+        +'<div class="astuce">\u{1F4A1} Devant un <strong>b</strong> ou un <strong>p</strong>, on écrit toujours <strong>m</strong> et non n : ja<strong>m</strong>be.</div>',
+      ugo:'Cette règle du m devant b et p te servira toute ta vie ! Retiens-la bien.' }
+  ],
+
+  memo:'\u{1F9D2} Les parties du corps :<br>'
+      +'la <strong>jambe</strong> · la <strong>main</strong> · l\'<strong>œil</strong> · '
+      +'la <strong>bouche</strong> · le <strong>pied</strong><br>'
+      +'\u26A0\uFE0F m devant b et p (jambe) · pied a un d muet · main s\'écrit ain',
+
+  exercices:[
+    { type:'dictee', titre:'Écris les mots', consigne:'Écoute chaque mot et écris-le.',
+      items:[
+        { rep:'jambe',  lu:'jambe',  expl:'la <strong>jambe</strong>, avec m devant le b' },
+        { rep:'main',   lu:'main',   expl:'la <strong>main</strong>, avec ain' },
+        { rep:['œil','oeil'], lu:'oeil',   expl:'l\'<strong>œil</strong> (le clavier n\'a pas de œ, \"oeil\" est accepté)' },
+        { rep:'bouche', lu:'bouche', expl:'la <strong>bouche</strong>, avec ou et ch' },
+        { rep:'pied',   lu:'pied',   expl:'le <strong>pied</strong>, avec un d muet' }
+      ]}
+  ]
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
+<script src="../atelier-fiche.js"></script>
+</body>
+</html>

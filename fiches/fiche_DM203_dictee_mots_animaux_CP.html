@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Dictée de mots — Les animaux – CP</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../atelier-fiche.css">
+</head>
+<body>
+<script>
+window.FICHE = {
+  code:'DM203', niveau:'CP', matiere:'Français', categorie:'Dictées mots',
+  duree:'10 min', retour:'cp.html',
+  accent:'#15803d', accent2:'#22c55e', accentLight:'#f0fdf4', accentMid:'#bbf7d0',
+  titre:'Dictée : les animaux 🐱',
+  ugoIntro:"Des animaux que tu connais bien !<br>\u00c9coute et \u00e9cris leur nom. \u{1F43E}",
+  msgBrillant:'Tu écris les noms des animaux sans faute !',
+
+  lecon:[
+    { titre:'\u{1F4D6} Les animaux',
+      html:'<div class="exemple" style="font-size:1.25rem;line-height:2.2;text-align:center;">'
+        +'\u{1F431} le <strong>chat</strong><br>'
+        +'\u{1F415} le <strong>chien</strong><br>'
+        +'\u{1F42D} la <strong>souris</strong><br>'
+        +'\u{1F426} l\'<strong>oiseau</strong><br>'
+        +'\u{1F41F} le <strong>poisson</strong></div>',
+      ugo:'Tu les as sûrement déjà vus ! Regarde bien comment leur nom s\'écrit.' },
+
+    { titre:'\u{1F511} Les pièges à éviter',
+      html:'<div class="exemple">'
+        +'\u26A0\uFE0F <strong>chat</strong> \u2192 il finit par un <strong>t</strong> muet<br>'
+        +'\u26A0\uFE0F <strong>souris</strong> \u2192 elle finit par un <strong>s</strong> muet<br>'
+        +'\u26A0\uFE0F <strong>oiseau</strong> \u2192 on écrit <strong>eau</strong> à la fin<br>'
+        +'\u26A0\uFE0F <strong>poisson</strong> \u2192 deux <strong>ss</strong> pour faire le son [s]</div>'
+        +'<div class="astuce">\u{1F4A1} Pour trouver la lettre muette : pense à <em>chatte</em> pour <strong>chat</strong> !</div>',
+      ugo:'Beaucoup d\'animaux ont une lettre muette à la fin. Retiens-les bien !' }
+  ],
+
+  memo:'\u{1F43E} Les animaux :<br>'
+      +'le <strong>chat</strong> · le <strong>chien</strong> · la <strong>souris</strong> · '
+      +'l\'<strong>oiseau</strong> · le <strong>poisson</strong><br>'
+      +'\u26A0\uFE0F chat et souris ont une lettre muette · poisson prend deux s',
+
+  exercices:[
+    { type:'dictee', titre:'Écris les mots', consigne:'Écoute chaque mot et écris-le.',
+      items:[
+        { rep:'chat',    lu:'chat',    expl:'le <strong>chat</strong>, avec un t muet' },
+        { rep:'chien',   lu:'chien',   expl:'le <strong>chien</strong>' },
+        { rep:'souris',  lu:'souris',  expl:'la <strong>souris</strong>, avec un s muet' },
+        { rep:'oiseau',  lu:'oiseau',  expl:'l\'<strong>oiseau</strong>, qui finit par eau' },
+        { rep:'poisson', lu:'poisson', expl:'le <strong>poisson</strong>, avec deux ss' }
+      ]}
+  ]
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
+<script src="../atelier-fiche.js"></script>
+</body>
+</html>

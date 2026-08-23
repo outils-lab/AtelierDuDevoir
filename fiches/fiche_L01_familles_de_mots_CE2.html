@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Les familles de mots – CE2</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../atelier-fiche.css">
+</head>
+<body>
+<script>
+window.FICHE = {
+  code:'L01', niveau:'CE2', matiere:'Français', categorie:'Lexique',
+  duree:'15 min', retour:'ce2.html',
+  accent:'#0d9488', accent2:'#14b8a6', accentLight:'#f0fdfa', accentMid:'#99f6e4',
+  titre:'Les familles de mots',
+  ugoIntro:"Certains mots sont cousins : ils partagent<br>un morceau commun. Partons les d\u00e9couvrir ! \u{1F333}",
+  msgBrillant:'Tu reconnais les familles de mots du premier coup !',
+
+  lecon:[
+    { titre:'\u{1F4D6} Bloc 1 — Qu\'est-ce qu\'une famille de mots ?',
+      html:'<p>Une <span class="highlight">famille de mots</span>, ce sont des mots qui partagent '
+        +'la même <strong>petite partie commune</strong> et qui parlent de la même idée.</p>'
+        +'<div class="exemple">\u{1F333} La famille de <strong>terre</strong> :<br>'
+        +'<strong>terr</strong>e · <strong>terr</strong>ain · a<strong>terr</strong>ir · '
+        +'<strong>terr</strong>asse · sou<strong>terr</strong>ain<br><br>'
+        +'\u{1F441}\uFE0F Tous ces mots parlent du <em>sol</em>, de la <em>terre</em>.</div>'
+        +'<div class="exemple">\u{1F3E0} La famille de <strong>maison</strong> :<br>'
+        +'<strong>maison</strong> · <strong>maison</strong>nette · <strong>mais</strong>onnée</div>',
+      ugo:'La partie commune s\'appelle le <strong>radical</strong>. C\'est comme la racine d\'un arbre : tous les mots poussent à partir d\'elle !' },
+
+    { titre:'\u{1F4D6} Bloc 2 — Deux indices pour être sûr',
+      html:'<p>Pour savoir si deux mots sont de la même famille, vérifie <strong>les deux</strong> :</p>'
+        +'<div class="exemple">\u2705 <strong>Indice 1</strong> — ils ont une partie commune<br>'
+        +'&nbsp;&nbsp;&nbsp;&nbsp;<em>dent · dentiste · dentaire</em> \u2192 <strong>dent</strong></div>'
+        +'<div class="exemple">\u2705 <strong>Indice 2</strong> — ils parlent de la même idée<br>'
+        +'&nbsp;&nbsp;&nbsp;&nbsp;<em>dentiste</em> et <em>dentaire</em> parlent bien des dents</div>'
+        +'<div class="astuce">\u26A0\uFE0F <strong>Attention au piège !</strong><br>'
+        +'<em>dent</em> et <em>dedans</em> se ressemblent… mais <em>dedans</em> ne parle pas des dents.<br>'
+        +'Ils ne sont <strong>pas</strong> de la même famille !</div>',
+      ugo:'Les deux indices doivent être vrais en même temps. La ressemblance ne suffit pas, il faut aussi le sens !' },
+
+    { titre:'\u{1F511} Bloc 3 — À quoi ça sert ?',
+      html:'<p>Connaître les familles de mots aide à <strong>bien écrire</strong> :</p>'
+        +'<div class="exemple">\u{1F914} Comment écrire la fin de <em>lait</em> ?<br>'
+        +'\u2192 Je pense à sa famille : <em>lait<strong>ier</strong></em>, <em>lait<strong>age</strong></em><br>'
+        +'\u2192 J\'entends le <strong>t</strong> ! Donc j\'écris <strong>lait</strong> avec un t.</div>'
+        +'<div class="exemple">\u{1F914} Et <em>tapis</em> ?<br>'
+        +'\u2192 Sa famille : <em>tapis<strong>serie</strong></em>, <em>tapis<strong>sier</strong></em><br>'
+        +'\u2192 J\'entends le <strong>s</strong> ! Donc <strong>tapis</strong> avec un s.</div>'
+        +'<div class="astuce">\u{1F4A1} Un mot difficile ? Cherche un mot de sa famille où la lettre s\'entend !</div>' }
+  ],
+
+  memo:'\u{1F333} Une <strong>famille de mots</strong> = des mots qui partagent une partie commune (le <strong>radical</strong>) '
+      +'<strong>et</strong> la même idée.<br>'
+      +'&nbsp;&nbsp;&nbsp;&nbsp;<em>terre · terrain · atterrir · souterrain</em><br>'
+      +'\u26A0\uFE0F Se ressembler ne suffit pas : <em>dent</em> et <em>dedans</em> ne sont pas de la même famille.<br>'
+      +'\u{1F4A1} Utile pour l\'orthographe : <em>lait \u2192 laitier</em> (le t s\'entend !)',
+
+  exercices:[
+    { type:'qcm', titre:'Trouve l\'intrus', consigne:'Quel mot n\'appartient pas à la famille ?',
+      items:[
+        { phrase:'Famille de <strong>dent</strong> :', q:'dentiste · dentaire · dedans · dentier',
+          bonne:'dedans', options:['dentiste','dedans','dentaire','dentier'],
+          expl:'<em>dedans</em> ne parle pas des dents : il se ressemble mais n\'a pas le même sens.' },
+        { phrase:'Famille de <strong>fleur</strong> :', q:'fleuriste · fleurir · fleuve · fleuri',
+          bonne:'fleuve', options:['fleuriste','fleuve','fleurir','fleuri'],
+          expl:'<em>fleuve</em> est un cours d\'eau : rien à voir avec les fleurs.' },
+        { phrase:'Famille de <strong>chant</strong> :', q:'chanteur · chanson · champ · chantonner',
+          bonne:'champ', options:['chanteur','chanson','champ','chantonner'],
+          expl:'<em>champ</em> est un terrain agricole : le sens est différent.' },
+        { phrase:'Famille de <strong>lait</strong> :', q:'laitier · laitage · laid · laiterie',
+          bonne:'laid', options:['laitier','laid','laitage','laiterie'],
+          expl:'<em>laid</em> signifie « pas beau » : aucun rapport avec le lait.' }
+      ]},
+
+    { type:'drag', titre:'Complète avec le bon mot',
+      consigne:'Tape sur un mot, puis tape sur la case dans la phrase.',
+      pool:['dentiste','laitage','terrain','fleuriste'],
+      items:[
+        { avant:'J\'ai mal aux dents, je vais chez le', apres:'.', rep:'dentiste',
+          expl:'<em>dentiste</em> vient de la famille de <strong>dent</strong>.' },
+        { avant:'Le yaourt est un', apres:'.', rep:'laitage',
+          expl:'<em>laitage</em> vient de la famille de <strong>lait</strong>.' },
+        { avant:'Les joueurs entrent sur le', apres:'.', rep:'terrain',
+          expl:'<em>terrain</em> vient de la famille de <strong>terre</strong>.' },
+        { avant:'J\'achète des roses chez le', apres:'.', rep:'fleuriste',
+          expl:'<em>fleuriste</em> vient de la famille de <strong>fleur</strong>.' }
+      ]},
+
+    { type:'classify', titre:'Range les mots par famille',
+      consigne:'Tape sur un mot, puis tape sur la bonne famille.',
+      pts:4,
+      cols:[
+        {id:'jard', nom:'\u{1F331} Famille de jardin', couleur:'#0d9488', fond:'#f0fdfa'},
+        {id:'chau', nom:'\u{1F525} Famille de chaud', couleur:'#ea580c', fond:'#fff7ed'}
+      ],
+      items:[
+        {mot:'jardinier', cat:'jard'}, {mot:'chaudière', cat:'chau'},
+        {mot:'jardinage', cat:'jard'}, {mot:'chauffage', cat:'chau'},
+        {mot:'jardinet', cat:'jard'}, {mot:'réchauffer', cat:'chau'},
+        {mot:'jardiner', cat:'jard'}, {mot:'chaleur', cat:'chau'}
+      ]},
+
+    { type:'saisie', titre:'Trouve la lettre muette',
+      consigne:'Utilise un mot de la même famille pour trouver la lettre finale.',
+      maxlen:1,
+      items:[
+        { phrase:'chan___ (pense à <em>chanteur</em>)', rep:'t',
+          expl:'<em>chanteur</em> \u2192 on entend le <strong>t</strong> \u2192 chant.' },
+        { phrase:'tapi___ (pense à <em>tapisserie</em>)', rep:'s',
+          expl:'<em>tapisserie</em> \u2192 on entend le <strong>s</strong> \u2192 tapis.' },
+        { phrase:'boi___ (pense à <em>boiserie</em>)', rep:'s',
+          expl:'<em>boiserie</em> \u2192 on entend le <strong>s</strong> \u2192 bois.' },
+        { phrase:'planch___ (pense à <em>plancher</em>)', rep:'e',
+          expl:'<em>plancher</em> vient de <strong>planche</strong>, qui se termine par un <strong>e</strong>.' }
+      ]}
+  ]
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
+<script src="../atelier-fiche.js"></script>
+</body>
+</html>

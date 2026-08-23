@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La marque du pluriel : le -s – CP/CE1</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Nunito',sans-serif;background:#fafaf8;color:#1e293b;font-size:22px;min-height:100vh;}
+:root{--accent:#059669;--accent-light:#ecfdf5;--accent-mid:#a7f3d0;}
+.phase{display:none;}.phase.active{display:block;}
+.site-header{background:var(--accent);color:#fff;padding:12px 20px;display:flex;align-items:center;gap:12px;}
+.site-header a{color:#fff;text-decoration:none;font-weight:700;font-size:16px;}
+.site-header span{font-weight:800;font-size:18px;}
+.accroche{background:linear-gradient(135deg,var(--accent) 0%,#10b981 100%);color:#fff;padding:28px 20px 22px;}
+.accroche-inner{display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:12px;max-width:600px;margin-left:auto;margin-right:auto;}
+.ugo-big{font-size:3.5rem;flex-shrink:0;}
+.accroche-text h1{font-size:1.6rem;font-weight:800;margin-bottom:4px;}
+.accroche-text p{font-size:1rem;opacity:.9;line-height:1.5;}
+.meta-tags{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:14px;}
+.meta-tag{background:rgba(255,255,255,.25);border-radius:20px;padding:5px 14px;font-size:.9rem;font-weight:700;}
+.lecon-wrap{max-width:680px;margin:0 auto;padding:20px 16px;}
+.lecon-block{background:#fff;border-radius:16px;border-left:5px solid var(--accent);padding:20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.06);display:none;}
+.lecon-block.revealed{display:block;}
+.lecon-block h2{color:var(--accent);font-size:1.15rem;font-weight:800;margin-bottom:10px;}
+.lecon-block p{line-height:1.6;margin-bottom:10px;font-size:1.05rem;}
+.exemple{background:var(--accent-light);border-radius:12px;padding:12px 16px;margin:10px 0;font-size:1rem;}
+.highlight{color:var(--accent);font-weight:800;}
+.ugo-bubble{background:#fff3cd;border-radius:14px;padding:12px 16px;margin:10px 0;display:flex;align-items:flex-start;gap:10px;font-size:.95rem;}
+.ugo-icon{font-size:1.8rem;flex-shrink:0;}
+.paire{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:8px 0;}
+.mot-card{background:#fff;border:3px solid var(--accent-mid);border-radius:14px;padding:10px 18px;font-size:1.1rem;font-weight:800;text-align:center;min-width:110px;}
+.s-mark{color:var(--accent);}
+.btn-compris{background:var(--accent);color:#fff;border:none;border-radius:16px;padding:16px 32px;font-family:'Nunito',sans-serif;font-size:1.1rem;font-weight:800;cursor:pointer;margin:14px auto 0;display:block;min-height:56px;width:fit-content;}
+.btn-compris:hover{background:#047857;}
+.btn-suite{display:none;background:var(--accent);color:#fff;border:none;border-radius:16px;padding:16px 32px;font-family:'Nunito',sans-serif;font-size:1.1rem;font-weight:800;cursor:pointer;margin:16px auto;min-height:56px;}
+.btn-suite.show{display:block;}
+.ex-wrap{max-width:680px;margin:0 auto;padding:20px 16px;}
+.ex-header{background:var(--accent);color:#fff;border-radius:14px;padding:14px 18px;margin-bottom:18px;}
+.ex-header h2{font-size:1.1rem;font-weight:800;}
+.ex-header p{font-size:.9rem;opacity:.9;margin-top:4px;}
+.score-bar{background:#fff;border-radius:12px;padding:10px 16px;margin-bottom:16px;text-align:center;font-weight:700;font-size:1rem;box-shadow:0 2px 6px rgba(0,0,0,.06);}
+.qcm-card{background:#fff;border-radius:16px;padding:18px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.06);}
+.qcm-card .question{font-weight:700;font-size:1.05rem;margin-bottom:12px;line-height:1.5;}
+.qcm-options{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.qcm-btn{background:#f1f5f9;border:3px solid #e2e8f0;border-radius:14px;padding:14px 10px;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;transition:all .2s;min-height:56px;}
+.qcm-btn:hover{border-color:var(--accent);background:var(--accent-light);}
+.qcm-btn.correct{background:#dcfce7;border-color:#16a34a;color:#15803d;}
+.qcm-btn.wrong{background:#fee2e2;border-color:#dc2626;color:#dc2626;}
+.qcm-feedback{display:none;border-radius:10px;padding:10px 14px;margin-top:10px;font-size:.9rem;font-weight:600;}
+.qcm-feedback.show{display:block;}
+.qcm-feedback.ok{background:#dcfce7;color:#15803d;}
+.qcm-feedback.ko{background:#fee2e2;color:#dc2626;}
+.classify-wrap{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0;}
+.classify-col{border-radius:14px;padding:12px;text-align:center;}
+.classify-col h4{font-size:1rem;font-weight:800;margin-bottom:10px;}
+.classify-col.sing{background:#fff7ed;border:3px solid #ea580c;}
+.classify-col.sing h4{color:#ea580c;}
+.classify-col.plur{background:var(--accent-light);border:3px solid var(--accent);}
+.classify-col.plur h4{color:var(--accent);}
+.classify-pool{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:14px 0;}
+.classify-chip{background:#fff;border:3px solid #cbd5e1;border-radius:14px;padding:10px 18px;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;transition:all .2s;min-height:56px;display:flex;align-items:center;}
+.classify-chip:hover{border-color:var(--accent);background:var(--accent-light);}
+.btn-verif{background:#0891b2;color:#fff;border:none;border-radius:14px;padding:14px 28px;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;margin-top:14px;display:block;min-height:56px;}
+.btn-verif:hover{background:#0e7490;}
+.btn-verif:disabled{opacity:.5;cursor:default;}
+.bilan-wrap{max-width:680px;margin:0 auto;padding:24px 16px;text-align:center;}
+.bilan-card{background:#fff;border-radius:20px;padding:28px 20px;box-shadow:0 4px 20px rgba(0,0,0,.08);}
+.stars{font-size:2.8rem;margin:16px 0;}
+.star{display:inline-block;filter:grayscale(1);transition:filter .3s,transform .3s;}
+.star.earned{filter:none;}
+@keyframes starPop{0%{transform:scale(0)}60%{transform:scale(1.3)}100%{transform:scale(1)}}
+.score-big{font-size:2.2rem;font-weight:800;color:var(--accent);margin:10px 0;}
+.bilan-msg{font-size:1.05rem;margin:8px 0 16px;color:#475569;}
+.memo{background:var(--accent-light);border-radius:14px;padding:16px;margin-top:16px;text-align:left;}
+.memo h3{color:var(--accent);font-weight:800;margin-bottom:8px;}
+.memo p{font-size:.95rem;line-height:1.8;}
+.btn-retry{background:var(--accent);color:#fff;border:none;border-radius:16px;padding:14px 30px;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;margin-top:16px;min-height:56px;}
+.print-bar{position:fixed;bottom:16px;right:16px;display:flex;flex-direction:column;gap:8px;z-index:100;}
+.print-btn{background:#fff;border:2px solid var(--accent);color:var(--accent);border-radius:12px;padding:8px 14px;font-family:'Nunito',sans-serif;font-size:.8rem;font-weight:700;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.1);}
+.print-btn:hover{background:var(--accent);color:#fff;}
+@media print{.print-bar,.site-header,.btn-compris,.btn-suite,.btn-verif,.btn-retry{display:none!important;}}
+@media(max-width:480px){.qcm-options{grid-template-columns:1fr;}.accroche-inner{flex-direction:column;text-align:center;}.classify-wrap{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <a href="../cp.html">&#8592; CP</a>
+  <span>L'Atelier du Devoir</span>
+</header>
+
+<!-- PHASE 0 : LECON -->
+<div id="phase0" class="phase active">
+  <div class="accroche">
+    <div class="accroche-inner">
+      <span class="ugo-big">&#x1F989;</span>
+      <div class="accroche-text">
+        <h1>La marque du pluriel ✨</h1>
+        <p>Quand il y a plusieurs choses,<br>on ajoute un <strong>-s</strong> à la fin ! &#x1F7E2;</p>
+      </div>
+    </div>
+    <div class="meta-tags">
+      <span class="meta-tag">CP / CE1</span>
+      <span class="meta-tag">Orthographe</span>
+      <span class="meta-tag">10 min</span>
+      <span class="meta-tag">12 pts</span>
+    </div>
+  </div>
+
+  <div class="lecon-wrap">
+
+    <!-- BLOC 0 -->
+    <div id="bloc0" class="lecon-block revealed">
+      <h2>&#x1F4D6; Bloc 1 — Un ou plusieurs ?</h2>
+      <p>Quand il y a <strong>une seule chose</strong>, on est au <span class="highlight">singulier</span>.<br>
+      Quand il y en a <strong>plusieurs</strong>, on est au <span class="highlight">pluriel</span>.</p>
+      <div class="exemple">
+        &#x1F431; un chat &nbsp;&nbsp; &#x2192; &nbsp;&nbsp; &#x1F431;&#x1F431;&#x1F431; des chat<strong class="highlight">s</strong>
+      </div>
+      <div class="exemple">
+        &#x1F33C; une fleur &nbsp;&nbsp; &#x2192; &nbsp;&nbsp; &#x1F33C;&#x1F33C; des fleur<strong class="highlight">s</strong>
+      </div>
+      <div class="ugo-bubble">
+        <span class="ugo-icon">&#x1F989;</span>
+        <span>Ugo : Au pluriel, on ajoute un <strong>-s</strong> à la fin du mot. Ce -s ne se prononce pas, mais il s'écrit toujours !</span>
+      </div>
+      <button class="btn-compris" onclick="revealBloc(1)">J'ai compris ! &#x2192;</button>
+    </div>
+
+    <!-- BLOC 1 -->
+    <div id="bloc1" class="lecon-block">
+      <h2>&#x1F4D6; Bloc 2 — Les articles du pluriel</h2>
+      <p>Les articles changent aussi au pluriel :</p>
+      <div class="exemple">
+        <strong>un / une</strong> &#x2192; <strong>des</strong><br>
+        <strong>le / la / l'</strong> &#x2192; <strong>les</strong>
+      </div>
+      <div class="paire">
+        <div class="mot-card">le chien</div>
+        <div style="font-size:1.4rem;">&#x2192;</div>
+        <div class="mot-card">les chien<span class="s-mark">s</span></div>
+      </div>
+      <div class="paire">
+        <div class="mot-card">une fille</div>
+        <div style="font-size:1.4rem;">&#x2192;</div>
+        <div class="mot-card">des fille<span class="s-mark">s</span></div>
+      </div>
+      <div class="ugo-bubble">
+        <span class="ugo-icon">&#x1F989;</span>
+        <span>Ugo : Quand tu vois <em>des</em> ou <em>les</em> devant un mot, ce mot est au pluriel et a un -s à la fin !</span>
+      </div>
+      <button class="btn-compris" onclick="revealBloc(2)">J'ai compris ! &#x2192;</button>
+    </div>
+
+    <!-- BLOC 2 -->
+    <div id="bloc2" class="lecon-block">
+      <h2>&#x1F511; Bloc 3 — Attention aux exceptions !</h2>
+      <p>Quelques mots ne prennent pas -s mais <span class="highlight">-x</span> au pluriel :</p>
+      <div class="exemple">
+        un bateau &#x2192; des bateau<strong class="highlight">x</strong> &#x1F6A2;<br>
+        un gâteau &#x2192; des gâteau<strong class="highlight">x</strong> &#x1F370;<br>
+        un oiseau &#x2192; des oiseau<strong class="highlight">x</strong> &#x1F426;
+      </div>
+      <p>Les mots en <strong>-eau</strong> prennent <strong>-x</strong> au pluriel.</p>
+      <div class="ugo-bubble">
+        <span class="ugo-icon">&#x1F989;</span>
+        <span>Ugo : Pour la plupart des mots, c'est -s. Mais les mots en -eau prennent -x. Retiens : bateau &#x2192; bateaux, comme chapeau &#x2192; chapeaux !</span>
+      </div>
+      <button class="btn-compris" onclick="startEx()">Aux exercices ! &#x1F4AA;</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- PHASE 1 : EX1 QCM -->
+<div id="phase1" class="phase">
+  <div class="ex-wrap">
+    <div class="ex-header">
+      <h2>Exercice 1 — Singulier ou pluriel ?</h2>
+      <p>Regarde le mot et dis si c'est singulier ou pluriel.</p>
+    </div>
+    <div class="score-bar">Score : <span id="score-ex1">0</span> / 4 pts</div>
+    <div id="qcm1-container"></div>
+    <button class="btn-suite" id="btn-ex1-suite" onclick="goPhase(2)">Exercice suivant &#x2192;</button>
+  </div>
+</div>
+
+<!-- PHASE 2 : EX2 QCM -->
+<div id="phase2" class="phase">
+  <div class="ex-wrap">
+    <div class="ex-header">
+      <h2>Exercice 2 — Lequel est au pluriel ?</h2>
+      <p>Parmi les deux mots, lequel est au pluriel ?</p>
+    </div>
+    <div class="score-bar">Score : <span id="score-ex2">0</span> / 4 pts</div>
+    <div id="qcm2-container"></div>
+    <button class="btn-suite" id="btn-ex2-suite" onclick="goPhase(3)">Exercice suivant &#x2192;</button>
+  </div>
+</div>
+
+<!-- PHASE 3 : EX3 CLASSIFICATION -->
+<div id="phase3" class="phase">
+  <div class="ex-wrap">
+    <div class="ex-header">
+      <h2>Exercice 3 — Range les mots</h2>
+      <p>Tape sur un mot, puis tape sur la bonne colonne.</p>
+    </div>
+    <div class="score-bar">Score : <span id="score-ex3">0</span> / 4 pts</div>
+    <div class="classify-wrap">
+      <div class="classify-col sing">
+        <h4>&#x0031;&#xFE0F;&#x20E3; Singulier</h4>
+        <div id="col-sing" style="display:flex;flex-direction:column;gap:6px;min-height:60px;" onclick="placeChip('sing')"></div>
+      </div>
+      <div class="classify-col plur">
+        <h4>&#x1F4AF; Pluriel</h4>
+        <div id="col-plur" style="display:flex;flex-direction:column;gap:6px;min-height:60px;" onclick="placeChip('plur')"></div>
+      </div>
+    </div>
+    <div class="classify-pool" id="pool3"></div>
+    <div id="classify-global-fb" style="display:none;border-radius:10px;padding:10px;margin-top:8px;font-weight:600;font-size:.9rem;text-align:center;"></div>
+    <button class="btn-verif" id="btn-verif3" onclick="verifyEx3()">Vérifier &#x2713;</button>
+    <button class="btn-suite" id="btn-ex3-suite" onclick="showBilan()">Voir mon bilan &#x1F3C6;</button>
+  </div>
+</div>
+
+<!-- PHASE 4 : BILAN -->
+<div id="phase4" class="phase">
+  <div class="bilan-wrap">
+    <div class="bilan-card">
+      <div style="font-size:2.5rem;">&#x1F3C6;</div>
+      <div class="stars">
+        <span class="star" id="star1">&#x2B50;</span>
+        <span class="star" id="star2">&#x2B50;</span>
+        <span class="star" id="star3">&#x2B50;</span>
+      </div>
+      <div class="score-big" id="bilan-score">0 / 12</div>
+      <div class="bilan-msg" id="bilan-msg"></div>
+      <div class="memo">
+        <h3>&#x1F4D6; À retenir</h3>
+        <p>
+          &#x1F7E2; Au pluriel, on ajoute <strong>-s</strong> à la fin du mot.<br>
+          &#x1F4CC; Articles pluriel : <strong>des</strong> / <strong>les</strong><br>
+          &#x26A0;&#xFE0F; Les mots en <strong>-eau</strong> prennent <strong>-x</strong> : bateau &#x2192; bateaux
+        </p>
+      </div>
+      <button class="btn-retry" onclick="location.reload()">&#x1F504; Recommencer</button>
+    </div>
+  </div>
+</div>
+
+<div class="print-bar">
+  <button class="print-btn" onclick="printLecon()">&#x1F4D6; Leçon</button>
+  <button class="print-btn" onclick="printExercices()">&#x1F4DD; Exercices</button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
+<script>
+var q1Data=[
+  {mot:"🐱🐱 des chats",correct:"pluriel",opts:["singulier","pluriel"],expl:"Des chats : des = article pluriel, chats a un -s final."},
+  {mot:"🌼 une fleur",correct:"singulier",opts:["pluriel","singulier"],expl:"Une fleur : une = article singulier, fleur sans -s."},
+  {mot:"🐕🐕 les chiens",correct:"pluriel",opts:["singulier","pluriel"],expl:"Les chiens : les = article pluriel, chiens a un -s final."},
+  {mot:"🐦 un oiseau",correct:"singulier",opts:["pluriel","singulier"],expl:"Un oiseau : un = article singulier, un seul oiseau."},
+];
+
+var q2Data=[
+  {opts:["chat","chats"],correct:"chats",expl:"Chats se termine par -s : c'est le pluriel de chat."},
+  {opts:["fleurs","fleur"],correct:"fleurs",expl:"Fleurs se termine par -s : c'est le pluriel de fleur."},
+  {opts:["bateau","bateaux"],correct:"bateaux",expl:"Bateaux se termine par -x : pluriel des mots en -eau."},
+  {opts:["filles","fille"],correct:"filles",expl:"Filles se termine par -s : c'est le pluriel de fille."},
+];
+
+var ex3Items=[
+  {word:"des chiens",cat:"plur"},
+  {word:"un chat",cat:"sing"},
+  {word:"les fleurs",cat:"plur"},
+  {word:"une fille",cat:"sing"},
+  {word:"des oiseaux",cat:"plur"},
+  {word:"le bateau",cat:"sing"},
+  {word:"les gâteaux",cat:"plur"},
+  {word:"un garçon",cat:"sing"},
+];
+
+var score=0;
+var TOTAL_PTS=4+4+4;
+var ex1Done=0,ex2Done=0,ex3Verified=false;
+var ex3Selected=null,ex3Placed={};
+var scoreSnap=[0,0,0];
+
+function goPhase(n){
+  document.querySelectorAll('.phase').forEach(function(p){p.classList.remove('active');});
+  var ph=document.getElementById('phase'+n);
+  ph.classList.add('active');
+  setTimeout(function(){ph.scrollIntoView({behavior:'smooth',block:'start'});},150);
+}
+function revealBloc(n){
+  var b=document.getElementById('bloc'+n);
+  if(b) b.classList.add('revealed');
+  var prev=document.getElementById('bloc'+(n-1));
+  if(prev){var btn=prev.querySelector('.btn-compris');if(btn)btn.style.display='none';}
+  setTimeout(function(){b.scrollIntoView({behavior:'smooth',block:'start'});},150);
+}
+function startEx(){scoreSnap[0]=score;goPhase(1);}
+function shuffle(a){
+  var arr=a.slice();
+  for(var i=arr.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=arr[i];arr[i]=arr[j];arr[j]=t;}
+  return arr;
+}
+
+function buildQcm1(){
+  var c=document.getElementById('qcm1-container');
+  q1Data.forEach(function(q,i){
+    var opts=shuffle(q.opts);
+    var card=document.createElement('div');
+    card.className='qcm-card';
+    card.innerHTML='<div class="question" style="font-size:1.3rem;text-align:center;padding:8px 0;">'+q.mot+'</div>'
+      +'<div class="qcm-options">'+opts.map(function(o){return '<button class="qcm-btn" onclick="answerQ1(this,'+i+')" data-val="'+o+'">'+o+'</button>';}).join('')+'</div>'
+      +'<div class="qcm-feedback" id="fb1-'+i+'"></div>';
+    c.appendChild(card);
+  });
+}
+function answerQ1(btn,i){
+  var card=btn.closest('.qcm-card');
+  if(card.dataset.done) return;
+  card.dataset.done='1';
+  card.querySelectorAll('.qcm-btn').forEach(function(b){b.disabled=true;if(b.dataset.val===q1Data[i].correct)b.classList.add('correct');});
+  var fb=document.getElementById('fb1-'+i);
+  if(btn.dataset.val===q1Data[i].correct){
+    score++;document.getElementById('score-ex1').textContent=score-scoreSnap[0];
+    fb.textContent='✅ '+q1Data[i].expl;fb.className='qcm-feedback show ok';
+  } else {
+    btn.classList.add('wrong');
+    fb.textContent='❌ '+q1Data[i].expl;fb.className='qcm-feedback show ko';
+  }
+  ex1Done++;
+  if(ex1Done===q1Data.length) setTimeout(function(){scoreSnap[1]=score;document.getElementById('btn-ex1-suite').classList.add('show');},400);
+}
+
+function buildQcm2(){
+  var c=document.getElementById('qcm2-container');
+  q2Data.forEach(function(q,i){
+    var opts=shuffle(q.opts);
+    var card=document.createElement('div');
+    card.className='qcm-card';
+    card.innerHTML='<div class="question">Lequel est au pluriel ?</div>'
+      +'<div class="qcm-options">'+opts.map(function(o){return '<button class="qcm-btn" onclick="answerQ2(this,'+i+')" data-val="'+o+'">'+o+'</button>';}).join('')+'</div>'
+      +'<div class="qcm-feedback" id="fb2-'+i+'"></div>';
+    c.appendChild(card);
+  });
+}
+function answerQ2(btn,i){
+  var card=btn.closest('.qcm-card');
+  if(card.dataset.done) return;
+  card.dataset.done='1';
+  card.querySelectorAll('.qcm-btn').forEach(function(b){b.disabled=true;if(b.dataset.val===q2Data[i].correct)b.classList.add('correct');});
+  var fb=document.getElementById('fb2-'+i);
+  if(btn.dataset.val===q2Data[i].correct){
+    score++;document.getElementById('score-ex2').textContent=score-scoreSnap[1];
+    fb.textContent='✅ '+q2Data[i].expl;fb.className='qcm-feedback show ok';
+  } else {
+    btn.classList.add('wrong');
+    fb.textContent='❌ '+q2Data[i].expl;fb.className='qcm-feedback show ko';
+  }
+  ex2Done++;
+  if(ex2Done===q2Data.length) setTimeout(function(){scoreSnap[2]=score;document.getElementById('btn-ex2-suite').classList.add('show');},400);
+}
+
+function buildEx3(){
+  var pool=document.getElementById('pool3');
+  shuffle(ex3Items).forEach(function(it,idx){
+    var chip=document.createElement('button');
+    chip.className='classify-chip';
+    chip.textContent=it.word;
+    chip.dataset.cat=it.cat;
+    chip.dataset.idx=String(idx);
+    chip.onclick=function(){
+      if(ex3Verified) return;
+      document.querySelectorAll('.classify-chip').forEach(function(c){c.style.outline='';});
+      chip.style.outline='3px solid #059669';
+      ex3Selected=chip;
+    };
+    pool.appendChild(chip);
+  });
+}
+
+function placeChip(col){
+  if(!ex3Selected||ex3Verified) return;
+  ex3Selected.style.outline='';
+  var key=ex3Selected.dataset.idx;
+  if(ex3Placed[key]){
+    var old=document.getElementById('placed-'+key);
+    if(old) old.remove();
+  }
+  ex3Placed[key]={col:col,cat:ex3Selected.dataset.cat,word:ex3Selected.textContent};
+  ex3Selected.style.opacity='.35';
+  ex3Selected.style.pointerEvents='none';
+  var tag=document.createElement('div');
+  tag.id='placed-'+key;
+  tag.style.cssText='background:#fff;border:2px solid #e2e8f0;border-radius:10px;padding:6px 12px;font-size:.9rem;font-weight:700;margin:3px;cursor:pointer;';
+  tag.textContent=ex3Selected.textContent;
+  document.getElementById('col-'+col).appendChild(tag);
+  ex3Selected=null;
+}
+
+function verifyEx3(){
+  if(ex3Verified) return;
+  ex3Verified=true;
+  var pts=0;
+  Object.keys(ex3Placed).forEach(function(key){
+    var p=ex3Placed[key];
+    var tag=document.getElementById('placed-'+key);
+    if(p.col===p.cat){
+      pts++;
+      if(tag){tag.style.background='#dcfce7';tag.style.borderColor='#16a34a';tag.style.color='#15803d';}
+    } else {
+      if(tag){tag.style.background='#fee2e2';tag.style.borderColor='#dc2626';tag.style.color='#dc2626';}
+    }
+  });
+  var ex3Score=Math.round(pts/2);
+  score+=ex3Score;
+  var fb=document.getElementById('classify-global-fb');
+  fb.style.display='block';
+  if(pts===ex3Items.length){
+    fb.style.background='#dcfce7';fb.style.color='#15803d';
+    fb.textContent='✅ Parfait ! Tous les mots sont bien rangés !';
+  } else {
+    fb.style.background='#fee2e2';fb.style.color='#dc2626';
+    fb.textContent='❌ '+pts+' mots sur '+ex3Items.length+' bien placés. Cherche le -s ou -x pour le pluriel !';
+  }
+  document.getElementById('score-ex3').textContent=ex3Score;
+  document.getElementById('btn-verif3').disabled=true;
+  setTimeout(function(){document.getElementById('btn-ex3-suite').classList.add('show');},400);
+}
+
+function showBilan(){
+  if(typeof enregistrerProgression==='function'){ enregistrerProgression('O02', score, TOTAL_PTS); }
+  goPhase(4);
+  document.getElementById('bilan-score').textContent=score+' / '+TOTAL_PTS;
+  var pct=score/TOTAL_PTS;
+  var msg=pct>=0.9?'Brillant ⭐ Tu maîtrises le pluriel !'
+    :pct>=0.8?'Bien maîtrisé 💪 Super travail !'
+    :pct>=0.5?'En cours 📚 Continue, tu progresses !'
+    :'À retravailler 🔁 Relis la leçon et réessaie !';
+  document.getElementById('bilan-msg').textContent=msg;
+  var seuils=[Math.ceil(TOTAL_PTS*0.33),Math.ceil(TOTAL_PTS*0.66),Math.ceil(TOTAL_PTS*0.89)];
+  ['star1','star2','star3'].forEach(function(id,i){
+    var el=document.getElementById(id);
+    if(score>=seuils[i]){
+      (function(elem,delay){setTimeout(function(){elem.classList.add('earned');elem.style.animation='starPop .4s ease';},delay);})(el,300+i*400);
+    }
+  });
+  if(score>=Math.ceil(TOTAL_PTS*0.5)){
+    var colors=['#059669','#10b981','#fbbf24','#db2777','#7c3aed'];
+    for(var k=0;k<40;k++){
+      (function(delay,color,left){
+        setTimeout(function(){
+          var d=document.createElement('div');
+          d.style.cssText='position:fixed;top:-10px;left:'+left+'%;width:8px;height:8px;background:'+color+';border-radius:50%;pointer-events:none;z-index:9999;animation:fall '+(1.2+Math.random())+'s ease-in forwards;';
+          document.body.appendChild(d);setTimeout(function(){d.remove();},2000);
+        },delay);
+      })(k*60,colors[k%colors.length],Math.random()*100);
+    }
+  }
+}
+
+var styleEl=document.createElement('style');
+styleEl.textContent='@keyframes fall{0%{transform:translateY(0) rotate(0);}100%{transform:translateY(100vh) rotate(720deg);opacity:0;}}';
+document.head.appendChild(styleEl);
+
+function printLecon(){
+  var w=window.open('','_blank');
+  w.document.write('<html><head><title>Leçon O02</title><style>body{font-family:sans-serif;padding:20px;font-size:14px;}h1,h2{color:#059669;}</style></head><body>');
+  w.document.write('<h1>La marque du pluriel : le -s — CP/CE1</h1>');
+  w.document.write('<h2>Règle</h2><p>Au pluriel, on ajoute <strong>-s</strong> à la fin du mot.</p>');
+  w.document.write('<h2>Articles</h2><p>un/une/le/la &#x2192; des/les</p>');
+  w.document.write('<h2>Exemples</h2><p>chat &#x2192; chats | fleur &#x2192; fleurs | fille &#x2192; filles</p>');
+  w.document.write('<h2>Exception</h2><p>Les mots en -eau prennent -x : bateau &#x2192; bateaux, gâteau &#x2192; gâteaux</p>');
+  w.document.write('</body></html>');
+  w.document.close();w.print();
+}
+function printExercices(){
+  var w=window.open('','_blank');
+  w.document.write('<html><head><title>Exercices O02</title><style>body{font-family:sans-serif;padding:20px;font-size:14px;}h1,h2{color:#059669;}.item{margin:10px 0;}</style></head><body>');
+  w.document.write('<h1>Exercices — La marque du pluriel</h1>');
+  w.document.write('<h2>Ex 1 — Singulier ou pluriel ?</h2>');
+  q1Data.forEach(function(q,i){w.document.write('<div class="item">'+(i+1)+'. '+q.mot.replace(/<[^>]+>/g,'')+'<br>&#x25A1; singulier &nbsp;&nbsp; &#x25A1; pluriel</div>');});
+  w.document.write('<h2>Ex 2 — Lequel est au pluriel ?</h2>');
+  q2Data.forEach(function(q,i){w.document.write('<div class="item">'+(i+1)+'. '+q.opts.join(' / ')+'</div>');});
+  w.document.write('<h2>Ex 3 — Range les mots</h2>');
+  w.document.write('<p>Singulier | Pluriel</p>');
+  ex3Items.forEach(function(it){w.document.write('<span style="margin:4px;border:1px solid #ccc;border-radius:6px;padding:3px 8px;">'+it.word+'</span> ');});
+  w.document.write('</body></html>');
+  w.document.close();w.print();
+}
+
+buildQcm1();
+buildQcm2();
+buildEx3();
+</script>
+</body>
+</html>

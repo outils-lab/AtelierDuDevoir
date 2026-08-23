@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>L'accord du participe passé : cas difficiles – 4e</title>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Playfair+Display:wght@600;700&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../atelier-fiche.css">
+</head>
+<body>
+<script>
+window.FICHE = {
+  code:'O402', niveau:'4e', cycle:4, matiere:'Français', categorie:'Orthographe',
+  duree:'20 min', retour:'4e.html',
+  accent:'#334155', accent2:'#475569', accentLight:'#f8fafc', accentMid:'#cbd5e1',
+  titre:'Le participe passé : cas difficiles',
+  ugoIntro:"Trois situations o\u00f9 la r\u00e8gle simple ne suffit plus.",
+  msgBrillant:'Tu maîtrises les accords les plus délicats.',
+
+  lecon:[
+    { titre:'Rappel des deux règles de base',
+      analogie:"Deux auxiliaires, deux logiques : avec être, le participe regarde devant lui ; avec avoir, il regarde derrière.",
+      html:'<table class="tbl"><tr><th>Auxiliaire</th><th>Accord</th><th>Exemple</th></tr>'
+        +'<tr><td><strong>être</strong></td><td>avec le <strong>sujet</strong></td>'
+        +'<td>Elles sont <strong>parties</strong>.</td></tr>'
+        +'<tr><td><strong>avoir</strong></td><td>avec le <strong>COD placé avant</strong></td>'
+        +'<td>Les lettres qu\'il a <strong>écrites</strong>.</td></tr></table>'
+        +'<div class="exemple">Avec <em>avoir</em>, si le COD est placé <strong>après</strong> le verbe, '
+        +'il n\'y a pas d\'accord :<br>Il a <strong>écrit</strong> des lettres.</div>',
+      ugo:'Avec <em>avoir</em>, cherche toujours le COD avant de décider.' },
+
+    { titre:'Cas 1 — Les verbes pronominaux',
+      analogie:"Un verbe pronominal se conjugue avec être, mais il se comporte souvent comme s'il avait avoir.",
+      html:'<p>Les verbes pronominaux se conjuguent avec <strong>être</strong>, mais l\'accord suit '
+        +'la règle du <strong>COD placé avant</strong>.</p>'
+        +'<div class="exemple">'
+        +'\u2713 Elle s\'est <strong>lavée</strong>. \u2192 <em>s\'</em> = COD placé avant \u2192 accord<br>'
+        +'\u2717 Elle s\'est <strong>lavé</strong> les mains. \u2192 le COD est <em>les mains</em>, '
+        +'placé après \u2192 pas d\'accord</div>'
+        +'<div class="astuce"><strong>Méthode :</strong> pose la question « lavé <em>quoi</em> ? ».<br>'
+        +'Si la réponse est le pronom réfléchi \u2192 accord. Si elle vient après \u2192 pas d\'accord.</div>',
+      ugo:'Le pronom réfléchi n\'est pas toujours COD : vérifie à chaque fois.' },
+
+    { titre:'Cas 2 — Le participe suivi d\'un infinitif',
+      analogie:"Ici, tout dépend de qui fait l'action de l'infinitif.",
+      html:'<p>Quand le participe passé est suivi d\'un <strong>infinitif</strong>, il s\'accorde '
+        +'seulement si le COD <strong>fait</strong> l\'action de l\'infinitif.</p>'
+        +'<div class="exemple">'
+        +'\u2713 Les cantatrices que j\'ai <strong>entendues</strong> chanter.<br>'
+        +'<span style="color:#6b7280;font-size:.9rem;">Ce sont elles qui chantent \u2192 accord</span><br><br>'
+        +'\u2717 Les airs que j\'ai <strong>entendu</strong> chanter.<br>'
+        +'<span style="color:#6b7280;font-size:.9rem;">Ce ne sont pas les airs qui chantent \u2192 pas d\'accord</span></div>'
+        +'<div class="astuce"><strong>Exception absolue :</strong> le participe <strong>fait</strong> '
+        +'suivi d\'un infinitif reste toujours invariable.<br>Les robes qu\'elle a <strong>fait</strong> coudre.</div>',
+      ugo:'La question à poser : le COD est-il l\'auteur de l\'action ?' },
+
+    { titre:'Cas 3 — Le COD est le pronom « en »',
+      analogie:"Le pronom en désigne une quantité indéterminée : il ne donne ni genre ni nombre.",
+      html:'<p>Quand le COD placé avant est le pronom <strong>en</strong>, le participe reste '
+        +'<strong>invariable</strong>.</p>'
+        +'<div class="exemple">'
+        +'Des erreurs, j\'en ai <strong>commis</strong>.<br>'
+        +'Des livres, il en a <strong>lu</strong> beaucoup.</div>'
+        +'<div class="astuce">Retiens aussi : après <strong>combien</strong>, <strong>que de</strong> '
+        +'ou une quantité, l\'accord se fait avec le nom qui suit.<br>'
+        +'Combien de pages as-tu <strong>lues</strong> ?</div>' }
+  ],
+
+  memo:'<strong>Verbes pronominaux</strong> : accord avec le pronom réfléchi seulement s\'il est COD.<br>'
+      +'&nbsp;&nbsp;<em>Elle s\'est lavée</em> / <em>Elle s\'est lavé les mains</em><br>'
+      +'<strong>Participe + infinitif</strong> : accord si le COD fait l\'action.<br>'
+      +'&nbsp;&nbsp;<em>Les cantatrices que j\'ai entendues chanter</em><br>'
+      +'<strong>fait</strong> + infinitif : toujours invariable.<br>'
+      +'<strong>COD = en</strong> : toujours invariable. <em>Des erreurs, j\'en ai commis.</em>',
+
+  exercices:[
+    { type:'qcm', titre:'Analyser l\'accord',
+      consigne:'Choisissez la forme correcte du participe passé.',
+      items:[
+        { phrase:'Elle s\'est ___ les cheveux ce matin.', bonne:'coiffé',
+          options:['coiffé','coiffée','coiffés'],
+          expl:'Le COD est <em>les cheveux</em>, placé après le verbe \u2192 pas d\'accord.' },
+        { phrase:'Les enfants se sont ___ dans le parc.', bonne:'promenés',
+          options:['promené','promenés','promenées'],
+          expl:'<em>se</em> est COD et placé avant \u2192 accord au masculin pluriel.' },
+        { phrase:'Des difficultés, nous en avons ___ .', bonne:'rencontré',
+          options:['rencontrées','rencontré','rencontrés'],
+          expl:'Le COD est le pronom <em>en</em> \u2192 le participe reste invariable.' },
+        { phrase:'Les maisons qu\'il a ___ construire sont vastes.', bonne:'fait',
+          options:['faites','fait','faits'],
+          expl:'<em>fait</em> suivi d\'un infinitif est toujours invariable.' }
+      ]},
+
+    { type:'classify', titre:'Accord ou invariabilité ?',
+      consigne:'Classez chaque énoncé selon que le participe s\'accorde ou non.',
+      pts:4,
+      cols:[
+        {id:'acc', nom:'Le participe s\'accorde', couleur:'#334155', fond:'#f8fafc'},
+        {id:'inv', nom:'Le participe est invariable', couleur:'#b45309', fond:'#fffbeb'}
+      ],
+      items:[
+        {mot:'Elle s\'est blessée', cat:'acc'},
+        {mot:'Des livres, j\'en ai lu', cat:'inv'},
+        {mot:'Ils se sont battus', cat:'acc'},
+        {mot:'Elle s\'est lavé les mains', cat:'inv'},
+        {mot:'Les chanteuses que j\'ai vues entrer', cat:'acc'},
+        {mot:'Les robes qu\'elle a fait coudre', cat:'inv'},
+        {mot:'Les lettres qu\'elle a écrites', cat:'acc'},
+        {mot:'Les airs que j\'ai entendu jouer', cat:'inv'}
+      ]},
+
+    { type:'saisie', titre:'Écrire la forme correcte',
+      consigne:'Écrivez le participe passé correctement accordé.',
+      maxlen:14,
+      items:[
+        { phrase:'Les élèves se sont (parler) ___ pendant le cours.', rep:['parlé'],
+          expl:'<em>se parler</em> : le pronom est COI, pas COD \u2192 invariable : <strong>parlé</strong>.' },
+        { phrase:'La lettre que j\'ai (recevoir) ___ hier était longue.', rep:['reçue'],
+          expl:'COD <em>que</em> = la lettre, placé avant \u2192 <strong>reçue</strong>, féminin singulier.' },
+        { phrase:'Combien de pages as-tu (écrire) ___ ?', rep:['écrites'],
+          expl:'Après <em>combien de</em>, accord avec le nom : <strong>écrites</strong>.' },
+        { phrase:'Elles se sont (succéder) ___ à la direction.', rep:['succédé'],
+          expl:'<em>se succéder</em> : le pronom est COI \u2192 invariable : <strong>succédé</strong>.' }
+      ]},
+
+    { type:'jugement', titre:'Juger la pertinence',
+      consigne:'Choisissez la phrase correctement orthographiée.',
+      items:[
+        { consigne:'Verbe pronominal avec COD après :',
+          bonne:'Elle s\'est offert un voyage en Italie.',
+          mauvaise:'Elle s\'est offerte un voyage en Italie.',
+          expl:'Le COD est <em>un voyage</em>, placé après \u2192 pas d\'accord.' },
+        { consigne:'Participe suivi d\'un infinitif :',
+          bonne:'Les musiciennes que j\'ai vues répéter sont douées.',
+          mauvaise:'Les musiciennes que j\'ai vu répéter sont douées.',
+          expl:'Ce sont les musiciennes qui répètent \u2192 accord : <em>vues</em>.' },
+        { consigne:'COD représenté par « en » :',
+          bonne:'Des occasions, il en a manqué plusieurs.',
+          mauvaise:'Des occasions, il en a manquées plusieurs.',
+          expl:'Le COD est <em>en</em> \u2192 le participe reste invariable.' },
+        { consigne:'Le participe « fait » devant un infinitif :',
+          bonne:'Les travaux qu\'ils ont fait réaliser sont coûteux.',
+          mauvaise:'Les travaux qu\'ils ont faits réaliser sont coûteux.',
+          expl:'<em>fait</em> + infinitif est invariable, sans exception.' }
+      ]}
+  ]
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
+<script src="../atelier-fiche.js"></script>
+</body>
+</html>

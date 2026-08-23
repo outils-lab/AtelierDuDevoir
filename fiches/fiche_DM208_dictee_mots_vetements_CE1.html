@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Dictée — Les vêtements – CE1</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../atelier-fiche.css">
+</head>
+<body>
+<script>
+window.FICHE = {
+  code:'DM208', niveau:'CE1', matiere:'Français', categorie:'Dictées mots',
+  duree:'12 min', retour:'ce1.html',
+  accent:'#6d28d9', accent2:'#8b5cf6', accentLight:'#f5f3ff', accentMid:'#ddd6fe',
+  titre:'Dictée : les vêtements 👕',
+  ugoIntro:"Ce que tu portes tous les jours !<br>\u00c9coute et \u00e9cris chaque mot. \u{1F9E5}",
+  msgBrillant:'Tu écris les vêtements sans faute !',
+
+  lecon:[
+    { titre:'\u{1F4D6} Les mots à écrire',
+      html:'<div class="exemple" style="font-size:1.15rem;line-height:2.1;text-align:center;">'
+        +'\u{1F455} le <strong>pull</strong> &nbsp;·&nbsp; \u{1F456} le <strong>pantalon</strong><br>'
+        +'\u{1F457} la <strong>robe</strong> &nbsp;·&nbsp; \u{1F45F} la <strong>chaussure</strong></div>'
+        +'<div class="astuce">\u{1F4A1} <strong>chaussure</strong> est un mot long : découpe-le en '
+        +'<em>chau · ssu · re</em> pour ne rien oublier.</div>',
+      ugo:'Pour les mots longs, dis-les syllabe par syllabe dans ta tête avant d\'écrire !' },
+
+    { titre:'\u{1F511} Les pièges à éviter',
+      html:'<div class="exemple">'
+        +'\u26A0\uFE0F <strong>pull</strong> \u2192 deux <strong>l</strong> à la fin<br>'
+        +'\u26A0\uFE0F <strong>pantalon</strong> \u2192 <strong>an</strong> puis <strong>on</strong><br>'
+        +'\u26A0\uFE0F <strong>chaussure</strong> \u2192 <strong>ch</strong>, <strong>au</strong>, puis deux <strong>ss</strong><br>'
+        +'\u26A0\uFE0F <strong>manteau</strong> \u2192 <strong>m</strong> devant le t, et <strong>eau</strong> à la fin</div>'
+        +'<div class="astuce">\u{1F4A1} Deux <strong>ss</strong> entre voyelles font le son [s]. '
+        +'Un seul s ferait [z] : <em>chausure</em> se dirait « chauzure » !</div>',
+      ugo:'Tu te souviens de la règle ? Entre deux voyelles, il faut deux s pour entendre [s] !' }
+  ],
+
+  memo:'\u{1F455} Les vêtements :<br>'
+      +'le <strong>pull</strong> · le <strong>pantalon</strong> · la <strong>robe</strong> · la <strong>chaussure</strong><br>'
+      +'\u26A0\uFE0F pull prend deux l · chaussure prend deux s entre voyelles',
+
+  exercices:[
+    { type:'dictee', titre:'Écris les mots', consigne:'Écoute chaque mot et écris-le.',
+      items:[
+        { rep:'pull',      lu:'pull',      expl:'le <strong>pull</strong>, avec deux l' },
+        { rep:'pantalon',  lu:'pantalon',  expl:'le <strong>pantalon</strong>' },
+        { rep:'robe',      lu:'robe',      expl:'la <strong>robe</strong>' },
+        { rep:'chaussure', lu:'chaussure', expl:'la <strong>chaussure</strong>, avec deux ss' }
+      ]},
+    { type:'dictee', titre:'Écris les phrases', consigne:'Écoute la phrase entière, puis écris-la.',
+      large:true,
+      items:[
+        { rep:'Je mets mon pull.', lu:'Je mets mon pull. point',
+          expl:'<strong>mets</strong> vient du verbe mettre : je mets, avec un s.' },
+        { rep:'La robe est jolie.', lu:'La robe est jolie. point',
+          expl:'<strong>jolie</strong> prend un e car robe est féminin.' }
+      ]}
+  ]
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
+<script src="../atelier-fiche.js"></script>
+</body>
+</html>

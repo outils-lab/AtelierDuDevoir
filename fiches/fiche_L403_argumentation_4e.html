@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>L'argumentation : thèse et arguments – 4e</title>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Playfair+Display:wght@600;700&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../atelier-fiche.css">
+</head>
+<body>
+<script>
+window.FICHE = {
+  code:'L403', niveau:'4e', cycle:4, matiere:'Français', categorie:'Lexique',
+  duree:'18 min', retour:'4e.html',
+  accent:'#9a3412', accent2:'#c2410c', accentLight:'#fff7ed', accentMid:'#fed7aa',
+  titre:"L'argumentation : thèse et arguments",
+  ugoIntro:"Convaincre suppose une structure : une position, des raisons, des preuves.",
+  msgBrillant:'Tu démontes et construis une argumentation avec méthode.',
+
+  lecon:[
+    { titre:'Trois niveaux emboîtés',
+      analogie:"Une charpente : la thèse est la poutre maîtresse, les arguments la soutiennent, les exemples les calent.",
+      html:'<div class="exemple" style="line-height:2;">'
+        +'<strong>Thèse</strong> \u2192 Le sport est indispensable aux adolescents.<br>'
+        +'<strong>Argument</strong> \u2192 Il améliore la concentration en classe.<br>'
+        +'<strong>Exemple</strong> \u2192 Une étude de 2019 montre de meilleurs résultats chez les licenciés.</div>'
+        +'<p>La <strong>thèse</strong> est l\'opinion défendue. L\'<strong>argument</strong> est la raison '
+        +'qui la justifie. L\'<strong>exemple</strong> est le fait concret qui rend l\'argument crédible.</p>',
+      ugo:'Un argument sans exemple reste une affirmation.',
+      questions:[
+        { q:'La thèse est :',
+          options:["l'opinion défendue","un fait concret","une raison"],
+          bonne:"l'opinion défendue",
+          expl:'C\'est la position que l\'on cherche à faire admettre.' },
+        { q:'Que fait l\'exemple ?',
+          options:["il rend l'argument crédible","il remplace la thèse","il contredit l'argument"],
+          bonne:"il rend l'argument crédible",
+          expl:'Le fait concret vient appuyer la raison avancée.' },
+        { q:'« Le sport améliore la concentration » est :',
+          options:['un argument','une thèse','un exemple'],
+          bonne:'un argument',
+          expl:'C\'est la raison qui justifie la thèse.' }
+      ]},
+
+    { titre:'Les types d\'arguments',
+      analogie:"Selon ce sur quoi il s'appuie, un argument ne convainc pas le même interlocuteur.",
+      html:'<table class="tbl"><tr><th>Type</th><th>S\'appuie sur</th><th>Exemple</th></tr>'
+        +'<tr><td><strong>Logique</strong></td><td>un raisonnement</td>'
+        +'<td>Puisque les places sont limitées, il faut réserver.</td></tr>'
+        +'<tr><td><strong>D\'autorité</strong></td><td>une source reconnue</td>'
+        +'<td>Selon l\'OMS, une heure d\'activité quotidienne est nécessaire.</td></tr>'
+        +'<tr><td><strong>D\'expérience</strong></td><td>un fait vécu ou observé</td>'
+        +'<td>Depuis qu\'il court, il dort mieux.</td></tr>'
+        +'<tr><td><strong>Affectif</strong></td><td>une émotion</td>'
+        +'<td>Songez à la détresse de ces familles.</td></tr></table>'
+        +'<p>L\'argument d\'autorité perd toute valeur si la source n\'est pas compétente sur le sujet.</p>',
+      ugo:'Varier les types rend une argumentation plus solide.',
+      questions:[
+        { q:'« Selon l\'OMS… » est un argument :',
+          options:["d'autorité",'logique','affectif'],
+          bonne:"d'autorité",
+          expl:'Il s\'appuie sur une source reconnue.' },
+        { q:'Un argument affectif s\'appuie sur :',
+          options:['une émotion','un raisonnement','une statistique'],
+          bonne:'une émotion',
+          expl:'Il cherche à toucher plutôt qu\'à démontrer.' },
+        { q:'Quand un argument d\'autorité perd-il sa valeur ?',
+          options:["si la source n'est pas compétente sur le sujet","s'il est trop court","s'il est écrit"],
+          bonne:"si la source n'est pas compétente sur le sujet",
+          expl:'Citer un footballeur sur une question médicale n\'apporte rien.' }
+      ]},
+
+    { titre:'Thèse et antithèse',
+      analogie:"Anticiper l'objection, c'est désarmer l'adversaire avant qu'il ne parle.",
+      html:'<div class="exemple" style="line-height:1.9;">'
+        +'<strong>Thèse</strong> : les écrans nuisent au sommeil des adolescents.<br>'
+        +'<strong>Antithèse</strong> : certains usages sont utiles à l\'apprentissage.<br>'
+        +'<strong>Concession puis réfutation</strong> : <em>Certes</em> ils facilitent l\'accès au savoir, '
+        +'<em>mais</em> leur usage tardif dérègle l\'endormissement.</div>'
+        +'<p>La <strong>concession</strong> reconnaît une part de vérité adverse ; la '
+        +'<strong>réfutation</strong> montre ensuite pourquoi elle ne suffit pas.</p>',
+      ugo:'Concéder n\'est pas céder : c\'est renforcer sa position.',
+      questions:[
+        { q:'L\'antithèse est :',
+          options:["la position opposée","un exemple","une conclusion"],
+          bonne:"la position opposée",
+          expl:'C\'est la thèse adverse, que l\'on anticipe pour mieux y répondre.' },
+        { q:'Que fait la concession ?',
+          options:["elle reconnaît une part de vérité adverse","elle abandonne la thèse","elle répète l'argument"],
+          bonne:"elle reconnaît une part de vérité adverse",
+          expl:'Elle précède la réfutation et renforce la crédibilité.' },
+        { q:'Quel couple de mots signale une concession suivie d\'une réfutation ?',
+          options:['certes… mais','donc… ainsi','car… puisque'],
+          bonne:'certes… mais',
+          expl:'<em>Certes</em> concède, <em>mais</em> réfute.' }
+      ]},
+
+    { titre:'Construire un paragraphe argumenté',
+      analogie:"Un plan fixe évite de s'égarer : chaque paragraphe défend une seule idée.",
+      html:'<div class="exemple">'
+        +'<strong>1.</strong> Annoncer l\'argument<br>'
+        +'<strong>2.</strong> L\'expliquer en une ou deux phrases<br>'
+        +'<strong>3.</strong> L\'illustrer par un exemple précis<br>'
+        +'<strong>4.</strong> Conclure en reliant à la thèse</div>'
+        +'<p><strong>Un paragraphe = un argument.</strong> Empiler trois idées dans le même '
+        +'paragraphe les affaiblit toutes.</p>',
+      questions:[
+        { q:'Combien d\'arguments par paragraphe ?',
+          options:['un seul','deux ou trois','autant que possible'],
+          bonne:'un seul',
+          expl:'Empiler les idées les affaiblit toutes.' },
+        { q:'Quelle est la dernière étape du paragraphe argumenté ?',
+          options:["conclure en reliant à la thèse","donner un exemple","annoncer l'argument"],
+          bonne:"conclure en reliant à la thèse",
+          expl:'On rattache l\'argument à la position défendue.' },
+        { q:'Après avoir expliqué l\'argument, il faut :',
+          options:["l'illustrer par un exemple précis","passer au suivant","répéter la thèse"],
+          bonne:"l'illustrer par un exemple précis",
+          expl:'L\'exemple rend l\'argument concret et crédible.' }
+      ]}
+  ],
+
+  memo:'<strong>Thèse</strong> : l\'opinion défendue. <strong>Argument</strong> : la raison qui la justifie. '
+      +'<strong>Exemple</strong> : le fait concret qui l\'appuie.<br>'
+      +'<strong>Types d\'arguments</strong> : logique · d\'autorité · d\'expérience · affectif.<br>'
+      +'<strong>Concession puis réfutation</strong> : <em>certes… mais…</em><br>'
+      +'<strong>Un paragraphe = un argument</strong> : annoncer, expliquer, illustrer, conclure.',
+
+  exercices:[
+    { type:'classify', titre:'Thèse, argument ou exemple ?',
+      consigne:'Classez chaque énoncé selon son rôle dans l\'argumentation.',
+      pts:4,
+      cols:[
+        {id:'arg', nom:'Argument', couleur:'#9a3412', fond:'#fff7ed'},
+        {id:'ex', nom:'Exemple', couleur:'#0f766e', fond:'#f0fdfa'}
+      ],
+      items:[
+        {mot:'La lecture enrichit le vocabulaire', cat:'arg'},
+        {mot:'Zola décrit ainsi la mine dans Germinal', cat:'ex'},
+        {mot:'Le vélo réduit la pollution urbaine', cat:'arg'},
+        {mot:'Amsterdam compte plus de vélos que d\'habitants', cat:'ex'},
+        {mot:'Le sommeil consolide la mémoire', cat:'arg'},
+        {mot:'Une étude de 2019 le démontre', cat:'ex'},
+        {mot:'Le bénévolat crée du lien social', cat:'arg'},
+        {mot:'Les Restos du Cœur mobilisent 70 000 bénévoles', cat:'ex'}
+      ]},
+
+    { type:'qcm', titre:'Identifier le type d\'argument',
+      consigne:'Sur quoi cet argument s\'appuie-t-il ?',
+      items:[
+        { phrase:'<em>D\'après les climatologues du GIEC, le réchauffement s\'accélère.</em>',
+          bonne:"d'autorité", options:['logique',"d'autorité",'affectif'],
+          expl:'Il invoque une source scientifique reconnue.' },
+        { phrase:'<em>Imaginez ces enfants privés d\'école.</em>',
+          bonne:'affectif', options:['affectif',"d'expérience",'logique'],
+          expl:'Il cherche à susciter l\'émotion.' },
+        { phrase:'<em>Puisque les ressources sont limitées, il faut les répartir.</em>',
+          bonne:'logique', options:["d'autorité",'affectif','logique'],
+          expl:'Il repose sur un raisonnement de cause à conséquence.' },
+        { phrase:'<em>Depuis que j\'ai arrêté le sucre, je me sens mieux.</em>',
+          bonne:"d'expérience", options:["d'expérience",'logique',"d'autorité"],
+          expl:'Il s\'appuie sur un fait vécu.' }
+      ]},
+
+    { type:'drag', titre:'Compléter avec le bon connecteur',
+      consigne:'Sélectionnez le connecteur, puis placez-le dans la phrase.',
+      pool:['Certes','mais','En effet','Ainsi'],
+      items:[
+        { avant:'', apres:', les jeux vidéo développent des réflexes.', rep:'Certes',
+          expl:'<em>Certes</em> introduit la concession.' },
+        { avant:'…', apres:' un usage excessif isole socialement.', rep:'mais',
+          expl:'<em>mais</em> introduit la réfutation qui suit la concession.' },
+        { avant:'', apres:', les écrans retardent la sécrétion de mélatonine.', rep:'En effet',
+          expl:'<em>En effet</em> introduit l\'explication d\'un argument.' },
+        { avant:'', apres:', limiter les écrans le soir améliore le sommeil.', rep:'Ainsi',
+          expl:'<em>Ainsi</em> introduit la conclusion.' }
+      ]},
+
+    { type:'jugement', titre:'Juger la pertinence',
+      consigne:'Choisissez l\'argumentation la mieux construite.',
+      items:[
+        { consigne:'Défendre la lecture :',
+          bonne:"La lecture enrichit le vocabulaire : un lecteur régulier connaît des milliers de mots de plus qu'un non-lecteur.",
+          mauvaise:"La lecture, c'est vraiment bien, tout le monde devrait lire davantage.",
+          expl:'La première avance un argument précis appuyé par un fait ; la seconde n\'est qu\'une opinion répétée.' },
+        { consigne:'Argument d\'autorité valable :',
+          bonne:"Selon l'Académie de médecine, dix heures de sommeil sont nécessaires à cet âge.",
+          mauvaise:"Selon un chanteur célèbre, dormir peu rend plus créatif.",
+          expl:'L\'autorité doit être compétente dans le domaine invoqué.' },
+        { consigne:'Concession bien menée :',
+          bonne:"Certes les transports en commun sont parfois bondés, mais ils restent le moyen le plus écologique.",
+          mauvaise:"Les transports en commun sont bondés, donc ils sont le moyen le plus écologique.",
+          expl:'La concession reconnaît l\'objection avant de la dépasser ; <em>donc</em> produit ici un raisonnement absurde.' },
+        { consigne:'Structure du paragraphe :',
+          bonne:"Le vélo réduit la pollution. Il n'émet aucun gaz. À Copenhague, la moitié des trajets s'y font à vélo.",
+          mauvaise:"Le vélo réduit la pollution, coûte moins cher, muscle les jambes et évite les embouteillages.",
+          expl:'Un paragraphe défend un seul argument, expliqué puis illustré.' }
+      ]}
+  ]
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
+<script src="../atelier-fiche.js"></script>
+</body>
+</html>

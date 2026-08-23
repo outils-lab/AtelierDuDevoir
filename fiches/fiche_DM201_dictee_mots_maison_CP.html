@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Dictée de mots — La maison – CP</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../atelier-fiche.css">
+</head>
+<body>
+<script>
+window.FICHE = {
+  code:'DM201', niveau:'CP', matiere:'Français', categorie:'Dictées mots',
+  duree:'10 min', retour:'cp.html',
+  accent:'#b45309', accent2:'#d97706', accentLight:'#fffbeb', accentMid:'#fde68a',
+  titre:'Dictée : la maison 🏠',
+  ugoIntro:"\u00c9coute bien chaque mot, puis \u00e9cris-le.<br>Tu peux r\u00e9\u00e9couter autant de fois que tu veux ! \u{1F442}",
+  msgBrillant:'Tu écris les mots de la maison sans faute !',
+
+  lecon:[
+    { titre:'\u{1F4D6} Les mots de la maison',
+      html:'<p>Voici les mots que tu vas écrire. Regarde-les bien !</p>'
+        +'<div class="exemple" style="font-size:1.25rem;line-height:2.2;text-align:center;">'
+        +'\u{1F6AA} la <strong>porte</strong><br>'
+        +'\u{1FA9F} la <strong>fenêtre</strong><br>'
+        +'\u{1F6CF}\uFE0F le <strong>lit</strong><br>'
+        +'\u{1FA91} la <strong>chaise</strong><br>'
+        +'\u{1F373} la <strong>cuisine</strong></div>',
+      ugo:'Prends ton temps pour bien regarder chaque mot. Ferme les yeux et essaie de le revoir dans ta tête !' },
+
+    { titre:'\u{1F511} Les pièges à éviter',
+      html:'<div class="exemple">'
+        +'\u26A0\uFE0F <strong>fenêtre</strong> \u2192 il y a un accent sur le <strong>ê</strong><br>'
+        +'\u26A0\uFE0F <strong>lit</strong> \u2192 il finit par un <strong>t</strong> qu\'on n\'entend pas<br>'
+        +'\u26A0\uFE0F <strong>chaise</strong> \u2192 on écrit <strong>ch</strong> et <strong>ai</strong></div>'
+        +'<div class="astuce">\u{1F4A1} Écoute d\'abord le mot en entier, puis écris-le doucement, lettre par lettre.</div>',
+      ugo:'Si un mot est difficile, clique sur \u{1F422} Lentement : je le dirai tout doucement pour toi !' }
+  ],
+
+  memo:'\u{1F3E0} Les mots de la maison :<br>'
+      +'la <strong>porte</strong> · la <strong>fenêtre</strong> · le <strong>lit</strong> · '
+      +'la <strong>chaise</strong> · la <strong>cuisine</strong><br>'
+      +'\u26A0\uFE0F fenêtre prend un accent circonflexe · lit finit par un t muet',
+
+  exercices:[
+    { type:'dictee', titre:'Écris les mots', consigne:'Écoute chaque mot et écris-le.',
+      items:[
+        { rep:'porte',   lu:'porte',   expl:'la <strong>porte</strong>' },
+        { rep:'fenêtre', lu:'fenêtre', expl:'la <strong>fenêtre</strong>, avec un accent sur le ê' },
+        { rep:'lit',     lu:'lit',     expl:'le <strong>lit</strong>, avec un t muet à la fin' },
+        { rep:'chaise',  lu:'chaise',  expl:'la <strong>chaise</strong>, avec ch et ai' },
+        { rep:'cuisine', lu:'cuisine', expl:'la <strong>cuisine</strong>' }
+      ]}
+  ]
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
+<script src="../atelier-fiche.js"></script>
+</body>
+</html>

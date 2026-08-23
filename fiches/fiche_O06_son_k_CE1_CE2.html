@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Le son [k] – CE1/CE2</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Nunito',sans-serif;background:#fafaf8;color:#1e293b;font-size:21px;min-height:100vh;}
+:root{--accent:#7e22ce;--accent-light:#faf5ff;--accent-mid:#e9d5ff;}
+.phase{display:none;}.phase.active{display:block;}
+.site-header{background:var(--accent);color:#fff;padding:12px 20px;display:flex;align-items:center;gap:12px;}
+.site-header a{color:#fff;text-decoration:none;font-weight:700;font-size:15px;}
+.site-header span{font-weight:800;font-size:17px;}
+.accroche{background:linear-gradient(135deg,var(--accent) 0%,#9333ea 100%);color:#fff;padding:28px 20px 22px;}
+.accroche-inner{display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:12px;max-width:600px;margin-left:auto;margin-right:auto;}
+.ugo-big{font-size:3.2rem;flex-shrink:0;}
+.accroche-text h1{font-size:1.5rem;font-weight:800;margin-bottom:4px;}
+.accroche-text p{font-size:.95rem;opacity:.9;line-height:1.5;}
+.meta-tags{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:14px;}
+.meta-tag{background:rgba(255,255,255,.25);border-radius:20px;padding:5px 14px;font-size:.88rem;font-weight:700;}
+.lecon-wrap{max-width:680px;margin:0 auto;padding:20px 16px;}
+.lecon-block{background:#fff;border-radius:16px;border-left:5px solid var(--accent);padding:20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.06);display:none;}
+.lecon-block.revealed{display:block;}
+.lecon-block h2{color:var(--accent);font-size:1.1rem;font-weight:800;margin-bottom:10px;}
+.lecon-block p{line-height:1.6;margin-bottom:8px;font-size:1rem;}
+.exemple{background:var(--accent-light);border-radius:10px;padding:10px 14px;margin:8px 0;font-size:.95rem;}
+.highlight{color:var(--accent);font-weight:800;}
+.astuce{background:#fefce8;border-left:4px solid #ca8a04;border-radius:8px;padding:10px 14px;margin:8px 0;font-size:.9rem;}
+.ugo-bubble{background:#fff3cd;border-radius:14px;padding:12px 16px;margin:10px 0;display:flex;align-items:flex-start;gap:10px;font-size:.9rem;}
+.ugo-icon{font-size:1.7rem;flex-shrink:0;}
+.regle-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:10px 0;}
+.regle-card{background:var(--accent-light);border-radius:12px;padding:10px 12px;border-left:4px solid var(--accent);text-align:center;}
+.regle-card h4{color:var(--accent);font-size:1.2rem;font-weight:800;margin-bottom:4px;}
+.regle-card p{font-size:.82rem;line-height:1.5;color:#475569;}
+.son-badge{display:inline-block;background:var(--accent);color:#fff;border-radius:8px;padding:2px 10px;font-weight:800;font-size:.9rem;margin:0 2px;}
+.ctrl{background:#f8fafc;border:2px dashed var(--accent-mid);border-radius:12px;padding:16px 14px;margin-top:14px;}
+.ctrl-titre{font-weight:800;font-size:1rem;color:var(--accent);margin-bottom:3px;}
+.ctrl-sous{font-size:.83rem;color:#94a3b8;font-weight:600;margin-bottom:12px;}
+.ctrl-q{background:#fff;border-radius:10px;padding:12px;margin-bottom:10px;box-shadow:0 1px 4px rgba(0,0,0,.05);}
+.ctrl-txt{font-weight:700;font-size:.95rem;margin-bottom:8px;line-height:1.45;}
+.ctrl-opts{display:flex;flex-wrap:wrap;gap:7px;}
+.ctrl-btn{flex:1;min-width:110px;background:#f1f5f9;border:2px solid #e2e8f0;border-radius:10px;padding:11px 8px;font-family:'Nunito',sans-serif;font-size:.92rem;font-weight:700;cursor:pointer;transition:all .15s;min-height:48px;}
+.ctrl-btn:hover:not(:disabled){border-color:var(--accent);background:var(--accent-light);}
+.ctrl-btn.correct{background:#dcfce7;border-color:#16a34a;color:#15803d;}
+.ctrl-btn.wrong{background:#fee2e2;border-color:#dc2626;color:#dc2626;}
+.ctrl-fb{display:none;border-radius:10px;padding:9px 13px;margin-top:9px;font-size:.86rem;font-weight:600;line-height:1.5;}
+.ctrl-fb.show{display:block;}
+.ctrl-fb.ok{background:#dcfce7;color:#15803d;}
+.ctrl-fb.ko{background:#fee2e2;color:#dc2626;}
+.ctrl-bilan{display:none;border-radius:10px;padding:13px 15px;margin-top:6px;font-size:.92rem;font-weight:700;line-height:1.6;}
+.ctrl-bilan.show{display:block;}
+.ctrl-bilan.ok{background:#dcfce7;color:#15803d;}
+.ctrl-bilan.ko{background:#fff7ed;color:#c2410c;border:2px solid #fdba74;}
+.ctrl-retry{background:#c2410c;color:#fff;border:none;border-radius:10px;padding:11px 20px;font-family:'Nunito',sans-serif;font-size:.9rem;font-weight:800;cursor:pointer;margin-top:10px;min-height:48px;}
+.ctrl-retry:hover{filter:brightness(.92);}
+.btn-compris{background:var(--accent);color:#fff;border:none;border-radius:14px;padding:14px 28px;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;margin:12px auto 0;display:block;min-height:56px;width:fit-content;}
+.btn-compris:hover{background:#6b21a8;}
+.btn-suite{display:none;background:var(--accent);color:#fff;border:none;border-radius:14px;padding:14px 28px;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;margin:16px auto;min-height:56px;}
+.btn-suite.show{display:block;}
+.ex-wrap{max-width:680px;margin:0 auto;padding:20px 16px;}
+.ex-header{background:var(--accent);color:#fff;border-radius:14px;padding:14px 18px;margin-bottom:18px;}
+.ex-header h2{font-size:1.1rem;font-weight:800;}
+.ex-header p{font-size:.88rem;opacity:.9;margin-top:4px;}
+.score-bar{background:#fff;border-radius:12px;padding:10px 16px;margin-bottom:16px;text-align:center;font-weight:700;font-size:.95rem;box-shadow:0 2px 6px rgba(0,0,0,.06);}
+.qcm-card{background:#fff;border-radius:14px;padding:16px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.06);}
+.qcm-card .question{font-weight:700;font-size:1rem;margin-bottom:10px;line-height:1.5;}
+.phrase-ex{font-size:.95rem;background:var(--accent-light);border-radius:8px;padding:8px 12px;margin-bottom:10px;}
+.qcm-options{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.qcm-btn{background:#f1f5f9;border:2px solid #e2e8f0;border-radius:12px;padding:12px 8px;font-family:'Nunito',sans-serif;font-size:.95rem;font-weight:700;cursor:pointer;transition:all .2s;min-height:56px;}
+.qcm-btn:hover{border-color:var(--accent);background:var(--accent-light);}
+.qcm-btn.correct{background:#dcfce7;border-color:#16a34a;color:#15803d;}
+.qcm-btn.wrong{background:#fee2e2;border-color:#dc2626;color:#dc2626;}
+.qcm-feedback{display:none;border-radius:10px;padding:8px 12px;margin-top:8px;font-size:.88rem;font-weight:600;}
+.qcm-feedback.show{display:block;}
+.qcm-feedback.ok{background:#dcfce7;color:#15803d;}
+.qcm-feedback.ko{background:#fee2e2;color:#dc2626;}
+.drag-pool{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;}
+.chip{background:#fff;border:2px solid var(--accent-mid);border-radius:20px;padding:7px 14px;font-family:'Nunito',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;transition:all .2s;user-select:none;min-height:44px;display:flex;align-items:center;}
+.chip:hover{background:var(--accent-light);}
+.chip.selected{background:var(--accent);color:#fff;border-color:var(--accent);}
+.chip.used{opacity:.35;pointer-events:none;}
+.drag-phrases{display:flex;flex-direction:column;gap:10px;}
+.drag-item{background:#fff;border-radius:12px;padding:12px 14px;box-shadow:0 1px 6px rgba(0,0,0,.07);display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.phrase-txt{font-size:.95rem;}
+.drop-zone{border:2px dashed #cbd5e1;border-radius:10px;min-width:60px;min-height:36px;display:flex;align-items:center;justify-content:center;font-size:.85rem;color:#94a3b8;padding:4px 8px;cursor:pointer;transition:all .2s;}
+.drop-zone.filled{border-color:var(--accent);background:var(--accent-light);color:var(--accent);font-weight:700;}
+.drop-zone.correct-zone{border-color:#16a34a;background:#dcfce7;color:#15803d;}
+.drop-zone.wrong-zone{border-color:#dc2626;background:#fee2e2;color:#dc2626;}
+.drag-expl{display:none;font-size:.82rem;font-weight:600;margin-top:4px;width:100%;}
+.drag-expl.show{display:block;}
+.drag-expl.ok{color:#15803d;}
+.drag-expl.ko{color:#dc2626;}
+.saisie-item{background:#fff;border-radius:12px;padding:14px;margin-bottom:12px;box-shadow:0 1px 6px rgba(0,0,0,.07);}
+.phrase-saisie{font-size:.95rem;margin-bottom:8px;line-height:1.6;}
+.saisie-item input{border:2px solid #cbd5e1;border-radius:10px;padding:8px 12px;font-family:'Nunito',sans-serif;font-size:.95rem;width:80px;outline:none;}
+.saisie-item input:focus{border-color:var(--accent);}
+.correct-input{border-color:#16a34a!important;background:#dcfce7;}
+.wrong-input{border-color:#dc2626!important;background:#fee2e2;}
+.saisie-feedback{display:none;font-size:.85rem;font-weight:600;margin-top:6px;}
+.saisie-feedback.show{display:block;}
+.saisie-feedback.ok{color:#15803d;}
+.saisie-feedback.ko{color:#dc2626;}
+.btn-verif{background:#0891b2;color:#fff;border:none;border-radius:12px;padding:12px 24px;font-family:'Nunito',sans-serif;font-size:.95rem;font-weight:800;cursor:pointer;margin-top:12px;display:block;min-height:50px;}
+.btn-verif:hover{background:#0e7490;}
+.btn-verif:disabled{opacity:.5;cursor:default;}
+.bilan-wrap{max-width:680px;margin:0 auto;padding:24px 16px;text-align:center;}
+.bilan-card{background:#fff;border-radius:20px;padding:28px 20px;box-shadow:0 4px 20px rgba(0,0,0,.08);}
+.stars{font-size:2.6rem;margin:16px 0;}
+.star{display:inline-block;filter:grayscale(1);transition:filter .3s,transform .3s;}
+.star.earned{filter:none;}
+@keyframes starPop{0%{transform:scale(0)}60%{transform:scale(1.3)}100%{transform:scale(1)}}
+.score-big{font-size:2.2rem;font-weight:800;color:var(--accent);margin:10px 0;}
+.bilan-msg{font-size:1rem;margin:8px 0 16px;color:#475569;}
+.memo{background:var(--accent-light);border-radius:14px;padding:16px;margin-top:16px;text-align:left;}
+.memo h3{color:var(--accent);font-weight:800;margin-bottom:8px;}
+.memo p{font-size:.9rem;line-height:1.8;}
+.btn-retry{background:var(--accent);color:#fff;border:none;border-radius:14px;padding:13px 28px;font-family:'Nunito',sans-serif;font-size:.95rem;font-weight:800;cursor:pointer;margin-top:16px;min-height:50px;}
+.print-bar{position:fixed;bottom:16px;right:16px;display:flex;flex-direction:column;gap:8px;z-index:100;}
+.print-btn{background:#fff;border:2px solid var(--accent);color:var(--accent);border-radius:12px;padding:8px 14px;font-family:'Nunito',sans-serif;font-size:.8rem;font-weight:700;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.1);}
+.print-btn:hover{background:var(--accent);color:#fff;}
+@media print{.print-bar,.site-header,.btn-compris,.btn-suite,.btn-verif,.btn-retry{display:none!important;}}
+@media(max-width:480px){.qcm-options{grid-template-columns:1fr;}.accroche-inner{flex-direction:column;text-align:center;}.regle-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <a href="../ce1.html">&#8592; CE1</a>
+  <span>L'Atelier du Devoir</span>
+</header>
+
+<!-- PHASE 0 : LECON -->
+<div id="phase0" class="phase active">
+  <div class="accroche">
+    <div class="accroche-inner">
+      <span class="ugo-big">&#x1F989;</span>
+      <div class="accroche-text">
+        <h1>Le son [k] 🔊</h1>
+        <p>Le son [k] comme dans <em>koala</em> peut s'écrire<br>de 3 façons : <strong>c</strong>, <strong>k</strong> ou <strong>qu</strong>. Voyons lesquelles ! &#x1F914;</p>
+      </div>
+    </div>
+    <div class="meta-tags">
+      <span class="meta-tag">CE1 / CE2</span>
+      <span class="meta-tag">Orthographe</span>
+      <span class="meta-tag">15 min</span>
+      <span class="meta-tag"><span id="meta-pts">16</span> pts</span>
+    </div>
+  </div>
+
+  <div class="lecon-wrap">
+
+    <!-- BLOC 0 -->
+    <div id="bloc0" class="lecon-block revealed">
+      <h2>&#x1F4D6; Bloc 1 — Le c qui fait [k]</h2>
+      <p>La lettre <span class="highlight">c</span> fait le son [k] devant <strong>a, o, u</strong> et devant une <strong>consonne</strong>.</p>
+      <div class="exemple">
+        <span class="son-badge">c</span> devant a : <strong>c</strong>arotte &#x1F955; · <strong>c</strong>amion &#x1F69A; · <strong>c</strong>adeau &#x1F381;<br>
+        <span class="son-badge">c</span> devant o : <strong>c</strong>ochon &#x1F437; · <strong>c</strong>ouleur &#x1F3A8; · <strong>c</strong>obra<br>
+        <span class="son-badge">c</span> devant u : <strong>c</strong>uisine &#x1F373; · <strong>c</strong>ulture<br>
+        <span class="son-badge">c</span> devant consonne : <strong>cl</strong>asse · <strong>cr</strong>ayon &#x270F;&#xFE0F;
+      </div>
+      <div class="astuce">
+        &#x26A0;&#xFE0F; Rappel : devant <strong>e, i, y</strong>, le c fait [s] (ciel, cirque). Ici on parle du c qui fait [k] !
+      </div>
+      <div class="ugo-bubble">
+        <span class="ugo-icon">&#x1F989;</span>
+        <span>Ugo : c + a/o/u/consonne = [k]. C'est la règle la plus courante. La majorité des mots en [k] s'écrivent avec c !</span>
+      </div>
+
+      <div class="ctrl" id="ctrl0">
+        <div class="ctrl-titre">🔎 Vérifions que tu as bien lu</div>
+        <div class="ctrl-sous">La leçon reste juste au-dessus : tu peux la relire.</div>
+        <div id="ctrlq0"></div>
+        <div class="ctrl-bilan" id="ctrlbil0"></div>
+      </div>
+
+      <button class="btn-compris" id="btnbloc0" style="display:none;" onclick="revealBloc(1)">J'ai compris ! &#x2192;</button>
+    </div>
+
+    <!-- BLOC 1 -->
+    <div id="bloc1" class="lecon-block">
+      <h2>&#x1F4D6; Bloc 2 — Le k et le qu</h2>
+      <p>Deux autres façons d'écrire le son [k] :</p>
+      <div class="regle-grid">
+        <div class="regle-card">
+          <h4>k</h4>
+          <p>Mots étrangers ou rares.<br><strong>k</strong>iwi &#x1F95D; · <strong>k</strong>oala &#x1F428; · <strong>k</strong>ayak · <strong>k</strong>etchup · stea<strong>k</strong></p>
+        </div>
+        <div class="regle-card">
+          <h4>qu</h4>
+          <p>Très fréquent en français.<br><strong>qu</strong>atre · <strong>qu</strong>and · <strong>qu</strong>estion · <strong>qu</strong>itter</p>
+        </div>
+        <div class="regle-card">
+          <h4>c</h4>
+          <p>Le plus courant.<br><strong>c</strong>hat · <strong>c</strong>arotte · <strong>c</strong>ouleur · <strong>cl</strong>asse</p>
+        </div>
+      </div>
+      <div class="ugo-bubble">
+        <span class="ugo-icon">&#x1F989;</span>
+        <span>Ugo : Le <strong>qu</strong> s'écrit toujours avec un u muet après le q. On ne prononce pas le u : <em>quatre</em> = [katr], pas [kuatr] !</span>
+      </div>
+
+      <div class="ctrl" id="ctrl1">
+        <div class="ctrl-titre">🔎 Vérifions que tu as bien lu</div>
+        <div class="ctrl-sous">La leçon reste juste au-dessus : tu peux la relire.</div>
+        <div id="ctrlq1"></div>
+        <div class="ctrl-bilan" id="ctrlbil1"></div>
+      </div>
+
+      <button class="btn-compris" id="btnbloc1" style="display:none;" onclick="revealBloc(2)">J'ai compris ! &#x2192;</button>
+    </div>
+
+    <!-- BLOC 2 -->
+    <div id="bloc2" class="lecon-block">
+      <h2>&#x1F511; Bloc 3 — Comment choisir ?</h2>
+      <p>Voici les indices pour choisir la bonne graphie :</p>
+      <div class="exemple">
+        &#x2705; <strong>c</strong> devant a, o, u ou consonne : carotte, couleur, classe<br>
+        &#x2705; <strong>qu</strong> devant e ou i (très fréquent) : quatre, quand, qui, que<br>
+        &#x2705; <strong>k</strong> dans les mots d'origine étrangère : kiwi, koala, kayak
+      </div>
+      <div class="astuce">
+        &#x1F4A1; <strong>Astuce :</strong> Si le mot commence par <em>qu</em> suivi de e ou i → c'est presque toujours <strong>qu</strong>. <br>
+        Si c'est un animal ou un objet exotique → pense au <strong>k</strong>.
+      </div>
+
+      <div class="ctrl" id="ctrl2">
+        <div class="ctrl-titre">🔎 Vérifions que tu as bien lu</div>
+        <div class="ctrl-sous">La leçon reste juste au-dessus : tu peux la relire.</div>
+        <div id="ctrlq2"></div>
+        <div class="ctrl-bilan" id="ctrlbil2"></div>
+      </div>
+
+      <button class="btn-compris" id="btnbloc2" style="display:none;" onclick="startEx()">Aux exercices ! &#x1F4AA;</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- PHASE 1 : EX1 -->
+<div id="phase1" class="phase">
+  <div class="ex-wrap">
+    <div class="ex-header">
+      <h2>Exercice 1 — Comment s'écrit le son [k] ?</h2>
+      <p>Choisis la bonne graphie pour le son [k] dans ce mot.</p>
+    </div>
+    <div class="score-bar">Score : <span id="score-ex1">0</span> / 4 pts</div>
+    <div id="qcm1-container"></div>
+    <button class="btn-suite" id="btn-ex1-suite" onclick="goPhase(2)">Exercice suivant &#x2192;</button>
+  </div>
+</div>
+
+<!-- PHASE 2 : EX2 -->
+<div id="phase2" class="phase">
+  <div class="ex-wrap">
+    <div class="ex-header">
+      <h2>Exercice 2 — c, k ou qu ?</h2>
+      <p>Quel mot est correctement orthographié ?</p>
+    </div>
+    <div class="score-bar">Score : <span id="score-ex2">0</span> / 4 pts</div>
+    <div id="qcm2-container"></div>
+    <button class="btn-suite" id="btn-ex2-suite" onclick="goPhase(3)">Exercice suivant &#x2192;</button>
+  </div>
+</div>
+
+<!-- PHASE 3 : EX3 DRAG -->
+<div id="phase3" class="phase">
+  <div class="ex-wrap">
+    <div class="ex-header">
+      <h2>Exercice 3 — Complète le mot</h2>
+      <p>Tape sur c, k ou qu, puis tape sur la case dans le mot.</p>
+    </div>
+    <div class="score-bar">Score : <span id="score-ex3">0</span> / 4 pts</div>
+    <div class="drag-pool" id="pool3"></div>
+    <div class="drag-phrases" id="drag3-phrases"></div>
+    <button class="btn-verif" id="btn-verif3" onclick="verifyEx3()">Vérifier &#x2713;</button>
+    <button class="btn-suite" id="btn-ex3-suite" onclick="goPhase(4)">Exercice suivant &#x2192;</button>
+  </div>
+</div>
+
+<!-- PHASE 4 : EX4 SAISIE -->
+<div id="phase4" class="phase">
+  <div class="ex-wrap">
+    <div class="ex-header">
+      <h2>Exercice 4 — Écris la bonne graphie</h2>
+      <p>Écris c, k ou qu pour compléter le mot.</p>
+    </div>
+    <div class="score-bar">Score : <span id="score-ex4">0</span> / 4 pts</div>
+    <div id="saisie4-container"></div>
+    <button class="btn-verif" id="btn-verif4" onclick="verifyEx4()">Vérifier &#x2713;</button>
+    <button class="btn-suite" id="btn-ex4-suite" onclick="showBilan()">Voir mon bilan &#x1F3C6;</button>
+  </div>
+</div>
+
+<!-- PHASE 5 : BILAN -->
+<div id="phase5" class="phase">
+  <div class="bilan-wrap">
+    <div class="bilan-card">
+      <div style="font-size:2rem;">&#x1F3C6;</div>
+      <div class="stars">
+        <span class="star" id="star1">&#x2B50;</span>
+        <span class="star" id="star2">&#x2B50;</span>
+        <span class="star" id="star3">&#x2B50;</span>
+      </div>
+      <div class="score-big" id="bilan-score">0 / 16</div>
+      <div class="bilan-msg" id="bilan-msg"></div>
+      <div class="memo">
+        <h3>&#x1F4D6; À retenir</h3>
+        <p>
+          &#x1F7E3; <strong>c</strong> devant a/o/u/consonne : carotte, couleur, classe<br>
+          &#x1F7E3; <strong>qu</strong> devant e/i : quatre, qui, que, quand<br>
+          &#x1F7E3; <strong>k</strong> dans les mots étrangers : kiwi, koala, kayak<br>
+          &#x26A0;&#xFE0F; c devant e/i/y = [s] (ciel, cirque) — pas [k] !
+        </p>
+      </div>
+      <button class="btn-retry" onclick="location.reload()">&#x1F504; Recommencer</button>
+    </div>
+  </div>
+</div>
+
+<div class="print-bar">
+  <button class="print-btn" onclick="printLecon()">&#x1F4D6; Leçon</button>
+  <button class="print-btn" onclick="printExercices()">&#x1F4DD; Exercices</button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
+<script>
+var q1Expls=[
+  "Carotte : devant a, le son [k] s'écrit c.",
+  "Kiwi : mot d'origine étrangère, le son [k] s'écrit k.",
+  "Quatre : devant a mais suivi de tr, on utilise qu (mot très fréquent en français).",
+  "Classe : devant l (consonne), le son [k] s'écrit c.",
+];
+var q1Data=[
+  {mot:"___arotte 🥕",correct:"c",opts:["c","k","qu"],expl:q1Expls[0]},
+  {mot:"___iwi 🥝",correct:"k",opts:["c","qu","k"],expl:q1Expls[1]},
+  {mot:"___atre (nombre après 3)",correct:"qu",opts:["k","c","qu"],expl:q1Expls[2]},
+  {mot:"___lasse (la salle où on étudie)",correct:"c",opts:["qu","k","c"],expl:q1Expls[3]},
+];
+
+var q2Expls=[
+  "Koala : mot d'origine australienne, s'écrit avec k.",
+  "Quatre : mot français très courant, s'écrit qu.",
+  "Crayon : devant r (consonne), le son [k] s'écrit c.",
+  "Kayak : mot d'origine inuit, s'écrit avec k.",
+];
+var q2Data=[
+  {correct:"koala",opts:["coala","quoala","koala"],expl:q2Expls[0]},
+  {correct:"quatre",opts:["katre","catre","quatre"],expl:q2Expls[1]},
+  {correct:"crayon",opts:["krayon","quayon","crayon"],expl:q2Expls[2]},
+  {correct:"kayak",opts:["cayak","quayak","kayak"],expl:q2Expls[3]},
+];
+
+var drag3Expls=[
+  "Question : qu devant e est très fréquent en français.",
+  "Couleur : c devant ou (voyelle o) fait [k].",
+  "Koala : mot australien, s'écrit avec k.",
+  "Crayon : c devant r (consonne) fait [k].",
+];
+var drag3Data=[
+  {avant:"",apres:"estion (ce qu'on pose pour demander quelque chose)",answer:"qu",expl:drag3Expls[0]},
+  {avant:"",apres:"ouleur 🎨",answer:"c",expl:drag3Expls[1]},
+  {avant:"",apres:"oala 🐨",answer:"k",expl:drag3Expls[2]},
+  {avant:"",apres:"rayon ✏️",answer:"c",expl:drag3Expls[3]},
+];
+
+var saisie4Expls=[
+  "Cuisine : c devant u fait [k].",
+  "Qui : qu devant i est très fréquent.",
+  "Ketchup : mot anglais, s'écrit avec k.",
+  "Camion : c devant a fait [k].",
+];
+var saisie4Data=[
+  {phrase:"___uisine 🍳",answer:"c",expl:saisie4Expls[0]},
+  {phrase:"___i (mot pour poser une question sur une personne)",answer:"qu",expl:saisie4Expls[1]},
+  {phrase:"___etchup 🍅",answer:"k",expl:saisie4Expls[2]},
+  {phrase:"___amion 🚚",answer:"c",expl:saisie4Expls[3]},
+];
+
+var score=0;
+var TOTAL_PTS=q1Data.length+q2Data.length+drag3Data.length+saisie4Data.length;
+var pts1=0,pts2=0;
+var ex1Done=0,ex2Done=0,ex3Verified=false,ex4Verified=false;
+var drag3Selected=null,drag3Placed={};
+var ctrlEtat=[];
+
+var ctrlData=[
+  [
+    {q:"Devant a, o, u ou une consonne, le c fait le son :",opts:["[k]","[s]"],correct:"[k]",
+     expl:"Bloc 1 : carotte, camion, cadeau, classe."},
+    {q:"« cadeau » commence par quelle lettre pour faire [k] ?",opts:["c","k"],correct:"c",
+     expl:"c devant a fait [k] : cadeau, carotte, camion."},
+    {q:"Devant e, i, y, le c fait plutôt le son :",opts:["[s]","[k]"],correct:"[s]",
+     expl:"L'astuce le rappelle : ciel, cirque font [s], pas [k]."}
+  ],
+  [
+    {q:"Le k s'utilise surtout dans des mots :",opts:["d'origine étrangère","très courants en français"],correct:"d'origine étrangère",
+     expl:"kiwi, koala, kayak, ketchup, steak : mots venus d'autres langues."},
+    {q:"« quatre » et « quand » s'écrivent avec :",opts:["qu","k"],correct:"qu",
+     expl:"qu est très fréquent en français."},
+    {q:"Dans « quatre », le u après le q se prononce :",opts:["non, il est muet","oui, on dit [kuatr]"],correct:"non, il est muet",
+     expl:"Ugo le dit : quatre = [katr], le u ne se prononce pas."}
+  ],
+  [
+    {q:"c devant a, o, u ou une consonne donne le son :",opts:["[k]","[s]"],correct:"[k]",
+     expl:"Premier indice du récapitulatif : carotte, couleur, classe."},
+    {q:"qu devant e ou i est :",opts:["très fréquent","très rare"],correct:"très fréquent",
+     expl:"quatre, quand, qui, que : très courant."},
+    {q:"Pour un animal ou objet exotique, on pense plutôt à :",opts:["k","qu"],correct:"k",
+     expl:"L'astuce le dit : kiwi, koala, kayak."}
+  ]
+];
+function buildCtrl(bi){
+  document.getElementById('ctrlq'+bi).innerHTML=ctrlData[bi].map(function(q,qi){
+    return '<div class="ctrl-q" id="cq'+bi+'-'+qi+'"><div class="ctrl-txt">'+q.q+'</div><div class="ctrl-opts">'
+      +shuffle(q.opts).map(function(o){
+        return '<button class="ctrl-btn" data-val="'+o+'" onclick="answerCtrl('+bi+','+qi+',this)">'+o+'</button>';
+      }).join('')
+      +'</div><div class="ctrl-fb" id="cfb'+bi+'-'+qi+'"></div></div>';
+  }).join('');
+  ctrlEtat[bi]={ok:0,ko:0,total:ctrlData[bi].length};
+  var bil=document.getElementById('ctrlbil'+bi);bil.className='ctrl-bilan';bil.innerHTML='';
+  document.getElementById('btnbloc'+bi).style.display='none';
+}
+function answerCtrl(bi,qi,btn){
+  var card=document.getElementById('cq'+bi+'-'+qi);
+  if(card.dataset.done) return;
+  card.dataset.done='1';
+  var q=ctrlData[bi][qi];
+  var bon=(btn.dataset.val===q.correct);
+  card.querySelectorAll('.ctrl-btn').forEach(function(b){
+    b.disabled=true;
+    if(b.dataset.val===q.correct) b.classList.add('correct');
+  });
+  if(!bon) btn.classList.add('wrong');
+  var fb=document.getElementById('cfb'+bi+'-'+qi);
+  fb.textContent=(bon?'✅ ':'❌ ')+q.expl;
+  fb.className='ctrl-fb show '+(bon?'ok':'ko');
+  var e=ctrlEtat[bi];
+  e[bon?'ok':'ko']++;
+  if(e.ok+e.ko<e.total) return;
+  var bil=document.getElementById('ctrlbil'+bi);
+  if(e.ko===0){
+    bil.innerHTML='🎉 <strong>Parfait !</strong> Tu as bien lu la leçon.';
+    bil.className='ctrl-bilan ok show';
+    document.getElementById('btnbloc'+bi).style.display='block';
+  } else {
+    var cible=(bi===0)?0:bi-1;
+    var txt=(bi===0)?'Relis ce bloc tranquillement, puis réessaie.'
+                    :'Relis le bloc précédent, puis reviens ici.';
+    bil.innerHTML='📖 <strong>'+e.ko+' réponse'+(e.ko>1?'s':'')+' à revoir.</strong><br>'+txt
+      +'<br><button class="ctrl-retry" onclick="reprendreCtrl('+bi+','+cible+')">↺ Relire et réessayer</button>';
+    bil.className='ctrl-bilan ko show';
+  }
+}
+function reprendreCtrl(bi,cible){
+  buildCtrl(bi);
+  var d=document.getElementById('bloc'+cible);
+  if(d) setTimeout(function(){d.scrollIntoView({behavior:'smooth',block:'start'});},150);
+}
+
+function goPhase(n){
+  document.querySelectorAll('.phase').forEach(function(p){p.classList.remove('active');});
+  var ph=document.getElementById('phase'+n);
+  ph.classList.add('active');
+  setTimeout(function(){ph.scrollIntoView({behavior:'smooth',block:'start'});},150);
+}
+function revealBloc(n){
+  var b=document.getElementById('bloc'+n);
+  if(b) b.classList.add('revealed');
+  var prev=document.getElementById('bloc'+(n-1));
+  if(prev){var btn=prev.querySelector('.btn-compris');if(btn)btn.style.display='none';}
+  buildCtrl(n);
+  setTimeout(function(){b.scrollIntoView({behavior:'smooth',block:'start'});},150);
+}
+function startEx(){goPhase(1);}
+function shuffle(a){
+  var arr=a.slice();
+  for(var i=arr.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=arr[i];arr[i]=arr[j];arr[j]=t;}
+  return arr;
+}
+
+function buildQcm1(){
+  var c=document.getElementById('qcm1-container');
+  q1Data.forEach(function(q,i){
+    var opts=shuffle(q.opts);
+    var card=document.createElement('div');
+    card.className='qcm-card';
+    card.innerHTML='<div class="question phrase-ex" style="text-align:center;font-size:1.2rem;">'+q.mot+'</div>'
+      +'<div class="qcm-options">'+opts.map(function(o){return '<button class="qcm-btn" onclick="answerQ1(this,'+i+')" data-val="'+o+'">'+o+'</button>';}).join('')+'</div>'
+      +'<div class="qcm-feedback" id="fb1-'+i+'"></div>';
+    c.appendChild(card);
+  });
+}
+function answerQ1(btn,i){
+  var card=btn.closest('.qcm-card');
+  if(card.dataset.done) return;
+  card.dataset.done='1';
+  card.querySelectorAll('.qcm-btn').forEach(function(b){b.disabled=true;if(b.dataset.val===q1Data[i].correct)b.classList.add('correct');});
+  var fb=document.getElementById('fb1-'+i);
+  if(btn.dataset.val===q1Data[i].correct){
+    score++;pts1++;document.getElementById('score-ex1').textContent=pts1;
+    fb.textContent='✅ '+q1Data[i].expl;fb.className='qcm-feedback show ok';
+  } else {
+    btn.classList.add('wrong');
+    fb.textContent='❌ '+q1Data[i].expl;fb.className='qcm-feedback show ko';
+  }
+  ex1Done++;
+  if(ex1Done===q1Data.length) setTimeout(function(){document.getElementById('btn-ex1-suite').classList.add('show');},400);
+}
+
+function buildQcm2(){
+  var c=document.getElementById('qcm2-container');
+  q2Data.forEach(function(q,i){
+    var opts=shuffle(q.opts);
+    var card=document.createElement('div');
+    card.className='qcm-card';
+    card.innerHTML='<div class="question">Quel mot est bien orthographié ?</div>'
+      +'<div class="qcm-options">'+opts.map(function(o){return '<button class="qcm-btn" onclick="answerQ2(this,'+i+')" data-val="'+o+'">'+o+'</button>';}).join('')+'</div>'
+      +'<div class="qcm-feedback" id="fb2-'+i+'"></div>';
+    c.appendChild(card);
+  });
+}
+function answerQ2(btn,i){
+  var card=btn.closest('.qcm-card');
+  if(card.dataset.done) return;
+  card.dataset.done='1';
+  card.querySelectorAll('.qcm-btn').forEach(function(b){b.disabled=true;if(b.dataset.val===q2Data[i].correct)b.classList.add('correct');});
+  var fb=document.getElementById('fb2-'+i);
+  if(btn.dataset.val===q2Data[i].correct){
+    score++;pts2++;document.getElementById('score-ex2').textContent=pts2;
+    fb.textContent='✅ '+q2Data[i].expl;fb.className='qcm-feedback show ok';
+  } else {
+    btn.classList.add('wrong');
+    fb.textContent='❌ '+q2Data[i].expl;fb.className='qcm-feedback show ko';
+  }
+  ex2Done++;
+  if(ex2Done===q2Data.length) setTimeout(function(){document.getElementById('btn-ex2-suite').classList.add('show');},400);
+}
+
+function buildEx3(){
+  var pool=document.getElementById('pool3');
+  ["c","k","qu"].forEach(function(w){
+    var chip=document.createElement('button');
+    chip.className='chip';chip.textContent=w;
+    chip.onclick=function(){
+      if(ex3Verified) return;
+      document.querySelectorAll('#pool3 .chip').forEach(function(c){c.classList.remove('selected');});
+      chip.classList.add('selected');drag3Selected=chip;
+    };
+    pool.appendChild(chip);
+  });
+  var cont=document.getElementById('drag3-phrases');
+  drag3Data.forEach(function(d,i){
+    var item=document.createElement('div');
+    item.className='drag-item';
+    item.innerHTML=(d.avant?'<span class="phrase-txt">'+d.avant+'</span>':'')
+      +'<span class="drop-zone" id="dz3-'+i+'" onclick="dropDz3('+i+')">…</span>'
+      +'<span class="phrase-txt">'+d.apres+'</span>'
+      +'<div class="drag-expl" id="de3-'+i+'"></div>';
+    cont.appendChild(item);
+  });
+}
+function dropDz3(i){
+  if(!drag3Selected||ex3Verified) return;
+  var dz=document.getElementById('dz3-'+i);
+  dz.textContent=drag3Selected.textContent;
+  dz.classList.add('filled');
+  drag3Placed[i]=drag3Selected.textContent;
+  drag3Selected.classList.remove('selected');
+  drag3Selected=null;
+}
+function verifyEx3(){
+  if(ex3Verified) return;
+  ex3Verified=true;
+  var pts=0;
+  drag3Data.forEach(function(d,i){
+    var dz=document.getElementById('dz3-'+i);
+    var de=document.getElementById('de3-'+i);
+    var placed=drag3Placed[i]||'';
+    if(placed===d.answer){
+      pts++;dz.classList.add('correct-zone');
+      de.textContent='✅ '+d.expl;de.className='drag-expl show ok';
+    } else {
+      dz.classList.add('wrong-zone');
+      de.textContent='❌ Réponse : '+d.answer+'. '+d.expl;de.className='drag-expl show ko';
+    }
+  });
+  score+=pts;
+  document.getElementById('score-ex3').textContent=pts;
+  document.getElementById('btn-verif3').disabled=true;
+  setTimeout(function(){document.getElementById('btn-ex3-suite').classList.add('show');},400);
+}
+
+function buildSaisie4(){
+  var c=document.getElementById('saisie4-container');
+  saisie4Data.forEach(function(q,i){
+    var div=document.createElement('div');
+    div.className='saisie-item';
+    div.innerHTML='<div class="phrase-saisie">'+q.phrase+'</div>'
+      +'<input type="text" id="inp4-'+i+'" placeholder="…" maxlength="2" autocomplete="off" autocorrect="off" spellcheck="false">'
+      +'<div class="saisie-feedback" id="sfb4-'+i+'"></div>';
+    c.appendChild(div);
+  });
+}
+function ns(s){return(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,' ').trim();}
+function verifyEx4(){
+  if(ex4Verified) return;
+  ex4Verified=true;
+  var pts=0;
+  saisie4Data.forEach(function(q,i){
+    var inp=document.getElementById('inp4-'+i);
+    var fb=document.getElementById('sfb4-'+i);
+    inp.disabled=true;
+    if(ns(inp.value)===ns(q.answer)){
+      pts++;inp.classList.add('correct-input');
+      fb.textContent='✅ '+q.expl;fb.className='saisie-feedback show ok';
+    } else {
+      inp.classList.add('wrong-input');
+      fb.textContent='❌ Réponse : '+q.answer+'. '+q.expl;fb.className='saisie-feedback show ko';
+    }
+  });
+  score+=pts;
+  document.getElementById('score-ex4').textContent=pts;
+  document.getElementById('btn-verif4').disabled=true;
+  setTimeout(function(){document.getElementById('btn-ex4-suite').classList.add('show');},400);
+}
+
+function showBilan(){
+  if(typeof enregistrerProgression==='function'){ enregistrerProgression('O06', score, TOTAL_PTS); }
+  goPhase(5);
+  document.getElementById('bilan-score').textContent=score+' / '+TOTAL_PTS;
+  var pct=score/TOTAL_PTS;
+  var msg=pct>=0.9?'Brillant ⭐ Tu maîtrises les graphies du son [k] !'
+    :pct>=0.8?'Bien maîtrisé 💪 Excellent travail !'
+    :pct>=0.5?'En cours 📚 Continue, tu progresses !'
+    :'À retravailler 🔁 Relis la leçon et réessaie !';
+  document.getElementById('bilan-msg').textContent=msg;
+  var seuils=[Math.ceil(TOTAL_PTS*0.33),Math.ceil(TOTAL_PTS*0.66),Math.ceil(TOTAL_PTS*0.89)];
+  ['star1','star2','star3'].forEach(function(id,i){
+    var el=document.getElementById(id);
+    if(score>=seuils[i]){
+      (function(elem,delay){setTimeout(function(){elem.classList.add('earned');elem.style.animation='starPop .4s ease';},delay);})(el,300+i*400);
+    }
+  });
+  if(score>=Math.ceil(TOTAL_PTS*0.5)){
+    var colors=['#7e22ce','#9333ea','#fbbf24','#16a34a','#ea580c'];
+    for(var k=0;k<40;k++){
+      (function(delay,color,left){
+        setTimeout(function(){
+          var d=document.createElement('div');
+          d.style.cssText='position:fixed;top:-10px;left:'+left+'%;width:8px;height:8px;background:'+color+';border-radius:50%;pointer-events:none;z-index:9999;animation:fall '+(1.2+Math.random())+'s ease-in forwards;';
+          document.body.appendChild(d);setTimeout(function(){d.remove();},2000);
+        },delay);
+      })(k*60,colors[k%colors.length],Math.random()*100);
+    }
+  }
+}
+
+var styleEl=document.createElement('style');
+styleEl.textContent='@keyframes fall{0%{transform:translateY(0) rotate(0);}100%{transform:translateY(100vh) rotate(720deg);opacity:0;}}';
+document.head.appendChild(styleEl);
+
+function printLecon(){
+  var w=window.open('','_blank');
+  w.document.write('<html><head><title>Leçon O06</title><style>body{font-family:sans-serif;padding:20px;font-size:13px;}h1,h2{color:#7e22ce;}table{border-collapse:collapse;width:90%;margin:8px 0;}th,td{padding:5px 10px;border:1px solid #ddd;}</style></head><body>');
+  w.document.write('<h1>Le son [k] — CE1/CE2</h1>');
+  w.document.write('<table><tr><th>Graphie</th><th>Quand ?</th><th>Exemples</th></tr>');
+  w.document.write('<tr><td><strong>c</strong></td><td>Devant a, o, u, ou une consonne</td><td>carotte, couleur, classe</td></tr>');
+  w.document.write('<tr><td><strong>qu</strong></td><td>Devant e ou i (très fréquent)</td><td>quatre, qui, que, quand</td></tr>');
+  w.document.write('<tr><td><strong>k</strong></td><td>Mots d\'origine étrangère</td><td>kiwi, koala, kayak, ketchup</td></tr></table>');
+  w.document.write('<p><strong>Attention :</strong> c + e/i/y = [s] (ciel, cirque) — pas [k] !</p>');
+  w.document.write('</body></html>');
+  w.document.close();w.print();
+}
+function printExercices(){
+  var w=window.open('','_blank');
+  w.document.write('<html><head><title>Exercices O06</title><style>body{font-family:sans-serif;padding:20px;font-size:13px;}h1,h2{color:#7e22ce;}.item{margin:8px 0;}.blank{display:inline-block;width:40px;border-bottom:2px solid #333;margin:0 2px;}</style></head><body>');
+  w.document.write('<h1>Exercices — Le son [k]</h1>');
+  w.document.write('<h2>Ex 1 — Quelle graphie ?</h2>');
+  q1Data.forEach(function(q,i){w.document.write('<div class="item">'+(i+1)+'. '+q.mot+'<br>[ '+q.opts.join(' / ')+' ]</div>');});
+  w.document.write('<h2>Ex 2 — Quel mot est correct ?</h2>');
+  q2Data.forEach(function(q,i){w.document.write('<div class="item">'+(i+1)+'. [ '+q.opts.join(' / ')+' ]</div>');});
+  w.document.write('<h2>Ex 3 — Complète le mot</h2>');
+  drag3Data.forEach(function(d,i){w.document.write('<div class="item">'+(i+1)+'. <span class="blank"></span>'+d.apres+'&nbsp; [ c / k / qu ]</div>');});
+  w.document.write('<h2>Ex 4 — Écris la graphie</h2>');
+  saisie4Data.forEach(function(q,i){w.document.write('<div class="item">'+(i+1)+'. '+q.phrase+'</div>');});
+  w.document.write('</body></html>');
+  w.document.close();w.print();
+}
+
+document.getElementById('meta-pts').textContent=TOTAL_PTS;
+buildCtrl(0);
+buildQcm1();
+buildQcm2();
+buildEx3();
+buildSaisie4();
+</script>
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Utiliser le dictionnaire – CE2</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../atelier-fiche.css">
+</head>
+<body>
+<script>
+window.FICHE = {
+  code:'L07', niveau:'CE2', matiere:'Français', categorie:'Lexique',
+  duree:'18 min', retour:'ce2.html',
+  accent:'#a16207', accent2:'#ca8a04', accentLight:'#fefce8', accentMid:'#fde68a',
+  titre:'Utiliser le dictionnaire',
+  ugoIntro:"Un livre magique qui conna\u00eet tous les mots !<br>Apprends \u00e0 y trouver ce que tu cherches. \u{1F4D6}",
+  msgBrillant:'Tu navigues dans le dictionnaire comme un explorateur !',
+
+  lecon:[
+    { titre:'\u{1F4D6} Bloc 1 — L\'ordre alphabétique',
+      html:'<p>Dans un dictionnaire, les mots sont rangés par <span class="highlight">ordre alphabétique</span>.</p>'
+        +'<div class="exemple" style="text-align:center;font-weight:800;letter-spacing:2px;">'
+        +'a b c d e f g h i j k l m<br>n o p q r s t u v w x y z</div>'
+        +'<div class="exemple">'
+        +'\u0031\uFE0F\u20E3 On regarde d\'abord la <strong>première lettre</strong> :<br>'
+        +'&nbsp;&nbsp;&nbsp;<em><strong>b</strong>allon</em> vient avant <em><strong>c</strong>hat</em><br><br>'
+        +'\u0032\uFE0F\u20E3 Si elle est identique, on compare la <strong>deuxième</strong> :<br>'
+        +'&nbsp;&nbsp;&nbsp;<em>ch<strong>a</strong>t</em> vient avant <em>ch<strong>i</strong>en</em><br><br>'
+        +'\u0033\uFE0F\u20E3 Et ainsi de suite, lettre après lettre !</div>',
+      ugo:'C\'est comme ranger des cartes : on compare lettre par lettre, jusqu\'à trouver une différence.' },
+
+    { titre:'\u{1F4D6} Bloc 2 — Les mots repères',
+      html:'<p>En haut de chaque page, deux <strong>mots repères</strong> t\'indiquent où tu es :</p>'
+        +'<div class="exemple" style="border:2px dashed #ca8a04;">'
+        +'<div style="display:flex;justify-content:space-between;font-weight:800;'
+        +'border-bottom:2px solid #ca8a04;padding-bottom:6px;margin-bottom:8px;">'
+        +'<span>chat</span><span>cheval</span></div>'
+        +'<div style="font-size:.9rem;">chaton · chaud · chausson · chemin · cheminée</div></div>'
+        +'<p>Ces deux mots sont le <strong>premier</strong> et le <strong>dernier</strong> mot de la page.</p>'
+        +'<div class="astuce">\u{1F4A1} Tu cherches <em>chemise</em> ? Il est entre <em>chat</em> et <em>cheval</em> ?<br>'
+        +'ch<strong>e</strong>mise… ch<strong>e</strong>val… <em>chemise</em> vient avant <em>cheval</em> \u2192 <strong>oui, c\'est sur cette page !</strong></div>',
+      ugo:'Les mots repères te font gagner un temps fou : tu sais tout de suite s\'il faut tourner la page en avant ou en arrière !' },
+
+    { titre:'\u{1F511} Bloc 3 — Lire un article',
+      html:'<p>Chaque mot expliqué s\'appelle un <strong>article</strong>. Il contient plusieurs informations :</p>'
+        +'<div class="exemple" style="border-left:4px solid #a16207;">'
+        +'<strong style="font-size:1.1rem;">chaton</strong> <em>n. m.</em><br>'
+        +'<span style="color:#64748b;">1.</span> Petit du chat. <em>La chatte allaite ses chatons.</em><br>'
+        +'<span style="color:#64748b;">2.</span> Fleur de certains arbres. <em>Les chatons du saule.</em></div>'
+        +'<table class="tbl"><tr><th>Ce que tu vois</th><th>Ce que ça veut dire</th></tr>'
+        +'<tr><td><strong>chaton</strong></td><td>le mot cherché (l\'entrée)</td></tr>'
+        +'<tr><td><em>n. m.</em></td><td>nom masculin (sa nature)</td></tr>'
+        +'<tr><td>1. 2.</td><td>les différents sens du mot</td></tr>'
+        +'<tr><td><em>en italique</em></td><td>un exemple de phrase</td></tr></table>'
+        +'<div class="astuce">\u{1F4DA} Abréviations courantes : <em>n. m.</em> nom masculin · <em>n. f.</em> nom féminin · '
+        +'<em>v.</em> verbe · <em>adj.</em> adjectif</div>' }
+  ],
+
+  memo:'\u{1F524} Les mots sont rangés par <strong>ordre alphabétique</strong> : on compare lettre par lettre.<br>'
+      +'\u{1F4D1} Les <strong>mots repères</strong> en haut de page = premier et dernier mot de la page.<br>'
+      +'\u{1F4D6} Un <strong>article</strong> contient : le mot · sa nature (n. m., v., adj.) · ses sens · des exemples.<br>'
+      +'\u{1F4A1} Un verbe se cherche à l\'<strong>infinitif</strong>, un nom au <strong>singulier</strong> !',
+
+  exercices:[
+    { type:'qcm', titre:'Quel mot vient en premier ?',
+      consigne:'Dans le dictionnaire, lequel apparaît avant l\'autre ?',
+      items:[
+        { phrase:'<strong>bateau</strong> ou <strong>ballon</strong> ?', bonne:'ballon',
+          options:['bateau','ballon'],
+          expl:'ba<strong>l</strong>lon et ba<strong>t</strong>eau : le <em>l</em> vient avant le <em>t</em>.' },
+        { phrase:'<strong>chien</strong> ou <strong>chat</strong> ?', bonne:'chat',
+          options:['chien','chat'],
+          expl:'ch<strong>a</strong>t et ch<strong>i</strong>en : le <em>a</em> vient avant le <em>i</em>.' },
+        { phrase:'<strong>maison</strong> ou <strong>maître</strong> ?', bonne:'maison',
+          options:['maître','maison'],
+          expl:'mai<strong>s</strong>on et maî<strong>t</strong>re : le <em>s</em> vient avant le <em>t</em>.' },
+        { phrase:'<strong>école</strong> ou <strong>écran</strong> ?', bonne:'école',
+          options:['écran','école'],
+          expl:'éc<strong>o</strong>le et éc<strong>r</strong>an : le <em>o</em> vient avant le <em>r</em>.' }
+      ]},
+
+    { type:'drag', titre:'Range dans l\'ordre alphabétique',
+      consigne:'Tape sur un mot, puis tape sur sa position dans la liste.',
+      pool:['arbre','banane','citron','danse'],
+      items:[
+        { avant:'\u0031\uFE0F\u20E3 En premier :', apres:'', rep:'arbre',
+          expl:'<em>arbre</em> commence par <strong>a</strong>.' },
+        { avant:'\u0032\uFE0F\u20E3 En deuxième :', apres:'', rep:'banane',
+          expl:'<em>banane</em> commence par <strong>b</strong>.' },
+        { avant:'\u0033\uFE0F\u20E3 En troisième :', apres:'', rep:'citron',
+          expl:'<em>citron</em> commence par <strong>c</strong>.' },
+        { avant:'\u0034\uFE0F\u20E3 En dernier :', apres:'', rep:'danse',
+          expl:'<em>danse</em> commence par <strong>d</strong>.' }
+      ]},
+
+    { type:'jugement', titre:'Le mot est-il sur cette page ?',
+      consigne:'Les mots repères sont donnés. Tape sur la bonne réponse.',
+      items:[
+        { consigne:'Page « <strong>chat</strong> \u2192 <strong>cheval</strong> ». Je cherche <strong>chemin</strong>.',
+          bonne:'Oui, chemin est sur cette page.',
+          mauvaise:'Non, il faut tourner la page.',
+          expl:'ch<strong>e</strong>min vient après ch<strong>a</strong>t et avant ch<strong>ev</strong>al.' },
+        { consigne:'Page « <strong>maison</strong> \u2192 <strong>marin</strong> ». Je cherche <strong>merci</strong>.',
+          bonne:'Non, il faut tourner la page en avant.',
+          mauvaise:'Oui, merci est sur cette page.',
+          expl:'m<strong>e</strong>rci vient après m<strong>a</strong>rin : il est plus loin dans le dictionnaire.' },
+        { consigne:'Page « <strong>fleur</strong> \u2192 <strong>fruit</strong> ». Je cherche <strong>forêt</strong>.',
+          bonne:'Oui, forêt est sur cette page.',
+          mauvaise:'Non, il faut revenir en arrière.',
+          expl:'f<strong>o</strong>rêt vient après f<strong>l</strong>eur et avant f<strong>r</strong>uit.' },
+        { consigne:'Page « <strong>table</strong> \u2192 <strong>tigre</strong> ». Je cherche <strong>soleil</strong>.',
+          bonne:'Non, il faut revenir en arrière.',
+          mauvaise:'Oui, soleil est sur cette page.',
+          expl:'<strong>s</strong>oleil commence par s : il vient avant tous les mots en t.' }
+      ]},
+
+    { type:'saisie', titre:'Sous quel mot chercher ?',
+      consigne:'Écris le mot exact à chercher dans le dictionnaire.',
+      maxlen:14,
+      items:[
+        { phrase:'Je cherche le sens de <strong>chantaient</strong>',
+          rep:['chanter'],
+          expl:'Un verbe se cherche à l\'infinitif \u2192 <strong>chanter</strong>.' },
+        { phrase:'Je cherche le sens de <strong>chevaux</strong>',
+          rep:['cheval'],
+          expl:'Un nom se cherche au singulier \u2192 <strong>cheval</strong>.' },
+        { phrase:'Je cherche le sens de <strong>gentilles</strong>',
+          rep:['gentil'],
+          expl:'Un adjectif se cherche au masculin singulier \u2192 <strong>gentil</strong>.' },
+        { phrase:'Je cherche le sens de <strong>finissons</strong>',
+          rep:['finir'],
+          expl:'Un verbe se cherche à l\'infinitif \u2192 <strong>finir</strong>.' }
+      ]}
+  ]
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
+<script src="../atelier-fiche.js"></script>
+</body>
+</html>
