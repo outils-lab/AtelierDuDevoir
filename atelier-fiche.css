@@ -223,3 +223,70 @@ body.cp{font-size:22px;}
 .faux-input.kb-cible{border-color:var(--accent);background:var(--accent-light);}
 .faux-input.ok{border-color:var(--vert)!important;background:var(--vert-bg);}
 .faux-input.ko{border-color:var(--rouge)!important;background:var(--rouge-bg);}
+
+/* ── Dictée ── */
+.dictee-item{border-left:4px solid var(--accent);}
+.dictee-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px;}
+.dictee-num{background:var(--accent);color:#fff;border-radius:50%;width:30px;height:30px;
+  display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.9rem;flex-shrink:0;}
+.btn-ecoute{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:10px 16px;
+  font-family:'Nunito',sans-serif;font-size:.9rem;font-weight:800;cursor:pointer;min-height:44px;
+  transition:filter .15s,transform .12s;}
+.btn-ecoute:hover{filter:brightness(.92);transform:translateY(-2px);}
+.btn-ecoute.lent{background:#fff;color:var(--accent);border:2px solid var(--accent);}
+
+/* ══════ CYCLE 4 — charte sobre (Lato + Playfair Display) ══════ */
+body.c4{font-family:'Lato',sans-serif;font-size:19px;background:#fbfbfa;color:#1f2937;}
+body.c4 .accroche-text h1,
+body.c4 .lecon-block h2,
+body.c4 .ex-header h2,
+body.c4 .memo h3{font-family:'Playfair Display',Georgia,serif;font-weight:700;}
+body.c4 .accroche{padding:26px 20px 20px;}
+body.c4 .accroche-text h1{font-size:1.5rem;letter-spacing:.2px;}
+body.c4 .ugo-big{font-size:2.4rem;}
+body.c4 .meta-tag{border-radius:4px;font-weight:600;font-size:.82rem;}
+body.c4 .lecon-block{border-radius:6px;border-left-width:3px;box-shadow:0 1px 4px rgba(0,0,0,.05);}
+body.c4 .exemple,body.c4 .astuce{border-radius:5px;}
+body.c4 .analogie{font-style:italic;color:#6b7280;font-size:.94rem;line-height:1.65;
+  margin-bottom:10px;padding-left:12px;border-left:2px solid #d1d5db;}
+body.c4 .ugo-bubble{background:#f3f4f6;border-radius:6px;font-size:.88rem;}
+body.c4 .ugo-icon{font-size:1.3rem;}
+body.c4 .btn-compris,body.c4 .btn-suite,body.c4 .btn-retry{border-radius:5px;font-weight:700;
+  font-family:'Lato',sans-serif;letter-spacing:.3px;}
+body.c4 .btn-verif{border-radius:5px;font-family:'Lato',sans-serif;}
+body.c4 .qcm-card,body.c4 .jug-card,body.c4 .saisie-item,body.c4 .drag-item{border-radius:6px;
+  box-shadow:0 1px 4px rgba(0,0,0,.05);}
+body.c4 .qcm-btn,body.c4 .jug-opt,body.c4 .chip,body.c4 .drop-zone,
+body.c4 .saisie-item input,body.c4 .faux-input{border-radius:5px;font-family:'Lato',sans-serif;}
+body.c4 .ex-header{border-radius:6px;}
+body.c4 .score-bar,body.c4 .bilan-card,body.c4 .memo,body.c4 .cls-col{border-radius:6px;}
+body.c4 .score-big{font-family:'Playfair Display',Georgia,serif;}
+body.c4 .niv,body.c4 .cl-badge{border-radius:4px;}
+
+/* ── Questions de contrôle de lecture ── */
+.ctrl{background:#f8fafc;border:2px dashed var(--accent-mid);border-radius:12px;
+  padding:16px 14px;margin-top:14px;}
+.ctrl-titre{font-weight:800;font-size:1rem;color:var(--accent);margin-bottom:3px;}
+.ctrl-sous{font-size:.83rem;color:var(--gris);font-weight:600;margin-bottom:12px;}
+.ctrl-q{background:#fff;border-radius:10px;padding:12px;margin-bottom:10px;
+  box-shadow:0 1px 4px rgba(0,0,0,.05);}
+.ctrl-txt{font-weight:700;font-size:.95rem;margin-bottom:8px;line-height:1.45;}
+.ctrl-opts{display:flex;flex-wrap:wrap;gap:7px;}
+.ctrl-btn{flex:1;min-width:110px;background:#f1f5f9;border:2px solid #e2e8f0;border-radius:10px;
+  padding:11px 8px;font-family:'Nunito',sans-serif;font-size:.92rem;font-weight:700;
+  cursor:pointer;transition:all .15s;min-height:48px;}
+.ctrl-btn:hover:not(:disabled){border-color:var(--accent);background:var(--accent-light);}
+.ctrl-btn.correct{background:var(--vert-bg);border-color:var(--vert);color:var(--vert-txt);}
+.ctrl-btn.wrong{background:var(--rouge-bg);border-color:var(--rouge);color:var(--rouge);}
+.ctrl-bilan{display:none;border-radius:10px;padding:13px 15px;margin-top:6px;
+  font-size:.92rem;font-weight:700;line-height:1.6;}
+.ctrl-bilan.show{display:block;}
+.ctrl-bilan.ok{background:var(--vert-bg);color:var(--vert-txt);}
+.ctrl-bilan.ko{background:#fff7ed;color:#c2410c;border:2px solid #fdba74;}
+.ctrl-retry{background:#c2410c;color:#fff;border:none;border-radius:10px;padding:11px 20px;
+  font-family:'Nunito',sans-serif;font-size:.9rem;font-weight:800;cursor:pointer;
+  margin-top:10px;min-height:46px;}
+.ctrl-retry:hover{filter:brightness(.92);}
+body.c4 .ctrl{border-radius:6px;background:#fafafa;}
+body.c4 .ctrl-q,body.c4 .ctrl-btn,body.c4 .ctrl-bilan,body.c4 .ctrl-retry{border-radius:5px;}
+body.c4 .ctrl-titre{font-family:'Playfair Display',Georgia,serif;}
