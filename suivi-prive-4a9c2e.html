@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Suivi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{--bleu:#3B82F6;--vert:#10B981;--orange:#F59E0B;--violet:#8B5CF6;--rouge:#EF4444;
+  --texte:#2C3E50;--gris:#9aa5b1;}
+body{font-family:'Nunito',sans-serif;background:#F8F9FA;color:var(--texte);min-height:100vh;}
+.wrap{max-width:1100px;margin:0 auto;padding:22px 16px 70px;}
+.tete{text-align:center;margin:6px 0 22px;}
+.tete h1{font-family:'Fredoka One',cursive;font-size:1.9rem;line-height:1.15;}
+.tete h1 span{color:var(--violet);}
+.tete p{font-weight:700;font-size:.85rem;color:#6b7280;margin-top:6px;}
+
+/* Connexion */
+.gate{max-width:390px;margin:60px auto;background:#fff;border:2.5px solid #e8ecf1;
+  border-radius:20px;padding:26px 22px;}
+.gate h2{font-family:'Fredoka One',cursive;font-size:1.2rem;margin-bottom:14px;text-align:center;}
+.gate label{display:block;font-weight:800;font-size:.82rem;margin:12px 0 5px;color:#6b7280;}
+.gate input{width:100%;border:2.5px solid #e8ecf1;border-radius:12px;padding:11px 13px;
+  font-family:'Nunito',sans-serif;font-size:1rem;font-weight:700;outline:none;}
+.gate input:focus{border-color:var(--violet);}
+.gate button{width:100%;margin-top:18px;background:var(--violet);color:#fff;border:none;
+  border-radius:14px;padding:13px;font-family:'Fredoka One',cursive;font-size:1rem;cursor:pointer;}
+.gate .err{color:var(--rouge);font-weight:800;font-size:.85rem;margin-top:12px;text-align:center;}
+
+/* Cartes de stats */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:12px;margin-bottom:24px;}
+.stat-card{background:#fff;border:2.5px solid #e8ecf1;border-radius:18px;padding:16px 12px;text-align:center;}
+.stat-val{font-family:'Fredoka One',cursive;font-size:1.8rem;line-height:1.1;}
+.stat-lib{font-weight:800;font-size:.76rem;color:var(--gris);margin-top:4px;}
+.stat-sub{font-weight:700;font-size:.72rem;color:#b8c0c9;margin-top:2px;}
+.sc-bleu .stat-val{color:var(--bleu);} .sc-vert .stat-val{color:var(--vert);}
+.sc-orange .stat-val{color:var(--orange);} .sc-violet .stat-val{color:var(--violet);}
+.sc-rouge .stat-val{color:var(--rouge);}
+
+.section{background:#fff;border:2.5px solid #e8ecf1;border-radius:20px;padding:18px 16px;margin-bottom:18px;}
+.section h2{font-family:'Fredoka One',cursive;font-size:1.05rem;margin-bottom:4px;}
+.section .aide{font-weight:700;font-size:.78rem;color:var(--gris);margin-bottom:14px;}
+
+/* Tableaux */
+.tbl-scroll{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:.85rem;}
+th{text-align:left;font-weight:900;font-size:.74rem;color:var(--gris);text-transform:uppercase;
+  letter-spacing:.4px;padding:8px 9px;border-bottom:2px solid #e8ecf1;cursor:pointer;
+  white-space:nowrap;user-select:none;}
+th:hover{color:var(--violet);}
+th.act{color:var(--violet);}
+td{padding:9px;border-bottom:1px solid #f1f4f7;font-weight:700;white-space:nowrap;}
+tr:hover td{background:#fbfcfd;}
+.pastille{display:inline-block;border-radius:20px;padding:2px 9px;font-size:.74rem;font-weight:900;}
+.p-vert{background:#d1fae5;color:#047857;} .p-bleu{background:#dbeafe;color:#1d4ed8;}
+.p-orange{background:#fef3c7;color:#b45309;} .p-rouge{background:#fee2e2;color:#b91c1c;}
+.p-gris{background:#f1f4f7;color:#7b8794;}
+.titre-fiche{white-space:normal;font-weight:800;}
+.mini{font-weight:700;font-size:.76rem;color:var(--gris);}
+
+/* Barres */
+.bars{display:flex;align-items:flex-end;gap:3px;height:120px;margin-top:8px;}
+.bar{flex:1;background:var(--violet);border-radius:4px 4px 0 0;min-height:2px;opacity:.85;
+  position:relative;}
+.bar:hover{opacity:1;}
+.bar span{display:none;position:absolute;bottom:100%;left:50%;transform:translateX(-50%);
+  background:var(--texte);color:#fff;border-radius:6px;padding:3px 7px;font-size:.7rem;
+  font-weight:800;white-space:nowrap;margin-bottom:4px;}
+.bar:hover span{display:block;}
+.bars-legende{display:flex;justify-content:space-between;font-size:.72rem;font-weight:800;
+  color:var(--gris);margin-top:6px;}
+.jauge{height:26px;border-radius:8px;overflow:hidden;display:flex;margin-top:10px;background:#f1f4f7;}
+.jauge div{display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:.74rem;}
+.legende{display:flex;flex-wrap:wrap;gap:14px;margin-top:10px;font-size:.78rem;font-weight:800;}
+.legende i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;}
+.vide{text-align:center;color:var(--gris);font-weight:800;padding:22px 0;font-size:.88rem;}
+.barre-fine{background:#f1f4f7;border-radius:6px;height:8px;width:70px;display:inline-block;
+  vertical-align:middle;overflow:hidden;}
+.barre-fine i{display:block;height:100%;border-radius:6px;}
+.deco{position:fixed;top:12px;right:14px;background:#fff;border:2.5px solid var(--rouge);
+  color:var(--rouge);border-radius:14px;padding:7px 15px;font-family:'Fredoka One',cursive;
+  font-size:.82rem;cursor:pointer;z-index:20;}
+</style>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#3B82F6">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-title" content="Atelier">
+</head>
+<body>
+
+<div id="gate" class="gate" style="display:none;">
+  <h2>Suivi privé</h2>
+  <label>Adresse e-mail</label>
+  <input type="email" id="mail" autocomplete="username">
+  <label>Mot de passe</label>
+  <input type="password" id="mdp" autocomplete="current-password">
+  <button onclick="connexion()">Entrer</button>
+  <div class="err" id="err"></div>
+</div>
+
+<button class="deco" id="btnDeco" style="display:none;" onclick="deconnexion()">Quitter</button>
+
+<div class="wrap" id="app" style="display:none;">
+  <div class="tete">
+    <h1>Suivi <span>du site</span></h1>
+    <p id="maj"></p>
+  </div>
+
+  <div class="stats-grid" id="cartes"></div>
+
+  <div class="section">
+    <h2>Activité des 30 derniers jours</h2>
+    <div class="aide">Nombre de fiches terminées chaque jour.</div>
+    <div class="bars" id="graphe"></div>
+    <div class="bars-legende"><span id="gJ1"></span><span id="gJ2"></span></div>
+  </div>
+
+  <div class="section">
+    <h2>Les enfants</h2>
+    <div class="aide">Un enfant par ligne — une famille de trois enfants apparaît trois fois. Cliquez sur un en-tête pour trier.</div>
+    <div class="tbl-scroll"><table id="tEnfants"></table></div>
+  </div>
+
+  <div class="section">
+    <h2>Les comptes famille</h2>
+    <div class="aide">Un compte parent par ligne.</div>
+    <div class="tbl-scroll"><table id="tComptes"></table></div>
+  </div>
+
+  <div class="section">
+    <h2>Les fiches</h2>
+    <div class="aide">Réussite moyenne par fiche : sous 55 %, la fiche est probablement trop difficile ou mal expliquée ; au-dessus de 95 %, elle est trop facile.</div>
+    <div class="tbl-scroll"><table id="tFiches"></table></div>
+  </div>
+
+  <div class="section">
+    <h2>Répartition des résultats</h2>
+    <div class="aide">Toutes fiches terminées confondues.</div>
+    <div class="jauge" id="jaugeNiv"></div>
+    <div class="legende" id="legNiv"></div>
+  </div>
+
+  <div class="section">
+    <h2>Par matière et par classe</h2>
+    <div class="tbl-scroll"><table id="tMat"></table></div>
+    <div style="height:14px;"></div>
+    <div class="tbl-scroll"><table id="tClasse"></table></div>
+  </div>
+
+  <div class="section">
+    <h2>Fidélité</h2>
+    <div class="aide">Un enfant « revenu » a travaillé au moins deux jours différents.</div>
+    <div class="stats-grid" id="cartesFid" style="margin-bottom:0;"></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+var SUPABASE_URL = "https://rwqsvrmjjoihuhmvbwuu.supabase.co";
+var SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ3cXN2cm1qam9paHVobXZid3V1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQzNjQxNTMsImV4cCI6MjA5OTk0MDE1M30.VtdOnI169-erf48NpxLPCC0th6kHqBcsBuCauOx52HI";
+var sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+var ENFANTS = [], PROG = [], PARENTS = [], ASSIGN = [], CATALOGUE = {};
+
+/* ── Utilitaires ── */
+function j(n){ return new Date(Date.now() - n*86400000); }
+function dateFR(d){
+  if(!d) return '—';
+  var x = new Date(d);
+  return x.toLocaleDateString('fr-FR', {day:'2-digit', month:'2-digit', year:'2-digit'});
+}
+function jour(d){ return new Date(d).toISOString().slice(0,10); }
+function depuis(d){
+  if(!d) return '—';
+  var n = Math.floor((Date.now() - new Date(d)) / 86400000);
+  if(n === 0) return "aujourd'hui";
+  if(n === 1) return 'hier';
+  if(n < 31) return 'il y a ' + n + ' j';
+  if(n < 365) return 'il y a ' + Math.floor(n/30) + ' mois';
+  return 'il y a ' + Math.floor(n/365) + ' an(s)';
+}
+function pct(s, t){ return t > 0 ? Math.round(s / t * 100) : 0; }
+function pastilleReussite(p, n){
+  if(!n) return '<span class="pastille p-gris">—</span>';
+  var c = p >= 90 ? 'p-vert' : p >= 80 ? 'p-bleu' : p >= 50 ? 'p-orange' : 'p-rouge';
+  return '<span class="pastille ' + c + '">' + p + ' %</span>';
+}
+function esc(s){ var d = document.createElement('div'); d.textContent = s == null ? '' : s; return d.innerHTML; }
+
+/* ── Connexion ── */
+async function demarrer(){
+  var s = await sb.auth.getSession();
+  if(!s.data.session){ document.getElementById('gate').style.display = 'block'; return; }
+  charger();
+}
+async function connexion(){
+  var e = document.getElementById('err');
+  e.textContent = '';
+  var r = await sb.auth.signInWithPassword({
+    email: document.getElementById('mail').value.trim(),
+    password: document.getElementById('mdp').value
+  });
+  if(r.error){ e.textContent = 'Identifiants incorrects.'; return; }
+  document.getElementById('gate').style.display = 'none';
+  charger();
+}
+async function deconnexion(){ await sb.auth.signOut(); location.reload(); }
+
+/* ── Chargement ── */
+async function charger(){
+  var rp = await sb.rpc('admin_parents');
+  if(rp.error){
+    document.getElementById('gate').style.display = 'block';
+    document.getElementById('err').textContent = "Ce compte n'a pas accès au suivi.";
+    await sb.auth.signOut();
+    return;
+  }
+  PARENTS = rp.data || [];
+
+  var r1 = await sb.from('enfants').select('*');
+  var r2 = await sb.from('progression').select('*');
+  var r3 = await sb.from('assignations').select('*');
+  ENFANTS = r1.data || []; PROG = r2.data || []; ASSIGN = r3.data || [];
+
+  try{
+    var cat = await fetch('fiches.json').then(function(x){ return x.json(); });
+    Object.keys(cat).forEach(function(k){
+      (cat[k] || []).forEach(function(f){ CATALOGUE[f.code] = f; });
+    });
+  }catch(err){ /* le suivi fonctionne sans le catalogue */ }
+
+  document.getElementById('app').style.display = 'block';
+  document.getElementById('btnDeco').style.display = 'block';
+  document.getElementById('maj').textContent = 'Mis à jour le ' + new Date().toLocaleString('fr-FR');
+  rendre();
+}
+
+/* ── Calculs ── */
+function rendre(){
+  var j7 = j(7), j30 = j(30);
+  var parEnfant = {};
+  ENFANTS.forEach(function(e){
+    parEnfant[e.id] = {enfant:e, lignes:[], jours:{}, score:0, total:0, brillant:0, faible:0, derniere:null};
+  });
+  PROG.forEach(function(p){
+    var b = parEnfant[p.enfant_id];
+    if(!b) return;
+    b.lignes.push(p);
+    b.jours[jour(p.fait_le)] = 1;
+    b.score += p.score; b.total += p.total;
+    var q = pct(p.score, p.total);
+    if(q >= 90) b.brillant++; else if(q < 50) b.faible++;
+    if(!b.derniere || new Date(p.fait_le) > new Date(b.derniere)) b.derniere = p.fait_le;
+  });
+
+  var mailParent = {};
+  PARENTS.forEach(function(p){ mailParent[p.id] = p.email; });
+
+  var enfantsActifs30 = 0, enfantsActifs7 = 0;
+  Object.keys(parEnfant).forEach(function(k){
+    var d = parEnfant[k].derniere;
+    if(!d) return;
+    if(new Date(d) > j30) enfantsActifs30++;
+    if(new Date(d) > j7) enfantsActifs7++;
+  });
+
+  var prog30 = PROG.filter(function(p){ return new Date(p.fait_le) > j30; });
+  var prog7  = PROG.filter(function(p){ return new Date(p.fait_le) > j7; });
+  var sT = 0, tT = 0;
+  PROG.forEach(function(p){ sT += p.score; tT += p.total; });
+
+  var nbFamilles = PARENTS.length || Object.keys(ENFANTS.reduce(function(a,e){ a[e.parent_id]=1; return a; },{})).length;
+
+  /* Cartes */
+  var cartes = [
+    ['sc-violet', nbFamilles, 'Comptes famille', PARENTS.filter(function(p){ return new Date(p.cree_le) > j30; }).length + ' ce mois-ci'],
+    ['sc-bleu', ENFANTS.length, 'Enfants enregistrés', nbFamilles ? (ENFANTS.length / nbFamilles).toFixed(1) + ' par compte' : ''],
+    ['sc-vert', enfantsActifs30, 'Enfants actifs (30 j)', enfantsActifs7 + ' cette semaine'],
+    ['sc-orange', PROG.length, 'Fiches terminées', prog30.length + ' ce mois-ci · ' + prog7.length + ' cette semaine'],
+    ['sc-bleu', pct(sT, tT) + ' %', 'Réussite moyenne', 'toutes fiches confondues'],
+    ['sc-violet', Object.keys(PROG.reduce(function(a,p){ a[p.fiche_code]=1; return a; },{})).length,
+      'Fiches jouées', 'sur ' + (Object.keys(CATALOGUE).length || '—') + ' au catalogue']
+  ];
+  document.getElementById('cartes').innerHTML = cartes.map(function(c){
+    return '<div class="stat-card ' + c[0] + '"><div class="stat-val">' + c[1] + '</div>'
+      + '<div class="stat-lib">' + c[2] + '</div>'
+      + (c[3] ? '<div class="stat-sub">' + c[3] + '</div>' : '') + '</div>';
+  }).join('');
+
+  /* Graphe 30 jours */
+  var parJour = {};
+  for(var i = 29; i >= 0; i--) parJour[jour(j(i))] = 0;
+  prog30.forEach(function(p){ var k = jour(p.fait_le); if(k in parJour) parJour[k]++; });
+  var cles = Object.keys(parJour), maxJ = Math.max.apply(null, cles.map(function(k){ return parJour[k]; }).concat([1]));
+  document.getElementById('graphe').innerHTML = cles.map(function(k){
+    return '<div class="bar" style="height:' + Math.round(parJour[k] / maxJ * 100) + '%">'
+      + '<span>' + dateFR(k) + ' : ' + parJour[k] + '</span></div>';
+  }).join('');
+  document.getElementById('gJ1').textContent = dateFR(cles[0]);
+  document.getElementById('gJ2').textContent = dateFR(cles[cles.length - 1]);
+
+  /* Tableau enfants */
+  var ligEnf = Object.keys(parEnfant).map(function(k){
+    var b = parEnfant[k], e = b.enfant, n = b.lignes.length;
+    var p = pct(b.score, b.total), nbj = Object.keys(b.jours).length;
+    return {
+      tri: [esc(e.prenom), e.classe || '', mailParent[e.parent_id] || '', new Date(e.cree_le).getTime(),
+            n, n ? p : -1, nbj, b.derniere ? new Date(b.derniere).getTime() : 0],
+      html: '<td>' + esc(e.prenom) + '</td>'
+        + '<td><span class="pastille p-gris">' + esc(e.classe || '—') + '</span></td>'
+        + '<td class="mini">' + esc(mailParent[e.parent_id] || e.parent_id.slice(0, 8)) + '</td>'
+        + '<td class="mini">' + dateFR(e.cree_le) + '</td>'
+        + '<td>' + n + '</td>'
+        + '<td>' + pastilleReussite(p, n) + '</td>'
+        + '<td>' + nbj + '</td>'
+        + '<td class="mini">' + depuis(b.derniere) + '</td>'
+    };
+  });
+  tableau('tEnfants', ['Prénom','Classe','Compte','Inscrit le','Fiches','Réussite','Jours actifs','Dernière activité'], ligEnf, 4, true);
+
+  /* Tableau comptes */
+  var parParent = {};
+  ENFANTS.forEach(function(e){
+    if(!parParent[e.parent_id]) parParent[e.parent_id] = {enfants:[], fiches:0, derniere:null};
+    parParent[e.parent_id].enfants.push(e);
+    var b = parEnfant[e.id];
+    parParent[e.parent_id].fiches += b.lignes.length;
+    if(b.derniere && (!parParent[e.parent_id].derniere || new Date(b.derniere) > new Date(parParent[e.parent_id].derniere)))
+      parParent[e.parent_id].derniere = b.derniere;
+  });
+  var parentsAssign = ASSIGN.reduce(function(a, x){
+    var e = ENFANTS.filter(function(y){ return y.id === x.enfant_id; })[0];
+    if(e) a[e.parent_id] = 1;
+    return a;
+  }, {});
+  var listeP = PARENTS.length ? PARENTS : Object.keys(parParent).map(function(id){ return {id:id, email:id.slice(0,8), cree_le:null, derniere_connexion:null}; });
+  var ligCpt = listeP.map(function(p){
+    var b = parParent[p.id] || {enfants:[], fiches:0, derniere:null};
+    return {
+      tri: [p.email || '', p.cree_le ? new Date(p.cree_le).getTime() : 0,
+            p.derniere_connexion ? new Date(p.derniere_connexion).getTime() : 0,
+            b.enfants.length, b.fiches, b.derniere ? new Date(b.derniere).getTime() : 0],
+      html: '<td>' + esc(p.email || '—') + '</td>'
+        + '<td class="mini">' + dateFR(p.cree_le) + '</td>'
+        + '<td class="mini">' + depuis(p.derniere_connexion) + '</td>'
+        + '<td>' + b.enfants.length + '</td>'
+        + '<td class="mini">' + esc(b.enfants.map(function(e){ return e.prenom; }).join(', ') || '—') + '</td>'
+        + '<td>' + b.fiches + '</td>'
+        + '<td>' + (parentsAssign[p.id] ? '<span class="pastille p-vert">oui</span>' : '<span class="pastille p-gris">non</span>') + '</td>'
+    };
+  });
+  tableau('tComptes', ['Compte','Inscrit le','Dernière connexion','Enfants','Prénoms','Fiches','Assigne des devoirs'], ligCpt, 5, true);
+
+  /* Tableau fiches */
+  var parFiche = {};
+  PROG.forEach(function(p){
+    if(!parFiche[p.fiche_code]) parFiche[p.fiche_code] = {s:0, t:0, n:0, enfants:{}};
+    var f = parFiche[p.fiche_code];
+    f.s += p.score; f.t += p.total; f.n++; f.enfants[p.enfant_id] = 1;
+  });
+  var ligFic = Object.keys(parFiche).map(function(code){
+    var f = parFiche[code], meta = CATALOGUE[code] || {}, p = pct(f.s, f.t);
+    var signal = p < 55 ? '<span class="pastille p-rouge">difficile</span>'
+               : p > 95 ? '<span class="pastille p-bleu">trop facile</span>' : '';
+    return {
+      tri: [code, esc(meta.matiere || ''), esc(meta.niveau || ''), f.n, Object.keys(f.enfants).length, p],
+      html: '<td>' + esc(code) + '</td>'
+        + '<td class="titre-fiche">' + esc(meta.titre || '—') + '</td>'
+        + '<td class="mini">' + esc(meta.matiere || '—') + '</td>'
+        + '<td><span class="pastille p-gris">' + esc(meta.niveau || '—') + '</span></td>'
+        + '<td>' + f.n + '</td>'
+        + '<td>' + Object.keys(f.enfants).length + '</td>'
+        + '<td>' + pastilleReussite(p, f.n) + ' ' + signal + '</td>'
+    };
+  });
+  tableau('tFiches', ['Code','Titre','Matière','Niveau','Tentatives','Enfants','Réussite'], ligFic, 4, true);
+
+  /* Jauge des niveaux de maîtrise */
+  var niv = {b:0, m:0, c:0, r:0};
+  PROG.forEach(function(p){
+    var q = pct(p.score, p.total);
+    if(q >= 90) niv.b++; else if(q >= 80) niv.m++; else if(q >= 50) niv.c++; else niv.r++;
+  });
+  var totN = PROG.length || 1;
+  var segs = [['Brillant', niv.b, '#10B981'], ['Bien maîtrisé', niv.m, '#3B82F6'],
+              ['En cours', niv.c, '#F59E0B'], ['À retravailler', niv.r, '#EF4444']];
+  document.getElementById('jaugeNiv').innerHTML = segs.map(function(s){
+    var w = s[1] / totN * 100;
+    return '<div style="width:' + w + '%;background:' + s[2] + ';">' + (w > 9 ? Math.round(w) + ' %' : '') + '</div>';
+  }).join('');
+  document.getElementById('legNiv').innerHTML = segs.map(function(s){
+    return '<span><i style="background:' + s[2] + '"></i>' + s[0] + ' — ' + s[1] + '</span>';
+  }).join('');
+
+  /* Par matière et par classe */
+  var mat = {}, cls = {};
+  PROG.forEach(function(p){
+    var m = (CATALOGUE[p.fiche_code] || {}).matiere || 'Inconnue';
+    if(!mat[m]) mat[m] = {n:0, s:0, t:0};
+    mat[m].n++; mat[m].s += p.score; mat[m].t += p.total;
+  });
+  var maxMat = Math.max.apply(null, Object.keys(mat).map(function(k){ return mat[k].n; }).concat([1]));
+  tableau('tMat', ['Matière','Fiches terminées','','Réussite'],
+    Object.keys(mat).map(function(k){
+      return { tri:[k, mat[k].n, 0, pct(mat[k].s, mat[k].t)],
+        html: '<td>' + esc(k) + '</td><td>' + mat[k].n + '</td>'
+          + '<td><span class="barre-fine"><i style="width:' + (mat[k].n / maxMat * 100) + '%;background:var(--violet)"></i></span></td>'
+          + '<td>' + pastilleReussite(pct(mat[k].s, mat[k].t), mat[k].n) + '</td>' };
+    }), 1, true);
+
+  ENFANTS.forEach(function(e){
+    var c = e.classe || 'Non renseignée';
+    if(!cls[c]) cls[c] = {enfants:0, fiches:0};
+    cls[c].enfants++;
+    cls[c].fiches += parEnfant[e.id].lignes.length;
+  });
+  tableau('tClasse', ['Classe','Enfants','Fiches terminées','Moyenne par enfant'],
+    Object.keys(cls).map(function(k){
+      return { tri:[k, cls[k].enfants, cls[k].fiches, cls[k].fiches / cls[k].enfants],
+        html: '<td><span class="pastille p-gris">' + esc(k) + '</span></td><td>' + cls[k].enfants + '</td>'
+          + '<td>' + cls[k].fiches + '</td><td>' + (cls[k].fiches / cls[k].enfants).toFixed(1) + '</td>' };
+    }), 1, true);
+
+  /* Fidélité */
+  var avecAct = 0, revenus = 0, sommeJours = 0, unSeul = 0;
+  Object.keys(parEnfant).forEach(function(k){
+    var nbj = Object.keys(parEnfant[k].jours).length;
+    if(nbj === 0) return;
+    avecAct++; sommeJours += nbj;
+    if(nbj > 1) revenus++; else unSeul++;
+  });
+  var fid = [
+    ['sc-vert', avecAct ? Math.round(revenus / avecAct * 100) + ' %' : '—', 'Enfants revenus', revenus + ' sur ' + avecAct],
+    ['sc-rouge', unSeul, 'Une seule journée', 'puis plus rien'],
+    ['sc-bleu', avecAct ? (sommeJours / avecAct).toFixed(1) : '—', 'Jours actifs par enfant', 'en moyenne'],
+    ['sc-orange', ENFANTS.length - avecAct, 'Jamais commencé', 'profils créés sans fiche terminée']
+  ];
+  document.getElementById('cartesFid').innerHTML = fid.map(function(c){
+    return '<div class="stat-card ' + c[0] + '"><div class="stat-val">' + c[1] + '</div>'
+      + '<div class="stat-lib">' + c[2] + '</div><div class="stat-sub">' + c[3] + '</div></div>';
+  }).join('');
+}
+
+/* ── Tableau générique triable ── */
+function tableau(id, entetes, lignes, triDefaut, desc){
+  var t = document.getElementById(id);
+  if(!lignes.length){ t.outerHTML = '<table id="' + id + '"><tr><td class="vide">Aucune donnée pour le moment.</td></tr></table>'; return; }
+  var etat = {col: triDefaut, desc: desc !== false};
+  function dessiner(){
+    var l = lignes.slice().sort(function(a, b){
+      var x = a.tri[etat.col], y = b.tri[etat.col], r;
+      r = (typeof x === 'number') ? x - y : String(x).localeCompare(String(y), 'fr');
+      return etat.desc ? -r : r;
+    });
+    t.innerHTML = '<tr>' + entetes.map(function(h, i){
+        return '<th class="' + (i === etat.col ? 'act' : '') + '" data-c="' + i + '">' + h
+          + (i === etat.col ? (etat.desc ? ' ↓' : ' ↑') : '') + '</th>';
+      }).join('') + '</tr>'
+      + l.map(function(x){ return '<tr>' + x.html + '</tr>'; }).join('');
+    t.querySelectorAll('th').forEach(function(th){
+      th.onclick = function(){
+        var c = parseInt(th.dataset.c, 10);
+        if(c === etat.col) etat.desc = !etat.desc; else { etat.col = c; etat.desc = true; }
+        dessiner();
+      };
+    });
+  }
+  dessiner();
+}
+
+demarrer();
+</script>
+</body>
+</html>
