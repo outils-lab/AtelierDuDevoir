@@ -1,7 +1,7 @@
 /* ═══════════════════════════════════════════════════════════
    L'Atelier du Devoir — Moteur de fiches (v2)
    Usage : définir window.FICHE puis inclure ce script.
-   Types d'exercices : qcm · drag · classify · saisie · jugement · conjtable
+   Types d'exercices : qcm · drag · classify · saisie · jugement · conjtable · carte
    ═══════════════════════════════════════════════════════════ */
 (function(){
 'use strict';
@@ -24,6 +24,12 @@ function ns(s){
     .replace(/\s*([.,;:!?])\s*/g,'$1').replace(/\s+/g,' ').trim();
 }
 function el(id){ return document.getElementById(id); }
+
+/* Exercices qui réclament un bouton « Vérifier » (validation groupée) */
+function besoinVerif(ex){
+  if(ex.type === 'carte') return !!(window.AFCarte && window.AFCarte.besoinVerif(ex));
+  return ['drag','classify','saisie','conjtable','dictee'].indexOf(ex.type) >= 0;
+}
 
 /* Comparaison stricte pour les mots accentués distinctifs (à/a, ou/où…) */
 function memeReponse(saisi, attendu, strict){
@@ -48,7 +54,6 @@ F.exercices.forEach(function(ex){
 
 /* ═══ CLAVIER VIRTUEL (anti écriture intuitive sur mobile) ═══ */
 var TACTILE = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
-var ordreDictee = {};
 var kbCible = null;
 
 var KB_LETTRES = [
@@ -226,7 +231,8 @@ function construire(){
     h += '<div id="bloc'+i+'" class="lecon-block'+(i===0?' revealed':'')+'">'
        + '<h2>'+b.titre+'</h2>'
        + (b.analogie ? '<div class="analogie">'+b.analogie+'</div>' : '')
-       + b.html;
+       + b.html
+       + (b.carte ? '<div class="carte-lecon" id="cartelecon'+i+'"></div>' : '');
     if(b.ugo) h += '<div class="ugo-bubble"><span class="ugo-icon">\u{1F989}</span><span>Ugo : '+b.ugo+'</span></div>';
     var dernier = (i === F.lecon.length-1);
     if(b.questions && b.questions.length){
@@ -267,7 +273,7 @@ function construire(){
        + '<p>'+esc(ex.consigne)+'</p></div>'
        + '<div class="score-bar">Score : <span id="sc'+i+'">0</span> / '+ex.pts+' pts</div>'
        + '<div id="ex'+i+'"></div>';
-    if(ex.type==='drag'||ex.type==='classify'||ex.type==='saisie'||ex.type==='conjtable'||ex.type==='dictee')
+    if(besoinVerif(ex))
       h += '<button class="btn-verif" id="verif'+i+'" onclick="AF.verifier('+i+')">Vérifier \u2713</button>';
     h += '<button class="btn-suite" id="next'+i+'" onclick="'
        + (dernier ? 'AF.bilan()' : 'AF.goPhase('+(n+1)+')') + '">'
@@ -290,6 +296,7 @@ function construire(){
      + '<button class="print-btn" onclick="AF.printEx()">\u{1F4DD} Exercices</button></div>';
 
   document.body.innerHTML = h;
+  if(window.AFCarte) window.AFCarte.monterLecons(F.lecon);
   F.exercices.forEach(function(ex,i){ rendre(ex,i); });
 }
 
@@ -365,21 +372,22 @@ function rendre(ex, i){
   }
 
   else if(ex.type === 'dictee'){
-    // Ordre mélangé à chaque chargement : l'enfant ne peut pas mémoriser une séquence.
-    // ordreDictee[i] mappe la position affichée (ii) vers l'index réel dans ex.items.
-    if(!ordreDictee[i]) ordreDictee[i] = shuffle(ex.items.map(function(_,idx){ return idx; }));
-    var ordre = ordreDictee[i];
-    c.innerHTML = ordre.map(function(reel,ii){
+    c.innerHTML = ex.items.map(function(it,ii){
       return '<div class="saisie-item dictee-item">'
         + '<div class="dictee-head"><span class="dictee-num">' + (ii+1) + '</span>'
-        + '<button type="button" class="btn-ecoute" onclick="AF.ecouter(' + i + ',' + reel + ',false)">'
+        + '<button type="button" class="btn-ecoute" onclick="AF.ecouter(' + i + ',' + ii + ',false)">'
         + '\u{1F50A} Écouter</button>'
-        + '<button type="button" class="btn-ecoute lent" onclick="AF.ecouter(' + i + ',' + reel + ',true)">'
+        + '<button type="button" class="btn-ecoute lent" onclick="AF.ecouter(' + i + ',' + ii + ',true)">'
         + '\u{1F422} Lentement</button></div>'
-        + champSaisie(i, reel, '100%', null)
-        + '<div class="expl" id="ex'+i+'-'+reel+'"></div></div>';
+        + champSaisie(i, ii, '100%', null)
+        + '<div class="expl" id="ex'+i+'-'+ii+'"></div></div>';
     }).join('') + (TACTILE ? '<div class="kb" id="kb'+i+'">'+clavierHTML('lettres')+'</div>' : '');
     if(TACTILE) monterClavier(ex, i);
+  }
+
+  else if(ex.type === 'carte'){
+    if(window.AFCarte) window.AFCarte.rendre(ex, i, c, AF.api);
+    else c.innerHTML = '<p class="carte-err">atelier-carte.js n\'est pas chargé.</p>';
   }
 
   else if(ex.type === 'conjtable'){
@@ -394,6 +402,12 @@ function rendre(ex, i){
 
 /* ═══ INTERACTIONS ═══ */
 var AF = {};
+
+/* Passerelle offerte aux composants externes (carte, futurs modules) */
+AF.api = {
+  point: function(i){ score++; etats[i].pts++; el('sc'+i).textContent = etats[i].pts; },
+  avancer: function(i){ setTimeout(function(){ el('next'+i).classList.add('show'); },400); }
+};
 
 AF.revealBloc = function(n){
   var b = el('bloc'+n); if(b) b.classList.add('revealed');
@@ -455,18 +469,16 @@ AF.ctrl = function(bi, qi, btn){
 };
 
 AF.reprendre = function(bi, cible){
-  // Réinitialiser les questions du bloc ET remélanger les options
-  // (sinon l'enfant retient juste la position du bouton vert précédent)
+  // Réinitialiser les questions du bloc
   ctrlEtat[bi] = null;
   var b = F.lecon[bi];
   b.questions.forEach(function(q,qi){
     var card = el('cq'+bi+'-'+qi);
     card.dataset.done = '';
-    var opts = card.querySelector('.ctrl-opts');
-    opts.innerHTML = shuffle(q.options).map(function(o){
-      return '<button class="ctrl-btn" data-v="'+esc(o)+'" '
-           + 'onclick="AF.ctrl('+bi+','+qi+',this)">'+o+'</button>';
-    }).join('');
+    card.querySelectorAll('.ctrl-btn').forEach(function(btn){
+      btn.disabled = false;
+      btn.classList.remove('correct','wrong');
+    });
     el('cfb'+bi+'-'+qi).className = 'fb';
   });
   el('cbil'+bi).className = 'ctrl-bilan';
@@ -522,10 +534,18 @@ AF.pick = function(i, chip){
 };
 
 AF.drop = function(i, ii){
-  var s = etats[i].sel;
-  if(!s || etats[i].verifie) return;
-  var dz = el('dz'+i+'-'+ii);
-  var anc = etats[i].place[ii];
+  if(etats[i].verifie) return;
+  var s = etats[i].sel, dz = el('dz'+i+'-'+ii), anc = etats[i].place[ii];
+  if(!s){
+    /* Taper une case déjà remplie, sans mot sélectionné, la vide. */
+    if(anc){
+      anc.classList.remove('used');
+      delete etats[i].place[ii];
+      dz.textContent = '\u2026';
+      dz.classList.remove('filled');
+    }
+    return;
+  }
   if(anc) anc.classList.remove('used');
   dz.textContent = s.dataset.w;
   dz.classList.add('filled');
@@ -593,6 +613,10 @@ AF.verifier = function(i){
     fbg.className = 'fb show ' + (justes===ex.items.length?'ok':'ko');
   }
 
+  else if(ex.type === 'carte'){
+    pts = window.AFCarte ? window.AFCarte.verifier(ex, i) : 0;
+  }
+
   else if(ex.type === 'saisie' || ex.type === 'conjtable' || ex.type === 'dictee'){
     ex.items.forEach(function(it,ii){
       var inp = el('in'+i+'-'+ii), ee = el('ex'+i+'-'+ii);
@@ -602,9 +626,7 @@ AF.verifier = function(i){
       var bon = attendus.some(function(a){ return memeReponse(saisi, a, ex.strict); });
       if(bon){ pts++; inp.classList.add('ok'); }
       else inp.classList.add('ko');
-      var rep0 = esc(attendus[0]);
-      var sepRep = /[.!?]$/.test(rep0) ? ' ' : '. ';
-      ee.innerHTML = (bon?'\u2705 ':'\u274C Réponse : '+rep0+sepRep) + (it.expl||'');
+      ee.innerHTML = (bon?'\u2705 ':'\u274C Réponse : '+esc(attendus[0])+'. ') + (it.expl||'');
       ee.className = 'expl show ' + (bon?'ok':'ko');
     });
   }
