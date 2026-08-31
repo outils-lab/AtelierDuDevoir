@@ -1,7 +1,7 @@
 /* ═══════════════════════════════════════════════════════════
    L'Atelier du Devoir — Moteur de fiches (v2)
    Usage : définir window.FICHE puis inclure ce script.
-   Types d'exercices : qcm · drag · classify · saisie · jugement · conjtable · carte
+   Types d'exercices : qcm · drag · classify · saisie · jugement · conjtable
    ═══════════════════════════════════════════════════════════ */
 (function(){
 'use strict';
@@ -24,12 +24,6 @@ function ns(s){
     .replace(/\s*([.,;:!?])\s*/g,'$1').replace(/\s+/g,' ').trim();
 }
 function el(id){ return document.getElementById(id); }
-
-/* Exercices qui réclament un bouton « Vérifier » (validation groupée) */
-function besoinVerif(ex){
-  if(ex.type === 'carte') return !!(window.AFCarte && window.AFCarte.besoinVerif(ex));
-  return ['drag','classify','saisie','conjtable','dictee'].indexOf(ex.type) >= 0;
-}
 
 /* Comparaison stricte pour les mots accentués distinctifs (à/a, ou/où…) */
 function memeReponse(saisi, attendu, strict){
@@ -54,6 +48,81 @@ F.exercices.forEach(function(ex){
 
 /* ═══ CLAVIER VIRTUEL (anti écriture intuitive sur mobile) ═══ */
 var TACTILE = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+
+/* ═══ GLOSSAIRE CONTEXTUEL (bulles d'explication) ═══
+   Données : F.glossaire = { cle:{ mot:'…', def:'…', voir:'thème' } }
+   Balisage dans la leçon : <span class="gl" data-t="cle">mot affiché</span>
+   Aucun texte n'est passé en attribut HTML (cf. règle anti-bug §11-3). */
+var GL = F.glossaire || {};
+var glPop = null, glCible = null;
+
+function glPhrase(theme){
+  return (F.cycle === 4)
+    ? 'Au besoin, revoyez la leçon sur ' + theme + '.'
+    : 'Si tu as besoin, retourne voir la leçon sur ' + theme + '.';
+}
+
+function glMontrer(sp){
+  var k = sp.getAttribute('data-t'), e = GL[k];
+  if(!e){ console.warn('Glossaire : clé absente — ' + k); return; }
+  if(!glPop){
+    glPop = document.createElement('div');
+    glPop.id = 'gl-pop';
+    document.body.appendChild(glPop);
+  }
+  glPop.innerHTML = '<span class="gl-mot">' + esc(e.mot || k) + '</span>' + e.def
+    + (e.voir ? '<span class="gl-voir">\u{1F4D6} ' + glPhrase(e.voir) + '</span>' : '');
+  glPop.classList.add('on');
+  if(glCible) glCible.classList.remove('on');
+  glCible = sp; sp.classList.add('on');
+
+  /* Positionnement borné : jamais hors écran, même sur 360 px */
+  glPop.style.left = '0px'; glPop.style.top = '0px';
+  var r = sp.getBoundingClientRect();
+  var w = glPop.offsetWidth, hh = glPop.offsetHeight;
+  var l = r.left + r.width / 2 - w / 2;
+  l = Math.max(8, Math.min(l, window.innerWidth - w - 8));
+  var t = r.top - hh - 10;
+  if(t < 8) t = r.bottom + 10;
+  glPop.style.left = Math.round(l) + 'px';
+  glPop.style.top  = Math.round(t) + 'px';
+}
+
+function glCacher(){
+  if(glPop) glPop.classList.remove('on');
+  if(glCible){ glCible.classList.remove('on'); glCible = null; }
+}
+
+function glCible_(ev){
+  var t = ev.target;
+  return (t && t.closest) ? t.closest('.gl') : null;
+}
+
+function brancherGlossaire(){
+  /* Tap (tactile) et clic (souris) : ouvre, referme, ou ferme si on tape ailleurs */
+  document.addEventListener('click', function(ev){
+    var sp = glCible_(ev);
+    if(sp){
+      ev.stopPropagation();
+      if(glCible === sp) glCacher(); else glMontrer(sp);
+      return;
+    }
+    glCacher();
+  });
+  /* Survol : souris uniquement */
+  if(!TACTILE){
+    document.addEventListener('mouseover', function(ev){
+      var sp = glCible_(ev);
+      if(sp && glCible !== sp) glMontrer(sp);
+    });
+    document.addEventListener('mouseout', function(ev){
+      if(glCible_(ev)) glCacher();
+    });
+  }
+  window.addEventListener('scroll', glCacher, true);
+  window.addEventListener('resize', glCacher);
+}
+
 var kbCible = null;
 
 var KB_LETTRES = [
@@ -209,6 +278,11 @@ function construire(){
   document.head.appendChild(st);
   if(F.niveau === 'CP') document.body.classList.add('cp');
   if(F.cycle === 4) document.body.classList.add('c4');
+  if(F.glIcone){
+    st.textContent += ':root{--gl-ico:url("../img/gl-' + F.glIcone
+                    + (F.cycle === 4 ? '-c4' : '') + '.png");}';
+    document.body.classList.add('gl-ico');
+  }
 
   var h = '';
 
@@ -231,8 +305,7 @@ function construire(){
     h += '<div id="bloc'+i+'" class="lecon-block'+(i===0?' revealed':'')+'">'
        + '<h2>'+b.titre+'</h2>'
        + (b.analogie ? '<div class="analogie">'+b.analogie+'</div>' : '')
-       + b.html
-       + (b.carte ? '<div class="carte-lecon" id="cartelecon'+i+'"></div>' : '');
+       + b.html;
     if(b.ugo) h += '<div class="ugo-bubble"><span class="ugo-icon">\u{1F989}</span><span>Ugo : '+b.ugo+'</span></div>';
     var dernier = (i === F.lecon.length-1);
     if(b.questions && b.questions.length){
@@ -273,7 +346,7 @@ function construire(){
        + '<p>'+esc(ex.consigne)+'</p></div>'
        + '<div class="score-bar">Score : <span id="sc'+i+'">0</span> / '+ex.pts+' pts</div>'
        + '<div id="ex'+i+'"></div>';
-    if(besoinVerif(ex))
+    if(ex.type==='drag'||ex.type==='classify'||ex.type==='saisie'||ex.type==='conjtable'||ex.type==='dictee')
       h += '<button class="btn-verif" id="verif'+i+'" onclick="AF.verifier('+i+')">Vérifier \u2713</button>';
     h += '<button class="btn-suite" id="next'+i+'" onclick="'
        + (dernier ? 'AF.bilan()' : 'AF.goPhase('+(n+1)+')') + '">'
@@ -296,8 +369,8 @@ function construire(){
      + '<button class="print-btn" onclick="AF.printEx()">\u{1F4DD} Exercices</button></div>';
 
   document.body.innerHTML = h;
-  if(window.AFCarte) window.AFCarte.monterLecons(F.lecon);
   F.exercices.forEach(function(ex,i){ rendre(ex,i); });
+  brancherGlossaire();
 }
 
 /* ═══ RENDU DES EXERCICES ═══ */
@@ -385,11 +458,6 @@ function rendre(ex, i){
     if(TACTILE) monterClavier(ex, i);
   }
 
-  else if(ex.type === 'carte'){
-    if(window.AFCarte) window.AFCarte.rendre(ex, i, c, AF.api);
-    else c.innerHTML = '<p class="carte-err">atelier-carte.js n\'est pas chargé.</p>';
-  }
-
   else if(ex.type === 'conjtable'){
     c.innerHTML = ex.items.map(function(it,ii){
       return '<div class="saisie-item"><div class="phrase"><strong>'+esc(it.pronom)+'</strong></div>'
@@ -402,12 +470,6 @@ function rendre(ex, i){
 
 /* ═══ INTERACTIONS ═══ */
 var AF = {};
-
-/* Passerelle offerte aux composants externes (carte, futurs modules) */
-AF.api = {
-  point: function(i){ score++; etats[i].pts++; el('sc'+i).textContent = etats[i].pts; },
-  avancer: function(i){ setTimeout(function(){ el('next'+i).classList.add('show'); },400); }
-};
 
 AF.revealBloc = function(n){
   var b = el('bloc'+n); if(b) b.classList.add('revealed');
@@ -534,18 +596,10 @@ AF.pick = function(i, chip){
 };
 
 AF.drop = function(i, ii){
-  if(etats[i].verifie) return;
-  var s = etats[i].sel, dz = el('dz'+i+'-'+ii), anc = etats[i].place[ii];
-  if(!s){
-    /* Taper une case déjà remplie, sans mot sélectionné, la vide. */
-    if(anc){
-      anc.classList.remove('used');
-      delete etats[i].place[ii];
-      dz.textContent = '\u2026';
-      dz.classList.remove('filled');
-    }
-    return;
-  }
+  var s = etats[i].sel;
+  if(!s || etats[i].verifie) return;
+  var dz = el('dz'+i+'-'+ii);
+  var anc = etats[i].place[ii];
   if(anc) anc.classList.remove('used');
   dz.textContent = s.dataset.w;
   dz.classList.add('filled');
@@ -611,10 +665,6 @@ AF.verifier = function(i){
     fbg.innerHTML = (justes===ex.items.length ? '\u2705 Parfait ! Tout est bien rangé !'
                     : '\u274C '+justes+' mots sur '+ex.items.length+' bien placés.');
     fbg.className = 'fb show ' + (justes===ex.items.length?'ok':'ko');
-  }
-
-  else if(ex.type === 'carte'){
-    pts = window.AFCarte ? window.AFCarte.verifier(ex, i) : 0;
   }
 
   else if(ex.type === 'saisie' || ex.type === 'conjtable' || ex.type === 'dictee'){
@@ -685,10 +735,19 @@ AF.printLecon = function(){
   var css = 'body{font-family:sans-serif;padding:22px;font-size:13px;line-height:1.6;}'
           + 'h1,h2{color:'+F.accent+';} .exemple,.astuce{background:#f6f8fa;padding:8px 12px;'
           + 'border-radius:6px;margin:6px 0;} table{border-collapse:collapse;margin:8px 0;}'
-          + 'th,td{border:1px solid #ddd;padding:5px 9px;}';
+          + 'th,td{border:1px solid #ddd;padding:5px 9px;}'
+          + '.gl{border-bottom:1px dotted #999;} ul{margin:6px 0 6px 18px;}';
   w.document.write('<html><head><title>Leçon '+F.code+'</title><style>'+css+'</style></head><body>');
   w.document.write('<h1>'+F.titre+' — '+F.niveau+'</h1>');
   F.lecon.forEach(function(b){ w.document.write('<h2>'+b.titre+'</h2>'+b.html); });
+  var gks = Object.keys(GL);
+  if(gks.length){
+    w.document.write('<h2>Mots à connaître</h2><ul>');
+    gks.forEach(function(k){
+      w.document.write('<li><strong>'+(GL[k].mot||k)+'</strong> : '+GL[k].def+'</li>');
+    });
+    w.document.write('</ul>');
+  }
   w.document.write('<h2>À retenir</h2><p>'+F.memo+'</p></body></html>');
   w.document.close(); w.print();
 };

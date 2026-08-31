@@ -290,3 +290,34 @@ body.c4 .niv,body.c4 .cl-badge{border-radius:4px;}
 body.c4 .ctrl{border-radius:6px;background:#fafafa;}
 body.c4 .ctrl-q,body.c4 .ctrl-btn,body.c4 .ctrl-bilan,body.c4 .ctrl-retry{border-radius:5px;}
 body.c4 .ctrl-titre{font-family:'Playfair Display',Georgia,serif;}
+
+/* ── Glossaire contextuel (bulles d'explication) ── */
+:root{--gl-taille:2.5em;}
+body.c4{--gl-taille:2em;}
+.gl{text-decoration:underline dotted var(--accent);text-decoration-thickness:2px;
+  text-underline-offset:3px;cursor:help;font-weight:700;padding:0 1px;border-radius:3px;
+  transition:background .15s;}
+.gl::after{content:"?";font-size:.62em;font-weight:800;color:var(--accent);
+  vertical-align:super;margin-left:1px;}
+.gl.on{background:var(--accent-light);}
+/* Icône déclencheur : remplace le « ? » dès que F.glIcone est défini */
+body.gl-ico .gl::after{content:"";display:inline-block;
+  width:var(--gl-taille);height:var(--gl-taille);
+  background:var(--gl-ico) center/contain no-repeat;
+  vertical-align:middle;margin:0 1px 0 4px;}
+#gl-pop{position:fixed;z-index:9998;width:max-content;max-width:min(300px,calc(100vw - 24px));
+  background:#fff;border:2px solid var(--accent);border-radius:12px;padding:12px 15px;
+  box-shadow:0 6px 26px rgba(0,0,0,.17);font-size:.86rem;line-height:1.55;
+  font-weight:600;color:var(--texte);display:none;}
+#gl-pop.on{display:block;}
+#gl-pop .gl-mot{color:var(--accent);font-weight:800;font-size:.92rem;
+  display:block;margin-bottom:4px;}
+#gl-pop .gl-voir{display:block;margin-top:8px;padding-top:8px;
+  border-top:1px solid #e2e8f0;font-size:.81rem;color:#64748b;font-weight:700;}
+body.c4 .gl{text-decoration-thickness:1px;font-weight:400;}
+body.c4 .gl::after{font-size:.58em;}
+body.c4 #gl-pop{border-radius:5px;border-width:1px;font-family:'Lato',sans-serif;
+  font-weight:400;box-shadow:0 4px 18px rgba(0,0,0,.12);}
+body.c4 #gl-pop .gl-mot{font-family:'Playfair Display',Georgia,serif;font-weight:700;}
+@media print{#gl-pop{display:none!important;} .gl::after{content:"";}
+  body.gl-ico .gl::after{display:none;} .gl{text-decoration:underline dotted #999;}}
