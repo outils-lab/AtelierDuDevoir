@@ -71,7 +71,7 @@ function glMontrer(sp){
     document.body.appendChild(glPop);
   }
   glPop.innerHTML = '<span class="gl-mot">' + esc(e.mot || k) + '</span>' + e.def
-    + (e.voir ? '<span class="gl-voir">\u{1F4D6} ' + glPhrase(e.voir) + '</span>' : '');
+    + (e.voir ? '<span class="gl-voir">' + glPhrase(e.voir) + '</span>' : '');
   glPop.classList.add('on');
   if(glCible) glCible.classList.remove('on');
   glCible = sp; sp.classList.add('on');
@@ -278,11 +278,6 @@ function construire(){
   document.head.appendChild(st);
   if(F.niveau === 'CP') document.body.classList.add('cp');
   if(F.cycle === 4) document.body.classList.add('c4');
-  if(F.glIcone){
-    st.textContent += ':root{--gl-ico:url("../img/gl-' + F.glIcone
-                    + (F.cycle === 4 ? '-c4' : '') + '.png");}';
-    document.body.classList.add('gl-ico');
-  }
 
   var h = '';
 
