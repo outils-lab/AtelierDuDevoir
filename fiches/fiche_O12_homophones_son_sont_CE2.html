@@ -12,21 +12,31 @@
 window.FICHE = {
   code:'O12', niveau:'CE2', matiere:'Français', categorie:'Orthographe',
   duree:'15 min', retour:'ce2.html',
+  glIcone:'fille',
   accent:'#15803d', accent2:'#16a34a', accentLight:'#f0fdf4', accentMid:'#bbf7d0',
   titre:'son ou sont ?',
   ugoIntro:"Deux petits mots qui se prononcent pareil<br>mais qui ne veulent pas dire la même chose ! \u{1F3AF}",
   msgBrillant:'Tu ne confonds plus son et sont !',
+
+  glossaire:{
+    determinant:{ mot:'déterminant',
+      def:"Le petit mot placé devant un nom : <em>le</em>, <em>la</em>, <em>un</em>, <em>mes</em>." ,
+      voir:'les articles' },
+    etre:{ mot:'le verbe être',
+      def:"Le verbe qui dit ce que l'on est : je suis, tu es, il est, ils sont.",
+      voir:'le verbe être au présent' }
+  },
 
   lecon:[
     { titre:'\u{1F4D6} Bloc 1 — Deux mots, deux rôles',
       html:'<div class="compare-grid">'
         +'<div class="compare-card" style="border-color:#15803d;background:#f0fdf4;">'
         +'<h4 style="color:#15803d;">\u{1F7E2} son</h4>'
-        +'<p>C\'est un <strong>déterminant possessif</strong>. Il montre à qui appartient quelque chose.</p>'
+        +'<p>C\'est un <strong><span class="gl" data-t="determinant">déterminant</span> possessif</strong>. Il montre à qui appartient quelque chose.</p>'
         +'<p style="margin-top:6px;"><em><strong>son</strong> vélo · <strong>son</strong> cartable · <strong>son</strong> frère</em></p></div>'
         +'<div class="compare-card" style="border-color:#b45309;background:#fffbeb;">'
         +'<h4 style="color:#b45309;">\u{1F7E0} sont</h4>'
-        +'<p>C\'est le verbe <strong>être</strong> conjugué avec ils / elles.</p>'
+        +'<p>C\'est le <strong><span class="gl" data-t="etre">verbe être</span></strong> conjugué avec ils / elles.</p>'
         +'<p style="margin-top:6px;"><em>Ils <strong>sont</strong> contents · Elles <strong>sont</strong> parties</em></p></div></div>',
       ugo:'<strong>son</strong> se place devant un nom (son vélo). <strong>sont</strong> se place après ils ou elles. Deux rôles bien différents !',
       questions:[
@@ -129,8 +139,8 @@ window.FICHE = {
       consigne:'Tape sur son ou sont, puis tape sur la case dans la phrase.',
       pool:['son','sont','son','sont'],
       items:[
-        { avant:'Papa gare', apres:'vélo.', rep:'son',
-          expl:'<em>mon</em> vélo… on peut dire <em>mon</em>/<em>ton</em> \u2192 <strong>son</strong>.' },
+        { avant:'Papa gare', apres:'la voiture.', rep:'son',
+          expl:'<em>ma</em> voiture… on peut dire <em>mon</em>/<em>ton</em> \u2192 <strong>son</strong>.' },
         { avant:'Mes cousins', apres:'en vacances.', rep:'sont',
           expl:'Mes cousins <em>étaient</em> en vacances \u2192 <strong>sont</strong>.' },
         { avant:'Elle cherche', apres:'stylo bleu.', rep:'son',
