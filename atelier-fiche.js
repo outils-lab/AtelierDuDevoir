@@ -48,81 +48,7 @@ F.exercices.forEach(function(ex){
 
 /* ═══ CLAVIER VIRTUEL (anti écriture intuitive sur mobile) ═══ */
 var TACTILE = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
-
-/* ═══ GLOSSAIRE CONTEXTUEL (bulles d'explication) ═══
-   Données : F.glossaire = { cle:{ mot:'…', def:'…', voir:'thème' } }
-   Balisage dans la leçon : <span class="gl" data-t="cle">mot affiché</span>
-   Aucun texte n'est passé en attribut HTML (cf. règle anti-bug §11-3). */
-var GL = F.glossaire || {};
-var glPop = null, glCible = null;
-
-function glPhrase(theme){
-  return (F.cycle === 4)
-    ? 'Au besoin, revoyez la leçon sur ' + theme + '.'
-    : 'Si tu as besoin, retourne voir la leçon sur ' + theme + '.';
-}
-
-function glMontrer(sp){
-  var k = sp.getAttribute('data-t'), e = GL[k];
-  if(!e){ console.warn('Glossaire : clé absente — ' + k); return; }
-  if(!glPop){
-    glPop = document.createElement('div');
-    glPop.id = 'gl-pop';
-    document.body.appendChild(glPop);
-  }
-  glPop.innerHTML = '<span class="gl-mot">' + esc(e.mot || k) + '</span>' + e.def
-    + (e.voir ? '<span class="gl-voir">' + glPhrase(e.voir) + '</span>' : '');
-  glPop.classList.add('on');
-  if(glCible) glCible.classList.remove('on');
-  glCible = sp; sp.classList.add('on');
-
-  /* Positionnement borné : jamais hors écran, même sur 360 px */
-  glPop.style.left = '0px'; glPop.style.top = '0px';
-  var r = sp.getBoundingClientRect();
-  var w = glPop.offsetWidth, hh = glPop.offsetHeight;
-  var l = r.left + r.width / 2 - w / 2;
-  l = Math.max(8, Math.min(l, window.innerWidth - w - 8));
-  var t = r.top - hh - 10;
-  if(t < 8) t = r.bottom + 10;
-  glPop.style.left = Math.round(l) + 'px';
-  glPop.style.top  = Math.round(t) + 'px';
-}
-
-function glCacher(){
-  if(glPop) glPop.classList.remove('on');
-  if(glCible){ glCible.classList.remove('on'); glCible = null; }
-}
-
-function glCible_(ev){
-  var t = ev.target;
-  return (t && t.closest) ? t.closest('.gl') : null;
-}
-
-function brancherGlossaire(){
-  /* Tap (tactile) et clic (souris) : ouvre, referme, ou ferme si on tape ailleurs */
-  document.addEventListener('click', function(ev){
-    var sp = glCible_(ev);
-    if(sp){
-      ev.stopPropagation();
-      if(glCible === sp) glCacher(); else glMontrer(sp);
-      return;
-    }
-    glCacher();
-  });
-  /* Survol : souris uniquement */
-  if(!TACTILE){
-    document.addEventListener('mouseover', function(ev){
-      var sp = glCible_(ev);
-      if(sp && glCible !== sp) glMontrer(sp);
-    });
-    document.addEventListener('mouseout', function(ev){
-      if(glCible_(ev)) glCacher();
-    });
-  }
-  window.addEventListener('scroll', glCacher, true);
-  window.addEventListener('resize', glCacher);
-}
-
+var ordreDictee = {};
 var kbCible = null;
 
 var KB_LETTRES = [
@@ -137,7 +63,8 @@ var KB_CHIFFRES = [
 
 function clavierHTML(mode){
   var rows = (mode === 'chiffres') ? KB_CHIFFRES : KB_LETTRES;
-  var h = '<div class="kb-info">Utilise ce clavier \u{1F447}</div>';
+  var h = '<div class="kb-info"><span>Utilise ce clavier \u{1F447}</span>'
+        + '<button type="button" class="kb-fermer" onclick="AF.fermerClavier()">\u2715 Fermer</button></div>';
   rows.forEach(function(r){
     h += '<div class="kb-row">'
        + r.map(function(k){ return '<button type="button" class="kb-k" data-k="'+k+'">'+k+'</button>'; }).join('')
@@ -164,8 +91,30 @@ function activerClavier(inp, kb){
   if(kbCible) kbCible.classList.remove('kb-cible');
   kbCible = inp;
   inp.classList.add('kb-cible');
+  var mode = inp.dataset.kbmode || 'lettres';
+  if(kb.dataset.mode !== mode){
+    kb.innerHTML = clavierHTML(mode);
+    kb.dataset.mode = mode;
+  }
   kb.classList.add('on');
-  setTimeout(function(){ kb.scrollIntoView({behavior:'smooth', block:'nearest'}); }, 120);
+  // Le clavier est fixe en bas de l'écran : on réserve la place derrière lui
+  // et on fait remonter le champ actif au-dessus, pour qu'il reste visible en écrivant.
+  document.body.style.paddingBottom = kb.offsetHeight + 'px';
+  setTimeout(function(){
+    var h = kb.offsetHeight;
+    var rect = inp.getBoundingClientRect();
+    var visible = window.innerHeight - h;
+    var cible = visible/2 - rect.height/2;
+    window.scrollBy({top: rect.top - cible, behavior:'smooth'});
+  }, 150);
+}
+
+/* Ferme le clavier virtuel : bouton "Fermer" ou changement de phase */
+function fermerClavierGlobal(){
+  var kb = el('kb-global');
+  if(kb) kb.classList.remove('on');
+  if(kbCible){ kbCible.classList.remove('kb-cible'); kbCible = null; }
+  document.body.style.paddingBottom = '';
 }
 
 /* Remplace l'input par un faux champ (div) : aucun clavier système possible */
@@ -212,22 +161,24 @@ function brancherClavier(inp, kb){
 }
 
 
-function champSaisie(i, ii, largeur, maxlen){
-  var id = 'in'+i+'-'+ii;
+function champSaisie(i, ii, largeur, maxlen, mode){
+  var id = 'in'+i+'-'+ii, m = mode || 'lettres';
   if(TACTILE){
-    return '<div class="faux-input vide" id="'+id+'" '
+    return '<div class="faux-input vide" id="'+id+'" data-kbmode="'+m+'" '
          + (maxlen ? 'data-max="'+maxlen+'" ' : '')
          + 'data-val="" style="width:'+largeur+';"></div>';
   }
-  return '<input type="text" id="'+id+'" placeholder="écris ici…" '
+  return '<input type="text" id="'+id+'" placeholder="écris ici…" data-kbmode="'+m+'" '
        + (maxlen ? 'maxlength="'+maxlen+'" data-max="'+maxlen+'" ' : '')
        + 'style="width:'+largeur+';" autocomplete="off" autocorrect="off" '
        + 'autocapitalize="off" spellcheck="false" data-lpignore="true">';
 }
 
+/* Un seul clavier, fixe en bas de l'écran, partagé par toute la fiche
+   (au lieu d'un clavier par exercice qui obligeait à faire défiler la page). */
 function monterClavier(ex, i){
   setTimeout(function(){
-    var kb = el('kb'+i);
+    var kb = el('kb-global');
     if(!kb) return;
     ex.items.forEach(function(it,ii){
       var inp = el('in'+i+'-'+ii);
@@ -363,9 +314,13 @@ function construire(){
   h += '<div class="print-bar"><button class="print-btn" onclick="AF.printLecon()">\u{1F4D6} Leçon</button>'
      + '<button class="print-btn" onclick="AF.printEx()">\u{1F4DD} Exercices</button></div>';
 
+  /* Un seul clavier virtuel pour toute la fiche, fixe en bas de l'écran (§11-36) :
+     quel que soit l'exercice ou la position du champ, il apparaît toujours au même
+     endroit, jamais après une longue liste à faire défiler. */
+  if(TACTILE) h += '<div class="kb" id="kb-global"></div>';
+
   document.body.innerHTML = h;
   F.exercices.forEach(function(ex,i){ rendre(ex,i); });
-  brancherGlossaire();
 }
 
 /* ═══ RENDU DES EXERCICES ═══ */
@@ -421,9 +376,9 @@ function rendre(ex, i){
   else if(ex.type === 'saisie'){
     c.innerHTML = ex.items.map(function(it,ii){
       return '<div class="saisie-item"><div class="phrase">'+it.phrase+'</div>'
-        + champSaisie(i, ii, (ex.large?'100%':'150px'), ex.maxlen)
+        + champSaisie(i, ii, (ex.large?'100%':'150px'), ex.maxlen, ex.clavier||'lettres')
         + '<div class="expl" id="ex'+i+'-'+ii+'"></div></div>';
-    }).join('') + (TACTILE ? '<div class="kb" id="kb'+i+'">'+clavierHTML(ex.clavier||'lettres')+'</div>' : '');
+    }).join('');
     if(TACTILE) monterClavier(ex, i);
   }
 
@@ -440,31 +395,37 @@ function rendre(ex, i){
   }
 
   else if(ex.type === 'dictee'){
-    c.innerHTML = ex.items.map(function(it,ii){
+    // Ordre mélangé à chaque chargement : l'enfant ne peut pas mémoriser une séquence.
+    // ordreDictee[i] mappe la position affichée (ii) vers l'index réel dans ex.items.
+    if(!ordreDictee[i]) ordreDictee[i] = shuffle(ex.items.map(function(_,idx){ return idx; }));
+    var ordre = ordreDictee[i];
+    c.innerHTML = ordre.map(function(reel,ii){
       return '<div class="saisie-item dictee-item">'
         + '<div class="dictee-head"><span class="dictee-num">' + (ii+1) + '</span>'
-        + '<button type="button" class="btn-ecoute" onclick="AF.ecouter(' + i + ',' + ii + ',false)">'
+        + '<button type="button" class="btn-ecoute" onclick="AF.ecouter(' + i + ',' + reel + ',false)">'
         + '\u{1F50A} Écouter</button>'
-        + '<button type="button" class="btn-ecoute lent" onclick="AF.ecouter(' + i + ',' + ii + ',true)">'
+        + '<button type="button" class="btn-ecoute lent" onclick="AF.ecouter(' + i + ',' + reel + ',true)">'
         + '\u{1F422} Lentement</button></div>'
-        + champSaisie(i, ii, '100%', null)
-        + '<div class="expl" id="ex'+i+'-'+ii+'"></div></div>';
-    }).join('') + (TACTILE ? '<div class="kb" id="kb'+i+'">'+clavierHTML('lettres')+'</div>' : '');
+        + champSaisie(i, reel, '100%', null, 'lettres')
+        + '<div class="expl" id="ex'+i+'-'+reel+'"></div></div>';
+    }).join('');
     if(TACTILE) monterClavier(ex, i);
   }
 
   else if(ex.type === 'conjtable'){
     c.innerHTML = ex.items.map(function(it,ii){
       return '<div class="saisie-item"><div class="phrase"><strong>'+esc(it.pronom)+'</strong></div>'
-        + champSaisie(i, ii, '200px', null)
+        + champSaisie(i, ii, '200px', null, 'lettres')
         + '<div class="expl" id="ex'+i+'-'+ii+'"></div></div>';
-    }).join('') + (TACTILE ? '<div class="kb" id="kb'+i+'">'+clavierHTML('lettres')+'</div>' : '');
+    }).join('');
     if(TACTILE) monterClavier(ex, i);
   }
 }
 
 /* ═══ INTERACTIONS ═══ */
 var AF = {};
+
+AF.fermerClavier = function(){ if(TACTILE) fermerClavierGlobal(); };
 
 AF.revealBloc = function(n){
   var b = el('bloc'+n); if(b) b.classList.add('revealed');
@@ -474,6 +435,7 @@ AF.revealBloc = function(n){
 };
 
 AF.goPhase = function(n){
+  AF.fermerClavier();
   document.querySelectorAll('.phase').forEach(function(p){ p.classList.remove('active'); });
   var ph = el('phase'+n); ph.classList.add('active');
   phaseCourante = n;
@@ -526,16 +488,18 @@ AF.ctrl = function(bi, qi, btn){
 };
 
 AF.reprendre = function(bi, cible){
-  // Réinitialiser les questions du bloc
+  // Réinitialiser les questions du bloc ET remélanger les options
+  // (sinon l'enfant retient juste la position du bouton vert précédent)
   ctrlEtat[bi] = null;
   var b = F.lecon[bi];
   b.questions.forEach(function(q,qi){
     var card = el('cq'+bi+'-'+qi);
     card.dataset.done = '';
-    card.querySelectorAll('.ctrl-btn').forEach(function(btn){
-      btn.disabled = false;
-      btn.classList.remove('correct','wrong');
-    });
+    var opts = card.querySelector('.ctrl-opts');
+    opts.innerHTML = shuffle(q.options).map(function(o){
+      return '<button class="ctrl-btn" data-v="'+esc(o)+'" '
+           + 'onclick="AF.ctrl('+bi+','+qi+',this)">'+o+'</button>';
+    }).join('');
     el('cfb'+bi+'-'+qi).className = 'fb';
   });
   el('cbil'+bi).className = 'ctrl-bilan';
@@ -671,7 +635,9 @@ AF.verifier = function(i){
       var bon = attendus.some(function(a){ return memeReponse(saisi, a, ex.strict); });
       if(bon){ pts++; inp.classList.add('ok'); }
       else inp.classList.add('ko');
-      ee.innerHTML = (bon?'\u2705 ':'\u274C Réponse : '+esc(attendus[0])+'. ') + (it.expl||'');
+      var rep0 = esc(attendus[0]);
+      var sepRep = /[.!?]$/.test(rep0) ? ' ' : '. ';
+      ee.innerHTML = (bon?'\u2705 ':'\u274C Réponse : '+rep0+sepRep) + (it.expl||'');
       ee.className = 'expl show ' + (bon?'ok':'ko');
     });
   }
@@ -679,6 +645,7 @@ AF.verifier = function(i){
   score += pts; etats[i].pts = pts;
   el('sc'+i).textContent = pts;
   el('verif'+i).disabled = true;
+  AF.fermerClavier();
   setTimeout(function(){ el('next'+i).classList.add('show'); },400);
 };
 
@@ -730,19 +697,10 @@ AF.printLecon = function(){
   var css = 'body{font-family:sans-serif;padding:22px;font-size:13px;line-height:1.6;}'
           + 'h1,h2{color:'+F.accent+';} .exemple,.astuce{background:#f6f8fa;padding:8px 12px;'
           + 'border-radius:6px;margin:6px 0;} table{border-collapse:collapse;margin:8px 0;}'
-          + 'th,td{border:1px solid #ddd;padding:5px 9px;}'
-          + '.gl{border-bottom:1px dotted #999;} ul{margin:6px 0 6px 18px;}';
+          + 'th,td{border:1px solid #ddd;padding:5px 9px;}';
   w.document.write('<html><head><title>Leçon '+F.code+'</title><style>'+css+'</style></head><body>');
   w.document.write('<h1>'+F.titre+' — '+F.niveau+'</h1>');
   F.lecon.forEach(function(b){ w.document.write('<h2>'+b.titre+'</h2>'+b.html); });
-  var gks = Object.keys(GL);
-  if(gks.length){
-    w.document.write('<h2>Mots à connaître</h2><ul>');
-    gks.forEach(function(k){
-      w.document.write('<li><strong>'+(GL[k].mot||k)+'</strong> : '+GL[k].def+'</li>');
-    });
-    w.document.write('</ul>');
-  }
   w.document.write('<h2>À retenir</h2><p>'+F.memo+'</p></body></html>');
   w.document.close(); w.print();
 };
