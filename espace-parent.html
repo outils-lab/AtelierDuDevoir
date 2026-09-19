@@ -489,11 +489,15 @@ function chercher(){
   }
   var dejaAssign = assignations.filter(function(a){ return a.statut==='a_faire'||a.statut==='a_refaire'; })
                                .map(function(a){ return a.fiche_code; });
+  var map = parFiche();
   box.innerHTML = res.map(function(f){
     var deja = dejaAssign.indexOf(f.code) !== -1;
+    var d = map[f.code] ? map[f.code][0] : null;
+    var n = d ? niveauMaitrise(Math.round(d.score/d.total*100)) : null;
     return '<div class="fiche-item">'
       + '<div class="fi-gauche"><div class="fi-titre">' + esc(f.titre) + '</div>'
       + '<div class="fi-meta">' + esc(f.code) + ' · ' + esc(f.niveau) + ' · ' + esc(f.matiere) + '</div></div>'
+      + (d ? '<div class="fi-score">' + d.score + '/' + d.total + '</div><span class="niv ' + n.cls + '">' + n.txt + '</span>' : '')
       + (deja ? '<span class="niv n-orange">déjà assignée</span>'
               : '<button class="btn-mini bm-bleu" onclick="assigner(\'' + f.code + '\')">+ Assigner</button>')
       + '</div>';
