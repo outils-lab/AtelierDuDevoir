@@ -189,6 +189,9 @@ body{font-family:'Nunito',sans-serif;background:#F8F9FA;color:var(--texte);min-h
           <option>CM1</option><option>CM2</option><option>6e</option>
           <option>5e</option><option>4e</option><option>3e</option>
         </select>
+        <select id="filtre-matiere" onchange="chercher()">
+          <option value="">Toutes les matières</option>
+        </select>
       </div>
       <div class="resultats" id="resultats-recherche">
         <div class="vide">Tape une notion ci-dessus pour trouver une fiche à assigner.</div>
@@ -266,6 +269,18 @@ function aplatir(data){
       if(f && f.code) toutesFiches.push(f);
     });
   });
+  remplirFiltreMatiere();
+}
+
+function remplirFiltreMatiere(){
+  var sel = document.getElementById('filtre-matiere');
+  var mats = [];
+  toutesFiches.forEach(function(f){
+    if(f.matiere && mats.indexOf(f.matiere) === -1) mats.push(f.matiere);
+  });
+  mats.sort(function(a,b){ return a.localeCompare(b,'fr'); });
+  sel.innerHTML = '<option value="">Toutes les matières</option>'
+    + mats.map(function(m){ return '<option>' + esc(m) + '</option>'; }).join('');
 }
 
 function afficherTabs(){
@@ -359,10 +374,13 @@ function rendre(){
     secA.style.display = 'block';
     document.getElementById('liste-assignees').innerHTML = enAttente.map(function(a){
       var inf = infoFiche(a.fiche_code);
+      var d = map[a.fiche_code] ? map[a.fiche_code][0] : null;
+      var n = d ? niveauMaitrise(Math.round(d.score/d.total*100)) : null;
       return '<div class="fiche-item">'
         + '<div class="fi-gauche"><div class="fi-titre">' + esc(inf ? inf.titre : a.fiche_code) + '</div>'
         + '<div class="fi-meta">' + esc(a.fiche_code) + (inf ? ' · ' + esc(inf.niveau) : '')
         + (a.statut==='a_refaire' ? ' · à refaire' : '') + '</div></div>'
+        + (d ? '<div class="fi-score">' + d.score + '/' + d.total + '</div><span class="niv ' + n.cls + '">' + n.txt + '</span>' : '')
         + '<button class="btn-mini bm-rouge" onclick="annulerAssign(\'' + a.id + '\')">Retirer</button>'
         + '</div>';
     }).join('');
@@ -449,15 +467,17 @@ function ligneFiche(code, essais, avecBouton){
 function chercher(){
   var q = document.getElementById('rech').value.trim().toLowerCase();
   var cl = document.getElementById('filtre-classe').value;
+  var mat = document.getElementById('filtre-matiere').value;
   var box = document.getElementById('resultats-recherche');
 
-  if(!q && !cl){
-    box.innerHTML = '<div class="vide">Tape une notion ci-dessus pour trouver une fiche à assigner.</div>';
+  if(!q && !cl && !mat){
+    box.innerHTML = '<div class="vide">Tape une notion, ou choisis une classe et/ou une matière ci-dessus.</div>';
     return;
   }
   var res = toutesFiches.filter(function(f){
     if(!f.disponible) return false;
     if(cl && (!f.niveau || f.niveau.split('/').indexOf(cl) === -1)) return false;
+    if(mat && f.matiere !== mat) return false;
     if(!q) return true;
     var t = ((f.titre||'') + ' ' + (f.sous_titre||'') + ' ' + (f.code||'') + ' ' + (f.matiere||'') + ' ' + (f.categorie||'')).toLowerCase();
     return t.indexOf(q) !== -1;
