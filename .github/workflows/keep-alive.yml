@@ -1,0 +1,43 @@
+name: Garder Supabase actif
+
+on:
+  schedule:
+    # Tous les 2 jours à 9h05 UTC. Supabase suspend après 7 jours d'inactivité.
+    - cron: "5 9 */2 * *"
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Interroger la base
+        run: |
+          if [ -z "${{ secrets.SUPABASE_URL }}" ]; then
+            echo "SUPABASE_URL est vide ou mal nommé."
+            exit 1
+          fi
+          if [ -z "${{ secrets.SUPABASE_ANON_KEY }}" ]; then
+            echo "SUPABASE_ANON_KEY est vide ou mal nommé."
+            exit 1
+          fi
+
+          CODE=$(curl -s -o /tmp/reponse.txt -w "%{http_code}" \
+            "${{ secrets.SUPABASE_URL }}/rest/v1/progression?select=id&limit=1" \
+            -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}")
+
+          echo "Code HTTP reçu : $CODE"
+          echo "Réponse :"
+          cat /tmp/reponse.txt
+
+          if [ "$CODE" = "000" ]; then
+            echo "Aucune réponse — URL injoignable. Vérifier SUPABASE_URL."
+            exit 1
+          fi
+
+          if [ "$CODE" = "404" ]; then
+            echo "Table introuvable — vérifier que la table s'appelle bien progression."
+            exit 1
+          fi
+
+          echo "La base a répondu : le projet est marqué comme actif."
