@@ -1,182 +1,179 @@
 /* ═══════════════════════════════════════════════════════════
-   L'Atelier du Devoir — Badges de progression sur les pages de classe
-   À inclure en fin de page, APRÈS le CDN supabase-js :
-     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-     <script src="atelier-badges.js"></script>
-   Ajoute : bandeau "qui travaille", leçons assignées, badges de score.
-   Ne fait rien si personne n'est connecté (mode découverte intact).
+   L'Atelier du Devoir — Badges de résultats sur les pages de classe
+   Déjà appelé en bas de cp.html … 3e.html, APRÈS le CDN supabase-js.
+
+   Affiche, pour l'enfant actif :
+     · sur chaque carte de fiche déjà travaillée, son MEILLEUR score
+     · sur chaque onglet de matière, le nombre de fiches faites sur le total
+
+   Aucun affichage si personne n'est connecté ou si aucun enfant n'est
+   sélectionné : un visiteur ne doit pas voir une page couverte de zéros.
    ═══════════════════════════════════════════════════════════ */
 (function(){
   var SUPABASE_URL = "https://rwqsvrmjjoihuhmvbwuu.supabase.co";
   var SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ3cXN2cm1qam9paHVobXZid3V1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQzNjQxNTMsImV4cCI6MjA5OTk0MDE1M30.VtdOnI169-erf48NpxLPCC0th6kHqBcsBuCauOx52HI";
   var CLE_ACTIF = "atelier_enfant_actif";
 
-  var sb = null, progParFiche = {}, assignCodes = [], mapFichierCode = {}, prenom = null;
+  var MEILLEURS = null;   // { code: {score, total, pct} }
+  var sb = null;
 
-  function css(){
+  function client(){
+    if(sb) return sb;
+    if(typeof supabase === 'undefined' || !supabase.createClient) return null;
+    sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    return sb;
+  }
+
+  /* ── Styles ───────────────────────────────────────────── */
+  function injecterStyles(){
     if(document.getElementById('atelier-badges-css')) return;
     var s = document.createElement('style');
     s.id = 'atelier-badges-css';
-    s.textContent = [
-      '.ab-bandeau{max-width:1100px;margin:14px auto 0;padding:0 16px;font-family:Nunito,sans-serif;}',
-      '.ab-qui{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:#fff;border:2.5px solid #8B5CF6;',
-      '  border-radius:16px;padding:11px 16px;font-weight:800;font-size:.92rem;color:#2C3E50;}',
-      '.ab-qui a{color:#8B5CF6;font-weight:800;text-decoration:underline;font-size:.85rem;}',
-      '.ab-qui.alerte{border-color:#F59E0B;}',
-      '.ab-qui.alerte a{color:#F59E0B;}',
-      '.ab-assign{background:#fff;border:2.5px solid #F59E0B;border-radius:16px;padding:14px 16px;margin-top:10px;}',
-      '.ab-assign h3{font-family:Nunito,sans-serif;font-weight:900;font-size:1rem;color:#b45309;margin:0 0 9px;}',
-      '.ab-assign-list{display:flex;flex-wrap:wrap;gap:8px;}',
-      '.ab-chip{display:inline-block;background:#fffbeb;border:2px solid #F59E0B;border-radius:12px;',
-      '  padding:8px 13px;font-weight:800;font-size:.85rem;color:#92400e;text-decoration:none;}',
-      '.ab-chip:hover{background:#fef3c7;}',
-      '.ab-badge{display:inline-block;border-radius:20px;padding:3px 10px;font-family:Nunito,sans-serif;',
-      '  font-weight:800;font-size:.72rem;margin-top:6px;white-space:nowrap;}',
-      '.ab-r{background:#fee2e2;color:#b91c1c;} .ab-o{background:#fef3c7;color:#b45309;}',
-      '.ab-v{background:#d1fae5;color:#047857;} .ab-p{background:#ede9fe;color:#6d28d9;}',
-      '.ab-todo{background:#fff7ed;color:#c2410c;border:1px dashed #F59E0B;}',
-      '.fiche-card{position:relative;}',
-      '.ab-coin{position:absolute;top:8px;right:8px;font-size:1rem;}'
-    ].join('\n');
+    s.textContent =
+      '.badge-score{padding:2px 9px;border-radius:50px;font-size:.68rem;'
+      + 'font-weight:800;color:#fff;white-space:nowrap;letter-spacing:.2px;}'
+      + '.fiche-card.deja-faite{position:relative;}'
+      + '.fiche-card.deja-faite::before{content:"";position:absolute;left:0;top:14px;'
+      + 'bottom:14px;width:4px;border-radius:0 4px 4px 0;background:var(--bs,#CBD5E1);}'
+      + '.mat-tab .count.avec-score{font-variant-numeric:tabular-nums;}';
     document.head.appendChild(s);
   }
 
-  function niveau(pct){
-    if(pct >= 90) return {t:'Brillant \u2B50', c:'ab-p'};
-    if(pct >= 80) return {t:'Bien maîtrisé \u{1F4AA}', c:'ab-v'};
-    if(pct >= 50) return {t:'En cours \u{1F4DA}', c:'ab-o'};
-    return {t:'À retravailler \u{1F501}', c:'ab-r'};
+  /* ── Couleur selon le niveau de maîtrise ──────────────── */
+  function couleur(pct){
+    if(pct >= 90) return '#10B981';   // Brillant
+    if(pct >= 80) return '#3B82F6';   // Bien maîtrisé
+    if(pct >= 50) return '#F59E0B';   // En cours
+    return '#94A3B8';                 // À retravailler
   }
 
-  function pointInsertion(){
-    return document.querySelector('.matieres') || document.querySelector('main.main') || document.body;
+  /* ── Extraire le code depuis le nom de fichier ────────── */
+  /* fiches/fiche_O12_homophones_son_sont_CE2.html → O12            */
+  function codeDepuisLien(href){
+    if(!href) return null;
+    var m = href.match(/fiche_([A-Za-z]+\d+[A-Za-z]*)_/);
+    return m ? m[1].toUpperCase() : null;
   }
 
-  function afficherBandeau(html, classe){
-    var box = document.getElementById('ab-bandeau');
-    if(!box){
-      box = document.createElement('div');
-      box.id = 'ab-bandeau';
-      box.className = 'ab-bandeau';
-      var pi = pointInsertion();
-      pi.parentNode.insertBefore(box, pi);
-    }
-    box.innerHTML = html;
-  }
+  /* ── Charger les meilleurs scores de l'enfant actif ───── */
+  async function charger(){
+    var c = client();
+    if(!c) return null;
 
-  function decorerCartes(){
-    var cartes = document.querySelectorAll('.fiche-card');
-    cartes.forEach(function(c){
-      if(c.dataset.abFait) return;
-      var href = c.getAttribute('href');
-      if(!href) return;
-      var code = mapFichierCode[href];
-      if(!code) return;
-      c.dataset.abFait = '1';
-
-      var assigné = assignCodes.indexOf(code) !== -1;
-      var d = progParFiche[code];
-
-      if(assigné){
-        var coin = document.createElement('span');
-        coin.className = 'ab-coin';
-        coin.textContent = '\u{1F4DA}';
-        coin.title = "Un adulte t'a préparé cette leçon";
-        c.appendChild(coin);
-      }
-      var b = document.createElement('span');
-      if(d){
-        var pct = Math.round(d.score / d.total * 100);
-        var n = niveau(pct);
-        b.className = 'ab-badge ' + n.c;
-        b.textContent = '\u2713 ' + d.score + '/' + d.total + ' — ' + n.t;
-      } else if(assigné){
-        b.className = 'ab-badge ab-todo';
-        b.textContent = '\u{1F4DA} À faire';
-      } else {
-        return;
-      }
-      var top = c.querySelector('.card-top');
-      if(top && top.parentNode) top.parentNode.insertBefore(b, top.nextSibling);
-      else c.appendChild(b);
-    });
-  }
-
-  async function demarrer(){
-    if(typeof supabase === 'undefined' || !supabase.createClient) return;
-    sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-    var s = await sb.auth.getSession();
-    if(!s.data.session) return;           // mode découverte : on ne touche à rien
-
-    css();
+    var res = await c.auth.getSession();
+    if(!res.data.session) return null;
 
     var enfantId = localStorage.getItem(CLE_ACTIF);
-    if(!enfantId){
-      afficherBandeau('<div class="ab-qui alerte">\u{1F464} Aucun enfant sélectionné '
-        + '<a href="ma-famille.html">Choisir qui travaille</a></div>');
-      return;
-    }
+    if(!enfantId) return null;
 
-    var re = await sb.from('enfants').select('prenom').eq('id', enfantId).single();
-    if(re.error || !re.data){
-      localStorage.removeItem(CLE_ACTIF);
-      afficherBandeau('<div class="ab-qui alerte">\u{1F464} Profil introuvable '
-        + '<a href="ma-famille.html">Choisir qui travaille</a></div>');
-      return;
-    }
-    prenom = re.data.prenom;
+    var q = await c.from('progression')
+                   .select('fiche_code, score, total')
+                   .eq('enfant_id', enfantId);
+    if(q.error || !q.data) return null;
 
-    // Progression (dernier essai par fiche)
-    var rp = await sb.from('progression').select('*').eq('enfant_id', enfantId)
-                     .order('fait_le', {ascending:false});
-    (rp.data || []).forEach(function(p){
-      if(!progParFiche[p.fiche_code]) progParFiche[p.fiche_code] = p;
+    var best = {};
+    q.data.forEach(function(l){
+      if(!l.fiche_code || !l.total) return;
+      var pct = Math.round(l.score / l.total * 100);
+      var code = String(l.fiche_code).toUpperCase();
+      /* On garde le MEILLEUR passage, jamais le dernier :
+         refaire une fiche pour s'amuser ne doit pas effacer un bon score. */
+      if(!best[code] || pct > best[code].pct){
+        best[code] = { score: l.score, total: l.total, pct: pct };
+      }
     });
+    return best;
+  }
 
-    // Assignations en attente
-    var ra = await sb.from('assignations').select('fiche_code,statut').eq('enfant_id', enfantId)
-                     .in('statut', ['a_faire','a_refaire']);
-    assignCodes = (ra.data || []).map(function(a){ return a.fiche_code; });
+  /* ── Poser les badges sur les cartes ──────────────────── */
+  function appliquerCartes(){
+    if(!MEILLEURS) return;
+    var cartes = document.querySelectorAll('a.fiche-card[href]');
+    cartes.forEach(function(carte){
+      if(carte.dataset.badgePose === '1') return;
 
-    // Carte fichier -> code (depuis fiches.json)
-    try{
-      var r = await fetch('fiches.json');
-      var data = await r.json();
-      ['6-9ans','9-12ans','12-15ans'].forEach(function(cy){
-        (data[cy] || []).forEach(function(f){
-          if(f && f.fichier && f.code) mapFichierCode[f.fichier] = f.code;
-        });
+      var code = codeDepuisLien(carte.getAttribute('href'));
+      if(!code) return;
+      var r = MEILLEURS[code];
+      if(!r) return;
+
+      var zone = carte.querySelector('.card-badges');
+      if(!zone) return;
+
+      var col = couleur(r.pct);
+      var b = document.createElement('span');
+      b.className = 'badge-score';
+      b.style.background = col;
+      b.textContent = r.score + '/' + r.total;
+      b.title = 'Meilleur résultat : ' + r.pct + ' %';
+      zone.appendChild(b);
+
+      carte.classList.add('deja-faite');
+      carte.style.setProperty('--bs', col);
+      carte.dataset.badgePose = '1';
+    });
+  }
+
+  /* ── Compteurs des onglets : faites / total ───────────── */
+  function appliquerOnglets(){
+    if(!MEILLEURS) return;
+    ['fr','ma','sc','hi','ge','an'].forEach(function(id){
+      var sec = document.getElementById('mat-' + id);
+      var tab = document.getElementById('tab-' + id);
+      if(!sec || !tab) return;
+
+      var cartes = sec.querySelectorAll('a.fiche-card[href]');
+      if(cartes.length === 0) return;
+
+      var faites = 0;
+      cartes.forEach(function(carte){
+        var code = codeDepuisLien(carte.getAttribute('href'));
+        if(code && MEILLEURS[code]) faites++;
       });
-    } catch(e){ /* sans fiches.json, pas de badge sur les cartes */ }
 
-    // Bandeau du haut
-    var html = '<div class="ab-qui">\u{1F464} <strong>' + prenom + '</strong> travaille en ce moment '
-             + '<a href="ma-famille.html">changer d\'enfant</a></div>';
+      var el = tab.querySelector('.count');
+      if(el){
+        /* Fraction et non pourcentage : le premier chiffre ne recule jamais
+           quand de nouvelles fiches sont publiées. */
+        el.textContent = faites + '/' + cartes.length;
+        el.classList.add('avec-score');
+      }
+    });
+  }
 
-    if(assignCodes.length){
-      var chips = assignCodes.map(function(code){
-        var lien = null;
-        for(var k in mapFichierCode){ if(mapFichierCode[k] === code){ lien = k; break; } }
-        var libelle = code + (progParFiche[code] ? ' \u2713' : '');
-        return lien ? '<a class="ab-chip" href="' + lien + '">' + libelle + '</a>'
-                    : '<span class="ab-chip">' + libelle + '</span>';
-      }).join('');
-      html += '<div class="ab-assign"><h3>\u{1F4DA} Un adulte t\'a préparé ' 
-            + (assignCodes.length > 1 ? 'des leçons' : 'une leçon') + '</h3>'
-            + '<div class="ab-assign-list">' + chips + '</div></div>';
+  function appliquer(){
+    appliquerCartes();
+    appliquerOnglets();
+  }
+
+  /* ── Démarrage ────────────────────────────────────────── */
+  /* Les cartes sont construites par loadFiches(), en asynchrone :
+     on observe le <main> pour poser les badges dès qu'elles existent. */
+  async function init(){
+    try{
+      injecterStyles();
+      MEILLEURS = await charger();
+      if(!MEILLEURS) return;
+
+      appliquer();
+
+      var main = document.querySelector('main');
+      if(!main) return;
+      var t = null;
+      new MutationObserver(function(){
+        clearTimeout(t);
+        t = setTimeout(appliquer, 60);
+      }).observe(main, { childList: true, subtree: true });
+
+    } catch(e){
+      /* Ne jamais casser la page de classe à cause des badges */
+      console.log('Badges non affichés :', e);
     }
-    afficherBandeau(html);
-
-    // Décorer les cartes (elles sont générées en asynchrone)
-    decorerCartes();
-    var obs = new MutationObserver(decorerCartes);
-    obs.observe(document.body, {childList:true, subtree:true});
-    setTimeout(decorerCartes, 600);
-    setTimeout(decorerCartes, 1500);
   }
 
   if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', demarrer);
-  } else { demarrer(); }
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
 })();
