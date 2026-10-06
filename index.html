@@ -289,6 +289,52 @@ body{font-family:'Nunito',sans-serif;background:#F8F9FA;color:var(--texte);}
 
   </section>
 
+<!-- ═══════════════════════════════════════════════════════════
+     LE PASSAGE SECRET
+     À coller dans index.html, juste APRÈS le bloc Primaire / Collège.
+     Dépend de : passage-secret.jpg et passage-secret.html
+     ═══════════════════════════════════════════════════════════ -->
+
+<style>
+.ps-porte{display:block;max-width:980px;margin:26px auto 0;background:#fff;
+  border-radius:22px;box-shadow:0 3px 16px rgba(30,41,59,.09);overflow:hidden;
+  text-decoration:none;color:inherit;position:relative;
+  border:2px solid #e8edf3;transition:transform .18s, box-shadow .18s, border-color .18s;}
+.ps-porte:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(234,179,8,.22);
+  border-color:#facc15;}
+.ps-porte:active{transform:translateY(-1px);}
+
+.ps-txt{position:absolute;left:5%;top:50%;transform:translateY(-50%);
+  max-width:44%;z-index:2;pointer-events:none;}
+.ps-titre{font-family:'Nunito',sans-serif;font-weight:800;font-size:clamp(1.3rem,3.4vw,2.1rem);
+  color:#1e293b;line-height:1.15;margin-bottom:6px;}
+.ps-titre em{font-style:normal;color:#ca8a04;}
+.ps-sous{font-family:'Nunito',sans-serif;font-weight:700;font-size:clamp(.78rem,1.8vw,.98rem);
+  color:#64748b;line-height:1.45;}
+.ps-cta{display:inline-block;margin-top:12px;background:#facc15;color:#422006;
+  font-family:'Nunito',sans-serif;font-weight:800;font-size:clamp(.78rem,1.7vw,.95rem);
+  padding:9px 18px;border-radius:999px;}
+
+.ps-img{display:block;width:100%;height:auto;}
+
+/* Mobile : le texte passe au-dessus de l'image, plus de superposition */
+@media (max-width:700px){
+  .ps-txt{position:static;transform:none;max-width:100%;padding:18px 18px 4px;}
+  .ps-cta{margin-bottom:8px;}
+}
+</style>
+
+<a class="ps-porte" href="passage-secret.html">
+  <div class="ps-txt">
+    <div class="ps-titre">Le <em>passage secret</em></div>
+    <div class="ps-sous">Des leçons rien que pour vous, préparées à la maison.</div>
+    <span class="ps-cta">Pousser la porte →</span>
+  </div>
+  <img class="ps-img" src="passage-secret.jpg"
+       alt="Deux enfants courent vers une porte entrouverte que leur père tient ouverte">
+</a>
+
+
 </div>
 
 </div>
