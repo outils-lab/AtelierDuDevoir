@@ -215,7 +215,26 @@ h1,h2,h3{font-family:var(--display);line-height:1.1;margin:0;text-wrap:balance}
 .bubble{display:inline-block;background:#ffd23f;color:#1b1f4a;border-radius:12px;padding:2px 10px;font-weight:700}
 .pick{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;max-width:280px}
 .pick button{height:70px;border-radius:14px;border:3px solid #fff;color:#fff;font-family:var(--display);font-weight:700;font-size:20px}
-.rwbtns{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%}
+.rwbtns{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;width:100%}
+.rwbtns .dm{background:#7a4a24;color:#fff}
+/* jeu de dames : damier en bois, même rendu dans les deux thèmes */
+.dwrap{width:100%;max-width:520px;box-shadow:0 0 0 6px #5b3519,0 8px 24px rgba(10,14,40,.3);border-radius:6px}
+.dboard{display:grid;width:100%;aspect-ratio:1;touch-action:manipulation;user-select:none;-webkit-user-select:none}
+.dc{position:relative;display:grid;place-items:center;background:#ecd3ac}
+.dc.k{background:#9b6a43;cursor:pointer}
+.dc.last{background:#b98a4f}
+.dc.sel{background:#d9a441}
+.dc.dest::after{content:"";width:32%;height:32%;border-radius:50%;background:rgba(80,220,130,.9);box-shadow:0 0 0 3px rgba(255,255,255,.7)}
+.pc{width:80%;height:80%;border-radius:50%;display:grid;place-items:center;font-size:clamp(10px,3.4vw,20px);line-height:1;transition:transform .15s}
+.pc.w{background:radial-gradient(circle at 35% 30%,#fff,#efe6d6 60%,#cdbfa6);box-shadow:inset 0 -3px 0 #b9a888,0 2px 3px rgba(0,0,0,.45);color:#b8860b}
+.pc.b{background:radial-gradient(circle at 35% 30%,#5b6488,#262b45 65%,#151829);box-shadow:inset 0 -3px 0 #0c0e1a,0 2px 3px rgba(0,0,0,.45);color:#ffd23f}
+.pc.mv{box-shadow:0 0 0 3px #ffd23f,inset 0 -3px 0 #b9a888,0 2px 3px rgba(0,0,0,.45)}
+.dc.sel .pc{transform:scale(1.08)}
+.dcount{margin-left:auto;display:flex;align-items:center;gap:6px;font-family:var(--display);font-size:20px;font-variant-numeric:tabular-nums}
+.dp{width:18px;height:18px;border-radius:50%;display:inline-block}
+.dp.me{background:#efe6d6;border:2px solid #b9a888}.dp.ai{background:#262b45;border:2px solid #0c0e1a}
+.dcount b{min-width:22px}
+.dmsg{text-align:center;font-weight:600;min-height:44px;font-size:16px}
 .rwbtns .btn{font-size:16px;padding:12px 6px}
 .rwbtns .sn{background:var(--ok);color:#fff}
 .dpad{display:grid;grid-template-columns:repeat(3,72px);grid-template-rows:repeat(2,58px);gap:8px;justify-content:center}
@@ -338,6 +357,21 @@ body{margin:0}
     <span></span><button data-d="up" aria-label="Haut">▲</button><span></span>
     <button data-d="left" aria-label="Gauche">◀</button><button data-d="down" aria-label="Bas">▼</button><button data-d="right" aria-label="Droite">▶</button>
   </div>
+</section>
+
+<!-- Jeu de dames -->
+<section id="s-dames" class="screen" hidden>
+  <div class="ghud">
+    <button class="back" id="dQuit" aria-label="Arrêter">✕</button>
+    <div class="gstat"><span>Temps</span><b id="dTime">10:00</b></div>
+    <div class="gstat"><span>Partie</span><b id="dInfo">1/1</b></div>
+    <div class="dcount" aria-label="Pions restants"><span class="dp me"></span><b id="dMe">0</b><span class="dp ai"></span><b id="dAi">0</b></div>
+  </div>
+  <div class="gwrap dwrap">
+    <div class="dboard" id="dBoard"></div>
+    <div class="gover" id="dOver" hidden></div>
+  </div>
+  <div class="dmsg" id="dMsg" aria-live="polite"></div>
 </section>
 
 <!-- Jeu de cartes -->
@@ -985,7 +1019,8 @@ function finish(){
   const rw=$('#reward');
   if(lives){
     const pl=lives>1?'s':'';
-    rw.innerHTML=`<div class="reward"><div class="hb">${'♥'.repeat(lives)}</div><div><b>Tu gagnes ${lives} vie${pl} !</b><br><span class="muted">Choisis ton jeu. À jouer tout de suite, sinon elles sont perdues.</span></div><div class="rwbtns"><button class="btn" id="playGame">Cascade<small>${lives} vie${pl}</small></button><button class="btn alt" id="playCards">Quatre Couleurs<small>${lives} partie${pl}</small></button><button class="btn sn" id="playSnake">Serpent<small>${lives} vie${pl}</small></button></div></div>`;
+    rw.innerHTML=`<div class="reward"><div class="hb">${'♥'.repeat(lives)}</div><div><b>Tu gagnes ${lives} vie${pl} !</b><br><span class="muted">Choisis ton jeu. À jouer tout de suite, sinon elles sont perdues.</span></div><div class="rwbtns"><button class="btn" id="playGame">Cascade<small>${lives} vie${pl}</small></button><button class="btn alt" id="playCards">Quatre Couleurs<small>${lives} partie${pl}</small></button><button class="btn sn" id="playSnake">Serpent<small>${lives} vie${pl}</small></button><button class="btn dm" id="playDames">Dames<small>${lives} partie${pl}</small></button></div></div>`;
+    $('#playDames').onclick=()=>damesStart(lives);
     $('#playSnake').onclick=()=>snakeStart(lives);
     $('#playGame').onclick=()=>gameStart(lives);
     $('#playCards').onclick=()=>ccStart(lives);
@@ -1313,6 +1348,146 @@ $('#sQuit').onclick=()=>{if(!S)return home();if(!S.alive){S=null;return home()}S
   sOver('Arrêter ?','Les vies restantes seront perdues.','Oui, arrêter',()=>{S.lives=1;S.paused=false;sCrash()});
   $('#sOver').insertAdjacentHTML('beforeend','<button class="btn" id="sNo" style="background:transparent;color:#fff;border:1px solid #fff">Continuer à jouer</button>');
   $('#sNo').onclick=()=>{S.paused=false;$('#sOver').hidden=true}};
+
+/* ---------- Jeu de dames contre l'ordinateur ----------
+   Règles françaises (dames internationales) : prise obligatoire, prise du plus grand nombre (10x10),
+   les pions prennent en avant et en arrière, dames volantes, pions retirés à la fin de la rafle,
+   promotion seulement si la rafle se termine sur la dernière ligne. Les blancs (l'enfant) commencent.
+   Niveaux : CE2-CM1 = 8x8, ordinateur facile, coups montrés · CM2 = 10x10, réfléchit 3 coups · 6e = 10x10, 5 coups. */
+const DDIRS=[[-1,-1],[-1,1],[1,-1],[1,1]];
+let DM=null,dTimer=null,dAiT=null;
+function dCfg(lv){return lv===1?{N:8,depth:1,rand:.45,hints:true,major:false}:lv===2?{N:10,depth:3,rand:.1,hints:false,major:true}:{N:10,depth:5,rand:0,hints:false,major:true}}
+function dNewBoard(N){const b=new Array(N*N).fill(0),rows=N===10?4:3;
+  for(let r=0;r<N;r++)for(let c=0;c<N;c++)if((r+c)%2===1){if(r<rows)b[r*N+c]=-1;else if(r>=N-rows)b[r*N+c]=1}return b}
+function dGen(b,N,side,major){
+  const caps=[],simple=[];
+  for(let sq=0;sq<N*N;sq++){const p=b[sq];if(!p||Math.sign(p)!==side)continue;
+    const king=Math.abs(p)===2,r0=Math.floor(sq/N),c0=sq%N;
+    b[sq]=0;
+    const dfs=(pos,path,took)=>{const r=Math.floor(pos/N),c=pos%N;let found=false;
+      for(const[dr,dc]of DDIRS){
+        if(!king){const r1=r+dr,c1=c+dc,r2=r+2*dr,c2=c+2*dc;
+          if(r2<0||r2>=N||c2<0||c2>=N)continue;const i1=r1*N+c1,i2=r2*N+c2;
+          if(Math.sign(b[i1])===-side&&!took.includes(i1)&&b[i2]===0){found=true;dfs(i2,path.concat(i2),took.concat(i1))}}
+        else{let rr=r+dr,cc=c+dc;
+          while(rr>=0&&rr<N&&cc>=0&&cc<N&&b[rr*N+cc]===0){rr+=dr;cc+=dc}
+          if(rr<0||rr>=N||cc<0||cc>=N)continue;const ie=rr*N+cc;
+          if(Math.sign(b[ie])!==-side||took.includes(ie))continue;
+          rr+=dr;cc+=dc;
+          while(rr>=0&&rr<N&&cc>=0&&cc<N&&b[rr*N+cc]===0){const il=rr*N+cc;found=true;dfs(il,path.concat(il),took.concat(ie));rr+=dr;cc+=dc}}
+      }
+      if(!found&&took.length)caps.push({from:sq,path,caps:took});
+    };
+    dfs(sq,[sq],[]);
+    if(!caps.length||true){
+      if(!king){for(const dc of[-1,1]){const r=r0-side,c=c0+dc;if(r>=0&&r<N&&c>=0&&c<N&&b[r*N+c]===0)simple.push({from:sq,path:[sq,r*N+c],caps:[]})}}
+      else for(const[dr,dc]of DDIRS){let r=r0+dr,c=c0+dc;while(r>=0&&r<N&&c>=0&&c<N&&b[r*N+c]===0){simple.push({from:sq,path:[sq,r*N+c],caps:[]});r+=dr;c+=dc}}
+    }
+    b[sq]=p;
+  }
+  if(caps.length){if(!major)return caps;const mx=Math.max(...caps.map(m=>m.caps.length));return caps.filter(m=>m.caps.length===mx)}
+  return simple;
+}
+function dApply(b,N,m){const p=b[m.from];b[m.from]=0;m.caps.forEach(i=>b[i]=0);const to=m.path[m.path.length-1],r=Math.floor(to/N);
+  let q=p;if(Math.abs(p)===1&&((p>0&&r===0)||(p<0&&r===N-1)))q=2*p;b[to]=q;return q!==p}
+function dEval(b,N){let s=0;for(let i=0;i<b.length;i++){const p=b[i];if(!p)continue;const r=Math.floor(i/N),c=i%N;
+  if(p===1)s+=100+(N-1-r)*3+(c>0&&c<N-1?2:0);else if(p===-1)s-=100+r*3+(c>0&&c<N-1?2:0);else s+=p>0?320:-320}return s}
+function dSearch(b,N,side,depth,a,be,major,ext){
+  const ms=dGen(b,N,side,major);
+  if(!ms.length)return -100000-depth;
+  if(depth<=0&&(!ms[0].caps.length||ext>=4))return side*dEval(b,N);
+  let best=-Infinity;
+  for(const m of ms){const nb=b.slice();dApply(nb,N,m);
+    const v=-dSearch(nb,N,-side,depth-1,-be,-a,major,depth<=0?ext+1:ext);
+    if(v>best)best=v;if(v>a)a=v;if(a>=be)break}
+  return best;
+}
+function dBest(b,N,cfg){
+  const ms=dGen(b,N,-1,cfg.major);if(!ms.length)return null;
+  if(ms.length===1)return ms[0];
+  if(Math.random()<cfg.rand)return pick(ms);
+  let best=null,bv=-Infinity;
+  for(const m of shuffle(ms)){const nb=b.slice();dApply(nb,N,m);const v=-dSearch(nb,N,1,cfg.depth-1,-Infinity,Infinity,cfg.major,0);if(v>bv){bv=v;best=m}}
+  return best;
+}
+const dCount=(b,s)=>b.filter(p=>Math.sign(p)===s).length;
+function damesStart(parties){
+  syncLevel();const cfg=dCfg(LV());
+  DM={parties,played:0,cfg};show('dames');dNewGame();
+}
+function dNewGame(){
+  clearInterval(dTimer);clearTimeout(dAiT);
+  const N=DM.cfg.N;Object.assign(DM,{N,b:dNewBoard(N),turn:1,sel:null,last:[],busy:false,over:false,quiet:0,tLeft:600,paused:false});
+  $('#dOver').hidden=true;$('#dBoard').style.gridTemplateColumns=`repeat(${N},1fr)`;
+  dLegal();dMsg(N===8?'Tu as les pions blancs : à toi de commencer ! Touche un pion entouré de jaune.':'Tu as les blancs : à toi de commencer ! Rappel : la prise est obligatoire.');
+  dRender();
+  dTimer=setInterval(()=>{if(!DM||DM.over||DM.paused)return;DM.tLeft-=1;dHud();if(DM.tLeft<=0)dTimeUp()},1000);
+}
+function dLegal(){DM.legal=dGen(DM.b,DM.N,1,DM.cfg.major)}
+function dMsg(t){$('#dMsg').innerHTML=t}
+function dHud(){if(!DM)return;const t=Math.max(0,DM.tLeft);$('#dTime').textContent=`${Math.floor(t/60)}:${String(t%60).padStart(2,'0')}`;
+  $('#dMe').textContent=dCount(DM.b,1);$('#dAi').textContent=dCount(DM.b,-1);$('#dInfo').textContent=`${Math.min(DM.played+(DM.over?0:1),DM.parties)}/${DM.parties}`}
+function dRender(){
+  const{N,b,sel}=DM,myTurn=DM.turn===1&&!DM.busy&&!DM.over;
+  const mustCap=myTurn&&DM.legal.length&&DM.legal[0].caps.length;
+  const movable=new Set(myTurn&&(DM.cfg.hints||mustCap)?DM.legal.map(m=>m.from):[]);
+  const dests=new Set(myTurn&&sel!=null?DM.legal.filter(m=>m.from===sel).map(m=>m.path[m.path.length-1]):[]);
+  let h='';
+  for(let i=0;i<N*N;i++){const r=Math.floor(i/N),c=i%N,dark=(r+c)%2===1,p=b[i];
+    const cls=['dc'];if(dark)cls.push('k');if(DM.last.includes(i))cls.push('last');if(i===sel)cls.push('sel');if(dests.has(i))cls.push('dest');
+    h+=`<div class="${cls.join(' ')}" data-i="${i}">${p?`<span class="pc ${p>0?'w':'b'}${movable.has(i)?' mv':''}">${Math.abs(p)===2?'♛':''}</span>`:''}</div>`}
+  $('#dBoard').innerHTML=h;dHud();
+}
+const dSleep=ms=>new Promise(r=>setTimeout(r,ms));
+async function dPlay(m,side){
+  DM.busy=true;DM.sel=null;const piece=DM.b[m.from];
+  for(let k=1;k<m.path.length;k++){DM.b[m.path[k-1]]=0;DM.b[m.path[k]]=piece;DM.last=[m.path[k-1],m.path[k]];dRender();await dSleep(m.path.length>2?260:160);if(!DM)return}
+  DM.b[m.path[m.path.length-1]]=0;DM.b[m.from]=piece;
+  const promo=dApply(DM.b,DM.N,m);DM.last=[m.from,m.path[m.path.length-1]];
+  DM.quiet=(m.caps.length||Math.abs(piece)===1)?0:DM.quiet+1;
+  const n=m.caps.length;
+  let txt=side===1?(n?`Bien joué, tu prends ${n} pion${n>1?'s':''} !`:''):(n?`L'ordinateur prend ${n} pion${n>1?'s':''}.`:'');
+  if(promo)txt+=side===1?' Ton pion devient une dame : elle peut avancer et reculer de plusieurs cases !':' L\'ordinateur a une dame.';
+  DM.turn=-side;DM.busy=false;
+  if(dCheckEnd())return;
+  if(DM.turn===1){dLegal();const mc=DM.legal[0].caps.length;dMsg((txt?txt+' ':'')+(mc?'<b>Tu dois prendre !</b> Les pions qui peuvent prendre sont entourés de jaune.':'À toi de jouer.'));dRender()}
+  else{dMsg((txt?txt+' ':'')+'L\'ordinateur réfléchit…');dRender();dAiT=setTimeout(dAiTurn,380)}
+}
+function dAiTurn(){if(!DM||DM.over)return;const m=dBest(DM.b,DM.N,DM.cfg);if(!m)return dEnd(1,'L\'ordinateur ne peut plus bouger.');dPlay(m,-1)}
+function dCheckEnd(){
+  const me=dCount(DM.b,1),ai=dCount(DM.b,-1);
+  if(!ai)return dEnd(1,'Tu as pris tous les pions de l\'ordinateur !'),true;
+  if(!me)return dEnd(-1,'L\'ordinateur a pris tous tes pions.'),true;
+  if(!dGen(DM.b,DM.N,DM.turn,DM.cfg.major).length)return dEnd(-DM.turn,DM.turn===1?'Tu ne peux plus bouger aucun pion.':'L\'ordinateur ne peut plus bouger.'),true;
+  if(DM.quiet>=50)return dEnd(0,'Plus aucune prise depuis longtemps.'),true;
+  return false;
+}
+function dTimeUp(){if(DM.over)return;clearTimeout(dAiT);const me=dCount(DM.b,1),ai=dCount(DM.b,-1);
+  dEnd(me>ai?1:me<ai?-1:0,`Les 10 minutes sont écoulées : il te reste ${me} pion${me>1?'s':''}, et ${ai} à l'ordinateur.`)}
+function dEnd(win,why){
+  DM.over=true;clearInterval(dTimer);DM.played++;dMsg('');dRender();
+  const p=P();p.dG=(p.dG||0)+1;if(win===1)p.dW=(p.dW||0)+1;save();
+  const more=DM.played<DM.parties,o=$('#dOver');
+  o.innerHTML=`<h3>${win===1?'Tu as gagné !':win===-1?'L\'ordinateur a gagné':'Match nul'}</h3><p>${why}<br>Tes victoires aux dames : <b>${p.dW||0}</b> sur ${p.dG}</p><button class="btn" id="dNext">${more?'Partie suivante':'Retour à l\'accueil'}</button>`;
+  o.hidden=false;$('#dNext').onclick=()=>{if(more)dNewGame();else{DM=null;home()}};
+}
+$('#dBoard').addEventListener('click',e=>{
+  const cell=e.target.closest('.dc');if(!cell||!DM||DM.turn!==1||DM.busy||DM.over)return;
+  const i=+cell.dataset.i,p=DM.b[i];
+  if(DM.sel!=null){const m=DM.legal.find(x=>x.from===DM.sel&&x.path[x.path.length-1]===i);if(m)return dPlay(m,1)}
+  if(p>0){
+    if(DM.legal.some(m=>m.from===i)){DM.sel=i;dMsg(DM.legal[0].caps.length?'Touche la case verte pour faire ta prise.':'Touche une case verte pour avancer.')}
+    else{DM.sel=null;const mc=DM.legal[0]&&DM.legal[0].caps.length;
+      dMsg(mc?(DM.cfg.major?'<b>Tu dois prendre</b>, et prendre le plus de pions possible. Cherche les pions entourés de jaune.':'<b>Tu dois prendre</b> avec un pion entouré de jaune.'):'Ce pion est bloqué. Essaie un autre pion.')}
+    dRender();
+  }
+});
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&DM&&!DM.over&&!DM.paused){DM.paused=true;const o=$('#dOver');
+  o.innerHTML='<h3>Pause</h3><p>Le temps est arrêté.</p><button class="btn" id="dRes">Reprendre</button>';o.hidden=false;$('#dRes').onclick=()=>{DM.paused=false;o.hidden=true}}});
+$('#dQuit').onclick=()=>{if(!DM||DM.over){clearInterval(dTimer);DM=null;return home()}DM.paused=true;const o=$('#dOver');
+  o.innerHTML='<h3>Arrêter ?</h3><p>Les parties restantes seront perdues.</p><button class="btn" id="dYes">Oui, arrêter</button><button class="btn" id="dNo" style="background:transparent;color:#fff;border:1px solid #fff">Continuer à jouer</button>';o.hidden=false;
+  $('#dYes').onclick=()=>{clearInterval(dTimer);clearTimeout(dAiT);DM=null;home()};
+  $('#dNo').onclick=()=>{DM.paused=false;o.hidden=true}};
 
 home();
 </script>
