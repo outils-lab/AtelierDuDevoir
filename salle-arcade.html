@@ -1,0 +1,1321 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<title>La salle d'arcade — L'Atelier du Devoir</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Lexend:wght@400;500;600&display=swap">
+<style>
+/* Layout: one-column phone app on French notebook paper (Seyès lines); ink blue for the child's writing, red pen for corrections */
+:root{
+  --paper:#fbfaf5; --line:#dde5f3; --card:#ffffff; --ink:#1d2b66; --soft:#5b678f; --border:#dce1ee;
+  --pen:#cf2f2a; --pen-bg:#fbe7e4; --ok:#1c8247; --ok-bg:#e1f3e8; --hl:#fff1a8;
+  --maths:#2c58c9; --maths-bg:#e8eefc; --fr:#b8460e; --fr-bg:#fcebdf;
+  --display:"Baloo 2","Trebuchet MS",system-ui,sans-serif;
+  --body:"Lexend",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#121830; --line:#1b2442; --card:#1a2240; --ink:#e7ebfa; --soft:#9ba6cc; --border:#2a3459;
+  --pen:#ff6d63; --pen-bg:#45201f; --ok:#52d28d; --ok-bg:#153829; --hl:#5e5212;
+  --maths:#86a8ff; --maths-bg:#1f2b55; --fr:#ff9d63; --fr-bg:#43281a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#121830; --line:#1b2442; --card:#1a2240; --ink:#e7ebfa; --soft:#9ba6cc; --border:#2a3459;
+  --pen:#ff6d63; --pen-bg:#45201f; --ok:#52d28d; --ok-bg:#153829; --hl:#5e5212;
+  --maths:#86a8ff; --maths-bg:#1f2b55; --fr:#ff9d63; --fr-bg:#43281a; color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{min-height:100%}
+body{background-color:var(--paper);background-image:repeating-linear-gradient(to bottom,transparent 0 31px,var(--line) 31px 32px);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5;-webkit-tap-highlight-color:transparent}
+.app{max-width:560px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:12px 32px}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--maths);outline-offset:2px}
+h1,h2,h3{font-family:var(--display);line-height:1.1;margin:0;text-wrap:balance}
+.screen{display:flex;flex-direction:column;gap:16px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{font-family:var(--display);font-weight:800;font-size:30px;letter-spacing:-.5px}
+.brand span{color:var(--pen)}
+.who{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--border);border-radius:999px;padding:4px 12px 4px 4px;min-width:0}
+.who b{font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px}
+.av{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:var(--ink);color:var(--paper);font-family:var(--display);font-weight:700;flex:none}
+.stars{font-size:13px;color:var(--soft)}
+.tabs{display:grid;grid-template-columns:1fr 1fr;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:4px;gap:4px}
+.tabs button{border:0;background:transparent;border-radius:12px;padding:10px;font-family:var(--display);font-weight:700;font-size:20px;color:var(--soft)}
+.tabs button[aria-selected="true"][data-tab="maths"]{background:var(--maths-bg);color:var(--maths)}
+.tabs button[aria-selected="true"][data-tab="fr"]{background:var(--fr-bg);color:var(--fr)}
+.rev{display:flex;align-items:center;gap:12px;text-align:left;border:2px dashed var(--pen);background:var(--pen-bg);color:var(--ink);border-radius:16px;padding:12px 14px}
+.rev .big{font-family:var(--display);font-weight:800;font-size:28px;color:var(--pen);line-height:1}
+.mods{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.mod{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:12px;min-width:0}
+.mod .sym{font-family:var(--display);font-weight:800;font-size:26px;line-height:1.1;color:var(--acc)}
+.mod .mn{font-weight:600;font-size:15px;line-height:1.25}
+.mod .ms{font-size:12.5px;color:var(--soft);line-height:1.3}
+.mod .mb{margin-top:6px;font-size:12px;font-variant-numeric:tabular-nums;color:var(--acc);font-weight:500}
+.mod .lv{font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--soft);margin-top:4px}
+.mod.wide{grid-column:1/-1;flex-direction:row;align-items:center;gap:12px}
+.mod.wide .sym{font-size:30px}
+.m-maths{--acc:var(--maths)} .m-fr{--acc:var(--fr)}
+.bar{display:flex;align-items:center;gap:10px}
+.back{border:1px solid var(--border);background:var(--card);border-radius:12px;width:44px;height:44px;font-size:20px;flex:none}
+.learn{display:flex;flex-direction:column;gap:10px}
+.lcard{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px 14px}
+.lcard h3{font-size:19px;color:var(--acc);margin-bottom:4px}
+.lcard p{margin:4px 0}
+.lcard ul{margin:4px 0;padding-left:20px}
+.lcard li{margin:2px 0}
+.ex{font-family:var(--display);font-size:18px;font-weight:700}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{width:46px;height:46px;border-radius:12px;border:2px solid var(--border);background:var(--card);font-family:var(--display);font-weight:700;font-size:20px}
+.chip[aria-pressed="true"]{background:var(--maths);border-color:var(--maths);color:var(--card)}
+.go{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn{border:0;border-radius:14px;padding:14px 12px;font-family:var(--display);font-weight:700;font-size:19px;background:var(--ink);color:var(--paper);line-height:1.15}
+.btn small{display:block;font-family:var(--body);font-weight:400;font-size:12px;opacity:.8}
+.btn.alt{background:var(--pen);color:#fff}
+.btn.ghost{background:var(--card);color:var(--ink);border:1px solid var(--border)}
+/* play */
+.ptop{display:flex;align-items:center;gap:10px}
+.prog{flex:1;height:12px;border-radius:99px;background:var(--card);border:1px solid var(--border);overflow:hidden}
+.prog i{display:block;height:100%;width:0;background:var(--acc);transition:width .2s linear}
+.count{font-family:var(--display);font-weight:700;font-size:20px;font-variant-numeric:tabular-nums;min-width:56px;text-align:right}
+.qcard{background:var(--card);border:2px solid var(--border);border-radius:20px;padding:16px;min-height:150px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;transition:border-color .15s,background .15s}
+.qcard.good{border-color:var(--ok);background:var(--ok-bg)}
+.qcard.bad{border-color:var(--pen)}
+.qtag{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--acc);font-weight:600}
+.qn{font-family:var(--display);font-weight:700;font-size:40px;line-height:1.15;font-variant-numeric:tabular-nums}
+.qn.s{font-size:30px}
+.qs{font-size:21px;line-height:1.4;font-weight:500}
+.slot{display:inline-block;min-width:1.6em;padding:0 .2em;border-bottom:4px solid var(--acc);color:var(--maths);text-align:center}
+.slot:empty::after{content:"?";color:var(--soft);opacity:.5}
+.blank{display:inline-block;min-width:2.2em;border-bottom:3px solid var(--acc);color:var(--soft)}
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;line-height:1;font-size:.8em;margin:0 .1em}
+.fr span:first-child{border-bottom:2px solid currentColor;padding:0 .15em .05em}
+.fr span:last-child{padding-top:.05em}
+.tense{display:inline-block;background:var(--fr-bg);color:var(--fr);border-radius:8px;padding:2px 10px;font-weight:600;font-size:14px}
+.inf{color:var(--soft);font-size:15px}
+.cl{display:flex;align-items:baseline;justify-content:center;flex-wrap:wrap;gap:0;font-family:var(--display);font-size:32px;font-weight:700;line-height:1.3}
+.cl .p{margin-right:.3em}
+.cl .p.el{margin-right:0}
+.cl input{font:inherit;color:var(--maths);width:5.2em;max-width:60vw;border:0;border-bottom:4px solid var(--fr);background:transparent;padding:0 2px;outline:none;border-radius:0}
+.cl input:focus{background:var(--hl)}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:10px}
+.opt{border:2px solid var(--border);background:var(--card);border-radius:14px;padding:14px 8px;font-family:var(--display);font-weight:700;font-size:24px}
+.opt.right{border-color:var(--ok);background:var(--ok-bg)}
+.opt.wrong{border-color:var(--pen);background:var(--pen-bg)}
+.pad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.pad button{border:1px solid var(--border);background:var(--card);border-radius:14px;height:56px;font-family:var(--display);font-weight:700;font-size:26px}
+.pad button:active{transform:scale(.97)}
+.pad .val{grid-column:1/-1;background:var(--ink);color:var(--paper);border:0;font-size:22px}
+.cl .cs{min-width:2.4em;border-bottom-color:var(--fr);text-align:left;white-space:pre}
+.kb{display:flex;flex-direction:column;gap:6px;user-select:none;-webkit-user-select:none}
+.kr{display:flex;gap:4px;justify-content:center}
+.kr button{flex:1 1 0;min-width:0;max-width:44px;height:46px;border:1px solid var(--border);background:var(--card);border-radius:9px;font-size:19px;font-weight:500;padding:0;touch-action:manipulation}
+.kr button:active{background:var(--hl)}
+.kr .ac{background:var(--fr-bg);color:var(--fr);border-color:transparent}
+.kr .wk{max-width:64px;flex-grow:1.5}
+.kr .sp{max-width:none;flex-grow:3;font-size:15px}
+.kr .ok{max-width:none;flex-grow:2;background:var(--ink);color:var(--paper);border:0;font-family:var(--display);font-weight:700;font-size:20px}
+.fb{background:var(--card);border:2px solid var(--pen);border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.fb .ans{font-family:var(--display);font-size:22px;font-weight:700;color:var(--pen)}
+.fb .why{font-size:15px}
+.fb .why b{color:var(--ink);background:var(--hl);padding:0 3px;border-radius:3px}
+.fb .lab{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--soft);font-weight:600}
+.okmsg{color:var(--ok);font-weight:600;font-size:15px;min-height:22px;text-align:center}
+.warn{color:var(--fr);font-size:14px;text-align:center}
+.pt{border-collapse:collapse;font-variant-numeric:tabular-nums;font-size:14px;margin:4px auto}
+.pt th{font-weight:600;color:var(--soft);font-size:11px;padding:2px 6px}
+.pt td{border:1px solid var(--border);width:26px;height:26px;text-align:center;font-weight:600}
+.pt .cm{border-left:3px solid var(--pen)}
+.wrap{overflow-x:auto}
+/* result */
+.grade{align-self:center;width:150px;height:150px;border:5px solid var(--pen);border-radius:50%;display:grid;place-items:center;transform:rotate(-6deg);color:var(--pen);font-family:var(--display);font-weight:800;font-size:52px;line-height:1;text-align:center}
+.grade small{display:block;font-size:15px;font-weight:600}
+.rmsg{text-align:center;font-size:18px;font-weight:500}
+.errs{display:flex;flex-direction:column;gap:8px}
+.err{background:var(--card);border:1px solid var(--border);border-left:4px solid var(--pen);border-radius:10px;padding:8px 12px;font-size:15px}
+.err s{color:var(--pen)}
+.err .c{font-weight:600}
+/* profile */
+.plist{display:flex;flex-direction:column;gap:8px}
+.prow{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:10px 12px}
+.prow.cur{border:2px solid var(--ink)}
+.prow .nm{flex:1;min-width:0;font-weight:600}
+.prow .nm small{display:block;font-weight:400;color:var(--soft);font-size:13px}
+.field{display:flex;flex-direction:column;gap:4px;font-size:14px;color:var(--soft)}
+.field input,.field select{font:inherit;font-size:17px;color:var(--ink);background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px 12px}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.row>*{flex:1 1 140px}
+.grid9{display:grid;grid-template-columns:repeat(10,1fr);gap:3px;font-variant-numeric:tabular-nums;font-size:13px;max-width:400px}
+.grid9 div{aspect-ratio:1;display:grid;place-items:center;border-radius:5px;background:var(--card);border:1px solid var(--border);max-width:100%}
+.grid9 .h{background:transparent;border:0;font-weight:700;color:var(--soft)}
+.grid9 .g{background:var(--ok-bg);border-color:var(--ok);color:var(--ok)}
+.grid9 .r{background:var(--pen-bg);border-color:var(--pen);color:var(--pen)}
+.legend{display:flex;gap:14px;font-size:13px;color:var(--soft);flex-wrap:wrap}
+.muted{color:var(--soft);font-size:14px}
+.sect{font-family:var(--display);font-size:22px;font-weight:700}
+.confirm{background:var(--pen-bg);border:1px solid var(--pen);border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;gap:8px}
+/* récompense + jeu (écran d'arcade, sombre dans les deux thèmes) */
+.reward{background:var(--card);border:2px solid var(--ok);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:10px;align-items:center;text-align:center}
+.reward.none{border-color:var(--border);color:var(--soft);font-size:15px}
+.reward .hb{font-size:34px;color:#ff4d6d;letter-spacing:4px;line-height:1}
+.reward .btn{width:100%}
+.ghud{display:flex;align-items:center;gap:10px}
+.hearts{font-size:24px;color:#ff4d6d;letter-spacing:2px;min-width:52px}
+.hearts .off{color:var(--border)}
+.gstat{display:flex;flex-direction:column;line-height:1.1;font-variant-numeric:tabular-nums}
+.gstat span,.gnext span{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--soft)}
+.gstat b{font-family:var(--display);font-size:22px}
+.gnext{margin-left:auto;display:flex;flex-direction:column;align-items:center}
+.gnext canvas{width:48px;height:48px;background:#0b1030;border-radius:8px}
+.gwrap{position:relative;align-self:center;border-radius:12px;overflow:hidden;box-shadow:0 0 0 3px #2a2f63,0 8px 24px rgba(10,14,40,.35);max-width:100%}
+#gBoard,#sBoard{display:block;background:#0b1030;max-width:100%}
+.gover{position:absolute;inset:0;background:rgba(8,11,32,.86);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;padding:16px}
+.gover h3{font-size:30px;color:#ffd23f}
+.gover p{margin:0;font-size:16px}
+.gover .btn{background:#ffd23f;color:#0b1030;min-width:180px}
+.gctl{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.gctl button{height:60px;border-radius:14px;border:1px solid var(--border);background:var(--card);font-size:26px;touch-action:none;user-select:none;-webkit-user-select:none}
+.gctl button:active{background:var(--hl)}
+.gctl .drop{background:var(--ink);color:var(--paper);border:0}
+/* jeu de cartes : tapis vert, même rendu dans les deux thèmes */
+.felt{position:relative;background:radial-gradient(ellipse at 50% 40%,#2b8a57,#16583a 75%);border-radius:20px;padding:12px;display:flex;flex-direction:column;gap:12px;color:#fff;box-shadow:inset 0 0 0 3px rgba(255,255,255,.08);min-height:480px}
+.aiz{display:flex;flex-direction:column;align-items:center;gap:4px}
+.aihand{display:flex;justify-content:center;min-height:62px}
+.aihand .back-card{width:40px;height:60px;margin-left:-22px;font-size:13px}
+.aihand .back-card:first-child{margin-left:0}
+.ailab{font-size:13px;opacity:.85}
+.mid{display:flex;align-items:center;justify-content:center;gap:18px}
+.deckbtn{border:0;background:transparent;display:flex;flex-direction:column;align-items:center;gap:4px;color:#fff;padding:0}
+.deckbtn .dlab{font-size:13px;font-weight:600}
+.deckbtn:disabled{opacity:.5}
+.back-card{display:grid;place-items:center;width:70px;height:105px;border-radius:10px;border:3px solid #fff;background:repeating-linear-gradient(45deg,#1b1f4a 0 6px,#262b63 6px 12px);box-shadow:0 3px 8px rgba(0,0,0,.35);font-family:var(--display);font-weight:800;color:#ffd23f;font-size:26px}
+.back-card span{background:#e0383e;border-radius:50%;width:60%;aspect-ratio:1;display:grid;place-items:center;color:#fff;transform:rotate(-15deg)}
+.cdot{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12px;font-weight:600}
+.cdot i{width:34px;height:34px;border-radius:50%;border:3px solid #fff;display:block}
+.card{--cw:60px;position:relative;width:var(--cw);height:calc(var(--cw)*1.5);flex:none;border-radius:calc(var(--cw)*.14);border:3px solid #fff;background:var(--cc);color:#fff;padding:0;box-shadow:0 3px 8px rgba(0,0,0,.35);font-family:var(--display);font-weight:800;transition:transform .12s}
+.card.big{--cw:84px}
+.c-r{--cc:#e0383e}.c-j{--cc:#f2b705}.c-v{--cc:#27a046}.c-b{--cc:#2563d9}
+.card.wild{background:conic-gradient(#e0383e 0 25%,#2563d9 0 50%,#27a046 0 75%,#f2b705 0);--cc:#111}
+.card .ov{position:absolute;inset:16% 10%;background:#fff;border-radius:50%;transform:rotate(-20deg);display:grid;place-items:center}
+.card.wild .ov{background:#111}
+.card .ov b{transform:rotate(20deg);color:var(--cc);font-size:calc(var(--cw)*.42);line-height:1}
+.card.wild .ov b{color:#fff}
+.card .cn{position:absolute;font-size:calc(var(--cw)*.2);line-height:1;text-shadow:0 1px 1px rgba(0,0,0,.4)}
+.card .tl{top:4px;left:5px}.card .br{bottom:4px;right:5px;transform:rotate(180deg)}
+.card .u{text-decoration:underline}
+.myhand{display:flex;justify-content:center;align-items:flex-end;min-height:110px;padding-top:14px}
+.myhand .card.play{transform:translateY(-12px);box-shadow:0 0 0 3px #ffd23f,0 6px 12px rgba(0,0,0,.4)}
+.myhand .card:disabled{filter:brightness(.6);cursor:default}
+.myhand.wrap{flex-wrap:wrap;gap:6px}
+.ccmsg{text-align:center;font-weight:600;min-height:24px;font-size:16px}
+.ccbtns{display:flex;gap:8px;justify-content:center}
+.ccbtns .btn{flex:1;max-width:220px;padding:10px}
+.ccbtns .ghost{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.4)}
+.bubble{display:inline-block;background:#ffd23f;color:#1b1f4a;border-radius:12px;padding:2px 10px;font-weight:700}
+.pick{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;max-width:280px}
+.pick button{height:70px;border-radius:14px;border:3px solid #fff;color:#fff;font-family:var(--display);font-weight:700;font-size:20px}
+.rwbtns{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%}
+.rwbtns .btn{font-size:16px;padding:12px 6px}
+.rwbtns .sn{background:var(--ok);color:#fff}
+.dpad{display:grid;grid-template-columns:repeat(3,72px);grid-template-rows:repeat(2,58px);gap:8px;justify-content:center}
+.dpad button{border-radius:14px;border:1px solid var(--border);background:var(--card);font-size:24px;touch-action:none;user-select:none;-webkit-user-select:none}
+.dpad button:active{background:var(--hl)}
+.rwbtns .btn small{opacity:.85}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<style>
+.home-link{display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:600;color:var(--soft);text-decoration:none;margin-bottom:-6px}
+.home-link:hover{color:var(--ink)}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- Onboarding -->
+<section id="s-new" class="screen" hidden>
+  <div class="brand">Les <span>Réflexes</span></div>
+  <p>Des séries courtes pour avoir les bons réflexes en calcul et en conjugaison avant le collège. Crée le profil de l'enfant pour commencer.</p>
+  <label class="field">Prénom<input id="newName" maxlength="20" autocomplete="off" placeholder="Prénom"></label>
+  <label class="field">Classe<select id="newLvl"><option value="1">CE2 – CM1</option><option value="2" selected>CM2</option><option value="3">6e</option></select></label>
+  <button class="btn" id="newGo">C'est parti</button>
+  <button class="btn ghost" id="newCancel" hidden>Annuler</button>
+</section>
+
+<!-- Home -->
+<section id="s-home" class="screen" hidden>
+  <a class="home-link" href="index.html">← Retour à l'Atelier du Devoir</a>
+  <header class="top">
+    <div><div class="brand">Les <span>Réflexes</span></div><div class="stars" id="starLine"></div></div>
+    <button class="who" id="profBtn" aria-label="Profil"><span class="av" id="avL"></span><b id="avN"></b></button>
+  </header>
+  <div class="tabs" role="tablist">
+    <button role="tab" data-tab="maths" id="tabM">Maths</button>
+    <button role="tab" data-tab="fr" id="tabF">Français</button>
+  </div>
+  <button class="rev" id="revBtn" hidden><span class="big" id="revN"></span><span><b>Mes erreurs à retravailler</b><br><span class="muted">Elles reviennent jusqu'à ce qu'elles soient sues.</span></span></button>
+  <div class="mods" id="mods"></div>
+</section>
+
+<!-- Intro of a module -->
+<section id="s-intro" class="screen" hidden>
+  <div class="bar"><button class="back" id="introBack" aria-label="Retour">←</button><h2 id="introT" style="font-size:28px"></h2></div>
+  <div class="learn" id="learn"></div>
+  <div id="tablesBox" hidden>
+    <div class="sect" style="font-size:18px;margin-bottom:6px">Tables à travailler</div>
+    <div class="chips" id="chips"></div>
+  </div>
+  <div class="go">
+    <button class="btn" id="goTen">10 questions<small>Avec explications</small></button>
+    <button class="btn alt" id="goChrono">Chrono 1 min<small>Le plus possible</small></button>
+  </div>
+</section>
+
+<!-- Play -->
+<section id="s-play" class="screen" hidden>
+  <div class="ptop">
+    <button class="back" id="quit" aria-label="Arrêter">✕</button>
+    <div class="prog"><i id="progI"></i></div>
+    <div class="count" id="count"></div>
+  </div>
+  <div class="qcard" id="qcard"></div>
+  <div class="okmsg" id="okmsg" aria-live="polite"></div>
+  <div id="answerArea"></div>
+  <div class="fb" id="fb" hidden></div>
+</section>
+
+<!-- Result -->
+<section id="s-res" class="screen" hidden>
+  <div class="grade" id="grade"></div>
+  <div class="rmsg" id="rmsg"></div>
+  <div id="reward"></div>
+  <div class="errs" id="errs"></div>
+  <div class="go">
+    <button class="btn" id="again">Rejouer</button>
+    <button class="btn ghost" id="toHome">Accueil</button>
+  </div>
+</section>
+
+<!-- Game -->
+<section id="s-game" class="screen" hidden>
+  <div class="ghud">
+    <button class="back" id="gQuit" aria-label="Arrêter">✕</button>
+    <div class="hearts" id="gLives" aria-label="Vies"></div>
+    <div class="gstat"><span>Score</span><b id="gScore">0</b></div>
+    <div class="gstat"><span>Niveau</span><b id="gLines">1</b></div>
+    <div class="gnext"><span>Suivant</span><canvas id="gNext" width="64" height="64"></canvas></div>
+  </div>
+  <div class="gwrap" id="gWrap">
+    <canvas id="gBoard"></canvas>
+    <div class="gover" id="gOver" hidden></div>
+  </div>
+  <div class="gctl">
+    <button data-g="left" aria-label="Gauche">◀</button>
+    <button data-g="rot" aria-label="Tourner">⟳</button>
+    <button data-g="right" aria-label="Droite">▶</button>
+    <button data-g="down" aria-label="Descendre">▼</button>
+    <button data-g="drop" class="drop" aria-label="Lâcher">⤓</button>
+  </div>
+</section>
+
+<!-- Serpent -->
+<section id="s-snake" class="screen" hidden>
+  <div class="ghud">
+    <button class="back" id="sQuit" aria-label="Arrêter">✕</button>
+    <div class="hearts" id="sLives" aria-label="Vies"></div>
+    <div class="gstat"><span>Score</span><b id="sScore">0</b></div>
+    <div class="gstat"><span>Niveau</span><b id="sLevel">1</b></div>
+    <div class="gstat" style="margin-left:auto;text-align:right"><span>Taille</span><b id="sLen">3</b></div>
+  </div>
+  <div class="gwrap">
+    <canvas id="sBoard" style="touch-action:none"></canvas>
+    <div class="gover" id="sOver" hidden></div>
+  </div>
+  <div class="dpad">
+    <span></span><button data-d="up" aria-label="Haut">▲</button><span></span>
+    <button data-d="left" aria-label="Gauche">◀</button><button data-d="down" aria-label="Bas">▼</button><button data-d="right" aria-label="Droite">▶</button>
+  </div>
+</section>
+
+<!-- Jeu de cartes -->
+<section id="s-cc" class="screen" hidden>
+  <div class="ghud">
+    <button class="back" id="ccQuit" aria-label="Arrêter">✕</button>
+    <div class="gstat"><span>Partie</span><b id="ccInfo">1/1</b></div>
+    <div class="gstat" style="margin-left:auto;text-align:right"><span>Victoires</span><b id="ccWins">0</b></div>
+  </div>
+  <div class="felt" id="ccTable">
+    <div class="aiz"><div class="aihand" id="ccAi"></div><div class="ailab" id="ccAiLab"></div></div>
+    <div class="mid">
+      <button class="deckbtn" id="ccDeck" aria-label="Piocher une carte"><span class="back-card"><span>4</span></span><span class="dlab">Piocher</span></button>
+      <div id="ccTop"></div>
+      <div class="cdot" id="ccColor"></div>
+    </div>
+    <div class="ccmsg" id="ccMsg" aria-live="polite"></div>
+    <div class="myhand" id="ccMe"></div>
+    <div class="ccbtns">
+      <button class="btn alt" id="ccLast" hidden>Dernière carte !</button>
+      <button class="btn ghost" id="ccPass" hidden>Garder et passer</button>
+    </div>
+    <div class="gover" id="ccOver" hidden></div>
+  </div>
+</section>
+
+<!-- Profile -->
+<section id="s-prof" class="screen" hidden>
+  <div class="bar"><button class="back" id="profBack" aria-label="Retour">←</button><h2 style="font-size:28px">Profils</h2></div>
+  <div class="plist" id="plist"></div>
+  <button class="btn ghost" id="addProf">+ Ajouter un enfant</button>
+  <div id="editBox"></div>
+  <div class="sect">Tables de multiplication</div>
+  <p class="muted" style="margin:0">Chaque case est un résultat de la table. Vert : su. Rouge : encore des erreurs.</p>
+  <div class="grid9" id="grid9"></div>
+  <div class="sect">Mettre l'appli sur l'écran d'accueil</div>
+  <div class="lcard">
+    <p><b>Android (Chrome)</b> : menu ⋮ en haut à droite, puis « Ajouter à l'écran d'accueil ».</p>
+    <p><b>iPhone (Safari)</b> : bouton Partager, puis « Sur l'écran d'accueil ».</p>
+    <p class="muted">La progression est gardée sur ce téléphone.</p>
+  </div>
+</section>
+
+</div>
+
+<script>
+/* ============ outils ============ */
+const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const fix=n=>+(+n).toFixed(6);
+const fmt=n=>String(fix(n)).replace('.',',');
+const F=(a,b)=>`<span class="fr"><span>${a}</span><span>${b}</span></span>`;
+const N=(q,a,hint,key,extra)=>Object.assign({t:'num',q,a:fix(a),hint,key},extra||{});
+const C=(q,a,opts,hint,key,extra)=>Object.assign({t:'choice',q,a,opts,hint,key},extra||{});
+let LEVEL=2, TABLES=[2,3,4,5,6,7,8,9];
+const LV=()=>LEVEL;
+const LVNAME=['','CE2 – CM1','CM2','6e'];
+
+/* tableau de numération pour les explications */
+function placeTable(nums){
+  const head=['m','c','d','u','d','c','m'];
+  const rows=nums.map(x=>{
+    let [ip,dp]=fix(x).toFixed(3).split('.');dp=dp.replace(/0+$/,'');
+    const cells=Array(7).fill('');
+    const id=ip.split('').reverse();
+    for(let k=0;k<id.length&&k<4;k++)cells[3-k]=id[k];
+    for(let k=0;k<dp.length;k++)cells[4+k]=dp[k];
+    return '<tr>'+cells.map((c,i)=>`<td${i===4?' class="cm"':''}>${c}</td>`).join('')+'</tr>';
+  }).join('');
+  return `<div class="wrap"><table class="pt"><tr>${head.map((h,i)=>`<th${i===4?' class="cm"':''}>${h}</th>`).join('')}</tr>${rows}</table></div><div class="muted" style="text-align:center;font-size:12px">milliers · centaines · dizaines · unités | dixièmes · centièmes · millièmes</div>`;
+}
+
+/* ============ MATHS ============ */
+function hintMul(a,b){
+  const p=a*b;
+  if(p===56&&a!==1&&b!==1)return `Retiens la suite <b>5, 6, 7, 8</b> : 56 = 7 × 8.`;
+  const t=[a,b].filter(x=>x>=2&&x<=9).sort((x,y)=>y-x)[0];
+  const o=t===a?b:a;
+  if(!t||o===1)return `Multiplier par 1 ne change rien : <b>${p}</b>.`;
+  if(o===10)return `× 10 : chaque chiffre devient 10 fois plus grand, on écrit un 0 à droite → <b>${p}</b>.`;
+  switch(t){
+    case 9:return `× 9 = × 10 moins une fois : ${o*10} − ${o} = <b>${p}</b>. Vérifie : ${String(p).split('').join(' + ')} = 9.`;
+    case 8:return `× 8 = double, double, double : ${o} → ${o*2} → ${o*4} → <b>${p}</b>.`;
+    case 7:return `× 7 = × 5 + × 2 : ${o*5} + ${o*2} = <b>${p}</b>.`;
+    case 6:return `× 6 = × 5 + une fois : ${o*5} + ${o} = <b>${p}</b>.`;
+    case 5:return `× 5 = la moitié de × 10 : ${o*10} ÷ 2 = <b>${p}</b>.`;
+    case 4:return `× 4 = le double du double : ${o} → ${o*2} → <b>${p}</b>.`;
+    case 3:return `× 3 = × 2 + une fois : ${o*2} + ${o} = <b>${p}</b>.`;
+    default:return `× 2 = le double : ${o} + ${o} = <b>${p}</b>.`;
+  }
+}
+function gMul(){
+  const L=LV(),a=pick(TABLES),b=L===1?R(1,10):R(2,9),p=a*b;
+  const [x,y]=Math.random()<.5?[a,b]:[b,a];
+  const r=Math.random();
+  if(L>=2&&r<.25)return N(`${x} × {?} = ${p}`,y,`Cherche dans la table de ${x} : ${x} × <b>${y}</b> = ${p}.`,`mq${x}-${p}`,{gk:[a,b]});
+  if(L===3&&r<.45)return N(`${x*10} × ${y} = {?}`,p*10,`${x*10} × ${y}, c'est ${x} × ${y} = ${p}, puis × 10 → <b>${p*10}</b>.`,`m${x*10}x${y}`);
+  return N(`${x} × ${y} = {?}`,p,hintMul(x,y),`m${Math.min(a,b)}x${Math.max(a,b)}`,{gk:[a,b]});
+}
+function gDiv(){
+  const L=LV(),T=TABLES.filter(t=>t>1),a=pick(T.length?T:[2,3,4,5,6,7,8,9]),b=R(2,9),n=a*b,r=Math.random();
+  if(L===3&&r<.3)return N(`${n*10} ÷ ${a} = {?}`,b*10,`Pense à ${n} ÷ ${a} = ${b} (car ${a} × ${b} = ${n}), puis × 10 → <b>${b*10}</b>.`,`d${n*10}/${a}`);
+  if(L>=2&&r<.5)return N(`${n} ÷ {?} = ${b}`,a,`Quel nombre multiplié par ${b} donne ${n} ? ${b} × <b>${a}</b> = ${n}.`,`dq${n}/${b}`,{gk:[a,b]});
+  return N(`${n} ÷ ${a} = {?}`,b,`Cherche dans la table de ${a} : ${a} × <b>${b}</b> = ${n}, donc ${n} ÷ ${a} = <b>${b}</b>.`,`d${n}/${a}`,{gk:[a,b]});
+}
+function decompAdd(a,b){const T=b-b%10,u=b%10;return u&&T?`Décompose : ${a} + ${T} = ${a+T}, puis + ${u} = <b>${a+b}</b>.`:`${a} + ${b} = <b>${a+b}</b>.`}
+function gAdd(){
+  const L=LV(),r=Math.random();
+  if(L===1){
+    if(r<.35){const a=R(1,9);return N(`${a} + {?} = 10`,10-a,`Les amis de 10 : ${a} et <b>${10-a}</b> (${a} + ${10-a} = 10).`,`c10-${a}`)}
+    if(r<.75){const a=R(2,9),b=R(2,9),s=a+b;return N(`${a} + ${b} = {?}`,s,s>10?`Passe par 10 : ${a} + ${10-a} = 10, puis + ${b-(10-a)} = <b>${s}</b>.`:`${a} + ${b} = <b>${s}</b>.`,`a${Math.min(a,b)}+${Math.max(a,b)}`)}
+    const a=R(2,8)*10+R(1,9),b=R(1,9);return N(`${a} + ${b} = {?}`,a+b,(a%10)+b>=10?`Passe par la dizaine : ${a} + ${10-a%10} = ${a+10-a%10}, puis + ${b-(10-a%10)} = <b>${a+b}</b>.`:`${a%10} + ${b} = ${a%10+b}, donc <b>${a+b}</b>.`,`a${a}+${b}`);
+  }
+  if(L===2){
+    if(r<.3){const a=R(11,89),up=Math.ceil(a/10)*10;return N(`${a} + {?} = 100`,100-a,a%10?`Monte à la dizaine : ${a} + ${up-a} = ${up}, puis ${up} + ${100-up} = 100. Total : ${up-a} + ${100-up} = <b>${100-a}</b>.`:`${a/10} dizaines + ${10-a/10} dizaines = 10 dizaines → <b>${100-a}</b>.`,`c100-${a}`)}
+    if(r<.6){const u=R(2,9),a=R(1,8)*10+u,b=R(10-u,9);return N(`${a} + ${b} = {?}`,a+b,`Passe par la dizaine : ${a} + ${10-u} = ${a+10-u}, puis + ${b-(10-u)} = <b>${a+b}</b>.`,`a${a}+${b}`)}
+    const a=R(12,59),b=R(12,99-a);return N(`${a} + ${b} = {?}`,a+b,decompAdd(a,b),`a${a}+${b}`);
+  }
+  if(r<.25){const a=R(11,99)*10,up=Math.ceil(a/100)*100;return N(`${a} + {?} = 1000`,1000-a,a%100?`Monte à la centaine : ${a} + ${up-a} = ${up}, puis ${up} + ${1000-up} = 1000. Total : <b>${1000-a}</b>.`:`${a} + <b>${1000-a}</b> = 1000.`,`c1000-${a}`)}
+  if(r<.55){const a=R(25,99),b=R(15,99);return N(`${a} + ${b} = {?}`,a+b,decompAdd(a,b),`a${a}+${b}`)}
+  if(r<.8){const A=R(11,99),B=R(11,99),a=A/10,b=B/10,ia=Math.floor(A/10),ib=Math.floor(B/10),da=A%10,db=B%10;
+    return N(`${fmt(a)} + ${fmt(b)} = {?}`,a+b,`Unités : ${ia} + ${ib} = ${ia+ib}. Dixièmes : ${da} + ${db} = ${da+db}${da+db>=10?` = 1 unité et ${da+db-10} dixième${da+db-10>1?'s':''}`:''}. Total : <b>${fmt(a+b)}</b>.`,`a${a}+${b}`)}
+  const a=R(120,880),b=R(15,99);return N(`${a} + ${b} = {?}`,a+b,decompAdd(a,b),`a${a}+${b}`);
+}
+function gSub(){
+  const L=LV(),r=Math.random(),chk=(a,b)=>` Vérifie : ${fmt(a-b)} + ${fmt(b)} = ${fmt(a)}.`;
+  if(L===1){
+    if(r<.3){const b=R(1,9);return N(`10 − ${b} = {?}`,10-b,`Les amis de 10 : ${b} + <b>${10-b}</b> = 10.`,`s10-${b}`)}
+    const a=R(11,18),b=R(Math.max(2,a-9),9);return N(`${a} − ${b} = {?}`,a-b,`Passe par 10 : ${a} − ${a-10} = 10, puis 10 − ${b-(a-10)} = <b>${a-b}</b>.`,`s${a}-${b}`);
+  }
+  if(L===2){
+    if(r<.45){const u=R(0,8),a=R(2,9)*10+u,b=R(u+1,9);return N(`${a} − ${b} = {?}`,a-b,u?`Passe par la dizaine : ${a} − ${u} = ${a-u}, puis − ${b-u} = <b>${a-b}</b>.`:`${a} − ${b} = <b>${a-b}</b>.${chk(a,b)}`,`s${a}-${b}`)}
+    if(r<.7){const a=R(1,99);return N(`100 − ${a} = {?}`,100-a,`C'est ce qu'il faut ajouter à ${a} pour faire 100 : <b>${100-a}</b>.${chk(100,a)}`,`s100-${a}`)}
+    const a=R(41,98),b=R(12,a-10),T=b-b%10,u=b%10;return N(`${a} − ${b} = {?}`,a-b,u?`Enlève les dizaines puis les unités : ${a} − ${T} = ${a-T}, puis − ${u} = <b>${a-b}</b>.`:`${a} − ${b} = <b>${a-b}</b>.`,`s${a}-${b}`);
+  }
+  if(r<.3){const a=R(11,99)*10;return N(`1000 − ${a} = {?}`,1000-a,`Ce qu'il faut ajouter à ${a} pour faire 1000 : <b>${1000-a}</b>.${chk(1000,a)}`,`s1000-${a}`)}
+  if(r<.6){const A=R(20,99),B=R(11,A-1),a=A/10,b=B/10;return N(`${fmt(a)} − ${fmt(b)} = {?}`,a-b,`Compte en dixièmes : ${A} dixièmes − ${B} dixièmes = ${A-B} dixièmes = <b>${fmt(a-b)}</b>.${chk(a,b)}`,`s${a}-${b}`)}
+  const a=R(51,99),b=R(18,a-12),T=b-b%10,u=b%10;return N(`${a} − ${b} = {?}`,a-b,u?`${a} − ${T} = ${a-T}, puis − ${u} = <b>${a-b}</b>.`:`<b>${a-b}</b>.`,`s${a}-${b}`);
+}
+function gP10(){
+  const L=LV(),f=pick(L===1?[10,100]:[10,100,1000]),mul=Math.random()<.5;let n;
+  if(L===1)n=mul?R(2,99):R(2,99)*f;
+  else if(L===2)n=mul?(Math.random()<.5?R(11,999)/10:R(101,999)/100):R(2,999);
+  else n=mul?R(101,9999)/100:(Math.random()<.5?R(11,999)/10:R(2,99));
+  n=fix(n);const ans=fix(mul?n*f:n/f),k=String(f).length-1,rg=`${k} rang${k>1?'s':''}`;
+  const h=mul?`× ${f} : chaque chiffre devient ${f} fois plus grand et glisse de <b>${rg} vers la gauche</b>. On complète avec des 0 si besoin.`:`÷ ${f} : chaque chiffre devient ${f} fois plus petit et glisse de <b>${rg} vers la droite</b>.`;
+  return N(`${fmt(n)} ${mul?'×':'÷'} ${f} = {?}`,ans,`${h} ${fmt(n)} ${mul?'×':'÷'} ${f} = <b>${fmt(ans)}</b>.${placeTable([n,ans])}`,`p${n}${mul?'x':'/'}${f}`,{small:true});
+}
+function halfH(n){const T=Math.floor(n/10)*10,U=n%10;return U&&T?`Moitié de ${n} = moitié de ${T} + moitié de ${U} = ${fmt(T/2)} + ${fmt(U/2)} = <b>${fmt(n/2)}</b>.`:`Moitié de ${n} = <b>${fmt(n/2)}</b>.`}
+function dblH(n){const T=Math.floor(n/10)*10,U=fix(n-T);return U&&T?`Double de ${fmt(n)} = double de ${T} + double de ${fmt(U)} = ${T*2} + ${fmt(U*2)} = <b>${fmt(n*2)}</b>.`:`Double de ${fmt(n)} = <b>${fmt(n*2)}</b>.`}
+function gDbl(){
+  const L=LV(),r=Math.random();
+  if(L===1){if(r<.5){const n=R(2,25);return N(`Le double de ${n} = {?}`,n*2,dblH(n),`db${n}`,{small:true})}const n=R(1,25)*2;return N(`La moitié de ${n} = {?}`,n/2,halfH(n),`mo${n}`,{small:true})}
+  if(L===2){if(r<.45){const n=R(11,99);return N(`Le double de ${n} = {?}`,n*2,dblH(n),`db${n}`,{small:true})}if(r<.85){const n=R(11,99)*2;return N(`La moitié de ${n} = {?}`,n/2,halfH(n),`mo${n}`,{small:true})}
+    const n=R(2,25)*4;return N(`Le quart de ${n} = {?}`,n/4,`Le quart = la moitié de la moitié : ${n} → ${n/2} → <b>${n/4}</b>.`,`qu${n}`,{small:true})}
+  if(r<.3){const n=R(1,49)*2+1;return N(`La moitié de ${n} = {?}`,n/2,halfH(n)+` Un nombre impair a une moitié à virgule (moitié de 1 = 0,5).`,`mo${n}`,{small:true})}
+  if(r<.55){const n=fix(R(11,99)/10);return N(`Le double de ${fmt(n)} = {?}`,n*2,dblH(n),`db${n}`,{small:true})}
+  if(r<.8){const n=R(3,30)*4;return N(`Le quart de ${n} = {?}`,n/4,`Le quart = la moitié de la moitié : ${n} → ${n/2} → <b>${n/4}</b>.`,`qu${n}`,{small:true})}
+  const n=R(26,250)*2;return N(`La moitié de ${n} = {?}`,n/2,halfH(n),`mo${n}`,{small:true});
+}
+const PLACES=[['centaines',2],['dizaines',1],['unités',0],['dixièmes',-1],['centièmes',-2],['millièmes',-3]];
+function gDec(){
+  const L=LV();
+  if(L>=2&&Math.random()<.35){
+    const ip=R(10,999),dp=L===3?R(101,999):R(11,99),d=String(dp).replace(/0+$/,'');if(d.length<String(dp).length)return gDec();
+    const s=`${ip},${d}`,places=PLACES.filter(p=>p[1]>-1-d.length&&p[1]<String(ip).length),[name,pos]=pick(places);
+    const dig=pos>=0?String(ip).split('').reverse()[pos]:d[-pos-1];
+    return N(`Dans <b>${s}</b>, le chiffre des ${name} = {?}`,+dig,`Après la virgule : 1er chiffre = dixièmes, 2e = centièmes, 3e = millièmes. Avant : unités, dizaines, centaines. Le chiffre des ${name} est <b>${dig}</b>.${placeTable([+s.replace(',','.')])}`,`pv${s}${name}`,{small:true});
+  }
+  let A,B;const r=Math.random();
+  if(L===1){const x=R(0,20);A=[x,R(0,9)];B=r<.5?[x,R(0,9)]:[x+pick([-1,1]),R(0,9)];if(B[0]<0)B[0]=0;A=`${A[0]},${A[1]}`;B=`${B[0]},${B[1]}`}
+  else{const x=R(0,15);
+    if(r<.55){let p=R(1,9),q=R(10,99);if(p*10===q)q++;A=`${x},${p}`;B=`${x},${q}`}
+    else if(r<.7){const p=R(1,9);A=`${x},${p}`;B=`${x},${p}0`}
+    else if(r<.85){A=`${x},${R(1,9)}${R(1,9)}`;B=`${x+1},${R(1,9)}`}
+    else{let p=R(11,99),q=R(101,999);A=`${x},${p}`;B=`${x},${q}`}
+  }
+  if(Math.random()<.5)[A,B]=[B,A];
+  const va=+A.replace(',','.'),vb=+B.replace(',','.'),ans=va<vb?'<':va>vb?'>':'=';
+  const dl=Math.max(A.split(',')[1].length,B.split(',')[1].length),pad=s=>{const[i,d]=s.split(',');return `${i},${d.padEnd(dl,'0')}`};
+  let h;
+  if(A.split(',')[0]!==B.split(',')[0])h=`On compare d'abord la partie entière : ${A.split(',')[0]} et ${B.split(',')[0]}. Donc ${A} <b>${ans}</b> ${B}.`;
+  else h=`Même partie entière. Écris-les avec autant de chiffres après la virgule : <b>${pad(A)}</b> et <b>${pad(B)}</b>. Donc ${A} <b>${ans}</b> ${B}.${ans==='='?' Les zéros à la fin ne changent rien.':' Un nombre plus « long » n\'est pas forcément plus grand !'}`;
+  return C(`${A} <span class="blank">?</span> ${B}`,ans,['<','=','>'],h,`cmp${A}|${B}`,{big:true});
+}
+function gFrac(){
+  const L=LV(),r=Math.random();
+  if(L===1||r<.5&&L===2||r<.35){
+    const b=L===1?pick([2,4,3,10]):R(2,10),a=L===1?(b===4&&Math.random()<.4?3:1):R(1,b-1),k=R(2,10),n=b*k;
+    return N(`${F(a,b)} de ${n} = {?}`,a*k,`On partage ${n} en ${b} parts égales : ${n} ÷ ${b} = ${k}. On prend ${a} part${a>1?'s':''} : ${a} × ${k} = <b>${a*k}</b>.`,`f${a}/${b}de${n}`);
+  }
+  const list=L===2?[[1,2],[1,4],[3,4],[1,10],[3,10],[7,10],[1,100],[25,100]]:[[1,2],[1,4],[3,4],[1,5],[2,5],[1,10],[9,10],[1,100],[37,100],[3,2],[5,4],[5,2],[1,8]];
+  const [a,b]=pick(list),v=fix(a/b);
+  const extra=b===10?` ${a} dixième${a>1?'s':''}.`:b===100?` ${a} centième${a>1?'s':''}.`:'';
+  if(Math.random()<.3&&L===3)return N(`${fmt(v)} = ${F('{?}',b)}`,a,`${fmt(v)} = ${a} ÷ ${b}, donc ${fmt(v)} = ${F(a,b)}.${extra}`,`fr${v}/${b}`);
+  return N(`${F(a,b)} = {?}`,v,`${F(a,b)}, c'est ${a} ÷ ${b} = <b>${fmt(v)}</b>.${extra}`,`fd${a}/${b}`);
+}
+const UF={km:1e6,m:1e3,dm:100,cm:10,mm:1,kg:1000,g:1,L:1000,cL:10,mL:1};
+function gTime(L){
+  const r=Math.random();
+  if(L===1){if(r<.6){const h=R(1,4);return N(`${h} h = {?} min`,h*60,`1 h = 60 min, donc ${h} h = ${h} × 60 = <b>${h*60} min</b>.`,`t${h}h`,{small:true})}
+    return N(`1 h 30 min = {?} min`,90,`1 h = 60 min, puis + 30 : <b>90 min</b>.`,`t1h30`,{small:true})}
+  if(L===2){if(r<.4){const h=R(1,3),m=pick([10,15,20,40,45]);return N(`${h} h ${m} min = {?} min`,h*60+m,`${h} h = ${h*60} min, puis + ${m} = <b>${h*60+m} min</b>.`,`t${h}h${m}`,{small:true})}
+    if(r<.7){const m=R(2,5);return N(`${m} min = {?} s`,m*60,`1 min = 60 s, donc ${m} × 60 = <b>${m*60} s</b>.`,`t${m}min`,{small:true})}
+    const h=R(2,4);return N(`${h*60} min = {?} h`,h,`60 min = 1 h, donc ${h*60} ÷ 60 = <b>${h} h</b>.`,`t${h*60}m`,{small:true})}
+  const [v,ans]=pick([[1.5,90],[2.5,150],[0.5,30],[0.25,15],[0.75,45],[3.5,210]]);
+  return N(`${fmt(v)} h = {?} min`,ans,`Attention : ${fmt(v)} h n'est pas ${Math.floor(v)} h ${String(v).split('.')[1]||''} min ! ${v%1===.5?'0,5 h = une demi-heure = 30 min':v%1===.25?'0,25 h = un quart d\'heure = 15 min':'0,75 h = trois quarts d\'heure = 45 min'}. Donc <b>${ans} min</b>.`,`th${v}`,{small:true});
+}
+function gConv(){
+  const L=LV();if(Math.random()<.25)return gTime(L);
+  const pairs=L===1?[['m','cm'],['kg','g'],['L','cL'],['cm','mm'],['km','m']]:[['m','cm'],['kg','g'],['L','cL'],['km','m'],['cm','m'],['g','kg'],['cL','L'],['mm','cm'],['m','mm'],['dm','cm'],['L','mL'],['m','km']];
+  const [u1,u2]=pick(pairs),f1=UF[u1],f2=UF[u2];let v;
+  if(f1>f2)v=L===3&&Math.random()<.6?fix(R(11,99)/10):R(2,L===1?9:25);
+  else{const ratio=f2/f1,res=L===2?(Math.random()<.5?R(2,20):R(11,99)/10):R(101,999)/100;v=fix(res*ratio)}
+  const ans=fix(v*f1/f2);
+  const h=f1>f2?`1 ${u1} = ${fmt(f1/f2)} ${u2}. Grande unité → petite : on multiplie. ${fmt(v)} × ${fmt(f1/f2)} = <b>${fmt(ans)} ${u2}</b>.`:`1 ${u2} = ${fmt(f2/f1)} ${u1}. Petite unité → grande : on divise. ${fmt(v)} ÷ ${fmt(f2/f1)} = <b>${fmt(ans)} ${u2}</b>.`;
+  return N(`${fmt(v)} ${u1} = {?} ${u2}`,ans,h,`cv${v}${u1}${u2}`,{small:true});
+}
+
+/* ============ FRANÇAIS ============ */
+const IRR={
+ 'être':{pr:['suis','es','est','sommes','êtes','sont'],im:'ét',fu:'ser',pp:'été',aux:'a',ps:['fut','furent'],ip:['sois','soyons','soyez']},
+ 'avoir':{pr:['ai','as','a','avons','avez','ont'],im:'av',fu:'aur',pp:'eu',aux:'a',ps:['eut','eurent'],ip:['aie','ayons','ayez']},
+ 'aller':{pr:['vais','vas','va','allons','allez','vont'],im:'all',fu:'ir',pp:'allé',aux:'e',ps:['alla','allèrent'],ip:['va','allons','allez']},
+ 'faire':{pr:['fais','fais','fait','faisons','faites','font'],im:'fais',fu:'fer',pp:'fait',aux:'a',ps:['fit','firent'],ip:['fais','faisons','faites']},
+ 'dire':{pr:['dis','dis','dit','disons','dites','disent'],im:'dis',fu:'dir',pp:'dit',aux:'a',ps:['dit','dirent'],ip:['dis','disons','dites']},
+ 'venir':{pr:['viens','viens','vient','venons','venez','viennent'],im:'ven',fu:'viendr',pp:'venu',aux:'e',ps:['vint','vinrent'],ip:['viens','venons','venez']},
+ 'prendre':{pr:['prends','prends','prend','prenons','prenez','prennent'],im:'pren',fu:'prendr',pp:'pris',aux:'a',ps:['prit','prirent'],ip:['prends','prenons','prenez']},
+ 'pouvoir':{pr:['peux','peux','peut','pouvons','pouvez','peuvent'],im:'pouv',fu:'pourr',pp:'pu',aux:'a',ps:['put','purent']},
+ 'vouloir':{pr:['veux','veux','veut','voulons','voulez','veulent'],im:'voul',fu:'voudr',pp:'voulu',aux:'a',ps:['voulut','voulurent']},
+ 'voir':{pr:['vois','vois','voit','voyons','voyez','voient'],im:'voy',fu:'verr',pp:'vu',aux:'a',ps:['vit','virent'],ip:['vois','voyons','voyez']},
+ 'partir':{pr:['pars','pars','part','partons','partez','partent'],im:'part',fu:'partir',pp:'parti',aux:'e',ps:['partit','partirent'],ip:['pars','partons','partez']},
+ 'mettre':{pr:['mets','mets','met','mettons','mettez','mettent'],im:'mett',fu:'mettr',pp:'mis',aux:'a',ps:['mit','mirent'],ip:['mets','mettons','mettez']}
+};
+const BASIC=['être','avoir','aller','faire'];
+const V1=['chanter','parler','jouer','regarder','aimer','danser','travailler','écouter','donner','trouver','porter','marcher','arriver','tomber','rester','entrer','sauter','crier'];
+const V1S=['manger','nager','ranger','commencer','lancer','avancer'];
+const V2=['finir','choisir','grandir','réussir','remplir','obéir','rougir','bâtir'];
+const ETRE=new Set(['arriver','tomber','rester','entrer','aller','venir','partir']);
+const PR1=['e','es','e','ons','ez','ent'],PR2=['is','is','it','issons','issez','issent'],IMP=['ais','ais','ait','ions','iez','aient'],FUT=['ai','as','a','ons','ez','ont'];
+const AV=['ai','as','a','avons','avez','ont'],ET=['suis','es','est','sommes','êtes','sont'];
+const TNAME={pr:'Présent',im:'Imparfait',fu:'Futur',pc:'Passé composé',ps:'Passé simple',ip:'Impératif'};
+const vowel=s=>/^[aeéèêiouyh]/i.test(s);
+const softOf=s=>s.endsWith('g')?s+'e':s.endsWith('c')?s.slice(0,-1)+'ç':s;
+const kind=v=>IRR[v]?'irr':V2.includes(v)?'v2':V1S.includes(v)?'v1s':'v1';
+const ppOf=v=>IRR[v]?IRR[v].pp:kind(v)==='v2'?v.slice(0,-2)+'i':v.slice(0,-2)+'é';
+const row=(v,arr)=>['je','tu','il','nous','vous','ils'].map((p,i)=>(p==='je'&&vowel(arr[i])?"j'":p+' ')+arr[i]).join(', ');
+
+function forms(v,t){ /* renvoie {stem,ends[6]} : stem vide = forme entière à écrire */
+  const k=kind(v),s=v.slice(0,-2);
+  if(k==='irr'){const d=IRR[v];
+    if(t==='pr')return{stem:'',ends:d.pr};
+    if(t==='im')return{stem:'',ends:IMP.map(e=>d.im+e)};
+    if(t==='fu')return{stem:'',ends:FUT.map(e=>d.fu+e)};}
+  if(k==='v1s'){const so=softOf(s);
+    if(t==='pr')return{stem:'',ends:PR1.map((e,i)=>(i===3?so:s)+e)};
+    if(t==='im')return{stem:'',ends:IMP.map((e,i)=>(i===3||i===4?s:so)+e)};
+    if(t==='fu')return{stem:v,ends:FUT};}
+  if(k==='v2'){
+    if(t==='pr')return{stem:s,ends:PR2};
+    if(t==='im')return{stem:s+'iss',ends:IMP};
+    if(t==='fu')return{stem:v,ends:FUT};}
+  if(t==='pr')return{stem:s,ends:PR1};
+  if(t==='im')return{stem:s,ends:IMP};
+  if(t==='fu')return{stem:v,ends:FUT};
+}
+function whyConj(v,t,p,pron,full,extra){
+  const k=kind(v),s=v.slice(0,-2),d=IRR[v];
+  if(t==='pr'){
+    if(k==='irr')return `<b>${v}</b> est un verbe irrégulier : on l'apprend par cœur. Au présent : ${row(v,d.pr)}.`;
+    if(k==='v2')return `<b>${v}</b> fait « nous ${s}issons » : c'est un verbe du 2e groupe. Terminaisons : -is, -is, -it, -issons, -issez, -issent.`;
+    let h=`<b>${v}</b> finit par -er : 1er groupe. Terminaisons du présent : -e, -es, -e, -ons, -ez, -ent.`;
+    if(k==='v1s')h+=` Devant -ons, on écrit <b>${softOf(s)}</b> pour garder le son ${s.endsWith('g')?'« je »':'« se »'} : nous ${softOf(s)}ons.`;
+    if(p===1)h+=' Avec tu, toujours un -s.';if(p===5)h+=' Le -ent ne s\'entend pas, mais il s\'écrit !';
+    return h;}
+  if(t==='im'){
+    if(v==='être')return `Être est le seul verbe spécial à l'imparfait : radical <b>ét-</b>, puis -ais, -ais, -ait, -ions, -iez, -aient.`;
+    const nous=k==='irr'?d.pr[3]:k==='v2'?s+'issons':k==='v1s'?softOf(s)+'ons':s+'ons';
+    let h=`Imparfait : on prend « nous ${nous} », on enlève -ons → radical <b>${nous.slice(0,-3)}-</b>, puis -ais, -ais, -ait, -ions, -iez, -aient. Mêmes terminaisons pour tous les verbes.`;
+    if(k==='v1s')h+=` Devant a on garde ${softOf(s).slice(-2)} (je ${softOf(s)}ais), devant i on n'en a pas besoin (nous ${s}ions).`;
+    return h;}
+  if(t==='fu'){
+    if(k==='irr'&&d.fu!==v)return `<b>${v}</b> a un radical spécial au futur : <b>${d.fu}-</b>. Puis les terminaisons -ai, -as, -a, -ons, -ez, -ont.`;
+    return `Futur : on garde l'infinitif <b>${v}</b> et on ajoute -ai, -as, -a, -ons, -ez, -ont. Astuce : ce sont les terminaisons de « avoir » (j'ai, tu as, il a…).`;}
+  if(t==='pc'){
+    const e=ETRE.has(v);let h=`Passé composé = <b>${e?'être':'avoir'}</b> au présent + participe passé <b>${ppOf(v)}</b>.`;
+    if(e)h+=` Avec être, le participe s'accorde avec le sujet : ${extra}.`;else h+=' Avec avoir, pas d\'accord avec le sujet.';
+    if(!IRR[v]&&kind(v)!=='v2')h+=` Participe en -é : « il a ${ppOf(v)} » se dit comme « il a vendu ».`;
+    return h;}
+  if(t==='ps'){
+    if(k==='irr')return `${v} au passé simple : il ${d.ps[0]}, ils ${d.ps[1]}. À apprendre par cœur. C'est le temps des contes et des récits.`;
+    if(k==='v2')return `2e groupe au passé simple : il ${s}<b>it</b>, ils ${s}<b>irent</b>.`;
+    return `Verbes en -er au passé simple : il ${k==='v1s'?softOf(s):s}<b>a</b>, ils ${s}<b>èrent</b>.`;}
+  if(t==='ip'){
+    let h='Impératif : on donne un ordre, sans sujet. Seulement 3 personnes : tu, nous, vous.';
+    if(k==='irr')h+=` ${v} : ${d.ip.join(', ')}.`;
+    else if(k==='v2')h+=` ${s}is, ${s}issons, ${s}issez.`;
+    else h+=` Verbes en -er : <b>pas de -s avec tu</b> → ${s}e !`;
+    return h;}
+}
+function gConjT(t){
+  const L=LV();let pool;
+  const irr=L===1?BASIC:Object.keys(IRR);
+  const cat=Math.random();
+  if(cat<.35)pool=V1;else if(cat<.5)pool=V1S;else if(cat<.68)pool=V2;else pool=irr;
+  if(t==='ip')pool=pool.filter(v=>!IRR[v]||IRR[v].ip);
+  if(L===1&&t!=='pr'&&pool===V1S)pool=V1;
+  const v=pick(pool);
+  let ps=[0,1,2,3,4,5];if(t==='ps')ps=[2,5];if(t==='ip')ps=[1,3,4];
+  const p=pick(ps),fem=Math.random()<.5;
+  let pron=['je','tu',fem?'elle':'il','nous','vous',fem?'elles':'ils'][p];
+  let stem='',ans=[],full,extra='',tail='';
+  if(t==='pc'){
+    const aux=(ETRE.has(v)?ET:AV)[p],pp=ppOf(v);
+    if(ETRE.has(v)){
+      const pl=p>=3?'s':'';
+      if(p===2||p===5){const g=pp+(fem?'e':'')+pl;ans=[`${aux} ${g}`];extra=`${pron} → ${g}`}
+      else{ans=[`${aux} ${pp}${pl}`,`${aux} ${pp}e${pl}`];extra=`${pron} ${aux} ${pp}${pl} (ou ${pp}e${pl} pour des filles)`}
+    }else ans=[`${aux} ${pp}`];
+    full=ans[0];
+  }else if(t==='ps'){
+    const k=kind(v),s=v.slice(0,-2),i=p===2?0:1;
+    if(k==='irr')ans=[IRR[v].ps[i]];
+    else if(k==='v2'){stem=s;ans=[['it','irent'][i]]}
+    else if(k==='v1s'){ans=[i?s+'èrent':softOf(s)+'a']}
+    else{stem=s;ans=[['a','èrent'][i]]}
+    full=stem+ans[0];
+  }else if(t==='ip'){
+    const k=kind(v),s=v.slice(0,-2),i=[1,3,4].indexOf(p);
+    if(k==='irr')ans=[IRR[v].ip[i]];
+    else if(k==='v2'){stem=s;ans=[['is','issons','issez'][i]]}
+    else if(k==='v1s')ans=[[s+'e',softOf(s)+'ons',s+'ez'][i]];
+    else{stem=s;ans=[['e','ons','ez'][i]]}
+    full=stem+ans[0];pron='('+['','tu','','nous','vous'][p]+')';tail=' !';
+  }else{
+    const f=forms(v,t);stem=f.stem;ans=[f.ends[p]];full=stem+ans[0];
+  }
+  let el=false;
+  if(pron==='je'&&vowel(stem||full)){pron="j'";el=true}
+  const why=whyConj(v,t,p,pron,full,extra);
+  return {t:'conj',tense:TNAME[t],inf:v,pron,el,stem,a:ans,full:(t==='ip'?'':pron+(el?'':' '))+full+tail,tail,hint:why,key:`c${t}-${v}-${p}${fem&&(p===2||p===5)?'f':''}`};
+}
+const HOM={
+ 'a/à':{lv:1,tip:"Remplace par <b>avait</b> : si ça marche, c'est <b>a</b> (verbe avoir). Sinon, c'est <b>à</b>.",opts:['a','à'],it:[["Il ___ un vélo rouge.","a"],["Je vais ___ la piscine.","à"],["Elle ___ mangé une pomme.","a"],["Nous partons ___ midi.","à"],["Mon frère ___ peur du noir.","a"],["C'est une tasse ___ café.","à"],["Tom ___ oublié son sac.","a"],["Ils jouent ___ cache-cache.","à"],["Léa ___ dix ans.","a"],["Il pense ___ ses vacances.","à"]]},
+ 'et/est':{lv:1,tip:"Remplace par <b>était</b> : si ça marche, c'est <b>est</b> (verbe être). Si on peut dire <b>et puis</b>, c'est <b>et</b>.",opts:['et','est'],it:[["Le chat ___ noir.","est"],["Paul ___ Léa jouent.","et"],["Il ___ parti tôt.","est"],["Du pain ___ du fromage.","et"],["La porte ___ fermée.","est"],["Il court ___ il saute.","et"],["Où ___ ma trousse ?","est"],["Il est grand ___ fort.","et"],["Mon cahier ___ propre.","est"]]},
+ 'on/ont':{lv:1,tip:"Remplace par <b>avaient</b> : si ça marche, c'est <b>ont</b> (verbe avoir). Si on peut mettre <b>il</b>, c'est <b>on</b>.",opts:['on','ont'],it:[["Ils ___ gagné le match.","ont"],["___ va au parc ?","on"],["Les élèves ___ fini.","ont"],["Demain, ___ part en vacances.","on"],["Mes parents ___ une voiture.","ont"],["___ ne court pas dans le couloir.","on"],["Les oiseaux ___ faim.","ont"],["Quand ___ a fini, ___ peut jouer.","on"]]},
+ 'son/sont':{lv:1,tip:"Remplace par <b>étaient</b> : si ça marche, c'est <b>sont</b> (verbe être). Si on peut dire <b>mon</b>, c'est <b>son</b>.",opts:['son','sont'],it:[["Ils ___ en retard.","sont"],["Elle range ___ cartable.","son"],["Les fleurs ___ belles.","sont"],["Il a perdu ___ stylo.","son"],["Où ___ mes clés ?","sont"],["Il appelle ___ chien.","son"],["Mes amis ___ gentils.","sont"]]},
+ 'ce/se':{lv:2,tip:"<b>se</b> est devant un verbe (il se lave = il lave lui-même ; on peut dire « je me lave »). <b>ce</b> est devant un nom (ce livre-là) ou veut dire « cela » (c'est).",opts:['ce','se'],it:[["Il ___ lave les mains.","se"],["___ livre est à moi.","ce"],["Elles ___ promènent.","se"],["J'aime ___ dessin.","ce"],["Le chat ___ cache sous le lit.","se"],["___ matin, il pleut.","ce"],["Ils ___ disputent souvent.","se"],["___ que tu dis est vrai.","ce"]]},
+ 'ces/ses':{lv:2,tip:"<b>ses</b> = les siens, à lui ou à elle (son, sa → ses). <b>ces</b> = ceux-là, ceux qu'on montre (ce, cette → ces).",opts:['ces','ses'],it:[["Il prête ___ jouets à sa sœur.","ses"],["Regarde ___ nuages là-bas !","ces"],["Elle a oublié ___ lunettes.","ses"],["___ chaussures sont à qui ?","ces"],["Le roi aime ___ enfants.","ses"],["Tu vois ___ maisons ?","ces"]]},
+ 'é/er':{lv:2,tip:"Remplace par <b>vendu / vendre</b> (ou mordu / mordre). Si « vendu » marche → <b>é</b>. Si « vendre » marche → <b>er</b>. Avec vous → <b>ez</b>.",opts:['é','er','ez'],it:[["Il a mang___ sa soupe.","é"],["Je vais mang___.","er"],["Elle veut jou___ dehors.","er"],["Nous avons jou___ au foot.","é"],["Il faut travaill___.","er"],["Tu as regard___ le film ?","é"],["Il commence à pleur___.","er"],["Vous mang___ ensemble.","ez"],["Elle a parl___ fort.","é"],["Vous jou___ bien !","ez"],["J'aime dessin___.","er"]]}
+};
+function gHom(){
+  const L=LV(),keys=Object.keys(HOM).filter(k=>HOM[k].lv<=L),k=pick(keys),H=HOM[k],idx=R(0,H.it.length-1),[s,a]=H.it[idx];
+  const start=s.startsWith('___'),cap=x=>start?x[0].toUpperCase()+x.slice(1):x;
+  const sent=s.replace(/___/g,'<span class="blank">?</span>');
+  return C(`<div class="qs">${sent}</div>`,cap(a),H.opts.map(cap),`${H.tip}<br>Réponse : « ${s.replace(/___/g,cap(a)).replace(cap(a),'<b>'+cap(a)+'</b>')} »`,`h${k}${idx}`,{tag:k});
+}
+const ACC=[
+ ["Les enfants du voisin ___ dehors.",["joue","jouent"],"jouent","Qui est-ce qui joue ? <b>les enfants</b> (pluriel), pas « le voisin »."],
+ ["Mon frère et ma sœur ___ la télé.",["regarde","regardent"],"regardent","Deux sujets reliés par « et » = pluriel."],
+ ["Dans la forêt ___ des loups.",["vit","vivent"],"vivent","Le sujet est après le verbe. Qui est-ce qui vit ? <b>des loups</b> (pluriel)."],
+ ["Tu ___ très bien.",["chante","chantes"],"chantes","Avec tu, le verbe finit par -s."],
+ ["La maîtresse les ___.",["appelle","appellent"],"appelle","« les » n'est pas le sujet. Qui est-ce qui appelle ? <b>la maîtresse</b>."],
+ ["Le chien de mes cousins ___.",["aboie","aboient"],"aboie","Qui est-ce qui aboie ? <b>le chien</b> (singulier), pas « mes cousins »."],
+ ["Les feuilles de l'arbre ___.",["tombe","tombent"],"tombent","Qui est-ce qui tombe ? <b>les feuilles</b> (pluriel)."],
+ ["Je les ___ souvent.",["regarde","regardent"],"regarde","« les » n'est pas le sujet. Le sujet est <b>je</b>."],
+ ["Où ___ les oiseaux en hiver ?",["va","vont"],"vont","Dans une question le sujet peut être après le verbe : <b>les oiseaux</b> vont."],
+ ["Chaque élève ___ un livre.",["prend","prennent"],"prend","« chaque » = un seul, donc singulier."],
+ ["Toi et moi ___ au cinéma.",["allons","allez"],"allons","Toi et moi = <b>nous</b>, donc -ons."],
+ ["Toi et ton frère ___ en retard.",["êtes","sont"],"êtes","Toi et ton frère = <b>vous</b>."],
+ ["La bande de copains ___.",["arrive","arrivent"],"arrive","Le sujet est « la bande » (singulier)."],
+ ["Le maître leur ___ des devoirs.",["donne","donnent"],"donne","« leur » n'est pas le sujet. Qui est-ce qui donne ? <b>le maître</b>."],
+ ["Ces fleurs ___ bon.",["sent","sentent"],"sentent","Qui est-ce qui sent ? <b>ces fleurs</b> (pluriel)."],
+ ["Les élèves de la classe ___ la sortie.",["prépare","préparent"],"préparent","Qui est-ce qui prépare ? <b>les élèves</b>."],
+ ["Il nous ___ une histoire.",["raconte","racontons"],"raconte","« nous » n'est pas le sujet ici. Qui raconte ? <b>il</b>."],
+ ["Mes parents et moi ___ le train.",["prenons","prennent"],"prenons","Mes parents et moi = <b>nous</b>."]
+];
+function gAcc(){const i=R(0,ACC.length-1),[s,o,a,w]=ACC[i];return C(`<div class="qs">${s.replace('___','<span class="blank">?</span>')}</div>`,a,shuffle(o),`Le verbe s'accorde avec son sujet. Pour le trouver : « Qui est-ce qui… ? ». ${w}`,`acc${i}`)}
+
+/* ============ MODULES ============ */
+const lc=(h,b)=>({h,b});
+const MODS={
+ mul:{s:'maths',sym:'×',name:'Tables ×',sub:'De 1 à 9',gen:gMul,tables:true,learn:[
+   lc('La règle','<p>7 × 4, c\'est 4 ajouté 7 fois. Et 7 × 4 = 4 × 7 : on peut tourner la multiplication. La moitié du tableau est donc déjà sue !</p>'),
+   lc('Les astuces','<ul><li>× 2 : le double</li><li>× 4 : le double du double</li><li>× 5 : la moitié de × 10</li><li>× 8 : double, double, double</li><li>× 9 : × 10 moins une fois (7 × 9 = 70 − 7 = 63)</li></ul>'),
+   lc('Les plus dures','<p class="ex">6 × 7 = 42 · 6 × 8 = 48 · 7 × 8 = 56 · 7 × 7 = 49 · 8 × 8 = 64</p><p>Pour 7 × 8, retiens la suite <b>5, 6, 7, 8</b> : 56 = 7 × 8.</p>')]},
+ div:{s:'maths',sym:'÷',name:'Divisions',sub:'Les tables à l\'envers',gen:gDiv,tables:true,learn:[
+   lc('La règle','<p>Diviser, c\'est l\'inverse de multiplier. 56 ÷ 7 veut dire : « dans la table de 7, combien de fois pour faire 56 ? »</p><p class="ex">7 × 8 = 56, donc 56 ÷ 7 = 8</p>'),
+   lc('Vérifier','<p>Multiplie ta réponse : 8 × 7 = 56 ✓. Si ça ne retombe pas juste, tu t\'es trompé.</p>'),
+   lc('À savoir','<p>÷ 2, c\'est la moitié. ÷ 4, la moitié de la moitié. 420 ÷ 6 : pense à 42 ÷ 6 = 7, puis × 10 → 70.</p>')]},
+ add:{s:'maths',sym:'+',name:'Additions',sub:'Amis de 10, de 100',gen:gAdd,learn:[
+   lc('Les amis de 10','<p class="ex">1+9 · 2+8 · 3+7 · 4+6 · 5+5</p><p>Les amis de 100 marchent pareil avec les dizaines : 30 + 70, 45 + 55.</p>'),
+   lc('Passer par la dizaine','<p class="ex">8 + 5 = 8 + 2 + 3 = 13</p><p>On complète d\'abord jusqu\'à 10, puis on ajoute le reste.</p>'),
+   lc('Décomposer','<p class="ex">46 + 38 = 46 + 30 + 8 = 84</p><p>Ajoute les dizaines, puis les unités.</p>')]},
+ sub:{s:'maths',sym:'−',name:'Soustractions',sub:'De tête, sans poser',gen:gSub,learn:[
+   lc('Passer par la dizaine','<p class="ex">13 − 5 = 13 − 3 − 2 = 8</p>'),
+   lc('Compléter','<p>100 − 37 : combien faut-il ajouter à 37 pour faire 100 ? 37 + 3 = 40, 40 + 60 = 100 → 63.</p>'),
+   lc('Vérifier','<p>Le résultat + le nombre enlevé = le nombre de départ. 63 + 37 = 100 ✓</p>')]},
+ p10:{s:'maths',sym:'10',name:'× et ÷ par 10, 100, 1000',sub:'Glisser dans le tableau',gen:gP10,learn:[
+   lc('× 10, 100, 1000','<p>Chaque chiffre devient 10, 100 ou 1000 fois plus grand : il glisse de 1, 2 ou 3 rangs <b>vers la gauche</b>.</p><p class="ex">4,5 × 10 = 45 · 3,2 × 100 = 320</p>'),
+   lc('÷ 10, 100, 1000','<p>Chaque chiffre glisse de 1, 2 ou 3 rangs <b>vers la droite</b>.</p><p class="ex">45 ÷ 10 = 4,5 · 7 ÷ 100 = 0,07</p>'),
+   lc('Le piège','<p>« On ajoute un zéro » ne marche pas avec les virgules : 4,5 × 10 ≠ 4,50. Pense au tableau de numération.</p>'+placeTable([4.5,45]))]},
+ dbl:{s:'maths',sym:'½',name:'Doubles et moitiés',sub:'Et les quarts',gen:gDbl,learn:[
+   lc('Les mots','<p>Double = × 2. Moitié = ÷ 2. Quart = moitié de la moitié.</p>'),
+   lc('Décomposer','<p class="ex">Double de 37 = 60 + 14 = 74</p><p class="ex">Moitié de 58 = 25 + 4 = 29</p>'),
+   lc('Les impairs','<p>Moitié de 7 = 3,5. Moitié de 45 = 20 + 2,5 = 22,5.</p>')]},
+ dec:{s:'maths',sym:'0,5',name:'Nombres décimaux',sub:'Comparer, lire les chiffres',gen:gDec,learn:[
+   lc('Après la virgule','<p>1er chiffre : <b>dixièmes</b>. 2e : <b>centièmes</b>. 3e : <b>millièmes</b>.</p>'+placeTable([47.385])),
+   lc('Comparer','<p>D\'abord la partie entière. Si elle est pareille, écris les deux nombres avec autant de chiffres : 2,7 → 2,70. Alors 2,70 > 2,15.</p>'),
+   lc('Le piège','<p>2,15 n\'est pas plus grand que 2,7 parce qu\'il est plus long ! Et 3,5 = 3,50 : les zéros à la fin ne changent rien.</p>')]},
+ frac:{s:'maths',sym:'¾',name:'Fractions',sub:'D\'un nombre, en décimal',gen:gFrac,learn:[
+   lc('Lire une fraction',`<p>${F(3,4)} : le nombre du bas dit en combien de parts égales on coupe. Celui du haut dit combien de parts on prend.</p>`),
+   lc('Fraction d\'un nombre',`<p class="ex">${F(3,4)} de 12 : 12 ÷ 4 = 3, puis 3 × 3 = 9</p>`),
+   lc('À connaître',`<p class="ex">${F(1,2)} = 0,5 · ${F(1,4)} = 0,25 · ${F(3,4)} = 0,75 · ${F(1,10)} = 0,1 · ${F(1,100)} = 0,01</p>`)]},
+ conv:{s:'maths',sym:'cm',name:'Conversions',sub:'Longueurs, masses, durées',gen:gConv,learn:[
+   lc('Les unités','<div class="wrap"><table class="pt"><tr><th>km</th><th>hm</th><th>dam</th><th>m</th><th>dm</th><th>cm</th><th>mm</th></tr></table></div><p>Chaque unité vaut 10 fois celle de droite. 1 km = 1000 m · 1 m = 100 cm · 1 kg = 1000 g · 1 L = 100 cL = 1000 mL</p>'),
+   lc('Multiplier ou diviser ?','<p>Grande unité → petite : on <b>multiplie</b> (3 m = 300 cm). Petite → grande : on <b>divise</b> (250 cm = 2,5 m).</p>'),
+   lc('Les heures','<p>1 h = 60 min, 1 min = 60 s. Piège : 1,5 h = 1 h 30 min = 90 min, pas 1 h 50 !</p>')]},
+ mmix:{s:'maths',sym:'★',name:'Défi maths',sub:'Tout mélangé',wide:true,learn:[lc('Le défi','<p>Un peu de tout pour garder les réflexes. Lis bien chaque calcul avant de répondre.</p>')]},
+ pr:{s:'fr',sym:'je…',name:'Présent',sub:'Les 3 groupes',gen:()=>gConjT('pr'),learn:[
+   lc('Trouver le groupe','<ul><li>1er groupe, verbes en -er : -e, -es, -e, -ons, -ez, -ent</li><li>2e groupe, -ir avec « nous -issons » : -is, -is, -it, -issons, -issez, -issent</li><li>3e groupe : les autres, à apprendre (être, avoir, aller, faire…)</li></ul>'),
+   lc('Toujours vrai','<p>tu → -s (ou -x : tu peux) · nous → -ons · vous → -ez (sauf êtes, faites, dites) · ils → -nt</p>'),
+   lc('Manger, commencer','<p class="ex">nous mangeons · nous commençons</p><p>Le e et le ç gardent le bon son devant -ons.</p>')]},
+ im:{s:'fr',sym:'-ait',name:'Imparfait',sub:'Décrire, l\'habitude',gen:()=>gConjT('im'),learn:[
+   lc('La recette','<p>On prend « nous » au présent, on enlève -ons, et on ajoute :</p><p class="ex">-ais, -ais, -ait, -ions, -iez, -aient</p><p>nous fais-ons → je faisais. Pareil pour tous les verbes !</p>'),
+   lc('Une seule exception','<p>Être : j\'<b>ét</b>ais, nous <b>ét</b>ions.</p>'),
+   lc('Quand ?','<p>Pour décrire ou raconter une habitude dans le passé : « Quand j\'étais petit, je jouais tous les jours. »</p>')]},
+ fu:{s:'fr',sym:'-rai',name:'Futur',sub:'Infinitif + -ai',gen:()=>gConjT('fu'),learn:[
+   lc('La recette','<p>Infinitif + les terminaisons de « avoir » :</p><p class="ex">-ai, -as, -a, -ons, -ez, -ont</p><p>chanter → je chanterai. Verbes en -re : on enlève le e (prendre → je prendrai).</p>'),
+   lc('Radicaux spéciaux','<p>être → je <b>ser</b>ai · avoir → j\'<b>aur</b>ai · aller → j\'<b>ir</b>ai · faire → je <b>fer</b>ai · venir → je <b>viendr</b>ai · pouvoir → je <b>pourr</b>ai · voir → je <b>verr</b>ai · vouloir → je <b>voudr</b>ai</p>')]},
+ pc:{s:'fr',sym:'a eu',name:'Passé composé',sub:'Être ou avoir + participe',gen:()=>gConjT('pc'),min:2,learn:[
+   lc('La recette','<p>Auxiliaire <b>avoir</b> ou <b>être</b> au présent + participe passé.</p><p class="ex">j\'ai mangé · je suis allé</p>'),
+   lc('Le participe','<p>-er → -é (mangé) · 2e groupe → -i (fini) · irréguliers : fait, dit, pris, mis, vu, pu, voulu, eu, été, venu</p>'),
+   lc('L\'accord avec être','<p>Aller, venir, partir, arriver, tomber, rester, entrer… se conjuguent avec être, et le participe s\'accorde avec le sujet :</p><p class="ex">elle est allée · ils sont partis</p><p>Avec avoir : pas d\'accord avec le sujet.</p>')]},
+ ip:{s:'fr',sym:'!',name:'Impératif',sub:'Donner un ordre',gen:()=>gConjT('ip'),min:2,learn:[
+   lc('La règle','<p>Pas de sujet. Seulement 3 personnes : tu, nous, vous.</p><p class="ex">Range ! Rangeons ! Rangez !</p>'),
+   lc('Le piège du -s','<p>Verbes en -er : <b>pas de -s</b> avec tu : Mange ! Chante ! Va !</p>'),
+   lc('Irréguliers','<p>être : sois, soyons, soyez · avoir : aie, ayons, ayez · faire : fais, faisons, faites</p>')]},
+ ps:{s:'fr',sym:'-a',name:'Passé simple',sub:'Il / ils, les récits',gen:()=>gConjT('ps'),min:3,learn:[
+   lc('Quand ?','<p>Le temps des contes et des récits écrits, surtout avec il / elle et ils / elles.</p>'),
+   lc('La recette','<p>Verbes en -er : il chant<b>a</b>, ils chant<b>èrent</b>.</p><p>Les autres : il fin<b>it</b>, il pr<b>it</b>, il voul<b>ut</b>, il v<b>int</b>.</p>'),
+   lc('À connaître','<p class="ex">il fut · il eut · il fit · il alla · il dit · il vit · il prit · il mit</p>')]},
+ cmix:{s:'fr',sym:'★',name:'Défi conjugaison',sub:'Tous les temps',wide:true,learn:[lc('Le défi','<p>Tous les temps mélangés. Regarde bien l\'étiquette du temps avant d\'écrire.</p>')]},
+ hom:{s:'fr',sym:'a/à',name:'Homophones',sub:'a/à, et/est, on/ont…',gen:gHom,learn:[
+   lc('Le truc','<p>On remplace le mot par un autre pour savoir lequel écrire.</p><ul><li>a → avait · et → et puis · est → était</li><li>ont → avaient · on → il · sont → étaient · son → mon</li><li>é → vendu · er → vendre</li></ul>'),
+   lc('ce / se · ces / ses','<p><b>se</b> devant un verbe (il se lave). <b>ce</b> devant un nom (ce livre). <b>ses</b> = à lui (ses jouets). <b>ces</b> = ceux-là (ces nuages).</p>')]},
+ acc:{s:'fr',sym:'-nt',name:'Accord sujet-verbe',sub:'Trouver le vrai sujet',gen:gAcc,learn:[
+   lc('La règle','<p>Le verbe s\'accorde avec son sujet. Pour le trouver : « <b>Qui est-ce qui</b> + verbe ? »</p>'),
+   lc('Les pièges','<ul><li>Le sujet est loin : les enfants <i>du voisin</i> jouent</li><li>Le sujet est après : où vont les oiseaux ?</li><li>Un petit mot devant : je <i>les</i> regarde</li><li>Deux sujets : Léo et Zoé jouent</li></ul>')]}
+};
+const MATHS=['mul','div','add','sub','p10','dbl','dec','frac','conv'];
+const CONJ=['pr','im','fu','pc','ip','ps'];
+function gen(mod){
+  let m=mod;
+  if(mod==='mmix')m=pick(MATHS);
+  if(mod==='cmix')m=pick(CONJ.filter(c=>(MODS[c].min||1)<=LV()));
+  const it=MODS[m].gen();it.mod=m;if(!it.tag)it.tag=MODS[m].name;return it;
+}
+/*UI*/
+</script>
+<script>
+const $=s=>document.querySelector(s);
+const KEY='les-reflexes-v1';
+let DB={profiles:[],cur:0};
+try{const d=JSON.parse(localStorage.getItem(KEY)||'null');if(d&&d.profiles)DB=d}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(DB))}catch(e){}};
+const P=()=>DB.profiles[DB.cur];
+let TAB='maths',MOD=null,G=null,timer=null,autoT=null;
+try{const t=localStorage.getItem(KEY+'-tab');if(t)TAB=t}catch(e){}
+
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.hidden=s.id!=='s-'+id);window.scrollTo(0,0)}
+function syncLevel(){if(P()){LEVEL=P().lvl;TABLES=P().tables||[2,3,4,5,6,7,8,9]}}
+function newProfile(name,lvl){DB.profiles.push({name,lvl,stars:0,best:{},err:{},grid:{},tables:[2,3,4,5,6,7,8,9]});DB.cur=DB.profiles.length-1;save()}
+
+/* ---------- accueil ---------- */
+function home(){
+  if(!P()){$('#newCancel').hidden=true;show('new');return}
+  syncLevel();const p=P();
+  $('#avL').textContent=p.name[0].toUpperCase();$('#avN').textContent=p.name;
+  $('#starLine').textContent=`${p.stars} ★ · ${LVNAME[p.lvl]}${p.cascade?` · Record Cascade ${p.cascade}`:''}`;
+  $('#tabM').setAttribute('aria-selected',TAB==='maths');$('#tabF').setAttribute('aria-selected',TAB==='fr');
+  const ne=Object.keys(p.err).length;$('#revBtn').hidden=!ne;$('#revN').textContent=ne;
+  $('#mods').innerHTML=Object.entries(MODS).filter(([,m])=>m.s===TAB).map(([id,m])=>{
+    const b=p.best[id]||{};const bb=[b.s10!=null?`Record ${b.s10}/10`:'',b.ch?`${b.ch} en 1 min`:''].filter(Boolean).join(' · ');
+    const lv=m.min&&m.min>p.lvl?`<span class="lv">Niveau ${LVNAME[m.min]}</span>`:'';
+    return `<button class="mod m-${m.s}${m.wide?' wide':''}" data-mod="${id}"><span class="sym">${m.sym}</span><span><span class="mn">${m.name}</span><br><span class="ms">${m.sub}</span>${bb?`<br><span class="mb">${bb}</span>`:''}${lv}</span></button>`;
+  }).join('');
+  show('home');
+}
+$('#mods').addEventListener('click',e=>{const b=e.target.closest('.mod');if(b)intro(b.dataset.mod)});
+document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{TAB=b.dataset.tab;try{localStorage.setItem(KEY+'-tab',TAB)}catch(e){}home()});
+$('#revBtn').onclick=()=>startGame('rev','ten');
+$('#profBtn').onclick=prof;
+
+/* ---------- intro ---------- */
+function intro(id){
+  MOD=id;const m=MODS[id];const sec=$('#s-intro');sec.className='screen m-'+m.s;
+  $('#introT').textContent=m.name;
+  $('#learn').innerHTML=m.learn.map(l=>`<div class="lcard"><h3>${l.h}</h3>${l.b}</div>`).join('');
+  $('#tablesBox').hidden=!m.tables;
+  if(m.tables)drawChips();
+  show('intro');
+}
+function drawChips(){const t=P().tables;$('#chips').innerHTML=[1,2,3,4,5,6,7,8,9].map(n=>`<button class="chip" aria-pressed="${t.includes(n)}" data-n="${n}">${n}</button>`).join('')}
+$('#chips').addEventListener('click',e=>{const c=e.target.closest('.chip');if(!c)return;const n=+c.dataset.n,p=P();
+  if(p.tables.includes(n)){if(p.tables.length>1)p.tables=p.tables.filter(x=>x!==n)}else p.tables=[...p.tables,n].sort((a,b)=>a-b);save();syncLevel();drawChips()});
+$('#introBack').onclick=home;
+$('#goTen').onclick=()=>startGame(MOD,'ten');
+$('#goChrono').onclick=()=>startGame(MOD,'chrono');
+
+/* ---------- jeu ---------- */
+function makeSet(mod,n){const out=[],keys=new Set();let tries=0;while(out.length<n&&tries<200){tries++;const it=gen(mod);if(keys.has(it.key))continue;keys.add(it.key);out.push(it)}return out}
+function startGame(mod,mode){
+  syncLevel();clearInterval(timer);clearTimeout(autoT);
+  const p=P();G={mod,mode,q:[],i:0,score:0,done:0,errs:[],tLeft:60,paused:false,busy:false,input:''};
+  if(mod==='rev'){G.q=shuffle(Object.values(p.err).map(e=>e.item)).slice(0,10);G.total=G.q.length}
+  else if(mode==='ten'){G.q=makeSet(mod,10);G.total=10}
+  else G.q=[gen(mod)];
+  const s=mod==='rev'?'maths':(MODS[mod].s);$('#s-play').className='screen m-'+s;
+  show('play');
+  if(mode==='chrono'){timer=setInterval(tick,100)}
+  render();
+}
+function tick(){if(!G||G.paused)return;G.tLeft-=.1;upd();if(G.tLeft<=0){clearInterval(timer);finish()}}
+function upd(){
+  if(G.mode==='chrono'){$('#progI').style.width=Math.max(0,G.tLeft/60*100)+'%';$('#count').textContent=Math.ceil(Math.max(0,G.tLeft))+' s'}
+  else{$('#progI').style.width=(G.done/G.total*100)+'%';$('#count').textContent=`${Math.min(G.done+1,G.total)}/${G.total}`}
+}
+function render(){
+  if(G.mode==='chrono'&&G.i>=G.q.length)G.q.push(gen(G.mod));
+  const it=G.q[G.i];G.cur=it;G.input='';G.busy=false;
+  const card=$('#qcard');card.className='qcard';$('#fb').hidden=true;$('#okmsg').textContent='';
+  let h=it.t==='conj'?'':`<div class="qtag">${it.tag||''}</div>`;
+  if(it.t==='num'){h+=`<div class="qn${it.small?' s':''}">${it.q.replace('{?}','<span class="slot" id="slot"></span>')}</div>`}
+  else if(it.t==='choice'){h+=it.big?`<div class="qn">${it.q}</div>`:it.q}
+  else{h+=`<div><span class="tense">${it.tense}</span> <span class="inf">(${it.inf})</span></div><div class="cl"><span class="p${it.el?' el':''}">${it.pron}</span><span>${it.stem}</span><span class="slot cs" id="slot" aria-live="polite"></span><span>${it.tail||''}</span></div>`}
+  card.innerHTML=h;
+  const A=$('#answerArea');A.hidden=false;
+  if(it.t==='num')A.innerHTML=`<div class="pad">${[7,8,9,4,5,6,1,2,3].map(n=>`<button data-k="${n}">${n}</button>`).join('')}<button data-k=",">,</button><button data-k="0">0</button><button data-k="del" aria-label="Effacer">⌫</button><button class="val" data-k="ok">Valider</button></div>`;
+  else if(it.t==='choice')A.innerHTML=`<div class="opts">${it.opts.map(o=>`<button class="opt" data-o="${o}">${o}</button>`).join('')}</div>`;
+  else{const rows=['azertyuiop','qsdfghjklm','wxcvbn','éèêàçùâîôû'];
+    A.innerHTML=`<div class="kb">${rows.map((r,i)=>`<div class="kr">${r.split('').map(c=>`<button data-k="${c}"${i===3?' class="ac"':''}>${c}</button>`).join('')}${i===2?`<button data-k="'">'</button><button data-k="del" class="wk" aria-label="Effacer">⌫</button>`:''}</div>`).join('')}<div class="kr"><button data-k="sp" class="sp">espace</button><button data-k="ok" class="ok">Valider</button></div></div>`}
+  upd();
+}
+$('#answerArea').addEventListener('click',e=>{
+  if(!G||G.busy)return;const b=e.target.closest('button');if(!b)return;
+  if(b.dataset.k)key(b.dataset.k);
+  if(b.dataset.o!=null)check(b.dataset.o,b);
+});
+document.addEventListener('keydown',e=>{
+  if($('#s-play').hidden||!G||!G.cur)return;
+  if(!$('#fb').hidden&&e.key==='Enter'&&G.mode==='ten'){e.preventDefault();nextQ();return}
+  if(G.busy)return;
+  if(G.cur.t==='conj'){if(e.ctrlKey||e.metaKey||e.altKey)return;const k=e.key;
+    if(k==='Enter'){e.preventDefault();key('ok')}else if(k==='Backspace'){e.preventDefault();key('del')}else if(k===' '){e.preventDefault();key('sp')}
+    else if(/^[a-zàâçéèêëîïôûùü'’]$/i.test(k)){e.preventDefault();key(k==='’'?"'":k.toLowerCase())}return}
+  if(G.cur.t!=='num')return;
+  if(/^[0-9]$/.test(e.key))key(e.key);else if(e.key===','||e.key==='.')key(',');else if(e.key==='Backspace')key('del');else if(e.key==='Enter')key('ok');
+});
+function key(k){
+  if(G.cur.t==='conj'){
+    if(k==='ok')return submitConj();
+    if(k==='del')G.input=G.input.slice(0,-1);
+    else if(k==='sp'){if(G.input&&!G.input.endsWith(' '))G.input+=' '}
+    else if(G.input.length<22)G.input+=k;
+    $('#slot').textContent=G.input;return}
+  if(k==='del')G.input=G.input.slice(0,-1);
+  else if(k==='ok'){if(G.input&&G.input!==',')check(G.input);return}
+  else if(k===','){if(!G.input.includes(','))G.input=(G.input||'0')+','}
+  else if(G.input.length<9)G.input=G.input==='0'?k:G.input+k;
+  $('#slot').textContent=G.input;
+}
+const norm=s=>s.toLowerCase().replace(/[’`]/g,"'").replace(/\s+/g,' ').trim();
+const deacc=s=>s.normalize('NFD').replace(/[̀-ͯ]/g,'');
+function submitConj(){
+  if(G.busy)return;let v=norm(G.input);if(!v)return;
+  const it=G.cur,pr=norm(it.pron.replace(/[()]/g,''));
+  if(v.startsWith(pr+' '))v=v.slice(pr.length+1);else if(pr==="j'"&&v.startsWith("j'"))v=v.slice(2);
+  v=v.replace(/\s*!$/,'');
+  const accepted=it.a.flatMap(a=>[a,it.stem+a]).map(norm);
+  if(accepted.includes(v))return check(true);
+  if(accepted.map(deacc).includes(deacc(v)))return check(true,null,`Presque parfait : attention à l'accent → ${it.stem}${it.a[0]}`);
+  check(false,null,null,G.input);
+}
+function check(val,btn,warn,given){
+  const it=G.cur;G.busy=true;let ok;
+  if(it.t==='num'){ok=Math.abs(parseFloat(String(val).replace(',','.'))-it.a)<1e-9;given=val}
+  else if(it.t==='choice'){ok=val===it.a;given=val}
+  else ok=val===true;
+  record(it,ok);
+  const card=$('#qcard');
+  if(it.t==='num')$('#slot').textContent=ok?fmt(it.a):G.input;
+  if(ok){
+    if(!it._re)G.score++;
+    card.classList.add('good');$('#okmsg').textContent=pick(['Bravo !','Juste !','Super !','Oui !','Bien vu !']);
+    if(btn)btn.classList.add('right');
+    if(warn){$('#okmsg').innerHTML=`<span class="warn">${warn}</span>`;autoT=setTimeout(nextQ,1600)}
+    else autoT=setTimeout(nextQ,G.mode==='chrono'?350:650);
+  }else{
+    card.classList.add('bad');
+    if(btn){btn.classList.add('wrong');document.querySelectorAll('.opt').forEach(o=>{if(o.dataset.o===it.a)o.classList.add('right')})}
+    G.errs.push({it,given});
+    if(G.mode!=='chrono'&&!it._re)G.q.push(Object.assign({},it,{_re:true}));
+    const ans=it.t==='num'?fmt(it.a):it.t==='choice'?it.a:it.full;
+    if(it.t!=='choice')$('#answerArea').hidden=true;
+    const fb=$('#fb');fb.hidden=false;
+    fb.innerHTML=`<div class="lab">La bonne réponse</div><div class="ans">${ans}</div><div class="lab">Pourquoi ?</div><div class="why">${it.hint}</div><button class="btn" id="cont">Continuer</button>`;
+    $('#cont').onclick=nextQ;
+    if(G.mode==='chrono'){G.paused=true;autoT=setTimeout(nextQ,4500)}
+    fb.scrollIntoView({block:'nearest',behavior:'smooth'});
+  }
+}
+function nextQ(){
+  clearTimeout(autoT);if(!G)return;
+  G.paused=false;G.i++;if(!G.cur._re||true)G.done=Math.min(G.done+(G.cur._re?0:1),G.total||999);
+  if(G.mode==='chrono'){if(G.tLeft<=0)return finish();return render()}
+  if(G.i>=G.q.length)return finish();
+  render();
+}
+function record(it,ok){
+  const p=P();
+  if(it.gk){const[a,b]=it.gk;if(a<=9&&b<=9){const k=Math.min(a,b)+'x'+Math.max(a,b);const g=p.grid[k]||[0,0];g[ok?0:1]++;p.grid[k]=g}}
+  if(ok){if(p.err[it.key]){p.err[it.key].n--;if(p.err[it.key].n<=0)delete p.err[it.key]}}
+  else{const c=Object.assign({},it);delete c._re;p.err[it.key]={item:c,n:2}}
+  save();
+}
+function finish(){
+  clearInterval(timer);clearTimeout(autoT);const p=P(),g=G;G=null;
+  if(g.mode==='chrono')g.score=g.score;
+  p.stars+=g.score;
+  let msg;
+  if(g.mod!=='rev'){const b=p.best[g.mod]||{};let rec=false;
+    if(g.mode==='ten'){if(b.s10==null||g.score>b.s10){b.s10=g.score;rec=true}}
+    else{if(!b.ch||g.score>b.ch){b.ch=g.score;rec=true}}
+    p.best[g.mod]=b;if(rec&&g.score>0)msg='Nouveau record !'}
+  save();
+  if(g.mode==='chrono'){$('#grade').innerHTML=`${g.score}<small>en 1 min</small>`;msg=msg||(g.score>=20?'Rapide et juste, bravo.':g.score>=10?'Bien ! Encore un essai pour battre ton score ?':'Chaque essai te rend plus rapide.')}
+  else{const t=g.total||10;$('#grade').innerHTML=`${g.score}<small>sur ${t}</small>`;const r=g.score/t;
+    msg=msg||(r===1?'Parfait, tout juste !':r>=.8?'Très bien !':r>=.5?'C\'est en bonne voie. Relis les explications.':'On recommence ? Lis d\'abord la leçon.')}
+  $('#rmsg').textContent=msg;
+  let lives;
+  if(g.mode==='chrono')lives=g.score>=20?2:g.score>=12?1:0;
+  else{const t=g.total||10,r=g.score/t;lives=r>=.9?2:r>=.6?1:0;if(t<5&&lives)lives=1}
+  const rw=$('#reward');
+  if(lives){
+    const pl=lives>1?'s':'';
+    rw.innerHTML=`<div class="reward"><div class="hb">${'♥'.repeat(lives)}</div><div><b>Tu gagnes ${lives} vie${pl} !</b><br><span class="muted">Choisis ton jeu. À jouer tout de suite, sinon elles sont perdues.</span></div><div class="rwbtns"><button class="btn" id="playGame">Cascade<small>${lives} vie${pl}</small></button><button class="btn alt" id="playCards">Quatre Couleurs<small>${lives} partie${pl}</small></button><button class="btn sn" id="playSnake">Serpent<small>${lives} vie${pl}</small></button></div></div>`;
+    $('#playSnake').onclick=()=>snakeStart(lives);
+    $('#playGame').onclick=()=>gameStart(lives);
+    $('#playCards').onclick=()=>ccStart(lives);
+  }else rw.innerHTML=`<div class="reward none">${g.mode==='chrono'?'12 bonnes réponses en 1 min':'6 bonnes réponses sur 10'} donnent une vie pour les jeux. Tu y es presque, retente ta chance !</div>`;
+  const seen=new Set();
+  $('#errs').innerHTML=g.errs.filter(e=>!seen.has(e.it.key)&&seen.add(e.it.key)).map(e=>{
+    const it=e.it,q=it.t==='conj'?`${it.tense} · ${it.inf}`:it.q.replace(/<[^>]+>/g,' ').replace('{?}','?').replace(/\s+/g,' ');
+    const ans=it.t==='num'?fmt(it.a):it.t==='choice'?it.a:it.full;
+    return `<div class="err"><div class="muted">${q}</div>${e.given!=null?`<s>${e.given}</s> → `:''}<span class="c">${ans}</span></div>`}).join('');
+  if(g.errs.length)$('#errs').insertAdjacentHTML('afterbegin','<div class="sect">À retenir</div>');
+  $('#again').onclick=()=>startGame(g.mod,g.mode);
+  show('res');
+}
+$('#quit').onclick=()=>{clearInterval(timer);clearTimeout(autoT);G=null;home()};
+$('#toHome').onclick=home;
+
+/* ---------- profils ---------- */
+function prof(){
+  const ps=DB.profiles;
+  $('#plist').innerHTML=ps.map((p,i)=>`<div class="prow${i===DB.cur?' cur':''}"><span class="av">${p.name[0].toUpperCase()}</span><span class="nm">${p.name}<small>${LVNAME[p.lvl]} · ${p.stars} ★</small></span>${i===DB.cur?'':`<button class="btn ghost" data-use="${i}" style="padding:8px 12px;font-size:15px">Choisir</button>`}<button class="btn ghost" data-edit="${i}" style="padding:8px 12px;font-size:15px">Modifier</button></div>`).join('');
+  $('#editBox').innerHTML='';
+  const p=P(),g=p.grid;let h='<div class="h">×</div>'+[1,2,3,4,5,6,7,8,9].map(n=>`<div class="h">${n}</div>`).join('');
+  for(let a=1;a<=9;a++){h+=`<div class="h">${a}</div>`;for(let b=1;b<=9;b++){const k=Math.min(a,b)+'x'+Math.max(a,b),s=g[k];let c='';if(s){c=s[1]===0||s[0]>=3*s[1]?'g':'r'}h+=`<div class="${c}">${a*b}</div>`}}
+  $('#grid9').innerHTML=h;
+  show('prof');
+}
+$('#plist').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+  if(b.dataset.use!=null){DB.cur=+b.dataset.use;save();syncLevel();prof()}
+  if(b.dataset.edit!=null)editProf(+b.dataset.edit)});
+function editProf(i){const p=DB.profiles[i];
+  $('#editBox').innerHTML=`<div class="lcard" style="display:flex;flex-direction:column;gap:10px"><div class="row"><label class="field">Prénom<input id="edName" maxlength="20" value="${p.name.replace(/"/g,'&quot;')}"></label><label class="field">Classe<select id="edLvl">${[1,2,3].map(l=>`<option value="${l}"${l===p.lvl?' selected':''}>${LVNAME[l]}</option>`).join('')}</select></label></div><div class="row"><button class="btn" id="edSave">Enregistrer</button><button class="btn ghost" id="edDel">Supprimer</button></div><div id="edConf"></div></div>`;
+  $('#edSave').onclick=()=>{const n=$('#edName').value.trim();if(n)p.name=n;p.lvl=+$('#edLvl').value;save();syncLevel();prof()};
+  $('#edDel').onclick=()=>{$('#edConf').innerHTML=`<div class="confirm">Supprimer ${p.name} et toute sa progression ?<div class="row"><button class="btn alt" id="edYes">Oui, supprimer</button><button class="btn ghost" id="edNo">Non</button></div></div>`;
+    $('#edNo').onclick=()=>$('#edConf').innerHTML='';
+    $('#edYes').onclick=()=>{DB.profiles.splice(i,1);DB.cur=0;save();if(!DB.profiles.length)return home();syncLevel();prof()}};
+  $('#editBox').scrollIntoView({block:'nearest'});
+}
+$('#addProf').onclick=()=>{$('#newName').value='';$('#newCancel').hidden=false;show('new');$('#newName').focus()};
+$('#newCancel').onclick=prof;
+$('#profBack').onclick=home;
+$('#newGo').onclick=()=>{const n=$('#newName').value.trim();if(!n){$('#newName').focus();return}newProfile(n,+$('#newLvl').value);syncLevel();home()};
+$('#newName').addEventListener('keydown',e=>{if(e.key==='Enter')$('#newGo').click()});
+
+/* ---------- Cascade : jeu de blocs ---------- */
+const GW=10,GH=20;
+const SHP={I:[[0,0,0,0],[1,1,1,1],[0,0,0,0],[0,0,0,0]],O:[[1,1],[1,1]],T:[[0,1,0],[1,1,1],[0,0,0]],S:[[0,1,1],[1,1,0],[0,0,0]],Z:[[1,1,0],[0,1,1],[0,0,0]],J:[[1,0,0],[1,1,1],[0,0,0]],L:[[0,0,1],[1,1,1],[0,0,0]]};
+const PCOL={I:'#3fd0e8',O:'#ffd23f',T:'#b06bff',S:'#4fd17a',Z:'#ff5a5f',J:'#4f7dff',L:'#ff9a3c'};
+let B=null,CELL=24;
+const emptyGrid=()=>Array.from({length:GH},()=>Array(GW).fill(null));
+function gameStart(lives){
+  B={grid:emptyGrid(),lives,max:lives,score:0,lines:0,level:1,elapsed:0,prev:0,bag:[],cur:null,next:null,last:0,paused:false,alive:true};
+  show('game');sizeBoard();B.next=takeP();spawnP();hud();$('#gOver').hidden=true;
+  B.last=performance.now();requestAnimationFrame(loop);
+}
+function sizeBoard(){
+  const w=Math.min($('.app').clientWidth-36,420),h=window.innerHeight-250;
+  CELL=Math.max(14,Math.floor(Math.min(w/GW,h/GH)));
+  const c=$('#gBoard'),d=window.devicePixelRatio||1;
+  c.width=CELL*GW*d;c.height=CELL*GH*d;c.style.width=CELL*GW+'px';c.style.height=CELL*GH+'px';
+  c.getContext('2d').setTransform(d,0,0,d,0,0);
+}
+function takeP(){if(!B.bag.length)B.bag=shuffle(Object.keys(SHP));const k=B.bag.pop();return{k,m:SHP[k].map(r=>r.slice()),x:0,y:0}}
+function hit(m,x,y){for(let r=0;r<m.length;r++)for(let c=0;c<m[r].length;c++)if(m[r][c]){const X=x+c,Y=y+r;if(X<0||X>=GW||Y>=GH)return true;if(Y>=0&&B.grid[Y][X])return true}return false}
+function spawnP(){B.cur=B.next;B.next=takeP();B.cur.x=Math.floor((GW-B.cur.m[0].length)/2);B.cur.y=B.cur.k==='I'?-1:0;drawNext();if(hit(B.cur.m,B.cur.x,B.cur.y))loseLife()}
+const rotM=m=>m.map((r,i)=>r.map((_,j)=>m[m.length-1-j][i]));
+function act(a){
+  if(!B||B.paused||!B.alive)return;const p=B.cur;
+  if(a==='left'&&!hit(p.m,p.x-1,p.y))p.x--;
+  if(a==='right'&&!hit(p.m,p.x+1,p.y))p.x++;
+  if(a==='rot'){const m=rotM(p.m);for(const dx of [0,-1,1,-2,2])if(!hit(m,p.x+dx,p.y)){p.m=m;p.x+=dx;break}}
+  if(a==='down'){if(!hit(p.m,p.x,p.y+1)){p.y++;B.score+=1;B.last=performance.now()}else lockP()}
+  if(a==='drop'){let d=0;while(!hit(p.m,p.x,p.y+1)){p.y++;d++}B.score+=d*2;lockP()}
+  draw();hud();
+}
+function lockP(){
+  const p=B.cur;let top=false;
+  p.m.forEach((r,ri)=>r.forEach((v,ci)=>{if(v){const Y=p.y+ri;if(Y<0)top=true;else B.grid[Y][p.x+ci]=p.k}}));
+  if(top)return loseLife();
+  let n=0;for(let r=GH-1;r>=0;r--){if(B.grid[r].every(Boolean)){B.grid.splice(r,1);B.grid.unshift(Array(GW).fill(null));n++;r++}}
+  if(n){B.lines+=n;B.score+=[0,100,300,500,800][n]*B.level}
+  spawnP();hud();
+}
+function loseLife(){
+  B.lives--;B.paused=true;hud();
+  if(B.lives>0)over(`Encore ${B.lives} vie !`,`Score : ${B.score}. Le plateau repart à zéro, ton score est gardé.`,'Continuer',()=>{B.grid=emptyGrid();B.elapsed=Math.max(0,B.elapsed-20000);B.paused=false;$('#gOver').hidden=true;spawnP();B.last=performance.now()});
+  else{
+    B.alive=false;const p=P();const rec=!p.cascade||B.score>p.cascade;if(rec)p.cascade=B.score;save();
+    over('Partie terminée',`Score : <b>${B.score}</b> · ${B.lines} ligne${B.lines>1?'s':''}<br>${rec&&B.score>0?'Nouveau record !':'Record : '+p.cascade}`,'Retour à l\'accueil',()=>{B=null;home()});
+  }
+}
+function over(t,txt,lab,fn){const o=$('#gOver');o.innerHTML=`<h3>${t}</h3><p>${txt}</p><button class="btn" id="gBtn">${lab}</button>`;o.hidden=false;$('#gBtn').onclick=fn}
+function hud(){if(!B)return;$('#gLives').innerHTML='♥'.repeat(Math.max(0,B.lives))+`<span class="off">${'♥'.repeat(B.max-Math.max(0,B.lives))}</span>`;$('#gScore').textContent=B.score;$('#gLines').textContent=B.level}
+function cell(ctx,x,y,s,col,ghost){
+  if(ghost){ctx.strokeStyle=col;ctx.globalAlpha=.45;ctx.lineWidth=2;ctx.strokeRect(x*s+2,y*s+2,s-4,s-4);ctx.globalAlpha=1;return}
+  ctx.fillStyle=col;ctx.fillRect(x*s+1,y*s+1,s-2,s-2);
+  ctx.fillStyle='rgba(255,255,255,.28)';ctx.fillRect(x*s+1,y*s+1,s-2,Math.max(2,s*.18));
+  ctx.fillStyle='rgba(0,0,0,.18)';ctx.fillRect(x*s+1,y*s+s-1-Math.max(2,s*.14),s-2,Math.max(2,s*.14));
+}
+function draw(){
+  if(!B)return;const c=$('#gBoard'),x=c.getContext('2d'),s=CELL;
+  x.fillStyle='#0b1030';x.fillRect(0,0,GW*s,GH*s);
+  x.strokeStyle='rgba(255,255,255,.05)';x.lineWidth=1;
+  for(let i=1;i<GW;i++){x.beginPath();x.moveTo(i*s+.5,0);x.lineTo(i*s+.5,GH*s);x.stroke()}
+  for(let j=1;j<GH;j++){x.beginPath();x.moveTo(0,j*s+.5);x.lineTo(GW*s,j*s+.5);x.stroke()}
+  B.grid.forEach((r,ry)=>r.forEach((v,rx)=>{if(v)cell(x,rx,ry,s,PCOL[v])}));
+  const p=B.cur;if(!p||!B.alive)return;
+  let gy=p.y;while(!hit(p.m,p.x,gy+1))gy++;
+  p.m.forEach((r,ri)=>r.forEach((v,ci)=>{if(v&&gy+ri>=0)cell(x,p.x+ci,gy+ri,s,PCOL[p.k],true)}));
+  p.m.forEach((r,ri)=>r.forEach((v,ci)=>{if(v&&p.y+ri>=0)cell(x,p.x+ci,p.y+ri,s,PCOL[p.k])}));
+}
+function drawNext(){
+  const c=$('#gNext'),x=c.getContext('2d'),m=B.next.m,s=14;x.clearRect(0,0,64,64);x.fillStyle='#0b1030';x.fillRect(0,0,64,64);
+  const rows=m.filter(r=>r.some(Boolean)),w=Math.max(...rows.map(r=>r.length)),ox=(64-w*s)/2,oy=(64-rows.length*s)/2;
+  x.save();x.translate(ox,oy);rows.forEach((r,ri)=>r.forEach((v,ci)=>{if(v)cell(x,ci,ri,s,PCOL[B.next.k])}));x.restore();
+}
+function loop(t){
+  if(!B||!B.alive)return;
+  const dt=B.prev?t-B.prev:0;B.prev=t;
+  if(!B.paused){
+    B.elapsed+=Math.min(dt,100);
+    const lv=1+Math.floor(B.elapsed/20000);if(lv!==B.level){B.level=lv;hud()}
+    /* la vitesse double toutes les 60 s de jeu, et chaque ligne accélère encore un peu */
+    const iv=Math.max(50,650*Math.pow(.5,B.elapsed/60000)*Math.pow(.97,B.lines));
+    if(t-B.last>iv){B.last=t;const p=B.cur;if(!hit(p.m,p.x,p.y+1))p.y++;else lockP()}}
+  draw();requestAnimationFrame(loop);
+}
+let rep=null,repT=null;
+const stopRep=()=>{clearTimeout(repT);clearInterval(rep);rep=repT=null};
+document.querySelector('.gctl').addEventListener('pointerdown',e=>{
+  const b=e.target.closest('button');if(!b)return;e.preventDefault();stopRep();const a=b.dataset.g;act(a);
+  if(a==='left'||a==='right'||a==='down')repT=setTimeout(()=>{rep=setInterval(()=>act(a),a==='down'?45:70)},180);
+});
+['pointerup','pointercancel','pointerleave'].forEach(ev=>document.querySelector('.gctl').addEventListener(ev,stopRep));
+document.addEventListener('keydown',e=>{
+  if($('#s-game').hidden||!B)return;
+  const m={ArrowLeft:'left',ArrowRight:'right',ArrowDown:'down',ArrowUp:'rot',' ':'drop'};
+  if(m[e.key]){e.preventDefault();act(m[e.key])}
+});
+document.addEventListener('visibilitychange',()=>{
+  if(document.hidden&&B&&B.alive&&!B.paused){B.paused=true;over('Pause','Ta partie t\'attend.','Reprendre',()=>{B.paused=false;$('#gOver').hidden=true;B.last=performance.now()})}
+});
+$('#gQuit').onclick=()=>{if(!B)return home();B.paused=true;over('Arrêter ?','Les vies restantes seront perdues.','Oui, arrêter',()=>{B.lives=1;B.paused=false;loseLife()});
+  $('#gOver').insertAdjacentHTML('beforeend','<button class="btn" id="gNo" style="background:transparent;color:#fff;border:1px solid #fff">Continuer à jouer</button>');
+  $('#gNo').onclick=()=>{B.paused=false;$('#gOver').hidden=true;B.last=performance.now()}};
+
+/* ---------- Quatre Couleurs : jeu de cartes contre l'ordinateur ---------- */
+const UC=['r','j','v','b'],UCN={r:'Rouge',j:'Jaune',v:'Vert',b:'Bleu'},UHEX={r:'#e0383e',j:'#f2b705',v:'#27a046',b:'#2563d9'};
+const SYM={'+2':'+2',inv:'⇄',pas:'⊘',joker:'★','+4':'+4'};
+let U=null,uT=null;
+function newDeck(){const d=[];for(const c of UC){d.push({c,v:'0'});for(let i=1;i<=9;i++)d.push({c,v:''+i},{c,v:''+i});for(const a of ['+2','inv','pas'])d.push({c,v:a},{c,v:a})}
+  for(let i=0;i<4;i++)d.push({c:'w',v:'joker'},{c:'w',v:'+4'});return shuffle(d).map((x,i)=>Object.assign(x,{id:i}))}
+const topC=()=>U.pile[U.pile.length-1];
+const canPlay=c=>c.c==='w'||c.c===U.color||c.v===topC().v;
+const ORDER={r:0,j:1,v:2,b:3,w:4};
+function ccStart(parties){U={parties,played:0};show('cc');ccNewGame()}
+function ccNewGame(){
+  clearTimeout(uT);
+  Object.assign(U,{deck:newDeck(),pile:[],me:[],ai:[],turn:'me',said:false,drawn:null,busy:false,over:false,aiSaid:false});
+  for(let i=0;i<5;i++){U.me.push(U.deck.pop());U.ai.push(U.deck.pop())}
+  let t;while(true){t=U.deck.pop();if(/^\d$/.test(t.v))break;U.deck.unshift(t)}
+  U.pile.push(t);U.color=t.c;$('#ccOver').hidden=true;
+  ccMsg('À toi de jouer ! Pose une carte de la même couleur ou du même chiffre.');ccRender();
+}
+function ccDraw(n,who){const out=[];for(let i=0;i<n;i++){
+  if(!U.deck.length){const top=U.pile.pop();U.deck=shuffle(U.pile);U.pile=[top]}
+  if(!U.deck.length)break;out.push(U.deck.pop())}U[who].push(...out);return out}
+function cardHTML(c,cls,dis){const s=SYM[c.v]||c.v,u=(c.v==='6'||c.v==='9')?' u':'';
+  return `<button class="card ${c.c==='w'?'wild':'c-'+c.c} ${cls||''}" data-id="${c.id}"${dis?' disabled':''} aria-label="${c.c==='w'?(c.v==='+4'?'Plus 4':'Joker'):UCN[c.c]+' '+s}"><span class="cn tl${u}">${s}</span><span class="ov"><b class="${u}">${s}</b></span><span class="cn br${u}">${s}</span></button>`}
+function ccMsg(h){$('#ccMsg').innerHTML=h}
+function ccRender(){
+  const p=P();$('#ccInfo').textContent=`${Math.min(U.played+1,U.parties)}/${U.parties}`;$('#ccWins').textContent=p.ccW||0;
+  const n=U.ai.length;$('#ccAi').innerHTML='<span class="back-card"><span>4</span></span>'.repeat(Math.min(n,12));
+  $('#ccAiLab').innerHTML=`Ordinateur · ${n} carte${n>1?'s':''}${U.aiSaid&&n===1?' <span class="bubble">Dernière carte !</span>':''}`;
+  $('#ccTop').innerHTML=cardHTML(topC(),'big',true).replace(' disabled','');
+  $('#ccColor').innerHTML=`<i style="background:${UHEX[U.color]}"></i>${UCN[U.color]}`;
+  const myTurn=U.turn==='me'&&!U.busy&&!U.over;
+  const hand=U.me.slice().sort((a,b)=>ORDER[a.c]-ORDER[b.c]||(a.v>b.v?1:-1));
+  const box=$('#ccMe'),avail=box.clientWidth||320,cw=60,m=hand.length;
+  let ov=m>1?Math.min(6,(avail-m*cw)/(m-1)):0;const wrap=ov<-(cw-24);
+  box.classList.toggle('wrap',wrap);
+  box.innerHTML=hand.map((c,i)=>{const ok=myTurn&&canPlay(c)&&(!U.drawn||U.drawn.id===c.id);
+    return cardHTML(c,ok?'play':'',!myTurn||!ok).replace('class="card','style="'+(!wrap&&i?`margin-left:${ov}px`:'')+'" class="card')}).join('');
+  $('#ccDeck').disabled=!myTurn||!!U.drawn;
+  $('#ccLast').hidden=!(myTurn&&U.me.length===2&&!U.said);
+  $('#ccPass').hidden=!(myTurn&&U.drawn);
+}
+$('#ccMe').addEventListener('click',e=>{const b=e.target.closest('.card');if(!b||b.disabled||!U||U.turn!=='me'||U.busy||U.over)return;
+  const c=U.me.find(x=>x.id===+b.dataset.id);if(!c||!canPlay(c))return;
+  U.me=U.me.filter(x=>x!==c);U.pile.push(c);U.drawn=null;
+  if(c.c==='w'){U.busy=true;ccRender();pickColor(col=>{U.busy=false;resolve(c,'me',col)})}
+  else resolve(c,'me');
+});
+function pickColor(fn){U.pickFn=fn;const o=$('#ccOver');o.innerHTML=`<h3>Choisis la couleur</h3><div class="pick">${UC.map(c=>`<button data-c="${c}" style="background:${UHEX[c]}">${UCN[c]}</button>`).join('')}</div>`;o.hidden=false;
+  o.querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>{o.hidden=true;U.pickFn=null;fn(b.dataset.c)})}
+function resolve(c,who,col){
+  const other=who==='me'?'ai':'me',me=who==='me';let again=false,txt='';
+  U.color=c.c==='w'?col:c.c;
+  const nm=me?'Tu':'L\'ordinateur';
+  if(c.v==='+2'){ccDraw(2,other);again=true;txt=me?'L\'ordinateur pioche 2 cartes et passe son tour.':'Tu pioches 2 cartes et tu passes ton tour.'}
+  else if(c.v==='+4'){ccDraw(4,other);again=true;txt=(me?'L\'ordinateur pioche 4 cartes.':'Tu pioches 4 cartes.')+` Couleur : ${UCN[U.color]}.`}
+  else if(c.v==='inv'||c.v==='pas'){again=true;txt=me?'L\'ordinateur passe son tour.':'Tu passes ton tour.'}
+  else if(c.v==='joker')txt=`${nm} ${me?'choisis':'choisit'} le ${UCN[U.color].toLowerCase()}.`;
+  if(me&&U.me.length===1&&!U.said){ccDraw(2,'me');txt+=' Tu as oublié « Dernière carte ! » : tu pioches 2 cartes.'}
+  U.said=false;
+  if(!U[who].length)return ccEnd(who);
+  U.turn=again?who:other;
+  if(U.turn==='ai'){U.busy=true;ccMsg(txt||'Au tour de l\'ordinateur…');ccRender();uT=setTimeout(aiTurn,1100)}
+  else{U.busy=false;ccMsg((txt?txt+' ':'')+(again&&me?'Tu rejoues !':'À toi de jouer !'));ccRender()}
+}
+$('#ccDeck').onclick=()=>{if(!U||U.turn!=='me'||U.busy||U.drawn||U.over)return;
+  const c=ccDraw(1,'me')[0];U.said=false;
+  if(c&&canPlay(c)){U.drawn=c;ccMsg('Tu peux jouer la carte piochée, ou la garder.');ccRender()}
+  else{U.turn='ai';U.busy=true;ccMsg('Tu ne peux pas la jouer. Au tour de l\'ordinateur…');ccRender();uT=setTimeout(aiTurn,1100)}};
+$('#ccPass').onclick=()=>{if(!U||!U.drawn)return;U.drawn=null;U.turn='ai';U.busy=true;ccMsg('Au tour de l\'ordinateur…');ccRender();uT=setTimeout(aiTurn,1000)};
+$('#ccLast').onclick=()=>{if(!U)return;U.said=true;ccMsg('<span class="bubble">Dernière carte !</span> Maintenant, joue.');ccRender()};
+function aiChoose(pl){
+  const opp=U.me.length,nw=pl.filter(c=>c.c!=='w');
+  const cnt={};U.ai.forEach(c=>{if(c.c!=='w')cnt[c.c]=(cnt[c.c]||0)+1});
+  if(nw.length){
+    if(opp<=2){const a=nw.find(c=>['+2','pas','inv'].includes(c.v));if(a)return a}
+    if(opp<=1){const f=pl.find(c=>c.v==='+4');if(f)return f}
+    nw.sort((a,b)=>(cnt[b.c]||0)-(cnt[a.c]||0)||(isNaN(b.v)?10:+b.v)-(isNaN(a.v)?10:+a.v));
+    return nw[0];
+  }
+  return pl.find(c=>c.v==='joker')&&opp>3?pl.find(c=>c.v==='joker'):(pl.find(c=>c.v==='+4')||pl[0]);
+}
+function aiColor(){const cnt={r:0,j:0,v:0,b:0};U.ai.forEach(c=>{if(c.c!=='w')cnt[c.c]++});return UC.slice().sort((a,b)=>cnt[b]-cnt[a])[0]}
+function aiPlay(c){U.ai=U.ai.filter(x=>x!==c);U.pile.push(c);U.aiSaid=U.ai.length===1;
+  const s=SYM[c.v]||c.v;ccMsg(`L'ordinateur joue ${c.c==='w'?s:s+' '+UCN[c.c].toLowerCase()}.`);
+  resolve(c,'ai',c.c==='w'?aiColor():null)}
+function aiTurn(){
+  if(!U||U.over)return;
+  const pl=U.ai.filter(canPlay);
+  if(pl.length)return aiPlay(aiChoose(pl));
+  const c=ccDraw(1,'ai')[0];ccMsg('L\'ordinateur pioche une carte.');ccRender();
+  if(c&&canPlay(c)){uT=setTimeout(()=>aiPlay(c),900)}
+  else uT=setTimeout(()=>{U.turn='me';U.busy=false;ccMsg('À toi de jouer !');ccRender()},900);
+}
+function ccEnd(who){
+  U.over=true;U.played++;const p=P();p.ccG=(p.ccG||0)+1;if(who==='me')p.ccW=(p.ccW||0)+1;save();ccRender();
+  const more=U.played<U.parties;
+  const o=$('#ccOver');o.innerHTML=`<h3>${who==='me'?'Tu as gagné !':'L\'ordinateur a gagné'}</h3><p>Tes victoires : <b>${p.ccW||0}</b> sur ${p.ccG} partie${p.ccG>1?'s':''}</p><button class="btn" id="ccNext">${more?'Partie suivante':'Retour à l\'accueil'}</button>`;o.hidden=false;
+  $('#ccNext').onclick=()=>{if(more)ccNewGame();else{U=null;home()}};
+}
+$('#ccQuit').onclick=()=>{if(!U||U.over){clearTimeout(uT);U=null;return home()}const o=$('#ccOver');
+  o.innerHTML=`<h3>Arrêter ?</h3><p>Les parties restantes seront perdues.</p><button class="btn" id="ccYes">Oui, arrêter</button><button class="btn" id="ccNo" style="background:transparent;color:#fff;border:1px solid #fff">Continuer à jouer</button>`;o.hidden=false;
+  $('#ccYes').onclick=()=>{clearTimeout(uT);U=null;home()};
+  $('#ccNo').onclick=()=>{o.hidden=true;if(U.pickFn)pickColor(U.pickFn)};
+};
+
+/* ---------- Serpent ---------- */
+const SW=15,SH=19,DIRS={up:{x:0,y:-1},down:{x:0,y:1},left:{x:-1,y:0},right:{x:1,y:0}};
+let S=null,SC=20;
+function snakeStart(lives){
+  S={lives,max:lives,score:0,fruits:0,elapsed:0,prev:0,acc:0,level:1,alive:true,paused:false};
+  show('snake');sizeSnake();snakeReset();sHud();$('#sOver').hidden=true;requestAnimationFrame(sLoop);
+}
+function sizeSnake(){
+  const w=Math.min($('.app').clientWidth-36,420),h=window.innerHeight-260;
+  SC=Math.max(14,Math.floor(Math.min(w/SW,h/SH)));
+  const c=$('#sBoard'),d=window.devicePixelRatio||1;
+  c.width=SC*SW*d;c.height=SC*SH*d;c.style.width=SC*SW+'px';c.style.height=SC*SH+'px';c.getContext('2d').setTransform(d,0,0,d,0,0);
+}
+function snakeReset(){const y=Math.floor(SH/2);S.body=[{x:5,y},{x:4,y},{x:3,y}];S.dir=DIRS.right;S.q=[];S.bonus=null;sFood();S.acc=0}
+function sFree(){const occ=new Set(S.body.map(p=>p.x+','+p.y));if(S.food)occ.add(S.food.x+','+S.food.y);if(S.bonus)occ.add(S.bonus.x+','+S.bonus.y);
+  let p;do{p={x:R(0,SW-1),y:R(0,SH-1)}}while(occ.has(p.x+','+p.y));return p}
+function sFood(){S.food=null;S.food=sFree()}
+function turn(name){if(!S||S.paused||!S.alive)return;const d=DIRS[name],last=S.q.length?S.q[S.q.length-1]:S.dir;
+  if(d.x===-last.x&&d.y===-last.y)return;if(d.x===last.x&&d.y===last.y)return;if(S.q.length<2)S.q.push(d)}
+function sStep(){
+  if(S.q.length)S.dir=S.q.shift();
+  const h=S.body[0],n={x:h.x+S.dir.x,y:h.y+S.dir.y};
+  const eat=n.x===S.food.x&&n.y===S.food.y,bon=S.bonus&&n.x===S.bonus.x&&n.y===S.bonus.y;
+  const grow=eat||bon,check=grow?S.body:S.body.slice(0,-1);
+  if(n.x<0||n.y<0||n.x>=SW||n.y>=SH||check.some(p=>p.x===n.x&&p.y===n.y))return sCrash();
+  S.body.unshift(n);
+  if(eat){S.fruits++;S.score+=10*S.level;sFood();if(!S.bonus&&Math.random()<.2){const p=sFree();S.bonus={...p,until:S.elapsed+5000}}}
+  else if(bon){S.score+=50*S.level;S.bonus=null}
+  else S.body.pop();
+  sHud();
+}
+function sCrash(){
+  S.lives--;S.paused=true;sHud();
+  if(S.lives>0)sOver(`Encore ${S.lives} vie !`,`Score : ${S.score}. Le serpent repart petit, ton score est gardé.`,'Continuer',()=>{S.elapsed=Math.max(0,S.elapsed-20000);snakeReset();S.paused=false;$('#sOver').hidden=true;sHud()});
+  else{S.alive=false;const p=P();const rec=!p.snake||S.score>p.snake;if(rec)p.snake=S.score;save();
+    sOver('Partie terminée',`Score : <b>${S.score}</b> · ${S.fruits} fruit${S.fruits>1?'s':''}<br>${rec&&S.score>0?'Nouveau record !':'Record : '+p.snake}`,'Retour à l\'accueil',()=>{S=null;home()})}
+}
+function sOver(t,txt,lab,fn){const o=$('#sOver');o.innerHTML=`<h3>${t}</h3><p>${txt}</p><button class="btn" id="sBtn">${lab}</button>`;o.hidden=false;$('#sBtn').onclick=fn}
+function sHud(){if(!S)return;$('#sLives').innerHTML='♥'.repeat(Math.max(0,S.lives))+`<span class="off">${'♥'.repeat(S.max-Math.max(0,S.lives))}</span>`;$('#sScore').textContent=S.score;$('#sLevel').textContent=S.level;$('#sLen').textContent=S.body?S.body.length:3}
+function sLoop(t){
+  if(!S||!S.alive)return;
+  const dt=S.prev?Math.min(t-S.prev,100):0;S.prev=t;
+  if(!S.paused){
+    S.elapsed+=dt;S.acc+=dt;
+    const lv=1+Math.floor(S.elapsed/20000);if(lv!==S.level){S.level=lv;sHud()}
+    if(S.bonus&&S.elapsed>S.bonus.until)S.bonus=null;
+    /* 200 ms par case au départ, environ 2 fois plus vite toutes les 80 s, et chaque fruit accélère un peu */
+    const iv=Math.max(55,200*Math.pow(.5,S.elapsed/80000)*Math.pow(.985,S.fruits));
+    while(S.acc>=iv&&!S.paused&&S.alive){S.acc-=iv;sStep()}
+  }
+  sDraw(t);requestAnimationFrame(sLoop);
+}
+function sDraw(t){
+  if(!S)return;const x=$('#sBoard').getContext('2d'),s=SC;
+  for(let i=0;i<SW;i++)for(let j=0;j<SH;j++){x.fillStyle=(i+j)%2?'#0e1438':'#0b1030';x.fillRect(i*s,j*s,s,s)}
+  const f=S.food;x.fillStyle='#ff4d5a';x.beginPath();x.arc(f.x*s+s/2,f.y*s+s/2+1,s*.36,0,7);x.fill();
+  x.fillStyle='#4fd17a';x.beginPath();x.ellipse(f.x*s+s*.62,f.y*s+s*.2,s*.14,s*.08,-.6,0,7);x.fill();
+  if(S.bonus){const b=S.bonus,pulse=.32+.06*Math.sin(t/120);x.fillStyle='#ffd23f';x.beginPath();x.arc(b.x*s+s/2,b.y*s+s/2,s*pulse,0,7);x.fill();
+    x.fillStyle='#0b1030';x.font=`bold ${Math.round(s*.5)}px sans-serif`;x.textAlign='center';x.textBaseline='middle';x.fillText('★',b.x*s+s/2,b.y*s+s/2+1)}
+  S.body.forEach((p,i)=>{const r=s*.22,k=i?1-Math.min(.35,i/S.body.length*.35):1;
+    x.fillStyle=i?`rgba(79,209,122,${k})`:'#8ff0b0';
+    const px=p.x*s+1,py=p.y*s+1,w=s-2;x.beginPath();x.roundRect?x.roundRect(px,py,w,w,r):x.rect(px,py,w,w);x.fill()});
+  const h=S.body[0],d=S.dir,cx=h.x*s+s/2,cy=h.y*s+s/2,ox=d.y?s*.2:0,oy=d.x?s*.2:0,fx=d.x*s*.15,fy=d.y*s*.15;
+  x.fillStyle='#0b1030';[[1],[-1]].forEach(([m])=>{x.beginPath();x.arc(cx+ox*m+fx,cy+oy*m+fy,s*.09,0,7);x.fill()});
+}
+document.querySelector('.dpad').addEventListener('pointerdown',e=>{const b=e.target.closest('button');if(!b)return;e.preventDefault();turn(b.dataset.d)});
+let sw0=null;
+$('#sBoard').addEventListener('pointerdown',e=>{sw0={x:e.clientX,y:e.clientY}});
+$('#sBoard').addEventListener('pointermove',e=>{if(!sw0)return;const dx=e.clientX-sw0.x,dy=e.clientY-sw0.y;
+  if(Math.max(Math.abs(dx),Math.abs(dy))>18){turn(Math.abs(dx)>Math.abs(dy)?(dx>0?'right':'left'):(dy>0?'down':'up'));sw0={x:e.clientX,y:e.clientY}}});
+['pointerup','pointercancel','pointerleave'].forEach(ev=>$('#sBoard').addEventListener(ev,()=>{sw0=null}));
+document.addEventListener('keydown',e=>{if($('#s-snake').hidden||!S)return;const m={ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right'};if(m[e.key]){e.preventDefault();turn(m[e.key])}});
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&S&&S.alive&&!S.paused){S.paused=true;sOver('Pause','Ton serpent t\'attend.','Reprendre',()=>{S.paused=false;$('#sOver').hidden=true})}});
+$('#sQuit').onclick=()=>{if(!S)return home();if(!S.alive){S=null;return home()}S.paused=true;
+  sOver('Arrêter ?','Les vies restantes seront perdues.','Oui, arrêter',()=>{S.lives=1;S.paused=false;sCrash()});
+  $('#sOver').insertAdjacentHTML('beforeend','<button class="btn" id="sNo" style="background:transparent;color:#fff;border:1px solid #fff">Continuer à jouer</button>');
+  $('#sNo').onclick=()=>{S.paused=false;$('#sOver').hidden=true}};
+
+home();
+</script>
+
+</body>
+</html>
