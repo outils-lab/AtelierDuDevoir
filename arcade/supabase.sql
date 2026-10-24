@@ -30,3 +30,6 @@ create policy "arcade_profils_parent" on public.arcade_profils
   for all
   using (exists (select 1 from public.enfants e where e.id = arcade_profils.enfant_id and e.parent_id = auth.uid()))
   with check (exists (select 1 from public.enfants e where e.id = arcade_profils.enfant_id and e.parent_id = auth.uid()));
+
+-- 4) Dictées : limite quotidienne à part (5 par défaut, réglable dans l'espace parent)
+alter table public.arcade_profils add column if not exists dictees_max_jour integer not null default 5;
