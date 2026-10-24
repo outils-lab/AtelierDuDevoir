@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Ma famille – L'Atelier du Devoir</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Luckiest+Guy&family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{
@@ -17,7 +17,7 @@ body{font-family:'Nunito',sans-serif;background:#F8F9FA;color:var(--texte);min-h
 .topbar{padding:16px 20px 0;display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
 .mini-btn{
   display:inline-block;background:#fff;border:2.5px solid;border-radius:14px;
-  padding:9px 18px;font-family:'Fredoka One',cursive;font-size:.9rem;
+  padding:9px 18px;font-family:'Lilita One','Fredoka One',cursive;font-size:.9rem;
   text-decoration:none;cursor:pointer;transition:transform .13s,box-shadow .13s;
 }
 .mini-btn:hover{transform:translateY(-3px);box-shadow:0 8px 14px rgba(0,0,0,.12);}
@@ -46,7 +46,7 @@ body{font-family:'Nunito',sans-serif;background:#F8F9FA;color:var(--texte);min-h
 .carte-enfant:hover{transform:translateY(-4px);box-shadow:0 8px 14px rgba(0,0,0,.12);}
 .carte-enfant.actif{box-shadow:0 0 0 4px rgba(0,0,0,.06),0 8px 18px rgba(0,0,0,.13);}
 .ce-avatar{font-size:2.6rem;display:block;margin-bottom:6px;}
-.ce-prenom{font-family:'Fredoka One',cursive;font-size:1.35rem;line-height:1.2;}
+.ce-prenom{font-family:'Lilita One','Fredoka One',cursive;font-size:1.35rem;line-height:1.2;}
 .ce-classe{font-weight:800;font-size:.85rem;color:#6b7280;margin-top:2px;}
 .ce-badge{
   display:inline-block;margin-top:10px;border-radius:20px;padding:4px 12px;
@@ -69,7 +69,7 @@ body{font-family:'Nunito',sans-serif;background:#F8F9FA;color:var(--texte);min-h
   background:#fff;border:2.5px dashed #cbd5e1;border-radius:18px;padding:20px 14px;
   text-align:center;cursor:pointer;color:#9aa5b1;
   display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:150px;
-  transition:all .15s;font-family:'Fredoka One',cursive;font-size:1.05rem;
+  transition:all .15s;font-family:'Lilita One','Fredoka One',cursive;font-size:1.05rem;
 }
 .carte-ajout:hover{border-color:var(--vert);color:var(--vert);transform:translateY(-3px);}
 .carte-ajout .plus{font-size:2rem;display:block;margin-bottom:4px;}
@@ -80,7 +80,7 @@ body{font-family:'Nunito',sans-serif;background:#F8F9FA;color:var(--texte);min-h
   padding:22px 20px;margin-bottom:26px;
 }
 .form-ajout.visible{display:block;}
-.form-ajout h3{font-family:'Fredoka One',cursive;font-size:1.2rem;color:var(--vert);margin-bottom:14px;text-align:center;}
+.form-ajout h3{font-family:'Lilita One','Fredoka One',cursive;font-size:1.2rem;color:var(--vert);margin-bottom:14px;text-align:center;}
 .champ{margin-bottom:14px;}
 .champ label{display:block;font-weight:800;font-size:.86rem;margin-bottom:6px;}
 .champ input,.champ select{
@@ -91,7 +91,7 @@ body{font-family:'Nunito',sans-serif;background:#F8F9FA;color:var(--texte);min-h
 .form-btns{display:flex;gap:10px;margin-top:16px;}
 .btn-form{
   flex:1;background:#fff;border:2.5px solid;border-radius:14px;padding:13px 4px 15px;
-  font-family:'Fredoka One',cursive;font-size:1rem;cursor:pointer;position:relative;
+  font-family:'Lilita One','Fredoka One',cursive;font-size:1rem;cursor:pointer;position:relative;
   transition:transform .13s,box-shadow .13s;
 }
 .btn-form::after{content:"";position:absolute;left:22%;right:22%;bottom:7px;height:3px;border-radius:2px;background:currentColor;opacity:.5;}
@@ -126,6 +126,9 @@ body{font-family:'Nunito',sans-serif;background:#F8F9FA;color:var(--texte);min-h
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="apple-mobile-web-app-title" content="Atelier du Devoir">
+<style>/* Polices du site : Luckiest Guy (titres, boutons d'action), Lilita One (sous-titres, boutons), Nunito (texte) */
+.tete h1{font-family:'Luckiest Guy','Lilita One',cursive;font-weight:400;letter-spacing:1px;text-transform:uppercase;}
+</style>
 </head>
 <body>
 

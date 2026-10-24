@@ -11,7 +11,8 @@
   --ok-bg:#ecfdf5;--ko-bg:#fef2f2;--hl:#fff3b0;
   /* jetons utilisés par les jeux */
   --card:#161d45;--border:#2a3459;--ink:#e7ebfa;--soft:#9ba6cc;--paper:#0b1030;--ok:#52d28d;
-  --display:'Fredoka One','Nunito',system-ui,sans-serif;
+  --display:'Lilita One','Fredoka One','Nunito',system-ui,sans-serif;
+  --titre:'Luckiest Guy','Lilita One',cursive;
 }
 html,body{min-height:100%}
 body{font-family:'Nunito',system-ui,-apple-system,'Segoe UI',sans-serif;background:var(--fond);color:var(--texte);font-size:17px;line-height:1.45;-webkit-tap-highlight-color:transparent;transition:background .3s}
@@ -316,3 +317,8 @@ body.mode-nuit .rond{background:#161d45;border-color:#2a3459;color:#cfd6f5}
 .u-saut{width:110px;height:110px;border-radius:50%;background:#ffd23f;color:#0b1030;border:0;font-family:var(--display);font-size:1.4rem}
 .ucroix button:active,.u-saut:active{filter:brightness(1.2)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* Polices du site : titres et boutons d'action en Luckiest Guy */
+.gros-btn,.gover h3{font-family:var(--titre);font-weight:400;letter-spacing:1px;text-transform:uppercase}
+.nuit .btn{font-family:var(--titre);font-weight:400;letter-spacing:1px;text-transform:uppercase}
+.nuit .btn small{text-transform:none;letter-spacing:0}
