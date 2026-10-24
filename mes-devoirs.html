@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Mes devoirs – L'Atelier du Devoir</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Luckiest+Guy&family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{--bleu:#3B82F6;--vert:#10B981;--orange:#F59E0B;--violet:#8B5CF6;--rouge:#EF4444;--texte:#2C3E50;--gris:#9aa5b1;}
@@ -13,7 +13,7 @@ body{font-family:'Nunito',sans-serif;background:#F8F9FA;color:var(--texte);min-h
 
 .topbar{padding:16px 20px 0;display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
 .mini-btn{display:inline-block;background:#fff;border:2.5px solid;border-radius:14px;padding:9px 18px;
-  font-family:'Fredoka One',cursive;font-size:.9rem;text-decoration:none;cursor:pointer;
+  font-family:'Lilita One','Fredoka One',cursive;font-size:.9rem;text-decoration:none;cursor:pointer;
   transition:transform .13s,box-shadow .13s;}
 .mini-btn:hover{transform:translateY(-3px);box-shadow:0 8px 14px rgba(0,0,0,.12);}
 .mb-bleu{color:var(--bleu);border-color:var(--bleu);}
@@ -34,7 +34,7 @@ body{font-family:'Nunito',sans-serif;background:#F8F9FA;color:var(--texte);min-h
 .matiere{background:#fff;border:2.5px solid #e8ecf1;border-radius:20px;padding:18px 16px;margin-bottom:16px;}
 .mat-head{display:flex;align-items:center;gap:10px;margin-bottom:13px;}
 .mat-ico{font-size:1.7rem;}
-.mat-nom{font-family:'Fredoka One',cursive;font-size:1.2rem;}
+.mat-nom{font-family:'Lilita One','Fredoka One',cursive;font-size:1.2rem;}
 .mat-cpt{margin-left:auto;font-weight:800;font-size:.8rem;color:var(--gris);}
 
 /* Ligne de devoir */
@@ -49,7 +49,7 @@ body{font-family:'Nunito',sans-serif;background:#F8F9FA;color:var(--texte);min-h
 .d-txt{flex:1;min-width:170px;}
 .d-titre{font-weight:800;font-size:1rem;line-height:1.3;}
 .d-meta{font-weight:700;font-size:.76rem;color:var(--gris);margin-top:3px;}
-.d-score{font-family:'Fredoka One',cursive;font-size:1.05rem;white-space:nowrap;}
+.d-score{font-family:'Lilita One','Fredoka One',cursive;font-size:1.05rem;white-space:nowrap;}
 .niv{display:inline-block;border-radius:20px;padding:3px 10px;font-weight:800;font-size:.73rem;white-space:nowrap;}
 .n-rouge{background:#fee2e2;color:#b91c1c;} .n-orange{background:#fef3c7;color:#b45309;}
 .n-vert{background:#d1fae5;color:#047857;} .n-violet{background:#ede9fe;color:#6d28d9;}
@@ -58,7 +58,7 @@ body{font-family:'Nunito',sans-serif;background:#F8F9FA;color:var(--texte);min-h
 
 .vide{text-align:center;padding:44px 20px;}
 .vide .em{font-size:3.4rem;display:block;margin-bottom:12px;}
-.vide h3{font-family:'Fredoka One',cursive;font-size:1.3rem;color:var(--vert);margin-bottom:8px;}
+.vide h3{font-family:'Lilita One','Fredoka One',cursive;font-size:1.3rem;color:var(--vert);margin-bottom:8px;}
 .vide p{font-weight:700;font-size:.92rem;color:var(--gris);line-height:1.7;}
 
 .chargement{text-align:center;padding:50px 20px;font-weight:800;color:var(--gris);}
@@ -69,7 +69,7 @@ body{font-family:'Nunito',sans-serif;background:#F8F9FA;color:var(--texte);min-h
 
 .recap{background:#fff;border:2.5px solid var(--orange);border-radius:18px;padding:15px 18px;
   margin-bottom:22px;text-align:center;font-weight:800;font-size:.95rem;}
-.recap .gros{font-family:'Fredoka One',cursive;font-size:1.6rem;color:var(--orange);display:block;}
+.recap .gros{font-family:'Lilita One','Fredoka One',cursive;font-size:1.6rem;color:var(--orange);display:block;}
 
 @media(max-width:480px){
   .tete h1{font-size:2rem;}
@@ -83,6 +83,9 @@ body{font-family:'Nunito',sans-serif;background:#F8F9FA;color:var(--texte);min-h
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="apple-mobile-web-app-title" content="Atelier du Devoir">
+<style>/* Polices du site : Luckiest Guy (titres, boutons d'action), Lilita One (sous-titres, boutons), Nunito (texte) */
+.tete h1{font-family:'Luckiest Guy','Lilita One',cursive;font-weight:400;letter-spacing:1px;text-transform:uppercase;}
+</style>
 </head>
 <body>
 
