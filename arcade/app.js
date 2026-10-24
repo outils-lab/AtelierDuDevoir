@@ -422,7 +422,7 @@ function repondre(val, btn){
     if(!it._re && SE.q.length < SE.N + 5){ var copie = Object.assign({}, it, {_re:true}); SE.q.push(copie); }
     var rep = it.t === 'num' ? ARC.fmt(it.a) : it.t === 'dict' ? esc(it.a) : esc(strip(String(it.prefix ? it.prefix+' ' : '')+it.a));
     var pq = it.t === 'dict' ? diff(val, it.a) : ARC.bulles(it.e || '');
-    var rf = it.t === 'dict' ? fichesDictee(val, it.a) : []; SE.erreurs[SE.erreurs.length-1].fiches = rf;
+    var rf = it.t === 'dict' ? fichesDictee(val, it.a) : ficheNotion(it.notion); SE.erreurs[SE.erreurs.length-1].fiches = rf;
     fb.className = 'fb'; fb.innerHTML = '<div class="lab">La bonne réponse</div><div class="rep">'+rep+'</div>'+(pq ? '<div class="lab">Pourquoi ?</div><div class="pq">'+pq+'</div>' : '')+renvoiFiches(rf)+'<button class="gros-btn b-bleu" id="continuer">Continuer</button>';
   }
   fb.hidden = false; $('#continuer').onclick = suivante;
@@ -487,6 +487,10 @@ function fichesDictee(donne, attendu){
     if(c && !vus[c]){ vus[c] = 1; res.push(c); }
   });
   return res.slice(0, 3);
+}
+function ficheNotion(code){
+  var f = code && S.catalogue[code];
+  return (f && f.disponible !== false && f.fichier && !/^D[MC]/.test(code)) ? [code] : [];
 }
 function renvoiFiches(codes){
   if(!codes || !codes.length) return '';
