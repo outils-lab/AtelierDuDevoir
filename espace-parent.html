@@ -54,6 +54,13 @@ body{font-family:'Nunito',sans-serif;background:#F8F9FA;color:var(--texte);min-h
 /* Sections */
 .section{background:#fff;border:2.5px solid #e8ecf1;border-radius:20px;padding:20px 18px;margin-bottom:20px;}
 .section h2{font-family:'Fredoka One',cursive;font-size:1.15rem;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.arc-ligne{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1.5px solid #f1f4f8;font-weight:700;font-size:.95rem;line-height:1.45;}
+.arc-ligne:last-child{border-bottom:0;}
+.arc-ico{flex:none;width:26px;text-align:center;}
+.arc-vert{color:#047857;} .arc-orange{color:#b45309;}
+.arc-reglage{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:6px;font-weight:700;font-size:.9rem;color:#6b7280;}
+.arc-reglage button{width:34px;height:34px;border-radius:10px;border:2.5px solid #d7dde5;background:#fff;font-family:'Fredoka One',cursive;font-size:1.1rem;cursor:pointer;}
+.arc-reglage b{font-family:'Fredoka One',cursive;font-size:1.2rem;color:var(--violet);min-width:22px;text-align:center;}
 .section h2 .compteur{background:var(--rouge);color:#fff;border-radius:20px;padding:2px 10px;font-size:.78rem;font-family:'Nunito';font-weight:800;}
 
 /* Barres de progression par classe */
@@ -148,6 +155,12 @@ body{font-family:'Nunito',sans-serif;background:#F8F9FA;color:var(--texte);min-h
     <!-- Statistiques globales -->
     <div class="stats-grid" id="stats"></div>
 
+    <!-- Salle d'arcade -->
+    <div class="section sec-arcade" id="sec-arcade">
+      <h2>&#x1F579;&#xFE0F; Salle d'arcade</h2>
+      <div id="arcade-resume"></div>
+    </div>
+
     <!-- À valider -->
     <div class="section" id="sec-valider" style="display:none;">
       <h2>&#x2705; À valider <span class="compteur" id="cpt-valider">0</span></h2>
@@ -212,6 +225,7 @@ var enfants = [], enfantSel = null;
 var toutesFiches = [];   // depuis fiches.json
 var progression = [];    // lignes de l'enfant sélectionné
 var assignations = [];
+var arcade = null;      // ligne arcade_profils de l'enfant sélectionné
 
 function msg(t, type){
   var el = document.getElementById('msg');
@@ -301,7 +315,10 @@ async function chargerEnfant(){
   progression = rp.error ? [] : (rp.data || []);
   var ra = await sb.from('assignations').select('*').eq('enfant_id', enfantSel).order('assigne_le', {ascending:false});
   assignations = ra.error ? [] : (ra.data || []);
+  var rx = await sb.from('arcade_profils').select('donnees,series_max_jour').eq('enfant_id', enfantSel).maybeSingle();
+  arcade = rx.error ? {absente:true} : (rx.data || {donnees:null, series_max_jour:3});
   rendre();
+  rendreArcade();
 }
 
 // Dernier résultat par fiche + historique
@@ -433,6 +450,45 @@ function rendre(){
   document.getElementById('liste-recentes').innerHTML = recentes.length
     ? recentes.map(function(c){ return ligneFiche(c, map[c], false); }).join('')
     : '<div class="vide">Aucune fiche terminée pour le moment.<br>Les résultats apparaîtront ici automatiquement.</div>';
+}
+
+/* ═══ Salle d'arcade : une carte simple ═══ */
+function titreNotion(code){ var f = infoFiche(code); return f ? f.titre : code; }
+function rendreArcade(){
+  var box = document.getElementById('arcade-resume');
+  if(!arcade || arcade.absente){
+    box.innerHTML = '<div class="vide">Le suivi de la salle d\'arcade sera visible ici dès que la table <b>arcade_profils</b> aura été créée dans Supabase.</div>';
+    return;
+  }
+  var D = arcade.donnees || {}, log = D.log || [], notions = D.notions || {};
+  var limite = new Date(); limite.setDate(limite.getDate() - 6);
+  var lim = limite.getFullYear()+'-'+String(limite.getMonth()+1).padStart(2,'0')+'-'+String(limite.getDate()).padStart(2,'0');
+  var semaine = log.filter(function(l){ return l.d >= lim; });
+  var q = 0, ok = 0; semaine.forEach(function(l){ q += l.n; ok += l.s; });
+  var forts = [], faibles = [];
+  Object.keys(notions).forEach(function(c){
+    var h = notions[c].h || []; if(h.length < 3) return;
+    var taux = h.reduce(function(a,b){ return a+b; }, 0) / h.length;
+    if(h.length >= 5 && taux >= 0.85) forts.push({c:c, t:taux, n:h.length});
+    else if(taux < 0.6) faibles.push({c:c, t:taux, n:h.length});
+  });
+  forts.sort(function(a,b){ return b.n - a.n; }); faibles.sort(function(a,b){ return a.t - b.t; });
+  var noms = function(l){ return l.slice(0,4).map(function(x){ return esc(titreNotion(x.c)); }).join(' · '); };
+  var cap = arcade.series_max_jour != null ? arcade.series_max_jour : 3;
+  box.innerHTML =
+      '<div class="arc-ligne"><span class="arc-ico">&#x1F4C5;</span><span>Cette semaine : <b>'+semaine.length+' série'+(semaine.length>1?'s':'')+'</b>'
+    + (q ? ' ('+q+' questions, '+Math.round(ok/q*100)+' % de bonnes réponses)' : '') + '</span></div>'
+    + '<div class="arc-ligne arc-vert"><span class="arc-ico">&#x2705;</span><span>Points forts : '+(forts.length ? noms(forts) : 'pas encore assez de réponses')+'</span></div>'
+    + '<div class="arc-ligne arc-orange"><span class="arc-ico">&#x1F536;</span><span>À travailler : '+(faibles.length ? noms(faibles) : 'rien à signaler pour l\'instant')+'</span></div>'
+    + '<div class="arc-reglage">Séries qui donnent des vies chaque jour :'
+    + '<button type="button" onclick="changerCap(-1)" aria-label="Moins">−</button><b id="arc-cap">'+cap+'</b><button type="button" onclick="changerCap(1)" aria-label="Plus">+</button></div>';
+}
+async function changerCap(d){
+  if(!arcade || arcade.absente) return;
+  var cap = Math.max(0, Math.min(10, (arcade.series_max_jour != null ? arcade.series_max_jour : 3) + d));
+  arcade.series_max_jour = cap; document.getElementById('arc-cap').textContent = cap;
+  var r = await sb.from('arcade_profils').upsert({enfant_id: enfantSel, series_max_jour: cap}, {onConflict:'enfant_id'});
+  if(r.error) msg("Réglage non enregistré : "+r.error.message, 'err'); else msg('Réglage enregistré : '+cap+' série'+(cap>1?'s':'')+' par jour.', 'ok');
 }
 
 function carteStat(cls, val, lib){

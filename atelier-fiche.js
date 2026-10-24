@@ -11,6 +11,17 @@ if(!F){ console.error('FICHE non définie'); return; }
 
 var score = 0, TOTAL = 0, phaseCourante = 0;
 var etats = [];   // état par exercice
+var erreursFiche = [];   // questions ratées, envoyées avec le score (révisions de la salle d'arcade)
+function noterErreur(o){
+  try{
+    if(erreursFiche.length >= 15) return;
+    Object.keys(o).forEach(function(k){
+      if(typeof o[k] === 'string' && o[k].length > 400) o[k] = o[k].slice(0, 400);
+      if(o[k] == null || o[k] === '') delete o[k];
+    });
+    erreursFiche.push(o);
+  }catch(e){}
+}
 
 /* ── Utilitaires ── */
 function esc(s){ var d=document.createElement('div'); d.textContent = s==null?'':s; return d.innerHTML; }
@@ -519,7 +530,8 @@ AF.qcm = function(i, qi, btn){
   });
   var fb = el('fb'+i+'-'+qi), bon = (btn.dataset.v === q.bonne);
   if(bon){ score++; etats[i].pts++; el('sc'+i).textContent = etats[i].pts; }
-  else btn.classList.add('wrong');
+  else { btn.classList.add('wrong');
+    noterErreur({t:'qcm', q:(q.phrase ? q.phrase + (q.q ? '<br>' + q.q : '') : q.q), b:q.bonne, o:q.options, e:q.expl}); }
   fb.innerHTML = (bon?'\u2705 ':'\u274C ') + q.expl;
   fb.className = 'fb show ' + (bon?'ok':'ko');
   etats[i].faits++;
@@ -538,7 +550,8 @@ AF.jug = function(i, ii, div){
   });
   var bon = (div.dataset.ok === '1');
   if(bon){ score++; etats[i].pts++; el('sc'+i).textContent = etats[i].pts; }
-  else div.classList.add('wrong');
+  else { div.classList.add('wrong');
+    noterErreur({t:'jug', q:it.consigne, b:it.bonne, m:it.mauvaise, e:it.expl}); }
   var fb = el('fb'+i+'-'+ii);
   fb.innerHTML = (bon?'\u2705 ':'\u274C ') + it.expl;
   fb.className = 'fb show ' + (bon?'ok':'ko');
@@ -600,7 +613,8 @@ AF.verifier = function(i){
       var mis = etats[i].place[ii] ? etats[i].place[ii].dataset.w : '';
       var bon = (mis === it.rep);
       if(bon){ pts++; dz.classList.add('ok'); }
-      else dz.classList.add('ko');
+      else { dz.classList.add('ko');
+        noterErreur({t:'drag', q:(it.avant||'') + ' ___ ' + (it.apres||''), b:it.rep, o:(ex.pool || ex.items.map(function(x){ return x.rep; })).slice(0,4), e:it.expl}); }
       ee.innerHTML = (bon?'\u2705 ':'\u274C Réponse : '+esc(it.rep)+'. ') + it.expl;
       ee.className = 'expl show ' + (bon?'ok':'ko');
     });
@@ -634,7 +648,10 @@ AF.verifier = function(i){
       var saisi = lireVal(inp);
       var bon = attendus.some(function(a){ return memeReponse(saisi, a, ex.strict); });
       if(bon){ pts++; inp.classList.add('ok'); }
-      else inp.classList.add('ko');
+      else { inp.classList.add('ko');
+        if(ex.type === 'dictee') noterErreur({t:'dictee', b:attendus, l:it.lu, e:it.expl});
+        else if(ex.type === 'conjtable') noterErreur({t:'conj', q:(ex.consigne ? ex.consigne + '<br>' : '') + '<b>' + it.pronom + '</b> ___', b:attendus, e:it.expl});
+        else noterErreur({t:'saisie', q:it.phrase, b:attendus, e:it.expl}); }
       var rep0 = esc(attendus[0]);
       var sepRep = /[.!?]$/.test(rep0) ? ' ' : '. ';
       ee.innerHTML = (bon?'\u2705 ':'\u274C Réponse : '+rep0+sepRep) + (it.expl||'');
@@ -672,7 +689,7 @@ AF.bilan = function(){
 
   if(score >= Math.ceil(TOTAL*0.5)) confettis();
   if(typeof enregistrerProgression === 'function')
-    enregistrerProgression(F.code, score, TOTAL);
+    enregistrerProgression(F.code, score, TOTAL, erreursFiche);
 };
 
 function confettis(){

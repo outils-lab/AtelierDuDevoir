@@ -5,6 +5,8 @@
      <script src="../atelier-progression.js"></script>
    Puis dans showBilan() :
      enregistrerProgression('O11', score, TOTAL_PTS);
+   Les fiches au format moteur passent aussi la liste des questions ratées :
+     enregistrerProgression('O11', score, TOTAL_PTS, erreurs);
    ═══════════════════════════════════════════════════════════ */
 (function(){
   var SUPABASE_URL = "https://rwqsvrmjjoihuhmvbwuu.supabase.co";
@@ -52,7 +54,7 @@
   }
 
   /* Fonction publique appelée par les fiches */
-  window.enregistrerProgression = async function(ficheCode, score, total){
+  window.enregistrerProgression = async function(ficheCode, score, total, erreurs){
     try{
       var c = client();
       if(!c){ return; }
@@ -83,12 +85,20 @@
         return;
       }
 
-      var ins = await c.from('progression').insert({
+      var ligne = {
         enfant_id: enfantId,
         fiche_code: ficheCode,
         score: score,
         total: total
-      });
+      };
+      // Questions ratées (moteur des fiches) : reprises dans les révisions de la salle d'arcade
+      if(erreurs && erreurs.length) ligne.erreurs = erreurs;
+      var ins = await c.from('progression').insert(ligne);
+      // Colonne « erreurs » pas encore créée dans Supabase : on enregistre au moins le score
+      if(ins.error && ligne.erreurs){
+        delete ligne.erreurs;
+        ins = await c.from('progression').insert(ligne);
+      }
 
       if(ins.error){
         banniere("\u26A0\uFE0F Résultat non enregistré. Vérifie ta connexion internet.", "#EF4444");
