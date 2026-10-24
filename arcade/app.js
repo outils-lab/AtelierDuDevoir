@@ -152,6 +152,7 @@ function quota(){
   if(D.jour.d !== j) D.jour = {d:j, m:{maths:0, fr:0, dictee:0}};
   if(!D.jour.m) D.jour.m = {maths:0, fr:0, dictee:D.jour.rd || 0};
   MATS.forEach(function(m){ if(D.jour.m[m] == null) D.jour.m[m] = 0; });
+  if(D.jour.v == null) D.jour.v = 0;
   return D.jour;
 }
 function capM(m){ return m === 'dictee' ? S.capDictee : S.cap; }
@@ -164,11 +165,13 @@ function msgPlafond(m){
   return '<div class="gros-msg">⭐ <b>Tu as gagné toutes tes vies en '+NOMS_M[m]+' aujourd\'hui !</b><br>Si tu veux gagner d\'autres vies, tente ta chance en '+listeOu(autres)+'.</div>';
 }
 function accueil(){
-  SE = null; S.vies = 0;
-  var q = quota(), aRevoir = Object.keys(D.items).filter(function(k){ return D.items[k].due <= jourNum(); }).length;
+  SE = null;
+  var q = quota(); S.vies = q.v;
+  var aRevoir = Object.keys(D.items).filter(function(k){ return D.items[k].due <= jourNum(); }).length;
   var prenom = S.mode === 'compte' ? S.enfant.prenom : '';
   var msg = (prenom ? 'Bonjour '+esc(prenom)+' ! ' : 'C\'est parti ! ') + 'Choisis ta matière. Réussis ta série pour gagner des vies et jouer.';
   if(aRevoir) msg += ' J\'ai gardé <b>'+aRevoir+' question'+(aRevoir>1?'s':'')+'</b> à revoir pour toi aujourd\'hui.';
+  if(S.vies) msg = '<b>♥ Tu as '+S.vies+' vie'+(S.vies>1?'s':'')+' en réserve.</b> Joue quand tu veux, mais aujourd\'hui : à minuit, elles disparaissent. ' + msg.replace(/^[^!]*! /, '');
   $('#ugoAccueil').innerHTML = msg;
   var qz = $('#quota');
   if(toutFini()){ qz.className = 'quota'; qz.innerHTML = msgPlafond('fr'); }
@@ -186,7 +189,7 @@ function accueil(){
   show('accueil');
 }
 document.querySelectorAll('[data-m]').forEach(function(b){ b.addEventListener('click', function(){ lancer(b.dataset.m); }); });
-$('#voirSalle').onclick = function(){ salle(0); };
+$('#voirSalle').onclick = function(){ salle(); };
 
 /* ═══ Bornes ═══ */
 function debloque(g){
@@ -221,7 +224,7 @@ function clicBorne(e){
     return;
   }
   if(!S.vies){ cible.innerHTML = 'Pour jouer à <b>'+g.nom+'</b>, réussis d\'abord une série : 7 bonnes réponses sur 10 donnent une vie !'; return; }
-  var v = S.vies; S.vies = 0; JEUX[g.id](v);
+  var v = S.vies; S.vies = 0; quota().v = 0; sauver(); JEUX[g.id](v);
 }
 $('#bornesAccueil').addEventListener('click', clicBorne);
 $('#bornesSalle').addEventListener('click', clicBorne);
@@ -237,20 +240,15 @@ function animerBornes(){
   }
   animT = requestAnimationFrame(tour);
 }
-function salle(vies){
-  S.vies = vies || 0;
+function salle(){
+  S.vies = quota().v;
   $('#viesSalle').innerHTML = S.vies ? '♥'.repeat(S.vies) : '';
-  $('#salleMsg').innerHTML = S.vies ? 'Tu as <b>'+S.vies+' vie'+(S.vies>1?'s':'')+'</b> : touche un jeu pour jouer !' : 'Réussis une série pour gagner des vies.';
+  $('#salleMsg').innerHTML = S.vies ? 'Tu as <b>'+S.vies+' vie'+(S.vies>1?'s':'')+'</b> : touche un jeu pour jouer !<br><span style="font-size:.85em;opacity:.85">Tu peux partir et revenir plus tard : elles restent jusqu\'à ce soir.</span>' : 'Réussis une série pour gagner des vies.';
   $('#salleOver').hidden = true;
   rendreBornes('#bornesSalle', false);
   show('arcade');
 }
-$('#quitSalle').onclick = function(){
-  if(!S.vies) return accueil();
-  var o = $('#salleOver');
-  o.innerHTML = '<h3>Quitter la salle ?</h3><p>Tes vies doivent être jouées maintenant : si tu quittes, elles seront perdues.</p><button class="btn" id="resterSalle">Je reste et je joue</button><button class="btn" id="partirSalle" style="background:transparent;color:#fff;border:1px solid #fff">Quitter quand même</button>';
-  o.hidden = false; $('#resterSalle').onclick = function(){ o.hidden = true; }; $('#partirSalle').onclick = function(){ S.vies = 0; accueil(); };
-};
+$('#quitSalle').onclick = function(){ accueil(); };
 
 /* ═══ Construction d'une série ═══ */
 function st(code){ return D.notions[code] || (D.notions[code] = {b:0, due:0, ok:0, ko:0, h:[]}); }
@@ -529,7 +527,7 @@ function finir(){
   var vies = dic ? (sc >= 2 ? 3 : sc === 1 ? 1 : 0) : (ratio >= 0.9 ? 2 : ratio >= 0.7 ? 1 : 0);
   var plafond = finiM(SE.m);
   if(vies && plafond) vies = 0;
-  if(vies) q.m[SE.m]++;
+  if(vies){ q.m[SE.m]++; q.v += vies; }
   D.log.push({d:jourStr(), m:SE.m, s:sc, n:total});
   sauver();
   $('#tampon').innerHTML = sc+'<small>sur '+total+'</small>';
@@ -542,8 +540,8 @@ function finir(){
   $('#ugoRes').innerHTML = msg;
   var rc = $('#recompense');
   if(vies){
-    rc.innerHTML = '<div class="recomp"><div class="coeurs">'+'♥'.repeat(vies)+'</div><div><b>Tu gagnes '+vies+' vie'+(vies>1?'s':'')+' !</b><br><span style="opacity:.8">À jouer tout de suite dans la salle d\'arcade.</span></div><button class="gros-btn b-jaune" id="allerJouer">Choisir mon jeu →</button></div>';
-    $('#allerJouer').onclick = function(){ salle(vies); };
+    rc.innerHTML = '<div class="recomp"><div class="coeurs">'+'♥'.repeat(vies)+'</div><div><b>Tu gagnes '+vies+' vie'+(vies>1?'s':'')+' !</b><br><span style="opacity:.8">Elles sont gardées jusqu\'à ce soir : utilise-les aujourd\'hui !'+(q.v > vies ? ' Tu en as '+q.v+' en tout.' : '')+'</span></div><button class="gros-btn b-jaune" id="allerJouer">Choisir mon jeu →</button></div>';
+    $('#allerJouer').onclick = function(){ salle(); };
     if(finiM(SE.m)) rc.insertAdjacentHTML('beforeend', msgPlafond(SE.m));
   } else if(plafond && (dic ? sc >= 1 : ratio >= 0.7)){
     rc.innerHTML = msgPlafond(SE.m);
