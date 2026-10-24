@@ -182,7 +182,7 @@ function accueil(){
   }
   document.querySelectorAll('#s-accueil [data-m]').forEach(function(b){
     var m = b.dataset.m, t = b.querySelector('.m-q'); if(!t){ t = document.createElement('span'); t.className = 'm-q'; b.appendChild(t); }
-    var f = finiM(m); t.className = 'm-q' + (f ? ' fini' : ''); var rst = capM(m) - q.m[m]; t.textContent = f ? '✓ Vies gagnées' : '♥ Encore ' + rst + ' série' + (rst > 1 ? 's' : '') + ' à vies';
+    var f = finiM(m); t.className = 'm-q' + (f ? ' fini' : ''); var rst = capM(m) - q.m[m]; t.textContent = f ? '✓ Vies gagnées' : '♥ Encore ' + rst + ' série' + (rst > 1 ? 's' : '') + ' pour gagner des vies';
   });
   $('#inviteCompte').hidden = S.mode === 'compte';
   rendreBornes('#bornesAccueil', true);
