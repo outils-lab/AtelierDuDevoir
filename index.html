@@ -292,7 +292,7 @@ body{font-family:'Nunito',sans-serif;background:#F8F9FA;color:var(--texte);}
 <!-- ═══════════════════════════════════════════════════════════
      LA SALLE D'ARCADE (gauche) + LE PASSAGE SECRET (droite)
      Dépend de : salle-arcade.webp, logo-salle-arcade.webp, salle-arcade.html,
-                 passage-secret.jpg, passage-secret.html
+                 passage-secret-porte.webp, logo-passage-secret.webp, passage-secret.html
      ═══════════════════════════════════════════════════════════ -->
 
 <style>
@@ -321,10 +321,10 @@ body{font-family:'Nunito',sans-serif;background:#F8F9FA;color:var(--texte);}
 
 /* Le passage secret */
 .porte-passage:hover{box-shadow:0 10px 28px rgba(234,179,8,.22);border-color:#facc15;}
-.ps-titre{font-family:'Nunito',sans-serif;font-weight:800;font-size:clamp(1.3rem,2.8vw,2rem);
-  color:#1e293b;line-height:1.15;margin-top:6px;}
-.ps-titre em{font-style:normal;color:#ca8a04;}
-.porte-passage .porte-img img{object-fit:contain;}
+.passage-logo{display:block;width:min(86%,360px);height:auto;margin:0 auto -6px;
+  filter:drop-shadow(0 3px 6px rgba(0,0,0,.15));transition:transform .18s;}
+.porte-passage:hover .passage-logo{transform:scale(1.04) rotate(-1.5deg);}
+.porte-passage .porte-img img{object-fit:contain;max-height:330px;}
 .porte-passage .porte-cta{background:#facc15;color:#422006;}
 
 @media (max-width:700px){
@@ -351,10 +351,10 @@ body{font-family:'Nunito',sans-serif;background:#F8F9FA;color:var(--texte);}
 
   <a class="porte porte-passage" href="passage-secret.html">
     <div class="porte-haut">
-      <div class="ps-titre">Le <em>passage secret</em></div>
+      <img class="passage-logo" src="logo-passage-secret.webp" alt="Le passage secret">
     </div>
     <div class="porte-img">
-      <img src="passage-secret.jpg" alt="Deux enfants courent vers une porte entrouverte que leur père tient ouverte">
+      <img src="passage-secret-porte.webp" alt="Deux enfants courent vers une porte entrouverte que leur père tient ouverte">
     </div>
     <div class="porte-bas">
       <div class="porte-sous">Des leçons rien que pour vous, préparées à la maison.</div>
