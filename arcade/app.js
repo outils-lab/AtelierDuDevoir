@@ -399,7 +399,8 @@ function repondre(val, btn){
     if(!it._re && SE.q.length < SE.N + 5){ var copie = Object.assign({}, it, {_re:true}); SE.q.push(copie); }
     var rep = it.t === 'num' ? ARC.fmt(it.a) : it.t === 'dict' ? esc(it.a) : esc(strip(String(it.prefix ? it.prefix+' ' : '')+it.a));
     var pq = it.t === 'dict' ? diff(val, it.a) : ARC.bulles(it.e || '');
-    fb.className = 'fb'; fb.innerHTML = '<div class="lab">La bonne réponse</div><div class="rep">'+rep+'</div>'+(pq ? '<div class="lab">Pourquoi ?</div><div class="pq">'+pq+'</div>' : '')+'<button class="gros-btn b-bleu" id="continuer">Continuer</button>';
+    var rf = it.t === 'dict' ? fichesDictee(val, it.a) : []; SE.erreurs[SE.erreurs.length-1].fiches = rf;
+    fb.className = 'fb'; fb.innerHTML = '<div class="lab">La bonne réponse</div><div class="rep">'+rep+'</div>'+(pq ? '<div class="lab">Pourquoi ?</div><div class="pq">'+pq+'</div>' : '')+renvoiFiches(rf)+'<button class="gros-btn b-bleu" id="continuer">Continuer</button>';
   }
   fb.hidden = false; $('#continuer').onclick = suivante;
   setTimeout(function(){ fb.scrollIntoView({block:'nearest', behavior:'smooth'}); }, 150);
@@ -408,6 +409,68 @@ function diff(donne, attendu){
   var a = attendu.split(' '), d = normD(donne).split(' ');
   var html = a.map(function(w, i){ return normD(w) === (d[i]||'') || normD(w) === normD(d[i]||'') ? esc(w) : '<span class="faux">'+esc(w)+'</span>'; }).join(' ');
   return 'Tu as écrit : « '+esc(donne)+' ».<br>Les mots soulignés sont à revoir : '+html;
+}
+/* ═══ Dictée : des fautes vers les fiches de leçon ═══ */
+var FAM_HOMO = [
+  [['a','à'], ['O09']], [['est','et'], ['O10']], [['on','ont'], ['O11']], [['son','sont'], ['O12']],
+  [['ces','ses',"c'est","s'est"], ['O301']], [['leur','leurs'], ['O302']], [['ou','où'], ['O303']],
+  [['mais','mes'], ['O304']], [['quand','quant',"qu'en"], ['O305']],
+  [['tout','tous','toute','toutes'], ['O403']], [['quel','quels','quelle','quelles',"qu'elle","qu'elles"], ['O404']]
+];
+function motsD(s){ return normD(s).replace(/[,.?!;:«»"]/g,' ').split(/\s+/).filter(Boolean); }
+function aligner(d, a){
+  var n = d.length, m = a.length, L = [], i, j;
+  for(i = 0; i <= n; i++){ L.push([]); for(j = 0; j <= m; j++) L[i].push(0); }
+  for(i = n-1; i >= 0; i--) for(j = m-1; j >= 0; j--) L[i][j] = d[i] === a[j] ? L[i+1][j+1]+1 : Math.max(L[i+1][j], L[i][j+1]);
+  var paires = [], bd = [], ba = []; i = 0; j = 0;
+  function vider(){ for(var k = 0; k < Math.max(bd.length, ba.length); k++) paires.push([bd[k] || '', ba[k] || '']); bd = []; ba = []; }
+  while(i < n && j < m){
+    if(d[i] === a[j]){ vider(); i++; j++; }
+    else if(L[i+1][j] >= L[i][j+1]) bd.push(d[i++]); else ba.push(a[j++]);
+  }
+  while(i < n) bd.push(d[i++]); while(j < m) ba.push(a[j++]); vider();
+  return paires;
+}
+function sansDouble(s){ return s.replace(/([bcdfglmnprst])\1/g, '$1'); }
+function fichesFaute(g, w){
+  var K = S.K, out = [];
+  if(!w) return out;
+  FAM_HOMO.forEach(function(f){ if(f[0].indexOf(w) >= 0 && (!g || f[0].indexOf(g) >= 0 || g.length <= 6)) out = out.concat(f[1]); });
+  if(out.length) return out;
+  if(!g) return out;
+  var fin = /(é|ée|és|ées|er|ez|ai|ait|aient)$/, rw = w.replace(fin, ''), rg = g.replace(fin, '');
+  if(fin.test(w) && fin.test(g) && rw === rg){
+    if(/^(é|ée|és|ées)$/.test(w.slice(rw.length)) && /^(é|ée|és|ées)$/.test(g.slice(rg.length))) return K >= 4 ? ['C308','C309'] : ['O309'];
+    return K >= 3 ? ['O309'] : ['C01'];
+  }
+  if(w === g + 'nt' || w === g + 'ent' || (/nt$/.test(w) && g === w.slice(0,-2))) return K >= 4 ? ['O307','G15'] : ['G15'];
+  if(w === g + 's' || w === g + 'x' || g === w + 's' || g === w + 'x') return K <= 0 ? ['O02'] : K <= 4 ? ['G11','O02'] : ['O401','G11'];
+  if(w === g + 'e' || w === g + 'es' || g === w + 'e') return K <= 1 ? ['O01','O03'] : K <= 4 ? ['O306','G11'] : ['O401','O306'];
+  if(sansAcc(w) === sansAcc(g)) return [];
+  if(sansDouble(w) === sansDouble(g)) return ['O308'];
+  var sx = function(s){ return s.replace(/ç/g,'s').replace(/ss/g,'s').replace(/c(?=[eiy])/g,'s'); };
+  if(sx(w) === sx(g)) return ['O04','O05'];
+  var gx = function(s){ return s.replace(/ge(?=[aou])/g,'j').replace(/g(?=[eiy])/g,'j').replace(/gu(?=[eiy])/g,'g'); };
+  if(gx(w) === gx(g)) return ['O07'];
+  var kx = function(s){ return s.replace(/qu/g,'k').replace(/c(?=[aou]|$|[^eiyh])/g,'k'); };
+  if(kx(w) === kx(g)) return ['O06'];
+  if(w.length > g.length && w.indexOf(g) === 0 && /^[tdspxe]$/.test(w.slice(g.length))) return ['O08'];
+  return [];
+}
+function fichesDictee(donne, attendu){
+  var vus = {}, res = [];
+  aligner(motsD(donne), motsD(attendu)).forEach(function(p){
+    var c = fichesFaute(p[0], p[1]).filter(function(c){ var f = S.catalogue[c]; return f && f.disponible !== false && f.fichier; })[0];
+    if(c && !vus[c]){ vus[c] = 1; res.push(c); }
+  });
+  return res.slice(0, 3);
+}
+function renvoiFiches(codes){
+  if(!codes || !codes.length) return '';
+  return '<div class="renvoi"><div class="lab">Tu veux réviser cette notion ?</div>' + codes.map(function(c){
+    var f = S.catalogue[c];
+    return '<a class="renvoi-fiche" href="'+esc(f.fichier)+'" target="_blank" rel="noopener">📖 '+esc(f.titre)+' <small>('+esc(f.niveau)+')</small><span>Ouvrir la fiche →</span></a>';
+  }).join('') + '</div>';
 }
 function maj(it, ok){
   var s = st(it.notion), j = jourNum();
@@ -469,6 +532,8 @@ function finir(){
     var qq = it.t === 'dict' ? 'Dictée' : esc(strip(sansBulles(it.q)).replace('{?}','?').slice(0,120));
     return '<div class="err"><div class="q">'+qq+'</div><span class="r">'+rep+'</span></div>';
   }).join('') : '';
+  var codesR = []; errs.forEach(function(x){ (x.fiches || []).forEach(function(c){ if(codesR.indexOf(c) < 0) codesR.push(c); }); });
+  if(codesR.length) $('#erreurs').innerHTML += renvoiFiches(codesR.slice(0, 3));
   show('resultat');
   SE.fini = true;
 }

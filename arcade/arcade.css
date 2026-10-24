@@ -322,3 +322,10 @@ body.mode-nuit .rond{background:#161d45;border-color:#2a3459;color:#cfd6f5}
 .gros-btn,.gover h3{font-family:var(--titre);font-weight:400;letter-spacing:1px;text-transform:uppercase}
 .nuit .btn{font-family:var(--titre);font-weight:400;letter-spacing:1px;text-transform:uppercase}
 .nuit .btn small{text-transform:none;letter-spacing:0}
+
+/* Dictée : renvoi vers les fiches selon les fautes */
+.renvoi{display:flex;flex-direction:column;gap:6px;margin-top:4px}
+.renvoi-fiche{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;background:#fff8eb;border:2.5px solid var(--orange);border-radius:14px;padding:9px 12px;color:#7a4a00;text-decoration:none;font-weight:800;font-size:.98rem}
+.renvoi-fiche small{font-weight:700;opacity:.75}
+.renvoi-fiche span{margin-left:auto;font-family:var(--display);color:var(--orange);white-space:nowrap}
+.renvoi-fiche:hover{background:#fff1d6}
