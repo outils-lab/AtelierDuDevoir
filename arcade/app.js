@@ -146,7 +146,23 @@ async function ecrire(){
 window.addEventListener('pagehide', function(){ if(tSave){ clearTimeout(tSave); ecrire(); } });
 
 /* ═══ Accueil ═══ */
-function quota(){ var j = jourStr(); if(D.jour.d !== j) D.jour = {d:j, r:0, rd:0}; if(D.jour.rd == null) D.jour.rd = 0; return D.jour; }
+var MATS = ['maths','fr','dictee'], NOMS_M = {maths:'Maths', fr:'Français', dictee:'Dictée'};
+function quota(){
+  var j = jourStr();
+  if(D.jour.d !== j) D.jour = {d:j, m:{maths:0, fr:0, dictee:0}};
+  if(!D.jour.m) D.jour.m = {maths:0, fr:0, dictee:D.jour.rd || 0};
+  MATS.forEach(function(m){ if(D.jour.m[m] == null) D.jour.m[m] = 0; });
+  return D.jour;
+}
+function capM(m){ return m === 'dictee' ? S.capDictee : S.cap; }
+function finiM(m){ return quota().m[m] >= capM(m); }
+function toutFini(){ return MATS.every(finiM); }
+function listeOu(l){ return l.length <= 1 ? l.join('') : l.slice(0,-1).join(', ')+' ou '+l[l.length-1]; }
+function msgPlafond(m){
+  if(toutFini()) return '<div class="gros-msg fini">🌙 <b>Bravo, tu as gagné toutes tes vies pour aujourd\'hui !</b><br>Reviens demain pour en gagner de nouvelles. Tu peux continuer à t\'entraîner si tu veux.</div>';
+  var autres = MATS.filter(function(x){ return !finiM(x); }).map(function(x){ return NOMS_M[x]; });
+  return '<div class="gros-msg">⭐ <b>Tu as gagné toutes tes vies en '+NOMS_M[m]+' aujourd\'hui !</b><br>Si tu veux gagner d\'autres vies, tente ta chance en '+listeOu(autres)+'.</div>';
+}
 function accueil(){
   SE = null; S.vies = 0;
   var q = quota(), aRevoir = Object.keys(D.items).filter(function(k){ return D.items[k].due <= jourNum(); }).length;
@@ -155,9 +171,16 @@ function accueil(){
   if(aRevoir) msg += ' J\'ai gardé <b>'+aRevoir+' question'+(aRevoir>1?'s':'')+'</b> à revoir pour toi aujourd\'hui.';
   $('#ugoAccueil').innerHTML = msg;
   var qz = $('#quota');
-  if(q.r >= S.cap){ qz.className = 'quota fini'; qz.innerHTML = 'Tu as gagné toutes tes vies pour aujourd\'hui (<b>'+S.cap+'/'+S.cap+'</b>). Tu peux continuer à t\'entraîner !'; }
-  else { qz.className = 'quota'; qz.innerHTML = 'Séries qui donnent des vies aujourd\'hui : <b>'+q.r+'/'+S.cap+'</b>'; }
-  qz.innerHTML += '<br><span style="font-size:.88em">Dictées qui donnent des vies : <b>'+Math.min(q.rd, S.capDictee)+'/'+S.capDictee+'</b> · 1 phrase sans faute = 1 vie, les 2 = 3 vies !</span>';
+  if(toutFini()){ qz.className = 'quota'; qz.innerHTML = msgPlafond('fr'); }
+  else {
+    qz.className = 'quota';
+    qz.innerHTML = 'Séries qui donnent des vies aujourd\'hui : ' + MATS.map(function(m){ var f = finiM(m); return NOMS_M[m]+' <b class="'+(f ? 'q-fini' : '')+'">'+Math.min(q.m[m], capM(m))+'/'+capM(m)+(f ? ' ✓' : '')+'</b>'; }).join(' · ')
+      + '<br><span style="font-size:.88em">Dictée : 1 phrase sans faute = 1 vie, les 2 = 3 vies !</span>';
+  }
+  document.querySelectorAll('#s-accueil [data-m]').forEach(function(b){
+    var m = b.dataset.m, t = b.querySelector('.m-q'); if(!t){ t = document.createElement('span'); t.className = 'm-q'; b.appendChild(t); }
+    var f = finiM(m); t.className = 'm-q' + (f ? ' fini' : ''); var rst = capM(m) - q.m[m]; t.textContent = f ? '✓ Vies gagnées' : '♥ Encore ' + rst + ' série' + (rst > 1 ? 's' : '') + ' à vies';
+  });
   $('#inviteCompte').hidden = S.mode === 'compte';
   rendreBornes('#bornesAccueil', true);
   show('accueil');
@@ -500,9 +523,9 @@ function finir(){
   var total = SE.N, sc = SE.score, ratio = sc / total;
   var dic = SE.m === 'dictee', q = quota();
   var vies = dic ? (sc >= 2 ? 3 : sc === 1 ? 1 : 0) : (ratio >= 0.9 ? 2 : ratio >= 0.7 ? 1 : 0);
-  var plafond = dic ? q.rd >= S.capDictee : q.r >= S.cap;
+  var plafond = finiM(SE.m);
   if(vies && plafond) vies = 0;
-  if(vies){ if(dic) q.rd++; else q.r++; }
+  if(vies) q.m[SE.m]++;
   D.log.push({d:jourStr(), m:SE.m, s:sc, n:total});
   sauver();
   $('#tampon').innerHTML = sc+'<small>sur '+total+'</small>';
@@ -517,8 +540,9 @@ function finir(){
   if(vies){
     rc.innerHTML = '<div class="recomp"><div class="coeurs">'+'♥'.repeat(vies)+'</div><div><b>Tu gagnes '+vies+' vie'+(vies>1?'s':'')+' !</b><br><span style="opacity:.8">À jouer tout de suite dans la salle d\'arcade.</span></div><button class="gros-btn b-jaune" id="allerJouer">Choisir mon jeu →</button></div>';
     $('#allerJouer').onclick = function(){ salle(vies); };
+    if(finiM(SE.m)) rc.insertAdjacentHTML('beforeend', msgPlafond(SE.m));
   } else if(plafond && (dic ? sc >= 1 : ratio >= 0.7)){
-    rc.innerHTML = '<div class="recomp rien">Tu as déjà gagné tes vies aujourd\'hui ('+(dic ? S.capDictee+' dictées' : S.cap+' séries')+'). Tu peux continuer à t\'entraîner : reviens demain pour rejouer !</div>';
+    rc.innerHTML = msgPlafond(SE.m);
   } else if(dic){
     rc.innerHTML = '<div class="recomp rien">Une phrase écrite sans faute donne une vie, les deux en donnent trois. Réécoute bien et relis-toi : retente ta chance !</div>';
   } else {
