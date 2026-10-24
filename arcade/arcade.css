@@ -329,3 +329,14 @@ body.mode-nuit .rond{background:#161d45;border-color:#2a3459;color:#cfd6f5}
 .renvoi-fiche small{font-weight:700;opacity:.75}
 .renvoi-fiche span{margin-left:auto;font-family:var(--display);color:var(--orange);white-space:nowrap}
 .renvoi-fiche:hover{background:#fff1d6}
+
+/* Vies par matière */
+.quota b.q-fini{color:var(--orange)}
+.m-q{display:inline-block;margin-top:6px;font-size:.78rem;font-weight:800;color:var(--vert);background:#ecfdf5;border-radius:999px;padding:2px 10px}
+.m-q.fini{color:#a96500;background:#fff8eb}
+.m-dictee .m-q{margin:0 0 0 8px;vertical-align:middle}
+.gros-msg{margin-top:12px;background:#fff8eb;border:3px solid var(--orange);border-radius:18px;padding:14px 16px;text-align:center;font-size:1.05rem;font-weight:700;color:#7a4a00;line-height:1.45}
+.gros-msg b{font-family:var(--titre);font-weight:400;letter-spacing:.5px;font-size:1.15rem;color:#b45309}
+.gros-msg.fini{background:#eef2ff;border-color:#6366f1;color:#3730a3}
+.gros-msg.fini b{color:#4338ca}
+.quota .gros-msg{margin-top:0}

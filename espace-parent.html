@@ -484,7 +484,7 @@ function rendreArcade(){
     + (q ? ' ('+q+' questions, '+Math.round(ok/q*100)+' % de bonnes réponses)' : '') + '</span></div>'
     + '<div class="arc-ligne arc-vert"><span class="arc-ico">&#x2705;</span><span>Points forts : '+(forts.length ? noms(forts) : 'pas encore assez de réponses')+'</span></div>'
     + '<div class="arc-ligne arc-orange"><span class="arc-ico">&#x1F536;</span><span>À travailler : '+(faibles.length ? noms(faibles) : 'rien à signaler pour l\'instant')+'</span></div>'
-    + '<div class="arc-reglage">Séries qui donnent des vies chaque jour :'
+    + '<div class="arc-reglage">Séries qui donnent des vies chaque jour, par matière (maths, français) :'
     + '<button type="button" onclick="changerCap(-1)" aria-label="Moins">−</button><b id="arc-cap">'+cap+'</b><button type="button" onclick="changerCap(1)" aria-label="Plus">+</button></div>'
     + '<div class="arc-reglage">Dictées qui donnent des vies chaque jour :'
     + '<button type="button" onclick="changerCapDictee(-1)" aria-label="Moins">−</button><b id="arc-capd">'+(arcade.dictees_max_jour != null ? arcade.dictees_max_jour : 5)+'</b><button type="button" onclick="changerCapDictee(1)" aria-label="Plus">+</button></div>';
@@ -502,7 +502,7 @@ async function changerCap(d){
   var cap = Math.max(0, Math.min(10, (arcade.series_max_jour != null ? arcade.series_max_jour : 3) + d));
   arcade.series_max_jour = cap; document.getElementById('arc-cap').textContent = cap;
   var r = await sb.from('arcade_profils').upsert({enfant_id: enfantSel, series_max_jour: cap}, {onConflict:'enfant_id'});
-  if(r.error) msg("Réglage non enregistré : "+r.error.message, 'err'); else msg('Réglage enregistré : '+cap+' série'+(cap>1?'s':'')+' par jour.', 'ok');
+  if(r.error) msg("Réglage non enregistré : "+r.error.message, 'err'); else msg('Réglage enregistré : '+cap+' série'+(cap>1?'s':'')+' par jour et par matière.', 'ok');
 }
 
 function carteStat(cls, val, lib){
