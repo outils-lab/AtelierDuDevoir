@@ -24,7 +24,7 @@ var JEUX_LISTE = [
   {id:'ugo', nom:'Ugo', seuil:15, c1:'#f59e0b', c2:'#92400e', unite:'essai'}
 ];
 var sb = null;
-var S = {mode:'decouverte', enfant:null, K:4, cap:3, fichesOk:0, scores:{}, tableOk:false, vies:0, catalogue:{}};
+var S = {mode:'decouverte', enfant:null, K:4, cap:3, capDictee:5, fichesOk:0, scores:{}, tableOk:false, vies:0, catalogue:{}};
 var D = nouveau();
 var SE = null;
 
@@ -67,9 +67,10 @@ async function boot(){
   if(re.error || !re.data){ try{ localStorage.removeItem(CLE_ACTIF); }catch(e){} location.href = 'ma-famille.html'; return; }
   S.mode = 'compte'; S.enfant = re.data; S.K = idx(re.data.classe);
   var local = null; try{ local = JSON.parse(localStorage.getItem('arcade_'+id) || 'null'); }catch(e){}
-  var rp = await sb.from('arcade_profils').select('donnees,series_max_jour').eq('enfant_id', id).maybeSingle();
+  var rp = await sb.from('arcade_profils').select('donnees,series_max_jour,dictees_max_jour').eq('enfant_id', id).maybeSingle();
+  if(rp.error) rp = await sb.from('arcade_profils').select('donnees,series_max_jour').eq('enfant_id', id).maybeSingle();
   if(rp.error){ S.tableOk = false; console.log('Salle d\'arcade : table arcade_profils absente, progression gardée sur cet appareil.', rp.error.message); D = Object.assign(nouveau(), local || {}); }
-  else { S.tableOk = true; D = Object.assign(nouveau(), (rp.data && rp.data.donnees) || local || {}); if(rp.data && rp.data.series_max_jour != null) S.cap = rp.data.series_max_jour; }
+  else { S.tableOk = true; D = Object.assign(nouveau(), (rp.data && rp.data.donnees) || local || {}); if(rp.data && rp.data.series_max_jour != null) S.cap = rp.data.series_max_jour; if(rp.data && rp.data.dictees_max_jour != null) S.capDictee = rp.data.dictees_max_jour; }
   var pr = await sb.from('progression').select('*').eq('enfant_id', id).order('fait_le', {ascending:false});
   var lignes = pr.error ? [] : (pr.data || []);
   lignes.forEach(function(l){
@@ -145,7 +146,7 @@ async function ecrire(){
 window.addEventListener('pagehide', function(){ if(tSave){ clearTimeout(tSave); ecrire(); } });
 
 /* ═══ Accueil ═══ */
-function quota(){ var j = jourStr(); if(D.jour.d !== j) D.jour = {d:j, r:0}; return D.jour; }
+function quota(){ var j = jourStr(); if(D.jour.d !== j) D.jour = {d:j, r:0, rd:0}; if(D.jour.rd == null) D.jour.rd = 0; return D.jour; }
 function accueil(){
   SE = null; S.vies = 0;
   var q = quota(), aRevoir = Object.keys(D.items).filter(function(k){ return D.items[k].due <= jourNum(); }).length;
@@ -156,6 +157,7 @@ function accueil(){
   var qz = $('#quota');
   if(q.r >= S.cap){ qz.className = 'quota fini'; qz.innerHTML = 'Tu as gagné toutes tes vies pour aujourd\'hui (<b>'+S.cap+'/'+S.cap+'</b>). Tu peux continuer à t\'entraîner !'; }
   else { qz.className = 'quota'; qz.innerHTML = 'Séries qui donnent des vies aujourd\'hui : <b>'+q.r+'/'+S.cap+'</b>'; }
+  qz.innerHTML += '<br><span style="font-size:.88em">Dictées qui donnent des vies : <b>'+Math.min(q.rd, S.capDictee)+'/'+S.capDictee+'</b> · 1 phrase sans faute = 1 vie, les 2 = 3 vies !</span>';
   $('#inviteCompte').hidden = S.mode === 'compte';
   rendreBornes('#bornesAccueil', true);
   show('accueil');
@@ -253,7 +255,7 @@ function tirer(liste, poidsF){
   var r = Math.random() * tot; for(var i=0;i<liste.length;i++){ r -= ws[i]; if(r <= 0) return liste[i]; } return liste[liste.length-1];
 }
 function construire(m){
-  var petit = S.K <= 1, N = m === 'dictee' ? (S.K <= 2 ? 10 : 6) : 10, items = [], vus = {}, parNotion = {};
+  var petit = S.K <= 1, N = m === 'dictee' ? 2 : 10, items = [], vus = {}, parNotion = {};
   function ajouter(it){ if(!it || vus[it.key]) return false; vus[it.key] = 1; items.push(it); parNotion[it.notion] = (parNotion[it.notion]||0) + 1; return true; }
   var dues = Object.keys(D.items).filter(function(k){ var r = D.items[k]; return r.m === m && r.due <= jourNum(); }).sort(function(a,b){ return D.items[a].due - D.items[b].due; });
   for(var i=0; i<dues.length && items.length < Math.min(4, N-3); i++){
@@ -299,7 +301,7 @@ function afficher(){
   var h = it.vis || '', q = sansBulles(it.q || '');
   if(it.t === 'num'){ h += '<div class="'+(q.length < 40 ? 'qn' : '')+'">'+(q.indexOf('{?}') >= 0 ? q.replace('{?}', slotHtml(it)) : q+'<br>'+slotHtml(it))+'</div>'; }
   else if(it.t === 'text'){ h += /class="blank"/.test(q) ? q.replace(/<span class="blank">\?<\/span>/, slotHtml(it)) : q + '<div>' + slotHtml(it) + '</div>'; }
-  else if(it.t === 'dict'){ h += '<div class="dict-zone"><div class="muted">Écoute bien, puis écris '+(/\s/.test(it.a) ? 'la phrase' : 'le mot')+'.</div><div class="dict-btns"><button id="dEcoute">🔊 Écouter</button><button id="dLent">🐢 Lentement</button></div>'+slotHtml(it)+'</div>'; }
+  else if(it.t === 'dict'){ h += '<div class="dict-zone"><div class="muted">Écoute bien, puis écris '+(/\s/.test(it.a) ? 'la phrase' : 'le mot')+'.<br><b>Sans faute = 1 vie · les 2 justes = 3 vies !</b></div><div class="dict-btns"><button id="dEcoute">🔊 Écouter</button><button id="dLent">🐢 Lentement</button></div>'+slotHtml(it)+'</div>'; }
   else h += '<div class="'+(q.length < 30 && !/<div|<br/.test(q) ? 'qn' : '')+'">'+q+'</div>';
   $('#qcontenu').innerHTML = h;
   $('#compte').textContent = (Math.min(SE.faites+1, SE.N))+'/'+SE.N;
@@ -433,9 +435,11 @@ $('#quitSerie').onclick = function(){
 /* ═══ Fin de série ═══ */
 function finir(){
   var total = SE.N, sc = SE.score, ratio = sc / total;
-  var vies = ratio >= 0.9 ? 2 : ratio >= 0.7 ? 1 : 0, q = quota(), plafond = q.r >= S.cap;
+  var dic = SE.m === 'dictee', q = quota();
+  var vies = dic ? (sc >= 2 ? 3 : sc === 1 ? 1 : 0) : (ratio >= 0.9 ? 2 : ratio >= 0.7 ? 1 : 0);
+  var plafond = dic ? q.rd >= S.capDictee : q.r >= S.cap;
   if(vies && plafond) vies = 0;
-  if(vies) q.r++;
+  if(vies){ if(dic) q.rd++; else q.r++; }
   D.log.push({d:jourStr(), m:SE.m, s:sc, n:total});
   sauver();
   $('#tampon').innerHTML = sc+'<small>sur '+total+'</small>';
@@ -450,8 +454,10 @@ function finir(){
   if(vies){
     rc.innerHTML = '<div class="recomp"><div class="coeurs">'+'♥'.repeat(vies)+'</div><div><b>Tu gagnes '+vies+' vie'+(vies>1?'s':'')+' !</b><br><span style="opacity:.8">À jouer tout de suite dans la salle d\'arcade.</span></div><button class="gros-btn b-jaune" id="allerJouer">Choisir mon jeu →</button></div>';
     $('#allerJouer').onclick = function(){ salle(vies); };
-  } else if(plafond && ratio >= 0.7){
-    rc.innerHTML = '<div class="recomp rien">Tu as déjà gagné tes vies aujourd\'hui ('+S.cap+' séries). Tu peux continuer à t\'entraîner : reviens demain pour rejouer !</div>';
+  } else if(plafond && (dic ? sc >= 1 : ratio >= 0.7)){
+    rc.innerHTML = '<div class="recomp rien">Tu as déjà gagné tes vies aujourd\'hui ('+(dic ? S.capDictee+' dictées' : S.cap+' séries')+'). Tu peux continuer à t\'entraîner : reviens demain pour rejouer !</div>';
+  } else if(dic){
+    rc.innerHTML = '<div class="recomp rien">Une phrase écrite sans faute donne une vie, les deux en donnent trois. Réécoute bien et relis-toi : retente ta chance !</div>';
   } else {
     rc.innerHTML = '<div class="recomp rien">'+(total === 10 ? '7 bonnes réponses sur 10' : Math.ceil(total*0.7)+' bonnes réponses sur '+total)+' donnent une vie, '+(total === 10 ? '9' : Math.ceil(total*0.9))+' en donnent deux. Retente ta chance !</div>';
   }

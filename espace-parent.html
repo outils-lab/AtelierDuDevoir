@@ -318,7 +318,8 @@ async function chargerEnfant(){
   progression = rp.error ? [] : (rp.data || []);
   var ra = await sb.from('assignations').select('*').eq('enfant_id', enfantSel).order('assigne_le', {ascending:false});
   assignations = ra.error ? [] : (ra.data || []);
-  var rx = await sb.from('arcade_profils').select('donnees,series_max_jour').eq('enfant_id', enfantSel).maybeSingle();
+  var rx = await sb.from('arcade_profils').select('donnees,series_max_jour,dictees_max_jour').eq('enfant_id', enfantSel).maybeSingle();
+  if(rx.error) rx = await sb.from('arcade_profils').select('donnees,series_max_jour').eq('enfant_id', enfantSel).maybeSingle();
   arcade = rx.error ? {absente:true} : (rx.data || {donnees:null, series_max_jour:3});
   rendre();
   rendreArcade();
@@ -484,7 +485,17 @@ function rendreArcade(){
     + '<div class="arc-ligne arc-vert"><span class="arc-ico">&#x2705;</span><span>Points forts : '+(forts.length ? noms(forts) : 'pas encore assez de réponses')+'</span></div>'
     + '<div class="arc-ligne arc-orange"><span class="arc-ico">&#x1F536;</span><span>À travailler : '+(faibles.length ? noms(faibles) : 'rien à signaler pour l\'instant')+'</span></div>'
     + '<div class="arc-reglage">Séries qui donnent des vies chaque jour :'
-    + '<button type="button" onclick="changerCap(-1)" aria-label="Moins">−</button><b id="arc-cap">'+cap+'</b><button type="button" onclick="changerCap(1)" aria-label="Plus">+</button></div>';
+    + '<button type="button" onclick="changerCap(-1)" aria-label="Moins">−</button><b id="arc-cap">'+cap+'</b><button type="button" onclick="changerCap(1)" aria-label="Plus">+</button></div>'
+    + '<div class="arc-reglage">Dictées qui donnent des vies chaque jour :'
+    + '<button type="button" onclick="changerCapDictee(-1)" aria-label="Moins">−</button><b id="arc-capd">'+(arcade.dictees_max_jour != null ? arcade.dictees_max_jour : 5)+'</b><button type="button" onclick="changerCapDictee(1)" aria-label="Plus">+</button></div>';
+}
+async function changerCapDictee(d){
+  if(!arcade || arcade.absente) return;
+  var cap = Math.max(0, Math.min(15, (arcade.dictees_max_jour != null ? arcade.dictees_max_jour : 5) + d));
+  arcade.dictees_max_jour = cap; document.getElementById('arc-capd').textContent = cap;
+  var r = await sb.from('arcade_profils').upsert({enfant_id: enfantSel, dictees_max_jour: cap}, {onConflict:'enfant_id'});
+  if(r.error) msg("Réglage non enregistré : lance d'abord la mise à jour Supabase de la salle d'arcade (colonne dictees_max_jour).", 'err');
+  else msg('Réglage enregistré : '+cap+' dictée'+(cap>1?'s':'')+' par jour.', 'ok');
 }
 async function changerCap(d){
   if(!arcade || arcade.absente) return;
