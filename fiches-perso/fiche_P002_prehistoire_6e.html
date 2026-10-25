@@ -1,0 +1,725 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="../favicon.ico" sizes="any">
+<title>La Préhistoire — Le passage secret</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6efe3; --paper:#fffaf2; --ink:#2b2118; --muted:#7a6a58; --line:#e3d5bf;
+  --ochre:#c1662b; --ochre-l:#fbe9dc; --char:#3b2a1a; --moss:#3f7d4e; --moss-l:#e5f3e8;
+  --red:#b3392c; --red-l:#fbe6e3; --gold:#c9961f; --gold-l:#fdf3d8; --blue:#2f6aa8; --blue-l:#e6eff9;
+}
+*{box-sizing:border-box}
+:root{color-scheme:light}
+.retour{display:inline-block;color:#e8c9a6;text-decoration:none;font-weight:800;font-size:15px;padding:0 0 8px}
+#atelier-progression-box{margin-top:14px}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Nunito,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:17px;line-height:1.5}
+header{background:var(--char);color:#fff;padding:14px 16px 0}
+header .top{max-width:860px;margin:0 auto}
+header small{color:#e8c9a6;letter-spacing:.05em;text-transform:uppercase;font-size:12px}
+header h1{margin:2px 0 10px;font-size:24px}
+nav{max-width:860px;margin:0 auto;display:flex;gap:6px;overflow-x:auto}
+nav button{flex:1;min-width:110px;border:0;border-radius:10px 10px 0 0;padding:10px 8px;font:inherit;font-weight:700;font-size:15px;cursor:pointer;background:#5a4430;color:#f3e3cf}
+nav button.on{background:var(--bg);color:var(--char)}
+main{max-width:860px;margin:0 auto;padding:16px 16px 140px}
+h2{font-size:21px;margin:22px 0 8px;color:var(--char)}
+.part{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:14px 0}
+.part h3{margin:0 0 8px;font-size:18px;color:var(--ochre)}
+.part ul{margin:6px 0;padding-left:20px}
+.part li{margin:3px 0}
+.def{background:var(--ochre-l);border-left:5px solid var(--ochre);border-radius:8px;padding:8px 10px;margin:8px 0}
+.warn{background:var(--red-l);border-left:5px solid var(--red);border-radius:8px;padding:8px 10px;margin:8px 0}
+.tip{background:var(--gold-l);border-left:5px solid var(--gold);border-radius:8px;padding:8px 10px;margin:8px 0}
+.k{font-weight:700;color:var(--char)}
+body.mem .k{color:transparent;background:#e9dcc6;border-radius:4px;cursor:pointer;user-select:none}
+body.mem .k.show{color:var(--moss);background:var(--moss-l)}
+.memctl{position:sticky;top:0;z-index:5;background:var(--bg);padding:8px 0;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.btn{border:0;border-radius:10px;padding:10px 14px;font:inherit;font-weight:700;cursor:pointer;background:var(--char);color:#fff}
+.btn.alt{background:#fff;color:var(--char);border:2px solid var(--char)}
+.btn.ok{background:var(--moss)}
+.btn:disabled{opacity:.45;cursor:default}
+.done-btn{margin-top:8px}
+.done-btn.on{background:var(--moss)}
+/* frise */
+.frise{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;align-items:center;margin-top:6px}
+.frise .d{font-weight:800;font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+.frise .e{padding:4px 8px;border-radius:6px}
+.frise .pa{background:var(--ochre-l)}
+.frise .ne{background:var(--moss-l)}
+.frise .sep{grid-column:1/-1;font-weight:800;font-size:13px;letter-spacing:.06em;text-transform:uppercase;margin-top:6px}
+/* exercices */
+.intro{background:var(--paper);border:2px solid var(--char);border-radius:14px;padding:12px 14px}
+.prog{height:10px;background:#e7dbc8;border-radius:6px;overflow:hidden;margin:10px 0}
+.prog i{display:block;height:100%;background:var(--ochre);width:0;transition:width .3s}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin:10px 0}
+.card .n{font-size:12px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.card .q{font-weight:600;margin:4px 0 8px}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opt{border:2px solid var(--line);background:#fff;border-radius:10px;padding:8px 12px;font:inherit;cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--ochre)}
+.opt.good{border-color:var(--moss);background:var(--moss-l)}
+.opt.bad{border-color:var(--red);background:var(--red-l)}
+.opt.sel{border-color:var(--char);background:#efe3d0}
+input[type=text],textarea{font:inherit;padding:8px 10px;border:2px solid var(--line);border-radius:10px;background:#fff;width:100%;max-width:340px}
+textarea{max-width:100%;min-height:70px;resize:vertical}
+input.blank{width:auto;min-width:90px;max-width:170px;padding:3px 6px;margin:2px 2px;display:inline-block}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.hint{font-size:14px;color:var(--blue);background:var(--blue-l);border-radius:6px;padding:2px 8px;display:inline-block;margin-bottom:6px}
+.fb{margin-top:8px;border-radius:8px;padding:7px 10px;font-size:15px}
+.fb.ok{background:var(--moss-l);color:#1f5131}
+.fb.mid{background:var(--gold-l);color:#6b4e08}
+.fb.ko{background:var(--red-l);color:#7d241a}
+.seq{min-height:38px;border:2px dashed var(--line);border-radius:10px;padding:6px;margin:8px 0;display:flex;flex-wrap:wrap;gap:6px}
+.seq span{background:var(--char);color:#fff;border-radius:8px;padding:4px 10px}
+.sort{display:grid;grid-template-columns:1fr auto auto;gap:6px 8px;align-items:center}
+.sort .opt{padding:5px 10px;font-size:14px}
+.result{border-radius:14px;padding:16px;margin:18px 0;text-align:center}
+.result.ok{background:var(--moss-l);border:2px solid var(--moss)}
+.result.ko{background:var(--red-l);border:2px solid var(--red)}
+.result .big{font-size:40px;font-weight:900}
+.notes{position:fixed;left:0;right:0;bottom:0;background:var(--char);color:#fff;z-index:20;box-shadow:0 -4px 14px rgba(0,0,0,.2)}
+.notes .in{max-width:860px;margin:0 auto;padding:8px 16px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.notes .box{background:#4b3826;border-radius:10px;padding:6px 10px}
+.notes .lab{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:#e8c9a6}
+.notes .val{font-size:18px;font-weight:800}
+.notes .ver{font-size:13px}
+.notes .ver.ok{color:#9fe0ae}.notes .ver.ko{color:#ffb4a8}
+.hidden{display:none}
+@media (max-width:520px){
+  html,body{font-size:16px}
+  .notes .val{font-size:16px}
+  .sort{grid-template-columns:1fr auto}
+  .sort .lbl{grid-column:1/-1;margin-top:4px}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="top">
+    <a class="retour" href="../passage-secret.html">← Retour au passage secret</a><br>
+    <small>🗝️ Passage secret · Raphaël · 6e · Histoire, chapitre 1</small>
+    <h1>La Préhistoire</h1>
+  </div>
+  <nav>
+    <button data-tab="lecon" class="on">1 · La leçon</button>
+    <button data-tab="aide">2 · Avec aide</button>
+    <button data-tab="sans">3 · Sans aide</button>
+  </nav>
+</header>
+
+<main>
+<!-- ================= LEÇON ================= -->
+<section id="tab-lecon">
+  <div class="memctl">
+    <button class="btn" id="memBtn">Mode mémoire : cacher les mots-clés</button>
+    <span id="memInfo" class="hidden" style="font-size:14px;color:var(--muted)">Dis le mot à voix haute, puis touche la case pour vérifier.</span>
+  </div>
+
+  <div class="part" data-part="intro">
+    <h3>Introduction</h3>
+    <div class="def"><b>La Préhistoire</b> : longue <span class="k">période</span> qui commence avec l'<span class="k">apparition</span> des premiers <span class="k">hominidés</span> et se termine avec l'<span class="k">invention</span> de l'<span class="k">écriture</span>.</div>
+    <p>Elle se divise en <span class="k">deux</span> époques : le <span class="k">Paléolithique</span> puis le <span class="k">Néolithique</span>.</p>
+    <div class="tip"><b>Grande question :</b> comment, au cours de cette longue évolution, a-t-on abouti au peuplement de toute la Terre ?</div>
+    <h3 style="margin-top:12px">La frise à connaître</h3>
+    <div class="frise">
+      <div class="sep" style="color:var(--ochre)">Paléolithique · pierre taillée</div>
+      <div class="d"><span class="k">-7 millions</span></div><div class="e pa"><span class="k">Toumaï</span> (le plus ancien hominidé connu)</div>
+      <div class="d"><span class="k">-3 millions</span></div><div class="e pa">Les premiers hommes</div>
+      <div class="d"><span class="k">-2,4 millions</span></div><div class="e pa"><span class="k">Homo habilis</span></div>
+      <div class="d"><span class="k">-450 000</span></div><div class="e pa">Les hommes de <span class="k">Tautavel</span></div>
+      <div class="d"><span class="k">-400 000</span></div><div class="e pa">La maîtrise du <span class="k">feu</span></div>
+      <div class="d"><span class="k">-350 000</span></div><div class="e pa">L'homme de <span class="k">Néandertal</span></div>
+      <div class="d"><span class="k">-200 000</span></div><div class="e pa"><span class="k">Homo sapiens</span></div>
+      <div class="d"><span class="k">-36 000</span></div><div class="e pa">La grotte <span class="k">Chauvet</span> (peintures)</div>
+      <div class="d"><span class="k">-17 000</span></div><div class="e pa">Homo sapiens arrive en <span class="k">Amérique</span></div>
+      <div class="sep" style="color:var(--moss)">Néolithique · pierre polie</div>
+      <div class="d"><span class="k">-10 000</span></div><div class="e ne">Début du <span class="k">Néolithique</span></div>
+      <div class="d"><span class="k">-9 000</span></div><div class="e ne">Les premiers <span class="k">villages</span> (Proche-Orient)</div>
+      <div class="d"><span class="k">-8 000</span></div><div class="e ne">L'<span class="k">agriculture</span></div>
+      <div class="d"><span class="k">-6 000</span></div><div class="e ne">La <span class="k">poterie</span></div>
+      <div class="d"><span class="k">-4 000</span></div><div class="e ne">Les premiers <span class="k">métaux</span></div>
+    </div>
+    <div class="tip">Astuce : apprends les dates <b>par paires</b>. Exemple : feu -400 000 / Néandertal -350 000 (50 000 ans d'écart).</div>
+    <button class="btn alt done-btn" data-done="intro">J'ai bien compris</button>
+  </div>
+
+  <div class="part" data-part="p1">
+    <h3>1) Les premiers hominidés</h3>
+    <div class="def"><b>Les hominidés</b> : espèces <span class="k">proches</span> de l'homme <span class="k">actuel</span>, qui ont <span class="k">précédé</span> Homo <span class="k">sapiens</span> dans l'<span class="k">évolution</span>.</div>
+    <div class="def"><b>L'évolution</b> : la <span class="k">transformation</span> des espèces <span class="k">vivantes</span> durant plusieurs <span class="k">millions</span> d'années.</div>
+    <ul>
+      <li>L'évolution commence en <span class="k">Afrique</span> avec <span class="k">Toumaï</span>, il y a 7 millions d'années. Découvert dans une région <span class="k">désertique</span> du <span class="k">Tchad</span>. Il marche <span class="k">debout</span>.</li>
+      <li>D'autres espèces peuplent l'Afrique : les <span class="k">australopithèques</span>. Exemple : <b>Lucy</b>, découverte en <span class="k">Éthiopie</span> en <span class="k">1974</span>.</li>
+      <li>Lucy : forte <span class="k">mâchoire</span>, faible capacité <span class="k">crânienne</span>. Visage : moins de <span class="k">cheveux</span>, plus petit <span class="k">nez</span>, plus grand <span class="k">front</span>.</li>
+      <li><b>Homo habilis</b> : fabrique des <span class="k">outils</span>.</li>
+      <li><b>Homo erectus</b> : maîtrise le <span class="k">feu</span> et commence à <span class="k">parler</span>.</li>
+      <li><b>L'homme de Néandertal</b> : vit en <span class="k">Europe</span> et <span class="k">enterre</span> ses morts.</li>
+      <li><b>Homo sapiens</b> : c'est <span class="k">nous</span>, le résultat de cette évolution.</li>
+    </ul>
+    <div class="warn">Attention : le plus ancien hominidé connu est <b>Toumaï</b>, pas Homo habilis.</div>
+    <div class="tip">L'ordre en 5 lettres : <b>T · H · E · N · S</b> = Toumaï, Habilis, Erectus, Néandertal, Sapiens.<br>Phrase pour retenir : « <b>T</b>om <b>H</b>abite <b>E</b>n <b>N</b>ormandie, <b>S</b>eul. »</div>
+    <button class="btn alt done-btn" data-done="p1">J'ai bien compris</button>
+  </div>
+
+  <div class="part" data-part="p2">
+    <h3>2) Le peuplement de la Terre</h3>
+    <ul>
+      <li>Homo erectus apparaît en <span class="k">Afrique</span>, dans la région des grands <span class="k">lacs</span> (lac <span class="k">Victoria</span>).</li>
+      <li>Les hommes se déplacent à <span class="k">pied</span>, par petites <span class="k">étapes</span>,</li>
+      <li>pour suivre les <span class="k">animaux</span> ou parce qu'ils sont devenus trop <span class="k">nombreux</span>.</li>
+      <li>Ils passent en Asie par le <span class="k">Sinaï</span>, peuplent l'Asie et l'<span class="k">Europe</span>, puis l'<span class="k">Océanie</span>.</li>
+      <li>Homo sapiens fait le même trajet. Il passe en <span class="k">Amérique</span> vers <span class="k">-17 000</span> par le détroit de <span class="k">Béring</span>.</li>
+      <li>Le feu donne un avantage <span class="k">décisif</span> : <span class="k">cuire</span> les aliments, <span class="k">éclairer</span>, <span class="k">chauffer</span>.</li>
+    </ul>
+    <div class="def"><b>Conclusion :</b> l'être humain est apparu en Afrique <span class="k">centrale</span>. Il a peuplé toute la <span class="k">planète</span> durant la Préhistoire.</div>
+    <button class="btn alt done-btn" data-done="p2">J'ai bien compris</button>
+  </div>
+
+  <div class="part" data-part="p3">
+    <h3>3) La vie au Paléolithique</h3>
+    <div class="def"><b>Le Paléolithique</b> : époque de la pierre <span class="k">ancienne</span>, la <span class="k">première</span> et la plus <span class="k">longue</span> période de la Préhistoire, connue pour ses pierres <span class="k">taillées</span>.</div>
+    <ul>
+      <li><b>Tautavel</b> : les hommes ne vivent pas dans la grotte, mais dans des <span class="k">tentes</span> à l'entrée.</li>
+      <li><b>Homo erectus</b> : vit dans les abris sous <span class="k">roche</span>, taille la <span class="k">pierre</span> (outils), chasse avec une <span class="k">lance</span>.</li>
+      <li><b>Homo sapiens à <span class="k">Pincevent</span></b> : campement avec tentes, feu, réserve d'eau en <span class="k">peau</span>, cadre en <span class="k">bois</span> pour sécher les peaux. Ils chassent les <span class="k">rennes</span> qui traversent la rivière.</li>
+      <li>Ce sont des <span class="k">nomades</span> : ils vivent de la <span class="k">chasse</span>, de la <span class="k">pêche</span> et de la <span class="k">cueillette</span> et suivent les troupeaux.</li>
+      <li>Armes en os et en bois : <span class="k">harpons</span>, lances. Pour pêcher : des <span class="k">hameçons</span>.</li>
+      <li>Habitat : huttes de <span class="k">branchages</span> et de peaux, faciles à déplacer, parfois des abris sous roche.</li>
+      <li>Au campement : faire du feu, préparer les aliments, <span class="k">tanner</span> les peaux, tailler la pierre.</li>
+      <li><b>L'art</b> : peintures d'animaux sur les <span class="k">parois</span> des grottes (grotte <span class="k">Chauvet</span>), <span class="k">statuettes</span>, instruments de <span class="k">musique</span>.</li>
+    </ul>
+    <div class="tip">Le Paléolithique = une très longue période d'<b>inventions</b> et de <b>progrès</b>.</div>
+    <button class="btn alt done-btn" data-done="p3">J'ai bien compris</button>
+  </div>
+
+  <div class="part" data-part="p4">
+    <h3>4) Le Néolithique : les modes de vie se transforment</h3>
+    <div class="def"><b>Le Néolithique</b> : époque de la pierre <span class="k">nouvelle</span> (pierre <span class="k">polie</span>), <span class="k">dernière</span> période de la Préhistoire, qui voit apparaître les premiers <span class="k">villages</span>, l'<span class="k">agriculture</span> et l'<span class="k">élevage</span> (à partir de -10 000).</div>
+    <ul>
+      <li>Vers <span class="k">-8 000</span>, dans le <span class="k">croissant fertile</span> au <span class="k">Moyen-Orient</span> : agriculture et élevage, premiers villages.</li>
+      <li>Les hommes deviennent <span class="k">sédentaires</span> car ils cultivent des <span class="k">céréales</span> et font du <span class="k">pain</span>.</li>
+      <li>L'agriculture arrive en Europe vers <span class="k">-4 000</span>.</li>
+    </ul>
+    <div class="def"><b>Croissant fertile</b> : région constituée de la <span class="k">Mésopotamie</span> (vallées du <span class="k">Tigre</span> et de l'<span class="k">Euphrate</span>) et de l'<span class="k">Égypte</span> (vallée du <span class="k">Nil</span>).</div>
+    <div class="def"><b>Sédentaire</b> : personne qui a un <span class="k">habitat</span> <span class="k">fixe</span>. <i>(Le contraire : <b>nomade</b>, qui se <span class="k">déplace</span> sans habitat fixe.)</i></div>
+    <p><b>Pourquoi les terres du Nil sont fertiles, en 3 étapes :</b><br>
+      1. Le fleuve a des <span class="k">crues</span> très importantes →
+      2. elles provoquent des <span class="k">inondations</span> →
+      3. l'eau laisse le <span class="k">limon</span> qui fertilise les terres.</p>
+    <div class="def"><b>Limon</b> : <span class="k">boue</span> <span class="k">fertile</span>, un <span class="k">engrais</span>.</div>
+    <div class="def"><b>Conclusion :</b> la Préhistoire a été une très longue période de <span class="k">progrès</span>.</div>
+    <button class="btn alt done-btn" data-done="p4">J'ai bien compris</button>
+  </div>
+
+  <div class="tip"><b>Comment apprendre :</b> lis une partie, active le <b>mode mémoire</b> et récite. Recommence jusqu'à ne plus avoir besoin de toucher les cases. Ensuite seulement, passe aux exercices.</div>
+</section>
+
+<!-- ================= EXERCICES ================= -->
+<section id="tab-aide" class="hidden"></section>
+<section id="tab-sans" class="hidden"></section>
+</main>
+
+<div class="notes">
+  <div class="in">
+    <div class="box"><div class="lab">Note avec aide</div><div class="val" id="nAide">—</div><div class="ver" id="vAide">Pas encore faite</div></div>
+    <div class="box"><div class="lab">Note sans aide</div><div class="val" id="nSans">—</div><div class="ver" id="vSans">Pas encore faite</div></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
+<script>
+var FICHE_CODE = "P002";
+/* ---------- Outils ---------- */
+const $ = (s, r=document) => r.querySelector(s);
+const el = (tag, attrs={}, html="") => { const e=document.createElement(tag); for(const k in attrs){ if(k==="class") e.className=attrs[k]; else e.setAttribute(k,attrs[k]); } if(html) e.innerHTML=html; return e; };
+const shuffle = a => { a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; };
+const norm = s => (s||"").toLowerCase().replace(/œ/g,"oe").normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9]+/g," ").trim();
+const lower = s => (s||"").toLowerCase().replace(/[^a-zà-ÿœ0-9]+/g," ").trim();
+function lev(a,b){ const m=a.length,n=b.length; if(!m) return n; if(!n) return m; let p=[...Array(n+1).keys()]; for(let i=1;i<=m;i++){ const c=[i]; for(let j=1;j<=n;j++) c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1)); p=c; } return p[n]; }
+const tol = n => n<=3?0 : n<=6?1 : 2;
+const store = { get(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } }, set(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} } };
+const fmt = x => (Math.round(x*100)/100).toString().replace(".",",");
+
+/* Compare une réponse tapée à la liste des réponses acceptées.
+   Retour : "exact" | "accent" | "fuzzy" | "no" */
+function matchWord(input, answers){
+  const ni = norm(input), li = lower(input), toks = ni.split(" ");
+  if(!ni) return "no";
+  let best = "no";
+  for(const a of answers){
+    const na = norm(a), la = lower(a);
+    if(li===la || (" "+li+" ").includes(" "+la+" ")) return "exact";
+    if(ni===na || (" "+ni+" ").includes(" "+na+" ")) best = "accent";
+    else if(best==="no"){
+      const t = tol(na.length);
+      if(t>0 && (lev(ni,na)<=t || (!na.includes(" ") && toks.some(x => lev(x,na)<=t)))) best = "fuzzy";
+    }
+  }
+  return best;
+}
+/* Cherche un mot-clé (avec variantes) dans un texte libre */
+function hasKey(text, alts){
+  const nt = " "+norm(text)+" ", toks = norm(text).split(" ");
+  for(const a of alts){
+    const na = norm(a);
+    if(nt.includes(" "+na+" ")) return true;
+    if(na.includes(" ")) continue;
+    const t = tol(na.length);
+    if(toks.some(x => (t>0 && lev(x,na)<=t) || (na.length>=5 && x.startsWith(na)))) return true;
+  }
+  return false;
+}
+/* Lit une date tapée : renvoie {val, neg} */
+function parseDate(s){
+  const raw = (s||"").toLowerCase();
+  const neg = /-|−|av|avant/.test(raw);
+  const c = raw.replace(/\s/g,"");
+  const m = c.match(/\d+([.,]\d+)?/);
+  if(!m) return null;
+  let v = parseFloat(m[0].replace(",","."));
+  if(/million/.test(raw)) v *= 1e6;
+  return {val:v, neg};
+}
+
+/* ---------- Banque de questions ---------- */
+const PARTS = {p0:"La frise et les dates", p1:"Les premiers hominidés", p2:"Le peuplement de la Terre", p3:"La vie au Paléolithique", p4:"Le Néolithique", p5:"Les définitions par cœur"};
+const D = (part,q,v,show,alt=[]) => ({part,type:"date",q,v,show,alt});
+const Wd = (part,q,a,show,d,aide) => ({part,type:"word",q,a,show,d,aide});
+
+const BANK = [
+  // --- p0 frise
+  Wd("p0","La Préhistoire se termine avec l'invention de l'…",["écriture"],"écriture",["agriculture","roue"]),
+  Wd("p0","La Préhistoire se divise en combien d'époques ? (écris un nombre)",["2","deux"],"2",["3","4"]),
+  D("p0","Toumaï, le plus ancien hominidé connu",-7e6,"-7 millions d'années"),
+  D("p0","Les premiers hommes",-3e6,"-3 millions d'années"),
+  D("p0","Homo habilis",-2.4e6,"-2,4 millions d'années"),
+  D("p0","Les hommes de Tautavel",-450000,"-450 000"),
+  D("p0","La maîtrise du feu",-400000,"-400 000"),
+  D("p0","L'homme de Néandertal",-350000,"-350 000"),
+  D("p0","Homo sapiens",-200000,"-200 000"),
+  D("p0","La grotte Chauvet",-36000,"-36 000",[-35000]),
+  D("p0","Homo sapiens arrive en Amérique",-17000,"-17 000"),
+  D("p0","Début du Néolithique",-10000,"-10 000"),
+  D("p0","Les premiers villages (Proche-Orient)",-9000,"-9 000"),
+  D("p0","Les débuts de l'agriculture",-8000,"-8 000"),
+  D("p0","La poterie",-6000,"-6 000"),
+  D("p0","Les premiers métaux",-4000,"-4 000"),
+  // --- p1 hominidés
+  Wd("p1","Le plus ancien hominidé connu s'appelle …",["Toumaï"],"Toumaï",["Lucy","Homo habilis"],"indice"),
+  Wd("p1","L'évolution qui mène à Homo sapiens commence en …",["Afrique"],"Afrique",["Europe","Asie"]),
+  Wd("p1","Toumaï a été découvert dans une région désertique du …",["Tchad"],"Tchad",["Kenya","Maroc"]),
+  Wd("p1","Toumaï marche déjà …",["debout"],"debout",["à quatre pattes","sur les mains"]),
+  Wd("p1","D'autres espèces peuplent l'Afrique : les …",["australopithèques","australopithèque"],"australopithèques",null,"indice"),
+  Wd("p1","Lucy a été découverte dans quel pays ?",["Éthiopie"],"Éthiopie",["Égypte","Tchad"]),
+  Wd("p1","Lucy a été découverte en quelle année ?",["1974"],"1974",["1947","1794"]),
+  Wd("p1","Lucy a une forte …",["mâchoire","machoire"],"mâchoire",["main","jambe"]),
+  Wd("p1","Lucy a une faible capacité …",["crânienne"],"crânienne",["physique","respiratoire"]),
+  Wd("p1","Sur le visage de Lucy : moins de …",["cheveux","poils"],"cheveux",["rides","dents"]),
+  Wd("p1","Lucy a un plus petit …",["nez"],"nez",["menton","œil"]),
+  Wd("p1","Lucy a un plus grand …",["front"],"front",["nez","menton"]),
+  Wd("p1","Homo habilis fabrique des …",["outils","outil"],"outils",["maisons","vêtements"]),
+  Wd("p1","Écris le nom de l'hominidé qui fabrique des outils : Homo …",["habilis"],"habilis",null,"indice"),
+  Wd("p1","Homo erectus maîtrise le …",["feu"],"feu",["fer","bronze"]),
+  Wd("p1","Homo erectus commence aussi à …",["parler"],"parler",["écrire","compter"]),
+  Wd("p1","Écris le nom de l'hominidé qui maîtrise le feu : Homo …",["erectus"],"erectus",null,"indice"),
+  Wd("p1","L'homme de Néandertal vit en …",["Europe"],"Europe",["Amérique","Océanie"]),
+  Wd("p1","L'homme de Néandertal … ses morts.",["enterre","enterrait","enterrer"],"enterre",["brûle","oublie"]),
+  Wd("p1","Écris le nom de l'homme qui vit en Europe et enterre ses morts : l'homme de …",["Néandertal","Neanderthal"],"Néandertal",null,"indice"),
+  Wd("p1","Homo sapiens, c'est …",["nous","l'homme actuel","homme actuel"],"nous (l'homme actuel)",["un australopithèque","l'homme de Néandertal"]),
+  {part:"p1",type:"order",q:"Range les hominidés du plus ancien au plus récent : touche-les dans l'ordre.",items:["Toumaï","Homo habilis","Homo erectus","Homme de Néandertal","Homo sapiens"]},
+  // --- p2 peuplement
+  Wd("p2","Homo erectus apparaît en Afrique, dans la région des grands …",["lacs","lac"],"lacs",["fleuves","déserts"]),
+  Wd("p2","Le grand lac de cette région : le lac …",["Victoria"],"Victoria",null,"indice"),
+  Wd("p2","Les hommes de la Préhistoire se déplacent à …",["pied","pieds"],"pied",["cheval","bateau"]),
+  Wd("p2","Ils avancent par petites …",["étapes","étape"],"étapes",["courses","sauts"]),
+  Wd("p2","1re raison de ces déplacements : suivre les …",["animaux","troupeaux","animal"],"animaux",["fleuves","étoiles"]),
+  Wd("p2","2e raison : ils sont devenus trop …",["nombreux"],"nombreux",["vieux","grands"]),
+  Wd("p2","Ils passent en Asie par le …",["Sinaï"],"Sinaï",null,"indice"),
+  Wd("p2","Homo erectus peuple l'Asie et l'…",["Europe"],"Europe",["Amérique","Antarctique"]),
+  Wd("p2","Puis ils entrent en …",["Océanie"],"Océanie",["Amérique","Antarctique"]),
+  Wd("p2","Homo sapiens arrive en Amérique par le détroit de …",["Béring","Bering"],"Béring",null,"indice"),
+  Wd("p2","Maîtriser le feu donne un avantage …",["décisif"],"décisif",["inutile","petit"]),
+  {part:"p2",type:"set",q:"Le feu sert à 3 choses. Écris les 3 verbes (un par case).",groups:[["cuire"],["éclairer"],["chauffer","réchauffer"]],show:"cuire, éclairer, chauffer"},
+  Wd("p2","Conclusion : l'être humain est apparu en Afrique …",["centrale"],"centrale",["du Nord","du Sud"]),
+  Wd("p2","Il a peuplé toute la … durant la Préhistoire.",["planète","Terre"],"planète",["Europe","Afrique"]),
+  // --- p3 Paléolithique
+  Wd("p3","Paléolithique veut dire : époque de la pierre …",["ancienne"],"ancienne",["nouvelle","polie"]),
+  Wd("p3","C'est la … et la plus longue période de la Préhistoire.",["première","1re","1ère","1ere"],"première",["dernière","deuxième"]),
+  Wd("p3","Il est connu pour ses pierres …",["taillées","taillée"],"taillées",["polies","peintes"]),
+  Wd("p3","À Tautavel, les hommes vivent dans des … à l'entrée de la grotte.",["tentes","tente"],"tentes",["maisons","cabanes en pierre"]),
+  Wd("p3","Homo erectus s'installe dans les abris sous …",["roche","roches"],"roche",["terre","les arbres"]),
+  Wd("p3","Il taille la … pour faire des outils.",["pierre"],"pierre",["bois","métal"]),
+  Wd("p3","Son arme de chasse : la …",["lance","lances"],"lance",["épée","massue"]),
+  Wd("p3","Homo sapiens s'est installé longtemps à …",["Pincevent"],"Pincevent",null,"indice"),
+  Wd("p3","À Pincevent, ils chassent les … qui traversent la rivière.",["rennes","renne"],"rennes",["mammouths","bisons"]),
+  Wd("p3","Au campement : une réserve d'eau en …",["peau","peaux"],"peau",["pierre","terre cuite"]),
+  Wd("p3","… et un cadre en … pour sécher les peaux.",["bois"],"bois",["os","pierre"]),
+  Wd("p3","Les Homo sapiens sont des … : ils se déplacent souvent.",["nomades","nomade"],"nomades",["sédentaires","paysans"]),
+  {part:"p3",type:"set",q:"Ils vivent de 3 activités. Écris-les (un mot par case).",groups:[["chasse"],["pêche"],["cueillette"]],show:"chasse, pêche, cueillette"},
+  Wd("p3","Pour pêcher, ils fabriquent déjà des …",["hameçons","hameçon","hamecons"],"hameçons",["filets en métal","cannes en fer"]),
+  Wd("p3","Armes de chasse en os et en bois : les lances et les …",["harpons","harpon"],"harpons",["épées","boucliers"]),
+  Wd("p3","Ils habitent des huttes de … et de peaux de bêtes.",["branchages","branches","branchage"],"branchages",["briques","pierres"]),
+  Wd("p3","Au campement, ils … les peaux (verbe à l'infinitif).",["tanner","tannent","tannaient"],"tanner",null,"indice"),
+  Wd("p3","Ils peignent de grandes scènes d'animaux sur les … des grottes.",["parois","paroi","murs"],"parois",["portes","sols"]),
+  Wd("p3","Ils sculptent des …",["statuettes","statuette","statues"],"statuettes",["maisons","bateaux"]),
+  Wd("p3","Ils fabriquent des instruments de …",["musique"],"musique",["chirurgie","cuisine"]),
+  Wd("p3","La grotte célèbre de la frise (-36 000) : la grotte …",["Chauvet"],"Chauvet",null,"indice"),
+  Wd("p3","Le Paléolithique : une très longue période d'… et de progrès.",["inventions","invention"],"inventions",["guerres","famines"]),
+  {part:"p3",type:"sort",w:3,q:"Paléolithique ou Néolithique ? Touche la bonne période pour chaque ligne.",cats:["Paléolithique","Néolithique"],items:[
+    ["Chasse, pêche et cueillette",0],["Agriculture et élevage",1],["Hommes nomades",0],["Hommes sédentaires",1],
+    ["Pierre taillée",0],["Pierre polie",1],["Huttes de branchages et de peaux",0],["Premiers villages",1],
+    ["Peintures sur les parois des grottes",0],["Fabrication du pain",1],["Harpons et hameçons",0],["Poterie et premiers métaux",1]]},
+  // --- p4 Néolithique
+  Wd("p4","Néolithique veut dire : époque de la pierre …",["nouvelle"],"nouvelle",["ancienne","taillée"]),
+  Wd("p4","Au Néolithique, la pierre est …",["polie","polies"],"polie",["taillée","peinte"]),
+  Wd("p4","C'est la … période de la Préhistoire.",["dernière"],"dernière",["première","plus longue"]),
+  Wd("p4","L'agriculture et l'élevage apparaissent dans le …",["croissant fertile"],"croissant fertile",["désert du Sahara","grand Nord"]),
+  Wd("p4","Le croissant fertile se trouve au …",["Moyen-Orient","Proche-Orient","moyen orient"],"Moyen-Orient",["nord de l'Europe","sud de l'Afrique"]),
+  Wd("p4","Les hommes deviennent … : ils ont un habitat fixe.",["sédentaires","sédentaire"],"sédentaires",["nomades","chasseurs"]),
+  Wd("p4","Car ils cultivent des …",["céréales","céréale","blé"],"céréales",["fleurs","arbres"]),
+  Wd("p4","… et ils font du …",["pain"],"pain",["fromage","vin"]),
+  D("p4","L'agriculture arrive en Europe vers …",-4000,"-4 000"),
+  {part:"p4",type:"set",q:"Les 3 grands fleuves du croissant fertile (un par case).",groups:[["Tigre"],["Euphrate"],["Nil"]],show:"Tigre, Euphrate, Nil"},
+  Wd("p4","Le croissant fertile = la Mésopotamie + l'…",["Égypte"],"Égypte",["Europe","Éthiopie"]),
+  {part:"p4",type:"order",q:"Pourquoi les terres du Nil sont fertiles ? Touche les 3 étapes dans l'ordre.",items:["Le fleuve a des crues très importantes","Elles provoquent des inondations","L'eau laisse le limon qui fertilise les terres"]},
+  Wd("p4","Le limon, c'est une … fertile.",["boue"],"boue",["pierre","herbe"]),
+  Wd("p4","Le limon est un …",["engrais"],"engrais",["outil","poison"]),
+  Wd("p4","Conclusion : la Préhistoire a été une très longue période de …",["progrès"],"progrès",["guerres","famines"]),
+  // --- p5 définitions
+  {part:"p5",type:"def",w:2,mot:"La Préhistoire",cloze:"Longue [[période]] qui commence avec l'[[apparition]] des premiers [[hominidés]] et se termine avec l'[[invention]] de l'[[écriture]].",groups:[["période","periode"],["apparition","apparaissent","apparu"],["hominidés","hominidé"],["invention","inventé","inventer"],["écriture"]]},
+  {part:"p5",type:"def",w:2,mot:"Les hominidés",cloze:"Espèces [[proches]] de l'homme [[actuel]], qui ont [[précédé]] Homo [[sapiens]] dans l'[[évolution]].",groups:[["proches","proche"],["actuel"],["précédé","précède","avant"],["sapiens"],["évolution"]]},
+  {part:"p5",type:"def",w:2,mot:"L'évolution",cloze:"La [[transformation]] des [[espèces]] [[vivantes]] durant plusieurs [[millions]] d'années.",groups:[["transformation","transforme","transformer","changement"],["espèces","espèce"],["vivantes","vivant","vivants"],["millions","million"]]},
+  {part:"p5",type:"def",w:2,mot:"Le Paléolithique",cloze:"Époque de la pierre [[ancienne]] : la [[première]] et la plus [[longue]] période de la Préhistoire, connue pour ses pierres [[taillées]].",groups:[["ancienne"],["première","1re","1ère","1ere"],["longue"],["taillées","taillée","taille"]]},
+  {part:"p5",type:"def",w:2,mot:"Le Néolithique",cloze:"Époque de la pierre [[nouvelle]] (pierre [[polie]]) : [[dernière]] période de la Préhistoire, qui voit apparaître les premiers [[villages]], l'[[agriculture]] et l'[[élevage]].",groups:[["nouvelle"],["polie"],["dernière"],["villages","village"],["agriculture"],["élevage"]]},
+  {part:"p5",type:"def",w:2,mot:"Nomade",cloze:"Personne qui se [[déplace]] souvent, sans habitat [[fixe]].",groups:[["déplace","déplacer","déplacent","bouge"],["fixe"]]},
+  {part:"p5",type:"def",w:2,mot:"Sédentaire",cloze:"Personne qui a un [[habitat]] [[fixe]].",groups:[["habitat","maison","logement","habitation"],["fixe"]]},
+  {part:"p5",type:"def",w:2,mot:"Le croissant fertile",cloze:"Région constituée de la [[Mésopotamie]] (vallées du [[Tigre]] et de l'[[Euphrate]]) et de l'[[Égypte]] (vallée du [[Nil]]).",groups:[["Mésopotamie"],["Tigre"],["Euphrate"],["Égypte"],["Nil"]]},
+  {part:"p5",type:"def",w:2,mot:"Le limon",cloze:"[[Boue]] [[fertile]], un [[engrais]].",groups:[["boue"],["fertile"],["engrais"]]},
+];
+BANK.forEach((q,i)=>{ q.id=i; q.w = q.w || 1; });
+const DATES = BANK.filter(q=>q.type==="date");
+
+/* ---------- Rendu des exercices ---------- */
+const MODES = {
+  aide: {key:"prehist_note_aide", box:"#tab-aide", label:"avec aide", code:FICHE_CODE+"-aide"},
+  sans: {key:"prehist_note_sans", box:"#tab-sans", label:"sans aide", code:FICHE_CODE}
+};
+let STATE = {};
+
+function startMode(mode, onlyIds){
+  const M = MODES[mode], root = $(M.box);
+  const ids = onlyIds || BANK.map(q=>q.id);
+  STATE[mode] = {ids, res:{}, retry:!!onlyIds};
+  root.innerHTML = "";
+  const intro = el("div",{class:"intro"});
+  if(mode==="aide"){
+    intro.innerHTML = `<b>Exercices AVEC aide</b> · ${ids.length} questions${onlyIds?" (seulement tes erreurs)":""}<br>
+      Parfois tu choisis parmi 3 réponses, parfois tu écris le mot avec un <span class="hint">indice</span>.
+      Pour les définitions, tu complètes les mots-clés manquants.<br><b>Objectif : 80 % minimum.</b> Ensuite, passe à la version sans aide.`;
+  } else {
+    intro.innerHTML = `<b>Exercices SANS aide</b> · ${ids.length} questions${onlyIds?" (seulement tes erreurs)":""}<br>
+      Pas de choix proposé : <b>tu écris tout toi-même</b>, comme le jour du contrôle. Un chirurgien n'a pas d'antisèche au bloc : il connaît chaque nom par cœur.<br>
+      • Mot juste = 1 point. Mot presque juste (une faute d'orthographe) = ½ point.<br>
+      • Dates : n'oublie pas le signe <b>-</b> (avant J.-C.), sinon ½ point.<br>
+      • Définitions : écris-les en entier. Elles sont corrigées avec les <b>mots-clés</b> de ta leçon. Chaque mot-clé oublié fait perdre des points.<br>
+      <b>Objectif : 80 % minimum.</b>`;
+  }
+  root.appendChild(intro);
+  const pr = el("div",{class:"prog"},"<i></i>"); root.appendChild(pr);
+  const cnt = el("div",{class:"cnt",style:"font-size:14px;color:var(--muted)"}); root.appendChild(cnt);
+  let lastPart = null, n = 0;
+  for(const id of ids){
+    const q = BANK[id];
+    if(q.part!==lastPart){ root.appendChild(el("h2",{},PARTS[q.part])); lastPart=q.part; }
+    n++;
+    root.appendChild(renderCard(q, mode, n));
+  }
+  root.appendChild(el("div",{class:"resultZone"}));
+  updateProgress(mode);
+}
+
+function renderCard(q, mode, n){
+  const c = el("div",{class:"card","data-id":q.id});
+  c.appendChild(el("div",{class:"n"},`Question ${n}${q.w>1?` · ${fmt(q.w)} points`:""}`));
+  const body = el("div");
+  c.appendChild(body);
+  const fb = el("div",{class:"fb hidden"});
+  const done = (pts, msg) => { pts = Math.max(0, Math.min(q.w, pts)); STATE[mode].res[q.id]=pts; fb.className="fb "+(pts>=q.w?"ok":pts>0?"mid":"ko"); fb.innerHTML=msg; fb.classList.remove("hidden"); updateProgress(mode); };
+
+  if(q.type==="word" || q.type==="date"){
+    body.appendChild(el("div",{class:"q"}, q.type==="date" ? `Quelle est la date ? <b>${q.q}</b>` : q.q));
+    const useQcm = mode==="aide" && (q.type==="date" || (q.d && q.aide!=="indice"));
+    if(useQcm){
+      let opts;
+      if(q.type==="date"){
+        const big = Math.abs(q.v)>=1e6;
+        const pool = shuffle(DATES.filter(x=>x.show!==q.show && (Math.abs(x.v)>=1e6)===big)).slice(0,2).map(x=>x.show);
+        opts = shuffle([q.show, ...pool]);
+      } else opts = shuffle([q.show, ...q.d]);
+      const box = el("div",{class:"opts"});
+      opts.forEach(o=>{
+        const b = el("button",{class:"opt"}, o);
+        b.onclick = () => {
+          box.querySelectorAll("button").forEach(x=>{ x.disabled=true; if(x.textContent===q.show) x.classList.add("good"); });
+          if(o===q.show) done(1,"Bravo !");
+          else { b.classList.add("bad"); done(0,`Non. La bonne réponse : <b>${q.show}</b>`); }
+        };
+        box.appendChild(b);
+      });
+      body.appendChild(box);
+    } else {
+      if(mode==="aide"){
+        const letters = q.show.replace(/[^A-Za-zÀ-ÿœ]/g,"").length;
+        body.appendChild(el("div",{class:"hint"},`Indice : commence par « ${q.show[0].toUpperCase()} », ${letters} lettres`));
+      }
+      const row = el("div",{class:"row"});
+      const inp = el("input",{type:"text",autocomplete:"off",autocapitalize:"off",spellcheck:"false",placeholder: q.type==="date"?"ex : -12 000":"écris ta réponse"});
+      const b = el("button",{class:"btn"},"Valider");
+      const go = () => {
+        if(!inp.value.trim()) return;
+        inp.disabled=true; b.disabled=true;
+        if(q.type==="date"){
+          const p = parseDate(inp.value), targets=[q.v,...q.alt].map(Math.abs);
+          if(p && targets.some(t=>Math.abs(p.val-t)<0.5)){
+            if(p.neg) done(1,`Bravo ! <b>${q.show}</b>`);
+            else done(0.5,`Le nombre est juste mais il manque le signe <b>-</b> : <b>${q.show}</b> (avant J.-C.). ½ point.`);
+          } else done(0,`Non. La bonne date : <b>${q.show}</b>`);
+        } else {
+          const r = matchWord(inp.value, q.a);
+          if(r==="exact") done(1,"Bravo !");
+          else if(r==="accent") done(1,`Juste ! Attention aux accents : <b>${q.show}</b>`);
+          else if(r==="fuzzy") done(0.5,`Presque : une faute d'orthographe. Il faut écrire <b>${q.show}</b>. ½ point.`);
+          else done(0,`Non. La bonne réponse : <b>${q.show}</b>`);
+        }
+      };
+      b.onclick=go; inp.onkeydown=e=>{ if(e.key==="Enter") go(); };
+      row.append(inp,b); body.appendChild(row);
+    }
+  }
+
+  else if(q.type==="set"){
+    body.appendChild(el("div",{class:"q"},q.q));
+    if(mode==="aide") body.appendChild(el("div",{class:"hint"},"Indices : "+q.groups.map(g=>`« ${g[0][0].toUpperCase()}… » (${g[0].length} lettres)`).join(" · ")));
+    const row = el("div",{class:"row"});
+    const ins = q.groups.map(()=>{ const i=el("input",{type:"text",autocomplete:"off",autocapitalize:"off",spellcheck:"false",style:"max-width:170px"}); row.appendChild(i); return i; });
+    const b = el("button",{class:"btn"},"Valider"); row.appendChild(b);
+    b.onclick = () => {
+      if(ins.some(i=>!i.value.trim())) return;
+      ins.forEach(i=>i.disabled=true); b.disabled=true;
+      const used = new Set(); let pts=0, typo=false;
+      ins.forEach(i=>{
+        for(let g=0; g<q.groups.length; g++){
+          if(used.has(g)) continue;
+          const r = matchWord(i.value, q.groups[g]);
+          if(r!=="no"){ used.add(g); if(r==="fuzzy"){ pts+=0.5; typo=true; } else pts+=1; break; }
+        }
+      });
+      const sc = pts/q.groups.length;
+      done(sc, sc>=1 ? "Bravo, les 3 sont justes !" : `${fmt(pts)} sur ${q.groups.length}${typo?" (faute d'orthographe)":""}. Il fallait : <b>${q.show}</b>`);
+    };
+    body.appendChild(row);
+  }
+
+  else if(q.type==="order"){
+    body.appendChild(el("div",{class:"q"},q.q));
+    const seq = el("div",{class:"seq"}); const box = el("div",{class:"opts"});
+    const picked = [];
+    const v = el("button",{class:"btn"},"Valider"); v.disabled=true;
+    const clr = el("button",{class:"btn alt"},"Effacer");
+    shuffle(q.items).forEach(it=>{
+      const b = el("button",{class:"opt"},it);
+      b.onclick=()=>{ picked.push(it); b.disabled=true; b.classList.add("sel"); seq.appendChild(el("span",{},`${picked.length}. ${it}`)); v.disabled = picked.length<q.items.length; };
+      box.appendChild(b);
+    });
+    clr.onclick=()=>{ picked.length=0; seq.innerHTML=""; box.querySelectorAll("button").forEach(b=>{b.disabled=false;b.classList.remove("sel");}); v.disabled=true; };
+    v.onclick=()=>{
+      v.disabled=true; clr.disabled=true; box.querySelectorAll("button").forEach(b=>b.disabled=true);
+      const ok = picked.every((x,i)=>x===q.items[i]);
+      done(ok?1:0, ok?"Bravo, l'ordre est parfait !":`Non. Le bon ordre : <b>${q.items.join(" → ")}</b>`);
+    };
+    const row = el("div",{class:"row",style:"margin-top:8px"}); row.append(v,clr);
+    body.append(box, seq, row);
+  }
+
+  else if(q.type==="sort"){
+    body.appendChild(el("div",{class:"q"},q.q));
+    const grid = el("div",{class:"sort"}); const choice = {};
+    const v = el("button",{class:"btn",style:"margin-top:10px"},"Valider"); v.disabled=true;
+    q.items.forEach(([txt],i)=>{
+      grid.appendChild(el("div",{class:"lbl"},txt));
+      q.cats.forEach((cat,ci)=>{
+        const b = el("button",{class:"opt","data-r":i,"data-c":ci},cat);
+        b.onclick=()=>{ choice[i]=ci; grid.querySelectorAll(`[data-r="${i}"]`).forEach(x=>x.classList.toggle("sel", x===b)); v.disabled = Object.keys(choice).length<q.items.length; };
+        grid.appendChild(b);
+      });
+    });
+    v.onclick=()=>{
+      v.disabled=true; let good=0;
+      grid.querySelectorAll("button").forEach(b=>{
+        b.disabled=true; const r=+b.dataset.r, c=+b.dataset.c;
+        if(c===q.items[r][1]) b.classList.add("good");
+        if(choice[r]===c && c!==q.items[r][1]) b.classList.add("bad");
+      });
+      q.items.forEach(([,c],i)=>{ if(choice[i]===c) good++; });
+      const pts = Math.round(q.w*good/q.items.length*4)/4;
+      done(pts, `${good} lignes justes sur ${q.items.length} → ${fmt(pts)} / ${q.w} points.`);
+    };
+    body.append(grid, v);
+  }
+
+  else if(q.type==="def"){
+    body.appendChild(el("div",{class:"q"},`Définition : <b>${q.mot}</b>`));
+    const keys = [...q.cloze.matchAll(/\[\[(.+?)\]\]/g)].map(m=>m[1]);
+    const model = q.cloze.replace(/\[\[(.+?)\]\]/g,"<b>$1</b>");
+    if(mode==="aide"){
+      body.appendChild(el("div",{class:"hint"},"Complète les mots-clés : la première lettre est donnée."));
+      const p = el("div",{style:"line-height:2.2"});
+      const ins = [];
+      q.cloze.split(/(\[\[.+?\]\])/).forEach(part=>{
+        const m = part.match(/^\[\[(.+)\]\]$/);
+        if(m){ const w=m[1]; const i=el("input",{type:"text",class:"blank",autocomplete:"off",autocapitalize:"off",spellcheck:"false",placeholder:w[0]+"…"+" ("+w.length+")"}); ins.push([i,w]); p.appendChild(i); }
+        else p.appendChild(document.createTextNode(part));
+      });
+      const b = el("button",{class:"btn",style:"margin-top:6px"},"Valider");
+      b.onclick=()=>{
+        if(ins.some(([i])=>!i.value.trim())) return;
+        b.disabled=true; let got=0;
+        ins.forEach(([i,w])=>{ i.disabled=true; const r=matchWord(i.value,[w]); if(r==="exact"||r==="accent"){got+=1;i.style.borderColor="var(--moss)";} else if(r==="fuzzy"){got+=0.5;i.style.borderColor="var(--gold)";} else i.style.borderColor="var(--red)"; });
+        const pts = Math.round(q.w*got/ins.length*4)/4;
+        done(pts, `${fmt(got)} mot(s) juste(s) sur ${ins.length} → ${fmt(pts)} / ${q.w} points.<br>Définition complète : ${model}`);
+      };
+      body.append(p,b);
+    } else {
+      const ta = el("textarea",{placeholder:"Écris la définition complète, comme dans ta leçon.",autocapitalize:"off",spellcheck:"false"});
+      const b = el("button",{class:"btn",style:"margin-top:6px"},"Valider");
+      b.onclick=()=>{
+        if(ta.value.trim().length<3) return;
+        ta.disabled=true; b.disabled=true;
+        const miss=[]; let got=0;
+        q.groups.forEach((g,i)=>{ if(hasKey(ta.value,g)) got++; else miss.push(keys[i]||g[0]); });
+        const pts = Math.round(q.w*got/q.groups.length*4)/4;
+        done(pts, `${got} mot(s)-clé(s) sur ${q.groups.length} → ${fmt(pts)} / ${q.w} points.`
+          + (miss.length?`<br>Mots-clés oubliés : <b>${miss.join(", ")}</b>`:"<br>Tous les mots-clés y sont, bravo !")
+          + `<br>Définition de la leçon : ${model}`);
+      };
+      body.append(ta,b);
+    }
+  }
+  c.appendChild(fb);
+  return c;
+}
+
+function updateProgress(mode){
+  const S = STATE[mode], root = $(MODES[mode].box);
+  const doneN = Object.keys(S.res).length, total = S.ids.length;
+  root.querySelector(".prog i").style.width = (100*doneN/total)+"%";
+  const pts = Object.values(S.res).reduce((a,b)=>a+b,0);
+  const maxSoFar = Object.keys(S.res).reduce((a,id)=>a+BANK[id].w,0);
+  root.querySelector(".cnt").textContent = `Questions faites : ${doneN} / ${total}` + (doneN?` · points : ${fmt(pts)} / ${fmt(maxSoFar)}`:"");
+  if(doneN===total) finish(mode);
+}
+
+function finish(mode){
+  const S = STATE[mode], M = MODES[mode], root = $(M.box);
+  const max = S.ids.reduce((a,id)=>a+BANK[id].w,0);
+  const pts = Object.values(S.res).reduce((a,b)=>a+b,0);
+  const pct = Math.round(100*pts/max);
+  const sur20 = Math.round(pts/max*20*2)/2;
+  const ok = pct>=80;
+  const wrong = S.ids.filter(id=>S.res[id] < BANK[id].w);
+  if(!S.retry){
+    const prev = store.get(M.key) || {};
+    store.set(M.key, {last:{sur20,pct,date:new Date().toLocaleDateString("fr-FR")}, best: (!prev.best || pct>prev.best.pct) ? {sur20,pct} : prev.best});
+    showNotes();
+  }
+  const z = root.querySelector(".resultZone");
+  z.innerHTML = "";
+  const r = el("div",{class:"result "+(ok?"ok":"ko")});
+  r.innerHTML = `<div>${S.retry?"Entraînement sur tes erreurs":"Ta note "+M.label}</div>
+    <div class="big">${fmt(sur20)} / 20</div>
+    <div><b>${pct} %</b> de bonnes réponses (${fmt(pts)} / ${fmt(max)} points)</div>
+    <p style="font-size:19px;font-weight:800">${ok ? "Acquis ✓" : "À retravailler"}</p>
+    <p>${ok
+      ? (mode==="aide" ? "Bien joué ! Maintenant, passe à la version <b>sans aide</b> : c'est elle qui compte pour le contrôle." : "Excellent : tu sais ta leçon. Pour finir, refais la fiche papier.")
+      : "Moins de 80 % : relis la leçon en mode mémoire, puis refais <b>seulement tes erreurs</b>, jusqu'à ne plus en faire."}</p>`;
+  const row = el("div",{class:"row",style:"justify-content:center"});
+  if(wrong.length){ const b=el("button",{class:"btn"},`Refaire mes ${wrong.length} erreur${wrong.length>1?"s":""}`); b.onclick=()=>{ startMode(mode, wrong); window.scrollTo({top:0}); }; row.appendChild(b); }
+  const b2 = el("button",{class:"btn alt"},"Tout recommencer"); b2.onclick=()=>{ startMode(mode); window.scrollTo({top:0}); }; row.appendChild(b2);
+  r.appendChild(row);
+  z.appendChild(r);
+  if(!S.retry && typeof enregistrerProgression==="function"){
+    // Score enregistré en pourcentage (sur 100) : les demi-points restent des nombres entiers
+    const bc = el("div",{class:"bilan-card"}); r.appendChild(bc);
+    Promise.resolve(enregistrerProgression(M.code, pct, 100)).then(()=>{
+      const box=document.getElementById("atelier-progression-box");
+      if(box && box.parentNode!==bc) bc.appendChild(box);
+      chargerNotesCompte();
+    });
+  }
+}
+
+/* Meilleures notes enregistrées sur le compte (tous appareils confondus) */
+const REMOTE = {};
+async function chargerNotesCompte(){
+  try{
+    if(typeof supabase==="undefined") return;
+    const sb = supabase.createClient("https://rwqsvrmjjoihuhmvbwuu.supabase.co","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ3cXN2cm1qam9paHVobXZid3V1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQzNjQxNTMsImV4cCI6MjA5OTk0MDE1M30.VtdOnI169-erf48NpxLPCC0th6kHqBcsBuCauOx52HI");
+    const s = await sb.auth.getSession(); if(!s.data.session) return;
+    let id = null; try{ id = localStorage.getItem("atelier_enfant_actif"); }catch(e){}
+    if(!id) return;
+    const r = await sb.from("progression").select("fiche_code,score,total").eq("enfant_id",id).in("fiche_code",[MODES.aide.code, MODES.sans.code]);
+    if(r.error || !r.data) return;
+    r.data.forEach(l=>{ const p = l.total>0 ? Math.round(l.score/l.total*100) : 0; REMOTE[l.fiche_code] = Math.max(REMOTE[l.fiche_code]||0, p); });
+    showNotes();
+  }catch(e){}
+}
+function showNotes(){
+  [["aide","#nAide","#vAide"],["sans","#nSans","#vSans"]].forEach(([m,n,v])=>{
+    const d = store.get(MODES[m].key);
+    const rb = REMOTE[MODES[m].code];
+    if(!d || !d.last){
+      if(rb!=null){ $(n).textContent=`${fmt(Math.round(rb/5*2)/2)} / 20 · ${rb} %`; $(v).textContent=(rb>=80?"Acquis ✓":"À retravailler")+" · meilleure note du compte"; $(v).className="ver "+(rb>=80?"ok":"ko"); }
+      else { $(n).textContent="—"; $(v).textContent="Pas encore faite"; $(v).className="ver"; }
+      return;
+    }
+    if(rb!=null && (!d.best || rb>d.best.pct)) d.best = {pct:rb};
+    $(n).textContent = `${fmt(d.last.sur20)} / 20 · ${d.last.pct} %`;
+    const ok = d.last.pct>=80;
+    $(v).textContent = (ok?"Acquis ✓":"À retravailler") + ` · le ${d.last.date}` + (d.best && d.best.pct>d.last.pct ? ` · record ${d.best.pct} %` : "");
+    $(v).className = "ver "+(ok?"ok":"ko");
+  });
+}
+
+/* ---------- Onglets, mode mémoire, "j'ai compris" ---------- */
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{
+  document.querySelectorAll("nav button").forEach(x=>x.classList.toggle("on",x===b));
+  ["lecon","aide","sans"].forEach(t=>$("#tab-"+t).classList.toggle("hidden", t!==b.dataset.tab));
+  if(b.dataset.tab!=="lecon" && !STATE[b.dataset.tab]) startMode(b.dataset.tab);
+  window.scrollTo({top:0});
+});
+$("#memBtn").onclick=()=>{
+  const on = document.body.classList.toggle("mem");
+  document.querySelectorAll(".k").forEach(k=>k.classList.remove("show"));
+  $("#memBtn").textContent = on ? "Montrer tous les mots-clés" : "Mode mémoire : cacher les mots-clés";
+  $("#memInfo").classList.toggle("hidden", !on);
+};
+document.querySelectorAll(".k").forEach(k=>k.onclick=()=>{ if(document.body.classList.contains("mem")) k.classList.add("show"); });
+const doneStore = store.get("prehist_compris") || {};
+document.querySelectorAll("[data-done]").forEach(b=>{
+  const id=b.dataset.done;
+  const paint=()=>{ b.classList.toggle("on",!!doneStore[id]); b.textContent = doneStore[id] ? "Compris ✓" : "J'ai bien compris"; };
+  b.onclick=()=>{ doneStore[id]=!doneStore[id]; store.set("prehist_compris",doneStore); paint(); };
+  paint();
+});
+showNotes();
+chargerNotesCompte();
+</script>
+</body>
+</html>
