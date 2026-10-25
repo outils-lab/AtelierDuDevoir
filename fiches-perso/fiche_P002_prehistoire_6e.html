@@ -91,6 +91,10 @@ input.blank{width:auto;min-width:90px;max-width:170px;padding:3px 6px;margin:2px
 .notes .ver{font-size:13px}
 .notes .ver.ok{color:#9fe0ae}.notes .ver.ko{color:#ffb4a8}
 .hidden{display:none}
+body.lock nav, body.lock .retour, body.lock #tab-lecon, body.lock #tab-aide{display:none!important}
+#lockBar{max-width:860px;margin:0 auto;padding:10px 0 12px;font-weight:800;color:#ffd9b0}
+.gate ul{margin:6px 0 10px;padding-left:20px}
+.gate .row{margin-top:8px}
 @media (max-width:520px){
   html,body{font-size:16px}
   .notes .val{font-size:16px}
@@ -111,6 +115,7 @@ input.blank{width:auto;min-width:90px;max-width:170px;padding:3px 6px;margin:2px
     <button data-tab="aide">2 · Avec aide</button>
     <button data-tab="sans">3 · Sans aide</button>
   </nav>
+  <div id="lockBar" class="hidden">🔒 Contrôle en cours : la leçon et l'aide sont verrouillées jusqu'à la dernière question.</div>
 </header>
 
 <main>
@@ -616,8 +621,70 @@ function renderCard(q, mode, n){
   return c;
 }
 
+/* ---------- Contrôle sans aide verrouillé ----------
+   Pendant le contrôle : plus d'accès à la leçon, ni à l'aide, ni au retour.
+   Quitter, recharger ou ouvrir la page ailleurs arrête le contrôle :
+   les questions non faites comptent 0. */
+const KEY_C = "prehist_controle_en_cours";
+let LOCKED = false;
+function lock(on){
+  LOCKED = on;
+  document.body.classList.toggle("lock", on);
+  $("#lockBar").classList.toggle("hidden", !on);
+}
+function gateSans(){
+  const root = $("#tab-sans");
+  root.innerHTML = "";
+  const g = el("div",{class:"intro gate"});
+  g.innerHTML = `<div style="font-size:22px;font-weight:900">🔒 Le contrôle sans aide</div>
+    <p>C'est comme le vrai contrôle en classe. <b>Dès que tu commences :</b></p>
+    <ul>
+      <li>la <b>leçon</b> et les <b>exercices avec aide</b> sont <b>verrouillés</b> jusqu'à la dernière question ;</li>
+      <li>tu écris tout toi-même, sans choix proposé ;</li>
+      <li>si tu quittes ou recharges la page, le contrôle s'arrête et <b>les questions non faites comptent 0</b>.</li>
+    </ul>
+    <p>Commence seulement si tu connais ta leçon par cœur.</p>`;
+  const row = el("div",{class:"row"});
+  const go = el("button",{class:"btn"},"Commencer le contrôle");
+  go.onclick = () => startControle();
+  const back = el("button",{class:"btn alt"},"Pas encore, je révise");
+  back.onclick = () => $('nav button[data-tab="lecon"]').click();
+  row.append(go, back); g.appendChild(row);
+  root.appendChild(g);
+}
+function startControle(onlyIds){
+  startMode("sans", onlyIds);
+  lock(true);
+  store.set(KEY_C, {ids:STATE.sans.ids, res:{}, retry:STATE.sans.retry});
+  window.scrollTo({top:0});
+}
+/* Page rechargée ou ouverte ailleurs pendant un contrôle : il est arrêté et noté tel quel */
+function controleInterrompu(c){
+  const root = $("#tab-sans");
+  const faites = Object.keys(c.res||{}).length;
+  STATE.sans = {ids:c.ids, res:Object.assign({}, c.res||{}), retry:!!c.retry, interrompu:true};
+  c.ids.forEach(id=>{ if(STATE.sans.res[id]===undefined) STATE.sans.res[id]=0; });
+  root.innerHTML = `<div class="intro" style="border-color:var(--red)"><b>Contrôle interrompu.</b><br>
+    La page a été quittée, rechargée ou ouverte ailleurs pendant le contrôle.
+    Tu avais répondu à ${faites} question${faites>1?"s":""} sur ${c.ids.length} : les autres comptent 0.</div><div class="resultZone"></div>`;
+  try{ localStorage.removeItem(KEY_C); }catch(e){}
+  finish("sans");
+  document.querySelectorAll("nav button").forEach(x=>x.classList.toggle("on",x.dataset.tab==="sans"));
+  ["lecon","aide","sans"].forEach(t=>$("#tab-"+t).classList.toggle("hidden", t!=="sans"));
+}
+window.addEventListener("beforeunload", e => { if(LOCKED){ e.preventDefault(); e.returnValue = ""; } });
+window.addEventListener("storage", e => {
+  // Le contrôle a été arrêté depuis un autre onglet : celui-ci s'arrête aussi
+  if(e.key===KEY_C && e.newValue===null && LOCKED){
+    LOCKED = false;
+    alert("Le contrôle a été arrêté : la page a été ouverte ailleurs.");
+    location.reload();
+  }
+});
+
 function updateProgress(mode){
   const S = STATE[mode], root = $(MODES[mode].box);
+  if(mode==="sans" && LOCKED) store.set(KEY_C, {ids:S.ids, res:S.res, retry:S.retry});
   const doneN = Object.keys(S.res).length, total = S.ids.length;
   root.querySelector(".prog i").style.width = (100*doneN/total)+"%";
   const pts = Object.values(S.res).reduce((a,b)=>a+b,0);
@@ -634,6 +701,7 @@ function finish(mode){
   const sur20 = Math.round(pts/max*20*2)/2;
   const ok = pct>=80;
   const wrong = S.ids.filter(id=>S.res[id] < BANK[id].w);
+  if(mode==="sans"){ lock(false); try{ localStorage.removeItem(KEY_C); }catch(e){} }
   if(!S.retry){
     const prev = store.get(M.key) || {};
     store.set(M.key, {last:{sur20,pct,date:new Date().toLocaleDateString("fr-FR")}, best: (!prev.best || pct>prev.best.pct) ? {sur20,pct} : prev.best});
@@ -650,8 +718,9 @@ function finish(mode){
       ? (mode==="aide" ? "Bien joué ! Maintenant, passe à la version <b>sans aide</b> : c'est elle qui compte pour le contrôle." : "Excellent : tu sais ta leçon. Pour finir, refais la fiche papier.")
       : "Moins de 80 % : relis la leçon en mode mémoire, puis refais <b>seulement tes erreurs</b>, jusqu'à ne plus en faire."}</p>`;
   const row = el("div",{class:"row",style:"justify-content:center"});
-  if(wrong.length){ const b=el("button",{class:"btn"},`Refaire mes ${wrong.length} erreur${wrong.length>1?"s":""}`); b.onclick=()=>{ startMode(mode, wrong); window.scrollTo({top:0}); }; row.appendChild(b); }
-  const b2 = el("button",{class:"btn alt"},"Tout recommencer"); b2.onclick=()=>{ startMode(mode); window.scrollTo({top:0}); }; row.appendChild(b2);
+  const relance = ids => { if(mode==="sans") startControle(ids); else { startMode(mode, ids); window.scrollTo({top:0}); } };
+  if(wrong.length){ const b=el("button",{class:"btn"},`Refaire mes ${wrong.length} erreur${wrong.length>1?"s":""}`); b.onclick=()=>relance(wrong); row.appendChild(b); }
+  const b2 = el("button",{class:"btn alt"},"Tout recommencer"); b2.onclick=()=>relance(); row.appendChild(b2);
   r.appendChild(row);
   z.appendChild(r);
   if(!S.retry && typeof enregistrerProgression==="function"){
@@ -701,7 +770,9 @@ function showNotes(){
 document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{
   document.querySelectorAll("nav button").forEach(x=>x.classList.toggle("on",x===b));
   ["lecon","aide","sans"].forEach(t=>$("#tab-"+t).classList.toggle("hidden", t!==b.dataset.tab));
-  if(b.dataset.tab!=="lecon" && !STATE[b.dataset.tab]) startMode(b.dataset.tab);
+  if(LOCKED) return;
+  if(b.dataset.tab==="aide" && !STATE.aide) startMode("aide");
+  if(b.dataset.tab==="sans" && !STATE.sans) gateSans();
   window.scrollTo({top:0});
 });
 $("#memBtn").onclick=()=>{
@@ -720,6 +791,7 @@ document.querySelectorAll("[data-done]").forEach(b=>{
 });
 showNotes();
 chargerNotesCompte();
+{ const c = store.get(KEY_C); if(c && c.ids) controleInterrompu(c); }
 </script>
 </body>
 </html>
