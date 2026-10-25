@@ -14,10 +14,17 @@
   var CLE_ACTIF = "atelier_enfant_actif";
   var sb = null;
 
-  // Chemin racine du site depuis une fiche (fiches/xxx.html → ../)
-  function racine(){
-    return (window.location.pathname.indexOf('/fiches/') !== -1) ? '../' : '';
-  }
+  /* Chemin racine du site, déduit de l'emplacement de CE script — qui vit toujours
+     à la racine du dépôt. Marche donc depuis n'importe quel dossier de fiches
+     (fiches/, fiches-perso/, …) : le test sur '/fiches/' utilisé auparavant
+     renvoyait une chaîne vide dès qu'une fiche vivait ailleurs, et les liens des
+     bannières pointaient alors vers des pages inexistantes. */
+  var RACINE = (function(){
+    var s = document.currentScript;
+    if(s && s.src) return s.src.replace(/[^/?#]*(?:[?#].*)?$/, '');
+    return (window.location.pathname.indexOf('/fiches') !== -1) ? '../' : '';
+  })();
+  function racine(){ return RACINE; }
 
   function client(){
     if(sb) return sb;
