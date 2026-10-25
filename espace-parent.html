@@ -226,6 +226,7 @@ var sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 var ORDRE_CLASSES = ['CP','CE1','CE2','CM1','CM2','6e','5e','4e','3e'];
 var enfants = [], enfantSel = null;
 var toutesFiches = [];   // depuis fiches.json
+var persoFiches = [];    // depuis passage-secret.json (jamais proposées à l'assignation)
 var progression = [];    // lignes de l'enfant sélectionné
 var assignations = [];
 var arcade = null;      // ligne arcade_profils de l'enfant sélectionné
@@ -257,6 +258,13 @@ function niveauMaitrise(pct){
   } catch(e){
     msg("Impossible de charger la liste des fiches.", 'err');
   }
+
+  // Leçons du passage secret : seulement pour afficher leur titre dans les résultats
+  try{
+    var rps = await fetch('passage-secret.json?v=' + Date.now());
+    var dps = await rps.json();
+    persoFiches = (dps.fiches || []).map(function(f){ return {code:f.code, titre:f.titre, niveau:'Passage secret'}; });
+  } catch(e){}
 
   var re = await sb.from('enfants').select('*').order('cree_le', {ascending:true});
   document.getElementById('chargement').style.display = 'none';
@@ -341,6 +349,9 @@ function parFiche(){
 function infoFiche(code){
   for(var i=0;i<toutesFiches.length;i++){
     if(toutesFiches[i].code === code) return toutesFiches[i];
+  }
+  for(var j=0;j<persoFiches.length;j++){
+    if(persoFiches[j].code === code) return persoFiches[j];
   }
   return null;
 }

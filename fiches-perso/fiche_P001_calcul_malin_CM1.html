@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="../favicon.ico" sizes="any">
+<title>Calcul malin — Le passage secret</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6f3ff;--card:#ffffff;--ink:#2a2547;--soft:#6b6590;--line:#e3ddf7;
+  --violet:#6d4fd8;--violet-l:#ece7ff;--blue:#1f8fc4;--blue-l:#e3f4fc;
+  --red:#d93a50;--red-l:#fde8eb;--green:#1f9d63;--green-l:#e2f6ec;
+  --amber:#b8740c;--amber-l:#fff4df;--grey:#4f4b66;--tan:#e9c46a;--tan-d:#a8801f;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#17142a;--card:#221e3b;--ink:#ece9ff;--soft:#a8a2cc;--line:#37315c;
+  --violet:#9d86ff;--violet-l:#2f2858;--blue:#5cc0ee;--blue-l:#1b3245;
+  --red:#ff6b7d;--red-l:#47202a;--green:#4ccf90;--green-l:#173b2b;
+  --amber:#ffc56b;--amber-l:#3b2f1a;--grey:#c3bfe0;
+}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Nunito,system-ui,sans-serif;font-size:18px;line-height:1.45}
+.wrap{max-width:860px;margin:0 auto;padding:16px 16px 130px}
+.retour{display:inline-block;color:var(--soft);text-decoration:none;font-weight:800;font-size:15px;padding:4px 0 10px}
+.consigne{background:rgba(255,255,255,.18);border-radius:12px;padding:8px 12px;margin-top:12px;font-size:15px;font-weight:700}
+#save-box:empty{display:none}
+.hero{background:linear-gradient(135deg,#5b3fd0,#2a9fd6);color:#fff;border-radius:22px;padding:22px 22px 18px;margin-bottom:8px}
+.hero .k{font-size:13px;opacity:.9;letter-spacing:.08em;text-transform:uppercase;font-weight:800}
+.hero h1{margin:4px 0 6px;font-size:28px;line-height:1.15}
+.hero p{margin:0;opacity:.95}
+.modes{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.modes button{border:2px solid rgba(255,255,255,.7);background:transparent;color:#fff;font:inherit;font-weight:800;padding:8px 14px;border-radius:999px;cursor:pointer}
+.modes button.on{background:#fff;color:#5b3fd0;border-color:#fff}
+.card{background:var(--card);border:2px solid var(--line);border-radius:18px;margin:16px 0;overflow:hidden}
+.card>.head{display:flex;align-items:stretch;border-bottom:2px solid var(--line)}
+.tag{background:var(--violet);color:#fff;font-weight:800;padding:10px 14px;display:flex;align-items:center;font-size:17px;min-width:62px;justify-content:center}
+.head h2{margin:0;padding:10px 14px;font-size:20px;flex:1;display:flex;align-items:center;line-height:1.2}
+.body{padding:14px 16px 16px}
+details.method{background:var(--blue-l);border-radius:14px;padding:10px 14px;margin-bottom:14px}
+details.method summary{cursor:pointer;font-weight:800;color:var(--blue)}
+.method p{margin:8px 0}
+.method .r,.qm{color:var(--red)}
+.tip{background:var(--amber-l);color:var(--ink);border-radius:10px;padding:6px 10px;font-size:16px}
+.mini{border-collapse:collapse;margin:6px 0;font-size:16px}
+.mini td{border:1.5px solid var(--line);padding:3px 10px;background:var(--card)}
+.nl{width:100%;max-width:430px;display:block;margin:6px auto}
+.nl .ax{stroke:var(--soft);stroke-width:2}
+.nl text{font:800 13px Nunito,system-ui,sans-serif;fill:var(--ink)}
+.nl text.r{fill:var(--red)}
+.nl .ab{stroke:var(--blue);fill:none;stroke-width:3}
+.nl .ag{stroke:var(--grey);fill:none;stroke-width:3}
+.nl text.lb{fill:var(--blue)} .nl text.lg{fill:var(--grey)}
+.blk{width:100%;max-width:420px;display:block;margin:6px auto}
+.blk text{font:800 15px Nunito,system-ui,sans-serif;fill:var(--ink)}
+ol.qs{list-style:none;margin:0;padding:0;counter-reset:q}
+.q{counter-increment:q;border:2px solid var(--line);border-radius:14px;padding:12px 14px 12px 50px;margin:10px 0;position:relative}
+.q::before{content:counter(q);position:absolute;left:12px;top:12px;width:27px;height:27px;border-radius:50%;background:var(--violet-l);color:var(--violet);font-weight:800;font-size:15px;display:flex;align-items:center;justify-content:center}
+.q.ok{border-color:var(--green);background:var(--green-l)}
+.q.ko{border-color:var(--red);background:var(--red-l)}
+.prompt{font-weight:700;margin-bottom:6px}
+.big{font-size:23px;font-weight:800}
+.q .row{margin:7px 0;display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+input.n{font:inherit;font-weight:800;font-size:20px;padding:4px 6px;text-align:center;border:2px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);min-width:3.4ch}
+input.n:focus{outline:none;border-color:var(--violet)}
+input.n.good{border-color:var(--green)} input.n.bad{border-color:var(--red)}
+.opts{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.opts label{border:2px solid var(--line);border-radius:12px;padding:6px 14px;cursor:pointer;font-weight:800;background:var(--card)}
+.opts input{position:absolute;opacity:0;pointer-events:none}
+.opts label.sel{border-color:var(--violet);background:var(--violet-l)}
+.hint{font-size:15px;color:var(--soft);font-weight:600;margin-top:4px}
+.chip{display:inline-block;font-size:13px;font-weight:800;background:var(--amber-l);color:var(--amber);border-radius:99px;padding:1px 9px;margin-right:6px;vertical-align:2px}
+.expl{display:none;margin-top:8px;font-size:16px;font-weight:600;background:var(--card);border-left:4px solid var(--red);padding:6px 10px;border-radius:6px}
+.q.ko .expl{display:block}
+.actions{display:flex;align-items:center;gap:12px;margin-top:12px;flex-wrap:wrap}
+.btn{font:inherit;font-weight:800;border:0;border-radius:12px;padding:10px 16px;cursor:pointer;background:var(--violet);color:#fff}
+.btn.alt{background:var(--violet-l);color:var(--violet)}
+.btn.small{font-size:15px;padding:8px 12px}
+.score{font-weight:800}
+.win{display:none;border-radius:18px;padding:16px 18px;font-size:19px;margin-top:10px}
+.win.yes{background:var(--green-l);border:2px solid var(--green)}
+.win.no{background:var(--amber-l);border:2px solid var(--amber)}
+.bar{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:2px solid var(--line);padding:10px 16px;z-index:5}
+.bar .in{max-width:860px;margin:0 auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.track{flex:1;min-width:120px;height:14px;background:var(--violet-l);border-radius:99px;overflow:hidden}
+.fillbar{height:100%;width:0;background:linear-gradient(90deg,var(--violet),var(--blue));transition:width .4s}
+@media (max-width:520px){.hero h1{font-size:23px}.head h2{font-size:17px}.q{padding-left:46px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="retour" href="../passage-secret.html">← Retour au passage secret</a>
+  <header class="hero">
+    <div class="k">🗝️ Passage secret · Nina · CM1</div>
+    <h1>Calcul malin : mes 4 méthodes</h1>
+    <p>Compléments à la centaine, ajouter et retirer 9, 19, 29…, et les dizaines entières.</p>
+    <div class="modes">
+      <button data-m="aide">🧭 Avec coups de pouce</button>
+      <button data-m="sans">🎯 Sans aide (test)</button>
+    </div>
+    <div class="consigne" id="consigne"></div>
+  </header>
+  <main id="app"></main>
+  <div id="win" class="win"></div>
+  <div class="bilan-card" id="save-box"></div>
+</div>
+
+<div class="bar"><div class="in">
+  <span class="score">⭐ <span id="total">0 / 0</span></span>
+  <div class="track"><div class="fillbar" id="fill"></div></div>
+  <button class="btn alt small" id="again">🔄 Nouvelle série</button>
+  <button class="btn alt small" id="sol">👀 Corrigé (parent)</button>
+</div></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
+<script>
+var FICHE_CODE='P001';
+/* ---------- outils ---------- */
+const R=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+const P=a=>a[R(0,a.length-1)];
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=R(0,i);[a[i],a[j]]=[a[j],a[i]];}return a;};
+const uniq=(c,cands)=>{const s=[c];for(const x of cands){if(x>0&&!s.includes(x))s.push(x);if(s.length===3)break;}let k=1;while(s.length<3){if(!s.includes(c+k))s.push(c+k);k++;}return shuffle(s.map(String));};
+const Q='<b class="qm">?</b>';
+const A=a=>({a});
+const fill=(prompt,rows,expl,hint)=>({type:'fill',prompt,rows,expl,hint});
+const choice=(prompt,options,correct,expl,hint)=>({type:'choice',prompt,options:options.map(String),correct:String(correct),expl,hint});
+
+/* ---------- droites numériques ---------- */
+function nl(ticks,arcs){
+  const W=340,H=140,L=30,RR=306,Y=70,pos={};
+  ticks.forEach(t=>pos[t.v]=L+t.p*(RR-L));
+  let s=`<svg class="nl" viewBox="0 0 ${W} ${H}" aria-hidden="true"><defs>
+  <marker id="mb" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" style="fill:var(--blue)"/></marker>
+  <marker id="mg" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" style="fill:var(--grey)"/></marker></defs>`;
+  s+=`<line class="ax" x1="${L-18}" y1="${Y}" x2="${RR+18}" y2="${Y}"/><path d="M${RR+18} ${Y-5}L${RR+27} ${Y}L${RR+18} ${Y+5}z" style="fill:var(--soft)"/>`;
+  arcs.forEach(a=>{
+    const x1=pos[a.f],x2=pos[a.t],m=(x1+x2)/2,sg=a.below?1:-1,y0=Y+sg*5,g=a.c==='g';
+    s+=`<path class="${g?'ag':'ab'}" d="M${x1} ${y0} Q${m} ${Y+sg*2*a.h} ${x2} ${y0}" marker-end="url(#${g?'mg':'mb'})"/>`;
+    const ly=a.ly!=null?Y+a.ly:(a.below?Y+a.h+18:Y-a.h-4);
+    s+=`<text x="${m+(a.dx||0)}" y="${ly}" text-anchor="middle" class="${g?'lg':'lb'}">${a.l}</text>`;
+  });
+  ticks.forEach(t=>{const x=pos[t.v];s+=`<line class="ax" x1="${x}" y1="${Y-7}" x2="${x}" y2="${Y+7}"/><text x="${x}" y="${Y+(t.dy||24)}" text-anchor="middle" class="${t.r?'r':''}">${t.v}</text>`;});
+  return s+'</svg>';
+}
+
+/* ---------- barres et cubes (dizaines / unités) ---------- */
+function rod(x,y,col,dk){let s=`<rect x="${x}" y="${y}" width="11" height="60" rx="2" fill="${col}" stroke="${dk}" stroke-width="1.5"/>`;for(let k=1;k<10;k++)s+=`<line x1="${x}" y1="${y+6*k}" x2="${x+11}" y2="${y+6*k}" stroke="${dk}" stroke-width="1"/>`;return s;}
+function cubes(x,y,n){let s='';for(let i=0;i<n;i++){const cx=x+(i%2)*13,cy=y+Math.floor(i/2)*13;s+=`<rect x="${cx}" y="${cy}" width="10" height="10" rx="1.5" fill="#e9c46a" stroke="#a8801f" stroke-width="1.5"/>`;}return s;}
+function blocks(){
+  const T='#e9c46a',Td='#a8801f',B='#7fd0f2',Bd='#1f8fc4';let s='<svg class="blk" viewBox="0 0 360 108" aria-hidden="true">';
+  for(let i=0;i<3;i++)s+=rod(6+i*15,14,T,Td); s+=cubes(52,14,8); s+=`<text x="40" y="100" text-anchor="middle">38</text>`;
+  s+=`<text x="88" y="52" text-anchor="middle">+</text>`;
+  for(let i=0;i<4;i++)s+=rod(102+i*15,14,B,Bd); s+=`<text x="129" y="100" text-anchor="middle">40</text>`;
+  s+=`<text x="175" y="52" text-anchor="middle">=</text>`;
+  for(let i=0;i<3;i++)s+=rod(190+i*15,14,T,Td); for(let i=0;i<4;i++)s+=rod(235+i*15,14,B,Bd); s+=cubes(300,14,8);
+  s+=`<text x="255" y="100" text-anchor="middle">78</text>`;
+  return s+'</svg>';
+}
+
+/* ---------- les fiches méthode (mode avec aide) ---------- */
+const M1=`<p><b>Exemple : 426 + ? = 500</b></p>
+${nl([{v:426,p:0,dy:-14},{v:430,p:.22,dy:-14},{v:500,p:1,dy:-14}],[{f:426,t:430,h:14,below:1,l:'+4'},{f:430,t:500,h:34,below:1,l:'+70'}])}
+<p>Je fais <b>deux sauts</b> : d'abord jusqu'à la <b>dizaine supérieure</b> (426 → 430 : +4), puis jusqu'à la <b>centaine supérieure</b> (430 → 500 : +70).</p>
+<p>J'additionne les sauts : 4 + 70 = <b class="r">74</b>. Donc 426 + 74 = 500.</p>
+<p class="tip">⚠️ Piège : ce n'est pas 84 ! Je vérifie toujours : 426 + 74 = 500 ✔️</p>`;
+const M2=`<p><b>Exemple : 875 + 9 = ?</b></p>
+${nl([{v:875,p:0},{v:884,p:.85,dy:50,r:1},{v:885,p:1,dy:50}],[{f:875,t:885,h:40,l:'+10'},{f:885,t:884,h:10,below:1,l:'−1',ly:32,dx:2}])}
+<p>9, c'est 10 − 1. Alors <b>j'ajoute 10 et je retranche 1</b> : 875 + 10 = 885, puis 885 − 1 = <b class="r">884</b>.</p>
+<table class="mini"><tr><td>+ 9</td><td>+ 10 puis − 1</td></tr><tr><td>+ 19</td><td>+ 20 puis − 1</td></tr><tr><td>+ 29</td><td>+ 30 puis − 1</td></tr><tr><td>+ 39</td><td>+ 40 puis − 1</td></tr></table>
+<p class="tip">Exemple : 638 + 29 → 638 + 30 = 668, puis 668 − 1 = 667.</p>`;
+const M3=`<p><b>Exemple : 432 − 9 = ?</b></p>
+${nl([{v:422,p:0,dy:50},{v:423,p:.15,dy:50,r:1},{v:432,p:1}],[{f:432,t:422,h:40,l:'−10'},{f:422,t:423,h:10,below:1,l:'+1',ly:32,dx:-2}])}
+<p>J'ai retiré 10, c'est-à-dire <b>1 de trop</b>… alors je le remets ! 432 − 10 = 422, puis 422 + 1 = <b class="r">423</b>.</p>
+<table class="mini"><tr><td>− 9</td><td>− 10 puis + 1</td></tr><tr><td>− 19</td><td>− 20 puis + 1</td></tr><tr><td>− 29</td><td>− 30 puis + 1</td></tr><tr><td>− 39</td><td>− 40 puis + 1</td></tr></table>
+<p class="tip">🧠 Le petit 1 va toujours <b>dans l'autre sens</b> : j'ajoute 9 → je finis par −1 ; je retire 9 → je finis par +1.</p>`;
+const M4=`<p><b>Exemple : 38 + 40 = ?</b></p>${blocks()}
+<p>38 = 3 dizaines et 8 unités. 40 = 4 dizaines.<br>3 dizaines + 4 dizaines = 7 dizaines, et je garde les 8 unités → <b class="r">78</b>.</p>
+<p>Pareil pour enlever : 96 − 40 → 9 dizaines − 4 dizaines = 5 dizaines, je garde les 6 unités → <b class="r">56</b>.</p>
+<p class="tip">🧠 Quand j'ajoute ou j'enlève des dizaines entières, <b>les unités ne bougent pas</b> : seul le chiffre des dizaines change.</p>`;
+
+/* ---------- CM1 : compléments à la centaine supérieure ---------- */
+function mk1(tmax){const h=R(1,8),t=R(0,tmax),u=R(1,9),n=h*100+t*10+u,T=(h+1)*100;return{n,T,d:n+10-u,c:T-n,u};}
+const ex1=o=>o.d===o.T?`${o.n} → ${o.T} : on arrive directement à la centaine, +${o.c}.`:`${o.n} → ${o.d} : +${o.d-o.n} ; ${o.d} → ${o.T} : +${o.T-o.d}. Total : ${o.d-o.n} + ${o.T-o.d} = ${o.c}.`;
+function genCM1(m){const q=[];
+  if(m==='aide'){
+    for(let i=0;i<3;i++){const o=mk1(8);q.push(fill(`<span class="big">${o.n} + ${Q} = ${o.T}</span>`,[
+      [`De ${o.n} à la dizaine supérieure <b>${o.d}</b> : +`,A(o.d-o.n)],
+      [`De ${o.d} à la centaine supérieure <b>${o.T}</b> : +`,A(o.T-o.d)],
+      [`Donc ${o.n} +`,A(o.c),`= ${o.T}`]],ex1(o)));}
+    let o=mk1(8);
+    q.push(choice(`Je veux aller de <b>${o.n}</b> à <b>${o.T}</b>. Quelle est la <b>dizaine supérieure</b> où je fais mon premier saut ?`,uniq(o.d,[o.n-o.u,o.n+10]),o.d,`La dizaine juste au-dessus de ${o.n}, c'est ${o.d}.`));
+    o=mk1(8);q.push(fill(`Complète.`,[[`${o.n} +`,A(o.c),`= ${o.T}`]],ex1(o),`Passe par ${o.d}.`));
+    o=mk1(8);q.push(fill(`Nina a ${o.n} points au jeu. Il lui faut ${o.T} points pour gagner. Combien lui en manque-t-il ?`,[[`Il lui manque`,A(o.c),`points.`]],ex1(o),`C'est ${o.n} + ? = ${o.T}.`));
+  }else{
+    let o=mk1(9);q.push(fill(`Combien manque-t-il à <b>${o.n}</b> pour arriver à <b>${o.T}</b> ?`,[[A(o.c)]],ex1(o)));
+    o=mk1(9);q.push(fill(`Trouve le nombre de départ.`,[[A(o.n),`+ ${o.c} = ${o.T}`]],`On cherche le nombre qui, avec ${o.c}, fait ${o.T} : ${o.T} − ${o.c} = ${o.n}. Vérification : ${ex1(o)}`));
+    o=mk1(9);q.push(fill(`Complète jusqu'à la centaine supérieure (trouve les deux nombres).`,[[`${o.n} +`,A(o.c),`=`,A(o.T)]],`La centaine supérieure de ${o.n} est ${o.T}. ${ex1(o)}`));
+    o=mk1(8);q.push(choice(`Quel nombre faut-il ajouter à <b>${o.n}</b> pour obtenir <b>${o.T}</b> ?`,uniq(o.c,[o.c+10,o.c>10?o.c-10:o.c+20]),o.c,ex1(o)));
+    o=mk1(9);q.push(fill(`Un livre a ${o.T} pages. Nina vient de finir la page ${o.n}. Combien de pages lui reste-t-il à lire ?`,[[`Il lui reste`,A(o.c),`pages.`]],ex1(o)));
+    const a=mk1(9),b=mk1(9);q.push(fill(`Calcule les deux compléments.`,[[`${a.n} +`,A(a.c),`= ${a.T}`],[`${b.n} +`,A(b.c),`= ${b.T}`]],`${ex1(a)}<br>${ex1(b)}`));
+  }
+  return q;}
+
+/* ---------- CM2 : ajouter 9, 19, 29, 39 ---------- */
+function genCM2(m){const q=[],K=[9,19,29,39];
+  if(m==='aide'){
+    shuffle(K).slice(0,3).forEach(k=>{const n=R(112,858),r=k+1;
+      q.push(fill(`<span class="big">${n} + ${k} = ${Q}</span>`,[[`J'ajoute ${r} : ${n} + ${r} =`,A(n+r)],[`Je retranche 1 :`,A(n+k)]],`${n} + ${r} = ${n+r}, puis ${n+r} − 1 = ${n+k}.`,`${k}, c'est ${r} − 1.`));});
+    const n=R(112,858);
+    q.push(choice(`Pour calculer <b>${n} + 29</b>, je peux faire :`,shuffle(['+ 30 puis − 1','+ 30 puis + 1','+ 20 puis − 1']),'+ 30 puis − 1',`29, c'est 30 − 1 : j'ajoute 30 et je retranche 1. ${n} + 30 = ${n+30}, ${n+30} − 1 = ${n+29}.`));
+    const n2=R(112,880);q.push(fill(`Calcule.`,[[`${n2} + 9 =`,A(n2+9)]],`${n2} + 10 = ${n2+10}, puis − 1 = ${n2+9}.`,`+ 10 puis − 1.`));
+    const n3=R(112,860);q.push(fill(`Calcule.`,[[`${n3} + 19 =`,A(n3+19)]],`${n3} + 20 = ${n3+20}, puis − 1 = ${n3+19}.`,`+ 20 puis − 1.`));
+  }else{
+    const [k1,k2]=shuffle(K),a=R(112,858),b=R(112,858);
+    q.push(fill(`Calcule.`,[[`${a} + ${k1} =`,A(a+k1)],[`${b} + ${k2} =`,A(b+k2)]],`${a} + ${k1+1} − 1 = ${a+k1}<br>${b} + ${k2+1} − 1 = ${b+k2}`));
+    const h=R(1,8),c=h*100+90+R(1,9),kc=P([9,19]);
+    q.push(fill(`Calcule.`,[[`${c} + ${kc} =`,A(c+kc)]],`${c} + ${kc+1} = ${c+kc+1}, puis − 1 = ${c+kc}. On passe la centaine !`));
+    const n=R(150,860),k=P(K);
+    q.push(fill(`Trouve le nombre qui manque.`,[[A(n),`+ ${k} = ${n+k}`]],`On fait le chemin à l'envers : ${n+k} − ${k} → ${n+k} − ${k+1} = ${n-1}, puis + 1 = ${n}.`));
+    const l=R(112,860);
+    q.push(choice(`Léo a écrit : <b>${l} + 19 = ${l+21}</b>. A-t-il raison ?`,['Oui','Non'],'Non',`Léo a ajouté 20 puis il a <b>ajouté</b> 1. Il fallait <b>retrancher</b> 1 : ${l} + 19 = ${l+19}.`));
+    q.push(fill(`Corrige le calcul de Léo.`,[[`${l} + 19 =`,A(l+19)]],`${l} + 20 = ${l+20}, puis − 1 = ${l+19}.`));
+    const z=R(112,840);
+    q.push(choice(`Quel calcul donne le bon résultat pour <b>${z} + 39</b> ?`,shuffle([`${z} + 40 − 1`,`${z} + 40 + 1`,`${z} + 39 + 1`]),`${z} + 40 − 1`,`39 = 40 − 1, donc ${z} + 40 − 1 = ${z+39}.`));
+  }
+  return q;}
+
+/* ---------- CM3 : soustraire 9, 19, 29, 39 ---------- */
+function genCM3(m){const q=[],K=[9,19,29,39];
+  if(m==='aide'){
+    shuffle(K).slice(0,3).forEach(k=>{const n=R(160,960),r=k+1;
+      q.push(fill(`<span class="big">${n} − ${k} = ${Q}</span>`,[[`Je retranche ${r} : ${n} − ${r} =`,A(n-r)],[`J'ajoute 1 :`,A(n-k)]],`${n} − ${r} = ${n-r}, puis ${n-r} + 1 = ${n-k}.`,`J'ai retiré 1 de trop, je le remets.`));});
+    const n=R(160,960);
+    q.push(choice(`Pour calculer <b>${n} − 19</b>, je peux faire :`,shuffle(['− 20 puis + 1','− 20 puis − 1','− 10 puis + 1']),'− 20 puis + 1',`19, c'est 20 − 1 : je retire 20 (1 de trop), puis je remets 1. ${n} − 20 = ${n-20}, + 1 = ${n-19}.`));
+    const n2=R(120,980);q.push(fill(`Calcule.`,[[`${n2} − 9 =`,A(n2-9)]],`${n2} − 10 = ${n2-10}, puis + 1 = ${n2-9}.`,`− 10 puis + 1.`));
+    const n3=R(140,980);q.push(fill(`Calcule.`,[[`${n3} − 29 =`,A(n3-29)]],`${n3} − 30 = ${n3-30}, puis + 1 = ${n3-29}.`,`− 30 puis + 1.`));
+  }else{
+    const [k1,k2]=shuffle(K),a=R(160,960),b=R(160,960);
+    q.push(fill(`Calcule.`,[[`${a} − ${k1} =`,A(a-k1)],[`${b} − ${k2} =`,A(b-k2)]],`${a} − ${k1+1} + 1 = ${a-k1}<br>${b} − ${k2+1} + 1 = ${b-k2}`));
+    const kc=P([9,19]),c=R(2,9)*100+R(0,kc-1);
+    q.push(fill(`Calcule.`,[[`${c} − ${kc} =`,A(c-kc)]],`${c} − ${kc+1} = ${c-kc-1}, puis + 1 = ${c-kc}. On passe sous la centaine !`));
+    const n=R(160,940),k=P(K);
+    q.push(fill(`Trouve le nombre qui manque.`,[[A(n),`− ${k} = ${n-k}`]],`On fait le chemin à l'envers : ${n-k} + ${k} → ${n-k} + ${k+1} = ${n+1}, puis − 1 = ${n}.`));
+    const l=R(160,960);
+    q.push(choice(`Léo a écrit : <b>${l} − 29 = ${l-31}</b>. A-t-il raison ?`,['Oui','Non'],'Non',`Léo a retiré 30 puis il a encore <b>retiré</b> 1. Il fallait <b>remettre</b> 1 : ${l} − 29 = ${l-29}.`));
+    q.push(fill(`Corrige le calcul de Léo.`,[[`${l} − 29 =`,A(l-29)]],`${l} − 30 = ${l-30}, puis + 1 = ${l-29}.`));
+    const z=R(160,960);
+    q.push(choice(`Quel calcul donne le bon résultat pour <b>${z} − 39</b> ?`,shuffle([`${z} − 40 + 1`,`${z} − 40 − 1`,`${z} − 30 − 10`]),`${z} − 40 + 1`,`39 = 40 − 1 : je retire 40 et je remets 1. ${z} − 40 + 1 = ${z-39}.`));
+  }
+  return q;}
+
+/* ---------- CM4 : ajouter / soustraire des dizaines entières ---------- */
+function genCM4(m){const q=[];
+  if(m==='aide'){
+    for(let i=0;i<2;i++){const t=R(1,7),u=R(1,9),a=t*10+u,dt=R(1,9-t),d=dt*10;
+      q.push(fill(`<span class="big">${a} + ${d} = ${Q}</span>`,[
+        [`${a} =`,A(t),`dizaines et`,A(u),`unités`],[`${d} =`,A(dt),`dizaines`],
+        [`J'ajoute les dizaines :`,A(t+dt),`dizaines (les unités ne bougent pas)`],[`Donc ${a} + ${d} =`,A(a+d)]],
+        `${a} = ${t} dizaines et ${u} unités ; ${d} = ${dt} dizaines ; ${t} + ${dt} = ${t+dt} dizaines → ${a+d}.`));}
+    const t=R(4,9),u=R(0,9),a=t*10+u,dt=R(1,t-1),d=dt*10;
+    q.push(fill(`<span class="big">${a} − ${d} = ${Q}</span>`,[
+      [`${a} =`,A(t),`dizaines et`,A(u),`unités`],[`J'enlève ${dt} dizaines :`,A(t-dt),`dizaines`],[`Donc ${a} − ${d} =`,A(a-d)]],
+      `${t} dizaines − ${dt} dizaines = ${t-dt} dizaines, je garde les ${u} unités → ${a-d}.`));
+    const t2=R(2,6),u2=R(1,9),a2=t2*10+u2,d2=R(1,3)*10;
+    q.push(choice(`Dans <b>${a2} + ${d2}</b>, quel chiffre change ?`,['le chiffre des dizaines','le chiffre des unités','les deux'],'le chiffre des dizaines',`On ajoute des dizaines entières : les ${u2} unités restent. ${a2} + ${d2} = ${a2+d2}.`));
+    const a3=R(3,8)*10+R(1,9),d3=R(1,Math.floor(a3/10)-1)*10;
+    q.push(fill(`Calcule.`,[[`${a3} − ${d3} =`,A(a3-d3)]],`${Math.floor(a3/10)} − ${d3/10} = ${Math.floor(a3/10)-d3/10} dizaines, je garde les ${a3%10} unités → ${a3-d3}.`,`Seul le chiffre des dizaines change.`));
+  }else{
+    const t=R(1,6),a=t*10+R(1,9),d=R(1,9-t)*10,tb=R(4,9),b=tb*10+R(0,9),e=R(1,tb-1)*10;
+    q.push(fill(`Calcule.`,[[`${a} + ${d} =`,A(a+d)],[`${b} − ${e} =`,A(b-e)]],`${a} + ${d} = ${a+d} (on ajoute ${d/10} dizaines)<br>${b} − ${e} = ${b-e} (on enlève ${e/10} dizaines)`));
+    const n=R(110,880),dn=R(2,9)*10,n2=R(200,990),en=R(2,9)*10;
+    q.push(fill(`Calcule avec des grands nombres.`,[[`${n} + ${dn} =`,A(n+dn)],[`${n2} − ${en} =`,A(n2-en)]],`${n} + ${dn} = ${n+dn}<br>${n2} − ${en} = ${n2-en}<br>Attention quand on passe une centaine !`));
+    const t3=R(1,5),a3=t3*10+R(1,9),d3=R(2,9-t3)*10||20;
+    q.push(fill(`Trouve le nombre qui manque.`,[[`${a3} +`,A(d3),`= ${a3+d3}`]],`Les unités n'ont pas changé ; les dizaines passent de ${t3} à ${t3+d3/10} : on a ajouté ${d3/10} dizaines, donc ${d3}.`));
+    const r4=R(1,5)*10+R(0,9),e4=R(2,4)*10;
+    q.push(fill(`Trouve le nombre de départ.`,[[A(r4+e4),`− ${e4} = ${r4}`]],`On fait le chemin à l'envers : ${r4} + ${e4} = ${r4+e4}.`));
+    const a5=R(2,5)*10+R(0,9),p5=R(2,4)*10,m5=R(1,3)*10;
+    q.push(fill(`Calcule en deux étapes.`,[[`${a5} + ${p5} − ${m5} =`,A(a5+p5-m5)]],`${a5} + ${p5} = ${a5+p5}, puis − ${m5} = ${a5+p5-m5}.`));
+    const tl=R(1,5),ul=R(1,4),al=tl*10+ul,dl=R(2,4)*10;
+    q.push(choice(`Léo a écrit : <b>${al} + ${dl} = ${al+dl/10}</b>. A-t-il raison ?`,['Oui','Non'],'Non',`Léo a ajouté ${dl/10} aux unités ! ${dl} = ${dl/10} dizaines, donc ${al} + ${dl} = ${al+dl}.`));
+  }
+  return q;}
+
+/* ---------- Mission finale : problèmes mélangés ---------- */
+function genFin(m){const q=[],aide=m==='aide';
+  const n1=R(130,860);
+  q.push(fill(`${aide?'<span class="chip">Méthode CM2</span>':''}La bibliothèque de l'école a ${n1} livres. Elle en reçoit 29 nouveaux. Combien de livres a-t-elle maintenant ?`,[[A(n1+29),`livres`]],`${n1} + 29 : ${n1} + 30 = ${n1+30}, − 1 = ${n1+29}.`,'+ 30 puis − 1.'));
+  const o=mk1(8);
+  q.push(fill(`${aide?'<span class="chip">Méthode CM1</span>':''}Pour la kermesse, il faut ${o.T} gâteaux. On en a déjà ${o.n}. Combien en manque-t-il ?`,[[A(o.c),`gâteaux`]],ex1(o),`${o.n} + ? = ${o.T} : passe par ${o.d}.`));
+  const n3=R(60,190);
+  q.push(fill(`${aide?'<span class="chip">Méthode CM3</span>':''}Nina a ${n3} billes. Elle en donne 19 à son amie. Combien lui en reste-t-il ?`,[[A(n3-19),`billes`]],`${n3} − 20 = ${n3-20}, + 1 = ${n3-19}.`,'− 20 puis + 1.'));
+  const n4=R(150,480),d4=R(3,9)*10;
+  q.push(fill(`${aide?'<span class="chip">Méthode CM4</span>':''}Un train transporte ${n4} passagers. À la gare, ${d4} passagers descendent. Combien en reste-t-il ?`,[[A(n4-d4),`passagers`]],`On enlève ${d4/10} dizaines : ${n4} − ${d4} = ${n4-d4}.`,`On enlève ${d4/10} dizaines.`));
+  if(!aide){const n5=R(150,800);
+    q.push(fill(`Nina a ${n5} points. Elle gagne 9 points, puis elle en perd 19. Combien a-t-elle de points à la fin ?`,[[A(n5-10),`points`]],`${n5} + 9 = ${n5+9} (+ 10 − 1), puis ${n5+9} − 19 = ${n5-10} (− 20 + 1).`));}
+  return q;}
+
+const SECTIONS=[
+  {id:'cm1',tag:'CM1',title:'Les compléments à la centaine supérieure',method:M1,gen:genCM1},
+  {id:'cm2',tag:'CM2',title:'Ajouter 9, 19, 29…',method:M2,gen:genCM2},
+  {id:'cm3',tag:'CM3',title:'Soustraire 9, 19, 29…',method:M3,gen:genCM3},
+  {id:'cm4',tag:'CM4',title:'Ajouter ou soustraire des dizaines entières',method:M4,gen:genCM4},
+  {id:'fin',tag:'🏁',title:'Mission finale : les problèmes',gen:genFin}
+];
+
+/* ---------- affichage ---------- */
+let mode='aide',state={},serie={enregistree:false,corrige:false};
+function renderQ(sid,q,i){
+  let h=`<li class="q" id="${sid}-${i}"><div class="prompt">${q.prompt}</div>`;
+  if(q.type==='fill'){
+    q.rows.forEach(r=>{h+='<div class="row">'+r.map(t=>typeof t==='string'?`<span>${t}</span>`:`<input class="n" type="text" inputmode="numeric" autocomplete="off" data-a="${t.a}" style="width:${String(t.a).length+2.4}ch" aria-label="réponse">`).join('')+'</div>';});
+  }else{
+    h+='<div class="opts">'+q.options.map(o=>`<label><input type="radio" name="${sid}-${i}" value="${o}">${o}</label>`).join('')+'</div>';
+  }
+  if(q.hint&&mode==='aide')h+=`<div class="hint">💡 Coup de pouce : ${q.hint}</div>`;
+  return h+`<div class="expl">🔎 ${q.expl}</div></li>`;
+}
+function render(){
+  document.querySelectorAll('.modes button').forEach(b=>b.classList.toggle('on',b.dataset.m===mode));
+  const app=document.getElementById('app');app.innerHTML='';state={};serie={enregistree:false,corrige:false};
+  const sbx=document.getElementById('save-box');if(sbx)sbx.innerHTML='';
+  document.getElementById('consigne').innerHTML=mode==='aide'?'🧭 Mode entraînement : ici, rien n\'est noté. Quand tu es prête, passe en mode <b>Sans aide</b> pour obtenir ta note !':'🎯 Mode test : ta note compte ! Elle est calculée sur ton <b>premier essai</b> de chaque partie. Tu peux recommencer une nouvelle série pour l\'améliorer.';
+  SECTIONS.forEach(S=>{
+    const qs=S.gen(mode);state[S.id]={qs,checked:false,score:0,premier:null};
+    const card=document.createElement('section');card.className='card';card.id=S.id;
+    let h=`<div class="head"><div class="tag">${S.tag}</div><h2>${S.title}</h2></div><div class="body">`;
+    if(mode==='aide'&&S.method)h+=`<details class="method" open><summary>📘 Ma méthode</summary>${S.method}</details>`;
+    h+='<ol class="qs">'+qs.map((q,i)=>renderQ(S.id,q,i)).join('')+'</ol>';
+    h+=`<div class="actions"><button class="btn" data-check="${S.id}">✅ Vérifier</button><span class="score" id="sc-${S.id}"></span></div></div>`;
+    card.innerHTML=h;app.appendChild(card);
+  });
+  updateBar();
+}
+function check(sid){
+  const st=state[sid];let sc=0;
+  st.qs.forEach((q,i)=>{
+    const li=document.getElementById(`${sid}-${i}`);let ok;
+    if(q.type==='fill'){ok=true;li.querySelectorAll('input.n').forEach(inp=>{const v=inp.value.replace(/\s/g,'');const g=v!==''&&Number(v)===Number(inp.dataset.a);inp.classList.toggle('good',g);inp.classList.toggle('bad',!g);if(!g)ok=false;});}
+    else{const c=li.querySelector('input:checked');ok=!!c&&c.value===q.correct;}
+    li.classList.toggle('ok',ok);li.classList.toggle('ko',!ok);if(ok)sc++;
+  });
+  st.checked=true;st.score=sc;if(st.premier===null)st.premier=sc;const n=st.qs.length;
+  document.getElementById('sc-'+sid).textContent=`${sc} / ${n} ${sc===n?'🌟 Parfait !':sc>=n*0.7?'👍 Bien !':'💪 Corrige les cases rouges'}`;
+  updateBar();
+}
+function statut(pct){
+  return pct>=80?{t:'Acquis ✅',c:'yes'}:pct>=60?{t:'À retravailler 📚',c:'no'}:{t:'À refaire 🔁',c:'no'};
+}
+function updateBar(){
+  let tot=0,sc=0,done=0,note=0;const ids=Object.keys(state);
+  ids.forEach(k=>{tot+=state[k].qs.length;if(state[k].checked){sc+=state[k].score;done++;note+=state[k].premier;}});
+  document.getElementById('fill').style.width=(tot?sc/tot*100:0)+'%';
+  document.getElementById('total').textContent=`${sc} / ${tot}`;
+  const win=document.getElementById('win');
+  if(done!==ids.length||!tot){win.style.display='none';return;}
+  win.style.display='block';
+  if(mode==='aide'){
+    const p=Math.round(sc/tot*100);
+    win.className='win '+(p>=80?'yes':'no');
+    win.innerHTML=p>=80?`🌟 <b>Super entraînement !</b> (${p} %)<br>Tu es prête pour le mode <b>Sans aide</b> : c'est lui qui donne ta note. 🎯`:`💪 ${p} % — corrige les cases rouges, puis entraîne-toi encore avant le mode <b>Sans aide</b>.`;
+    return;
+  }
+  if(serie.corrige){win.className='win no';win.innerHTML='👀 Corrigé affiché : cette série n\'est pas notée.<br>Clique sur <b>🔄 Nouvelle série</b> pour une série notée.';return;}
+  const p=Math.round(note/tot*100),st=statut(p);
+  win.className='win '+st.c;
+  win.innerHTML=(p>=80?'🔓 <b>Passage secret débloqué !</b><br>':'')+`Ta note : <b>${note} / ${tot}</b> (${p} %) — <b>${st.t}</b>`
+    +(p<80?`<br>Corrige les cases rouges pour comprendre tes erreurs, puis clique sur <b>🔄 Nouvelle série</b> pour retenter ta chance.`:'')
+    ;
+  if(!serie.enregistree&&!serie.corrige){
+    serie.enregistree=true;
+    if(typeof enregistrerProgression==='function')Promise.resolve(enregistrerProgression(FICHE_CODE,note,tot)).then(()=>{
+      // Même vocabulaire que la liste du passage secret (à faire / à refaire / à retravailler / acquis)
+      const box=document.getElementById('atelier-progression-box');
+      if(box&&box.textContent.indexOf('enregistré pour')!==-1)box.innerHTML=box.innerHTML.replace(/— .*$/,'— '+st.t);
+    });
+  }
+}
+
+/* ---------- événements ---------- */
+document.addEventListener('click',e=>{
+  const c=e.target.closest('[data-check]');if(c)check(c.dataset.check);
+  const m=e.target.closest('.modes button');if(m&&m.dataset.m!==mode){mode=m.dataset.m;render();window.scrollTo({top:0,behavior:'smooth'});}
+});
+document.addEventListener('change',e=>{
+  if(e.target.type==='radio'){e.target.closest('.opts').querySelectorAll('label').forEach(l=>l.classList.toggle('sel',l.contains(e.target)));}
+});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&e.target.matches('input.n')){e.preventDefault();const all=[...document.querySelectorAll('input.n')];const nx=all[all.indexOf(e.target)+1];if(nx)nx.focus();}
+});
+document.getElementById('again').onclick=()=>{render();window.scrollTo({top:0,behavior:'smooth'});};
+document.getElementById('sol').onclick=()=>{
+  if(!confirm('Afficher toutes les réponses ? (pour le parent)\nCette série ne sera pas notée.'))return;
+  serie.corrige=true;
+  document.querySelectorAll('input.n').forEach(i=>i.value=i.dataset.a);
+  SECTIONS.forEach(S=>{state[S.id].qs.forEach((q,i)=>{if(q.type==='choice'){const r=[...document.querySelectorAll(`input[name="${S.id}-${i}"]`)].find(x=>x.value===q.correct);if(r){r.checked=true;r.dispatchEvent(new Event('change',{bubbles:true}));}}});check(S.id);});
+};
+render();
+</script>
+</body>
+</html>
