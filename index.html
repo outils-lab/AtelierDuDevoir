@@ -349,7 +349,7 @@ body{font-family:'Nunito',sans-serif;background:#F8F9FA;color:var(--texte);}
     </div>
   </a>
 
-  <a class="porte porte-passage" href="passage-secret.html">
+  <a class="porte porte-passage" id="porte-passage" href="passage-secret.html" style="display:none;">
     <div class="porte-haut">
       <img class="passage-logo" src="logo-passage-secret.webp" alt="Le passage secret">
     </div>
@@ -391,6 +391,18 @@ window.addEventListener('load', function() {
       var sb=supabase.createClient(U,K);
       var s=await sb.auth.getSession();
       if(!s.data.session) return;
+
+      /* Le passage secret est l'espace privé d'une seule famille : la carte reste
+         masquée par défaut et n'apparaît qu'après accord de la base (est_admin).
+         Un échec du script laisse donc la carte cachée, jamais visible par erreur. */
+      try{
+        var adm = await sb.rpc('est_admin');
+        if(adm.data === true){
+          var pp = document.getElementById('porte-passage');
+          if(pp) pp.style.display = '';
+        }
+      }catch(e){}
+
       var id=localStorage.getItem('atelier_enfant_actif');
       if(!id) return;
       var r=await sb.from('assignations').select('id').eq('enfant_id',id).in('statut',['a_faire','a_refaire']);
