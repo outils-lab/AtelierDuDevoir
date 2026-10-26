@@ -550,7 +550,7 @@ function finir(){
   } else {
     rc.innerHTML = '<div class="recomp rien">'+(total === 10 ? '7 bonnes réponses sur 10' : Math.ceil(total*0.7)+' bonnes réponses sur '+total)+' donnent une vie, '+(total === 10 ? '9' : Math.ceil(total*0.9))+' en donnent deux. Retente ta chance !</div>';
   }
-  if(S.mode !== 'compte') rc.innerHTML += '<div class="invite" style="margin-top:12px"><b>Envie de garder tes progrès ?</b> Avec un compte famille, tes erreurs reviennent pour que tu les maîtrises, et tu peux débloquer les 6 jeux. <a href="connexion.html">Créer un compte</a></div>';
+  if(S.mode !== 'compte') rc.insertAdjacentHTML('beforeend', '<div class="invite" style="margin-top:12px"><b>Envie de garder tes progrès ?</b> Avec un compte famille, tes erreurs reviennent pour que tu les maîtrises, et tu peux débloquer les 6 jeux. <a href="connexion.html">Créer un compte</a></div>');
   var vus = {};
   var errs = SE.erreurs.filter(function(x){ if(vus[x.it.key]) return false; vus[x.it.key] = 1; return true; });
   $('#erreurs').innerHTML = errs.length ? '<h3>À retenir</h3>' + errs.map(function(x){
