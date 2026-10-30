@@ -1,0 +1,117 @@
+# Contrôle automatique des fiches — L'Atelier du Devoir
+# • À chaque envoi sur main : le script (qa/controle.js) et le robot (qa/robot.py)
+#   contrôlent les fichiers modifiés. S'ils trouvent une erreur dans ces fichiers,
+#   la coche devient rouge et GitHub envoie un e-mail.
+# • Chaque lundi (et à la demande, bouton « Run workflow ») : rapport complet du site,
+#   pour information, dans l'onglet Actions.
+# Le rapport s'affiche sur la page du passage (onglet Actions → le passage → « Summary »).
+name: Contrôle des fiches
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'fiches/**'
+      - 'fiches-perso/**'
+      - 'arcade/**'
+      - 'atelier-fiche.js'
+      - 'atelier-fiche.css'
+      - 'atelier-progression.js'
+      - 'fiches.json'
+      - 'passage-secret.json'
+      - 'qa/**'
+      - '.github/workflows/controle-fiches.yml'
+  schedule:
+    - cron: '17 6 * * 1'
+  workflow_dispatch:
+
+jobs:
+  script:
+    name: Script de contrôle
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Contrôler les fichiers envoyés
+        if: github.event_name == 'push'
+        shell: bash
+        run: |
+          FICHIERS=$(git diff --name-only --diff-filter=d "${{ github.event.before }}" "${{ github.sha }}" -- fiches fiches-perso arcade atelier-fiche.js atelier-fiche.css atelier-progression.js fiches.json passage-secret.json 2>/dev/null | grep -E '\.(html|js|css|json)$' || true)
+          if [ -n "$FICHIERS" ]; then
+            echo "Fichiers contrôlés :"; echo "$FICHIERS"
+            node qa/controle.js $FICHIERS --rapport rapport.md
+          else
+            echo "Aucune fiche modifiée : rapport complet du site, pour information."
+            node qa/controle.js --rapport rapport.md || true
+          fi
+
+      - name: Rapport complet du site
+        if: github.event_name != 'push'
+        run: node qa/controle.js --rapport rapport.md || true
+
+      - name: Afficher le rapport
+        if: always()
+        run: '[ -f rapport.md ] && cat rapport.md >> "$GITHUB_STEP_SUMMARY" || true'
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rapport-controle
+          path: rapport.md
+          retention-days: 30
+
+  robot:
+    name: Robot qui joue les fiches
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Installer le navigateur du robot
+        run: |
+          pip install playwright==1.48.0
+          python -m playwright install --with-deps chromium
+
+      - name: Jouer les fiches envoyées
+        if: github.event_name == 'push'
+        shell: bash
+        run: |
+          set -o pipefail
+          DIFF() { git diff --name-only --diff-filter=d "${{ github.event.before }}" "${{ github.sha }}" -- "$@" 2>/dev/null || true; }
+          FICHES=$(DIFF fiches fiches-perso | grep -E '\.html$' || true)
+          MOTEUR=$(DIFF atelier-fiche.js atelier-fiche.css)
+          OUTILS=$(DIFF qa .github/workflows/controle-fiches.yml)
+          if [ -n "$MOTEUR" ]; then
+            python3 qa/robot.py | tee robot.txt                       # moteur modifié : on rejoue tout
+          elif [ -n "$FICHES" ]; then
+            python3 qa/robot.py $FICHES | tee robot.txt
+          elif [ -n "$OUTILS" ]; then
+            echo "Contrôles modifiés : toutes les fiches, pour information." | tee robot.txt
+            python3 qa/robot.py | tee -a robot.txt || true
+          else
+            echo "Aucune fiche à jouer." | tee robot.txt
+          fi
+
+      - name: Jouer toutes les fiches
+        if: github.event_name != 'push'
+        shell: bash
+        run: python3 qa/robot.py | tee robot.txt || true
+
+      - name: Afficher le rapport du robot
+        if: always()
+        run: '[ -f robot.txt ] && { echo "## Robot"; echo; cat robot.txt; } >> "$GITHUB_STEP_SUMMARY" || true'
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rapport-robot
+          path: robot.txt
+          retention-days: 30
