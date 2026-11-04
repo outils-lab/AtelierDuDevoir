@@ -107,6 +107,10 @@ body.lock nav, body.lock .retour, body.lock #tab-lecon, body.lock #tab-aide{disp
   .sort.c4 .lbl{grid-column:auto;margin-top:0}
 }
 .svgbox{overflow-x:auto;margin:6px 0}.svgbox svg{max-width:100%;height:auto}
+.verif{background:#fff;border:2px dashed var(--ochre);border-radius:12px;padding:10px 12px;margin:12px 0 4px}
+.verif-t{font-weight:800;color:var(--ochre);margin-bottom:4px}
+.vq{padding:6px 0;border-top:1px dotted var(--line)}
+.vq:first-of-type{border-top:0}
 .ex{background:#fff;border:1px dashed var(--line);border-radius:10px;padding:8px 10px;margin:8px 0}
 </style>
 </head>
@@ -194,7 +198,9 @@ body.lock nav, body.lock .retour, body.lock #tab-lecon, body.lock #tab-aide{disp
     <button class="btn alt done-btn" data-done="p4">J'ai bien compris</button>
   </div>
 
-  <div class="tip"><b>Comment apprendre :</b> lis une partie, active le <b>mode mémoire</b> et récite. Puis fais les exercices <b>avec aide</b>, et enfin le contrôle <b>sans aide</b>.</div>
+  <div id="partLock" class="warn hidden"></div>
+
+  <div class="tip"><b>Comment apprendre :</b> lis un bloc, réponds à ses 3 questions, puis clique sur « J'ai bien compris » pour ouvrir le bloc suivant. Ensuite, active le <b>mode mémoire</b> pour réciter, fais les exercices <b>avec aide</b>, et enfin le contrôle <b>sans aide</b>.</div>
 </section>
 
 <!-- ================= EXERCICES ================= -->
@@ -672,13 +678,86 @@ $("#memBtn").onclick=()=>{
   $("#memInfo").classList.toggle("hidden", !on);
 };
 document.querySelectorAll(".k").forEach(k=>k.onclick=()=>{ if(document.body.classList.contains("mem")) k.classList.add("show"); });
+/* ---------- 3 questions de vérification par bloc ----------
+   Le bloc suivant reste caché tant que les 3 réponses ne sont pas justes.
+   Le bloc au-dessus reste visible : l'enfant peut relire pour répondre. */
+const CHECKS = {
+  p1: [["Écris en anglais : <b>lundi</b>",["Monday"]],
+       ["Écris en anglais : <b>mercredi</b>",["Wednesday"]],
+       ["En anglais, un jour commence toujours par une … <i>(un mot en français)</i>",["majuscule","capitale","lettre majuscule"]]],
+  p2: [["Écris l'abréviation de <b>the first</b> <i>(chiffre + 2 lettres)</i>",["1st"]],
+       ["Écris l'abréviation de <b>the twenty-third</b> <i>(chiffre + 2 lettres)</i>",["23rd"]],
+       ["Quelles 2 lettres ajoute-t-on après <b>11</b> ?",["th"]]],
+  p3: [["Écris en lettres : <b>5th</b> = the …",["fifth"]],
+       ["Écris en lettres : <b>9th</b> = the …",["ninth"]],
+       ["Écris en lettres : <b>20th</b> = the …",["twentieth"]]],
+  p4: [["Écris en lettres : <b>3rd</b> = the …",["third"]],
+       ["Écris en lettres : <b>21st</b> = the …",["twenty-first","twenty first"]],
+       ["Écris en lettres : <b>30th</b> = the …",["thirtieth"]]]
+};
+const ORDER = ["p1","p2","p3","p4"];
 const doneStore = store.get("p004_compris") || {};
-document.querySelectorAll("[data-done]").forEach(b=>{
-  const id=b.dataset.done;
-  const paint=()=>{ b.classList.toggle("on",!!doneStore[id]); b.textContent = doneStore[id] ? "Compris ✓" : "J'ai bien compris"; };
-  b.onclick=()=>{ doneStore[id]=!doneStore[id]; store.set("p004_compris",doneStore); paint(); };
-  paint();
+const checkStore = store.get("p004_verif") || {};
+function paintParts(){
+  let open = true;
+  ORDER.forEach(id=>{
+    const part = document.querySelector(`[data-part="${id}"]`);
+    part.classList.toggle("hidden", !open);
+    if(!doneStore[id]) open = false;
+  });
+  const lockMsg = $("#partLock");
+  const next = ORDER.find(id=>!doneStore[id]);
+  lockMsg.classList.toggle("hidden", !next || next===ORDER[ORDER.length-1] && false);
+  lockMsg.innerHTML = next ? `🔒 Les blocs suivants s'ouvriront quand tu auras répondu juste aux 3 questions du bloc « ${document.querySelector(`[data-part="${next}"] h3`).textContent} », puis cliqué sur « J'ai bien compris ».` : "";
+  if(!next) lockMsg.classList.add("hidden");
+}
+ORDER.forEach(id=>{
+  const part = document.querySelector(`[data-part="${id}"]`);
+  const btn = part.querySelector("[data-done]");
+  checkStore[id] = checkStore[id] || {};
+  const box = el("div",{class:"verif"});
+  box.appendChild(el("div",{class:"verif-t"},"✏️ Je vérifie que j'ai compris (je peux relire le bloc juste au-dessus) :"));
+  const paintBtn = () => {
+    const all = CHECKS[id].every((_,i)=>checkStore[id][i]);
+    btn.disabled = !all && !doneStore[id];
+    btn.classList.toggle("on", !!doneStore[id]);
+    btn.textContent = doneStore[id] ? "Compris ✓" : all ? "J'ai bien compris" : "J'ai bien compris (réponds d'abord aux 3 questions)";
+  };
+  CHECKS[id].forEach(([q,ans],i)=>{
+    const c = el("div",{class:"vq"});
+    c.appendChild(el("div",{class:"q"},`${i+1}. ${q}`));
+    const row = el("div",{class:"row"});
+    const inp = el("input",{type:"text",autocomplete:"off",autocapitalize:"off",spellcheck:"false",placeholder:"écris ta réponse"});
+    const b = el("button",{class:"btn"},"Vérifier");
+    const fb = el("div",{class:"fb hidden"});
+    let essais = 0;
+    const ok = () => { inp.value = inp.value || ans[0]; inp.disabled=true; b.disabled=true; fb.className="fb ok"; fb.innerHTML="Bravo ! ✓"; checkStore[id][i]=true; store.set("p004_verif",checkStore); paintBtn(); };
+    if(checkStore[id][i]) { inp.value = ans[0]; ok(); }
+    const go = () => {
+      if(!inp.value.trim()) return;
+      const r = matchWord(inp.value, ans);
+      if(r==="exact" || r==="accent") ok();
+      else {
+        essais++;
+        fb.className = "fb " + (r==="fuzzy" ? "mid" : "ko");
+        fb.innerHTML = (r==="fuzzy" ? "Presque ! Vérifie l'orthographe dans le bloc au-dessus, puis réessaie." : "Pas encore. Relis le bloc juste au-dessus, puis réessaie.")
+          + (essais>=3 ? `<br>La bonne réponse : <b>${ans[0]}</b>. Recopie-la pour continuer.` : "");
+        inp.select();
+      }
+    };
+    b.onclick = go; inp.onkeydown = e => { if(e.key==="Enter") go(); };
+    row.append(inp,b); c.append(row,fb); box.appendChild(c);
+  });
+  part.insertBefore(box, btn);
+  btn.onclick = () => {
+    if(btn.disabled || doneStore[id]) return;
+    doneStore[id] = true; store.set("p004_compris",doneStore); paintBtn(); paintParts();
+    const n = ORDER[ORDER.indexOf(id)+1];
+    if(n) setTimeout(()=>document.querySelector(`[data-part="${n}"]`).scrollIntoView({behavior:"smooth",block:"start"}),100);
+  };
+  paintBtn();
 });
+paintParts();
 showNotes();
 chargerNotesCompte();
 { const c = store.get(KEY_C); if(c && c.ids) controleInterrompu(c); }
