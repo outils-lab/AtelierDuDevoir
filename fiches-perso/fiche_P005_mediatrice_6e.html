@@ -1,0 +1,772 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="../favicon.ico" sizes="any">
+<title>La médiatrice d'un segment — Le passage secret</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6efe3; --paper:#fffaf2; --ink:#2b2118; --muted:#7a6a58; --line:#e3d5bf;
+  --ochre:#2f6aa8; --ochre-l:#e3eefa; --char:#1f2f4a; --moss:#3f7d4e; --moss-l:#e5f3e8;
+  --red:#b3392c; --red-l:#fbe6e3; --gold:#c9961f; --gold-l:#fdf3d8; --blue:#2f6aa8; --blue-l:#e6eff9;
+}
+*{box-sizing:border-box}
+:root{color-scheme:light}
+.retour{display:inline-block;color:#bcd3f0;text-decoration:none;font-weight:800;font-size:15px;padding:0 0 8px}
+#atelier-progression-box{margin-top:14px}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Nunito,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:17px;line-height:1.5}
+header{background:var(--char);color:#fff;padding:14px 16px 0}
+header .top{max-width:860px;margin:0 auto}
+header small{color:#bcd3f0;letter-spacing:.05em;text-transform:uppercase;font-size:12px}
+header h1{margin:2px 0 10px;font-size:24px}
+nav{max-width:860px;margin:0 auto;display:flex;gap:6px;overflow-x:auto}
+nav button{flex:1;min-width:110px;border:0;border-radius:10px 10px 0 0;padding:10px 8px;font:inherit;font-weight:700;font-size:15px;cursor:pointer;background:#3b5580;color:#e3eefa}
+nav button.on{background:var(--bg);color:var(--char)}
+main{max-width:860px;margin:0 auto;padding:16px 16px 140px}
+h2{font-size:21px;margin:22px 0 8px;color:var(--char)}
+.part{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:14px 0}
+.part h3{margin:0 0 8px;font-size:18px;color:var(--ochre)}
+.part ul{margin:6px 0;padding-left:20px}
+.part li{margin:3px 0}
+.def{background:var(--ochre-l);border-left:5px solid var(--ochre);border-radius:8px;padding:8px 10px;margin:8px 0}
+.warn{background:var(--red-l);border-left:5px solid var(--red);border-radius:8px;padding:8px 10px;margin:8px 0}
+.tip{background:var(--gold-l);border-left:5px solid var(--gold);border-radius:8px;padding:8px 10px;margin:8px 0}
+.k{font-weight:700;color:var(--char)}
+body.mem .k{color:transparent;background:#e9dcc6;border-radius:4px;cursor:pointer;user-select:none}
+body.mem .k.show{color:var(--moss);background:var(--moss-l)}
+.memctl{position:sticky;top:0;z-index:5;background:var(--bg);padding:8px 0;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.btn{border:0;border-radius:10px;padding:10px 14px;font:inherit;font-weight:700;cursor:pointer;background:var(--char);color:#fff}
+.btn.alt{background:#fff;color:var(--char);border:2px solid var(--char)}
+.btn.ok{background:var(--moss)}
+.btn:disabled{opacity:.45;cursor:default}
+.done-btn{margin-top:8px}
+.done-btn.on{background:var(--moss)}
+/* frise */
+.part:not([data-part=p4]) .frise{grid-template-columns:auto 1fr}
+.frise{display:grid;grid-template-columns:auto 1fr auto 1fr;gap:4px 10px;align-items:center;margin-top:6px}
+.frise .d{font-weight:800;font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+.frise .e{padding:4px 8px;border-radius:6px}
+.frise .pa{background:var(--ochre-l)}
+.frise .ne{background:var(--moss-l)}
+.frise .sep{grid-column:1/-1;font-weight:800;font-size:13px;letter-spacing:.06em;text-transform:uppercase;margin-top:6px}
+/* exercices */
+.intro{background:var(--paper);border:2px solid var(--char);border-radius:14px;padding:12px 14px}
+.prog{height:10px;background:#e7dbc8;border-radius:6px;overflow:hidden;margin:10px 0}
+.prog i{display:block;height:100%;background:var(--ochre);width:0;transition:width .3s}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin:10px 0}
+.card .n{font-size:12px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.card .q{font-weight:600;margin:4px 0 8px}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opt{border:2px solid var(--line);background:#fff;border-radius:10px;padding:8px 12px;font:inherit;cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--ochre)}
+.opt.good{border-color:var(--moss);background:var(--moss-l)}
+.opt.bad{border-color:var(--red);background:var(--red-l)}
+.opt.sel{border-color:var(--char);background:#efe3d0}
+input[type=text],textarea{font:inherit;padding:8px 10px;border:2px solid var(--line);border-radius:10px;background:#fff;width:100%;max-width:340px}
+textarea{max-width:100%;min-height:70px;resize:vertical}
+input.blank{width:auto;min-width:90px;max-width:170px;padding:3px 6px;margin:2px 2px;display:inline-block}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.hint{font-size:14px;color:var(--blue);background:var(--blue-l);border-radius:6px;padding:2px 8px;display:inline-block;margin-bottom:6px}
+.fb{margin-top:8px;border-radius:8px;padding:7px 10px;font-size:15px}
+.fb.ok{background:var(--moss-l);color:#1f5131}
+.fb.mid{background:var(--gold-l);color:#6b4e08}
+.fb.ko{background:var(--red-l);color:#7d241a}
+.seq{min-height:38px;border:2px dashed var(--line);border-radius:10px;padding:6px;margin:8px 0;display:flex;flex-wrap:wrap;gap:6px}
+.seq span{background:var(--char);color:#fff;border-radius:8px;padding:4px 10px}
+.sort{display:grid;grid-template-columns:1fr auto auto;gap:6px 8px;align-items:center}
+.sort .opt{padding:5px 10px;font-size:14px}
+.sort.c4{grid-template-columns:auto repeat(4,minmax(44px,auto));justify-content:start}
+.sort.c4 .lbl{font-weight:800;text-align:right;padding-right:6px}
+.result{border-radius:14px;padding:16px;margin:18px 0;text-align:center}
+.result.ok{background:var(--moss-l);border:2px solid var(--moss)}
+.result.ko{background:var(--red-l);border:2px solid var(--red)}
+.result .big{font-size:40px;font-weight:900}
+.notes{position:fixed;left:0;right:0;bottom:0;background:var(--char);color:#fff;z-index:20;box-shadow:0 -4px 14px rgba(0,0,0,.2)}
+.notes .in{max-width:860px;margin:0 auto;padding:8px 16px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.notes .box{background:#33466a;border-radius:10px;padding:6px 10px}
+.notes .lab{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:#e8c9a6}
+.notes .val{font-size:18px;font-weight:800}
+.notes .ver{font-size:13px}
+.notes .ver.ok{color:#9fe0ae}.notes .ver.ko{color:#ffb4a8}
+.hidden{display:none}
+body.lock nav, body.lock .retour, body.lock #tab-lecon, body.lock #tab-aide{display:none!important}
+#lockBar{max-width:860px;margin:0 auto;padding:10px 0 12px;font-weight:800;color:#ffd9b0}
+.gate ul{margin:6px 0 10px;padding-left:20px}
+.gate .row{margin-top:8px}
+@media (max-width:520px){
+  html,body{font-size:16px}
+  .notes .val{font-size:16px}
+  .sort{grid-template-columns:1fr auto}
+  .sort .lbl{grid-column:1/-1;margin-top:4px}
+  .sort.c4{grid-template-columns:auto repeat(4,1fr)}
+  .sort.c4 .lbl{grid-column:auto;margin-top:0}
+}
+.svgbox{overflow-x:auto;margin:6px 0}.svgbox svg{max-width:100%;height:auto}
+.verif{background:#fff;border:2px dashed var(--ochre);border-radius:12px;padding:10px 12px;margin:12px 0 4px}
+.verif-t{font-weight:800;color:var(--ochre);margin-bottom:4px}
+.vq{padding:6px 0;border-top:1px dotted var(--line)}
+.vq:first-of-type{border-top:0}
+.ex{background:#fff;border:1px dashed var(--line);border-radius:10px;padding:8px 10px;margin:8px 0}
+</style>
+</head>
+<body>
+<header>
+  <div class="top">
+    <a class="retour" href="../passage-secret.html">← Retour au passage secret</a><br>
+    <small>🗝️ Passage secret · Raphaël · 6e · Maths · interro</small>
+    <h1>La médiatrice d'un segment</h1>
+  </div>
+  <nav>
+    <button data-tab="lecon" class="on">1 · La leçon</button>
+    <button data-tab="aide">2 · Avec aide</button>
+    <button data-tab="sans">3 · Sans aide</button>
+  </nav>
+  <div id="lockBar" class="hidden">🔒 Contrôle en cours : la leçon et l'aide sont verrouillées jusqu'à la dernière question.</div>
+</header>
+
+<main>
+<section id="tab-lecon">
+  <div class="memctl">
+    <button class="btn" id="memBtn">Mode mémoire : cacher les mots-clés</button>
+    <span id="memInfo" class="hidden" style="font-size:14px;color:var(--muted)">Dis le mot à voix haute, puis touche la case pour vérifier.</span>
+  </div>
+  <div class="tip"><b>Pour l'interrogation, tu dois savoir :</b> la <b>définition</b>, la <b>propriété caractéristique</b> et les <b>deux méthodes de construction</b>.</div>
+
+  <div class="part" data-part="p1">
+    <h3>1) La définition (par cœur)</h3>
+    <div class="def"><b>Définition :</b> la médiatrice d'un segment est la <span class="k">droite</span> qui est <span class="k">perpendiculaire</span> à ce segment en son <span class="k">milieu</span>.</div>
+    <div class="svgbox"><svg viewBox="0 0 380 170" width="380" xmlns="http://www.w3.org/2000/svg" font-family="Nunito,sans-serif" font-size="14"><line x1="40" y1="100" x2="340" y2="100" stroke="#222" stroke-width="2" /><path d="M35 95L45 105M35 105L45 95" stroke="#222" stroke-width="2"/><path d="M335 95L345 105M335 105L345 95" stroke="#222" stroke-width="2"/><text x="28" y="125" font-weight="800" fill="#222">A</text><text x="336" y="125" font-weight="800" fill="#222">B</text><path d="M185 95L195 105M185 105L195 95" stroke="#c0392b" stroke-width="2"/><text x="196" y="122" font-weight="800" fill="#c0392b">I</text><line x1="111" y1="93" x2="115" y2="107" stroke="#222" stroke-width="1.6" /><line x1="115" y1="93" x2="119" y2="107" stroke="#222" stroke-width="1.6" /><line x1="261" y1="93" x2="265" y2="107" stroke="#222" stroke-width="1.6" /><line x1="265" y1="93" x2="269" y2="107" stroke="#222" stroke-width="1.6" /><line x1="190" y1="10" x2="190" y2="165" stroke="#2f6aa8" stroke-width="2.5" /><path d="M190 100h10v-10" fill="none" stroke="#2f6aa8" stroke-width="1.6"/><text x="198" y="28" font-weight="800" fill="#2f6aa8">(d)</text></svg></div>
+    <ul>
+      <li>C'est une <b>droite</b> (pas un segment, pas une demi-droite).</li>
+      <li>Les <b>2 conditions</b> sont obligatoires : elle passe par le <b>milieu</b> I ET elle fait un <b>angle droit</b> avec le segment.</li>
+      <li>On <b>code</b> la figure : les petits traits pareils (= milieu) et le petit carré (= angle droit).</li>
+    </ul>
+    <div class="warn">Une droite perpendiculaire qui ne passe pas par le milieu, ou qui passe par le milieu sans angle droit, <b>n'est pas</b> la médiatrice.</div>
+    <button class="btn alt done-btn" data-done="p1">J'ai bien compris</button>
+  </div>
+
+  <div class="part" data-part="p2">
+    <h3>2) Les propriétés et la propriété caractéristique</h3>
+    <div class="svgbox"><svg viewBox="0 0 380 200" width="380" xmlns="http://www.w3.org/2000/svg" font-family="Nunito,sans-serif" font-size="14"><line x1="40" y1="150" x2="340" y2="150" stroke="#222" stroke-width="2" /><path d="M35 145L45 155M35 155L45 145" stroke="#222" stroke-width="2"/><path d="M335 145L345 155M335 155L345 145" stroke="#222" stroke-width="2"/><text x="28" y="175" font-weight="800" fill="#222">A</text><text x="336" y="175" font-weight="800" fill="#222">B</text><line x1="190" y1="15" x2="190" y2="195" stroke="#2f6aa8" stroke-width="2.5" /><path d="M190 150h10v-10" fill="none" stroke="#2f6aa8" stroke-width="1.6"/><line x1="111" y1="143" x2="115" y2="157" stroke="#222" stroke-width="1.6" /><line x1="115" y1="143" x2="119" y2="157" stroke="#222" stroke-width="1.6" /><line x1="261" y1="143" x2="265" y2="157" stroke="#222" stroke-width="1.6" /><line x1="265" y1="143" x2="269" y2="157" stroke="#222" stroke-width="1.6" /><path d="M185 50L195 60M185 60L195 50" stroke="#c0392b" stroke-width="2"/><text x="198" y="52" font-weight="800" fill="#c0392b">M</text><line x1="190" y1="55" x2="40" y2="150" stroke="#c0392b" stroke-width="1.5" stroke-dasharray="5 4"/><line x1="190" y1="55" x2="340" y2="150" stroke="#c0392b" stroke-width="1.5" stroke-dasharray="5 4"/><text x="88" y="92" font-weight="800" fill="#c0392b">MA</text><text x="262" y="92" font-weight="800" fill="#c0392b">MB</text><text x="198" y="30" font-weight="800" fill="#2f6aa8">(d)</text></svg></div>
+    <div class="def"><b>Propriété :</b> tous les points de la médiatrice d'un segment sont à la <span class="k">même distance</span> des <span class="k">extrémités</span> de ce segment. On dit qu'ils sont <span class="k">équidistants</span> des extrémités. <i>(Ici : MA = MB.)</i></div>
+    <div class="def"><b>Propriété (dans l'autre sens) :</b> tous les points à la même distance des extrémités d'un segment <span class="k">appartiennent</span> à la <span class="k">médiatrice</span> de ce segment.</div>
+    <div class="def" style="border-left-color:var(--moss);background:var(--moss-l)"><b>Propriété caractéristique :</b> la médiatrice d'un segment est l'<span class="k">ensemble</span> des points à <span class="k">égale distance</span> des extrémités de ce segment.</div>
+    <div class="tip"><b>Les 2 sens marchent :</b> sur la médiatrice → même distance. Même distance → sur la médiatrice. C'est pour ça qu'on l'appelle <b>caractéristique</b>.</div>
+    <p><b>Une conjecture</b> : on <span class="k">observe</span> qu'une propriété semble vraie sur quelques exemples, mais sans l'avoir <span class="k">prouvée</span>. Quelques exemples ne suffisent pas pour prouver.</p>
+    <div class="ex"><b>Je justifie comme ça :</b><br>« M est sur la médiatrice de [AB], <b>donc</b> MA = MB. »<br>« PA = PB, <b>donc</b> P est sur la médiatrice de [AB]. »</div>
+    <button class="btn alt done-btn" data-done="p2">J'ai bien compris</button>
+  </div>
+
+  <div class="part" data-part="p3">
+    <h3>3) Méthode n°1 : règle graduée et équerre</h3>
+    <div class="svgbox"><div style="display:inline-block;text-align:center;margin:4px"><div style="font-size:13px;font-weight:800">1. Je place le milieu I</div><svg viewBox="0 0 170 170" width="170" xmlns="http://www.w3.org/2000/svg" font-family="Nunito,sans-serif" font-size="14"><line x1="25" y1="90" x2="145" y2="90" stroke="#222" stroke-width="2" /><path d="M20 85L30 95M20 95L30 85" stroke="#222" stroke-width="2"/><path d="M140 85L150 95M140 95L150 85" stroke="#222" stroke-width="2"/><text x="21" y="112" font-weight="800" fill="#222">A</text><text x="141" y="112" font-weight="800" fill="#222">B</text><rect x="20" y="92" width="130" height="14" fill="#f3e9c7" stroke="#b49a4a"/><line x1="25" y1="92" x2="25" y2="103" stroke="#7a6a2a" stroke-width="1" /><line x1="37" y1="92" x2="37" y2="99" stroke="#7a6a2a" stroke-width="1" /><line x1="49" y1="92" x2="49" y2="99" stroke="#7a6a2a" stroke-width="1" /><line x1="61" y1="92" x2="61" y2="99" stroke="#7a6a2a" stroke-width="1" /><line x1="73" y1="92" x2="73" y2="99" stroke="#7a6a2a" stroke-width="1" /><line x1="85" y1="92" x2="85" y2="103" stroke="#7a6a2a" stroke-width="1" /><line x1="97" y1="92" x2="97" y2="99" stroke="#7a6a2a" stroke-width="1" /><line x1="109" y1="92" x2="109" y2="99" stroke="#7a6a2a" stroke-width="1" /><line x1="121" y1="92" x2="121" y2="99" stroke="#7a6a2a" stroke-width="1" /><line x1="133" y1="92" x2="133" y2="99" stroke="#7a6a2a" stroke-width="1" /><line x1="145" y1="92" x2="145" y2="103" stroke="#7a6a2a" stroke-width="1" /><path d="M80.0 85L90.0 95M80.0 95L90.0 85" stroke="#c0392b" stroke-width="2"/><text x="82.0" y="80" font-weight="800" fill="#c0392b">I</text></svg></div><div style="display:inline-block;text-align:center;margin:4px"><div style="font-size:13px;font-weight:800">2. L'équerre sur [AB], en I</div><svg viewBox="0 0 170 170" width="170" xmlns="http://www.w3.org/2000/svg" font-family="Nunito,sans-serif" font-size="14"><line x1="25" y1="90" x2="145" y2="90" stroke="#222" stroke-width="2" /><path d="M20 85L30 95M20 95L30 85" stroke="#222" stroke-width="2"/><path d="M140 85L150 95M140 95L150 85" stroke="#222" stroke-width="2"/><text x="21" y="112" font-weight="800" fill="#222">A</text><text x="141" y="112" font-weight="800" fill="#222">B</text><path d="M80.0 85L90.0 95M80.0 95L90.0 85" stroke="#c0392b" stroke-width="2"/><text x="91.0" y="84" font-weight="800" fill="#c0392b">I</text><path d="M85.0 90 L85.0 20 L130.0 90 Z" fill="#e3eefa" stroke="#2f6aa8" stroke-width="1.5"/><path d="M85.0 90h10v-10" fill="none" stroke="#2f6aa8" stroke-width="1.6"/></svg></div><div style="display:inline-block;text-align:center;margin:4px"><div style="font-size:13px;font-weight:800">3. Je trace et je code</div><svg viewBox="0 0 170 170" width="170" xmlns="http://www.w3.org/2000/svg" font-family="Nunito,sans-serif" font-size="14"><line x1="25" y1="90" x2="145" y2="90" stroke="#222" stroke-width="2" /><path d="M20 85L30 95M20 95L30 85" stroke="#222" stroke-width="2"/><path d="M140 85L150 95M140 95L150 85" stroke="#222" stroke-width="2"/><text x="21" y="112" font-weight="800" fill="#222">A</text><text x="141" y="112" font-weight="800" fill="#222">B</text><path d="M80.0 85L90.0 95M80.0 95L90.0 85" stroke="#c0392b" stroke-width="2"/><text x="91.0" y="112" font-weight="800" fill="#c0392b">I</text><line x1="85.0" y1="15" x2="85.0" y2="165" stroke="#c0392b" stroke-width="2.5" /><path d="M85.0 90h10v-10" fill="none" stroke="#c0392b" stroke-width="1.6"/><line x1="51.0" y1="83" x2="55.0" y2="97" stroke="#222" stroke-width="1.6" /><line x1="55.0" y1="83" x2="59.0" y2="97" stroke="#222" stroke-width="1.6" /><line x1="111.0" y1="83" x2="115.0" y2="97" stroke="#222" stroke-width="1.6" /><line x1="115.0" y1="83" x2="119.0" y2="97" stroke="#222" stroke-width="1.6" /></svg></div></div>
+    <ol>
+      <li>Je place <span class="k">I</span>, le <span class="k">milieu</span> du segment, avec la règle <span class="k">graduée</span> (je mesure, je divise par 2). Je code.</li>
+      <li>Je trace la <span class="k">perpendiculaire</span> à [AB] passant par I avec l'<span class="k">équerre</span>. Je code l'angle droit.</li>
+    </ol>
+    <div class="tip">Règle « <b>graduée</b> » = j'ai le droit d'utiliser les <b>graduations</b>. Règle « <b>non graduée</b> » = je n'ai pas le droit de m'en servir (même si ma règle en a).</div>
+    <button class="btn alt done-btn" data-done="p3">J'ai bien compris</button>
+  </div>
+
+  <div class="part" data-part="p4">
+    <h3>4) Méthode n°2 : compas et règle non graduée</h3>
+    <div class="svgbox"><div style="display:inline-block;text-align:center;margin:4px"><div style="font-size:13px;font-weight:800">1. Écartement > moitié</div><svg viewBox="0 0 170 170" width="170" xmlns="http://www.w3.org/2000/svg" font-family="Nunito,sans-serif" font-size="14"><line x1="30" y1="95" x2="140" y2="95" stroke="#222" stroke-width="2" /><path d="M25 90L35 100M25 100L35 90" stroke="#222" stroke-width="2"/><path d="M135 90L145 100M135 100L145 90" stroke="#222" stroke-width="2"/><text x="26" y="117" font-weight="800" fill="#222">A</text><text x="136" y="117" font-weight="800" fill="#222">B</text><circle cx="30" cy="95" r="75" fill="none" stroke="#bbb" stroke-dasharray="3 3"/></svg></div><div style="display:inline-block;text-align:center;margin:4px"><div style="font-size:13px;font-weight:800">2. Arcs de centre A et B</div><svg viewBox="0 0 170 170" width="170" xmlns="http://www.w3.org/2000/svg" font-family="Nunito,sans-serif" font-size="14"><line x1="30" y1="95" x2="140" y2="95" stroke="#222" stroke-width="2" /><path d="M25 90L35 100M25 100L35 90" stroke="#222" stroke-width="2"/><path d="M135 90L145 100M135 100L145 90" stroke="#222" stroke-width="2"/><text x="26" y="117" font-weight="800" fill="#222">A</text><text x="136" y="117" font-weight="800" fill="#222">B</text><path d="M95.0 57.5 A75 75 0 0 0 71.9 32.8" fill="none" stroke="#2f6aa8" stroke-width="1.6"/><path d="M98.1 32.8 A75 75 0 0 0 75.0 57.5" fill="none" stroke="#2f6aa8" stroke-width="1.6"/></svg></div><div style="display:inline-block;text-align:center;margin:4px"><div style="font-size:13px;font-weight:800">3. Pareil de l'autre côté</div><svg viewBox="0 0 170 170" width="170" xmlns="http://www.w3.org/2000/svg" font-family="Nunito,sans-serif" font-size="14"><line x1="30" y1="95" x2="140" y2="95" stroke="#222" stroke-width="2" /><path d="M25 90L35 100M25 100L35 90" stroke="#222" stroke-width="2"/><path d="M135 90L145 100M135 100L145 90" stroke="#222" stroke-width="2"/><text x="26" y="117" font-weight="800" fill="#222">A</text><text x="136" y="117" font-weight="800" fill="#222">B</text><path d="M95.0 57.5 A75 75 0 0 0 71.9 32.8" fill="none" stroke="#2f6aa8" stroke-width="1.6"/><path d="M98.1 32.8 A75 75 0 0 0 75.0 57.5" fill="none" stroke="#2f6aa8" stroke-width="1.6"/><path d="M71.9 157.2 A75 75 0 0 0 95.0 132.5" fill="none" stroke="#2f6aa8" stroke-width="1.6"/><path d="M75.0 132.5 A75 75 0 0 0 98.1 157.2" fill="none" stroke="#2f6aa8" stroke-width="1.6"/></svg></div><div style="display:inline-block;text-align:center;margin:4px"><div style="font-size:13px;font-weight:800">4. Je trace la droite</div><svg viewBox="0 0 170 170" width="170" xmlns="http://www.w3.org/2000/svg" font-family="Nunito,sans-serif" font-size="14"><line x1="30" y1="95" x2="140" y2="95" stroke="#222" stroke-width="2" /><path d="M25 90L35 100M25 100L35 90" stroke="#222" stroke-width="2"/><path d="M135 90L145 100M135 100L145 90" stroke="#222" stroke-width="2"/><text x="26" y="117" font-weight="800" fill="#222">A</text><text x="136" y="117" font-weight="800" fill="#222">B</text><path d="M95.0 57.5 A75 75 0 0 0 71.9 32.8" fill="none" stroke="#2f6aa8" stroke-width="1.6"/><path d="M98.1 32.8 A75 75 0 0 0 75.0 57.5" fill="none" stroke="#2f6aa8" stroke-width="1.6"/><path d="M71.9 157.2 A75 75 0 0 0 95.0 132.5" fill="none" stroke="#2f6aa8" stroke-width="1.6"/><path d="M75.0 132.5 A75 75 0 0 0 98.1 157.2" fill="none" stroke="#2f6aa8" stroke-width="1.6"/><line x1="85.0" y1="30.00980486407215" x2="85.0" y2="159.99019513592785" stroke="#c0392b" stroke-width="2.5" /><path d="M85.0 95h10v-10" fill="none" stroke="#c0392b" stroke-width="1.6"/><line x1="53.5" y1="88" x2="57.5" y2="102" stroke="#222" stroke-width="1.6" /><line x1="57.5" y1="88" x2="61.5" y2="102" stroke="#222" stroke-width="1.6" /><line x1="108.5" y1="88" x2="112.5" y2="102" stroke="#222" stroke-width="1.6" /><line x1="112.5" y1="88" x2="116.5" y2="102" stroke="#222" stroke-width="1.6" /></svg></div></div>
+    <ol>
+      <li>Je prends un écartement de compas <span class="k">plus grand</span> que la <span class="k">moitié</span> du segment. Je ne mesure pas : je choisis « à <span class="k">vue d'œil</span> ».</li>
+      <li>Je trace deux <span class="k">arcs</span> de cercle de centre <b>A</b> et de centre <b>B</b>, de <span class="k">même rayon</span> (je ne change pas l'écartement). Ils se coupent : 1er point.</li>
+      <li>Je recommence de l'<span class="k">autre côté</span> du segment (pour la précision) : 2e point. J'ai <span class="k">deux</span> points équidistants de A et de B.</li>
+      <li>Je trace la <span class="k">droite</span> qui passe par ces deux points : c'est la médiatrice. Je <span class="k">code</span> la figure.</li>
+    </ol>
+    <div class="warn">Pourquoi ça marche ? Les 2 points sont à la même distance de A et de B (même rayon), donc ils sont sur la médiatrice : c'est la <b>propriété caractéristique</b> !</div>
+    <button class="btn alt done-btn" data-done="p4">J'ai bien compris</button>
+  </div>
+
+  <div id="partLock" class="warn hidden"></div>
+  <div class="tip"><b>Comment apprendre :</b> lis un bloc, réponds à ses 3 questions, puis clique sur « J'ai bien compris » pour ouvrir le bloc suivant. Ensuite, active le <b>mode mémoire</b> pour réciter, fais les exercices <b>avec aide</b>, et enfin le contrôle <b>sans aide</b>.</div>
+</section>
+
+<!-- ================= EXERCICES ================= -->
+<section id="tab-aide" class="hidden"></section>
+<section id="tab-sans" class="hidden"></section>
+</main>
+
+<div class="notes">
+  <div class="in">
+    <div class="box"><div class="lab">Note avec aide</div><div class="val" id="nAide">—</div><div class="ver" id="vAide">Pas encore faite</div></div>
+    <div class="box"><div class="lab">Note sans aide</div><div class="val" id="nSans">—</div><div class="ver" id="vSans">Pas encore faite</div></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
+<script>
+var FICHE_CODE = "P005";
+/* ---------- Outils ---------- */
+const $ = (s, r=document) => r.querySelector(s);
+const el = (tag, attrs={}, html="") => { const e=document.createElement(tag); for(const k in attrs){ if(k==="class") e.className=attrs[k]; else e.setAttribute(k,attrs[k]); } if(html) e.innerHTML=html; return e; };
+const shuffle = a => { a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; };
+const norm = s => (s||"").toLowerCase().replace(/œ/g,"oe").normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9]+/g," ").trim();
+const lower = s => (s||"").toLowerCase().replace(/[^a-zà-ÿœ0-9]+/g," ").trim();
+function lev(a,b){ const m=a.length,n=b.length; if(!m) return n; if(!n) return m; let p=[...Array(n+1).keys()]; for(let i=1;i<=m;i++){ const c=[i]; for(let j=1;j<=n;j++) c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1)); p=c; } return p[n]; }
+const tol = n => n<=3?0 : n<=6?1 : 2;
+const store = { get(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } }, set(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} } };
+const fmt = x => (Math.round(x*100)/100).toString().replace(".",",");
+
+/* Compare une réponse tapée à la liste des réponses acceptées.
+   Retour : "exact" | "accent" | "fuzzy" | "no" */
+function matchWord(input, answers){
+  const ni = norm(input), li = lower(input), toks = ni.split(" ");
+  if(!ni) return "no";
+  let best = "no";
+  for(const a of answers){
+    const na = norm(a), la = lower(a);
+    if(li===la || (" "+li+" ").includes(" "+la+" ")) return "exact";
+    if(ni===na || (" "+ni+" ").includes(" "+na+" ")) best = "accent";
+    else if(best==="no"){
+      const t = tol(na.length);
+      if(t>0 && (lev(ni,na)<=t || (!na.includes(" ") && toks.some(x => lev(x,na)<=t)))) best = "fuzzy";
+    }
+  }
+  return best;
+}
+/* Cherche un mot-clé (avec variantes) dans un texte libre */
+function hasKey(text, alts){
+  const nt = " "+norm(text)+" ", toks = norm(text).split(" ");
+  for(const a of alts){
+    const na = norm(a);
+    if(nt.includes(" "+na+" ")) return true;
+    if(na.includes(" ")) continue;
+    const t = tol(na.length);
+    if(toks.some(x => (t>0 && lev(x,na)<=t) || (na.length>=5 && x.startsWith(na)))) return true;
+  }
+  return false;
+}
+/* Lit une date tapée : renvoie {val, neg} */
+function parseDate(s){
+  const raw = (s||"").toLowerCase();
+  const neg = /-|−|av|avant/.test(raw);
+  const c = raw.replace(/\s/g,"");
+  const m = c.match(/\d+([.,]\d+)?/);
+  if(!m) return null;
+  let v = parseFloat(m[0].replace(",","."));
+  if(/million/.test(raw)) v *= 1e6;
+  return {val:v, neg};
+}
+
+/* ---------- Banque de questions ---------- */
+const PARTS = {p1:"La définition", p2:"Les propriétés", p3:"Méthode n°1 : règle et équerre", p4:"Méthode n°2 : compas", p5:"Les phrases par cœur"};
+const Wd = (part,q,a,show,d,aide) => ({part,type:"word",q,a,show,d,aide});
+const I = "indice";
+
+const BANK = [
+  // --- p1 définition
+  Wd("p1","La médiatrice d'un segment est une … <i>(droite, segment ou demi-droite ?)</i>",["droite"],"droite",["segment","demi-droite"]),
+  Wd("p1","La médiatrice est … au segment (elle fait un angle droit avec lui).",["perpendiculaire"],"perpendiculaire",["parallèle","égale"],I),
+  Wd("p1","La médiatrice coupe le segment en son …",["milieu"],"milieu",["extrémité","début"],I),
+  Wd("p1","Pour coder un angle droit, je dessine un petit …",["carré"],"carré",["rond","trait"],I),
+  {part:"p1",type:"sort",w:3,q:"Est-ce la médiatrice de [AB] ? Touche OUI ou NON pour chaque droite.",cats:["OUI","NON"],items:[
+    ["Elle passe par le milieu de [AB] et elle est perpendiculaire à [AB].",0],
+    ["Elle est perpendiculaire à [AB] mais ne passe pas par son milieu.",1],
+    ["Elle passe par le milieu de [AB] mais ne fait pas d'angle droit.",1],
+    ["Elle passe par deux points qui sont chacun à égale distance de A et de B.",0],
+    ["C'est un segment perpendiculaire à [AB] en son milieu.",1],
+    ["Elle passe par A et elle est perpendiculaire à [AB].",1]]},
+  // --- p2 propriétés
+  Wd("p2","Tous les points de la médiatrice d'un segment sont à la même … des extrémités de ce segment.",["distance"],"distance",["longueur droite","hauteur"],I),
+  Wd("p2","On dit que ces points sont … des extrémités du segment.",["équidistants","équidistant","equidistants"],"équidistants",["égaux","parallèles"],I),
+  Wd("p2","M est sur la médiatrice de [AB] et MA = 4,5 cm. Combien mesure MB ? <i>(écris le nombre en cm)</i>",["4,5","4.5"],"4,5",["9","2,25"]),
+  Wd("p2","K est sur la médiatrice de [EF] et KF = 7 cm. Combien mesure KE ? <i>(écris le nombre en cm)</i>",["7"],"7",["14","3,5"]),
+  Wd("p2","PA = 6 cm et PB = 6 cm. Le point P est-il sur la médiatrice de [AB] ? <i>(écris oui ou non)</i>",["oui"],"oui",["non","on ne peut pas savoir"]),
+  Wd("p2","RA = 3 cm et RB = 4 cm. Le point R est-il sur la médiatrice de [AB] ? <i>(écris oui ou non)</i>",["non"],"non",["oui","on ne peut pas savoir"]),
+  Wd("p2","Tous les points à la même distance des extrémités d'un segment appartiennent à la … de ce segment.",["médiatrice","mediatrice"],"médiatrice",["diagonale","perpendiculaire"],I),
+  Wd("p2","Une propriété qui marche dans les 2 sens s'appelle une propriété …",["caractéristique","caracteristique"],"caractéristique",["réciproque","contraire"],I),
+  Wd("p2","Une propriété observée sur quelques exemples, mais pas encore prouvée, s'appelle une …",["conjecture"],"conjecture",["définition","preuve"],I),
+  Wd("p2","Le pirate cache son trésor à la même distance du drapeau et de la fleur. Le trésor est sur la … du segment [drapeau-fleur].",["médiatrice","mediatrice"],"médiatrice",["diagonale","moitié"],I),
+  {part:"p2",type:"order",q:"Range la justification dans l'ordre : touche les 3 phrases une par une.",items:["Je sais que M est sur la médiatrice de [AB].","Or tous les points de la médiatrice d'un segment sont à égale distance de ses extrémités.","Donc MA = MB."]},
+  // --- p3 méthode 1
+  Wd("p3","Méthode n°1 : je place d'abord le … du segment avec la règle graduée.",["milieu"],"milieu",["centre","bout"],I),
+  Wd("p3","Puis je trace la perpendiculaire avec l'…",["équerre","equerre"],"équerre",["compas","rapporteur"],I),
+  Wd("p3","AB = 9 cm. À combien de cm de A je place le milieu I ? <i>(écris le nombre)</i>",["4,5","4.5"],"4,5",["9","3"]),
+  Wd("p3","Règle « graduée » veut dire que j'ai le droit d'utiliser les …",["graduations","graduation"],"graduations",["couleurs","équerres"],I),
+  Wd("p3","Règle « non graduée » : est-ce que je dois trouver une règle sans graduations ? <i>(écris oui ou non)</i>",["non"],"non",["oui","parfois"]),
+  {part:"p3",type:"order",q:"Méthode n°1 : range les étapes dans l'ordre.",items:["Je mesure le segment avec la règle graduée.","Je place le milieu I et je code les deux moitiés.","Je pose l'équerre sur le segment, en I.","Je trace la perpendiculaire et je code l'angle droit."]},
+  // --- p4 méthode 2
+  Wd("p4","Méthode n°2 : l'écartement du compas doit être plus grand que la … du segment.",["moitié","moitie"],"moitié",["longueur","double"],I),
+  Wd("p4","Est-ce qu'on mesure le segment pour choisir l'écartement ? <i>(écris oui ou non)</i>",["non"],"non",["oui","toujours"]),
+  Wd("p4","On choisit l'écartement « à vue d'… »",["œil","oeil"],"œil",["oreille","avion"],I),
+  Wd("p4","Les deux arcs de centre A et B ont le même …",["rayon","écartement","ecartement"],"rayon",["centre","diamètre"],I),
+  Wd("p4","Combien de points d'intersection faut-il trouver pour tracer la médiatrice ? <i>(écris le nombre)</i>",["2","deux"],"2",["1","4"]),
+  Wd("p4","Pour la précision, le 2e point se fait de préférence de l'autre … du segment.",["côté","cote"],"côté",["bout","milieu"],I),
+  {part:"p4",type:"order",q:"Méthode n°2 : range les étapes dans l'ordre.",items:["Je prends un écartement plus grand que la moitié du segment.","Je trace deux arcs de centre A et B, de même rayon : 1er point.","Je recommence de l'autre côté du segment : 2e point.","Je trace la droite qui passe par ces deux points et je code."]},
+  {part:"p4",type:"sort",w:3,q:"Méthode n°1 (règle + équerre) ou méthode n°2 (compas) ? Touche la bonne méthode.",cats:["Méthode 1","Méthode 2"],items:[
+    ["On mesure le segment.",0],["On trace des arcs de cercle.",1],["On utilise l'équerre.",0],
+    ["On ne mesure pas le segment.",1],["On place le milieu I en premier.",0],["On trouve deux points équidistants de A et de B.",1]]},
+  // --- p5 par cœur
+  {part:"p5",type:"def",w:3,mot:"La définition de la médiatrice d'un segment",cloze:"La médiatrice d'un segment est la [[droite]] qui est [[perpendiculaire]] à ce segment en son [[milieu]].",groups:[["droite"],["perpendiculaire"],["milieu"]]},
+  {part:"p5",type:"def",w:3,mot:"La propriété caractéristique de la médiatrice",cloze:"La médiatrice d'un segment est l'[[ensemble]] des points à [[égale]] [[distance]] des [[extrémités]] de ce segment.",groups:[["ensemble"],["égale","egale","même","meme"],["distance"],["extrémités","extremites","extrémité","bouts"]]},
+  {part:"p5",type:"def",w:2,mot:"Équidistant",cloze:"Qui est à la [[même]] [[distance]] (de deux points).",groups:[["même","meme","égale","egale"],["distance"]]},
+];
+BANK.forEach((q,i)=>{ q.id=i; q.w = q.w || 1; });
+const DATES = [];
+
+/* ---------- Rendu des exercices ---------- */
+const MODES = {
+  aide: {key:"p005_note_aide", box:"#tab-aide", label:"avec aide", code:FICHE_CODE+"-aide"},
+  sans: {key:"p005_note_sans", box:"#tab-sans", label:"sans aide", code:FICHE_CODE}
+};
+let STATE = {};
+
+function startMode(mode, onlyIds){
+  const M = MODES[mode], root = $(M.box);
+  const ids = onlyIds || BANK.map(q=>q.id);
+  STATE[mode] = {ids, res:{}, retry:!!onlyIds};
+  root.innerHTML = "";
+  const intro = el("div",{class:"intro"});
+  if(mode==="aide"){
+    intro.innerHTML = `<b>Exercices AVEC aide</b> · ${ids.length} questions${onlyIds?" (seulement tes erreurs)":""}<br>
+      Parfois tu choisis parmi 3 réponses, parfois tu écris le mot avec un <span class="hint">indice</span>.
+      <b>Objectif : 80 % minimum.</b> Ensuite, passe à la version sans aide.`;
+  } else {
+    intro.innerHTML = `<b>Exercices SANS aide</b> · ${ids.length} questions${onlyIds?" (seulement tes erreurs)":""}<br>
+      Pas de choix proposé : <b>tu écris tout toi-même</b>, comme le jour du contrôle. 
+      • Mot juste = 1 point. Mot presque juste (une faute d'orthographe) = ½ point.<br>
+      • Nombres : écris seulement le nombre (sans unité).<br>
+      <b>Objectif : 80 % minimum.</b>`;
+  }
+  root.appendChild(intro);
+  const pr = el("div",{class:"prog"},"<i></i>"); root.appendChild(pr);
+  const cnt = el("div",{class:"cnt",style:"font-size:14px;color:var(--muted)"}); root.appendChild(cnt);
+  let lastPart = null, n = 0;
+  for(const id of ids){
+    const q = BANK[id];
+    if(q.part!==lastPart){ root.appendChild(el("h2",{},PARTS[q.part])); lastPart=q.part; }
+    n++;
+    root.appendChild(renderCard(q, mode, n));
+  }
+  root.appendChild(el("div",{class:"resultZone"}));
+  updateProgress(mode);
+}
+
+function renderCard(q, mode, n){
+  const c = el("div",{class:"card","data-id":q.id});
+  c.appendChild(el("div",{class:"n"},`Question ${n}${q.w>1?` · ${fmt(q.w)} points`:""}`));
+  const body = el("div");
+  c.appendChild(body);
+  const fb = el("div",{class:"fb hidden"});
+  const done = (pts, msg) => { pts = Math.max(0, Math.min(q.w, pts)); STATE[mode].res[q.id]=pts; fb.className="fb "+(pts>=q.w?"ok":pts>0?"mid":"ko"); fb.innerHTML=msg; fb.classList.remove("hidden"); updateProgress(mode); };
+
+  if(q.type==="word" || q.type==="date"){
+    body.appendChild(el("div",{class:"q"}, q.type==="date" ? `Quelle est la date ? <b>${q.q}</b>` : q.q));
+    const useQcm = mode==="aide" && (q.type==="date" || (q.d && q.aide!=="indice"));
+    if(useQcm){
+      let opts;
+      if(q.type==="date"){
+        const big = Math.abs(q.v)>=1e6;
+        const pool = shuffle(DATES.filter(x=>x.show!==q.show && (Math.abs(x.v)>=1e6)===big)).slice(0,2).map(x=>x.show);
+        opts = shuffle([q.show, ...pool]);
+      } else opts = shuffle([q.show, ...q.d]);
+      const box = el("div",{class:"opts"});
+      opts.forEach(o=>{
+        const b = el("button",{class:"opt"}, o);
+        b.onclick = () => {
+          box.querySelectorAll("button").forEach(x=>{ x.disabled=true; if(x.textContent===q.show) x.classList.add("good"); });
+          if(o===q.show) done(1,"Bravo !");
+          else { b.classList.add("bad"); done(0,`Non. La bonne réponse : <b>${q.show}</b>`); }
+        };
+        box.appendChild(b);
+      });
+      body.appendChild(box);
+    } else {
+      if(mode==="aide"){
+        const letters = q.show.replace(/[^A-Za-zÀ-ÿœ]/g,"").length;
+        body.appendChild(el("div",{class:"hint"},`Indice : commence par « ${q.show[0].toUpperCase()} », ${letters} lettres`));
+      }
+      const row = el("div",{class:"row"});
+      const inp = el("input",{type:"text",autocomplete:"off",autocapitalize:"off",spellcheck:"false",placeholder: q.type==="date"?"ex : -12 000":"écris ta réponse"});
+      const b = el("button",{class:"btn"},"Valider");
+      const go = () => {
+        if(!inp.value.trim()) return;
+        inp.disabled=true; b.disabled=true;
+        if(q.type==="date"){
+          const p = parseDate(inp.value), targets=[q.v,...q.alt].map(Math.abs);
+          if(p && targets.some(t=>Math.abs(p.val-t)<0.5)){
+            if(p.neg) done(1,`Bravo ! <b>${q.show}</b>`);
+            else done(0.5,`Le nombre est juste mais il manque le signe <b>-</b> : <b>${q.show}</b> (avant J.-C.). ½ point.`);
+          } else done(0,`Non. La bonne date : <b>${q.show}</b>`);
+        } else {
+          const r = matchWord(inp.value, q.a);
+          if(r==="exact") done(1,"Bravo !");
+          else if(r==="accent") done(1,`Juste ! Attention aux accents : <b>${q.show}</b>`);
+          else if(r==="fuzzy") done(0.5,`Presque : une faute d'orthographe. Il faut écrire <b>${q.show}</b>. ½ point.`);
+          else done(0,`Non. La bonne réponse : <b>${q.show}</b>`);
+        }
+      };
+      b.onclick=go; inp.onkeydown=e=>{ if(e.key==="Enter") go(); };
+      row.append(inp,b); body.appendChild(row);
+    }
+  }
+
+  else if(q.type==="set"){
+    body.appendChild(el("div",{class:"q"},q.q));
+    if(mode==="aide") body.appendChild(el("div",{class:"hint"},"Indices : "+q.groups.map(g=>`« ${g[0][0].toUpperCase()}… » (${g[0].length} lettres)`).join(" · ")));
+    const row = el("div",{class:"row"});
+    const ins = q.groups.map(()=>{ const i=el("input",{type:"text",autocomplete:"off",autocapitalize:"off",spellcheck:"false",style:"max-width:170px"}); row.appendChild(i); return i; });
+    const b = el("button",{class:"btn"},"Valider"); row.appendChild(b);
+    b.onclick = () => {
+      if(ins.some(i=>!i.value.trim())) return;
+      ins.forEach(i=>i.disabled=true); b.disabled=true;
+      const used = new Set(); let pts=0, typo=false;
+      ins.forEach(i=>{
+        for(let g=0; g<q.groups.length; g++){
+          if(used.has(g)) continue;
+          const r = matchWord(i.value, q.groups[g]);
+          if(r!=="no"){ used.add(g); if(r==="fuzzy"){ pts+=0.5; typo=true; } else pts+=1; break; }
+        }
+      });
+      const sc = pts/q.groups.length;
+      done(sc, sc>=1 ? "Bravo, les 3 sont justes !" : `${fmt(pts)} sur ${q.groups.length}${typo?" (faute d'orthographe)":""}. Il fallait : <b>${q.show}</b>`);
+    };
+    body.appendChild(row);
+  }
+
+  else if(q.type==="order"){
+    body.appendChild(el("div",{class:"q"},q.q));
+    const seq = el("div",{class:"seq"}); const box = el("div",{class:"opts"});
+    const picked = [];
+    const v = el("button",{class:"btn"},"Valider"); v.disabled=true;
+    const clr = el("button",{class:"btn alt"},"Effacer");
+    shuffle(q.items).forEach(it=>{
+      const b = el("button",{class:"opt"},it);
+      b.onclick=()=>{ picked.push(it); b.disabled=true; b.classList.add("sel"); seq.appendChild(el("span",{},`${picked.length}. ${it}`)); v.disabled = picked.length<q.items.length; };
+      box.appendChild(b);
+    });
+    clr.onclick=()=>{ picked.length=0; seq.innerHTML=""; box.querySelectorAll("button").forEach(b=>{b.disabled=false;b.classList.remove("sel");}); v.disabled=true; };
+    v.onclick=()=>{
+      v.disabled=true; clr.disabled=true; box.querySelectorAll("button").forEach(b=>b.disabled=true);
+      const ok = picked.every((x,i)=>x===q.items[i]);
+      done(ok?1:0, ok?"Bravo, l'ordre est parfait !":`Non. Le bon ordre : <b>${q.items.join(" → ")}</b>`);
+    };
+    const row = el("div",{class:"row",style:"margin-top:8px"}); row.append(v,clr);
+    body.append(box, seq, row);
+  }
+
+  else if(q.type==="sort"){
+    body.appendChild(el("div",{class:"q"},q.q));
+    const grid = el("div",{class:"sort"+(q.cats.length>2?" c4":"")}); const choice = {};
+    const v = el("button",{class:"btn",style:"margin-top:10px"},"Valider"); v.disabled=true;
+    q.items.forEach(([txt],i)=>{
+      grid.appendChild(el("div",{class:"lbl"},txt));
+      q.cats.forEach((cat,ci)=>{
+        const b = el("button",{class:"opt","data-r":i,"data-c":ci},cat);
+        b.onclick=()=>{ choice[i]=ci; grid.querySelectorAll(`[data-r="${i}"]`).forEach(x=>x.classList.toggle("sel", x===b)); v.disabled = Object.keys(choice).length<q.items.length; };
+        grid.appendChild(b);
+      });
+    });
+    v.onclick=()=>{
+      v.disabled=true; let good=0;
+      grid.querySelectorAll("button").forEach(b=>{
+        b.disabled=true; const r=+b.dataset.r, c=+b.dataset.c;
+        if(c===q.items[r][1]) b.classList.add("good");
+        if(choice[r]===c && c!==q.items[r][1]) b.classList.add("bad");
+      });
+      q.items.forEach(([,c],i)=>{ if(choice[i]===c) good++; });
+      const pts = Math.round(q.w*good/q.items.length*4)/4;
+      done(pts, `${good} lignes justes sur ${q.items.length} → ${fmt(pts)} / ${q.w} points.`);
+    };
+    body.append(grid, v);
+  }
+
+  else if(q.type==="def"){
+    body.appendChild(el("div",{class:"q"},`Définition : <b>${q.mot}</b>`));
+    const keys = [...q.cloze.matchAll(/\[\[(.+?)\]\]/g)].map(m=>m[1]);
+    const model = q.cloze.replace(/\[\[(.+?)\]\]/g,"<b>$1</b>");
+    if(mode==="aide"){
+      body.appendChild(el("div",{class:"hint"},"Complète les mots-clés : la première lettre est donnée."));
+      const p = el("div",{style:"line-height:2.2"});
+      const ins = [];
+      q.cloze.split(/(\[\[.+?\]\])/).forEach(part=>{
+        const m = part.match(/^\[\[(.+)\]\]$/);
+        if(m){ const w=m[1]; const i=el("input",{type:"text",class:"blank",autocomplete:"off",autocapitalize:"off",spellcheck:"false",placeholder:w[0]+"…"+" ("+w.length+")"}); ins.push([i,w]); p.appendChild(i); }
+        else p.appendChild(document.createTextNode(part));
+      });
+      const b = el("button",{class:"btn",style:"margin-top:6px"},"Valider");
+      b.onclick=()=>{
+        if(ins.some(([i])=>!i.value.trim())) return;
+        b.disabled=true; let got=0;
+        ins.forEach(([i,w])=>{ i.disabled=true; const r=matchWord(i.value,[w]); if(r==="exact"||r==="accent"){got+=1;i.style.borderColor="var(--moss)";} else if(r==="fuzzy"){got+=0.5;i.style.borderColor="var(--gold)";} else i.style.borderColor="var(--red)"; });
+        const pts = Math.round(q.w*got/ins.length*4)/4;
+        done(pts, `${fmt(got)} mot(s) juste(s) sur ${ins.length} → ${fmt(pts)} / ${q.w} points.<br>Définition complète : ${model}`);
+      };
+      body.append(p,b);
+    } else {
+      const ta = el("textarea",{placeholder:"Écris la définition complète, comme dans ta leçon.",autocapitalize:"off",spellcheck:"false"});
+      const b = el("button",{class:"btn",style:"margin-top:6px"},"Valider");
+      b.onclick=()=>{
+        if(ta.value.trim().length<3) return;
+        ta.disabled=true; b.disabled=true;
+        const miss=[]; let got=0;
+        q.groups.forEach((g,i)=>{ if(hasKey(ta.value,g)) got++; else miss.push(keys[i]||g[0]); });
+        const pts = Math.round(q.w*got/q.groups.length*4)/4;
+        done(pts, `${got} mot(s)-clé(s) sur ${q.groups.length} → ${fmt(pts)} / ${q.w} points.`
+          + (miss.length?`<br>Mots-clés oubliés : <b>${miss.join(", ")}</b>`:"<br>Tous les mots-clés y sont, bravo !")
+          + `<br>Définition de la leçon : ${model}`);
+      };
+      body.append(ta,b);
+    }
+  }
+  c.appendChild(fb);
+  return c;
+}
+
+/* ---------- Contrôle sans aide verrouillé ----------
+   Pendant le contrôle : plus d'accès à la leçon, ni à l'aide, ni au retour.
+   Quitter, recharger ou ouvrir la page ailleurs arrête le contrôle :
+   les questions non faites comptent 0. */
+const KEY_C = "p005_controle_en_cours";
+let LOCKED = false;
+function lock(on){
+  LOCKED = on;
+  document.body.classList.toggle("lock", on);
+  $("#lockBar").classList.toggle("hidden", !on);
+}
+function gateSans(){
+  const root = $("#tab-sans");
+  root.innerHTML = "";
+  const g = el("div",{class:"intro gate"});
+  g.innerHTML = `<div style="font-size:22px;font-weight:900">🔒 Le contrôle sans aide</div>
+    <p>C'est comme le vrai contrôle en classe. <b>Dès que tu commences :</b></p>
+    <ul>
+      <li>la <b>leçon</b> et les <b>exercices avec aide</b> sont <b>verrouillés</b> jusqu'à la dernière question ;</li>
+      <li>tu écris tout toi-même, sans choix proposé ;</li>
+      <li>si tu quittes ou recharges la page, le contrôle s'arrête et <b>les questions non faites comptent 0</b>.</li>
+    </ul>
+    <p>Commence seulement si tu connais ta leçon par cœur.</p>`;
+  const row = el("div",{class:"row"});
+  const go = el("button",{class:"btn"},"Commencer le contrôle");
+  go.onclick = () => startControle();
+  const back = el("button",{class:"btn alt"},"Pas encore, je révise");
+  back.onclick = () => $('nav button[data-tab="lecon"]').click();
+  row.append(go, back); g.appendChild(row);
+  root.appendChild(g);
+}
+function startControle(onlyIds){
+  startMode("sans", onlyIds);
+  lock(true);
+  store.set(KEY_C, {ids:STATE.sans.ids, res:{}, retry:STATE.sans.retry});
+  window.scrollTo({top:0});
+}
+/* Page rechargée ou ouverte ailleurs pendant un contrôle : il est arrêté et noté tel quel */
+function controleInterrompu(c){
+  const root = $("#tab-sans");
+  const faites = Object.keys(c.res||{}).length;
+  STATE.sans = {ids:c.ids, res:Object.assign({}, c.res||{}), retry:!!c.retry, interrompu:true};
+  c.ids.forEach(id=>{ if(STATE.sans.res[id]===undefined) STATE.sans.res[id]=0; });
+  root.innerHTML = `<div class="intro" style="border-color:var(--red)"><b>Contrôle interrompu.</b><br>
+    La page a été quittée, rechargée ou ouverte ailleurs pendant le contrôle.
+    Tu avais répondu à ${faites} question${faites>1?"s":""} sur ${c.ids.length} : les autres comptent 0.</div><div class="resultZone"></div>`;
+  try{ localStorage.removeItem(KEY_C); }catch(e){}
+  finish("sans");
+  document.querySelectorAll("nav button").forEach(x=>x.classList.toggle("on",x.dataset.tab==="sans"));
+  ["lecon","aide","sans"].forEach(t=>$("#tab-"+t).classList.toggle("hidden", t!=="sans"));
+}
+window.addEventListener("beforeunload", e => { if(LOCKED){ e.preventDefault(); e.returnValue = ""; } });
+window.addEventListener("storage", e => {
+  // Le contrôle a été arrêté depuis un autre onglet : celui-ci s'arrête aussi
+  if(e.key===KEY_C && e.newValue===null && LOCKED){
+    LOCKED = false;
+    alert("Le contrôle a été arrêté : la page a été ouverte ailleurs.");
+    location.reload();
+  }
+});
+
+function updateProgress(mode){
+  const S = STATE[mode], root = $(MODES[mode].box);
+  if(mode==="sans" && LOCKED) store.set(KEY_C, {ids:S.ids, res:S.res, retry:S.retry});
+  const doneN = Object.keys(S.res).length, total = S.ids.length;
+  root.querySelector(".prog i").style.width = (100*doneN/total)+"%";
+  const pts = Object.values(S.res).reduce((a,b)=>a+b,0);
+  const maxSoFar = Object.keys(S.res).reduce((a,id)=>a+BANK[id].w,0);
+  root.querySelector(".cnt").textContent = `Questions faites : ${doneN} / ${total}` + (doneN?` · points : ${fmt(pts)} / ${fmt(maxSoFar)}`:"");
+  if(doneN===total) finish(mode);
+}
+
+function finish(mode){
+  const S = STATE[mode], M = MODES[mode], root = $(M.box);
+  const max = S.ids.reduce((a,id)=>a+BANK[id].w,0);
+  const pts = Object.values(S.res).reduce((a,b)=>a+b,0);
+  const pct = Math.round(100*pts/max);
+  const sur20 = Math.round(pts/max*20*2)/2;
+  const ok = pct>=80;
+  const wrong = S.ids.filter(id=>S.res[id] < BANK[id].w);
+  if(mode==="sans"){ lock(false); try{ localStorage.removeItem(KEY_C); }catch(e){} }
+  if(!S.retry){
+    const prev = store.get(M.key) || {};
+    store.set(M.key, {last:{sur20,pct,date:new Date().toLocaleDateString("fr-FR")}, best: (!prev.best || pct>prev.best.pct) ? {sur20,pct} : prev.best});
+    showNotes();
+  }
+  const z = root.querySelector(".resultZone");
+  z.innerHTML = "";
+  const r = el("div",{class:"result "+(ok?"ok":"ko")});
+  r.innerHTML = `<div>${S.retry?"Entraînement sur tes erreurs":"Ta note "+M.label}</div>
+    <div class="big">${fmt(sur20)} / 20</div>
+    <div><b>${pct} %</b> de bonnes réponses (${fmt(pts)} / ${fmt(max)} points)</div>
+    <p style="font-size:19px;font-weight:800">${ok ? "Acquis ✓" : "À retravailler"}</p>
+    <p>${ok
+      ? (mode==="aide" ? "Bien joué ! Maintenant, passe à la version <b>sans aide</b> : c'est elle qui compte pour le contrôle." : "Excellent : tu sais ta leçon !")
+      : "Moins de 80 % : relis la leçon en mode mémoire, puis refais <b>seulement tes erreurs</b>, jusqu'à ne plus en faire."}</p>`;
+  const row = el("div",{class:"row",style:"justify-content:center"});
+  const relance = ids => { if(mode==="sans") startControle(ids); else { startMode(mode, ids); window.scrollTo({top:0}); } };
+  if(wrong.length){ const b=el("button",{class:"btn"},`Refaire mes ${wrong.length} erreur${wrong.length>1?"s":""}`); b.onclick=()=>relance(wrong); row.appendChild(b); }
+  const b2 = el("button",{class:"btn alt"},"Tout recommencer"); b2.onclick=()=>relance(); row.appendChild(b2);
+  r.appendChild(row);
+  z.appendChild(r);
+  if(!S.retry && typeof enregistrerProgression==="function"){
+    // Score enregistré en pourcentage (sur 100) : les demi-points restent des nombres entiers
+    const bc = el("div",{class:"bilan-card"}); r.appendChild(bc);
+    Promise.resolve(enregistrerProgression(M.code, pct, 100)).then(()=>{
+      const box=document.getElementById("atelier-progression-box");
+      if(box && box.parentNode!==bc) bc.appendChild(box);
+      chargerNotesCompte();
+    });
+  }
+}
+
+/* Meilleures notes enregistrées sur le compte (tous appareils confondus) */
+const REMOTE = {};
+async function chargerNotesCompte(){
+  try{
+    if(typeof supabase==="undefined") return;
+    const sb = supabase.createClient("https://rwqsvrmjjoihuhmvbwuu.supabase.co","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ3cXN2cm1qam9paHVobXZid3V1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQzNjQxNTMsImV4cCI6MjA5OTk0MDE1M30.VtdOnI169-erf48NpxLPCC0th6kHqBcsBuCauOx52HI");
+    const s = await sb.auth.getSession(); if(!s.data.session) return;
+    let id = null; try{ id = localStorage.getItem("atelier_enfant_actif"); }catch(e){}
+    if(!id) return;
+    const r = await sb.from("progression").select("fiche_code,score,total").eq("enfant_id",id).in("fiche_code",[MODES.aide.code, MODES.sans.code]);
+    if(r.error || !r.data) return;
+    r.data.forEach(l=>{ const p = l.total>0 ? Math.round(l.score/l.total*100) : 0; REMOTE[l.fiche_code] = Math.max(REMOTE[l.fiche_code]||0, p); });
+    showNotes();
+  }catch(e){}
+}
+function showNotes(){
+  [["aide","#nAide","#vAide"],["sans","#nSans","#vSans"]].forEach(([m,n,v])=>{
+    const d = store.get(MODES[m].key);
+    const rb = REMOTE[MODES[m].code];
+    if(!d || !d.last){
+      if(rb!=null){ $(n).textContent=`${fmt(Math.round(rb/5*2)/2)} / 20 · ${rb} %`; $(v).textContent=(rb>=80?"Acquis ✓":"À retravailler")+" · meilleure note du compte"; $(v).className="ver "+(rb>=80?"ok":"ko"); }
+      else { $(n).textContent="—"; $(v).textContent="Pas encore faite"; $(v).className="ver"; }
+      return;
+    }
+    if(rb!=null && (!d.best || rb>d.best.pct)) d.best = {pct:rb};
+    $(n).textContent = `${fmt(d.last.sur20)} / 20 · ${d.last.pct} %`;
+    const ok = d.last.pct>=80;
+    $(v).textContent = (ok?"Acquis ✓":"À retravailler") + ` · le ${d.last.date}` + (d.best && d.best.pct>d.last.pct ? ` · record ${d.best.pct} %` : "");
+    $(v).className = "ver "+(ok?"ok":"ko");
+  });
+}
+
+/* ---------- Onglets, mode mémoire, "j'ai compris" ---------- */
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{
+  document.querySelectorAll("nav button").forEach(x=>x.classList.toggle("on",x===b));
+  ["lecon","aide","sans"].forEach(t=>$("#tab-"+t).classList.toggle("hidden", t!==b.dataset.tab));
+  if(LOCKED) return;
+  if(b.dataset.tab==="aide" && !STATE.aide) startMode("aide");
+  if(b.dataset.tab==="sans" && !STATE.sans) gateSans();
+  window.scrollTo({top:0});
+});
+$("#memBtn").onclick=()=>{
+  const on = document.body.classList.toggle("mem");
+  document.querySelectorAll(".k").forEach(k=>k.classList.remove("show"));
+  $("#memBtn").textContent = on ? "Montrer tous les mots-clés" : "Mode mémoire : cacher les mots-clés";
+  $("#memInfo").classList.toggle("hidden", !on);
+};
+document.querySelectorAll(".k").forEach(k=>k.onclick=()=>{ if(document.body.classList.contains("mem")) k.classList.add("show"); });
+/* ---------- 3 questions de vérification par bloc ----------
+   Le bloc suivant reste caché tant que les 3 réponses ne sont pas justes.
+   Le bloc au-dessus reste visible : l'enfant peut relire pour répondre. */
+const CHECKS = {
+  p1: [["La médiatrice d'un segment est une … <i>(un mot)</i>",["droite"]],
+       ["Elle est … au segment <i>(un mot)</i>",["perpendiculaire"]],
+       ["Elle passe par le … du segment <i>(un mot)</i>",["milieu"]]],
+  p2: [["M est sur la médiatrice de [AB] et MA = 5 cm. MB = … cm <i>(un nombre)</i>",["5"]],
+       ["Des points à la même distance des extrémités sont … <i>(un mot)</i>",["équidistants","équidistant","equidistants"]],
+       ["La médiatrice est l'ensemble des points à égale … des extrémités <i>(un mot)</i>",["distance"]]],
+  p3: [["Méthode n°1 : je place d'abord le … <i>(un mot)</i>",["milieu"]],
+       ["Puis je trace la perpendiculaire avec l'… <i>(un mot)</i>",["équerre","equerre"]],
+       ["Règle « graduée » : j'ai le droit d'utiliser les … <i>(un mot)</i>",["graduations","graduation"]]],
+  p4: [["L'écartement du compas : plus grand que la … du segment <i>(un mot)</i>",["moitié","moitie"]],
+       ["Les deux arcs ont le même … <i>(un mot)</i>",["rayon","écartement"]],
+       ["Combien de points faut-il trouver ? <i>(un nombre)</i>",["2","deux"]]]
+};
+const ORDER = ["p1","p2","p3","p4"];
+const doneStore = store.get("p005_compris") || {};
+const checkStore = store.get("p005_verif") || {};
+function paintParts(){
+  let open = true;
+  ORDER.forEach(id=>{
+    const part = document.querySelector(`[data-part="${id}"]`);
+    part.classList.toggle("hidden", !open);
+    if(!doneStore[id]) open = false;
+  });
+  const lockMsg = $("#partLock");
+  const next = ORDER.find(id=>!doneStore[id]);
+  lockMsg.classList.toggle("hidden", !next || next===ORDER[ORDER.length-1] && false);
+  lockMsg.innerHTML = next ? `🔒 Les blocs suivants s'ouvriront quand tu auras répondu juste aux 3 questions du bloc « ${document.querySelector(`[data-part="${next}"] h3`).textContent} », puis cliqué sur « J'ai bien compris ».` : "";
+  if(!next) lockMsg.classList.add("hidden");
+}
+ORDER.forEach(id=>{
+  const part = document.querySelector(`[data-part="${id}"]`);
+  const btn = part.querySelector("[data-done]");
+  checkStore[id] = checkStore[id] || {};
+  const box = el("div",{class:"verif"});
+  box.appendChild(el("div",{class:"verif-t"},"✏️ Je vérifie que j'ai compris (je peux relire le bloc juste au-dessus) :"));
+  const paintBtn = () => {
+    const all = CHECKS[id].every((_,i)=>checkStore[id][i]);
+    btn.disabled = !all && !doneStore[id];
+    btn.classList.toggle("on", !!doneStore[id]);
+    btn.textContent = doneStore[id] ? "Compris ✓" : all ? "J'ai bien compris" : "J'ai bien compris (réponds d'abord aux 3 questions)";
+  };
+  CHECKS[id].forEach(([q,ans],i)=>{
+    const c = el("div",{class:"vq"});
+    c.appendChild(el("div",{class:"q"},`${i+1}. ${q}`));
+    const row = el("div",{class:"row"});
+    const inp = el("input",{type:"text",autocomplete:"off",autocapitalize:"off",spellcheck:"false",placeholder:"écris ta réponse"});
+    const b = el("button",{class:"btn"},"Vérifier");
+    const fb = el("div",{class:"fb hidden"});
+    let essais = 0;
+    const ok = () => { inp.value = inp.value || ans[0]; inp.disabled=true; b.disabled=true; fb.className="fb ok"; fb.innerHTML="Bravo ! ✓"; checkStore[id][i]=true; store.set("p005_verif",checkStore); paintBtn(); };
+    if(checkStore[id][i]) { inp.value = ans[0]; ok(); }
+    const go = () => {
+      if(!inp.value.trim()) return;
+      const r = matchWord(inp.value, ans);
+      if(r==="exact" || r==="accent") ok();
+      else {
+        essais++;
+        fb.className = "fb " + (r==="fuzzy" ? "mid" : "ko");
+        fb.innerHTML = (r==="fuzzy" ? "Presque ! Vérifie l'orthographe dans le bloc au-dessus, puis réessaie." : "Pas encore. Relis le bloc juste au-dessus, puis réessaie.")
+          + (essais>=3 ? `<br>La bonne réponse : <b>${ans[0]}</b>. Recopie-la pour continuer.` : "");
+        inp.select();
+      }
+    };
+    b.onclick = go; inp.onkeydown = e => { if(e.key==="Enter") go(); };
+    row.append(inp,b); c.append(row,fb); box.appendChild(c);
+  });
+  part.insertBefore(box, btn);
+  btn.onclick = () => {
+    if(btn.disabled || doneStore[id]) return;
+    doneStore[id] = true; store.set("p005_compris",doneStore); paintBtn(); paintParts();
+    const n = ORDER[ORDER.indexOf(id)+1];
+    if(n) setTimeout(()=>document.querySelector(`[data-part="${n}"]`).scrollIntoView({behavior:"smooth",block:"start"}),100);
+  };
+  paintBtn();
+});
+paintParts();
+showNotes();
+chargerNotesCompte();
+{ const c = store.get(KEY_C); if(c && c.ids) controleInterrompu(c); }
+</script>
+</body>
+</html>
