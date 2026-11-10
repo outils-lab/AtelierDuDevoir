@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
 <link rel="icon" href="../favicon.ico" sizes="any">
-<title>La médiatrice d'un segment — Le passage secret</title>
+<title>La médiatrice d'un segment — contrôle</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800;900&display=swap" rel="stylesheet">
@@ -111,6 +111,14 @@ body.lock nav, body.lock .retour, body.lock #tab-lecon, body.lock #tab-aide{disp
 .verif-t{font-weight:800;color:var(--ochre);margin-bottom:4px}
 .vq{padding:6px 0;border-top:1px dotted var(--line)}
 .vq:first-of-type{border-top:0}
+nav button.locked{opacity:.55}
+nav button.locked::before{content:"🔒 "}
+.gatebox{background:#fff;border:2px solid var(--ochre);border-radius:14px;padding:16px;margin:12px 0}
+.gatebox h3{margin-top:0}
+.steps3{display:flex;gap:6px;margin:4px 0 6px;font-size:14px;font-weight:800}
+.steps3 span{flex:1;text-align:center;border-radius:8px;padding:3px;background:#eee;color:#777}
+.steps3 span.ok{background:var(--moss-l);color:#1f5131}
+.steps3 span.cur{background:var(--gold-l);color:#6b4e08}
 .ex{background:#fff;border:1px dashed var(--line);border-radius:10px;padding:8px 10px;margin:8px 0}
 </style>
 </head>
@@ -118,7 +126,7 @@ body.lock nav, body.lock .retour, body.lock #tab-lecon, body.lock #tab-aide{disp
 <header>
   <div class="top">
     <a class="retour" href="../passage-secret.html">← Retour au passage secret</a><br>
-    <small>🗝️ Passage secret · Raphaël · 6e · Maths · interro</small>
+    <small>🗝️ Passage secret · Raphaël · 6e · Maths · contrôle de jeudi</small>
     <h1>La médiatrice d'un segment</h1>
   </div>
   <nav>
@@ -135,7 +143,13 @@ body.lock nav, body.lock .retour, body.lock #tab-lecon, body.lock #tab-aide{disp
     <button class="btn" id="memBtn">Mode mémoire : cacher les mots-clés</button>
     <span id="memInfo" class="hidden" style="font-size:14px;color:var(--muted)">Dis le mot à voix haute, puis touche la case pour vérifier.</span>
   </div>
-  <div class="tip"><b>Pour l'interrogation, tu dois savoir :</b> la <b>définition</b>, la <b>propriété caractéristique</b> et les <b>deux méthodes de construction</b>.</div>
+  <div class="tip"><b>Pour le contrôle de jeudi, tu dois savoir :</b> la <b>définition</b>, les <b>propriétés</b> et la <b>propriété caractéristique</b>, <b>justifier</b> avec « donc », et faire les <b>deux méthodes de construction</b>.</div>
+  <div class="gatebox" style="margin-top:0"><b>Les règles du parcours :</b>
+    <ol style="margin:6px 0 0">
+      <li><b>La leçon</b> : à la fin de chaque bloc, 3 questions. <b>Une seule erreur = tu recommences à la question 1</b> du bloc (avec de nouvelles questions).</li>
+      <li><b>Avec aide</b> : s'ouvre quand les 4 blocs de la leçon sont réussis.</li>
+      <li><b>Sans aide</b> : s'ouvre quand tu as au moins <b>16 / 20</b> dans la partie avec aide.</li>
+    </ol></div>
 
   <div class="part" data-part="p1">
     <h3>1) La définition (par cœur)</h3>
@@ -187,7 +201,7 @@ body.lock nav, body.lock .retour, body.lock #tab-lecon, body.lock #tab-aide{disp
   </div>
 
   <div id="partLock" class="warn hidden"></div>
-  <div class="tip"><b>Comment apprendre :</b> lis un bloc, réponds à ses 3 questions, puis clique sur « J'ai bien compris » pour ouvrir le bloc suivant. Ensuite, active le <b>mode mémoire</b> pour réciter, fais les exercices <b>avec aide</b>, et enfin le contrôle <b>sans aide</b>.</div>
+  <div id="leconFinie" class="def hidden" style="border-left-color:var(--moss);background:var(--moss-l)"><b>Bravo, toute la leçon est réussie !</b> La partie <b>avec aide</b> est ouverte. Tu peux d'abord réciter avec le <b>mode mémoire</b>.<br><button class="btn" id="goAide" style="margin-top:8px">Aller à la partie avec aide →</button></div>
 </section>
 
 <!-- ================= EXERCICES ================= -->
@@ -205,7 +219,7 @@ body.lock nav, body.lock .retour, body.lock #tab-lecon, body.lock #tab-aide{disp
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../atelier-progression.js"></script>
 <script>
-var FICHE_CODE = "P005";
+var FICHE_CODE = "P006";
 /* ---------- Outils ---------- */
 const $ = (s, r=document) => r.querySelector(s);
 const el = (tag, attrs={}, html="") => { const e=document.createElement(tag); for(const k in attrs){ if(k==="class") e.className=attrs[k]; else e.setAttribute(k,attrs[k]); } if(html) e.innerHTML=html; return e; };
@@ -288,11 +302,15 @@ const BANK = [
   Wd("p2","Une propriété observée sur quelques exemples, mais pas encore prouvée, s'appelle une …",["conjecture"],"conjecture",["définition","preuve"],I),
   Wd("p2","Le pirate cache son trésor à la même distance du drapeau et de la fleur. Le trésor est sur la … du segment [drapeau-fleur].",["médiatrice","mediatrice"],"médiatrice",["diagonale","moitié"],I),
   {part:"p2",type:"order",q:"Range la justification dans l'ordre : touche les 3 phrases une par une.",items:["Je sais que M est sur la médiatrice de [AB].","Or tous les points de la médiatrice d'un segment sont à égale distance de ses extrémités.","Donc MA = MB."]},
+  Wd("p2","Le point C est sur la médiatrice de [AB]. CA = 3 cm et AB = 4 cm. Quel est le périmètre du triangle ABC ? <i>(écris le nombre en cm)</i>",["10"],"10",["7","11"]),
+  Wd("p2","Dans le triangle ABC, CA = CB = 5 cm. Le point C est sur la … de [AB].",["médiatrice","mediatrice"],"médiatrice",["diagonale","hauteur"],I),
+  {part:"p2",type:"order",q:"Range la justification dans l'ordre : touche les 3 phrases une par une.",items:["Je sais que TA = TB = 6 cm.","Or tous les points à égale distance des extrémités d'un segment sont sur sa médiatrice.","Donc T est sur la médiatrice de [AB]."]},
   // --- p3 méthode 1
   Wd("p3","Méthode n°1 : je place d'abord le … du segment avec la règle graduée.",["milieu"],"milieu",["centre","bout"],I),
   Wd("p3","Puis je trace la perpendiculaire avec l'…",["équerre","equerre"],"équerre",["compas","rapporteur"],I),
   Wd("p3","AB = 9 cm. À combien de cm de A je place le milieu I ? <i>(écris le nombre)</i>",["4,5","4.5"],"4,5",["9","3"]),
   Wd("p3","Règle « graduée » veut dire que j'ai le droit d'utiliser les …",["graduations","graduation"],"graduations",["couleurs","équerres"],I),
+  Wd("p3","AB = 7 cm. À combien de cm de A je place le milieu I ? <i>(écris le nombre)</i>",["3,5","3.5"],"3,5",["7","14"]),
   Wd("p3","Règle « non graduée » : est-ce que je dois trouver une règle sans graduations ? <i>(écris oui ou non)</i>",["non"],"non",["oui","parfois"]),
   {part:"p3",type:"order",q:"Méthode n°1 : range les étapes dans l'ordre.",items:["Je mesure le segment avec la règle graduée.","Je place le milieu I et je code les deux moitiés.","Je pose l'équerre sur le segment, en I.","Je trace la perpendiculaire et je code l'angle droit."]},
   // --- p4 méthode 2
@@ -316,8 +334,8 @@ const DATES = [];
 
 /* ---------- Rendu des exercices ---------- */
 const MODES = {
-  aide: {key:"p005_note_aide", box:"#tab-aide", label:"avec aide", code:FICHE_CODE+"-aide"},
-  sans: {key:"p005_note_sans", box:"#tab-sans", label:"sans aide", code:FICHE_CODE}
+  aide: {key:"p006_note_aide", box:"#tab-aide", label:"avec aide", code:FICHE_CODE+"-aide"},
+  sans: {key:"p006_note_sans", box:"#tab-sans", label:"sans aide", code:FICHE_CODE}
 };
 let STATE = {};
 
@@ -330,7 +348,7 @@ function startMode(mode, onlyIds){
   if(mode==="aide"){
     intro.innerHTML = `<b>Exercices AVEC aide</b> · ${ids.length} questions${onlyIds?" (seulement tes erreurs)":""}<br>
       Parfois tu choisis parmi 3 réponses, parfois tu écris le mot avec un <span class="hint">indice</span>.
-      <b>Objectif : 80 % minimum.</b> Ensuite, passe à la version sans aide.`;
+      <b>Il faut au moins 16 / 20 (80 %) sur la partie complète pour ouvrir la partie sans aide.</b>`;
   } else {
     intro.innerHTML = `<b>Exercices SANS aide</b> · ${ids.length} questions${onlyIds?" (seulement tes erreurs)":""}<br>
       Pas de choix proposé : <b>tu écris tout toi-même</b>, comme le jour du contrôle. 
@@ -527,7 +545,7 @@ function renderCard(q, mode, n){
    Pendant le contrôle : plus d'accès à la leçon, ni à l'aide, ni au retour.
    Quitter, recharger ou ouvrir la page ailleurs arrête le contrôle :
    les questions non faites comptent 0. */
-const KEY_C = "p005_controle_en_cours";
+const KEY_C = "p006_controle_en_cours";
 let LOCKED = false;
 function lock(on){
   LOCKED = on;
@@ -617,8 +635,8 @@ function finish(mode){
     <div><b>${pct} %</b> de bonnes réponses (${fmt(pts)} / ${fmt(max)} points)</div>
     <p style="font-size:19px;font-weight:800">${ok ? "Acquis ✓" : "À retravailler"}</p>
     <p>${ok
-      ? (mode==="aide" ? "Bien joué ! Maintenant, passe à la version <b>sans aide</b> : c'est elle qui compte pour le contrôle." : "Excellent : tu sais ta leçon !")
-      : "Moins de 80 % : relis la leçon en mode mémoire, puis refais <b>seulement tes erreurs</b>, jusqu'à ne plus en faire."}</p>`;
+      ? (mode==="aide" ? "Bien joué ! Tu as au moins 16 / 20 : la partie <b>sans aide</b> est ouverte. C'est elle qui ressemble au contrôle." : "Excellent : tu es prêt pour jeudi !")
+      : (mode==="aide" ? "Moins de 16 / 20 : la partie sans aide reste fermée. Relis la leçon en mode mémoire, entraîne-toi sur tes erreurs, puis clique sur <b>Tout recommencer</b> : il faut 16 / 20 sur une partie complète." : "Moins de 80 % : relis la leçon en mode mémoire, puis refais <b>seulement tes erreurs</b>, jusqu'à ne plus en faire.")}</p>`;
   const row = el("div",{class:"row",style:"justify-content:center"});
   const relance = ids => { if(mode==="sans") startControle(ids); else { startMode(mode, ids); window.scrollTo({top:0}); } };
   if(wrong.length){ const b=el("button",{class:"btn"},`Refaire mes ${wrong.length} erreur${wrong.length>1?"s":""}`); b.onclick=()=>relance(wrong); row.appendChild(b); }
@@ -652,6 +670,7 @@ async function chargerNotesCompte(){
   }catch(e){}
 }
 function showNotes(){
+  try{ paintTabs(); }catch(e){}
   [["aide","#nAide","#vAide"],["sans","#nSans","#vSans"]].forEach(([m,n,v])=>{
     const d = store.get(MODES[m].key);
     const rb = REMOTE[MODES[m].code];
@@ -668,15 +687,58 @@ function showNotes(){
   });
 }
 
-/* ---------- Onglets, mode mémoire, "j'ai compris" ---------- */
+/* ---------- Onglets verrouillés ----------
+   Avec aide : seulement quand les 4 blocs de la leçon sont réussis.
+   Sans aide : seulement avec au moins 16/20 (80 %) dans la partie avec aide. */
+const SEUIL = 80;
+const leconOk = () => ORDER.every(id=>doneStore[id]);
+function meilleureAide(){
+  const d = store.get(MODES.aide.key) || {};
+  const loc = Math.max(d.best ? d.best.pct : 0, d.last ? d.last.pct : 0);
+  return Math.max(loc, REMOTE[MODES.aide.code]||0);
+}
+const aideOk = () => meilleureAide() >= SEUIL;
+function paintTabs(){
+  $('nav button[data-tab="aide"]').classList.toggle("locked", !leconOk());
+  $('nav button[data-tab="sans"]').classList.toggle("locked", !aideOk());
+}
+function verrou(tab){
+  const root = $("#tab-"+tab);
+  const g = el("div",{class:"gatebox"});
+  if(tab==="aide"){
+    const faits = ORDER.filter(id=>doneStore[id]).length;
+    g.innerHTML = `<h3>🔒 La partie avec aide est fermée</h3>
+      <p>Elle s'ouvrira quand tu auras réussi <b>les 4 blocs de la leçon</b> (3 bonnes réponses d'affilée à chaque bloc).</p>
+      <p>Pour l'instant : <b>${faits} bloc${faits>1?"s":""} sur 4</b> réussi${faits>1?"s":""}.</p>`;
+  } else {
+    const p = meilleureAide();
+    g.innerHTML = `<h3>🔒 La partie sans aide est fermée</h3>
+      <p>Elle s'ouvrira quand tu auras au moins <b>16 / 20</b> (80 %) dans la partie <b>avec aide</b>.</p>
+      <p>${p ? `Ta meilleure note avec aide : <b>${fmt(Math.round(p/5*2)/2)} / 20</b> (${p} %).` : "Tu n'as pas encore fini la partie avec aide."}
+      ${leconOk() ? "" : "<br>Et avant ça, il faut finir la leçon."}</p>`;
+  }
+  const row = el("div",{class:"row"});
+  const go = el("button",{class:"btn"}, tab==="aide" || !leconOk() ? "Retour à la leçon" : "Aller à la partie avec aide");
+  go.onclick = () => $(`nav button[data-tab="${tab==="aide" || !leconOk() ? "lecon" : "aide"}"]`).click();
+  row.appendChild(go); g.appendChild(row);
+  root.innerHTML = ""; root.appendChild(g);
+}
 document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{
   document.querySelectorAll("nav button").forEach(x=>x.classList.toggle("on",x===b));
   ["lecon","aide","sans"].forEach(t=>$("#tab-"+t).classList.toggle("hidden", t!==b.dataset.tab));
   if(LOCKED) return;
-  if(b.dataset.tab==="aide" && !STATE.aide) startMode("aide");
-  if(b.dataset.tab==="sans" && !STATE.sans) gateSans();
+  const t = b.dataset.tab;
+  if(t==="aide"){
+    if(!leconOk()){ STATE.aide = null; verrou("aide"); }
+    else if(!STATE.aide) startMode("aide");
+  }
+  if(t==="sans"){
+    if(!aideOk()){ STATE.sans = null; verrou("sans"); }
+    else if(!STATE.sans) gateSans();
+  }
   window.scrollTo({top:0});
 });
+$("#goAide").onclick = () => $('nav button[data-tab="aide"]').click();
 $("#memBtn").onclick=()=>{
   const on = document.body.classList.toggle("mem");
   document.querySelectorAll(".k").forEach(k=>k.classList.remove("show"));
@@ -690,20 +752,27 @@ document.querySelectorAll(".k").forEach(k=>k.onclick=()=>{ if(document.body.clas
 const CHECKS = {
   p1: [["La médiatrice d'un segment est une … <i>(un mot)</i>",["droite"]],
        ["Elle est … au segment <i>(un mot)</i>",["perpendiculaire"]],
-       ["Elle passe par le … du segment <i>(un mot)</i>",["milieu"]]],
+       ["Elle passe par le … du segment <i>(un mot)</i>",["milieu"]],
+       ["Pour coder l'angle droit, je dessine un petit … <i>(un mot)</i>",["carré","carre"]],
+       ["Une droite perpendiculaire à [AB] qui ne passe pas par son milieu est-elle la médiatrice ? <i>(oui ou non)</i>",["non"]]],
   p2: [["M est sur la médiatrice de [AB] et MA = 5 cm. MB = … cm <i>(un nombre)</i>",["5"]],
        ["Des points à la même distance des extrémités sont … <i>(un mot)</i>",["équidistants","équidistant","equidistants"]],
-       ["La médiatrice est l'ensemble des points à égale … des extrémités <i>(un mot)</i>",["distance"]]],
+       ["La médiatrice est l'ensemble des points à égale … des extrémités <i>(un mot)</i>",["distance"]],
+       ["PA = 4 cm et PB = 4 cm. P est-il sur la médiatrice de [AB] ? <i>(oui ou non)</i>",["oui"]],
+       ["Une propriété vue sur des exemples mais pas prouvée s'appelle une … <i>(un mot)</i>",["conjecture"]]],
   p3: [["Méthode n°1 : je place d'abord le … <i>(un mot)</i>",["milieu"]],
        ["Puis je trace la perpendiculaire avec l'… <i>(un mot)</i>",["équerre","equerre"]],
-       ["Règle « graduée » : j'ai le droit d'utiliser les … <i>(un mot)</i>",["graduations","graduation"]]],
+       ["Règle « graduée » : j'ai le droit d'utiliser les … <i>(un mot)</i>",["graduations","graduation"]],
+       ["AB = 8 cm. Le milieu I est à … cm de A <i>(un nombre)</i>",["4"]],
+       ["AB = 6 cm. Le milieu I est à … cm de B <i>(un nombre)</i>",["3"]]],
   p4: [["L'écartement du compas : plus grand que la … du segment <i>(un mot)</i>",["moitié","moitie"]],
-       ["Les deux arcs ont le même … <i>(un mot)</i>",["rayon","écartement"]],
-       ["Combien de points faut-il trouver ? <i>(un nombre)</i>",["2","deux"]]]
+       ["Les deux arcs ont le même … <i>(un mot)</i>",["rayon","écartement","ecartement"]],
+       ["Combien de points faut-il trouver ? <i>(un nombre)</i>",["2","deux"]],
+       ["Avec le compas, est-ce qu'on mesure le segment ? <i>(oui ou non)</i>",["non"]],
+       ["Le 2e point se fait de l'autre … du segment <i>(un mot)</i>",["côté","cote"]]]
 };
 const ORDER = ["p1","p2","p3","p4"];
-const doneStore = store.get("p005_compris") || {};
-const checkStore = store.get("p005_verif") || {};
+const doneStore = store.get("p006_compris") || {};
 function paintParts(){
   let open = true;
   ORDER.forEach(id=>{
@@ -714,56 +783,66 @@ function paintParts(){
   const lockMsg = $("#partLock");
   const next = ORDER.find(id=>!doneStore[id]);
   lockMsg.classList.toggle("hidden", !next || next===ORDER[ORDER.length-1] && false);
-  lockMsg.innerHTML = next ? `🔒 Les blocs suivants s'ouvriront quand tu auras répondu juste aux 3 questions du bloc « ${document.querySelector(`[data-part="${next}"] h3`).textContent} », puis cliqué sur « J'ai bien compris ».` : "";
+  lockMsg.innerHTML = next ? `🔒 La suite de la leçon (et la partie avec aide) s'ouvrira quand tu auras réussi les 3 questions d'affilée du bloc « ${document.querySelector(`[data-part="${next}"] h3`).textContent} », puis cliqué sur « J'ai bien compris ».` : "";
   if(!next) lockMsg.classList.add("hidden");
+  $("#leconFinie").classList.toggle("hidden", !!next);
 }
+/* Règle : 3 questions tirées au hasard dans le bloc, à faire dans l'ordre.
+   Une seule erreur => on recommence à la question 1 (nouveau tirage). */
 ORDER.forEach(id=>{
   const part = document.querySelector(`[data-part="${id}"]`);
   const btn = part.querySelector("[data-done]");
-  checkStore[id] = checkStore[id] || {};
   const box = el("div",{class:"verif"});
-  box.appendChild(el("div",{class:"verif-t"},"✏️ Je vérifie que j'ai compris (je peux relire le bloc juste au-dessus) :"));
+  part.insertBefore(box, btn);
+  let tirage = [], step = 0, msg = "";
   const paintBtn = () => {
-    const all = CHECKS[id].every((_,i)=>checkStore[id][i]);
+    const all = step>=3;
     btn.disabled = !all && !doneStore[id];
     btn.classList.toggle("on", !!doneStore[id]);
-    btn.textContent = doneStore[id] ? "Compris ✓" : all ? "J'ai bien compris" : "J'ai bien compris (réponds d'abord aux 3 questions)";
+    btn.textContent = doneStore[id] ? "Compris ✓" : all ? "J'ai bien compris" : "J'ai bien compris (réussis d'abord les 3 questions)";
   };
-  CHECKS[id].forEach(([q,ans],i)=>{
+  const nouveauTirage = () => { tirage = shuffle(CHECKS[id].map((_,k)=>k)).slice(0,3); step = 0; };
+  const render = () => {
+    box.innerHTML = "";
+    box.appendChild(el("div",{class:"verif-t"},"✏️ Je vérifie que j'ai compris : 3 questions à réussir d'affilée (je peux relire le bloc au-dessus)."));
+    if(doneStore[id]){ box.appendChild(el("div",{class:"fb ok"},"Bloc réussi ✓")); paintBtn(); return; }
+    const st = el("div",{class:"steps3"});
+    [0,1,2].forEach(k=>st.appendChild(el("span",{class: k<step?"ok":(k===step?"cur":"")}, (k<step?"✓ ":"")+"Question "+(k+1))));
+    box.appendChild(st);
+    if(msg){ box.appendChild(el("div",{class:"fb ko"},msg)); }
+    if(step>=3){ box.appendChild(el("div",{class:"fb ok"},"Les 3 réponses sont justes ! Clique sur « J'ai bien compris »."));
+      paintBtn(); return; }
+    const [q,ans] = CHECKS[id][tirage[step]];
     const c = el("div",{class:"vq"});
-    c.appendChild(el("div",{class:"q"},`${i+1}. ${q}`));
+    c.appendChild(el("div",{class:"q"},`Question ${step+1} sur 3 : ${q}`));
     const row = el("div",{class:"row"});
     const inp = el("input",{type:"text",autocomplete:"off",autocapitalize:"off",spellcheck:"false",placeholder:"écris ta réponse"});
     const b = el("button",{class:"btn"},"Vérifier");
-    const fb = el("div",{class:"fb hidden"});
-    let essais = 0;
-    const ok = () => { inp.value = inp.value || ans[0]; inp.disabled=true; b.disabled=true; fb.className="fb ok"; fb.innerHTML="Bravo ! ✓"; checkStore[id][i]=true; store.set("p005_verif",checkStore); paintBtn(); };
-    if(checkStore[id][i]) { inp.value = ans[0]; ok(); }
     const go = () => {
       if(!inp.value.trim()) return;
       const r = matchWord(inp.value, ans);
-      if(r==="exact" || r==="accent") ok();
+      if(r==="exact" || r==="accent"){ step++; msg=""; render(); }
       else {
-        essais++;
-        fb.className = "fb " + (r==="fuzzy" ? "mid" : "ko");
-        fb.innerHTML = (r==="fuzzy" ? "Presque ! Vérifie l'orthographe dans le bloc au-dessus, puis réessaie." : "Pas encore. Relis le bloc juste au-dessus, puis réessaie.")
-          + (essais>=3 ? `<br>La bonne réponse : <b>${ans[0]}</b>. Recopie-la pour continuer.` : "");
-        inp.select();
+        msg = (r==="fuzzy" ? "❌ Mal écrit : attention à l'orthographe." : "❌ Ce n'est pas la bonne réponse.")
+          + " <b>Tu recommences à la question 1.</b> Relis bien le bloc au-dessus avant de répondre.";
+        nouveauTirage(); render();
       }
+      paintBtn();
     };
     b.onclick = go; inp.onkeydown = e => { if(e.key==="Enter") go(); };
-    row.append(inp,b); c.append(row,fb); box.appendChild(c);
-  });
-  part.insertBefore(box, btn);
+    row.append(inp,b); c.append(row); box.appendChild(c);
+    paintBtn();
+  };
+  nouveauTirage(); render();
   btn.onclick = () => {
     if(btn.disabled || doneStore[id]) return;
-    doneStore[id] = true; store.set("p005_compris",doneStore); paintBtn(); paintParts();
+    doneStore[id] = true; store.set("p006_compris",doneStore); render(); paintParts(); paintTabs();
     const n = ORDER[ORDER.indexOf(id)+1];
     if(n) setTimeout(()=>document.querySelector(`[data-part="${n}"]`).scrollIntoView({behavior:"smooth",block:"start"}),100);
   };
-  paintBtn();
 });
 paintParts();
+paintTabs();
 showNotes();
 chargerNotesCompte();
 { const c = store.get(KEY_C); if(c && c.ids) controleInterrompu(c); }
