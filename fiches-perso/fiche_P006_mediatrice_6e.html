@@ -67,12 +67,6 @@ body.mem .k.show{color:var(--moss);background:var(--moss-l)}
 .opt.good{border-color:var(--moss);background:var(--moss-l)}
 .opt.bad{border-color:var(--red);background:var(--red-l)}
 .opt.sel{border-color:var(--char);background:#efe3d0}
-/* Contrôle sans aide : aucune correction tant que tout n'est pas fini */
-#tab-sans.encours .card .fb{display:none}
-#tab-sans.encours .opt.good,#tab-sans.encours .opt.bad{border-color:var(--line);background:#fff}
-#tab-sans.encours .opt.sel{border-color:var(--char);background:#efe3d0}
-#tab-sans .enreg{margin-top:8px;font-size:14px;color:var(--muted);font-weight:700}
-#tab-sans:not(.encours) .enreg{display:none}
 .revoir{background:#fff;border:2px solid var(--red);border-radius:14px;padding:12px 14px;margin:14px 0;text-align:left}
 .revoir h3{margin-top:0;color:var(--red)}
 .revoir .part{border:1px dashed var(--line);border-radius:10px;padding:8px 10px;margin:8px 0;background:var(--paper)}
@@ -362,7 +356,7 @@ function startMode(mode, onlyIds){
       <b>Il faut au moins 16 / 20 (80 %) sur la partie complète pour ouvrir la partie sans aide.</b>`;
   } else {
     intro.innerHTML = `<b>Exercices SANS aide</b> · ${ids.length} questions${onlyIds?" (seulement tes erreurs)":""}<br>
-      Pas de choix proposé : <b>tu écris tout toi-même</b>, comme le jour du contrôle. La correction n'apparaît qu'<b>à la fin</b>.<br>
+      Pas de choix proposé : <b>tu écris tout toi-même</b>, comme le jour du contrôle. Tu vois la correction après chaque réponse ; à la fin, tu refais les questions ratées.<br>
       • Mot juste = 1 point. Mot presque juste (une faute d'orthographe) = ½ point.<br>
       • Nombres : écris seulement le nombre (sans unité).<br>
       <b>Objectif : 17 / 20 pour être prêt</b> (et gagner 3 vies pour la salle d'arcade, une seule fois pour cette fiche).`;
@@ -387,7 +381,7 @@ function renderCard(q, mode, n){
   const body = el("div");
   c.appendChild(body);
   const fb = el("div",{class:"fb hidden"});
-  const done = (pts, msg) => { pts = Math.max(0, Math.min(q.w, pts)); STATE[mode].res[q.id]=pts; fb.className="fb "+(pts>=q.w?"ok":pts>0?"mid":"ko"); fb.innerHTML=msg; fb.classList.remove("hidden"); if(mode==="sans" && !c.querySelector(".enreg")) c.appendChild(el("div",{class:"enreg"},"Réponse enregistrée ✓ — la correction s'affichera quand tu auras fini tout le contrôle.")); updateProgress(mode); };
+  const done = (pts, msg) => { pts = Math.max(0, Math.min(q.w, pts)); STATE[mode].res[q.id]=pts; fb.className="fb "+(pts>=q.w?"ok":pts>0?"mid":"ko"); fb.innerHTML=msg; fb.classList.remove("hidden"); updateProgress(mode); };
 
   if(q.type==="word" || q.type==="date"){
     body.appendChild(el("div",{class:"q"}, q.type==="date" ? `Quelle est la date ? <b>${q.q}</b>` : q.q));
@@ -630,7 +624,7 @@ function texteQ(q){ const d=document.createElement("div"); d.innerHTML = q.type=
 /* Correction du contrôle : seulement les blocs de la leçon où il y a eu des erreurs */
 function correction(wrong){
   const z = el("div",{class:"revoir"});
-  z.appendChild(el("h3",{},`📖 Ta correction : ${wrong.length} question${wrong.length>1?"s":""} à revoir`));
+  z.appendChild(el("h3",{},`📖 À refaire : ${wrong.length} question${wrong.length>1?"s":""} ratée${wrong.length>1?"s":""}`));
   z.appendChild(el("p",{},"Relis les parties de la leçon où tu t'es trompé, puis refais seulement ces questions. <b>Ça ne te donne pas de point en plus</b> : c'est pour comprendre tes erreurs."));
   ORDER.forEach(pid=>{
     const qs = wrong.filter(id=>blocDe(BANK[id])===pid);
