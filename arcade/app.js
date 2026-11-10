@@ -80,6 +80,7 @@ async function boot(){
   S.dernier = {}; lignes.forEach(function(l){ if(S.dernier[l.fiche_code] == null) S.dernier[l.fiche_code] = l.total > 0 ? l.score/l.total : 0; });
   S.fichesOk = Object.keys(S.scores).filter(function(c){ return S.scores[c] >= 0.8; }).length;
   importerErreurs(lignes);
+  bonusPassageSecret(lignes);
   $('#qui').innerHTML = '👤 '+esc(S.enfant.prenom)+' · '+esc(S.enfant.classe); $('#qui').hidden = false;
   accueil();
 }
@@ -129,6 +130,23 @@ function importerErreurs(lignes){
   if(n) sauver();
 }
 
+/* Passage secret : contrôle « sans aide » réussi avec au moins 17/20 = 3 vies.
+   Une seule fois par fiche (P001, P002…), pour les contrôles faits depuis le 10/11/2026.
+   Les vies sont ajoutées à la première visite de la salle après le contrôle. */
+var SECRET_DEPUIS = new Date('2026-11-10T00:00:00+01:00').getTime();
+function bonusPassageSecret(lignes){
+  if(!D.secret) D.secret = {};
+  var gain = 0, fiches = [];
+  lignes.forEach(function(l){
+    var c = l.fiche_code;
+    if(!/^P\d{3}$/.test(c) || !(l.total > 0) || D.secret[c]) return;
+    if(new Date(l.fait_le).getTime() < SECRET_DEPUIS) return;
+    var sur20 = Math.round(l.score / l.total * 40) / 2;
+    if(sur20 >= 17){ D.secret[c] = 1; gain += 3; fiches.push(c); }
+  });
+  if(gain){ quota().v += gain; S.bonusSecret = gain; sauver(); }
+}
+
 /* ═══ Enregistrement ═══ */
 var tSave = null;
 function sauver(){ clearTimeout(tSave); tSave = setTimeout(ecrire, 700); }
@@ -172,6 +190,7 @@ function accueil(){
   var msg = (prenom ? 'Bonjour '+esc(prenom)+' ! ' : 'C\'est parti ! ') + 'Choisis ta matière. Réussis ta série pour gagner des vies et jouer.';
   if(aRevoir) msg += ' J\'ai gardé <b>'+aRevoir+' question'+(aRevoir>1?'s':'')+'</b> à revoir pour toi aujourd\'hui.';
   if(S.vies) msg = '<b>♥ Tu as '+S.vies+' vie'+(S.vies>1?'s':'')+' en réserve.</b> Joue quand tu veux, mais aujourd\'hui : à minuit, elles disparaissent. ' + msg.replace(/^[^!]*! /, '');
+  if(S.bonusSecret){ msg = '🗝️ <b>Contrôle du passage secret réussi : +'+S.bonusSecret+' vies !</b> ' + msg; S.bonusSecret = 0; }
   $('#ugoAccueil').innerHTML = msg;
   var qz = $('#quota');
   if(toutFini()){ qz.className = 'quota'; qz.innerHTML = msgPlafond('fr'); }

@@ -67,6 +67,16 @@ body.mem .k.show{color:var(--moss);background:var(--moss-l)}
 .opt.good{border-color:var(--moss);background:var(--moss-l)}
 .opt.bad{border-color:var(--red);background:var(--red-l)}
 .opt.sel{border-color:var(--char);background:#efe3d0}
+/* Contrôle sans aide : aucune correction tant que tout n'est pas fini */
+#tab-sans.encours .card .fb{display:none}
+#tab-sans.encours .opt.good,#tab-sans.encours .opt.bad{border-color:var(--line);background:#fff}
+#tab-sans.encours .opt.sel{border-color:var(--char);background:#efe3d0}
+#tab-sans .enreg{margin-top:8px;font-size:14px;color:var(--muted);font-weight:700}
+#tab-sans:not(.encours) .enreg{display:none}
+.revoir{background:#fff;border:2px solid var(--red);border-radius:14px;padding:12px 14px;margin:14px 0;text-align:left}
+.revoir h3{margin-top:0;color:var(--red)}
+.revoir .part{border:1px dashed var(--line);border-radius:10px;padding:8px 10px;margin:8px 0;background:var(--paper)}
+.revoir .ques{margin:4px 0 8px;padding-left:18px}
 input[type=text],textarea{font:inherit;padding:8px 10px;border:2px solid var(--line);border-radius:10px;background:#fff;width:100%;max-width:340px}
 textarea{max-width:100%;min-height:70px;resize:vertical}
 input.blank{width:auto;min-width:90px;max-width:170px;padding:3px 6px;margin:2px 2px;display:inline-block}
@@ -344,6 +354,7 @@ function startMode(mode, onlyIds){
   const ids = onlyIds || BANK.map(q=>q.id);
   STATE[mode] = {ids, res:{}, retry:!!onlyIds};
   root.innerHTML = "";
+  if(mode==="sans") root.classList.add("encours");
   const intro = el("div",{class:"intro"});
   if(mode==="aide"){
     intro.innerHTML = `<b>Exercices AVEC aide</b> · ${ids.length} questions${onlyIds?" (seulement tes erreurs)":""}<br>
@@ -351,10 +362,10 @@ function startMode(mode, onlyIds){
       <b>Il faut au moins 16 / 20 (80 %) sur la partie complète pour ouvrir la partie sans aide.</b>`;
   } else {
     intro.innerHTML = `<b>Exercices SANS aide</b> · ${ids.length} questions${onlyIds?" (seulement tes erreurs)":""}<br>
-      Pas de choix proposé : <b>tu écris tout toi-même</b>, comme le jour du contrôle. 
+      Pas de choix proposé : <b>tu écris tout toi-même</b>, comme le jour du contrôle. La correction n'apparaît qu'<b>à la fin</b>.<br>
       • Mot juste = 1 point. Mot presque juste (une faute d'orthographe) = ½ point.<br>
       • Nombres : écris seulement le nombre (sans unité).<br>
-      <b>Objectif : 80 % minimum.</b>`;
+      <b>Objectif : 17 / 20 pour être prêt</b> (et gagner 3 vies pour la salle d'arcade, une seule fois pour cette fiche).`;
   }
   root.appendChild(intro);
   const pr = el("div",{class:"prog"},"<i></i>"); root.appendChild(pr);
@@ -376,7 +387,7 @@ function renderCard(q, mode, n){
   const body = el("div");
   c.appendChild(body);
   const fb = el("div",{class:"fb hidden"});
-  const done = (pts, msg) => { pts = Math.max(0, Math.min(q.w, pts)); STATE[mode].res[q.id]=pts; fb.className="fb "+(pts>=q.w?"ok":pts>0?"mid":"ko"); fb.innerHTML=msg; fb.classList.remove("hidden"); updateProgress(mode); };
+  const done = (pts, msg) => { pts = Math.max(0, Math.min(q.w, pts)); STATE[mode].res[q.id]=pts; fb.className="fb "+(pts>=q.w?"ok":pts>0?"mid":"ko"); fb.innerHTML=msg; fb.classList.remove("hidden"); if(mode==="sans" && !c.querySelector(".enreg")) c.appendChild(el("div",{class:"enreg"},"Réponse enregistrée ✓ — la correction s'affichera quand tu auras fini tout le contrôle.")); updateProgress(mode); };
 
   if(q.type==="word" || q.type==="date"){
     body.appendChild(el("div",{class:"q"}, q.type==="date" ? `Quelle est la date ? <b>${q.q}</b>` : q.q));
@@ -613,15 +624,40 @@ function updateProgress(mode){
   if(doneN===total) finish(mode);
 }
 
+const PRET = 17;   // note sans aide pour « tu es prêt » (et 3 vies dans la salle d'arcade)
+function blocDe(q){ if(q.part!=="p5") return q.part; return /caract|quidist/i.test(q.mot) ? "p2" : "p1"; }
+function texteQ(q){ const d=document.createElement("div"); d.innerHTML = q.type==="def" ? "Écrire : "+q.mot : q.q; return d.textContent; }
+/* Correction du contrôle : seulement les blocs de la leçon où il y a eu des erreurs */
+function correction(wrong){
+  const z = el("div",{class:"revoir"});
+  z.appendChild(el("h3",{},`📖 Ta correction : ${wrong.length} question${wrong.length>1?"s":""} à revoir`));
+  z.appendChild(el("p",{},"Relis les parties de la leçon où tu t'es trompé, puis refais seulement ces questions. <b>Ça ne te donne pas de point en plus</b> : c'est pour comprendre tes erreurs."));
+  ORDER.forEach(pid=>{
+    const qs = wrong.filter(id=>blocDe(BANK[id])===pid);
+    if(!qs.length) return;
+    const src = document.querySelector(`#tab-lecon [data-part="${pid}"]`);
+    const c = src.cloneNode(true);
+    c.classList.remove("hidden");
+    c.querySelectorAll(".verif,[data-done]").forEach(x=>x.remove());
+    c.querySelectorAll(".k").forEach(k=>k.classList.add("show"));
+    const t = el("div",{style:"font-weight:800;margin-top:10px"},`Tu t'es trompé ici (${qs.length}) :`);
+    const ul = el("ul",{class:"ques"}); qs.forEach(id=>ul.appendChild(el("li",{},texteQ(BANK[id]))));
+    z.append(t, ul, c);
+  });
+  const b = el("button",{class:"btn"},`J'ai relu : je refais mes ${wrong.length} question${wrong.length>1?"s":""} ratée${wrong.length>1?"s":""}`);
+  b.onclick = () => startControle(wrong);
+  z.appendChild(b);
+  return z;
+}
 function finish(mode){
   const S = STATE[mode], M = MODES[mode], root = $(M.box);
   const max = S.ids.reduce((a,id)=>a+BANK[id].w,0);
   const pts = Object.values(S.res).reduce((a,b)=>a+b,0);
   const pct = Math.round(100*pts/max);
   const sur20 = Math.round(pts/max*20*2)/2;
-  const ok = pct>=80;
+  const ok = mode==="sans" ? sur20>=PRET : pct>=80;
   const wrong = S.ids.filter(id=>S.res[id] < BANK[id].w);
-  if(mode==="sans"){ lock(false); try{ localStorage.removeItem(KEY_C); }catch(e){} }
+  if(mode==="sans"){ lock(false); root.classList.remove("encours"); try{ localStorage.removeItem(KEY_C); }catch(e){} }
   if(!S.retry){
     const prev = store.get(M.key) || {};
     store.set(M.key, {last:{sur20,pct,date:new Date().toLocaleDateString("fr-FR")}, best: (!prev.best || pct>prev.best.pct) ? {sur20,pct} : prev.best});
@@ -630,19 +666,35 @@ function finish(mode){
   const z = root.querySelector(".resultZone");
   z.innerHTML = "";
   const r = el("div",{class:"result "+(ok?"ok":"ko")});
-  r.innerHTML = `<div>${S.retry?"Entraînement sur tes erreurs":"Ta note "+M.label}</div>
-    <div class="big">${fmt(sur20)} / 20</div>
-    <div><b>${pct} %</b> de bonnes réponses (${fmt(pts)} / ${fmt(max)} points)</div>
-    <p style="font-size:19px;font-weight:800">${ok ? "Acquis ✓" : "À retravailler"}</p>
-    <p>${ok
-      ? (mode==="aide" ? "Bien joué ! Tu as au moins 16 / 20 : la partie <b>sans aide</b> est ouverte. C'est elle qui ressemble au contrôle." : "Excellent : tu es prêt pour jeudi !")
-      : (mode==="aide" ? "Moins de 16 / 20 : la partie sans aide reste fermée. Relis la leçon en mode mémoire, entraîne-toi sur tes erreurs, puis clique sur <b>Tout recommencer</b> : il faut 16 / 20 sur une partie complète." : "Moins de 80 % : relis la leçon en mode mémoire, puis refais <b>seulement tes erreurs</b>, jusqu'à ne plus en faire.")}</p>`;
+  let titre, texte;
+  if(S.retry){
+    titre = wrong.length ? "Encore à revoir" : "Erreurs corrigées ✓";
+    texte = (wrong.length ? `Il reste ${wrong.length} question${wrong.length>1?"s":""} à revoir : relis encore la leçon.` : "Bravo, tu as compris tes erreurs !")
+      + (mode==="sans" ? " Ta note du contrôle ne change pas. Pour l'améliorer, refais le contrôle en entier (<b>Tout recommencer</b>)." : "");
+  } else if(mode==="sans"){
+    if(sur20>=PRET){ titre = "Tu es prêt pour ton contrôle ! ✓";
+      texte = "Excellent travail ! 🎮 <b>3 vies</b> t'attendent dans la salle d'arcade (une seule fois pour cette fiche). Elles s'ajoutent quand tu ouvres la salle d'arcade, et sont valables jusqu'à minuit ce jour-là."; }
+    else if(sur20>=16){ titre = "Presque prêt";
+      texte = `Il faut ${PRET} / 20 pour être prêt. Regarde ta correction ci-dessous, puis refais le contrôle en entier un peu plus tard.`; }
+    else { titre = "À retravailler";
+      texte = `Il faut ${PRET} / 20 pour être prêt. Regarde ta correction, relis la leçon en mode mémoire, puis refais le contrôle en entier un autre moment.`; }
+  } else {
+    titre = ok ? "Acquis ✓" : "À retravailler";
+    texte = ok ? "Bien joué ! Tu as au moins 16 / 20 : la partie <b>sans aide</b> est ouverte. C'est elle qui ressemble au contrôle."
+      : "Moins de 16 / 20 : la partie sans aide reste fermée. Relis la leçon en mode mémoire, entraîne-toi sur tes erreurs, puis clique sur <b>Tout recommencer</b> : il faut 16 / 20 sur une partie complète.";
+  }
+  r.innerHTML = `<div>${S.retry?"Correction de tes erreurs (sans note)":"Ta note "+M.label}</div>
+    ${S.retry ? `<div class="big">${S.ids.length-wrong.length} / ${S.ids.length}</div><div>questions réussies</div>` : `<div class="big">${fmt(sur20)} / 20</div>
+    <div><b>${pct} %</b> de bonnes réponses (${fmt(pts)} / ${fmt(max)} points)</div>`}
+    <p style="font-size:19px;font-weight:800">${titre}</p>
+    <p>${texte}</p>`;
   const row = el("div",{class:"row",style:"justify-content:center"});
   const relance = ids => { if(mode==="sans") startControle(ids); else { startMode(mode, ids); window.scrollTo({top:0}); } };
-  if(wrong.length){ const b=el("button",{class:"btn"},`Refaire mes ${wrong.length} erreur${wrong.length>1?"s":""}`); b.onclick=()=>relance(wrong); row.appendChild(b); }
-  const b2 = el("button",{class:"btn alt"},"Tout recommencer"); b2.onclick=()=>relance(); row.appendChild(b2);
+  if(wrong.length && mode==="aide"){ const b=el("button",{class:"btn"},`Refaire mes ${wrong.length} erreur${wrong.length>1?"s":""}`); b.onclick=()=>relance(wrong); row.appendChild(b); }
+  const b2 = el("button",{class:"btn alt"},mode==="sans"?"Tout recommencer (nouveau contrôle noté)":"Tout recommencer"); b2.onclick=()=>relance(); row.appendChild(b2);
   r.appendChild(row);
   z.appendChild(r);
+  if(mode==="sans" && wrong.length) z.appendChild(correction(wrong));
   if(!S.retry && typeof enregistrerProgression==="function"){
     // Score enregistré en pourcentage (sur 100) : les demi-points restent des nombres entiers
     const bc = el("div",{class:"bilan-card"}); r.appendChild(bc);
@@ -675,14 +727,14 @@ function showNotes(){
     const d = store.get(MODES[m].key);
     const rb = REMOTE[MODES[m].code];
     if(!d || !d.last){
-      if(rb!=null){ $(n).textContent=`${fmt(Math.round(rb/5*2)/2)} / 20 · ${rb} %`; $(v).textContent=(rb>=80?"Acquis ✓":"À retravailler")+" · meilleure note du compte"; $(v).className="ver "+(rb>=80?"ok":"ko"); }
+      if(rb!=null){ $(n).textContent=`${fmt(Math.round(rb/5*2)/2)} / 20 · ${rb} %`; const okr = m==="sans" ? Math.round(rb/5*2)/2>=PRET : rb>=80; $(v).textContent=(okr?(m==="sans"?"Prêt ✓":"Acquis ✓"):"À retravailler")+" · meilleure note du compte"; $(v).className="ver "+(okr?"ok":"ko"); }
       else { $(n).textContent="—"; $(v).textContent="Pas encore faite"; $(v).className="ver"; }
       return;
     }
     if(rb!=null && (!d.best || rb>d.best.pct)) d.best = {pct:rb};
     $(n).textContent = `${fmt(d.last.sur20)} / 20 · ${d.last.pct} %`;
-    const ok = d.last.pct>=80;
-    $(v).textContent = (ok?"Acquis ✓":"À retravailler") + ` · le ${d.last.date}` + (d.best && d.best.pct>d.last.pct ? ` · record ${d.best.pct} %` : "");
+    const ok = m==="sans" ? d.last.sur20>=PRET : d.last.pct>=80;
+    $(v).textContent = (m==="sans" ? (ok?"Prêt ✓":d.last.sur20>=16?"Presque prêt":"À retravailler") : (ok?"Acquis ✓":"À retravailler")) + ` · le ${d.last.date}` + (d.best && d.best.pct>d.last.pct ? ` · record ${d.best.pct} %` : "");
     $(v).className = "ver "+(ok?"ok":"ko");
   });
 }
