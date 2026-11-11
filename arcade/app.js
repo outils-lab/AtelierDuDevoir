@@ -354,11 +354,12 @@ function afficher(){
     z.innerHTML = '<div class="pad'+(it.neg?' neg':'')+'">'+[7,8,9,4,5,6,1,2,3].map(function(k){ return '<button data-k="'+k+'">'+k+'</button>'; }).join('')+'<button data-k=",">,</button><button data-k="0">0</button>'+(it.neg?'<button data-k="−">−</button>':'')+'<button data-k="del" aria-label="Effacer">⌫</button><button class="val" data-k="ok">Valider</button></div>';
   } else {
     var rows = ['azertyuiop','qsdfghjklm','wxcvbn','éèêàçùâîôû'];
-    z.innerHTML = '<div class="kb">'+rows.map(function(r,i){ return '<div class="kr">'+r.split('').map(function(c){ return '<button data-k="'+c+'"'+(i===3?' class="ac"':'')+'>'+c+'</button>'; }).join('')+(i===2?'<button data-k="\'">\'</button><button data-k="-">-</button><button data-k="del" class="wk" aria-label="Effacer">⌫</button>':'')+'</div>'; }).join('')
-      + (it.t === 'dict' ? '<div class="kr"><button data-k=",">,</button><button data-k=".">.</button><button data-k="?">?</button><button data-k="!">!</button><button data-k="ë" class="ac">ë</button><button data-k="ï" class="ac">ï</button><button data-k="œ" class="ac">œ</button></div>' : '')
+    SE.maj = false;
+    z.innerHTML = '<div class="kb">'+rows.map(function(r,i){ return '<div class="kr">'+(i===2?'<button data-k="maj" class="wk maj" aria-label="Majuscule">⇧ <small>Maj</small></button>':'')+r.split('').map(function(c){ return '<button data-k="'+c+'" class="lt'+(i===3?' ac':'')+'">'+c+'</button>'; }).join('')+(i===2?'<button data-k="\'">\'</button><button data-k="-">-</button><button data-k="del" class="wk" aria-label="Effacer">⌫</button>':'')+'</div>'; }).join('')
+      + (it.t === 'dict' ? '<div class="kr ponct"><button data-k="," title="virgule">,<small>virgule</small></button><button data-k="." title="point">.<small>point</small></button><button data-k="?">?</button><button data-k="!">!</button><button data-k=":">:</button><button data-k="ë" class="lt ac">ë</button><button data-k="ï" class="lt ac">ï</button><button data-k="œ" class="lt ac">œ</button></div>' : '')
       + '<div class="kr"><button data-k="sp" class="sp">espace</button><button data-k="ok" class="ok">Valider</button></div></div>';
   }
-  if(it.t === 'dict'){ $('#dEcoute').onclick = function(){ dire(it.speak, false); }; $('#dLent').onclick = function(){ dire(it.speak, true); }; setTimeout(function(){ dire(it.speak, false); }, 350); }
+  if(it.t === 'dict'){ var lu = texteDicte(it); $('#dEcoute').onclick = function(){ dire(lu, false); }; $('#dLent').onclick = function(){ dire(lu, true); }; setTimeout(function(){ dire(lu, false); }, 350); }
   else if(S.K === 0) setTimeout(function(){ dire(aLire(it), false); }, 300);
   $('#lire').hidden = it.t === 'dict';
   SE.t0 = performance.now();
@@ -370,9 +371,15 @@ $('#zoneReponse').addEventListener('click', function(e){
   if(b.dataset.v != null) return repondre(b.dataset.v, b);
   if(b.dataset.k) touche(b.dataset.k);
 });
+function majClavier(){
+  var z = $('#zoneReponse'); if(!z) return;
+  z.querySelectorAll('.kb .lt').forEach(function(b){ b.textContent = SE.maj ? b.dataset.k.toUpperCase() : b.dataset.k; });
+  var m = z.querySelector('.maj'); if(m) m.classList.toggle('on', !!SE.maj);
+}
 function touche(k){
   var it = cur(); if(!it || SE.verrou) return;
   if(k === 'ok'){ if(SE.saisie.trim()) repondre(SE.saisie); return; }
+  if(k === 'maj'){ SE.maj = !SE.maj; majClavier(); return; }
   if(k === 'del') SE.saisie = SE.saisie.slice(0,-1);
   else if(k === 'sp'){ if(SE.saisie && !/ $/.test(SE.saisie)) SE.saisie += ' '; }
   else if(it.t === 'num'){
@@ -380,7 +387,11 @@ function touche(k){
     else if(k === '−'){ SE.saisie = SE.saisie.charAt(0) === '−' ? SE.saisie.slice(1) : '−' + SE.saisie; }
     else if(SE.saisie.replace(/[−,]/g,'').length < 9) SE.saisie = (SE.saisie === '0' ? '' : SE.saisie === '−0' ? '−' : SE.saisie) + k;
   }
-  else if(SE.saisie.length < 90) SE.saisie += k;
+  else if(SE.saisie.length < 90){
+    if(SE.maj && /[a-zà-ÿœ]/.test(k)){ k = k.toUpperCase(); SE.maj = false; majClavier(); }
+    if(/^[,.?!:;]$/.test(k)) SE.saisie = SE.saisie.replace(/ $/, '');
+    SE.saisie += k;
+  }
   var el = $('#slot') || $('#saisie'); if(el){ el.textContent = SE.saisie; el.classList.toggle('vide', !SE.saisie); }
 }
 document.addEventListener('keydown', function(e){
@@ -594,6 +605,17 @@ function choisirVoix(){
   if(!voix) voix = vs.filter(function(v){ return /^fr[-_]FR/i.test(v.lang); })[0] || vs.filter(function(v){ return /^fr/i.test(v.lang); })[0] || null;
 }
 if('speechSynthesis' in window){ choisirVoix(); speechSynthesis.onvoiceschanged = choisirVoix; }
+/* Dictée : la ponctuation est dite à voix haute (« virgule », « point »…) */
+function texteDicte(it){
+  var t = String(it.speak || it.a), a = String(it.a);
+  if(!/\s/.test(a)) return t;
+  if(t === a){
+    t = t.replace(/\.(\s|$)/g, ' point.$1').replace(/\s*,\s*/g, ' virgule, ').replace(/\s*;\s*/g, ' point-virgule, ').replace(/\s*:\s*/g, ' deux points, ')
+         .replace(/\s*\?\s*/g, " point d'interrogation. ").replace(/\s*!\s*/g, " point d'exclamation. ")
+         .replace(/«\s*/g, 'ouvrez les guillemets, ').replace(/\s*»/g, ', fermez les guillemets');
+  } else if(/\.$/.test(a) && !/point[^a-z]*$/i.test(t)) t = t.replace(/[.\s]*$/, '') + ' point.';
+  return t.replace(/\s+/g, ' ').trim();
+}
 function dire(txt, lent){
   if(!('speechSynthesis' in window) || !txt) return;
   speechSynthesis.cancel();
