@@ -67,6 +67,9 @@ var KB_LETTRES = [
   ['q','s','d','f','g','h','j','k','l','m'],
   ['w','x','c','v','b','n','é','è','à','ç']
 ];
+var KB_ACCENTS = ['ê','ù','â','î','ô','û','ë','ï','œ'];
+var KB_PONCT = [[',','virgule'],['.','point'],['?',''],['!',''],[':','']];
+var kbMaj = false;
 var KB_CHIFFRES = [
   ['1','2','3','4','5'],
   ['6','7','8','9','0']
@@ -76,14 +79,19 @@ function clavierHTML(mode){
   var rows = (mode === 'chiffres') ? KB_CHIFFRES : KB_LETTRES;
   var h = '<div class="kb-info"><span>Utilise ce clavier \u{1F447}</span>'
         + '<button type="button" class="kb-fermer" onclick="AF.fermerClavier()">\u2715 Fermer</button></div>';
-  rows.forEach(function(r){
+  var lettres = (mode !== 'chiffres');
+  rows.forEach(function(r, ri){
     h += '<div class="kb-row">'
-       + r.map(function(k){ return '<button type="button" class="kb-k" data-k="'+k+'">'+k+'</button>'; }).join('')
+       + (lettres && ri === 2 ? '<button type="button" class="kb-k kb-maj" data-k="__maj" aria-label="Majuscule">\u21E7<small>Maj</small></button>' : '')
+       + r.map(function(k){ return '<button type="button" class="kb-k'+(lettres?' kb-lt':'')+'" data-k="'+k+'">'+k+'</button>'; }).join('')
        + '</div>';
   });
+  if(lettres) h += '<div class="kb-row">' + KB_ACCENTS.map(function(k){ return '<button type="button" class="kb-k kb-lt kb-acc" data-k="'+k+'">'+k+'</button>'; }).join('') + '</div>';
+  if(mode === 'dictee') h += '<div class="kb-row kb-ponct">' + KB_PONCT.map(function(p){ return '<button type="button" class="kb-k" data-k="'+p[0]+'">'+p[0]+(p[1] ? '<small>'+p[1]+'</small>' : '')+'</button>'; }).join('') + '</div>';
   h += '<div class="kb-row">'
      + '<button type="button" class="kb-k wide" data-k=" ">espace</button>'
-     + '<button type="button" class="kb-k wide" data-k="-">tiret</button>'
+     + (lettres ? '<button type="button" class="kb-k" data-k="\'">\'</button>' : '')
+     + '<button type="button" class="kb-k'+(lettres?'':' wide')+'" data-k="-">'+(lettres?'-':'tiret')+'</button>'
      + '<button type="button" class="kb-k wide del" data-k="__del">\u232B effacer</button>'
      + '</div>';
   return h;
@@ -150,6 +158,10 @@ function majFauxChamp(d){
   else { d.textContent = d.dataset.val; d.classList.remove('vide'); }
 }
 
+function majTouches(kb){
+  kb.querySelectorAll('.kb-lt').forEach(function(t){ t.textContent = kbMaj ? t.dataset.k.toUpperCase() : t.dataset.k; });
+  var m = kb.querySelector('.kb-maj'); if(m) m.classList.toggle('on', kbMaj);
+}
 function brancherClavier(inp, kb){
   inp.addEventListener('click', function(){
     if(estDesactive(inp)) return;
@@ -162,8 +174,11 @@ function brancherClavier(inp, kb){
     if(!b || !kbCible || estDesactive(kbCible)) return;
     ev.preventDefault();
     var k = b.dataset.k, v = lireVal(kbCible);
+    if(k === '__maj'){ kbMaj = !kbMaj; majTouches(kb); return; }
     if(k === '__del') ecrireVal(kbCible, v.slice(0,-1));
     else {
+      if(kbMaj && /^[a-zà-ÿœ]$/.test(k)){ k = k.toUpperCase(); kbMaj = false; majTouches(kb); }
+      if(/^[,.?!:]$/.test(k)) v = v.replace(/ $/, '');
       var max = kbCible.dataset.max;
       if(max && v.length >= parseInt(max,10)) return;
       ecrireVal(kbCible, v + k);
@@ -417,7 +432,7 @@ function rendre(ex, i){
         + '\u{1F50A} Écouter</button>'
         + '<button type="button" class="btn-ecoute lent" onclick="AF.ecouter(' + i + ',' + reel + ',true)">'
         + '\u{1F422} Lentement</button></div>'
-        + champSaisie(i, reel, '100%', null, 'lettres')
+        + champSaisie(i, reel, '100%', null, 'dictee')
         + '<div class="expl" id="ex'+i+'-'+reel+'"></div></div>';
     }).join('');
     if(TACTILE) monterClavier(ex, i);
