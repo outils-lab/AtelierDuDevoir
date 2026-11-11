@@ -119,6 +119,9 @@ body.lock nav, body.lock .retour, body.lock #tab-lecon, body.lock #tab-aide{disp
 .svgbox{overflow-x:auto;margin:6px 0}.svgbox svg{max-width:100%;height:auto}
 .verif{background:#fff;border:2px dashed var(--ochre);border-radius:12px;padding:10px 12px;margin:12px 0 4px}
 .verif-t{font-weight:800;color:var(--ochre);margin-bottom:4px}
+.qcm-v{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.btn-v{font:inherit;font-weight:700;text-align:left;background:#fff;border:2px solid #e2d6c3;border-radius:12px;padding:11px 14px;cursor:pointer;color:inherit}
+.btn-v:hover{border-color:var(--ochre);background:#fffaf2}
 .vq{padding:6px 0;border-top:1px dotted var(--line)}
 .vq:first-of-type{border-top:0}
 nav button.locked{opacity:.55}
@@ -156,7 +159,7 @@ nav button.locked::before{content:"🔒 "}
   <div class="tip"><b>Pour l'interro de jeudi, tu dois savoir :</b> trouver les <b>données utiles</b> et ce qu'on <b>cherche</b>, faire un <b>schéma en barres</b>, choisir la bonne <b>opération</b>, écrire une <b>phrase réponse</b> et <b>vérifier</b>.</div>
   <div class="gatebox" style="margin-top:0"><b>Les règles du parcours :</b>
     <ol style="margin:6px 0 0">
-      <li><b>La leçon</b> : à la fin de chaque bloc, 3 questions. <b>Une seule erreur = tu recommences à la question 1</b> du bloc (avec de nouvelles questions).</li>
+      <li><b>La leçon</b> : à la fin de chaque bloc, 3 questions à choix (QCM). <b>Une seule erreur = tu recommences à la question 1</b> du bloc (avec de nouvelles questions).</li>
       <li><b>Avec aide</b> : s'ouvre quand les 4 blocs de la leçon sont réussis.</li>
       <li><b>Sans aide</b> : s'ouvre quand tu as au moins <b>16 / 20</b> dans la partie avec aide.</li>
     </ol></div>
@@ -805,26 +808,26 @@ document.querySelectorAll(".k").forEach(k=>k.onclick=()=>{ if(document.body.clas
    Le bloc suivant reste caché tant que les 3 réponses ne sont pas justes.
    Le bloc au-dessus reste visible : l'enfant peut relire pour répondre. */
 const CHECKS = {
-  p1: [["Ce que je dois trouver s'appelle la grandeur … <i>(un mot)</i>",["recherchée","recherchee","cherchée","cherchee"]],
-       ["Un nombre qui ne sert à rien est une donnée … <i>(un mot)</i>",["inutile"]],
-       ["Les nombres qui servent sont les données … <i>(un mot)</i>",["utiles","utile"]],
-       ["Je sais ce que je cherche en lisant la … <i>(un mot)</i>",["question"]],
-       ["« Léo a 35 billes, il a 12 ans, il gagne 18 billes. » Le nombre inutile est … <i>(un nombre)</i>",["12"]]],
-  p2: [["Je connais les parties, je cherche le tout : je fais une … <i>(un mot)</i>",["addition"]],
-       ["Je connais le tout et une partie : je fais une … <i>(un mot)</i>",["soustraction"]],
-       ["Le tout = 50, une partie = 20. L'autre partie = … <i>(un nombre)</i>",["30"]],
-       ["Une partie = 25, l'autre = 15. Le tout = … <i>(un nombre)</i>",["40"]],
-       ["« 10 de plus que 30 » = … <i>(un nombre)</i>",["40"]]],
-  p3: [["Une part et le nombre de parts égales : je fais une … <i>(un mot)</i>",["multiplication"]],
-       ["Le tout et le nombre de parts égales : je fais une … <i>(un mot)</i>",["division"]],
-       ["4 parts de 5 = … <i>(un nombre)</i>",["20"]],
-       ["24 partagé en 4 parts égales : une part = … <i>(un nombre)</i>",["6"]],
-       ["« 2 fois plus que 7 » = … <i>(un nombre)</i>",["14"]]],
-  p4: [["À la fin, j'écris une phrase … <i>(un mot)</i>",["réponse","reponse"]],
-       ["Dans ma phrase, je n'oublie pas l'… (€, km, billes…) <i>(un mot)</i>",["unité","unite"]],
-       ["Une partie peut-elle être plus grande que le tout ? <i>(oui ou non)</i>",["non"]],
-       ["Pour vérifier 53 − 18 = 35, je calcule 35 + 18 = … <i>(un nombre)</i>",["53"]],
-       ["Combien d'étapes dans la méthode ? <i>(un nombre)</i>",["4","quatre"]]]
+  p1: [["Ce que je dois trouver dans un problème s'appelle…",["la grandeur recherchée","la donnée utile","la donnée inutile"]],
+       ["Un nombre de l'énoncé qui ne sert pas au calcul est…",["une donnée inutile","une donnée utile","la grandeur recherchée"]],
+       ["Pour savoir ce que je cherche, je lis d'abord…",["la question","le premier nombre","le titre"]],
+       ["« Léo a 35 billes, il a 12 ans, il gagne 18 billes. Combien de billes a-t-il ? » Le nombre inutile est…",["12","18","35"]],
+       ["Avant de calculer, j'entoure…",["seulement les nombres utiles","tous les nombres de l'énoncé","le plus grand nombre"]]],
+  p2: [["Je connais les deux parties, je cherche le tout : je fais…",["une addition","une soustraction","une multiplication"]],
+       ["Je connais le tout et une partie, je cherche l'autre partie : je fais…",["une soustraction","une addition","une division"]],
+       ["Le tout vaut 50, une partie vaut 20. L'autre partie vaut…",["30","70","25"]],
+       ["Une partie vaut 25, l'autre vaut 15. Le tout vaut…",["40","10","35"]],
+       ["« 10 de plus que 30 », c'est…",["40","20","300"]]],
+  p3: [["Je connais une part et le nombre de parts égales, je cherche le tout : je fais…",["une multiplication","une division","une addition"]],
+       ["Je connais le tout et le nombre de parts égales, je cherche une part : je fais…",["une division","une multiplication","une soustraction"]],
+       ["4 parts égales de 5, cela fait en tout…",["20","9","1"]],
+       ["24 partagé en 4 parts égales : une part vaut…",["6","20","8"]],
+       ["« 2 fois plus que 7 », c'est…",["14","9","5"]]],
+  p4: [["À la fin d'un problème, j'écris…",["une phrase réponse","seulement le résultat","le calcul en entier"]],
+       ["Dans ma phrase réponse, je n'oublie pas…",["l'unité (€, km, billes…)","le nom du problème","la date"]],
+       ["Dans un schéma en barres, une partie peut-elle être plus grande que le tout ?",["non, jamais","oui, parfois","oui, toujours"]],
+       ["Pour vérifier 53 − 18 = 35, je calcule…",["35 + 18","53 + 18","35 − 18"]],
+       ["Combien d'étapes compte la méthode pour résoudre un problème ?",["4","3","5"]]]
 };
 const ORDER = ["p1","p2","p3","p4"];
 const doneStore = store.get("p007_compris") || {};
@@ -867,25 +870,20 @@ ORDER.forEach(id=>{
     if(msg){ box.appendChild(el("div",{class:"fb ko"},msg)); }
     if(step>=3){ box.appendChild(el("div",{class:"fb ok"},"Les 3 réponses sont justes ! Clique sur « J'ai bien compris »."));
       paintBtn(); return; }
-    const [q,ans] = CHECKS[id][tirage[step]];
+    const [q,opts] = CHECKS[id][tirage[step]];   // opts[0] = la bonne réponse
     const c = el("div",{class:"vq"});
     c.appendChild(el("div",{class:"q"},`Question ${step+1} sur 3 : ${q}`));
-    const row = el("div",{class:"row"});
-    const inp = el("input",{type:"text",autocomplete:"off",autocapitalize:"off",spellcheck:"false",placeholder:"écris ta réponse"});
-    const b = el("button",{class:"btn"},"Vérifier");
-    const go = () => {
-      if(!inp.value.trim()) return;
-      const r = matchWord(inp.value, ans);
-      if(r==="exact" || r==="accent"){ step++; msg=""; render(); }
-      else {
-        msg = (r==="fuzzy" ? "❌ Mal écrit : attention à l'orthographe." : "❌ Ce n'est pas la bonne réponse.")
-          + " <b>Tu recommences à la question 1.</b> Relis bien le bloc au-dessus avant de répondre.";
-        nouveauTirage(); render();
-      }
-      paintBtn();
-    };
-    b.onclick = go; inp.onkeydown = e => { if(e.key==="Enter") go(); };
-    row.append(inp,b); c.append(row); box.appendChild(c);
+    const row = el("div",{class:"qcm-v"});
+    shuffle(opts.slice()).forEach(o=>{
+      const b = el("button",{class:"btn-v"},o);
+      b.onclick = () => {
+        if(o === opts[0]){ step++; msg=""; render(); }
+        else { msg = "❌ Ce n'est pas la bonne réponse. <b>Tu recommences à la question 1.</b> Relis bien le bloc au-dessus avant de répondre."; nouveauTirage(); render(); }
+        paintBtn();
+      };
+      row.appendChild(b);
+    });
+    c.append(row); box.appendChild(c);
     paintBtn();
   };
   nouveauTirage(); render();
