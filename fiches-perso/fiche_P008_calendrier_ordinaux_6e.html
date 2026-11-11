@@ -1,0 +1,1020 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="../favicon.ico" sizes="any">
+<title>Big Test 2 (1/3) : jours, mois, saisons, ordinaux — Le passage secret</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6efe3; --paper:#fffaf2; --ink:#2b2118; --muted:#7a6a58; --line:#e3d5bf;
+  --ochre:#2f6aa8; --ochre-l:#e3eefa; --char:#1f2f4a; --moss:#3f7d4e; --moss-l:#e5f3e8;
+  --red:#b3392c; --red-l:#fbe6e3; --gold:#c9961f; --gold-l:#fdf3d8; --blue:#2f6aa8; --blue-l:#e6eff9;
+}
+*{box-sizing:border-box}
+:root{color-scheme:light}
+.retour{display:inline-block;color:#bcd3f0;text-decoration:none;font-weight:800;font-size:15px;padding:0 0 8px}
+#atelier-progression-box{margin-top:14px}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Nunito,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:17px;line-height:1.5}
+header{background:var(--char);color:#fff;padding:14px 16px 0}
+header .top{max-width:860px;margin:0 auto}
+header small{color:#bcd3f0;letter-spacing:.05em;text-transform:uppercase;font-size:12px}
+header h1{margin:2px 0 10px;font-size:24px}
+nav{max-width:860px;margin:0 auto;display:flex;gap:6px;overflow-x:auto}
+nav button{flex:1;min-width:110px;border:0;border-radius:10px 10px 0 0;padding:10px 8px;font:inherit;font-weight:700;font-size:15px;cursor:pointer;background:#3b5580;color:#e3eefa}
+nav button.on{background:var(--bg);color:var(--char)}
+main{max-width:860px;margin:0 auto;padding:16px 16px 140px}
+h2{font-size:21px;margin:22px 0 8px;color:var(--char)}
+.part{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:14px 0}
+.part h3{margin:0 0 8px;font-size:18px;color:var(--ochre)}
+.part ul{margin:6px 0;padding-left:20px}
+.part li{margin:3px 0}
+.def{background:var(--ochre-l);border-left:5px solid var(--ochre);border-radius:8px;padding:8px 10px;margin:8px 0}
+.warn{background:var(--red-l);border-left:5px solid var(--red);border-radius:8px;padding:8px 10px;margin:8px 0}
+.tip{background:var(--gold-l);border-left:5px solid var(--gold);border-radius:8px;padding:8px 10px;margin:8px 0}
+.k{font-weight:700;color:var(--char)}
+body.mem .k{color:transparent;background:#e9dcc6;border-radius:4px;cursor:pointer;user-select:none}
+body.mem .k.show{color:var(--moss);background:var(--moss-l)}
+.memctl{position:sticky;top:0;z-index:5;background:var(--bg);padding:8px 0;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.btn{border:0;border-radius:10px;padding:10px 14px;font:inherit;font-weight:700;cursor:pointer;background:var(--char);color:#fff}
+.btn.alt{background:#fff;color:var(--char);border:2px solid var(--char)}
+.btn.ok{background:var(--moss)}
+.btn:disabled{opacity:.45;cursor:default}
+.done-btn{margin-top:8px}
+.done-btn.on{background:var(--moss)}
+/* frise */
+.frise{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;align-items:center;margin-top:6px}
+.frise .d{font-weight:800;font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+.frise .e{padding:4px 8px;border-radius:6px}
+.frise .pa{background:var(--ochre-l)}
+.frise .ne{background:var(--moss-l)}
+.frise .sep{grid-column:1/-1;font-weight:800;font-size:13px;letter-spacing:.06em;text-transform:uppercase;margin-top:6px}
+/* exercices */
+.intro{background:var(--paper);border:2px solid var(--char);border-radius:14px;padding:12px 14px}
+.prog{height:10px;background:#e7dbc8;border-radius:6px;overflow:hidden;margin:10px 0}
+.prog i{display:block;height:100%;background:var(--ochre);width:0;transition:width .3s}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin:10px 0}
+.card .n{font-size:12px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.card .q{font-weight:600;margin:4px 0 8px}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opt{border:2px solid var(--line);background:#fff;border-radius:10px;padding:8px 12px;font:inherit;cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--ochre)}
+.opt.good{border-color:var(--moss);background:var(--moss-l)}
+.opt.bad{border-color:var(--red);background:var(--red-l)}
+.bar{display:flex;margin:6px 0;font-weight:800;font-size:15px;max-width:460px}
+.bar span{border:2px solid #222;padding:7px 4px;text-align:center;margin-right:-2px;white-space:nowrap;overflow:hidden}
+.bar .t{background:#dfe9f5}.bar .a{background:var(--ochre-l)}.bar .b{background:var(--moss-l)}
+.bar .q{background:#fff;border-style:dashed;color:var(--red)}
+.bar .vide{border:none;background:none}
+.barlbl{font-size:13px;color:var(--muted);font-weight:700;margin-top:8px}
+.opt.sel{border-color:var(--char);background:#efe3d0}
+.revoir{background:#fff;border:2px solid var(--red);border-radius:14px;padding:12px 14px;margin:14px 0;text-align:left}
+.revoir h3{margin-top:0;color:var(--red)}
+.revoir .part{border:1px dashed var(--line);border-radius:10px;padding:8px 10px;margin:8px 0;background:var(--paper)}
+.revoir .ques{margin:4px 0 8px;padding-left:18px}
+input[type=text],textarea{font:inherit;padding:8px 10px;border:2px solid var(--line);border-radius:10px;background:#fff;width:100%;max-width:340px}
+textarea{max-width:100%;min-height:70px;resize:vertical}
+input.blank{width:auto;min-width:90px;max-width:170px;padding:3px 6px;margin:2px 2px;display:inline-block}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.hint{font-size:14px;color:var(--blue);background:var(--blue-l);border-radius:6px;padding:2px 8px;display:inline-block;margin-bottom:6px}
+.fb{margin-top:8px;border-radius:8px;padding:7px 10px;font-size:15px}
+.fb.ok{background:var(--moss-l);color:#1f5131}
+.fb.mid{background:var(--gold-l);color:#6b4e08}
+.fb.ko{background:var(--red-l);color:#7d241a}
+.seq{min-height:38px;border:2px dashed var(--line);border-radius:10px;padding:6px;margin:8px 0;display:flex;flex-wrap:wrap;gap:6px}
+.seq span{background:var(--char);color:#fff;border-radius:8px;padding:4px 10px}
+.sort{display:grid;grid-template-columns:1fr auto auto;gap:6px 8px;align-items:center}
+.sort .opt{padding:5px 10px;font-size:14px}
+.result{border-radius:14px;padding:16px;margin:18px 0;text-align:center}
+.result.ok{background:var(--moss-l);border:2px solid var(--moss)}
+.result.ko{background:var(--red-l);border:2px solid var(--red)}
+.result .big{font-size:40px;font-weight:900}
+.notes{position:fixed;left:0;right:0;bottom:0;background:var(--char);color:#fff;z-index:20;box-shadow:0 -4px 14px rgba(0,0,0,.2)}
+.notes .in{max-width:860px;margin:0 auto;padding:8px 16px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.notes .box{background:#33466a;border-radius:10px;padding:6px 10px}
+.notes .lab{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:#e8c9a6}
+.notes .val{font-size:18px;font-weight:800}
+.notes .ver{font-size:13px}
+.notes .ver.ok{color:#9fe0ae}.notes .ver.ko{color:#ffb4a8}
+.hidden{display:none}
+body.lock nav, body.lock .retour, body.lock #tab-lecon, body.lock #tab-aide{display:none!important}
+#lockBar{max-width:860px;margin:0 auto;padding:10px 0 12px;font-weight:800;color:#ffd9b0}
+.gate ul{margin:6px 0 10px;padding-left:20px}
+.gate .row{margin-top:8px}
+@media (max-width:520px){
+  html,body{font-size:16px}
+  .notes .val{font-size:16px}
+  .sort{grid-template-columns:1fr auto}
+  .sort .lbl{grid-column:1/-1;margin-top:4px}
+}
+.svgbox{overflow-x:auto;margin:6px 0}.svgbox svg{max-width:100%;height:auto}
+.verif{background:#fff;border:2px dashed var(--ochre);border-radius:12px;padding:10px 12px;margin:12px 0 4px}
+.verif-t{font-weight:800;color:var(--ochre);margin-bottom:4px}
+.qcm-v{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.btn-v{font:inherit;font-weight:700;text-align:left;background:#fff;border:2px solid #e2d6c3;border-radius:12px;padding:11px 14px;cursor:pointer;color:inherit}
+.btn-v:hover{border-color:var(--ochre);background:#fffaf2}
+.vq{padding:6px 0;border-top:1px dotted var(--line)}
+.vq:first-of-type{border-top:0}
+nav button.locked{opacity:.55}
+nav button.locked::before{content:"🔒 "}
+.gatebox{background:#fff;border:2px solid var(--ochre);border-radius:14px;padding:16px;margin:12px 0}
+.gatebox h3{margin-top:0}
+.steps3{display:flex;gap:6px;margin:4px 0 6px;font-size:14px;font-weight:800}
+.steps3 span{flex:1;text-align:center;border-radius:8px;padding:3px;background:#eee;color:#777}
+.steps3 span.ok{background:var(--moss-l);color:#1f5131}
+.steps3 span.cur{background:var(--gold-l);color:#6b4e08}
+.ex{background:#fff;border:1px dashed var(--line);border-radius:10px;padding:8px 10px;margin:8px 0}
+
+.frise.f4{grid-template-columns:auto 1fr auto 1fr}
+.say{border:0;background:none;cursor:pointer;font-size:16px;padding:0 3px;line-height:1;vertical-align:middle}
+body.noson .say, body.noson .ecoute{display:none}
+.ecoute{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:2px 0 8px}
+.ecoute a{font-size:13px;color:var(--muted)}
+.txt{background:#fff;border:2px solid var(--char);border-radius:12px;padding:10px 14px;margin:8px 0 12px;line-height:1.7}
+.txt h4{margin:0 0 4px;font-size:18px;color:var(--char)}
+.txt .num{font-weight:900;color:var(--ochre)}
+.poem{font-style:italic;line-height:1.6}
+.fr{color:var(--muted);font-size:15px}
+.sort.cx{grid-template-columns:auto repeat(var(--n),minmax(44px,auto));justify-content:start}
+.sort.cx .lbl{font-weight:800;text-align:right;padding-right:6px}
+.sort.cx.stack{grid-template-columns:repeat(var(--n),minmax(64px,auto))}
+.sort.cx.stack .lbl{grid-column:1/-1;text-align:left;margin-top:6px}
+@media (max-width:520px){
+  .sort:not(.cx){grid-template-columns:1fr 1fr}
+  .sort.cx{grid-template-columns:auto repeat(var(--n),1fr)}
+  .sort.cx .lbl{grid-column:auto;margin-top:0}
+  .sort.cx.stack{grid-template-columns:repeat(var(--n),1fr)}
+  .sort.cx.stack .lbl{grid-column:1/-1;margin-top:6px}
+  .sort.cx.stack .opt{padding:6px 2px}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="top">
+    <a class="retour" href="../passage-secret.html">← Retour au passage secret</a><br>
+    <small>🗝️ Passage secret · Raphaël · 6e · Anglais · Big Test 2 · fiche 1 sur 3</small>
+    <h1>Le calendrier : jours, mois, saisons et nombres ordinaux</h1>
+  </div>
+  <nav>
+    <button data-tab="lecon" class="on">1 · La leçon</button>
+    <button data-tab="aide">2 · Avec aide</button>
+    <button data-tab="sans">3 · Sans aide</button>
+  </nav>
+  <div id="lockBar" class="hidden">🔒 Contrôle en cours : la leçon et l'aide sont verrouillées jusqu'à la dernière question.</div>
+</header>
+
+<main>
+<section id="tab-lecon">
+  <div class="memctl">
+    <button class="btn" id="memBtn">Mode mémoire : cacher les mots-clés</button>
+    <span id="memInfo" class="hidden" style="font-size:14px;color:var(--muted)">Dis le mot à voix haute, puis touche la case pour vérifier.</span>
+  </div>
+  <div class="tip"><b>Big Test 2 de mardi 17 novembre — fiche 1 sur 3.</b> Tu dois savoir <b>écrire</b> : les <b>jours</b>, les <b>mois</b>, les <b>saisons</b> et les <b>nombres ordinaux</b> (en chiffres et en lettres).</div>
+  <div class="gatebox" style="margin-top:0"><b>Les règles du parcours :</b>
+    <ol style="margin:6px 0 0">
+      <li><b>La leçon</b> : à la fin de chaque bloc, 3 questions à choix (QCM, 3 réponses possibles). <b>Une seule erreur = tu recommences à la question 1</b> du bloc (avec de nouvelles questions).</li>
+      <li><b>Avec aide</b> : s'ouvre quand les 6 blocs de la leçon sont réussis.</li>
+      <li><b>Sans aide</b> : s'ouvre quand tu as au moins <b>16 / 20</b> dans la partie avec aide.</li>
+    </ol>
+    <div style="margin-top:6px">Touche <button type="button" class="say" data-say="Hello Raphael! Let's work." aria-label="Écouter">🔊</button> pour écouter la voix anglaise.</div></div>
+
+  <div class="part" data-part="p1">
+    <h3>1) Les 7 jours de la semaine</h3>
+    <div class="frise">
+      <div class="d">lundi</div><div class="e pa"><span class="k">Monday</span> <button type="button" class="say" data-say="Monday" aria-label="Écouter">🔊</button></div>
+      <div class="d">mardi</div><div class="e pa"><span class="k">Tuesday</span> <button type="button" class="say" data-say="Tuesday" aria-label="Écouter">🔊</button></div>
+      <div class="d">mercredi</div><div class="e pa"><span class="k">Wednesday</span> <button type="button" class="say" data-say="Wednesday" aria-label="Écouter">🔊</button></div>
+      <div class="d">jeudi</div><div class="e pa"><span class="k">Thursday</span> <button type="button" class="say" data-say="Thursday" aria-label="Écouter">🔊</button></div>
+      <div class="d">vendredi</div><div class="e pa"><span class="k">Friday</span> <button type="button" class="say" data-say="Friday" aria-label="Écouter">🔊</button></div>
+      <div class="d">samedi</div><div class="e ne"><span class="k">Saturday</span> <button type="button" class="say" data-say="Saturday" aria-label="Écouter">🔊</button></div>
+      <div class="d">dimanche</div><div class="e ne"><span class="k">Sunday</span> <button type="button" class="say" data-say="Sunday" aria-label="Écouter">🔊</button></div>
+    </div>
+    <div class="warn">En anglais, les jours prennent toujours une <b>MAJUSCULE</b> : <b>M</b>onday (jamais « monday »).</div>
+    <div class="tip"><b>Astuces :</b><br>
+      • Ils finissent tous par <b>-day</b> (= jour).<br>
+      • <b>Wed<u>nes</u>day</b> : on écrit « nes » mais on ne l'entend pas.<br>
+      • Ne confonds pas <b>Tuesday</b> (mardi) et <b>Thursday</b> (jeudi, avec <b>h</b> et <b>r</b>).</div>
+    <button class="btn alt done-btn" data-done="p1">J'ai bien compris</button>
+  </div>
+
+  <div class="part" data-part="p2">
+    <h3>2) Les 12 mois de l'année</h3>
+    <div class="frise f4">
+      <div class="d">1</div><div class="e pa"><span class="k">January</span> <button type="button" class="say" data-say="January" aria-label="Écouter">🔊</button></div><div class="d">7</div><div class="e ne"><span class="k">July</span> <button type="button" class="say" data-say="July" aria-label="Écouter">🔊</button></div>
+      <div class="d">2</div><div class="e pa"><span class="k">February</span> <button type="button" class="say" data-say="February" aria-label="Écouter">🔊</button></div><div class="d">8</div><div class="e ne"><span class="k">August</span> <button type="button" class="say" data-say="August" aria-label="Écouter">🔊</button></div>
+      <div class="d">3</div><div class="e pa"><span class="k">March</span> <button type="button" class="say" data-say="March" aria-label="Écouter">🔊</button></div><div class="d">9</div><div class="e ne"><span class="k">September</span> <button type="button" class="say" data-say="September" aria-label="Écouter">🔊</button></div>
+      <div class="d">4</div><div class="e pa"><span class="k">April</span> <button type="button" class="say" data-say="April" aria-label="Écouter">🔊</button></div><div class="d">10</div><div class="e ne"><span class="k">October</span> <button type="button" class="say" data-say="October" aria-label="Écouter">🔊</button></div>
+      <div class="d">5</div><div class="e pa"><span class="k">May</span> <button type="button" class="say" data-say="May" aria-label="Écouter">🔊</button></div><div class="d">11</div><div class="e ne"><span class="k">November</span> <button type="button" class="say" data-say="November" aria-label="Écouter">🔊</button></div>
+      <div class="d">6</div><div class="e pa"><span class="k">June</span> <button type="button" class="say" data-say="June" aria-label="Écouter">🔊</button></div><div class="d">12</div><div class="e ne"><span class="k">December</span> <button type="button" class="say" data-say="December" aria-label="Écouter">🔊</button></div>
+    </div>
+    <div class="warn">Les mois prennent aussi une <b>MAJUSCULE</b> : <b>A</b>pril, <b>N</b>ovember.</div>
+    <div class="tip"><b>Les pièges :</b> Feb<b>r</b>uary (un r après le b) • <b>Au</b>gust • June (juin) et July (juillet).</div>
+    <button class="btn alt done-btn" data-done="p2">J'ai bien compris</button>
+  </div>
+
+  <div class="part" data-part="p3">
+    <h3>3) Les 4 saisons et leurs mois</h3>
+    <div class="frise">
+      <div class="d">❄️ <span class="k">winter</span><br><span class="fr">hiver</span></div><div class="e pa">December, January, February</div>
+      <div class="d">🌷 <span class="k">spring</span><br><span class="fr">printemps</span></div><div class="e ne">March, April, May</div>
+      <div class="d">☀️ <span class="k">summer</span><br><span class="fr">été</span></div><div class="e pa">June, July, August</div>
+      <div class="d">🍂 <span class="k">autumn</span><br><span class="fr">automne</span></div><div class="e ne">September, October, November</div>
+    </div>
+    <div class="def">« automne » a 2 mots : <b>autumn</b> en Grande-Bretagne 🇬🇧, <span class="k">fall</span> aux USA 🇺🇸.</div>
+    <div class="ex">Christmas is in December, <b>in winter</b>. <button type="button" class="say" data-say="Christmas is in December, in winter." aria-label="Écouter">🔊</button><br>My birthday is in April, <b>in spring</b>. <button type="button" class="say" data-say="My birthday is in April, in spring." aria-label="Écouter">🔊</button></div>
+    <div class="warn">Attention : <b>April</b> est au <b>printemps</b> (spring), pas en été !</div>
+    <div class="tip">Les saisons s'écrivent <b>sans</b> majuscule : winter, spring, summer, autumn.</div>
+    <button class="btn alt done-btn" data-done="p3">J'ai bien compris</button>
+  </div>
+
+  <div class="part" data-part="p4">
+    <h3>4) Les nombres ordinaux : la règle</h3>
+    <p>Un nombre <b>ordinal</b> dit le <b>rang</b> : premier, deuxième, troisième… On s'en sert pour les <b>dates</b>.</p>
+    <div class="def"><b>La règle :</b> on ajoute <span class="k">th</span> : four → <b>fourth</b> (4th), six → <b>sixth</b> (6th).</div>
+    <div class="warn"><b>Sauf 1, 2 et 3</b> (et les nombres qui finissent par 1, 2, 3) :<br>
+      1 → <b>1st</b> = the <span class="k">first</span> <button type="button" class="say" data-say="the first" aria-label="Écouter">🔊</button><br>
+      2 → <b>2nd</b> = the <span class="k">second</span> <button type="button" class="say" data-say="the second" aria-label="Écouter">🔊</button><br>
+      3 → <b>3rd</b> = the <span class="k">third</span> <button type="button" class="say" data-say="the third" aria-label="Écouter">🔊</button><br>
+      → 21st • 22nd • 23rd • 31st</div>
+    <div class="warn"><b>Attention :</b> <span class="k">11</span>, <span class="k">12</span>, <span class="k">13</span> prennent <b>th</b> : 11th, 12th, 13th.</div>
+    <div class="tip"><b>Astuce :</b> les 2 lettres après le chiffre sont les 2 dernières lettres du mot : fir<b>st</b> → 1<b>st</b>, seco<b>nd</b> → 2<b>nd</b>, thi<b>rd</b> → 3<b>rd</b>, four<b>th</b> → 4<b>th</b>.</div>
+    <button class="btn alt done-btn" data-done="p4">J'ai bien compris</button>
+  </div>
+
+  <div class="part" data-part="p5">
+    <h3>5) Écrire les ordinaux en lettres</h3>
+    <div class="def"><b>Les changements d'orthographe à savoir par cœur :</b></div>
+    <div class="frise">
+      <div class="d">5th</div><div class="e pa">the <span class="k">fifth</span> <i>(ve → f)</i> <button type="button" class="say" data-say="the fifth" aria-label="Écouter">🔊</button></div>
+      <div class="d">8th</div><div class="e pa">the <span class="k">eighth</span> <i>(un seul t)</i> <button type="button" class="say" data-say="the eighth" aria-label="Écouter">🔊</button></div>
+      <div class="d">9th</div><div class="e pa">the <span class="k">ninth</span> <i>(sans e)</i> <button type="button" class="say" data-say="the ninth" aria-label="Écouter">🔊</button></div>
+      <div class="d">12th</div><div class="e pa">the <span class="k">twelfth</span> <i>(ve → f)</i> <button type="button" class="say" data-say="the twelfth" aria-label="Écouter">🔊</button></div>
+      <div class="d">20th</div><div class="e pa">the <span class="k">twentieth</span> <i>(y → ie)</i> <button type="button" class="say" data-say="the twentieth" aria-label="Écouter">🔊</button></div>
+      <div class="d">30th</div><div class="e pa">the <span class="k">thirtieth</span> <i>(y → ie)</i> <button type="button" class="say" data-say="the thirtieth" aria-label="Écouter">🔊</button></div>
+    </div>
+    <div class="warn"><b>Nombre en 2 mots :</b> seul le <b>dernier</b> mot change, avec un trait d'union.<br>
+      21st = the twenty-<b>first</b> • 23rd = the twenty-<b>third</b> • 31st = the <span class="k">thirty-first</span><br>
+      ❌ jamais « the thirtieth-first ».</div>
+    <div class="frise f4">
+      <div class="d">1st</div><div class="e pa">the first</div><div class="d">11th</div><div class="e ne">the eleventh</div>
+      <div class="d">2nd</div><div class="e pa">the second</div><div class="d">12th</div><div class="e ne">the twelfth</div>
+      <div class="d">3rd</div><div class="e pa">the third</div><div class="d">13th</div><div class="e ne">the thirteenth</div>
+      <div class="d">4th</div><div class="e pa">the fourth</div><div class="d">14th</div><div class="e ne">the fourteenth</div>
+      <div class="d">5th</div><div class="e pa">the fifth</div><div class="d">15th</div><div class="e ne">the fifteenth</div>
+      <div class="d">6th</div><div class="e pa">the sixth</div><div class="d">20th</div><div class="e ne">the twentieth</div>
+      <div class="d">7th</div><div class="e pa">the seventh</div><div class="d">21st</div><div class="e ne">the twenty-first</div>
+      <div class="d">8th</div><div class="e pa">the eighth</div><div class="d">25th</div><div class="e ne">the twenty-fifth</div>
+      <div class="d">9th</div><div class="e pa">the ninth</div><div class="d">30th</div><div class="e ne">the thirtieth</div>
+      <div class="d">10th</div><div class="e pa">the tenth</div><div class="d">31st</div><div class="e ne">the thirty-first</div>
+    </div>
+    <button class="btn alt done-btn" data-done="p5">J'ai bien compris</button>
+  </div>
+
+  <div class="part" data-part="p6">
+    <h3>6) Hier, aujourd'hui, demain</h3>
+    <div class="frise">
+      <div class="d">hier</div><div class="e pa"><span class="k">Yesterday</span> <span class="k">was</span> Tuesday. <button type="button" class="say" data-say="Yesterday was Tuesday." aria-label="Écouter">🔊</button></div>
+      <div class="d">aujourd'hui</div><div class="e ne"><span class="k">Today</span> <span class="k">is</span> Wednesday. <button type="button" class="say" data-say="Today is Wednesday." aria-label="Écouter">🔊</button></div>
+      <div class="d">demain</div><div class="e pa"><span class="k">Tomorrow</span> <span class="k">will be</span> Thursday. <button type="button" class="say" data-say="Tomorrow will be Thursday." aria-label="Écouter">🔊</button></div>
+    </div>
+    <div class="def"><b>was</b> = c'était (passé) • <b>is</b> = c'est (présent) • <b>will be</b> = ce sera (futur).</div>
+    <div class="ex"><b>Question :</b> What's the day today? <button type="button" class="say" data-say="What's the day today?" aria-label="Écouter">🔊</button><br><b>Réponse :</b> Today is Wednesday.</div>
+    <button class="btn alt done-btn" data-done="p6">J'ai bien compris</button>
+  </div>
+
+  <div id="partLock" class="warn hidden"></div>
+  <div id="leconFinie" class="def hidden" style="border-left-color:var(--moss);background:var(--moss-l)"><b>Bravo, toute la leçon est réussie !</b> La partie <b>avec aide</b> est ouverte. Tu peux d'abord réciter avec le <b>mode mémoire</b>.<br><button class="btn" id="goAide" style="margin-top:8px">Aller à la partie avec aide →</button></div>
+</section>
+
+<!-- ================= EXERCICES ================= -->
+<section id="tab-aide" class="hidden"></section>
+<section id="tab-sans" class="hidden"></section>
+</main>
+
+<div class="notes">
+  <div class="in">
+    <div class="box"><div class="lab">Note avec aide</div><div class="val" id="nAide">—</div><div class="ver" id="vAide">Pas encore faite</div></div>
+    <div class="box"><div class="lab">Note sans aide</div><div class="val" id="nSans">—</div><div class="ver" id="vSans">Pas encore faite</div></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
+<script>
+var FICHE_CODE = "P008";
+/* ---------- Outils ---------- */
+const $ = (s, r=document) => r.querySelector(s);
+const el = (tag, attrs={}, html="") => { const e=document.createElement(tag); for(const k in attrs){ if(k==="class") e.className=attrs[k]; else e.setAttribute(k,attrs[k]); } if(html) e.innerHTML=html; return e; };
+const shuffle = a => { a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; };
+const norm = s => (s||"").toLowerCase().replace(/œ/g,"oe").normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9]+/g," ").trim();
+const lower = s => (s||"").toLowerCase().replace(/[^a-zà-ÿœ0-9]+/g," ").trim();
+function lev(a,b){ const m=a.length,n=b.length; if(!m) return n; if(!n) return m; let p=[...Array(n+1).keys()]; for(let i=1;i<=m;i++){ const c=[i]; for(let j=1;j<=n;j++) c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1)); p=c; } return p[n]; }
+const tol = n => n<=3?0 : n<=6?1 : 2;
+const store = { get(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } }, set(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} } };
+const fmt = x => (Math.round(x*100)/100).toString().replace(".",",");
+
+/* Compare une réponse tapée à la liste des réponses acceptées.
+   Retour : "exact" | "accent" | "fuzzy" | "no" */
+function matchWord(input, answers){
+  const ni = norm(input), li = lower(input), toks = ni.split(" ");
+  if(!ni) return "no";
+  let best = "no";
+  for(const a of answers){
+    const na = norm(a), la = lower(a);
+    if(li===la || (" "+li+" ").includes(" "+la+" ")) return "exact";
+    if(ni===na || (" "+ni+" ").includes(" "+na+" ")) best = "accent";
+    else if(best==="no"){
+      const t = tol(na.length);
+      const dg = s => (s.match(/\d+[a-z]*/g)||[]).join(" ");
+      if(t>0 && dg(ni)===dg(na) && (lev(ni,na)<=t || (!na.includes(" ") && toks.some(x => lev(x,na)<=t)))) best = "fuzzy";
+    }
+  }
+  return best;
+}
+/* Cherche un mot-clé (avec variantes) dans un texte libre */
+function hasKey(text, alts){
+  const nt = " "+norm(text)+" ", toks = norm(text).split(" ");
+  for(const a of alts){
+    const na = norm(a);
+    if(nt.includes(" "+na+" ")) return true;
+    if(na.includes(" ")) continue;
+    const t = tol(na.length);
+    if(toks.some(x => (t>0 && lev(x,na)<=t) || (na.length>=5 && x.startsWith(na)))) return true;
+  }
+  return false;
+}
+/* Lit une date tapée : renvoie {val, neg} */
+function parseDate(s){
+  const raw = (s||"").toLowerCase();
+  const neg = /-|−|av|avant/.test(raw);
+  const c = raw.replace(/\s/g,"");
+  const m = c.match(/\d+([.,]\d+)?/);
+  if(!m) return null;
+  let v = parseFloat(m[0].replace(",","."));
+  if(/million/.test(raw)) v *= 1e6;
+  return {val:v, neg};
+}
+
+
+/* ---------- Son : la voix du téléphone lit l'anglais ---------- */
+const SON = ("speechSynthesis" in window) && typeof SpeechSynthesisUtterance !== "undefined";
+if(SON){ try{ speechSynthesis.getVoices(); }catch(e){} } else document.body.classList.add("noson");
+function parler(t){
+  if(!SON) return;
+  try{
+    const u = new SpeechSynthesisUtterance(t); u.lang = "en-GB"; u.rate = 0.8;
+    const vs = speechSynthesis.getVoices();
+    const v = vs.find(x=>/en[-_]GB/i.test(x.lang)) || vs.find(x=>/^en/i.test(x.lang));
+    if(v) u.voice = v;
+    speechSynthesis.cancel(); speechSynthesis.speak(u);
+  }catch(e){}
+}
+document.addEventListener("click", e => { const b = e.target.closest("[data-say]"); if(b){ e.preventDefault(); parler(b.dataset.say); } });
+/* Majuscule oubliée sur un jour ou un mois */
+const MAJ = ["monday","tuesday","wednesday","thursday","friday","saturday","sunday","january","february","march","april","may","june","july","august","september","october","november","december"];
+function majManque(input){
+  return (input||"").replace(/[^A-Za-z]+/g," ").split(" ").some(w => w && MAJ.includes(w.toLowerCase()) && w[0] !== w[0].toUpperCase());
+}
+/* Réponse tapée = un piège connu (ex. Tuesday au lieu de Thursday) : 0 point, jamais « presque » */
+function estPiege(q, input){
+  const ni = norm(input); if(!ni) return false;
+  const bons = q.a.map(norm);
+  return [...(q.d||[]), ...(q.no||[])].some(x => { const nx = norm(x); return nx === ni && !bons.includes(nx); });
+}
+
+/* ---------- Banque de questions ---------- */
+const PARTS = {p1:"Les jours", p2:"Les mois", p3:"Les saisons", p4:"La règle st / nd / rd / th", p5:"Les ordinaux en lettres", p6:"Yesterday, today, tomorrow"};
+const Wd = (part,q,a,show,d,aide,x) => Object.assign({part,type:"word",q,a,show,d,aide}, x||{});
+const I = "indice";
+
+const BANK = [
+  // --- p1 jours
+  Wd("p1","Écris en anglais : <b>mercredi</b>",["Wednesday"],"Wednesday",["Wenesday","Thursday"],I),
+  Wd("p1","Écris en anglais : <b>jeudi</b>",["Thursday"],"Thursday",["Tuesday","Thurday"],I),
+  {part:"p1",type:"order",q:"Range les jours dans l'ordre, du lundi au dimanche : touche-les un par un.",items:["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]},
+  Wd("p1","Écoute. Écris le jour que tu entends.",["Saturday"],"Saturday",["Sunday","Thursday"],I,{say:"Saturday"}),
+  // --- p2 mois
+  Wd("p2","Écris en anglais : <b>février</b>",["February"],"February",["Febuary","January"],I),
+  Wd("p2","Écris en anglais : <b>août</b>",["August"],"August",["April","Augst"],I),
+  Wd("p2","Écris le mois qui vient juste après <b>June</b>.",["July"],"July",["May","August","June"],I),
+  {part:"p2",type:"set",q:"Écris les 3 derniers mois de l'année.",groups:[["October"],["November"],["December"]],show:"October, November, December"},
+  // --- p3 saisons
+  {part:"p3",type:"sort",w:4,stack:true,q:"Touche la bonne saison pour chaque mois.",cats:["winter","spring","summer","autumn"],items:[
+    ["December",0],["April",1],["July",2],["October",3],["February",0],["May",1],["August",2],["November",3]]},
+  Wd("p3","Écris le mot des USA pour dire <b>automne</b>.",["fall"],"fall",["autumn","spring"],I),
+  Wd("p3","Complète avec la saison : Christmas is in December, in …",["winter"],"winter",["summer","autumn"],I),
+  Wd("p3","Complète avec la saison : My birthday is in April, in …",["spring"],"spring",["summer","winter"],I),
+  {part:"p3",type:"set",q:"Écris les 3 mois de l'été (summer).",groups:[["June"],["July"],["August"]],show:"June, July, August"},
+  // --- p4 règle
+  {part:"p4",type:"sort",w:3,q:"Touche la bonne terminaison pour chaque nombre.",cats:["st","nd","rd","th"],items:[
+    ["1",0],["2",1],["3",2],["4",3],["11",3],["12",3],["13",3],["21",0],["22",1],["23",2],["30",3],["31",0]]},
+  Wd("p4","Écris <b>the twelfth</b> avec des chiffres et 2 lettres.",["12th"],"12th",["12nd","12st"]),
+  Wd("p4","Écris <b>the thirty-first</b> avec des chiffres et 2 lettres.",["31st"],"31st",["31th","31nd"]),
+  Wd("p4","Écoute. Écris ce nombre avec des chiffres et 2 lettres (exemple : 4th).",["22nd"],"22nd",["22th","20th"],undefined,{say:"the twenty-second"}),
+  // --- p5 en lettres
+  Wd("p5","Écris en lettres : <b>5th</b> = the …",["fifth"],"fifth",["fiveth","fift"],I),
+  Wd("p5","Écris en lettres : <b>8th</b> = the …",["eighth"],"eighth",["eightth","eight"],I),
+  Wd("p5","Écris en lettres : <b>9th</b> = the …",["ninth"],"ninth",["nineth","nigth"],I),
+  Wd("p5","Écris en lettres : <b>12th</b> = the …",["twelfth"],"twelfth",["twelveth","twelth"],I),
+  Wd("p5","Écris en lettres : <b>20th</b> = the …",["twentieth"],"twentieth",["twentyth","twentith"],I),
+  Wd("p5","Écris en lettres : <b>30th</b> = the …",["thirtieth"],"thirtieth",["thirtyth","thirteenth"],I),
+  Wd("p5","Écris en lettres : <b>23rd</b> = the …",["twenty-third","twenty third"],"twenty-third",["twentieth-third","twenty-three"],I,{h:"2 mots avec un trait d'union"}),
+  Wd("p5","Écris en lettres : <b>31st</b> = the …",["thirty-first","thirty first"],"thirty-first",["thirtieth-first","thirty-oneth"],I,{h:"2 mots avec un trait d'union. Seul le dernier mot change."}),
+  // --- p6 hier / aujourd'hui / demain
+  Wd("p6","Complète : Yesterday … Tuesday.",["was"],"was",["is","will be"]),
+  Wd("p6","Complète avec 2 mots : Tomorrow … … Thursday.",["will be"],"will be",["was","is"]),
+  Wd("p6","Today is Wednesday. Complète avec le jour : Tomorrow will be …",["Thursday"],"Thursday",["Tuesday","Friday"],I),
+  Wd("p6","Réponds par une phrase. <b>What's the day today?</b> (Imagine : on est mercredi.)",["Today is Wednesday","It is Wednesday","It's Wednesday"],"Today is Wednesday.",["Today was Wednesday.","Today will be Wednesday."],undefined,{multi:1}),
+];
+const AUDIO_OK = SON;
+for(let i=BANK.length-1;i>=0;i--){ if(BANK[i].say && !AUDIO_OK) BANK.splice(i,1); }
+BANK.forEach((q,i)=>{ q.id=i; q.w = q.w || 1; });
+const DATES = [];
+const PARTS_INTRO = {};
+
+/* ---------- Rendu des exercices ---------- */
+const MODES = {
+  aide: {key:"p008_note_aide", box:"#tab-aide", label:"avec aide", code:FICHE_CODE+"-aide"},
+  sans: {key:"p008_note_sans", box:"#tab-sans", label:"sans aide", code:FICHE_CODE}
+};
+let STATE = {};
+
+function startMode(mode, onlyIds){
+  const M = MODES[mode], root = $(M.box);
+  const ids = onlyIds || BANK.map(q=>q.id);
+  STATE[mode] = {ids, res:{}, retry:!!onlyIds};
+  root.innerHTML = "";
+  if(mode==="sans") root.classList.add("encours");
+  const intro = el("div",{class:"intro"});
+  if(mode==="aide"){
+    intro.innerHTML = `<b>Exercices AVEC aide</b> · ${ids.length} questions${onlyIds?" (seulement tes erreurs)":""}<br>
+      Parfois tu choisis parmi 3 réponses, mais le plus souvent <b>tu écris</b> avec un <span class="hint">indice</span>.
+      <b>Il faut au moins 16 / 20 (80 %) sur la partie complète pour ouvrir la partie sans aide.</b>`;
+  } else {
+    intro.innerHTML = `<b>Exercices SANS aide</b> · ${ids.length} questions${onlyIds?" (seulement tes erreurs)":""}<br>
+      Pas de choix proposé : <b>tu écris tout toi-même</b>, comme le jour du contrôle. Tu vois la correction après chaque réponse ; à la fin, tu refais les questions ratées.<br>
+      • Mot juste = 1 point. Mot presque juste (une faute d'orthographe) = ½ point.<br>
+      • <b>Majuscule oubliée</b> sur un jour ou un mois (monday, april…) = ½ point seulement.<br>
+      • 🔊 Quand il y a un bouton « Écouter », monte le son et écoute autant de fois que tu veux.<br>
+      <b>Objectif : 17 / 20 pour être prêt</b> (et gagner 3 vies pour la salle d'arcade, une seule fois pour cette fiche).`;
+  }
+  root.appendChild(intro);
+  const pr = el("div",{class:"prog"},"<i></i>"); root.appendChild(pr);
+  const cnt = el("div",{class:"cnt",style:"font-size:14px;color:var(--muted)"}); root.appendChild(cnt);
+  let lastPart = null, n = 0;
+  for(const id of ids){
+    const q = BANK[id];
+    if(q.part!==lastPart){ root.appendChild(el("h2",{},PARTS[q.part])); if(PARTS_INTRO[q.part]) root.appendChild(el("div",{},PARTS_INTRO[q.part])); lastPart=q.part; }
+    n++;
+    root.appendChild(renderCard(q, mode, n));
+  }
+  root.appendChild(el("div",{class:"resultZone"}));
+  updateProgress(mode);
+}
+
+function renderCard(q, mode, n){
+  const c = el("div",{class:"card","data-id":q.id});
+  c.appendChild(el("div",{class:"n"},`Question ${n}${q.w>1?` · ${fmt(q.w)} points`:""}`));
+  const body = el("div");
+  c.appendChild(body);
+  const fb = el("div",{class:"fb hidden"});
+  const done = (pts, msg) => { pts = Math.max(0, Math.min(q.w, pts)); STATE[mode].res[q.id]=pts; fb.className="fb "+(pts>=q.w?"ok":pts>0?"mid":"ko"); fb.innerHTML=msg; fb.classList.remove("hidden"); updateProgress(mode); };
+
+  if(q.type==="word" || q.type==="date"){
+    body.appendChild(el("div",{class:"q"}, q.type==="date" ? `Quelle est la date ? <b>${q.q}</b>` : q.q));
+    if(q.say){
+      const ec = el("div",{class:"ecoute"});
+      ec.appendChild(el("button",{class:"btn alt",type:"button","data-say":q.say},"🔊 Écouter"));
+      const lien = el("a",{href:"#"},"Pas de son ? Voir la phrase");
+      lien.onclick = e => { e.preventDefault(); lien.replaceWith(el("span",{class:"hint"},q.say)); };
+      ec.appendChild(lien); body.appendChild(ec);
+    }
+    const useQcm = mode==="aide" && (q.type==="date" || (q.d && q.aide!=="indice"));
+    if(useQcm){
+      let opts;
+      if(q.type==="date"){
+        const big = Math.abs(q.v)>=1e6;
+        const pool = shuffle(DATES.filter(x=>x.show!==q.show && (Math.abs(x.v)>=1e6)===big)).slice(0,2).map(x=>x.show);
+        opts = shuffle([q.show, ...pool]);
+      } else opts = shuffle([q.show, ...q.d]);
+      const box = el("div",{class:"opts"});
+      opts.forEach(o=>{
+        const b = el("button",{class:"opt"}, o);
+        b.onclick = () => {
+          box.querySelectorAll("button").forEach(x=>{ x.disabled=true; if(x.textContent===q.show) x.classList.add("good"); });
+          if(o===q.show) done(1,"Bravo !");
+          else { b.classList.add("bad"); done(0,`Non. La bonne réponse : <b>${q.show}</b>`); }
+        };
+        box.appendChild(b);
+      });
+      body.appendChild(box);
+    } else {
+      if(mode==="aide"){
+        const letters = q.show.replace(/[^A-Za-zÀ-ÿœ]/g,"").length;
+        body.appendChild(el("div",{class:"hint"}, q.h ? "Indice : "+q.h : `Indice : commence par « ${q.show[0]} », ${letters} lettres`));
+      }
+      const row = el("div",{class:"row"});
+      const inp = el("input",{type:"text",autocomplete:"off",autocapitalize:"off",spellcheck:"false",placeholder: q.type==="date"?"ex : -12 000":"écris ta réponse"});
+      const b = el("button",{class:"btn"},"Valider");
+      const go = () => {
+        if(!inp.value.trim()) return;
+        inp.disabled=true; b.disabled=true;
+        if(q.type==="date"){
+          const p = parseDate(inp.value), targets=[q.v,...q.alt].map(Math.abs);
+          if(p && targets.some(t=>Math.abs(p.val-t)<0.5)){
+            if(p.neg) done(1,`Bravo ! <b>${q.show}</b>`);
+            else done(0.5,`Le nombre est juste mais il manque le signe <b>-</b> : <b>${q.show}</b> (avant J.-C.). ½ point.`);
+          } else done(0,`Non. La bonne date : <b>${q.show}</b>`);
+        } else {
+          const r = estPiege(q, inp.value) ? "no" : matchWord(inp.value, q.a);
+          if((r==="exact"||r==="accent") && majManque(inp.value)) done(0.5,`Le mot est juste, mais il manque la <b>MAJUSCULE</b> : en anglais, les jours et les mois prennent toujours une majuscule → <b>${q.show}</b>. ½ point.`);
+          else if(r==="exact") done(1, q.multi ? `Bravo ! <b>${q.show}</b>` : "Bravo !");
+          else if(r==="accent") done(1,`Juste ! <b>${q.show}</b>`);
+          else if(r==="fuzzy") done(0.5,`Presque : il y a une petite erreur (une lettre ou un petit mot). Il faut écrire <b>${q.show}</b>. ½ point.`);
+          else done(0,`Non. La bonne réponse : <b>${q.show}</b>`);
+        }
+      };
+      b.onclick=go; inp.onkeydown=e=>{ if(e.key==="Enter") go(); };
+      row.append(inp,b); body.appendChild(row);
+    }
+  }
+
+  else if(q.type==="set"){
+    body.appendChild(el("div",{class:"q"},q.q));
+    if(mode==="aide") body.appendChild(el("div",{class:"hint"},"Indices : "+q.groups.map(g=>`« ${g[0][0].toUpperCase()}… » (${g[0].length} lettres)`).join(" · ")));
+    const row = el("div",{class:"row"});
+    const ins = q.groups.map(()=>{ const i=el("input",{type:"text",autocomplete:"off",autocapitalize:"off",spellcheck:"false",style:"max-width:170px"}); row.appendChild(i); return i; });
+    const b = el("button",{class:"btn"},"Valider"); row.appendChild(b);
+    b.onclick = () => {
+      if(ins.some(i=>!i.value.trim())) return;
+      ins.forEach(i=>i.disabled=true); b.disabled=true;
+      const used = new Set(); let pts=0, typo=false;
+      ins.forEach(i=>{
+        for(let g=0; g<q.groups.length; g++){
+          if(used.has(g)) continue;
+          const r = matchWord(i.value, q.groups[g]);
+          if(r!=="no"){ used.add(g); if(r==="fuzzy" || majManque(i.value)){ pts+=0.5; typo=true; } else pts+=1; break; }
+        }
+      });
+      const sc = pts/q.groups.length;
+      done(sc, sc>=1 ? "Bravo, tout est juste !" : `${fmt(pts)} sur ${q.groups.length}${typo?" (faute d'orthographe ou majuscule oubliée)":""}. Il fallait : <b>${q.show}</b>`);
+    };
+    body.appendChild(row);
+  }
+
+  else if(q.type==="order"){
+    body.appendChild(el("div",{class:"q"},q.q));
+    const seq = el("div",{class:"seq"}); const box = el("div",{class:"opts"});
+    const picked = [];
+    const v = el("button",{class:"btn"},"Valider"); v.disabled=true;
+    const clr = el("button",{class:"btn alt"},"Effacer");
+    shuffle(q.items).forEach(it=>{
+      const b = el("button",{class:"opt"},it);
+      b.onclick=()=>{ picked.push(it); b.disabled=true; b.classList.add("sel"); seq.appendChild(el("span",{},`${picked.length}. ${it}`)); v.disabled = picked.length<q.items.length; };
+      box.appendChild(b);
+    });
+    clr.onclick=()=>{ picked.length=0; seq.innerHTML=""; box.querySelectorAll("button").forEach(b=>{b.disabled=false;b.classList.remove("sel");}); v.disabled=true; };
+    v.onclick=()=>{
+      v.disabled=true; clr.disabled=true; box.querySelectorAll("button").forEach(b=>b.disabled=true);
+      const ok = picked.every((x,i)=>x===q.items[i]);
+      done(ok?q.w:0, ok?"Bravo, l'ordre est parfait !":`Non. Le bon ordre : <b>${q.items.join(" → ")}</b>`);
+    };
+    const row = el("div",{class:"row",style:"margin-top:8px"}); row.append(v,clr);
+    body.append(box, seq, row);
+  }
+
+  else if(q.type==="sort"){
+    body.appendChild(el("div",{class:"q"},q.q));
+    const grid = el("div",{class:"sort"+(q.cats.length>2?" cx":"")+(q.stack?" stack":""),style:"--n:"+q.cats.length}); const choice = {};
+    const v = el("button",{class:"btn",style:"margin-top:10px"},"Valider"); v.disabled=true;
+    q.items.forEach(([txt],i)=>{
+      grid.appendChild(el("div",{class:"lbl"},txt));
+      q.cats.forEach((cat,ci)=>{
+        const b = el("button",{class:"opt","data-r":i,"data-c":ci},cat);
+        b.onclick=()=>{ choice[i]=ci; grid.querySelectorAll(`[data-r="${i}"]`).forEach(x=>x.classList.toggle("sel", x===b)); v.disabled = Object.keys(choice).length<q.items.length; };
+        grid.appendChild(b);
+      });
+    });
+    v.onclick=()=>{
+      v.disabled=true; let good=0;
+      grid.querySelectorAll("button").forEach(b=>{
+        b.disabled=true; const r=+b.dataset.r, c=+b.dataset.c;
+        if(c===q.items[r][1]) b.classList.add("good");
+        if(choice[r]===c && c!==q.items[r][1]) b.classList.add("bad");
+      });
+      q.items.forEach(([,c],i)=>{ if(choice[i]===c) good++; });
+      const pts = Math.round(q.w*good/q.items.length*4)/4;
+      done(pts, `${good} lignes justes sur ${q.items.length} → ${fmt(pts)} / ${q.w} points.`);
+    };
+    body.append(grid, v);
+  }
+
+  else if(q.type==="def"){
+    body.appendChild(el("div",{class:"q"},`Définition : <b>${q.mot}</b>`));
+    const keys = [...q.cloze.matchAll(/\[\[(.+?)\]\]/g)].map(m=>m[1]);
+    const model = q.cloze.replace(/\[\[(.+?)\]\]/g,"<b>$1</b>");
+    if(mode==="aide"){
+      body.appendChild(el("div",{class:"hint"},"Complète les mots-clés : la première lettre est donnée."));
+      const p = el("div",{style:"line-height:2.2"});
+      const ins = [];
+      q.cloze.split(/(\[\[.+?\]\])/).forEach(part=>{
+        const m = part.match(/^\[\[(.+)\]\]$/);
+        if(m){ const w=m[1]; const i=el("input",{type:"text",class:"blank",autocomplete:"off",autocapitalize:"off",spellcheck:"false",placeholder:w[0]+"…"+" ("+w.length+")"}); ins.push([i,w]); p.appendChild(i); }
+        else p.appendChild(document.createTextNode(part));
+      });
+      const b = el("button",{class:"btn",style:"margin-top:6px"},"Valider");
+      b.onclick=()=>{
+        if(ins.some(([i])=>!i.value.trim())) return;
+        b.disabled=true; let got=0;
+        ins.forEach(([i,w])=>{ i.disabled=true; const r=matchWord(i.value,[w]); if(r==="exact"||r==="accent"){got+=1;i.style.borderColor="var(--moss)";} else if(r==="fuzzy"){got+=0.5;i.style.borderColor="var(--gold)";} else i.style.borderColor="var(--red)"; });
+        const pts = Math.round(q.w*got/ins.length*4)/4;
+        done(pts, `${fmt(got)} mot(s) juste(s) sur ${ins.length} → ${fmt(pts)} / ${q.w} points.<br>Définition complète : ${model}`);
+      };
+      body.append(p,b);
+    } else {
+      const ta = el("textarea",{placeholder:"Écris la définition complète, comme dans ta leçon.",autocapitalize:"off",spellcheck:"false"});
+      const b = el("button",{class:"btn",style:"margin-top:6px"},"Valider");
+      b.onclick=()=>{
+        if(ta.value.trim().length<3) return;
+        ta.disabled=true; b.disabled=true;
+        const miss=[]; let got=0;
+        q.groups.forEach((g,i)=>{ if(hasKey(ta.value,g)) got++; else miss.push(keys[i]||g[0]); });
+        const pts = Math.round(q.w*got/q.groups.length*4)/4;
+        done(pts, `${got} mot(s)-clé(s) sur ${q.groups.length} → ${fmt(pts)} / ${q.w} points.`
+          + (miss.length?`<br>Mots-clés oubliés : <b>${miss.join(", ")}</b>`:"<br>Tous les mots-clés y sont, bravo !")
+          + `<br>Définition de la leçon : ${model}`);
+      };
+      body.append(ta,b);
+    }
+  }
+  c.appendChild(fb);
+  return c;
+}
+
+/* ---------- Contrôle sans aide verrouillé ----------
+   Pendant le contrôle : plus d'accès à la leçon, ni à l'aide, ni au retour.
+   Quitter, recharger ou ouvrir la page ailleurs arrête le contrôle :
+   les questions non faites comptent 0. */
+const KEY_C = "p008_controle_en_cours";
+let LOCKED = false;
+function lock(on){
+  LOCKED = on;
+  document.body.classList.toggle("lock", on);
+  $("#lockBar").classList.toggle("hidden", !on);
+}
+function gateSans(){
+  const root = $("#tab-sans");
+  root.innerHTML = "";
+  const g = el("div",{class:"intro gate"});
+  g.innerHTML = `<div style="font-size:22px;font-weight:900">🔒 Le contrôle sans aide</div>
+    <p>C'est comme le vrai contrôle en classe. <b>Dès que tu commences :</b></p>
+    <ul>
+      <li>la <b>leçon</b> et les <b>exercices avec aide</b> sont <b>verrouillés</b> jusqu'à la dernière question ;</li>
+      <li>tu écris tout toi-même, sans choix proposé ;</li>
+      <li>si tu quittes ou recharges la page, le contrôle s'arrête et <b>les questions non faites comptent 0</b>.</li>
+    </ul>
+    <p>Commence seulement si tu connais ta leçon par cœur.</p>`;
+  const row = el("div",{class:"row"});
+  const go = el("button",{class:"btn"},"Commencer le contrôle");
+  go.onclick = () => startControle();
+  const back = el("button",{class:"btn alt"},"Pas encore, je révise");
+  back.onclick = () => $('nav button[data-tab="lecon"]').click();
+  row.append(go, back); g.appendChild(row);
+  root.appendChild(g);
+}
+function startControle(onlyIds){
+  startMode("sans", onlyIds);
+  lock(true);
+  store.set(KEY_C, {ids:STATE.sans.ids, res:{}, retry:STATE.sans.retry});
+  window.scrollTo({top:0});
+}
+/* Page rechargée ou ouverte ailleurs pendant un contrôle : il est arrêté et noté tel quel */
+function controleInterrompu(c){
+  const root = $("#tab-sans");
+  const faites = Object.keys(c.res||{}).length;
+  STATE.sans = {ids:c.ids, res:Object.assign({}, c.res||{}), retry:!!c.retry, interrompu:true};
+  c.ids.forEach(id=>{ if(STATE.sans.res[id]===undefined) STATE.sans.res[id]=0; });
+  root.innerHTML = `<div class="intro" style="border-color:var(--red)"><b>Contrôle interrompu.</b><br>
+    La page a été quittée, rechargée ou ouverte ailleurs pendant le contrôle.
+    Tu avais répondu à ${faites} question${faites>1?"s":""} sur ${c.ids.length} : les autres comptent 0.</div><div class="resultZone"></div>`;
+  try{ localStorage.removeItem(KEY_C); }catch(e){}
+  finish("sans");
+  document.querySelectorAll("nav button").forEach(x=>x.classList.toggle("on",x.dataset.tab==="sans"));
+  ["lecon","aide","sans"].forEach(t=>$("#tab-"+t).classList.toggle("hidden", t!=="sans"));
+}
+window.addEventListener("beforeunload", e => { if(LOCKED){ e.preventDefault(); e.returnValue = ""; } });
+window.addEventListener("storage", e => {
+  // Le contrôle a été arrêté depuis un autre onglet : celui-ci s'arrête aussi
+  if(e.key===KEY_C && e.newValue===null && LOCKED){
+    LOCKED = false;
+    alert("Le contrôle a été arrêté : la page a été ouverte ailleurs.");
+    location.reload();
+  }
+});
+
+function updateProgress(mode){
+  const S = STATE[mode], root = $(MODES[mode].box);
+  if(mode==="sans" && LOCKED) store.set(KEY_C, {ids:S.ids, res:S.res, retry:S.retry});
+  const doneN = Object.keys(S.res).length, total = S.ids.length;
+  root.querySelector(".prog i").style.width = (100*doneN/total)+"%";
+  const pts = Object.values(S.res).reduce((a,b)=>a+b,0);
+  const maxSoFar = Object.keys(S.res).reduce((a,id)=>a+BANK[id].w,0);
+  root.querySelector(".cnt").textContent = `Questions faites : ${doneN} / ${total}` + (doneN?` · points : ${fmt(pts)} / ${fmt(maxSoFar)}`:"");
+  if(doneN===total) finish(mode);
+}
+
+const PRET = 17;   // note sans aide pour « tu es prêt » (et 3 vies dans la salle d'arcade)
+function blocDe(q){ return q.part; }
+function texteQ(q){ const d=document.createElement("div"); d.innerHTML = q.type==="def" ? "Écrire : "+q.mot : q.q; return d.textContent; }
+/* Correction du contrôle : seulement les blocs de la leçon où il y a eu des erreurs */
+function correction(wrong){
+  const z = el("div",{class:"revoir"});
+  z.appendChild(el("h3",{},`📖 À refaire : ${wrong.length} question${wrong.length>1?"s":""} ratée${wrong.length>1?"s":""}`));
+  z.appendChild(el("p",{},"Relis les parties de la leçon où tu t'es trompé, puis refais seulement ces questions. <b>Ça ne te donne pas de point en plus</b> : c'est pour comprendre tes erreurs."));
+  ORDER.forEach(pid=>{
+    const qs = wrong.filter(id=>blocDe(BANK[id])===pid);
+    if(!qs.length) return;
+    const src = document.querySelector(`#tab-lecon [data-part="${pid}"]`);
+    const c = src.cloneNode(true);
+    c.classList.remove("hidden");
+    c.querySelectorAll(".verif,[data-done]").forEach(x=>x.remove());
+    c.querySelectorAll(".k").forEach(k=>k.classList.add("show"));
+    const t = el("div",{style:"font-weight:800;margin-top:10px"},`Tu t'es trompé ici (${qs.length}) :`);
+    const ul = el("ul",{class:"ques"}); qs.forEach(id=>ul.appendChild(el("li",{},texteQ(BANK[id]))));
+    z.append(t, ul, c);
+  });
+  const b = el("button",{class:"btn"},`J'ai relu : je refais mes ${wrong.length} question${wrong.length>1?"s":""} ratée${wrong.length>1?"s":""}`);
+  b.onclick = () => startControle(wrong);
+  z.appendChild(b);
+  return z;
+}
+function finish(mode){
+  const S = STATE[mode], M = MODES[mode], root = $(M.box);
+  const max = S.ids.reduce((a,id)=>a+BANK[id].w,0);
+  const pts = Object.values(S.res).reduce((a,b)=>a+b,0);
+  const pct = Math.round(100*pts/max);
+  const sur20 = Math.round(pts/max*20*2)/2;
+  const ok = mode==="sans" ? sur20>=PRET : pct>=80;
+  const wrong = S.ids.filter(id=>S.res[id] < BANK[id].w);
+  if(mode==="sans"){ lock(false); root.classList.remove("encours"); try{ localStorage.removeItem(KEY_C); }catch(e){} }
+  if(!S.retry){
+    const prev = store.get(M.key) || {};
+    store.set(M.key, {last:{sur20,pct,date:new Date().toLocaleDateString("fr-FR")}, best: (!prev.best || pct>prev.best.pct) ? {sur20,pct} : prev.best});
+    showNotes();
+  }
+  const z = root.querySelector(".resultZone");
+  z.innerHTML = "";
+  const r = el("div",{class:"result "+(ok?"ok":"ko")});
+  let titre, texte;
+  if(S.retry){
+    titre = wrong.length ? "Encore à revoir" : "Erreurs corrigées ✓";
+    texte = (wrong.length ? `Il reste ${wrong.length} question${wrong.length>1?"s":""} à revoir : relis encore la leçon.` : "Bravo, tu as compris tes erreurs !")
+      + (mode==="sans" ? " Ta note du contrôle ne change pas. Pour l'améliorer, refais le contrôle en entier (<b>Tout recommencer</b>)." : "");
+  } else if(mode==="sans"){
+    if(sur20>=PRET){ titre = "Tu es prêt pour ton contrôle ! ✓";
+      texte = "Excellent travail ! 🎮 <b>3 vies</b> t'attendent dans la salle d'arcade (une seule fois pour cette fiche). Elles s'ajoutent quand tu ouvres la salle d'arcade, et sont valables jusqu'à minuit ce jour-là."; }
+    else if(sur20>=16){ titre = "Presque prêt";
+      texte = `Il faut ${PRET} / 20 pour être prêt. Regarde ta correction ci-dessous, puis refais le contrôle en entier un peu plus tard.`; }
+    else { titre = "À retravailler";
+      texte = `Il faut ${PRET} / 20 pour être prêt. Regarde ta correction, relis la leçon en mode mémoire, puis refais le contrôle en entier un autre moment.`; }
+  } else {
+    titre = ok ? "Acquis ✓" : "À retravailler";
+    texte = ok ? "Bien joué ! Tu as au moins 16 / 20 : la partie <b>sans aide</b> est ouverte. C'est elle qui ressemble au contrôle."
+      : "Moins de 16 / 20 : la partie sans aide reste fermée. Relis la leçon en mode mémoire, entraîne-toi sur tes erreurs, puis clique sur <b>Tout recommencer</b> : il faut 16 / 20 sur une partie complète.";
+  }
+  r.innerHTML = `<div>${S.retry?"Correction de tes erreurs (sans note)":"Ta note "+M.label}</div>
+    ${S.retry ? `<div class="big">${S.ids.length-wrong.length} / ${S.ids.length}</div><div>questions réussies</div>` : `<div class="big">${fmt(sur20)} / 20</div>
+    <div><b>${pct} %</b> de bonnes réponses (${fmt(pts)} / ${fmt(max)} points)</div>`}
+    <p style="font-size:19px;font-weight:800">${titre}</p>
+    <p>${texte}</p>`;
+  const row = el("div",{class:"row",style:"justify-content:center"});
+  const relance = ids => { if(mode==="sans") startControle(ids); else { startMode(mode, ids); window.scrollTo({top:0}); } };
+  if(wrong.length && mode==="aide"){ const b=el("button",{class:"btn"},`Refaire mes ${wrong.length} erreur${wrong.length>1?"s":""}`); b.onclick=()=>relance(wrong); row.appendChild(b); }
+  const b2 = el("button",{class:"btn alt"},mode==="sans"?"Tout recommencer (nouveau contrôle noté)":"Tout recommencer"); b2.onclick=()=>relance(); row.appendChild(b2);
+  r.appendChild(row);
+  z.appendChild(r);
+  if(mode==="sans" && wrong.length) z.appendChild(correction(wrong));
+  if(!S.retry && typeof enregistrerProgression==="function"){
+    // Score enregistré en pourcentage (sur 100) : les demi-points restent des nombres entiers
+    const bc = el("div",{class:"bilan-card"}); r.appendChild(bc);
+    Promise.resolve(enregistrerProgression(M.code, pct, 100)).then(()=>{
+      const box=document.getElementById("atelier-progression-box");
+      if(box && box.parentNode!==bc) bc.appendChild(box);
+      chargerNotesCompte();
+    });
+  }
+}
+
+/* Meilleures notes enregistrées sur le compte (tous appareils confondus) */
+const REMOTE = {};
+async function chargerNotesCompte(){
+  try{
+    if(typeof supabase==="undefined") return;
+    const sb = supabase.createClient("https://rwqsvrmjjoihuhmvbwuu.supabase.co","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ3cXN2cm1qam9paHVobXZid3V1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQzNjQxNTMsImV4cCI6MjA5OTk0MDE1M30.VtdOnI169-erf48NpxLPCC0th6kHqBcsBuCauOx52HI");
+    const s = await sb.auth.getSession(); if(!s.data.session) return;
+    let id = null; try{ id = localStorage.getItem("atelier_enfant_actif"); }catch(e){}
+    if(!id) return;
+    const r = await sb.from("progression").select("fiche_code,score,total").eq("enfant_id",id).in("fiche_code",[MODES.aide.code, MODES.sans.code]);
+    if(r.error || !r.data) return;
+    r.data.forEach(l=>{ const p = l.total>0 ? Math.round(l.score/l.total*100) : 0; REMOTE[l.fiche_code] = Math.max(REMOTE[l.fiche_code]||0, p); });
+    showNotes();
+  }catch(e){}
+}
+function showNotes(){
+  try{ paintTabs(); }catch(e){}
+  [["aide","#nAide","#vAide"],["sans","#nSans","#vSans"]].forEach(([m,n,v])=>{
+    const d = store.get(MODES[m].key);
+    const rb = REMOTE[MODES[m].code];
+    if(!d || !d.last){
+      if(rb!=null){ $(n).textContent=`${fmt(Math.round(rb/5*2)/2)} / 20 · ${rb} %`; const okr = m==="sans" ? Math.round(rb/5*2)/2>=PRET : rb>=80; $(v).textContent=(okr?(m==="sans"?"Prêt ✓":"Acquis ✓"):"À retravailler")+" · meilleure note du compte"; $(v).className="ver "+(okr?"ok":"ko"); }
+      else { $(n).textContent="—"; $(v).textContent="Pas encore faite"; $(v).className="ver"; }
+      return;
+    }
+    if(rb!=null && (!d.best || rb>d.best.pct)) d.best = {pct:rb};
+    $(n).textContent = `${fmt(d.last.sur20)} / 20 · ${d.last.pct} %`;
+    const ok = m==="sans" ? d.last.sur20>=PRET : d.last.pct>=80;
+    $(v).textContent = (m==="sans" ? (ok?"Prêt ✓":d.last.sur20>=16?"Presque prêt":"À retravailler") : (ok?"Acquis ✓":"À retravailler")) + ` · le ${d.last.date}` + (d.best && d.best.pct>d.last.pct ? ` · record ${d.best.pct} %` : "");
+    $(v).className = "ver "+(ok?"ok":"ko");
+  });
+}
+
+/* ---------- Onglets verrouillés ----------
+   Avec aide : seulement quand les 4 blocs de la leçon sont réussis.
+   Sans aide : seulement avec au moins 16/20 (80 %) dans la partie avec aide. */
+const SEUIL = 80;
+const leconOk = () => ORDER.every(id=>doneStore[id]);
+function meilleureAide(){
+  const d = store.get(MODES.aide.key) || {};
+  const loc = Math.max(d.best ? d.best.pct : 0, d.last ? d.last.pct : 0);
+  return Math.max(loc, REMOTE[MODES.aide.code]||0);
+}
+const aideOk = () => meilleureAide() >= SEUIL;
+function paintTabs(){
+  $('nav button[data-tab="aide"]').classList.toggle("locked", !leconOk());
+  $('nav button[data-tab="sans"]').classList.toggle("locked", !aideOk());
+}
+function verrou(tab){
+  const root = $("#tab-"+tab);
+  const g = el("div",{class:"gatebox"});
+  if(tab==="aide"){
+    const faits = ORDER.filter(id=>doneStore[id]).length;
+    g.innerHTML = `<h3>🔒 La partie avec aide est fermée</h3>
+      <p>Elle s'ouvrira quand tu auras réussi <b>les 6 blocs de la leçon</b> (3 bonnes réponses d'affilée à chaque bloc).</p>
+      <p>Pour l'instant : <b>${faits} bloc${faits>1?"s":""} sur 6</b> réussi${faits>1?"s":""}.</p>`;
+  } else {
+    const p = meilleureAide();
+    g.innerHTML = `<h3>🔒 La partie sans aide est fermée</h3>
+      <p>Elle s'ouvrira quand tu auras au moins <b>16 / 20</b> (80 %) dans la partie <b>avec aide</b>.</p>
+      <p>${p ? `Ta meilleure note avec aide : <b>${fmt(Math.round(p/5*2)/2)} / 20</b> (${p} %).` : "Tu n'as pas encore fini la partie avec aide."}
+      ${leconOk() ? "" : "<br>Et avant ça, il faut finir la leçon."}</p>`;
+  }
+  const row = el("div",{class:"row"});
+  const go = el("button",{class:"btn"}, tab==="aide" || !leconOk() ? "Retour à la leçon" : "Aller à la partie avec aide");
+  go.onclick = () => $(`nav button[data-tab="${tab==="aide" || !leconOk() ? "lecon" : "aide"}"]`).click();
+  row.appendChild(go); g.appendChild(row);
+  root.innerHTML = ""; root.appendChild(g);
+}
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{
+  document.querySelectorAll("nav button").forEach(x=>x.classList.toggle("on",x===b));
+  ["lecon","aide","sans"].forEach(t=>$("#tab-"+t).classList.toggle("hidden", t!==b.dataset.tab));
+  if(LOCKED) return;
+  const t = b.dataset.tab;
+  if(t==="aide"){
+    if(!leconOk()){ STATE.aide = null; verrou("aide"); }
+    else if(!STATE.aide) startMode("aide");
+  }
+  if(t==="sans"){
+    if(!aideOk()){ STATE.sans = null; verrou("sans"); }
+    else if(!STATE.sans) gateSans();
+  }
+  window.scrollTo({top:0});
+});
+$("#goAide").onclick = () => $('nav button[data-tab="aide"]').click();
+$("#memBtn").onclick=()=>{
+  const on = document.body.classList.toggle("mem");
+  document.querySelectorAll(".k").forEach(k=>k.classList.remove("show"));
+  $("#memBtn").textContent = on ? "Montrer tous les mots-clés" : "Mode mémoire : cacher les mots-clés";
+  $("#memInfo").classList.toggle("hidden", !on);
+};
+document.querySelectorAll(".k").forEach(k=>k.onclick=()=>{ if(document.body.classList.contains("mem")) k.classList.add("show"); });
+/* ---------- 3 questions de vérification par bloc ----------
+   Le bloc suivant reste caché tant que les 3 réponses ne sont pas justes.
+   Le bloc au-dessus reste visible : l'enfant peut relire pour répondre. */
+const CHECKS = {
+  p1: [["Comment écrit-on « mercredi » ?",["Wednesday","Wenesday","Wendsday"]],
+       ["Quelle écriture est juste ?",["Monday","monday","Mondey"]],
+       ["« jeudi » se dit…",["Thursday","Tuesday","Friday"]],
+       ["« mardi » se dit…",["Tuesday","Thursday","Monday"]],
+       ["Quel jour vient juste après Friday ?",["Saturday","Sunday","Thursday"]],
+       ["Tous les jours finissent par…",["-day","-dey","-days"]]],
+  p2: [["Quel est le 2e mois de l'année ?",["February","January","March"]],
+       ["Quelle écriture est juste ?",["February","Febuary","february"]],
+       ["« août » se dit…",["August","April","Augst"]],
+       ["Quel mois vient juste après June ?",["July","May","August"]],
+       ["« juin » se dit…",["June","July","January"]],
+       ["Quel est le dernier mois de l'année ?",["December","November","October"]]],
+  p3: [["Dans le tableau de la leçon, April est en…",["spring","summer","winter"]],
+       ["Les 3 mois de l'été (summer) sont…",["June, July, August","May, June, July","July, August, September"]],
+       ["En Grande-Bretagne, « automne » se dit…",["autumn","fall","spring"]],
+       ["« fall » est le mot des USA pour…",["l'automne","l'hiver","le printemps"]],
+       ["December, January, February : c'est…",["winter","autumn","spring"]],
+       ["October est en…",["autumn","summer","winter"]]],
+  p4: [["Le plus souvent, on ajoute au nombre…",["th","st","rd"]],
+       ["3 s'écrit…",["3rd","3th","3nd"]],
+       ["12 s'écrit…",["12th","12nd","12st"]],
+       ["21 s'écrit…",["21st","21th","21nd"]],
+       ["22 s'écrit…",["22nd","22th","22rd"]],
+       ["13 s'écrit…",["13th","13rd","13st"]],
+       ["31 s'écrit…",["31st","31th","31rd"]]],
+  p5: [["5th s'écrit…",["the fifth","the fiveth","the fivth"]],
+       ["9th s'écrit…",["the ninth","the nineth","the nigth"]],
+       ["12th s'écrit…",["the twelfth","the twelveth","the twelth"]],
+       ["20th s'écrit…",["the twentieth","the twentyth","the twentith"]],
+       ["31st s'écrit…",["the thirty-first","the thirtieth-first","the thirty-oneth"]],
+       ["8th s'écrit…",["the eighth","the eightth","the eigth"]],
+       ["22nd s'écrit…",["the twenty-second","the twentieth-second","the twenty-two"]]],
+  p6: [["« hier » se dit…",["yesterday","today","tomorrow"]],
+       ["Complète : Today … Monday.",["is","was","will be"]],
+       ["Complète : Yesterday … Sunday.",["was","is","will be"]],
+       ["Complète : Tomorrow … Friday.",["will be","was","is"]],
+       ["Today is Wednesday. Tomorrow will be…",["Thursday","Tuesday","Friday"]],
+       ["Today is Monday. Yesterday was…",["Sunday","Tuesday","Saturday"]]]
+};
+const ORDER = ["p1","p2","p3","p4","p5","p6"];
+const doneStore = store.get("p008_compris") || {};
+function paintParts(){
+  let open = true;
+  ORDER.forEach(id=>{
+    const part = document.querySelector(`[data-part="${id}"]`);
+    part.classList.toggle("hidden", !open);
+    if(!doneStore[id]) open = false;
+  });
+  const lockMsg = $("#partLock");
+  const next = ORDER.find(id=>!doneStore[id]);
+  lockMsg.classList.toggle("hidden", !next || next===ORDER[ORDER.length-1] && false);
+  lockMsg.innerHTML = next ? `🔒 La suite de la leçon (et la partie avec aide) s'ouvrira quand tu auras réussi les 3 questions d'affilée du bloc « ${document.querySelector(`[data-part="${next}"] h3`).textContent} », puis cliqué sur « J'ai bien compris ».` : "";
+  if(!next) lockMsg.classList.add("hidden");
+  $("#leconFinie").classList.toggle("hidden", !!next);
+}
+/* Règle : 3 questions tirées au hasard dans le bloc, à faire dans l'ordre.
+   Une seule erreur => on recommence à la question 1 (nouveau tirage). */
+ORDER.forEach(id=>{
+  const part = document.querySelector(`[data-part="${id}"]`);
+  const btn = part.querySelector("[data-done]");
+  const box = el("div",{class:"verif"});
+  part.insertBefore(box, btn);
+  let tirage = [], step = 0, msg = "";
+  const paintBtn = () => {
+    const all = step>=3;
+    btn.disabled = !all && !doneStore[id];
+    btn.classList.toggle("on", !!doneStore[id]);
+    btn.textContent = doneStore[id] ? "Compris ✓" : all ? "J'ai bien compris" : "J'ai bien compris (réussis d'abord les 3 questions)";
+  };
+  const nouveauTirage = () => { tirage = shuffle(CHECKS[id].map((_,k)=>k)).slice(0,3); step = 0; };
+  const render = () => {
+    box.innerHTML = "";
+    box.appendChild(el("div",{class:"verif-t"},"✏️ Je vérifie que j'ai compris : 3 questions à réussir d'affilée (je peux relire le bloc au-dessus)."));
+    if(doneStore[id]){ box.appendChild(el("div",{class:"fb ok"},"Bloc réussi ✓")); paintBtn(); return; }
+    const st = el("div",{class:"steps3"});
+    [0,1,2].forEach(k=>st.appendChild(el("span",{class: k<step?"ok":(k===step?"cur":"")}, (k<step?"✓ ":"")+"Question "+(k+1))));
+    box.appendChild(st);
+    if(msg){ box.appendChild(el("div",{class:"fb ko"},msg)); }
+    if(step>=3){ box.appendChild(el("div",{class:"fb ok"},"Les 3 réponses sont justes ! Clique sur « J'ai bien compris »."));
+      paintBtn(); return; }
+    const [q,opts] = CHECKS[id][tirage[step]];   // opts[0] = la bonne réponse
+    const c = el("div",{class:"vq"});
+    c.appendChild(el("div",{class:"q"},`Question ${step+1} sur 3 : ${q}`));
+    const row = el("div",{class:"qcm-v"});
+    shuffle(opts.slice()).forEach(o=>{
+      const b = el("button",{class:"btn-v"},o);
+      b.onclick = () => {
+        if(o === opts[0]){ step++; msg=""; render(); }
+        else { msg = "❌ Ce n'est pas la bonne réponse. <b>Tu recommences à la question 1.</b> Relis bien le bloc au-dessus avant de répondre."; nouveauTirage(); render(); }
+        paintBtn();
+      };
+      row.appendChild(b);
+    });
+    c.append(row); box.appendChild(c);
+    paintBtn();
+  };
+  nouveauTirage(); render();
+  btn.onclick = () => {
+    if(btn.disabled || doneStore[id]) return;
+    doneStore[id] = true; store.set("p008_compris",doneStore); render(); paintParts(); paintTabs();
+    const n = ORDER[ORDER.indexOf(id)+1];
+    if(n) setTimeout(()=>document.querySelector(`[data-part="${n}"]`).scrollIntoView({behavior:"smooth",block:"start"}),100);
+  };
+});
+paintParts();
+paintTabs();
+showNotes();
+chargerNotesCompte();
+{ const c = store.get(KEY_C); if(c && c.ids) controleInterrompu(c); }
+</script>
+</body>
+</html>
