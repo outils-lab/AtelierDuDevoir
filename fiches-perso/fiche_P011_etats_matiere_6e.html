@@ -1,0 +1,997 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="../favicon.ico" sizes="any">
+<title>Les états de la matière : solide, liquide, gaz — Le passage secret</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6efe3; --paper:#fffaf2; --ink:#2b2118; --muted:#7a6a58; --line:#e3d5bf;
+  --ochre:#2f6aa8; --ochre-l:#e3eefa; --char:#1f2f4a; --moss:#3f7d4e; --moss-l:#e5f3e8;
+  --red:#b3392c; --red-l:#fbe6e3; --gold:#c9961f; --gold-l:#fdf3d8; --blue:#2f6aa8; --blue-l:#e6eff9;
+}
+*{box-sizing:border-box}
+:root{color-scheme:light}
+.retour{display:inline-block;color:#bcd3f0;text-decoration:none;font-weight:800;font-size:15px;padding:0 0 8px}
+#atelier-progression-box{margin-top:14px}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Nunito,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:17px;line-height:1.5}
+header{background:var(--char);color:#fff;padding:14px 16px 0}
+header .top{max-width:860px;margin:0 auto}
+header small{color:#bcd3f0;letter-spacing:.05em;text-transform:uppercase;font-size:12px}
+header h1{margin:2px 0 10px;font-size:24px}
+nav{max-width:860px;margin:0 auto;display:flex;gap:6px;overflow-x:auto}
+nav button{flex:1;min-width:110px;border:0;border-radius:10px 10px 0 0;padding:10px 8px;font:inherit;font-weight:700;font-size:15px;cursor:pointer;background:#3b5580;color:#e3eefa}
+nav button.on{background:var(--bg);color:var(--char)}
+main{max-width:860px;margin:0 auto;padding:16px 16px 140px}
+h2{font-size:21px;margin:22px 0 8px;color:var(--char)}
+.part{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:14px 0}
+.part h3{margin:0 0 8px;font-size:18px;color:var(--ochre)}
+.part ul{margin:6px 0;padding-left:20px}
+.part li{margin:3px 0}
+.def{background:var(--ochre-l);border-left:5px solid var(--ochre);border-radius:8px;padding:8px 10px;margin:8px 0}
+.warn{background:var(--red-l);border-left:5px solid var(--red);border-radius:8px;padding:8px 10px;margin:8px 0}
+.tip{background:var(--gold-l);border-left:5px solid var(--gold);border-radius:8px;padding:8px 10px;margin:8px 0}
+.k{font-weight:700;color:var(--char)}
+body.mem .k{color:transparent;background:#e9dcc6;border-radius:4px;cursor:pointer;user-select:none}
+body.mem .k.show{color:var(--moss);background:var(--moss-l)}
+.memctl{position:sticky;top:0;z-index:5;background:var(--bg);padding:8px 0;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.btn{border:0;border-radius:10px;padding:10px 14px;font:inherit;font-weight:700;cursor:pointer;background:var(--char);color:#fff}
+.btn.alt{background:#fff;color:var(--char);border:2px solid var(--char)}
+.btn.ok{background:var(--moss)}
+.btn:disabled{opacity:.45;cursor:default}
+.done-btn{margin-top:8px}
+.done-btn.on{background:var(--moss)}
+/* frise */
+.frise{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;align-items:center;margin-top:6px}
+.frise .d{font-weight:800;font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+.frise .e{padding:4px 8px;border-radius:6px}
+.frise .pa{background:var(--ochre-l)}
+.frise .ne{background:var(--moss-l)}
+.frise .sep{grid-column:1/-1;font-weight:800;font-size:13px;letter-spacing:.06em;text-transform:uppercase;margin-top:6px}
+/* exercices */
+.intro{background:var(--paper);border:2px solid var(--char);border-radius:14px;padding:12px 14px}
+.prog{height:10px;background:#e7dbc8;border-radius:6px;overflow:hidden;margin:10px 0}
+.prog i{display:block;height:100%;background:var(--ochre);width:0;transition:width .3s}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin:10px 0}
+.card .n{font-size:12px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.card .q{font-weight:600;margin:4px 0 8px}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opt{border:2px solid var(--line);background:#fff;border-radius:10px;padding:8px 12px;font:inherit;cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--ochre)}
+.opt.good{border-color:var(--moss);background:var(--moss-l)}
+.opt.bad{border-color:var(--red);background:var(--red-l)}
+.bar{display:flex;margin:6px 0;font-weight:800;font-size:15px;max-width:460px}
+.bar span{border:2px solid #222;padding:7px 4px;text-align:center;margin-right:-2px;white-space:nowrap;overflow:hidden}
+.bar .t{background:#dfe9f5}.bar .a{background:var(--ochre-l)}.bar .b{background:var(--moss-l)}
+.bar .q{background:#fff;border-style:dashed;color:var(--red)}
+.bar .vide{border:none;background:none}
+.barlbl{font-size:13px;color:var(--muted);font-weight:700;margin-top:8px}
+.opt.sel{border-color:var(--char);background:#efe3d0}
+.revoir{background:#fff;border:2px solid var(--red);border-radius:14px;padding:12px 14px;margin:14px 0;text-align:left}
+.revoir h3{margin-top:0;color:var(--red)}
+.revoir .part{border:1px dashed var(--line);border-radius:10px;padding:8px 10px;margin:8px 0;background:var(--paper)}
+.revoir .ques{margin:4px 0 8px;padding-left:18px}
+input[type=text],textarea{font:inherit;padding:8px 10px;border:2px solid var(--line);border-radius:10px;background:#fff;width:100%;max-width:340px}
+textarea{max-width:100%;min-height:70px;resize:vertical}
+input.blank{width:auto;min-width:90px;max-width:170px;padding:3px 6px;margin:2px 2px;display:inline-block}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.hint{font-size:14px;color:var(--blue);background:var(--blue-l);border-radius:6px;padding:2px 8px;display:inline-block;margin-bottom:6px}
+.fb{margin-top:8px;border-radius:8px;padding:7px 10px;font-size:15px}
+.fb.ok{background:var(--moss-l);color:#1f5131}
+.fb.mid{background:var(--gold-l);color:#6b4e08}
+.fb.ko{background:var(--red-l);color:#7d241a}
+.seq{min-height:38px;border:2px dashed var(--line);border-radius:10px;padding:6px;margin:8px 0;display:flex;flex-wrap:wrap;gap:6px}
+.seq span{background:var(--char);color:#fff;border-radius:8px;padding:4px 10px}
+.sort{display:grid;grid-template-columns:1fr auto auto;gap:6px 8px;align-items:center}
+.sort .opt{padding:5px 10px;font-size:14px}
+.result{border-radius:14px;padding:16px;margin:18px 0;text-align:center}
+.result.ok{background:var(--moss-l);border:2px solid var(--moss)}
+.result.ko{background:var(--red-l);border:2px solid var(--red)}
+.result .big{font-size:40px;font-weight:900}
+.notes{position:fixed;left:0;right:0;bottom:0;background:var(--char);color:#fff;z-index:20;box-shadow:0 -4px 14px rgba(0,0,0,.2)}
+.notes .in{max-width:860px;margin:0 auto;padding:8px 16px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.notes .box{background:#33466a;border-radius:10px;padding:6px 10px}
+.notes .lab{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:#e8c9a6}
+.notes .val{font-size:18px;font-weight:800}
+.notes .ver{font-size:13px}
+.notes .ver.ok{color:#9fe0ae}.notes .ver.ko{color:#ffb4a8}
+.hidden{display:none}
+body.lock nav, body.lock .retour, body.lock #tab-lecon, body.lock #tab-aide{display:none!important}
+#lockBar{max-width:860px;margin:0 auto;padding:10px 0 12px;font-weight:800;color:#ffd9b0}
+.gate ul{margin:6px 0 10px;padding-left:20px}
+.gate .row{margin-top:8px}
+@media (max-width:520px){
+  html,body{font-size:16px}
+  .notes .val{font-size:16px}
+  .sort{grid-template-columns:1fr auto}
+  .sort .lbl{grid-column:1/-1;margin-top:4px}
+}
+.svgbox{overflow-x:auto;margin:6px 0}.svgbox svg{max-width:100%;height:auto}
+.verif{background:#fff;border:2px dashed var(--ochre);border-radius:12px;padding:10px 12px;margin:12px 0 4px}
+.verif-t{font-weight:800;color:var(--ochre);margin-bottom:4px}
+.qcm-v{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.btn-v{font:inherit;font-weight:700;text-align:left;background:#fff;border:2px solid #e2d6c3;border-radius:12px;padding:11px 14px;cursor:pointer;color:inherit}
+.btn-v:hover{border-color:var(--ochre);background:#fffaf2}
+.vq{padding:6px 0;border-top:1px dotted var(--line)}
+.vq:first-of-type{border-top:0}
+nav button.locked{opacity:.55}
+nav button.locked::before{content:"🔒 "}
+.gatebox{background:#fff;border:2px solid var(--ochre);border-radius:14px;padding:16px;margin:12px 0}
+.gatebox h3{margin-top:0}
+.steps3{display:flex;gap:6px;margin:4px 0 6px;font-size:14px;font-weight:800}
+.steps3 span{flex:1;text-align:center;border-radius:8px;padding:3px;background:#eee;color:#777}
+.steps3 span.ok{background:var(--moss-l);color:#1f5131}
+.steps3 span.cur{background:var(--gold-l);color:#6b4e08}
+.ex{background:#fff;border:1px dashed var(--line);border-radius:10px;padding:8px 10px;margin:8px 0}
+
+.frise.f4{grid-template-columns:auto 1fr auto 1fr}
+.say{border:0;background:none;cursor:pointer;font-size:16px;padding:0 3px;line-height:1;vertical-align:middle}
+body.noson .say, body.noson .ecoute{display:none}
+.ecoute{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:2px 0 8px}
+.ecoute a{font-size:13px;color:var(--muted)}
+.txt{background:#fff;border:2px solid var(--char);border-radius:12px;padding:10px 14px;margin:8px 0 12px;line-height:1.7}
+.txt h4{margin:0 0 4px;font-size:18px;color:var(--char)}
+.txt .num{font-weight:900;color:var(--ochre)}
+.poem{font-style:italic;line-height:1.6}
+.fr{color:var(--muted);font-size:15px}
+.sort.cx{grid-template-columns:auto repeat(var(--n),minmax(44px,auto));justify-content:start}
+.sort.cx .lbl{font-weight:800;text-align:right;padding-right:6px}
+.sort.cx.stack{grid-template-columns:repeat(var(--n),minmax(64px,auto))}
+.sort.cx.stack .lbl{grid-column:1/-1;text-align:left;margin-top:6px}
+@media (max-width:520px){
+  .sort:not(.cx){grid-template-columns:1fr 1fr}
+  .sort.cx{grid-template-columns:auto repeat(var(--n),1fr)}
+  .sort.cx .lbl{grid-column:auto;margin-top:0}
+  .sort.cx.stack{grid-template-columns:repeat(var(--n),1fr)}
+  .sort.cx.stack .lbl{grid-column:1/-1;margin-top:6px}
+  .sort.cx.stack .opt{padding:6px 2px}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="top">
+    <a class="retour" href="../passage-secret.html">← Retour au passage secret</a><br>
+    <small>🗝️ Passage secret · Raphaël · 6e · Physique-Chimie · chapitre 2</small>
+    <h1>Les états de la matière : solide, liquide, gaz</h1>
+  </div>
+  <nav>
+    <button data-tab="lecon" class="on">1 · La leçon</button>
+    <button data-tab="aide">2 · Avec aide</button>
+    <button data-tab="sans">3 · Sans aide</button>
+  </nav>
+  <div id="lockBar" class="hidden">🔒 Contrôle en cours : la leçon et l'aide sont verrouillées jusqu'à la dernière question.</div>
+</header>
+
+<main>
+<section id="tab-lecon">
+  <div class="memctl">
+    <button class="btn" id="memBtn">Mode mémoire : cacher les mots-clés</button>
+    <span id="memInfo" class="hidden" style="font-size:14px;color:var(--muted)">Dis le mot à voix haute, puis touche la case pour vérifier.</span>
+  </div>
+  <div class="tip"><b>Chapitre 2 : les états de la matière</b> (activités C2_01, C2_02, C2_03 et les exercices). Pas de contrôle annoncé : c'est pour <b>bien garder ces leçons en mémoire</b>.</div>
+  <div class="gatebox" style="margin-top:0"><b>Les règles du parcours :</b>
+    <ol style="margin:6px 0 0">
+      <li><b>La leçon</b> : à la fin de chaque bloc, 3 questions à choix (QCM, 3 réponses possibles). <b>Une seule erreur = tu recommences à la question 1</b> du bloc (avec de nouvelles questions).</li>
+      <li><b>Avec aide</b> : s'ouvre quand les 6 blocs de la leçon sont réussis.</li>
+      <li><b>Sans aide</b> : s'ouvre quand tu as au moins <b>16 / 20</b> dans la partie avec aide.</li>
+    </ol></div>
+
+  <div class="part" data-part="p1">
+    <h3>1) L'hypothèse</h3>
+    <p>Chat Noir pense : « un <b>solide</b>, c'est quelque chose de <b>dur</b> ». Ladybug pense : « un <b>liquide</b>, c'est quelque chose qui <b>coule</b> ». Ils ont fait une <span class="k">hypothèse</span>.</p>
+    <div class="def">Une <b>hypothèse</b> est une <span class="k">proposition</span> de <span class="k">réponse</span> au problème posé. Elle peut s'avérer <span class="k">fausse</span>.</div>
+    <div class="warn"><b>Ici, les deux hypothèses sont fausses</b> (ni Chat Noir, ni Ladybug) :<br>
+      • le <b>coton</b> et le <b>caoutchouc</b> ne sont pas durs… mais ce sont des solides ;<br>
+      • le <b>sucre en poudre</b> et la <b>semoule</b> coulent… mais ce sont des solides.</div>
+    <button class="btn alt done-btn" data-done="p1">J'ai bien compris</button>
+  </div>
+
+  <div class="part" data-part="p2">
+    <h3>2) Le solide et le solide divisé</h3>
+    <div class="def"><b>Un solide</b> a une <span class="k">forme propre</span> : il garde sa forme. On peut le <span class="k">saisir</span> avec les doigts. <i>Ex. : craie, bois, liège, coton.</i></div>
+    <div class="def"><b>Un solide divisé</b> (poudre, grains) est formé de solides de petite <span class="k">taille</span>.<br>
+      • Chaque petit grain a une forme propre, mais le tas <b>n'en a pas</b> : il prend la forme du récipient.<br>
+      • Sa surface <b>n'est pas</b> automatiquement plane et horizontale (ça fait un tas).<br>
+      • On peut quand même le saisir avec les doigts. <i>Ex. : semoule, sucre en poudre, sable, sel.</i></div>
+    <div><div class="svgbox" style="display:inline-block;text-align:center;margin:4px 6px"><svg viewBox="0 0 96 96" width="96" height="96" xmlns="http://www.w3.org/2000/svg"><polygon points="36.0,80.0 56.0,80.0 56.0,60.0 36.0,60.0" fill="#bdbdbd" stroke="#555" stroke-width="1.2"/><polyline points="28.0,16.0 28.0,80.0 68.0,80.0 68.0,16.0" fill="none" stroke="#2b2118" stroke-width="2.5" stroke-linejoin="round"/><line x1="4" y1="81.5" x2="92" y2="81.5" stroke="#999" stroke-width="2"/></svg><div style="font-size:13px;color:var(--muted)">solide (craie)</div></div><div class="svgbox" style="display:inline-block;text-align:center;margin:4px 6px"><svg viewBox="0 0 96 96" width="96" height="96" xmlns="http://www.w3.org/2000/svg"><polygon points="28.0,80.0 68.0,80.0 68.0,62.0 48.0,44.0 28.0,62.0" fill="#e2c070" /><circle cx="33.5" cy="77.0" r="1.3" fill="#9a7428"/><circle cx="31.0" cy="72.0" r="1.3" fill="#9a7428"/><circle cx="33.5" cy="67.0" r="1.3" fill="#9a7428"/><circle cx="38.5" cy="77.0" r="1.3" fill="#9a7428"/><circle cx="36.0" cy="72.0" r="1.3" fill="#9a7428"/><circle cx="38.5" cy="67.0" r="1.3" fill="#9a7428"/><circle cx="36.0" cy="62.0" r="1.3" fill="#9a7428"/><circle cx="43.5" cy="77.0" r="1.3" fill="#9a7428"/><circle cx="41.0" cy="72.0" r="1.3" fill="#9a7428"/><circle cx="43.5" cy="67.0" r="1.3" fill="#9a7428"/><circle cx="41.0" cy="62.0" r="1.3" fill="#9a7428"/><circle cx="43.5" cy="57.0" r="1.3" fill="#9a7428"/><circle cx="48.5" cy="77.0" r="1.3" fill="#9a7428"/><circle cx="46.0" cy="72.0" r="1.3" fill="#9a7428"/><circle cx="48.5" cy="67.0" r="1.3" fill="#9a7428"/><circle cx="46.0" cy="62.0" r="1.3" fill="#9a7428"/><circle cx="48.5" cy="57.0" r="1.3" fill="#9a7428"/><circle cx="46.0" cy="52.0" r="1.3" fill="#9a7428"/><circle cx="53.5" cy="77.0" r="1.3" fill="#9a7428"/><circle cx="51.0" cy="72.0" r="1.3" fill="#9a7428"/><circle cx="53.5" cy="67.0" r="1.3" fill="#9a7428"/><circle cx="51.0" cy="62.0" r="1.3" fill="#9a7428"/><circle cx="53.5" cy="57.0" r="1.3" fill="#9a7428"/><circle cx="51.0" cy="52.0" r="1.3" fill="#9a7428"/><circle cx="58.5" cy="77.0" r="1.3" fill="#9a7428"/><circle cx="56.0" cy="72.0" r="1.3" fill="#9a7428"/><circle cx="58.5" cy="67.0" r="1.3" fill="#9a7428"/><circle cx="56.0" cy="62.0" r="1.3" fill="#9a7428"/><circle cx="58.5" cy="57.0" r="1.3" fill="#9a7428"/><circle cx="63.5" cy="77.0" r="1.3" fill="#9a7428"/><circle cx="61.0" cy="72.0" r="1.3" fill="#9a7428"/><circle cx="63.5" cy="67.0" r="1.3" fill="#9a7428"/><circle cx="61.0" cy="62.0" r="1.3" fill="#9a7428"/><polyline points="28.0,16.0 28.0,80.0 68.0,80.0 68.0,16.0" fill="none" stroke="#2b2118" stroke-width="2.5" stroke-linejoin="round"/><line x1="4" y1="81.5" x2="92" y2="81.5" stroke="#999" stroke-width="2"/></svg><div style="font-size:13px;color:var(--muted)">solide divisé (semoule)</div></div><div class="svgbox" style="display:inline-block;text-align:center;margin:4px 6px"><svg viewBox="0 0 96 96" width="96" height="96" xmlns="http://www.w3.org/2000/svg"><polygon points="31.6,91.5 64.4,68.5 54.1,53.8 27.4,50.5 21.3,76.7" fill="#e2c070" /><circle cx="34.4" cy="85.9" r="1.3" fill="#9a7428"/><circle cx="29.5" cy="83.2" r="1.3" fill="#9a7428"/><circle cx="28.7" cy="77.7" r="1.3" fill="#9a7428"/><circle cx="38.5" cy="83.0" r="1.3" fill="#9a7428"/><circle cx="33.6" cy="80.3" r="1.3" fill="#9a7428"/><circle cx="32.8" cy="74.8" r="1.3" fill="#9a7428"/><circle cx="27.8" cy="72.1" r="1.3" fill="#9a7428"/><circle cx="42.6" cy="80.1" r="1.3" fill="#9a7428"/><circle cx="37.7" cy="77.5" r="1.3" fill="#9a7428"/><circle cx="36.9" cy="71.9" r="1.3" fill="#9a7428"/><circle cx="31.9" cy="69.3" r="1.3" fill="#9a7428"/><circle cx="31.1" cy="63.7" r="1.3" fill="#9a7428"/><circle cx="46.7" cy="77.3" r="1.3" fill="#9a7428"/><circle cx="41.8" cy="74.6" r="1.3" fill="#9a7428"/><circle cx="41.0" cy="69.1" r="1.3" fill="#9a7428"/><circle cx="36.0" cy="66.4" r="1.3" fill="#9a7428"/><circle cx="35.2" cy="60.9" r="1.3" fill="#9a7428"/><circle cx="30.3" cy="58.2" r="1.3" fill="#9a7428"/><circle cx="50.8" cy="74.4" r="1.3" fill="#9a7428"/><circle cx="45.9" cy="71.7" r="1.3" fill="#9a7428"/><circle cx="45.0" cy="66.2" r="1.3" fill="#9a7428"/><circle cx="40.1" cy="63.5" r="1.3" fill="#9a7428"/><circle cx="39.3" cy="58.0" r="1.3" fill="#9a7428"/><circle cx="34.4" cy="55.3" r="1.3" fill="#9a7428"/><circle cx="54.9" cy="71.5" r="1.3" fill="#9a7428"/><circle cx="50.0" cy="68.9" r="1.3" fill="#9a7428"/><circle cx="49.1" cy="63.3" r="1.3" fill="#9a7428"/><circle cx="44.2" cy="60.7" r="1.3" fill="#9a7428"/><circle cx="43.4" cy="55.1" r="1.3" fill="#9a7428"/><circle cx="59.0" cy="68.7" r="1.3" fill="#9a7428"/><circle cx="54.1" cy="66.0" r="1.3" fill="#9a7428"/><circle cx="53.2" cy="60.5" r="1.3" fill="#9a7428"/><circle cx="48.3" cy="57.8" r="1.3" fill="#9a7428"/><polyline points="-5.1,39.0 31.6,91.5 64.4,68.5 27.7,16.1" fill="none" stroke="#2b2118" stroke-width="2.5" stroke-linejoin="round"/><line x1="4" y1="93.0" x2="92" y2="93.0" stroke="#999" stroke-width="2"/></svg><div style="font-size:13px;color:var(--muted)">penché : un tas, pas horizontal</div></div></div>
+    <button class="btn alt done-btn" data-done="p2">J'ai bien compris</button>
+  </div>
+
+  <div class="part" data-part="p3">
+    <h3>3) Le liquide et sa surface libre</h3>
+    <div class="def"><b>Un liquide</b> n'a pas de forme propre : il prend la <span class="k">forme du récipient</span> qui le contient et il <span class="k">coule</span>. On ne peut <b>pas</b> le saisir avec les doigts.<br>
+      Au repos, sa surface (la <b>surface libre</b>) est toujours <span class="k">plane</span> et <span class="k">horizontale</span>, même quand on penche le récipient.</div>
+    <div><div class="svgbox" style="display:inline-block;text-align:center;margin:4px 6px"><svg viewBox="0 0 96 96" width="96" height="96" xmlns="http://www.w3.org/2000/svg"><polygon points="28.0,80.0 68.0,80.0 68.0,50.0 28.0,50.0" fill="#8ec5f0" /><line x1="28.0" y1="50.0" x2="68.0" y2="50.0" stroke="#1565c0" stroke-width="2.5"/><polyline points="28.0,16.0 28.0,80.0 68.0,80.0 68.0,16.0" fill="none" stroke="#2b2118" stroke-width="2.5" stroke-linejoin="round"/><line x1="4" y1="81.5" x2="92" y2="81.5" stroke="#999" stroke-width="2"/></svg><div style="font-size:13px;color:var(--muted)">posé à plat</div></div><div class="svgbox" style="display:inline-block;text-align:center;margin:4px 6px"><svg viewBox="0 0 96 96" width="96" height="96" xmlns="http://www.w3.org/2000/svg"><polygon points="31.6,91.5 64.4,68.5 59.4,61.5 10.6,61.5" fill="#8ec5f0" /><line x1="10.6" y1="61.5" x2="59.4" y2="61.5" stroke="#1565c0" stroke-width="2.5"/><polyline points="-5.1,39.0 31.6,91.5 64.4,68.5 27.7,16.1" fill="none" stroke="#2b2118" stroke-width="2.5" stroke-linejoin="round"/><line x1="4" y1="93.0" x2="92" y2="93.0" stroke="#999" stroke-width="2"/></svg><div style="font-size:13px;color:var(--muted)">penché : toujours horizontale</div></div><div class="svgbox" style="display:inline-block;text-align:center;margin:4px 6px"><svg viewBox="0 0 96 96" width="96" height="96" xmlns="http://www.w3.org/2000/svg"><polygon points="31.6,68.5 64.4,91.5 85.4,61.5 36.6,61.5" fill="#8ec5f0" /><line x1="36.6" y1="61.5" x2="85.4" y2="61.5" stroke="#1565c0" stroke-width="2.5"/><polyline points="68.3,16.1 31.6,68.5 64.4,91.5 101.1,39.0" fill="none" stroke="#2b2118" stroke-width="2.5" stroke-linejoin="round"/><line x1="4" y1="93.0" x2="92" y2="93.0" stroke="#999" stroke-width="2"/></svg><div style="font-size:13px;color:var(--muted)">penché de l'autre côté</div></div></div>
+    <div class="def"><b>Le fil à plomb</b> donne la <span class="k">verticale</span>. Avec une équerre, on voit que la surface de l'eau fait un <span class="k">angle droit</span> avec le fil à plomb : elle est donc <b>horizontale</b>.</div>
+    <div class="svgbox"><svg viewBox="0 0 260 150" width="260" height="150" xmlns="http://www.w3.org/2000/svg"><rect x="20" y="70" width="120" height="60" fill="#8ec5f0"/><polyline points="20,30 20,130 140,130 140,30" fill="none" stroke="#2b2118" stroke-width="2.5"/><line x1="20" y1="70" x2="140" y2="70" stroke="#1565c0" stroke-width="3"/><line x1="175" y1="6" x2="175" y2="128" stroke="#2b2118" stroke-width="1.5"/><path d="M169,128 L181,128 L175,142 Z" fill="#7a6a58"/><polyline points="160,70 160,58 175,58" fill="none" stroke="#b3392c" stroke-width="2"/><line x1="140" y1="70" x2="175" y2="70" stroke="#1565c0" stroke-width="1.5" stroke-dasharray="4 3"/><text x="183" y="20" font-size="11" fill="#2b2118">fil à plomb</text><text x="183" y="33" font-size="11" fill="#2b2118">= verticale</text><text x="24" y="64" font-size="11" fill="#1565c0">surface libre</text><text x="24" y="146" font-size="10" fill="#7a6a58">angle droit (en rouge)</text></svg></div>
+    <div class="tip"><b>Pour dessiner la surface de l'eau</b> dans n'importe quel récipient (même un tube en U ou un récipient penché) : trace à la règle un trait <b>horizontal</b>, parallèle à la table, au niveau indiqué.</div>
+    <div class="warn"><b>Piège :</b> de l'eau gelée dans un verre penché reste <b>penchée</b> quand on remet le verre droit : la glace est un <b>solide</b>, elle garde sa forme.</div>
+    <div><div class="svgbox" style="display:inline-block;text-align:center;margin:4px 6px"><svg viewBox="0 0 96 96" width="96" height="96" xmlns="http://www.w3.org/2000/svg"><polygon points="31.6,91.5 64.4,68.5 59.4,61.5 10.6,61.5" fill="#8ec5f0" /><line x1="10.6" y1="61.5" x2="59.4" y2="61.5" stroke="#1565c0" stroke-width="2.5"/><polyline points="-5.1,39.0 31.6,91.5 64.4,68.5 27.7,16.1" fill="none" stroke="#2b2118" stroke-width="2.5" stroke-linejoin="round"/><line x1="4" y1="93.0" x2="92" y2="93.0" stroke="#999" stroke-width="2"/></svg><div style="font-size:13px;color:var(--muted)">1. eau dans un verre penché</div></div><div class="svgbox" style="display:inline-block;text-align:center;margin:4px 6px"><svg viewBox="0 0 96 96" width="96" height="96" xmlns="http://www.w3.org/2000/svg"><polygon points="28.0,80.0 68.0,80.0 68.0,64.0 28.0,38.0" fill="#cfe6f7" stroke="#7aa7c9" stroke-width="1"/><polyline points="28.0,16.0 28.0,80.0 68.0,80.0 68.0,16.0" fill="none" stroke="#2b2118" stroke-width="2.5" stroke-linejoin="round"/><line x1="4" y1="81.5" x2="92" y2="81.5" stroke="#999" stroke-width="2"/></svg><div style="font-size:13px;color:var(--muted)">2. gelée puis redressée : la glace reste penchée</div></div></div>
+    <button class="btn alt done-btn" data-done="p3">J'ai bien compris</button>
+  </div>
+
+  <div class="part" data-part="p4">
+    <h3>4) Le gaz : le 3<sup>e</sup> état de la matière</h3>
+    <ul>
+      <li><b>Ballon de baudruche :</b> on souffle dedans, il gonfle → on a ajouté de l'<b>air</b>.</li>
+      <li><b>Seringue « vide » plongée dans l'eau :</b> on pousse le piston → des <b>bulles d'air</b> sortent. La seringue était pleine d'<b>air</b>.</li>
+      <li><b>Seringue d'air bouchée :</b> on peut enfoncer le piston en forçant, mais <b>pas jusqu'au bout</b> ; on peut aussi le tirer en forçant.</li>
+      <li><b>Seringue d'eau bouchée :</b> <b>impossible</b> d'enfoncer le piston : un liquide ne se comprime pas.</li>
+    </ul>
+    <div class="def"><b>L'état <span class="k">gazeux</span> est le 3<sup>e</sup> état physique de la matière.</b><br>
+      Les gaz n'ont pas de <span class="k">volume propre</span> : ils prennent tout l'<span class="k">espace</span> qu'on leur offre.<br>
+      • Leur volume peut <b>diminuer</b> : ils sont <span class="k">compressibles</span>.<br>
+      • Leur volume peut <b>augmenter</b> : ils sont <span class="k">expansibles</span>.</div>
+    <div class="tip"><b>À l'hôpital :</b> avant une piqûre, on chasse les <b>bulles d'air</b> de la seringue. Et c'est parce que les gaz sont <b>compressibles</b> qu'on peut serrer beaucoup d'oxygène dans une petite bouteille pour le bloc opératoire.</div>
+    <button class="btn alt done-btn" data-done="p4">J'ai bien compris</button>
+  </div>
+
+  <div class="part" data-part="p5">
+    <h3>5) Reconnaître l'état : le résumé</h3>
+    <div class="frise">
+      <div class="d">Solide</div><div class="e pa">forme propre · on peut le saisir</div>
+      <div class="d">Solide divisé</div><div class="e ne">petits grains · prend la forme du récipient · surface pas forcément plane</div>
+      <div class="d">Liquide</div><div class="e pa">forme du récipient · coule · surface <b>plane et horizontale</b> · ne se comprime pas</div>
+      <div class="d">Gaz</div><div class="e ne">occupe <b>tout l'espace</b> · compressible et expansible</div>
+    </div>
+    <div><div class="svgbox" style="display:inline-block;text-align:center;margin:4px 6px"><svg viewBox="0 0 96 96" width="96" height="96" xmlns="http://www.w3.org/2000/svg"><polygon points="36.0,80.0 56.0,80.0 56.0,60.0 36.0,60.0" fill="#bdbdbd" stroke="#555" stroke-width="1.2"/><polyline points="28.0,16.0 28.0,80.0 68.0,80.0 68.0,16.0" fill="none" stroke="#2b2118" stroke-width="2.5" stroke-linejoin="round"/><line x1="4" y1="81.5" x2="92" y2="81.5" stroke="#999" stroke-width="2"/></svg><div style="font-size:13px;color:var(--muted)">solide</div></div><div class="svgbox" style="display:inline-block;text-align:center;margin:4px 6px"><svg viewBox="0 0 96 96" width="96" height="96" xmlns="http://www.w3.org/2000/svg"><polygon points="28.0,80.0 68.0,80.0 68.0,62.0 48.0,44.0 28.0,62.0" fill="#e2c070" /><circle cx="33.5" cy="77.0" r="1.3" fill="#9a7428"/><circle cx="31.0" cy="72.0" r="1.3" fill="#9a7428"/><circle cx="33.5" cy="67.0" r="1.3" fill="#9a7428"/><circle cx="38.5" cy="77.0" r="1.3" fill="#9a7428"/><circle cx="36.0" cy="72.0" r="1.3" fill="#9a7428"/><circle cx="38.5" cy="67.0" r="1.3" fill="#9a7428"/><circle cx="36.0" cy="62.0" r="1.3" fill="#9a7428"/><circle cx="43.5" cy="77.0" r="1.3" fill="#9a7428"/><circle cx="41.0" cy="72.0" r="1.3" fill="#9a7428"/><circle cx="43.5" cy="67.0" r="1.3" fill="#9a7428"/><circle cx="41.0" cy="62.0" r="1.3" fill="#9a7428"/><circle cx="43.5" cy="57.0" r="1.3" fill="#9a7428"/><circle cx="48.5" cy="77.0" r="1.3" fill="#9a7428"/><circle cx="46.0" cy="72.0" r="1.3" fill="#9a7428"/><circle cx="48.5" cy="67.0" r="1.3" fill="#9a7428"/><circle cx="46.0" cy="62.0" r="1.3" fill="#9a7428"/><circle cx="48.5" cy="57.0" r="1.3" fill="#9a7428"/><circle cx="46.0" cy="52.0" r="1.3" fill="#9a7428"/><circle cx="53.5" cy="77.0" r="1.3" fill="#9a7428"/><circle cx="51.0" cy="72.0" r="1.3" fill="#9a7428"/><circle cx="53.5" cy="67.0" r="1.3" fill="#9a7428"/><circle cx="51.0" cy="62.0" r="1.3" fill="#9a7428"/><circle cx="53.5" cy="57.0" r="1.3" fill="#9a7428"/><circle cx="51.0" cy="52.0" r="1.3" fill="#9a7428"/><circle cx="58.5" cy="77.0" r="1.3" fill="#9a7428"/><circle cx="56.0" cy="72.0" r="1.3" fill="#9a7428"/><circle cx="58.5" cy="67.0" r="1.3" fill="#9a7428"/><circle cx="56.0" cy="62.0" r="1.3" fill="#9a7428"/><circle cx="58.5" cy="57.0" r="1.3" fill="#9a7428"/><circle cx="63.5" cy="77.0" r="1.3" fill="#9a7428"/><circle cx="61.0" cy="72.0" r="1.3" fill="#9a7428"/><circle cx="63.5" cy="67.0" r="1.3" fill="#9a7428"/><circle cx="61.0" cy="62.0" r="1.3" fill="#9a7428"/><polyline points="28.0,16.0 28.0,80.0 68.0,80.0 68.0,16.0" fill="none" stroke="#2b2118" stroke-width="2.5" stroke-linejoin="round"/><line x1="4" y1="81.5" x2="92" y2="81.5" stroke="#999" stroke-width="2"/></svg><div style="font-size:13px;color:var(--muted)">solide divisé</div></div><div class="svgbox" style="display:inline-block;text-align:center;margin:4px 6px"><svg viewBox="0 0 96 96" width="96" height="96" xmlns="http://www.w3.org/2000/svg"><polygon points="30.7,90.0 65.3,70.0 59.5,60.0 13.4,60.0" fill="#8ec5f0" /><line x1="13.4" y1="60.0" x2="59.5" y2="60.0" stroke="#1565c0" stroke-width="2.5"/><polyline points="-1.3,34.6 30.7,90.0 65.3,70.0 33.3,14.6" fill="none" stroke="#2b2118" stroke-width="2.5" stroke-linejoin="round"/><line x1="4" y1="91.5" x2="92" y2="91.5" stroke="#999" stroke-width="2"/></svg><div style="font-size:13px;color:var(--muted)">liquide</div></div><div class="svgbox" style="display:inline-block;text-align:center;margin:4px 6px"><svg viewBox="0 0 96 96" width="96" height="96" xmlns="http://www.w3.org/2000/svg"><circle cx="36.0" cy="74.0" r="1.6" fill="#8a8a8a"/><circle cx="32.0" cy="65.0" r="1.6" fill="#8a8a8a"/><circle cx="36.0" cy="56.0" r="1.6" fill="#8a8a8a"/><circle cx="32.0" cy="47.0" r="1.6" fill="#8a8a8a"/><circle cx="36.0" cy="38.0" r="1.6" fill="#8a8a8a"/><circle cx="32.0" cy="29.0" r="1.6" fill="#8a8a8a"/><circle cx="36.0" cy="20.0" r="1.6" fill="#8a8a8a"/><circle cx="44.0" cy="74.0" r="1.6" fill="#8a8a8a"/><circle cx="40.0" cy="65.0" r="1.6" fill="#8a8a8a"/><circle cx="44.0" cy="56.0" r="1.6" fill="#8a8a8a"/><circle cx="40.0" cy="47.0" r="1.6" fill="#8a8a8a"/><circle cx="44.0" cy="38.0" r="1.6" fill="#8a8a8a"/><circle cx="40.0" cy="29.0" r="1.6" fill="#8a8a8a"/><circle cx="44.0" cy="20.0" r="1.6" fill="#8a8a8a"/><circle cx="52.0" cy="74.0" r="1.6" fill="#8a8a8a"/><circle cx="48.0" cy="65.0" r="1.6" fill="#8a8a8a"/><circle cx="52.0" cy="56.0" r="1.6" fill="#8a8a8a"/><circle cx="48.0" cy="47.0" r="1.6" fill="#8a8a8a"/><circle cx="52.0" cy="38.0" r="1.6" fill="#8a8a8a"/><circle cx="48.0" cy="29.0" r="1.6" fill="#8a8a8a"/><circle cx="52.0" cy="20.0" r="1.6" fill="#8a8a8a"/><circle cx="60.0" cy="74.0" r="1.6" fill="#8a8a8a"/><circle cx="56.0" cy="65.0" r="1.6" fill="#8a8a8a"/><circle cx="60.0" cy="56.0" r="1.6" fill="#8a8a8a"/><circle cx="56.0" cy="47.0" r="1.6" fill="#8a8a8a"/><circle cx="60.0" cy="38.0" r="1.6" fill="#8a8a8a"/><circle cx="56.0" cy="29.0" r="1.6" fill="#8a8a8a"/><circle cx="60.0" cy="20.0" r="1.6" fill="#8a8a8a"/><circle cx="68.0" cy="74.0" r="1.6" fill="#8a8a8a"/><circle cx="64.0" cy="65.0" r="1.6" fill="#8a8a8a"/><circle cx="68.0" cy="56.0" r="1.6" fill="#8a8a8a"/><circle cx="64.0" cy="47.0" r="1.6" fill="#8a8a8a"/><circle cx="68.0" cy="38.0" r="1.6" fill="#8a8a8a"/><circle cx="64.0" cy="29.0" r="1.6" fill="#8a8a8a"/><circle cx="68.0" cy="20.0" r="1.6" fill="#8a8a8a"/><polyline points="28.0,16.0 28.0,80.0 68.0,80.0 68.0,16.0" fill="none" stroke="#2b2118" stroke-width="2.5" stroke-linejoin="round"/><line x1="28.0" y1="16.0" x2="68.0" y2="16.0" stroke="#2b2118" stroke-width="5"/><line x1="4" y1="81.5" x2="92" y2="81.5" stroke="#999" stroke-width="2"/></svg><div style="font-size:13px;color:var(--muted)">gaz (flacon bouché)</div></div></div>
+    <div class="def">Ces caractéristiques s'appellent les <span class="k">propriétés</span> des états de la matière.</div>
+    <button class="btn alt done-btn" data-done="p5">J'ai bien compris</button>
+  </div>
+
+  <div class="part" data-part="p6">
+    <h3>6) On chauffe de l'eau : la courbe</h3>
+    <p>On mesure la température de l'eau chaque minute, puis on trace la courbe : <b>« Évolution de la <span class="k">température</span> de l'eau en fonction du <span class="k">temps</span> »</b>.</p>
+    <div class="tip"><b>Méthode :</b> au crayon à papier, on place chaque mesure avec une <span class="k">croix</span>, puis on relie les points <span class="k">à main levée</span>.</div>
+    <div class="svgbox"><svg viewBox="0 0 330 210" width="330" height="210" xmlns="http://www.w3.org/2000/svg" font-family="Nunito,sans-serif"><rect x="34.0" y="26" width="175.4" height="154" fill="#e3eefa"/><rect x="209.4" y="26" width="108.6" height="154" fill="#e5f3e8"/><line x1="34" y1="180.0" x2="318" y2="180.0" stroke="#ddd"/><text x="30" y="184.0" font-size="10" text-anchor="end">0</text><line x1="34" y1="152.0" x2="318" y2="152.0" stroke="#ddd"/><text x="30" y="156.0" font-size="10" text-anchor="end">20</text><line x1="34" y1="124.0" x2="318" y2="124.0" stroke="#ddd"/><text x="30" y="128.0" font-size="10" text-anchor="end">40</text><line x1="34" y1="96.0" x2="318" y2="96.0" stroke="#ddd"/><text x="30" y="100.0" font-size="10" text-anchor="end">60</text><line x1="34" y1="68.0" x2="318" y2="68.0" stroke="#ddd"/><text x="30" y="72.0" font-size="10" text-anchor="end">80</text><line x1="34" y1="40.0" x2="318" y2="40.0" stroke="#ddd"/><text x="30" y="44.0" font-size="10" text-anchor="end">100</text><text x="34.0" y="193" font-size="10" text-anchor="middle">0</text><text x="67.4" y="193" font-size="10" text-anchor="middle">2</text><text x="100.8" y="193" font-size="10" text-anchor="middle">4</text><text x="134.2" y="193" font-size="10" text-anchor="middle">6</text><text x="167.6" y="193" font-size="10" text-anchor="middle">8</text><text x="201.1" y="193" font-size="10" text-anchor="middle">10</text><text x="234.5" y="193" font-size="10" text-anchor="middle">12</text><text x="267.9" y="193" font-size="10" text-anchor="middle">14</text><text x="301.3" y="193" font-size="10" text-anchor="middle">16</text><line x1="34" y1="180" x2="318" y2="180" stroke="#2b2118" stroke-width="1.5"/><line x1="34" y1="180" x2="34" y2="26" stroke="#2b2118" stroke-width="1.5"/><polyline fill="none" stroke="#2f6aa8" stroke-width="2" points="34.0,152.6 50.7,151.0 67.4,138.8 84.1,125.0 100.8,109.2 117.5,94.2 134.2,78.5 150.9,66.9 167.6,55.3 184.4,45.7 201.1,42.4 217.8,41.4 234.5,40.0 251.2,39.7 267.9,40.1 284.6,39.7 301.3,39.9 318.0,39.9"/><text x="34.0" y="156.6" font-size="12" text-anchor="middle" fill="#2b2118">×</text><text x="50.7" y="155.0" font-size="12" text-anchor="middle" fill="#2b2118">×</text><text x="67.4" y="142.8" font-size="12" text-anchor="middle" fill="#2b2118">×</text><text x="84.1" y="129.0" font-size="12" text-anchor="middle" fill="#2b2118">×</text><text x="100.8" y="113.2" font-size="12" text-anchor="middle" fill="#2b2118">×</text><text x="117.5" y="98.2" font-size="12" text-anchor="middle" fill="#2b2118">×</text><text x="134.2" y="82.5" font-size="12" text-anchor="middle" fill="#2b2118">×</text><text x="150.9" y="70.9" font-size="12" text-anchor="middle" fill="#2b2118">×</text><text x="167.6" y="59.3" font-size="12" text-anchor="middle" fill="#2b2118">×</text><text x="184.4" y="49.7" font-size="12" text-anchor="middle" fill="#2b2118">×</text><text x="201.1" y="46.4" font-size="12" text-anchor="middle" fill="#2b2118">×</text><text x="217.8" y="45.4" font-size="12" text-anchor="middle" fill="#2b2118">×</text><text x="234.5" y="44.0" font-size="12" text-anchor="middle" fill="#2b2118">×</text><text x="251.2" y="43.7" font-size="12" text-anchor="middle" fill="#2b2118">×</text><text x="267.9" y="44.1" font-size="12" text-anchor="middle" fill="#2b2118">×</text><text x="284.6" y="43.7" font-size="12" text-anchor="middle" fill="#2b2118">×</text><text x="301.3" y="43.9" font-size="12" text-anchor="middle" fill="#2b2118">×</text><text x="318.0" y="43.9" font-size="12" text-anchor="middle" fill="#2b2118">×</text><text x="100.8" y="138.0" font-size="12" font-weight="800" fill="#2f6aa8">A : liquide</text><text x="217.8" y="75.0" font-size="12" font-weight="800" fill="#3f7d4e">B : liquide</text><text x="217.8" y="89.0" font-size="12" font-weight="800" fill="#3f7d4e">+ gaz</text><text x="242.8" y="34.0" font-size="11" font-weight="800" fill="#b3392c">palier à 100 °C</text><text x="36" y="23" font-size="10">T (°C)</text><text x="318" y="206" font-size="10" text-anchor="end">temps (min)</text></svg></div>
+    <ul>
+      <li><b>Partie A</b> (0 à 10 min) : la température <b>monte</b> (de 20 °C à presque 100 °C). L'eau est <span class="k">liquide</span>.</li>
+      <li><b>Partie B</b> (à partir de 11 min) : la température <b>ne monte plus</b>, elle reste à <span class="k">100 °C</span> : c'est un <span class="k">palier</span>. L'eau bout : il y a du <b>liquide + du gaz</b> (vapeur d'eau).</li>
+    </ul>
+    <button class="btn alt done-btn" data-done="p6">J'ai bien compris</button>
+  </div>
+
+  <div id="partLock" class="warn hidden"></div>
+  <div id="leconFinie" class="def hidden" style="border-left-color:var(--moss);background:var(--moss-l)"><b>Bravo, toute la leçon est réussie !</b> La partie <b>avec aide</b> est ouverte. Tu peux d'abord réciter avec le <b>mode mémoire</b>.<br><button class="btn" id="goAide" style="margin-top:8px">Aller à la partie avec aide →</button></div>
+</section>
+
+<!-- ================= EXERCICES ================= -->
+<section id="tab-aide" class="hidden"></section>
+<section id="tab-sans" class="hidden"></section>
+</main>
+
+<div class="notes">
+  <div class="in">
+    <div class="box"><div class="lab">Note avec aide</div><div class="val" id="nAide">—</div><div class="ver" id="vAide">Pas encore faite</div></div>
+    <div class="box"><div class="lab">Note sans aide</div><div class="val" id="nSans">—</div><div class="ver" id="vSans">Pas encore faite</div></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
+<script>
+var FICHE_CODE = "P011";
+/* ---------- Outils ---------- */
+const $ = (s, r=document) => r.querySelector(s);
+const el = (tag, attrs={}, html="") => { const e=document.createElement(tag); for(const k in attrs){ if(k==="class") e.className=attrs[k]; else e.setAttribute(k,attrs[k]); } if(html) e.innerHTML=html; return e; };
+const shuffle = a => { a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; };
+const norm = s => (s||"").toLowerCase().replace(/œ/g,"oe").normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9]+/g," ").trim();
+const lower = s => (s||"").toLowerCase().replace(/[^a-zà-ÿœ0-9]+/g," ").trim();
+function lev(a,b){ const m=a.length,n=b.length; if(!m) return n; if(!n) return m; let p=[...Array(n+1).keys()]; for(let i=1;i<=m;i++){ const c=[i]; for(let j=1;j<=n;j++) c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1)); p=c; } return p[n]; }
+const tol = n => n<=3?0 : n<=6?1 : 2;
+const store = { get(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } }, set(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} } };
+const fmt = x => (Math.round(x*100)/100).toString().replace(".",",");
+
+/* Compare une réponse tapée à la liste des réponses acceptées.
+   Retour : "exact" | "accent" | "fuzzy" | "no" */
+function matchWord(input, answers){
+  const ni = norm(input), li = lower(input), toks = ni.split(" ");
+  if(!ni) return "no";
+  let best = "no";
+  for(const a of answers){
+    const na = norm(a), la = lower(a);
+    if(li===la || (" "+li+" ").includes(" "+la+" ")) return "exact";
+    if(ni===na || (" "+ni+" ").includes(" "+na+" ")) best = "accent";
+    else if(best==="no"){
+      const t = tol(na.length);
+      const dg = s => (s.match(/\d+[a-z]*/g)||[]).join(" ");
+      if(t>0 && dg(ni)===dg(na) && (lev(ni,na)<=t || (!na.includes(" ") && toks.some(x => lev(x,na)<=t)))) best = "fuzzy";
+    }
+  }
+  return best;
+}
+/* Cherche un mot-clé (avec variantes) dans un texte libre */
+function hasKey(text, alts){
+  const nt = " "+norm(text)+" ", toks = norm(text).split(" ");
+  for(const a of alts){
+    const na = norm(a);
+    if(nt.includes(" "+na+" ")) return true;
+    if(na.includes(" ")) continue;
+    const t = tol(na.length);
+    if(toks.some(x => (t>0 && lev(x,na)<=t) || (na.length>=5 && x.startsWith(na)))) return true;
+  }
+  return false;
+}
+/* Lit une date tapée : renvoie {val, neg} */
+function parseDate(s){
+  const raw = (s||"").toLowerCase();
+  const neg = /-|−|av|avant/.test(raw);
+  const c = raw.replace(/\s/g,"");
+  const m = c.match(/\d+([.,]\d+)?/);
+  if(!m) return null;
+  let v = parseFloat(m[0].replace(",","."));
+  if(/million/.test(raw)) v *= 1e6;
+  return {val:v, neg};
+}
+
+
+/* ---------- Son : la voix du téléphone lit l'anglais ---------- */
+const SON = ("speechSynthesis" in window) && typeof SpeechSynthesisUtterance !== "undefined";
+if(SON){ try{ speechSynthesis.getVoices(); }catch(e){} } else document.body.classList.add("noson");
+function parler(t){
+  if(!SON) return;
+  try{
+    const u = new SpeechSynthesisUtterance(t); u.lang = "en-GB"; u.rate = 0.8;
+    const vs = speechSynthesis.getVoices();
+    const v = vs.find(x=>/en[-_]GB/i.test(x.lang)) || vs.find(x=>/^en/i.test(x.lang));
+    if(v) u.voice = v;
+    speechSynthesis.cancel(); speechSynthesis.speak(u);
+  }catch(e){}
+}
+document.addEventListener("click", e => { const b = e.target.closest("[data-say]"); if(b){ e.preventDefault(); parler(b.dataset.say); } });
+/* Majuscule oubliée sur un jour ou un mois */
+const MAJ = []; const MAJ_OLD = ["monday","tuesday","wednesday","thursday","friday","saturday","sunday","january","february","march","april","may","june","july","august","september","october","november","december"];
+function majManque(input){
+  return (input||"").replace(/[^A-Za-z]+/g," ").split(" ").some(w => w && MAJ.includes(w.toLowerCase()) && w[0] !== w[0].toUpperCase());
+}
+/* Réponse tapée = un piège connu (ex. Tuesday au lieu de Thursday) : 0 point, jamais « presque » */
+function estPiege(q, input){
+  const ni = norm(input); if(!ni) return false;
+  const bons = q.a.map(norm);
+  return [...(q.d||[]), ...(q.no||[])].some(x => { const nx = norm(x); return nx === ni && !bons.includes(nx); });
+}
+
+/* ---------- Banque de questions ---------- */
+const PARTS = {p1:"L'hypothèse", p2:"Le solide et le solide divisé", p3:"Le liquide et sa surface libre", p4:"Le gaz", p5:"Reconnaître l'état", p6:"La courbe de l'eau qu'on chauffe"};
+const Wd = (part,q,a,show,d,aide,x) => Object.assign({part,type:"word",q,a,show,d,aide}, x||{});
+const I = "indice";
+const G = (k,t,c) => `<span style="display:inline-block;text-align:center;vertical-align:middle">${SVG[k]}<br><small>${c||""}</small></span>`;
+const SVG = {"okL": "<svg viewBox=\"0 0 80 80\" width=\"80\" height=\"80\" xmlns=\"http://www.w3.org/2000/svg\"><polygon points=\"31.6,91.5 64.4,68.5 59.4,61.5 10.6,61.5\" fill=\"#8ec5f0\" /><line x1=\"10.6\" y1=\"61.5\" x2=\"59.4\" y2=\"61.5\" stroke=\"#1565c0\" stroke-width=\"2.5\"/><polyline points=\"-5.1,39.0 31.6,91.5 64.4,68.5 27.7,16.1\" fill=\"none\" stroke=\"#2b2118\" stroke-width=\"2.5\" stroke-linejoin=\"round\"/><line x1=\"4\" y1=\"93.0\" x2=\"76\" y2=\"93.0\" stroke=\"#999\" stroke-width=\"2\"/></svg>", "koL": "<svg viewBox=\"0 0 80 80\" width=\"80\" height=\"80\" xmlns=\"http://www.w3.org/2000/svg\"><polygon points=\"31.6,91.5 64.4,68.5 47.2,44.0 14.4,66.9\" fill=\"#8ec5f0\" /><line x1=\"47.2\" y1=\"44.0\" x2=\"14.4\" y2=\"66.9\" stroke=\"#1565c0\" stroke-width=\"2.5\"/><polyline points=\"-5.1,39.0 31.6,91.5 64.4,68.5 27.7,16.1\" fill=\"none\" stroke=\"#2b2118\" stroke-width=\"2.5\" stroke-linejoin=\"round\"/><line x1=\"4\" y1=\"93.0\" x2=\"76\" y2=\"93.0\" stroke=\"#999\" stroke-width=\"2\"/></svg>", "okR": "<svg viewBox=\"0 0 80 80\" width=\"80\" height=\"80\" xmlns=\"http://www.w3.org/2000/svg\"><polygon points=\"31.6,68.5 64.4,91.5 85.4,61.5 36.6,61.5\" fill=\"#8ec5f0\" /><line x1=\"36.6\" y1=\"61.5\" x2=\"85.4\" y2=\"61.5\" stroke=\"#1565c0\" stroke-width=\"2.5\"/><polyline points=\"68.3,16.1 31.6,68.5 64.4,91.5 101.1,39.0\" fill=\"none\" stroke=\"#2b2118\" stroke-width=\"2.5\" stroke-linejoin=\"round\"/><line x1=\"4\" y1=\"93.0\" x2=\"76\" y2=\"93.0\" stroke=\"#999\" stroke-width=\"2\"/></svg>", "koR": "<svg viewBox=\"0 0 80 80\" width=\"80\" height=\"80\" xmlns=\"http://www.w3.org/2000/svg\"><polygon points=\"31.6,68.5 64.4,91.5 81.6,66.9 48.8,44.0\" fill=\"#8ec5f0\" /><line x1=\"81.6\" y1=\"66.9\" x2=\"48.8\" y2=\"44.0\" stroke=\"#1565c0\" stroke-width=\"2.5\"/><polyline points=\"68.3,16.1 31.6,68.5 64.4,91.5 101.1,39.0\" fill=\"none\" stroke=\"#2b2118\" stroke-width=\"2.5\" stroke-linejoin=\"round\"/><line x1=\"4\" y1=\"93.0\" x2=\"76\" y2=\"93.0\" stroke=\"#999\" stroke-width=\"2\"/></svg>", "div": "<svg viewBox=\"0 0 80 80\" width=\"80\" height=\"80\" xmlns=\"http://www.w3.org/2000/svg\"><polygon points=\"28.0,80.0 68.0,80.0 68.0,62.0 48.0,44.0 28.0,62.0\" fill=\"#e2c070\" /><circle cx=\"33.5\" cy=\"77.0\" r=\"1.3\" fill=\"#9a7428\"/><circle cx=\"31.0\" cy=\"72.0\" r=\"1.3\" fill=\"#9a7428\"/><circle cx=\"33.5\" cy=\"67.0\" r=\"1.3\" fill=\"#9a7428\"/><circle cx=\"38.5\" cy=\"77.0\" r=\"1.3\" fill=\"#9a7428\"/><circle cx=\"36.0\" cy=\"72.0\" r=\"1.3\" fill=\"#9a7428\"/><circle cx=\"38.5\" cy=\"67.0\" r=\"1.3\" fill=\"#9a7428\"/><circle cx=\"36.0\" cy=\"62.0\" r=\"1.3\" fill=\"#9a7428\"/><circle cx=\"43.5\" cy=\"77.0\" r=\"1.3\" fill=\"#9a7428\"/><circle cx=\"41.0\" cy=\"72.0\" r=\"1.3\" fill=\"#9a7428\"/><circle cx=\"43.5\" cy=\"67.0\" r=\"1.3\" fill=\"#9a7428\"/><circle cx=\"41.0\" cy=\"62.0\" r=\"1.3\" fill=\"#9a7428\"/><circle cx=\"43.5\" cy=\"57.0\" r=\"1.3\" fill=\"#9a7428\"/><circle cx=\"48.5\" cy=\"77.0\" r=\"1.3\" fill=\"#9a7428\"/><circle cx=\"46.0\" cy=\"72.0\" r=\"1.3\" fill=\"#9a7428\"/><circle cx=\"48.5\" cy=\"67.0\" r=\"1.3\" fill=\"#9a7428\"/><circle cx=\"46.0\" cy=\"62.0\" r=\"1.3\" fill=\"#9a7428\"/><circle cx=\"48.5\" cy=\"57.0\" r=\"1.3\" fill=\"#9a7428\"/><circle cx=\"46.0\" cy=\"52.0\" r=\"1.3\" fill=\"#9a7428\"/><circle cx=\"53.5\" cy=\"77.0\" r=\"1.3\" fill=\"#9a7428\"/><circle cx=\"51.0\" cy=\"72.0\" r=\"1.3\" fill=\"#9a7428\"/><circle cx=\"53.5\" cy=\"67.0\" r=\"1.3\" fill=\"#9a7428\"/><circle cx=\"51.0\" cy=\"62.0\" r=\"1.3\" fill=\"#9a7428\"/><circle cx=\"53.5\" cy=\"57.0\" r=\"1.3\" fill=\"#9a7428\"/><circle cx=\"51.0\" cy=\"52.0\" r=\"1.3\" fill=\"#9a7428\"/><circle cx=\"58.5\" cy=\"77.0\" r=\"1.3\" fill=\"#9a7428\"/><circle cx=\"56.0\" cy=\"72.0\" r=\"1.3\" fill=\"#9a7428\"/><circle cx=\"58.5\" cy=\"67.0\" r=\"1.3\" fill=\"#9a7428\"/><circle cx=\"56.0\" cy=\"62.0\" r=\"1.3\" fill=\"#9a7428\"/><circle cx=\"58.5\" cy=\"57.0\" r=\"1.3\" fill=\"#9a7428\"/><circle cx=\"63.5\" cy=\"77.0\" r=\"1.3\" fill=\"#9a7428\"/><circle cx=\"61.0\" cy=\"72.0\" r=\"1.3\" fill=\"#9a7428\"/><circle cx=\"63.5\" cy=\"67.0\" r=\"1.3\" fill=\"#9a7428\"/><circle cx=\"61.0\" cy=\"62.0\" r=\"1.3\" fill=\"#9a7428\"/><polyline points=\"28.0,16.0 28.0,80.0 68.0,80.0 68.0,16.0\" fill=\"none\" stroke=\"#2b2118\" stroke-width=\"2.5\" stroke-linejoin=\"round\"/><line x1=\"4\" y1=\"81.5\" x2=\"76\" y2=\"81.5\" stroke=\"#999\" stroke-width=\"2\"/></svg>", "liqP": "<svg viewBox=\"0 0 80 80\" width=\"80\" height=\"80\" xmlns=\"http://www.w3.org/2000/svg\"><polygon points=\"30.7,70.0 65.3,90.0 82.6,60.0 36.5,60.0\" fill=\"#8ec5f0\" /><line x1=\"36.5\" y1=\"60.0\" x2=\"82.6\" y2=\"60.0\" stroke=\"#1565c0\" stroke-width=\"2.5\"/><polyline points=\"62.7,14.6 30.7,70.0 65.3,90.0 97.3,34.6\" fill=\"none\" stroke=\"#2b2118\" stroke-width=\"2.5\" stroke-linejoin=\"round\"/><line x1=\"4\" y1=\"91.5\" x2=\"76\" y2=\"91.5\" stroke=\"#999\" stroke-width=\"2\"/></svg>", "gaz": "<svg viewBox=\"0 0 80 80\" width=\"80\" height=\"80\" xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"36.0\" cy=\"74.0\" r=\"1.6\" fill=\"#8a8a8a\"/><circle cx=\"32.0\" cy=\"65.0\" r=\"1.6\" fill=\"#8a8a8a\"/><circle cx=\"36.0\" cy=\"56.0\" r=\"1.6\" fill=\"#8a8a8a\"/><circle cx=\"32.0\" cy=\"47.0\" r=\"1.6\" fill=\"#8a8a8a\"/><circle cx=\"36.0\" cy=\"38.0\" r=\"1.6\" fill=\"#8a8a8a\"/><circle cx=\"32.0\" cy=\"29.0\" r=\"1.6\" fill=\"#8a8a8a\"/><circle cx=\"36.0\" cy=\"20.0\" r=\"1.6\" fill=\"#8a8a8a\"/><circle cx=\"44.0\" cy=\"74.0\" r=\"1.6\" fill=\"#8a8a8a\"/><circle cx=\"40.0\" cy=\"65.0\" r=\"1.6\" fill=\"#8a8a8a\"/><circle cx=\"44.0\" cy=\"56.0\" r=\"1.6\" fill=\"#8a8a8a\"/><circle cx=\"40.0\" cy=\"47.0\" r=\"1.6\" fill=\"#8a8a8a\"/><circle cx=\"44.0\" cy=\"38.0\" r=\"1.6\" fill=\"#8a8a8a\"/><circle cx=\"40.0\" cy=\"29.0\" r=\"1.6\" fill=\"#8a8a8a\"/><circle cx=\"44.0\" cy=\"20.0\" r=\"1.6\" fill=\"#8a8a8a\"/><circle cx=\"52.0\" cy=\"74.0\" r=\"1.6\" fill=\"#8a8a8a\"/><circle cx=\"48.0\" cy=\"65.0\" r=\"1.6\" fill=\"#8a8a8a\"/><circle cx=\"52.0\" cy=\"56.0\" r=\"1.6\" fill=\"#8a8a8a\"/><circle cx=\"48.0\" cy=\"47.0\" r=\"1.6\" fill=\"#8a8a8a\"/><circle cx=\"52.0\" cy=\"38.0\" r=\"1.6\" fill=\"#8a8a8a\"/><circle cx=\"48.0\" cy=\"29.0\" r=\"1.6\" fill=\"#8a8a8a\"/><circle cx=\"52.0\" cy=\"20.0\" r=\"1.6\" fill=\"#8a8a8a\"/><circle cx=\"60.0\" cy=\"74.0\" r=\"1.6\" fill=\"#8a8a8a\"/><circle cx=\"56.0\" cy=\"65.0\" r=\"1.6\" fill=\"#8a8a8a\"/><circle cx=\"60.0\" cy=\"56.0\" r=\"1.6\" fill=\"#8a8a8a\"/><circle cx=\"56.0\" cy=\"47.0\" r=\"1.6\" fill=\"#8a8a8a\"/><circle cx=\"60.0\" cy=\"38.0\" r=\"1.6\" fill=\"#8a8a8a\"/><circle cx=\"56.0\" cy=\"29.0\" r=\"1.6\" fill=\"#8a8a8a\"/><circle cx=\"60.0\" cy=\"20.0\" r=\"1.6\" fill=\"#8a8a8a\"/><circle cx=\"68.0\" cy=\"74.0\" r=\"1.6\" fill=\"#8a8a8a\"/><circle cx=\"64.0\" cy=\"65.0\" r=\"1.6\" fill=\"#8a8a8a\"/><circle cx=\"68.0\" cy=\"56.0\" r=\"1.6\" fill=\"#8a8a8a\"/><circle cx=\"64.0\" cy=\"47.0\" r=\"1.6\" fill=\"#8a8a8a\"/><circle cx=\"68.0\" cy=\"38.0\" r=\"1.6\" fill=\"#8a8a8a\"/><circle cx=\"64.0\" cy=\"29.0\" r=\"1.6\" fill=\"#8a8a8a\"/><circle cx=\"68.0\" cy=\"20.0\" r=\"1.6\" fill=\"#8a8a8a\"/><polyline points=\"28.0,16.0 28.0,80.0 68.0,80.0 68.0,16.0\" fill=\"none\" stroke=\"#2b2118\" stroke-width=\"2.5\" stroke-linejoin=\"round\"/><line x1=\"28.0\" y1=\"16.0\" x2=\"68.0\" y2=\"16.0\" stroke=\"#2b2118\" stroke-width=\"5\"/><line x1=\"4\" y1=\"81.5\" x2=\"76\" y2=\"81.5\" stroke=\"#999\" stroke-width=\"2\"/></svg>", "sol": "<svg viewBox=\"0 0 80 80\" width=\"80\" height=\"80\" xmlns=\"http://www.w3.org/2000/svg\"><polygon points=\"36.0,80.0 56.0,80.0 56.0,60.0 36.0,60.0\" fill=\"#bdbdbd\" stroke=\"#555\" stroke-width=\"1.2\"/><polyline points=\"28.0,16.0 28.0,80.0 68.0,80.0 68.0,16.0\" fill=\"none\" stroke=\"#2b2118\" stroke-width=\"2.5\" stroke-linejoin=\"round\"/><line x1=\"4\" y1=\"81.5\" x2=\"76\" y2=\"81.5\" stroke=\"#999\" stroke-width=\"2\"/></svg>"};
+
+const BANK = [
+  // --- p1 hypothèse
+  {part:"p1",type:"def",w:2,mot:"Une hypothèse",cloze:"C'est une [[proposition]] de [[réponse]] au problème posé. Elle peut s'avérer [[fausse]].",
+   groups:[["proposition"],["reponse","reponses"],["fausse","faux"]]},
+  Wd("p1","Chat Noir pense : « un solide, c'est quelque chose de dur ». Écris le nom d'une matière de la leçon qui est un <b>solide</b> mais qui n'est <b>pas dure</b>.",
+     ["coton","caoutchouc"],"le coton (ou le caoutchouc)",["la craie","le bois"],I,{h:"la matière des compresses du chirurgien… ou celle des gants"}),
+  Wd("p1","Ladybug pense : « un liquide, c'est quelque chose qui coule ». Écris le nom d'une matière de la leçon qui <b>coule</b> mais qui est un <b>solide</b>.",
+     ["sucre en poudre","semoule","sable","sel","sucre"],"le sucre en poudre (ou la semoule)",["l'eau","l'huile"],I,{h:"une poudre blanche qu'on met dans les gâteaux, ou les grains du couscous"}),
+  // --- p2 solide
+  {part:"p2",type:"def",w:2,mot:"Un solide",cloze:"Il a une [[forme]] [[propre]] et on peut le [[saisir]] avec les doigts.",
+   groups:[["forme"],["propre"],["saisir","saisi","attraper","prendre","tenir"]]},
+  {part:"p2",type:"def",w:2,mot:"Un solide divisé",cloze:"Il est formé de solides de petite [[taille]]. Il n'a pas de forme propre et sa [[surface]] n'est pas automatiquement [[horizontale]].",
+   groups:[["taille","petits","grains"],["surface"],["horizontale","plane"]]},
+  // --- p3 liquide
+  {part:"p3",type:"def",w:2,mot:"Un liquide",cloze:"Il prend la forme du [[récipient]] et il [[coule]]. Au repos, sa surface est toujours [[plane]] et [[horizontale]].",
+   groups:[["recipient"],["coule","coulent"],["plane"],["horizontale"]]},
+  Wd("p3","Quelle direction donne le <b>fil à plomb</b> ? Écris un mot.",["verticale","vertical","la verticale"],"la verticale",["l'horizontale"],I,{h:"commence par « v », 9 lettres"}),
+  Wd("p3","La surface libre de l'eau et le fil à plomb forment un angle… (écris un mot)",["droit"],"droit (un angle droit)",["aigu","plat"],I,{h:"comme le coin d'une équerre : commence par « d », 5 lettres"}),
+  {part:"p3",type:"sort",w:2,stack:true,q:"Pour chaque verre penché, la surface de l'eau est-elle <b>bien dessinée</b> ? Touche Juste ou Faux.",cats:["Juste","Faux"],items:[
+    [G("okL"),0],[G("koL"),1],[G("okR"),0],[G("koR"),1]]},
+  Wd("p3","On penche un verre d'eau et on le met au congélateur. Une fois gelé, on le pose <b>droit</b> sur la table. La surface de la glace est-elle horizontale ? Écris <b>oui</b> ou <b>non</b>.",
+     ["non"],"non : la glace est un solide, elle garde sa forme (sa surface reste penchée)",["oui"],I,{h:"la glace est-elle un liquide ou un solide ?"}),
+  // --- p4 gaz
+  Wd("p4","Quel est le <b>3<sup>e</sup> état</b> physique de la matière ? Écris un mot.",["gazeux","gaz","l'etat gazeux","etat gazeux"],"l'état gazeux (le gaz)",["liquide","solide"],I,{h:"l'état g… (6 lettres)"}),
+  {part:"p4",type:"def",w:2,mot:"Un gaz",cloze:"Il n'a pas de [[volume]] propre : il prend tout l'[[espace]] qu'on lui offre.",
+   groups:[["volume"],["espace","place"]]},
+  Wd("p4","À l'hôpital, on serre beaucoup d'oxygène dans une petite bouteille : son volume <b>diminue</b>. On dit que les gaz sont… (écris un mot)",
+     ["compressibles","compressible"],"compressibles",["expansibles"],I),
+  Wd("p4","Le volume d'un gaz peut aussi <b>augmenter</b>. On dit que les gaz sont… (écris un mot)",
+     ["expansibles","expansible"],"expansibles",["compressibles"],I),
+  Wd("p4","Avant une piqûre, l'infirmier pousse le piston d'une seringue « vide » dont le bout est dans l'eau. Qu'est-ce qui sort ? Écris 3 mots.",
+     ["bulles d'air","des bulles d'air","bulles","de l'air","air"],"des bulles d'air : la seringue « vide » était pleine d'air",["rien","de l'eau"],I,{h:"des b… d'a…"}),
+  Wd("p4","On bouche une seringue remplie d'<b>eau</b> et on pousse le piston. Peut-on l'enfoncer ? Écris <b>oui</b> ou <b>non</b>.",
+     ["non"],"non : un liquide ne se comprime pas",["oui"],I,{h:"un liquide est-il compressible comme l'air ?"}),
+  // --- p5 reconnaître
+  {part:"p5",type:"sort",w:3,stack:true,q:"Touche l'état qui correspond à chaque phrase.",cats:["solide","solide divisé","liquide","gaz"],items:[
+    ["Il a sa forme propre et on peut le saisir.",0],["Il prend la forme du récipient et il coule.",2],["Il occupe tout l'espace qu'on lui offre.",3],
+    ["Ses grains forment un tas : sa surface n'est pas plane.",1],["Sa surface est plane et horizontale.",2],["Il est compressible et expansible.",3]]},
+  {part:"p5",type:"sort",w:2,stack:true,q:"Regarde chaque récipient et touche l'état de ce qu'il contient.",cats:["solide","solide divisé","liquide","gaz"],items:[
+    [G("div","","A"),1],[G("liqP","","B"),2],[G("gaz","","C (bouché)"),3],[G("sol","","D"),0]]},
+  Wd("p5","Les caractéristiques d'un état de la matière s'appellent ses… (écris un mot)",["proprietes","propriete"],"propriétés",["formes"],I),
+  // --- p6 courbe
+  {part:"p6",type:"set",q:"Complète le titre du graphique : « Évolution de la … de l'eau en fonction du … »",groups:[["temperature"],["temps"]],show:"température, temps"},
+  {part:"p6",type:"set",q:"Complète la méthode : on place les points avec des … puis on les relie à … levée.",groups:[["croix"],["main"]],show:"croix, main"},
+  Wd("p6","À quelle température se trouve le <b>palier</b> ? Écris le nombre.",["100"],"100 °C",["90","0"]),
+  Wd("p6","Partie A (la température monte) : l'eau est à l'état… (écris un mot)",["liquide"],"liquide",["gazeux"],I),
+  Wd("p6","Partie B (le palier) : il y a de l'eau liquide et de l'eau à l'état… (écris un mot)",["gazeux","gaz","vapeur"],"gazeux (vapeur d'eau)",["solide"],I,{h:"commence par « g », 6 lettres"}),
+];
+const AUDIO_OK = SON;
+for(let i=BANK.length-1;i>=0;i--){ if(BANK[i].say && !AUDIO_OK) BANK.splice(i,1); }
+BANK.forEach((q,i)=>{ q.id=i; q.w = q.w || 1; });
+const DATES = [];
+const PARTS_INTRO = {};
+
+/* ---------- Rendu des exercices ---------- */
+const MODES = {
+  aide: {key:"p011_note_aide", box:"#tab-aide", label:"avec aide", code:FICHE_CODE+"-aide"},
+  sans: {key:"p011_note_sans", box:"#tab-sans", label:"sans aide", code:FICHE_CODE}
+};
+let STATE = {};
+
+function startMode(mode, onlyIds){
+  const M = MODES[mode], root = $(M.box);
+  const ids = onlyIds || BANK.map(q=>q.id);
+  STATE[mode] = {ids, res:{}, retry:!!onlyIds};
+  root.innerHTML = "";
+  if(mode==="sans") root.classList.add("encours");
+  const intro = el("div",{class:"intro"});
+  if(mode==="aide"){
+    intro.innerHTML = `<b>Exercices AVEC aide</b> · ${ids.length} questions${onlyIds?" (seulement tes erreurs)":""}<br>
+      Parfois tu choisis parmi 3 réponses, mais le plus souvent <b>tu écris</b> avec un <span class="hint">indice</span>.
+      <b>Il faut au moins 16 / 20 (80 %) sur la partie complète pour ouvrir la partie sans aide.</b>`;
+  } else {
+    intro.innerHTML = `<b>Exercices SANS aide</b> · ${ids.length} questions${onlyIds?" (seulement tes erreurs)":""}<br>
+      Pas de choix proposé : <b>tu écris tout toi-même</b>, comme le jour du contrôle. Tu vois la correction après chaque réponse ; à la fin, tu refais les questions ratées.<br>
+      • Mot juste = 1 point. Mot presque juste (une petite faute d'orthographe) = ½ point.<br>
+      <b>Objectif : 17 / 20 pour être prêt</b> (et gagner 3 vies pour la salle d'arcade, une seule fois pour cette fiche).`;
+  }
+  root.appendChild(intro);
+  const pr = el("div",{class:"prog"},"<i></i>"); root.appendChild(pr);
+  const cnt = el("div",{class:"cnt",style:"font-size:14px;color:var(--muted)"}); root.appendChild(cnt);
+  let lastPart = null, n = 0;
+  for(const id of ids){
+    const q = BANK[id];
+    if(q.part!==lastPart){ root.appendChild(el("h2",{},PARTS[q.part])); if(PARTS_INTRO[q.part]) root.appendChild(el("div",{},PARTS_INTRO[q.part])); lastPart=q.part; }
+    n++;
+    root.appendChild(renderCard(q, mode, n));
+  }
+  root.appendChild(el("div",{class:"resultZone"}));
+  updateProgress(mode);
+}
+
+function renderCard(q, mode, n){
+  const c = el("div",{class:"card","data-id":q.id});
+  c.appendChild(el("div",{class:"n"},`Question ${n}${q.w>1?` · ${fmt(q.w)} points`:""}`));
+  const body = el("div");
+  c.appendChild(body);
+  const fb = el("div",{class:"fb hidden"});
+  const done = (pts, msg) => { pts = Math.max(0, Math.min(q.w, pts)); STATE[mode].res[q.id]=pts; fb.className="fb "+(pts>=q.w?"ok":pts>0?"mid":"ko"); fb.innerHTML=msg; fb.classList.remove("hidden"); updateProgress(mode); };
+
+  if(q.type==="word" || q.type==="date"){
+    body.appendChild(el("div",{class:"q"}, q.type==="date" ? `Quelle est la date ? <b>${q.q}</b>` : q.q));
+    if(q.say){
+      const ec = el("div",{class:"ecoute"});
+      ec.appendChild(el("button",{class:"btn alt",type:"button","data-say":q.say},"🔊 Écouter"));
+      const lien = el("a",{href:"#"},"Pas de son ? Voir la phrase");
+      lien.onclick = e => { e.preventDefault(); lien.replaceWith(el("span",{class:"hint"},q.say)); };
+      ec.appendChild(lien); body.appendChild(ec);
+    }
+    const useQcm = mode==="aide" && (q.type==="date" || (q.d && q.aide!=="indice"));
+    if(useQcm){
+      let opts;
+      if(q.type==="date"){
+        const big = Math.abs(q.v)>=1e6;
+        const pool = shuffle(DATES.filter(x=>x.show!==q.show && (Math.abs(x.v)>=1e6)===big)).slice(0,2).map(x=>x.show);
+        opts = shuffle([q.show, ...pool]);
+      } else opts = shuffle([q.show, ...q.d]);
+      const box = el("div",{class:"opts"});
+      opts.forEach(o=>{
+        const b = el("button",{class:"opt"}, o);
+        b.onclick = () => {
+          box.querySelectorAll("button").forEach(x=>{ x.disabled=true; if(x.textContent===q.show) x.classList.add("good"); });
+          if(o===q.show) done(1,"Bravo !");
+          else { b.classList.add("bad"); done(0,`Non. La bonne réponse : <b>${q.show}</b>`); }
+        };
+        box.appendChild(b);
+      });
+      body.appendChild(box);
+    } else {
+      if(mode==="aide"){
+        const letters = q.show.replace(/[^A-Za-zÀ-ÿœ]/g,"").length;
+        body.appendChild(el("div",{class:"hint"}, q.h ? "Indice : "+q.h : `Indice : commence par « ${q.show[0]} », ${letters} lettres`));
+      }
+      const row = el("div",{class:"row"});
+      const inp = el("input",{type:"text",autocomplete:"off",autocapitalize:"off",spellcheck:"false",placeholder: q.type==="date"?"ex : -12 000":"écris ta réponse"});
+      const b = el("button",{class:"btn"},"Valider");
+      const go = () => {
+        if(!inp.value.trim()) return;
+        inp.disabled=true; b.disabled=true;
+        if(q.type==="date"){
+          const p = parseDate(inp.value), targets=[q.v,...q.alt].map(Math.abs);
+          if(p && targets.some(t=>Math.abs(p.val-t)<0.5)){
+            if(p.neg) done(1,`Bravo ! <b>${q.show}</b>`);
+            else done(0.5,`Le nombre est juste mais il manque le signe <b>-</b> : <b>${q.show}</b> (avant J.-C.). ½ point.`);
+          } else done(0,`Non. La bonne date : <b>${q.show}</b>`);
+        } else {
+          const r = estPiege(q, inp.value) ? "no" : matchWord(inp.value, q.a);
+          if((r==="exact"||r==="accent") && majManque(inp.value)) done(0.5,`Le mot est juste, mais il manque la <b>MAJUSCULE</b> : en anglais, les jours et les mois prennent toujours une majuscule → <b>${q.show}</b>. ½ point.`);
+          else if(r==="exact") done(1, q.multi ? `Bravo ! <b>${q.show}</b>` : "Bravo !");
+          else if(r==="accent") done(1,`Juste ! <b>${q.show}</b>`);
+          else if(r==="fuzzy") done(0.5,`Presque : il y a une petite erreur (une lettre ou un petit mot). Il faut écrire <b>${q.show}</b>. ½ point.`);
+          else done(0,`Non. La bonne réponse : <b>${q.show}</b>`);
+        }
+      };
+      b.onclick=go; inp.onkeydown=e=>{ if(e.key==="Enter") go(); };
+      row.append(inp,b); body.appendChild(row);
+    }
+  }
+
+  else if(q.type==="set"){
+    body.appendChild(el("div",{class:"q"},q.q));
+    if(mode==="aide") body.appendChild(el("div",{class:"hint"},"Indices : "+q.groups.map(g=>`« ${g[0][0].toUpperCase()}… » (${g[0].length} lettres)`).join(" · ")));
+    const row = el("div",{class:"row"});
+    const ins = q.groups.map(()=>{ const i=el("input",{type:"text",autocomplete:"off",autocapitalize:"off",spellcheck:"false",style:"max-width:170px"}); row.appendChild(i); return i; });
+    const b = el("button",{class:"btn"},"Valider"); row.appendChild(b);
+    b.onclick = () => {
+      if(ins.some(i=>!i.value.trim())) return;
+      ins.forEach(i=>i.disabled=true); b.disabled=true;
+      const used = new Set(); let pts=0, typo=false;
+      ins.forEach(i=>{
+        for(let g=0; g<q.groups.length; g++){
+          if(used.has(g)) continue;
+          const r = matchWord(i.value, q.groups[g]);
+          if(r!=="no"){ used.add(g); if(r==="fuzzy" || majManque(i.value)){ pts+=0.5; typo=true; } else pts+=1; break; }
+        }
+      });
+      const sc = pts/q.groups.length;
+      done(sc, sc>=1 ? "Bravo, tout est juste !" : `${fmt(pts)} sur ${q.groups.length}${typo?" (faute d'orthographe ou majuscule oubliée)":""}. Il fallait : <b>${q.show}</b>`);
+    };
+    body.appendChild(row);
+  }
+
+  else if(q.type==="order"){
+    body.appendChild(el("div",{class:"q"},q.q));
+    const seq = el("div",{class:"seq"}); const box = el("div",{class:"opts"});
+    const picked = [];
+    const v = el("button",{class:"btn"},"Valider"); v.disabled=true;
+    const clr = el("button",{class:"btn alt"},"Effacer");
+    shuffle(q.items).forEach(it=>{
+      const b = el("button",{class:"opt"},it);
+      b.onclick=()=>{ picked.push(it); b.disabled=true; b.classList.add("sel"); seq.appendChild(el("span",{},`${picked.length}. ${it}`)); v.disabled = picked.length<q.items.length; };
+      box.appendChild(b);
+    });
+    clr.onclick=()=>{ picked.length=0; seq.innerHTML=""; box.querySelectorAll("button").forEach(b=>{b.disabled=false;b.classList.remove("sel");}); v.disabled=true; };
+    v.onclick=()=>{
+      v.disabled=true; clr.disabled=true; box.querySelectorAll("button").forEach(b=>b.disabled=true);
+      const ok = picked.every((x,i)=>x===q.items[i]);
+      done(ok?q.w:0, ok?"Bravo, l'ordre est parfait !":`Non. Le bon ordre : <b>${q.items.join(" → ")}</b>`);
+    };
+    const row = el("div",{class:"row",style:"margin-top:8px"}); row.append(v,clr);
+    body.append(box, seq, row);
+  }
+
+  else if(q.type==="sort"){
+    body.appendChild(el("div",{class:"q"},q.q));
+    const grid = el("div",{class:"sort"+(q.cats.length>2?" cx":"")+(q.stack?" stack":""),style:"--n:"+q.cats.length}); const choice = {};
+    const v = el("button",{class:"btn",style:"margin-top:10px"},"Valider"); v.disabled=true;
+    q.items.forEach(([txt],i)=>{
+      grid.appendChild(el("div",{class:"lbl"},txt));
+      q.cats.forEach((cat,ci)=>{
+        const b = el("button",{class:"opt","data-r":i,"data-c":ci},cat);
+        b.onclick=()=>{ choice[i]=ci; grid.querySelectorAll(`[data-r="${i}"]`).forEach(x=>x.classList.toggle("sel", x===b)); v.disabled = Object.keys(choice).length<q.items.length; };
+        grid.appendChild(b);
+      });
+    });
+    v.onclick=()=>{
+      v.disabled=true; let good=0;
+      grid.querySelectorAll("button").forEach(b=>{
+        b.disabled=true; const r=+b.dataset.r, c=+b.dataset.c;
+        if(c===q.items[r][1]) b.classList.add("good");
+        if(choice[r]===c && c!==q.items[r][1]) b.classList.add("bad");
+      });
+      q.items.forEach(([,c],i)=>{ if(choice[i]===c) good++; });
+      const pts = Math.round(q.w*good/q.items.length*4)/4;
+      done(pts, `${good} lignes justes sur ${q.items.length} → ${fmt(pts)} / ${q.w} points.`);
+    };
+    body.append(grid, v);
+  }
+
+  else if(q.type==="def"){
+    body.appendChild(el("div",{class:"q"},`Définition : <b>${q.mot}</b>`));
+    const keys = [...q.cloze.matchAll(/\[\[(.+?)\]\]/g)].map(m=>m[1]);
+    const model = q.cloze.replace(/\[\[(.+?)\]\]/g,"<b>$1</b>");
+    if(mode==="aide"){
+      body.appendChild(el("div",{class:"hint"},"Complète les mots-clés : la première lettre est donnée."));
+      const p = el("div",{style:"line-height:2.2"});
+      const ins = [];
+      q.cloze.split(/(\[\[.+?\]\])/).forEach(part=>{
+        const m = part.match(/^\[\[(.+)\]\]$/);
+        if(m){ const w=m[1]; const i=el("input",{type:"text",class:"blank",autocomplete:"off",autocapitalize:"off",spellcheck:"false",placeholder:w[0]+"…"+" ("+w.length+")"}); ins.push([i,w]); p.appendChild(i); }
+        else p.appendChild(document.createTextNode(part));
+      });
+      const b = el("button",{class:"btn",style:"margin-top:6px"},"Valider");
+      b.onclick=()=>{
+        if(ins.some(([i])=>!i.value.trim())) return;
+        b.disabled=true; let got=0;
+        ins.forEach(([i,w])=>{ i.disabled=true; const r=matchWord(i.value,[w]); if(r==="exact"||r==="accent"){got+=1;i.style.borderColor="var(--moss)";} else if(r==="fuzzy"){got+=0.5;i.style.borderColor="var(--gold)";} else i.style.borderColor="var(--red)"; });
+        const pts = Math.round(q.w*got/ins.length*4)/4;
+        done(pts, `${fmt(got)} mot(s) juste(s) sur ${ins.length} → ${fmt(pts)} / ${q.w} points.<br>Définition complète : ${model}`);
+      };
+      body.append(p,b);
+    } else {
+      const ta = el("textarea",{placeholder:"Écris la définition complète, comme dans ta leçon.",autocapitalize:"off",spellcheck:"false"});
+      const b = el("button",{class:"btn",style:"margin-top:6px"},"Valider");
+      b.onclick=()=>{
+        if(ta.value.trim().length<3) return;
+        ta.disabled=true; b.disabled=true;
+        const miss=[]; let got=0;
+        q.groups.forEach((g,i)=>{ if(hasKey(ta.value,g)) got++; else miss.push(keys[i]||g[0]); });
+        const pts = Math.round(q.w*got/q.groups.length*4)/4;
+        done(pts, `${got} mot(s)-clé(s) sur ${q.groups.length} → ${fmt(pts)} / ${q.w} points.`
+          + (miss.length?`<br>Mots-clés oubliés : <b>${miss.join(", ")}</b>`:"<br>Tous les mots-clés y sont, bravo !")
+          + `<br>Définition de la leçon : ${model}`);
+      };
+      body.append(ta,b);
+    }
+  }
+  c.appendChild(fb);
+  return c;
+}
+
+/* ---------- Contrôle sans aide verrouillé ----------
+   Pendant le contrôle : plus d'accès à la leçon, ni à l'aide, ni au retour.
+   Quitter, recharger ou ouvrir la page ailleurs arrête le contrôle :
+   les questions non faites comptent 0. */
+const KEY_C = "p011_controle_en_cours";
+let LOCKED = false;
+function lock(on){
+  LOCKED = on;
+  document.body.classList.toggle("lock", on);
+  $("#lockBar").classList.toggle("hidden", !on);
+}
+function gateSans(){
+  const root = $("#tab-sans");
+  root.innerHTML = "";
+  const g = el("div",{class:"intro gate"});
+  g.innerHTML = `<div style="font-size:22px;font-weight:900">🔒 Le contrôle sans aide</div>
+    <p>C'est comme le vrai contrôle en classe. <b>Dès que tu commences :</b></p>
+    <ul>
+      <li>la <b>leçon</b> et les <b>exercices avec aide</b> sont <b>verrouillés</b> jusqu'à la dernière question ;</li>
+      <li>tu écris tout toi-même, sans choix proposé ;</li>
+      <li>si tu quittes ou recharges la page, le contrôle s'arrête et <b>les questions non faites comptent 0</b>.</li>
+    </ul>
+    <p>Commence seulement si tu connais ta leçon par cœur.</p>`;
+  const row = el("div",{class:"row"});
+  const go = el("button",{class:"btn"},"Commencer le contrôle");
+  go.onclick = () => startControle();
+  const back = el("button",{class:"btn alt"},"Pas encore, je révise");
+  back.onclick = () => $('nav button[data-tab="lecon"]').click();
+  row.append(go, back); g.appendChild(row);
+  root.appendChild(g);
+}
+function startControle(onlyIds){
+  startMode("sans", onlyIds);
+  lock(true);
+  store.set(KEY_C, {ids:STATE.sans.ids, res:{}, retry:STATE.sans.retry});
+  window.scrollTo({top:0});
+}
+/* Page rechargée ou ouverte ailleurs pendant un contrôle : il est arrêté et noté tel quel */
+function controleInterrompu(c){
+  const root = $("#tab-sans");
+  const faites = Object.keys(c.res||{}).length;
+  STATE.sans = {ids:c.ids, res:Object.assign({}, c.res||{}), retry:!!c.retry, interrompu:true};
+  c.ids.forEach(id=>{ if(STATE.sans.res[id]===undefined) STATE.sans.res[id]=0; });
+  root.innerHTML = `<div class="intro" style="border-color:var(--red)"><b>Contrôle interrompu.</b><br>
+    La page a été quittée, rechargée ou ouverte ailleurs pendant le contrôle.
+    Tu avais répondu à ${faites} question${faites>1?"s":""} sur ${c.ids.length} : les autres comptent 0.</div><div class="resultZone"></div>`;
+  try{ localStorage.removeItem(KEY_C); }catch(e){}
+  finish("sans");
+  document.querySelectorAll("nav button").forEach(x=>x.classList.toggle("on",x.dataset.tab==="sans"));
+  ["lecon","aide","sans"].forEach(t=>$("#tab-"+t).classList.toggle("hidden", t!=="sans"));
+}
+window.addEventListener("beforeunload", e => { if(LOCKED){ e.preventDefault(); e.returnValue = ""; } });
+window.addEventListener("storage", e => {
+  // Le contrôle a été arrêté depuis un autre onglet : celui-ci s'arrête aussi
+  if(e.key===KEY_C && e.newValue===null && LOCKED){
+    LOCKED = false;
+    alert("Le contrôle a été arrêté : la page a été ouverte ailleurs.");
+    location.reload();
+  }
+});
+
+function updateProgress(mode){
+  const S = STATE[mode], root = $(MODES[mode].box);
+  if(mode==="sans" && LOCKED) store.set(KEY_C, {ids:S.ids, res:S.res, retry:S.retry});
+  const doneN = Object.keys(S.res).length, total = S.ids.length;
+  root.querySelector(".prog i").style.width = (100*doneN/total)+"%";
+  const pts = Object.values(S.res).reduce((a,b)=>a+b,0);
+  const maxSoFar = Object.keys(S.res).reduce((a,id)=>a+BANK[id].w,0);
+  root.querySelector(".cnt").textContent = `Questions faites : ${doneN} / ${total}` + (doneN?` · points : ${fmt(pts)} / ${fmt(maxSoFar)}`:"");
+  if(doneN===total) finish(mode);
+}
+
+const PRET = 17;   // note sans aide pour « tu es prêt » (et 3 vies dans la salle d'arcade)
+function blocDe(q){ return q.part; }
+function texteQ(q){ const d=document.createElement("div"); d.innerHTML = q.type==="def" ? "Écrire : "+q.mot : q.q; return d.textContent; }
+/* Correction du contrôle : seulement les blocs de la leçon où il y a eu des erreurs */
+function correction(wrong){
+  const z = el("div",{class:"revoir"});
+  z.appendChild(el("h3",{},`📖 À refaire : ${wrong.length} question${wrong.length>1?"s":""} ratée${wrong.length>1?"s":""}`));
+  z.appendChild(el("p",{},"Relis les parties de la leçon où tu t'es trompé, puis refais seulement ces questions. <b>Ça ne te donne pas de point en plus</b> : c'est pour comprendre tes erreurs."));
+  ORDER.forEach(pid=>{
+    const qs = wrong.filter(id=>blocDe(BANK[id])===pid);
+    if(!qs.length) return;
+    const src = document.querySelector(`#tab-lecon [data-part="${pid}"]`);
+    const c = src.cloneNode(true);
+    c.classList.remove("hidden");
+    c.querySelectorAll(".verif,[data-done]").forEach(x=>x.remove());
+    c.querySelectorAll(".k").forEach(k=>k.classList.add("show"));
+    const t = el("div",{style:"font-weight:800;margin-top:10px"},`Tu t'es trompé ici (${qs.length}) :`);
+    const ul = el("ul",{class:"ques"}); qs.forEach(id=>ul.appendChild(el("li",{},texteQ(BANK[id]))));
+    z.append(t, ul, c);
+  });
+  const b = el("button",{class:"btn"},`J'ai relu : je refais mes ${wrong.length} question${wrong.length>1?"s":""} ratée${wrong.length>1?"s":""}`);
+  b.onclick = () => startControle(wrong);
+  z.appendChild(b);
+  return z;
+}
+function finish(mode){
+  const S = STATE[mode], M = MODES[mode], root = $(M.box);
+  const max = S.ids.reduce((a,id)=>a+BANK[id].w,0);
+  const pts = Object.values(S.res).reduce((a,b)=>a+b,0);
+  const pct = Math.round(100*pts/max);
+  const sur20 = Math.round(pts/max*20*2)/2;
+  const ok = mode==="sans" ? sur20>=PRET : pct>=80;
+  const wrong = S.ids.filter(id=>S.res[id] < BANK[id].w);
+  if(mode==="sans"){ lock(false); root.classList.remove("encours"); try{ localStorage.removeItem(KEY_C); }catch(e){} }
+  if(!S.retry){
+    const prev = store.get(M.key) || {};
+    store.set(M.key, {last:{sur20,pct,date:new Date().toLocaleDateString("fr-FR")}, best: (!prev.best || pct>prev.best.pct) ? {sur20,pct} : prev.best});
+    showNotes();
+  }
+  const z = root.querySelector(".resultZone");
+  z.innerHTML = "";
+  const r = el("div",{class:"result "+(ok?"ok":"ko")});
+  let titre, texte;
+  if(S.retry){
+    titre = wrong.length ? "Encore à revoir" : "Erreurs corrigées ✓";
+    texte = (wrong.length ? `Il reste ${wrong.length} question${wrong.length>1?"s":""} à revoir : relis encore la leçon.` : "Bravo, tu as compris tes erreurs !")
+      + (mode==="sans" ? " Ta note du contrôle ne change pas. Pour l'améliorer, refais le contrôle en entier (<b>Tout recommencer</b>)." : "");
+  } else if(mode==="sans"){
+    if(sur20>=PRET){ titre = "Tu es prêt pour ton contrôle ! ✓";
+      texte = "Excellent travail ! 🎮 <b>3 vies</b> t'attendent dans la salle d'arcade (une seule fois pour cette fiche). Elles s'ajoutent quand tu ouvres la salle d'arcade, et sont valables jusqu'à minuit ce jour-là."; }
+    else if(sur20>=16){ titre = "Presque prêt";
+      texte = `Il faut ${PRET} / 20 pour être prêt. Regarde ta correction ci-dessous, puis refais le contrôle en entier un peu plus tard.`; }
+    else { titre = "À retravailler";
+      texte = `Il faut ${PRET} / 20 pour être prêt. Regarde ta correction, relis la leçon en mode mémoire, puis refais le contrôle en entier un autre moment.`; }
+  } else {
+    titre = ok ? "Acquis ✓" : "À retravailler";
+    texte = ok ? "Bien joué ! Tu as au moins 16 / 20 : la partie <b>sans aide</b> est ouverte. C'est elle qui ressemble au contrôle."
+      : "Moins de 16 / 20 : la partie sans aide reste fermée. Relis la leçon en mode mémoire, entraîne-toi sur tes erreurs, puis clique sur <b>Tout recommencer</b> : il faut 16 / 20 sur une partie complète.";
+  }
+  r.innerHTML = `<div>${S.retry?"Correction de tes erreurs (sans note)":"Ta note "+M.label}</div>
+    ${S.retry ? `<div class="big">${S.ids.length-wrong.length} / ${S.ids.length}</div><div>questions réussies</div>` : `<div class="big">${fmt(sur20)} / 20</div>
+    <div><b>${pct} %</b> de bonnes réponses (${fmt(pts)} / ${fmt(max)} points)</div>`}
+    <p style="font-size:19px;font-weight:800">${titre}</p>
+    <p>${texte}</p>`;
+  const row = el("div",{class:"row",style:"justify-content:center"});
+  const relance = ids => { if(mode==="sans") startControle(ids); else { startMode(mode, ids); window.scrollTo({top:0}); } };
+  if(wrong.length && mode==="aide"){ const b=el("button",{class:"btn"},`Refaire mes ${wrong.length} erreur${wrong.length>1?"s":""}`); b.onclick=()=>relance(wrong); row.appendChild(b); }
+  const b2 = el("button",{class:"btn alt"},mode==="sans"?"Tout recommencer (nouveau contrôle noté)":"Tout recommencer"); b2.onclick=()=>relance(); row.appendChild(b2);
+  r.appendChild(row);
+  z.appendChild(r);
+  if(mode==="sans" && wrong.length) z.appendChild(correction(wrong));
+  if(!S.retry && typeof enregistrerProgression==="function"){
+    // Score enregistré en pourcentage (sur 100) : les demi-points restent des nombres entiers
+    const bc = el("div",{class:"bilan-card"}); r.appendChild(bc);
+    Promise.resolve(enregistrerProgression(M.code, pct, 100)).then(()=>{
+      const box=document.getElementById("atelier-progression-box");
+      if(box && box.parentNode!==bc) bc.appendChild(box);
+      chargerNotesCompte();
+    });
+  }
+}
+
+/* Meilleures notes enregistrées sur le compte (tous appareils confondus) */
+const REMOTE = {};
+async function chargerNotesCompte(){
+  try{
+    if(typeof supabase==="undefined") return;
+    const sb = supabase.createClient("https://rwqsvrmjjoihuhmvbwuu.supabase.co","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ3cXN2cm1qam9paHVobXZid3V1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQzNjQxNTMsImV4cCI6MjA5OTk0MDE1M30.VtdOnI169-erf48NpxLPCC0th6kHqBcsBuCauOx52HI");
+    const s = await sb.auth.getSession(); if(!s.data.session) return;
+    let id = null; try{ id = localStorage.getItem("atelier_enfant_actif"); }catch(e){}
+    if(!id) return;
+    const r = await sb.from("progression").select("fiche_code,score,total").eq("enfant_id",id).in("fiche_code",[MODES.aide.code, MODES.sans.code]);
+    if(r.error || !r.data) return;
+    r.data.forEach(l=>{ const p = l.total>0 ? Math.round(l.score/l.total*100) : 0; REMOTE[l.fiche_code] = Math.max(REMOTE[l.fiche_code]||0, p); });
+    showNotes();
+  }catch(e){}
+}
+function showNotes(){
+  try{ paintTabs(); }catch(e){}
+  [["aide","#nAide","#vAide"],["sans","#nSans","#vSans"]].forEach(([m,n,v])=>{
+    const d = store.get(MODES[m].key);
+    const rb = REMOTE[MODES[m].code];
+    if(!d || !d.last){
+      if(rb!=null){ $(n).textContent=`${fmt(Math.round(rb/5*2)/2)} / 20 · ${rb} %`; const okr = m==="sans" ? Math.round(rb/5*2)/2>=PRET : rb>=80; $(v).textContent=(okr?(m==="sans"?"Prêt ✓":"Acquis ✓"):"À retravailler")+" · meilleure note du compte"; $(v).className="ver "+(okr?"ok":"ko"); }
+      else { $(n).textContent="—"; $(v).textContent="Pas encore faite"; $(v).className="ver"; }
+      return;
+    }
+    if(rb!=null && (!d.best || rb>d.best.pct)) d.best = {pct:rb};
+    $(n).textContent = `${fmt(d.last.sur20)} / 20 · ${d.last.pct} %`;
+    const ok = m==="sans" ? d.last.sur20>=PRET : d.last.pct>=80;
+    $(v).textContent = (m==="sans" ? (ok?"Prêt ✓":d.last.sur20>=16?"Presque prêt":"À retravailler") : (ok?"Acquis ✓":"À retravailler")) + ` · le ${d.last.date}` + (d.best && d.best.pct>d.last.pct ? ` · record ${d.best.pct} %` : "");
+    $(v).className = "ver "+(ok?"ok":"ko");
+  });
+}
+
+/* ---------- Onglets verrouillés ----------
+   Avec aide : seulement quand les 4 blocs de la leçon sont réussis.
+   Sans aide : seulement avec au moins 16/20 (80 %) dans la partie avec aide. */
+const SEUIL = 80;
+const leconOk = () => ORDER.every(id=>doneStore[id]);
+function meilleureAide(){
+  const d = store.get(MODES.aide.key) || {};
+  const loc = Math.max(d.best ? d.best.pct : 0, d.last ? d.last.pct : 0);
+  return Math.max(loc, REMOTE[MODES.aide.code]||0);
+}
+const aideOk = () => meilleureAide() >= SEUIL;
+function paintTabs(){
+  $('nav button[data-tab="aide"]').classList.toggle("locked", !leconOk());
+  $('nav button[data-tab="sans"]').classList.toggle("locked", !aideOk());
+}
+function verrou(tab){
+  const root = $("#tab-"+tab);
+  const g = el("div",{class:"gatebox"});
+  if(tab==="aide"){
+    const faits = ORDER.filter(id=>doneStore[id]).length;
+    g.innerHTML = `<h3>🔒 La partie avec aide est fermée</h3>
+      <p>Elle s'ouvrira quand tu auras réussi <b>les 6 blocs de la leçon</b> (3 bonnes réponses d'affilée à chaque bloc).</p>
+      <p>Pour l'instant : <b>${faits} bloc${faits>1?"s":""} sur 6</b> réussi${faits>1?"s":""}.</p>`;
+  } else {
+    const p = meilleureAide();
+    g.innerHTML = `<h3>🔒 La partie sans aide est fermée</h3>
+      <p>Elle s'ouvrira quand tu auras au moins <b>16 / 20</b> (80 %) dans la partie <b>avec aide</b>.</p>
+      <p>${p ? `Ta meilleure note avec aide : <b>${fmt(Math.round(p/5*2)/2)} / 20</b> (${p} %).` : "Tu n'as pas encore fini la partie avec aide."}
+      ${leconOk() ? "" : "<br>Et avant ça, il faut finir la leçon."}</p>`;
+  }
+  const row = el("div",{class:"row"});
+  const go = el("button",{class:"btn"}, tab==="aide" || !leconOk() ? "Retour à la leçon" : "Aller à la partie avec aide");
+  go.onclick = () => $(`nav button[data-tab="${tab==="aide" || !leconOk() ? "lecon" : "aide"}"]`).click();
+  row.appendChild(go); g.appendChild(row);
+  root.innerHTML = ""; root.appendChild(g);
+}
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{
+  document.querySelectorAll("nav button").forEach(x=>x.classList.toggle("on",x===b));
+  ["lecon","aide","sans"].forEach(t=>$("#tab-"+t).classList.toggle("hidden", t!==b.dataset.tab));
+  if(LOCKED) return;
+  const t = b.dataset.tab;
+  if(t==="aide"){
+    if(!leconOk()){ STATE.aide = null; verrou("aide"); }
+    else if(!STATE.aide) startMode("aide");
+  }
+  if(t==="sans"){
+    if(!aideOk()){ STATE.sans = null; verrou("sans"); }
+    else if(!STATE.sans) gateSans();
+  }
+  window.scrollTo({top:0});
+});
+$("#goAide").onclick = () => $('nav button[data-tab="aide"]').click();
+$("#memBtn").onclick=()=>{
+  const on = document.body.classList.toggle("mem");
+  document.querySelectorAll(".k").forEach(k=>k.classList.remove("show"));
+  $("#memBtn").textContent = on ? "Montrer tous les mots-clés" : "Mode mémoire : cacher les mots-clés";
+  $("#memInfo").classList.toggle("hidden", !on);
+};
+document.querySelectorAll(".k").forEach(k=>k.onclick=()=>{ if(document.body.classList.contains("mem")) k.classList.add("show"); });
+/* ---------- 3 questions de vérification par bloc ----------
+   Le bloc suivant reste caché tant que les 3 réponses ne sont pas justes.
+   Le bloc au-dessus reste visible : l'enfant peut relire pour répondre. */
+const CHECKS = {
+  p1: [["Une hypothèse, c'est…",["une proposition de réponse","une réponse toujours juste","une expérience"]],
+       ["Une hypothèse peut s'avérer…",["fausse","impossible","dangereuse"]],
+       ["Le coton n'est pas dur. C'est pourtant…",["un solide","un liquide","un gaz"]],
+       ["Le sucre en poudre coule. C'est pourtant…",["un solide","un liquide","un gaz"]],
+       ["Avec qui faut-il être d'accord : Chat Noir ou Ladybug ?",["aucun des deux","Chat Noir","Ladybug"]],
+       ["« Un liquide, c'est ce qui coule » est l'hypothèse de…",["Ladybug","Chat Noir","Papillon"]]],
+  p2: [["Un solide a…",["une forme propre","la forme du récipient","une surface toujours horizontale"]],
+       ["Un solide, on peut…",["le saisir avec les doigts","le verser comme de l'eau","le comprimer comme l'air"]],
+       ["La semoule est…",["un solide divisé","un liquide","un gaz"]],
+       ["Un solide divisé est fait de solides de petite…",["taille","forme","couleur"]],
+       ["La surface d'un solide divisé est…",["pas forcément plane et horizontale","toujours horizontale","toujours verticale"]],
+       ["Le tas de semoule a-t-il une forme propre ?",["non","oui","seulement s'il est chaud"]]],
+  p3: [["Au repos, la surface d'un liquide est toujours…",["plane et horizontale","penchée comme le verre","en forme de tas"]],
+       ["Un liquide prend la forme…",["du récipient","d'un tas","d'une boule"]],
+       ["Le fil à plomb donne…",["la verticale","l'horizontale","la température"]],
+       ["Peut-on saisir un liquide avec les doigts ?",["non","oui","seulement l'huile"]],
+       ["On penche le verre d'eau : la surface reste…",["horizontale","parallèle au fond du verre","verticale"]],
+       ["La glace dans un verre qu'on redresse garde sa surface penchée car c'est…",["un solide","un liquide","un gaz"]]],
+  p4: [["Le 3e état physique de la matière est l'état…",["gazeux","liquide","divisé"]],
+       ["Une seringue « vide » est en fait pleine…",["d'air","de rien","d'eau"]],
+       ["Le volume d'un gaz peut diminuer : il est…",["compressible","expansible","horizontal"]],
+       ["Le volume d'un gaz peut augmenter : il est…",["expansible","compressible","propre"]],
+       ["Un gaz prend…",["tout l'espace qu'on lui offre","la forme d'un tas","une forme propre"]],
+       ["Seringue d'eau bouchée : peut-on enfoncer le piston ?",["non","oui, jusqu'au bout","oui, un peu"]]],
+  p5: [["« Il occupe tout l'espace » : c'est…",["un gaz","un liquide","un solide"]],
+       ["« Sa surface est plane et horizontale » : c'est…",["un liquide","un gaz","un solide divisé"]],
+       ["« Il a sa forme propre » : c'est…",["un solide","un liquide","un gaz"]],
+       ["Les caractéristiques d'un état s'appellent ses…",["propriétés","formes","hypothèses"]],
+       ["Un flacon bouché qui paraît vide contient…",["un gaz (de l'air)","rien du tout","un liquide"]],
+       ["Le sable dans un seau est…",["un solide divisé","un liquide","un gaz"]]],
+  p6: [["Le palier de l'eau qu'on chauffe est à…",["100 °C","0 °C","50 °C"]],
+       ["Pendant le palier, la température…",["ne monte plus","monte vite","descend"]],
+       ["Pendant le palier, l'eau est…",["liquide + gaz","seulement solide","seulement liquide"]],
+       ["Avant le palier, l'eau est…",["liquide","gazeuse","solide"]],
+       ["On place les points de mesure avec…",["des croix","des ronds coloriés","des flèches"]],
+       ["On relie les points…",["à main levée","à la règle","au compas"]]]
+};
+const ORDER = ["p1","p2","p3","p4","p5","p6"];
+const doneStore = store.get("p011_compris") || {};
+function paintParts(){
+  let open = true;
+  ORDER.forEach(id=>{
+    const part = document.querySelector(`[data-part="${id}"]`);
+    part.classList.toggle("hidden", !open);
+    if(!doneStore[id]) open = false;
+  });
+  const lockMsg = $("#partLock");
+  const next = ORDER.find(id=>!doneStore[id]);
+  lockMsg.classList.toggle("hidden", !next || next===ORDER[ORDER.length-1] && false);
+  lockMsg.innerHTML = next ? `🔒 La suite de la leçon (et la partie avec aide) s'ouvrira quand tu auras réussi les 3 questions d'affilée du bloc « ${document.querySelector(`[data-part="${next}"] h3`).textContent} », puis cliqué sur « J'ai bien compris ».` : "";
+  if(!next) lockMsg.classList.add("hidden");
+  $("#leconFinie").classList.toggle("hidden", !!next);
+}
+/* Règle : 3 questions tirées au hasard dans le bloc, à faire dans l'ordre.
+   Une seule erreur => on recommence à la question 1 (nouveau tirage). */
+ORDER.forEach(id=>{
+  const part = document.querySelector(`[data-part="${id}"]`);
+  const btn = part.querySelector("[data-done]");
+  const box = el("div",{class:"verif"});
+  part.insertBefore(box, btn);
+  let tirage = [], step = 0, msg = "";
+  const paintBtn = () => {
+    const all = step>=3;
+    btn.disabled = !all && !doneStore[id];
+    btn.classList.toggle("on", !!doneStore[id]);
+    btn.textContent = doneStore[id] ? "Compris ✓" : all ? "J'ai bien compris" : "J'ai bien compris (réussis d'abord les 3 questions)";
+  };
+  const nouveauTirage = () => { tirage = shuffle(CHECKS[id].map((_,k)=>k)).slice(0,3); step = 0; };
+  const render = () => {
+    box.innerHTML = "";
+    box.appendChild(el("div",{class:"verif-t"},"✏️ Je vérifie que j'ai compris : 3 questions à réussir d'affilée (je peux relire le bloc au-dessus)."));
+    if(doneStore[id]){ box.appendChild(el("div",{class:"fb ok"},"Bloc réussi ✓")); paintBtn(); return; }
+    const st = el("div",{class:"steps3"});
+    [0,1,2].forEach(k=>st.appendChild(el("span",{class: k<step?"ok":(k===step?"cur":"")}, (k<step?"✓ ":"")+"Question "+(k+1))));
+    box.appendChild(st);
+    if(msg){ box.appendChild(el("div",{class:"fb ko"},msg)); }
+    if(step>=3){ box.appendChild(el("div",{class:"fb ok"},"Les 3 réponses sont justes ! Clique sur « J'ai bien compris »."));
+      paintBtn(); return; }
+    const [q,opts] = CHECKS[id][tirage[step]];   // opts[0] = la bonne réponse
+    const c = el("div",{class:"vq"});
+    c.appendChild(el("div",{class:"q"},`Question ${step+1} sur 3 : ${q}`));
+    const row = el("div",{class:"qcm-v"});
+    shuffle(opts.slice()).forEach(o=>{
+      const b = el("button",{class:"btn-v"},o);
+      b.onclick = () => {
+        if(o === opts[0]){ step++; msg=""; render(); }
+        else { msg = "❌ Ce n'est pas la bonne réponse. <b>Tu recommences à la question 1.</b> Relis bien le bloc au-dessus avant de répondre."; nouveauTirage(); render(); }
+        paintBtn();
+      };
+      row.appendChild(b);
+    });
+    c.append(row); box.appendChild(c);
+    paintBtn();
+  };
+  nouveauTirage(); render();
+  btn.onclick = () => {
+    if(btn.disabled || doneStore[id]) return;
+    doneStore[id] = true; store.set("p011_compris",doneStore); render(); paintParts(); paintTabs();
+    const n = ORDER[ORDER.indexOf(id)+1];
+    if(n) setTimeout(()=>document.querySelector(`[data-part="${n}"]`).scrollIntoView({behavior:"smooth",block:"start"}),100);
+  };
+});
+paintParts();
+paintTabs();
+showNotes();
+chargerNotesCompte();
+{ const c = store.get(KEY_C); if(c && c.ids) controleInterrompu(c); }
+</script>
+</body>
+</html>
