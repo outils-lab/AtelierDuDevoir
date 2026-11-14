@@ -180,131 +180,107 @@ body.noson .say, body.noson .ecoute{display:none}
     <button class="btn" id="memBtn">Mode mémoire : cacher les mots-clés</button>
     <span id="memInfo" class="hidden" style="font-size:14px;color:var(--muted)">Dis le mot à voix haute, puis touche la case pour vérifier.</span>
   </div>
-  <div class="tip"><b>Histoire · tout le programme depuis la rentrée</b> : les grandes périodes, les outils de l'historien, les chiffres romains, Clovis et les Mérovingiens, Charlemagne et les Carolingiens. C'est pour préparer ton <b>contrôle</b>.</div>
-  <div class="gatebox" style="margin-top:0"><b>Les règles du parcours :</b>
+  <div class="gatebox" style="margin-top:0"><b>Comment ça marche :</b>
     <ol style="margin:6px 0 0">
-      <li><b>La leçon</b> : à la fin de chaque bloc, 3 questions à choix. <b>Une seule erreur = tu recommences à la question 1</b> du bloc.</li>
-      <li><b>Avec aide</b> : s'ouvre quand les 7 blocs de la leçon sont réussis.</li>
-      <li><b>Sans aide</b> : s'ouvre quand tu as au moins <b>16 / 20</b> dans la partie avec aide.</li>
+      <li><b>Leçon</b> : 7 petits blocs. Après chaque bloc, 3 questions à réussir d'affilée.</li>
+      <li><b>Avec aide</b> : s'ouvre quand la leçon est finie.</li>
+      <li><b>Sans aide</b> : s'ouvre à partir de <b>16 / 20</b> avec aide.</li>
     </ol></div>
 
   <div class="part" data-part="p1">
-    <h3>1) Les 5 grandes périodes de l'histoire</h3>
-    <p>L'histoire est découpée en <span class="k">5</span> périodes. Chacune commence par un <b>grand événement</b> : c'est une <b>date repère</b>.</p>
+    <h3>1) Les 5 grandes périodes</h3>
     <div class="frise">
       <div class="d">-3 millions</div><div class="e c1"><b>Préhistoire</b> : apparition de l'<span class="k">Homme</span></div>
       <div class="d"><span class="k">-3000</span></div><div class="e c2"><b>Antiquité</b> : invention de l'<span class="k">écriture</span></div>
-      <div class="d"><span class="k">476</span></div><div class="e c3"><b>Moyen Âge</b> : chute de l'<span class="k">Empire romain</span> d'Occident</div>
-      <div class="d"><span class="k">1492</span></div><div class="e c4"><b>Temps modernes</b> : Christophe <span class="k">Colomb</span> découvre l'<span class="k">Amérique</span></div>
-      <div class="d"><span class="k">1789</span></div><div class="e c5"><b>Époque contemporaine</b> : la <span class="k">Révolution</span> française… jusqu'à nos jours</div>
+      <div class="d"><span class="k">476</span></div><div class="e c3"><b>Moyen Âge</b> : chute de l'<span class="k">Empire romain</span></div>
+      <div class="d"><span class="k">1492</span></div><div class="e c4"><b>Temps modernes</b> : <span class="k">Colomb</span> découvre l'Amérique</div>
+      <div class="d"><span class="k">1789</span></div><div class="e c5"><b>Époque contemporaine</b> : la <span class="k">Révolution</span> française</div>
     </div>
-    <div class="tip">Pour retenir l'ordre : « <b>P</b>apa <b>A</b>ime <b>M</b>anger <b>T</b>es <b>C</b>rêpes » = <b>P</b>réhistoire, <b>A</b>ntiquité, <b>M</b>oyen Âge, <b>T</b>emps modernes, <b>C</b>ontemporaine.</div>
-    <p><b>Des traces de chaque période :</b></p>
     <ul>
-      <li>Préhistoire : <b>Lucy</b>, les peintures des <b>grottes</b>, les outils en pierre.</li>
-      <li>Antiquité : les <b>hiéroglyphes</b>, les statues grecques, le <b>pont du Gard</b> (construit par les Romains).</li>
-      <li>Moyen Âge : les <b>enluminures</b>, la <b>tapisserie de Bayeux</b>, <b>Notre-Dame de Paris</b>, les châteaux forts. Clovis et Charlemagne vivent au <span class="k">Moyen Âge</span>.</li>
-      <li>Temps modernes : la <b>chambre de Louis XIV</b> à Versailles, les cartes des explorateurs.</li>
-      <li>Époque contemporaine : les <b>photos</b>, les films, les objets d'aujourd'hui.</li>
+      <li>Ordre : « <b>P</b>apa <b>A</b>ime <b>M</b>anger <b>T</b>es <b>C</b>rêpes ».</li>
+      <li>Traces : Lucy (Préhistoire) · pont du Gard (Antiquité) · Bayeux, Notre-Dame (Moyen Âge) · chambre de Louis XIV (Temps modernes) · photo (aujourd'hui).</li>
+      <li>Clovis et Charlemagne vivent au <span class="k">Moyen Âge</span>.</li>
     </ul>
-    <div class="warn">Attention au signe <b>-</b> : <b>-3000</b> veut dire 3000 ans <b>avant</b> Jésus-Christ. Les autres dates (476, 1492, 1789) sont <b>après</b> Jésus-Christ : pas de signe.</div>
     <button class="btn alt done-btn" data-done="p1">J'ai bien compris</button>
   </div>
 
   <div class="part" data-part="p2">
     <h3>2) Les outils de l'historien</h3>
-    <p>L'historien est un <b>détective du passé</b> : il cherche des indices pour comprendre ce qui s'est passé.</p>
     <ul>
-      <li><b>Lire une frise</b> : elle a un <span class="k">titre</span>, des <span class="k">repères</span> (les dates), des <span class="k">événements</span> et une <span class="k">légende</span> (les couleurs).</li>
-      <li><b>Les repères</b> : 1 décennie = <span class="k">10</span> ans · 1 siècle = <span class="k">100</span> ans · 1 millénaire = <span class="k">1 000</span> ans.</li>
-      <li><b>Analyser un document</b> : une <span class="k">photographie</span>, une <span class="k">œuvre d'art</span> (tableau, tapisserie, statue) ou une <span class="k">carte</span>.</li>
-      <li><b>Les sources</b> : les sources <span class="k">écrites</span> (textes, lettres), les sources <span class="k">orales</span> (ce qu'on raconte) et les <span class="k">vestiges</span> (ce qui reste : os, objets, monuments).</li>
-      <li><b>La démarche</b> : <span class="k">réflexion</span> → <span class="k">hypothèse</span> → <span class="k">recherche</span> d'informations → <span class="k">sélection</span> des informations → <span class="k">conclusion</span>.</li>
+      <li>Décennie = <span class="k">10</span> ans · siècle = <span class="k">100</span> ans · millénaire = <span class="k">1 000</span> ans.</li>
+      <li>Siècle : je <b>cache</b> les 2 derniers chiffres et j'<span class="k">ajoute 1</span> → <b>14</b>92 : 14 + 1 = <b>XV<sup>e</sup></b> siècle.</li>
+      <li>Durée : date <b>récente</b> − date <b>ancienne</b> → 511 − 481 = 30 ans.</li>
+      <li>Une frise : <b>titre</b>, <b>repères</b> (dates), <b>événements</b>, <b>légende</b> (couleurs).</li>
+      <li>Sources : <span class="k">écrites</span> (textes) · <span class="k">orales</span> (on raconte) · <span class="k">vestiges</span> (objets, os, monuments).</li>
+      <li>Démarche : réflexion → hypothèse → recherche → sélection → conclusion.</li>
     </ul>
-    <div class="def"><b>Trouver le siècle d'une date</b> : je <span class="k">cache</span> les 2 derniers chiffres, puis j'<span class="k">ajoute 1</span>.</div>
-    <div class="ex"><b>14</b><span style="color:#aaa">92</span> → 14 + 1 = <b>15</b> → <b>XV<sup>e</sup> siècle</b><br><b>4</b><span style="color:#aaa">81</span> → 4 + 1 = <b>5</b> → <b>V<sup>e</sup> siècle</b><br><b>7</b><span style="color:#aaa">68</span> → 7 + 1 = <b>8</b> → <b>VIII<sup>e</sup> siècle</b></div>
-    <div class="def"><b>Calculer une durée</b> : date la plus <span class="k">récente</span> − date la plus <span class="k">ancienne</span>.<br>Exemple : Clovis est roi de 481 à 511 → 511 − 481 = <b>30 ans</b>.</div>
-    <div class="tip">Pourquoi +1 ? Parce que les années 1 à 100 forment le <b>1<sup>er</sup></b> siècle. Comme toi : pendant ta 1<sup>re</sup> année de vie, tu avais 0 an !</div>
     <button class="btn alt done-btn" data-done="p2">J'ai bien compris</button>
   </div>
 
   <div class="part" data-part="p3">
     <h3>3) Les chiffres romains</h3>
-    <p>Les Romains écrivaient les nombres avec <span class="k">7</span> lettres :</p>
     <div class="romains"><span><b>I</b>1</span><span><b>V</b>5</span><span><b>X</b>10</span><span><b>L</b>50</span><span><b>C</b>100</span><span><b>D</b>500</span><span><b>M</b>1000</span></div>
-    <div class="tip">Phrase pour retenir l'ordre : « <b>I</b>l <b>V</b>oulait e<b>X</b>plorer <b>L</b>es <b>C</b>hâteaux <b>D</b>u <b>M</b>oyen Âge ».</div>
     <ul>
-      <li>Petit <b>après</b> grand → j'<span class="k">ajoute</span> : VI = 5 + 1 = 6 · XV = 15 · LX = 60.</li>
-      <li>Petit <b>avant</b> grand → j'<span class="k">enlève</span> : IV = 5 − 1 = 4 · IX = 9 · XL = 40 · XC = 90.</li>
-      <li>Jamais plus de <span class="k">3</span> fois la même lettre : on écrit IV, pas IIII ; XL, pas XXXX.</li>
+      <li>« <b>I</b>l <b>V</b>oulait e<b>X</b>plorer <b>L</b>es <b>C</b>hâteaux <b>D</b>u <b>M</b>oyen Âge ».</li>
+      <li>Petit <b>après</b> grand → j'<span class="k">ajoute</span> : VI = 6.</li>
+      <li>Petit <b>avant</b> grand → j'<span class="k">enlève</span> : IV = 4 · IX = 9 · XL = 40 · XC = 90.</li>
+      <li>Jamais plus de <span class="k">3</span> fois la même lettre (IV, pas IIII).</li>
     </ul>
-    <div class="ex">Pour lire un grand nombre, je le <b>découpe</b> : XIX = X + IX = 10 + 9 = <b>19</b> · LXXX = 50 + 30 = <b>80</b>.</div>
-    <p>On les utilise pour les <span class="k">siècles</span> (XV<sup>e</sup> siècle) et les numéros des <span class="k">rois</span> (Louis XIV = Louis 14).</p>
     <button class="btn alt done-btn" data-done="p3">J'ai bien compris</button>
   </div>
 
   <div class="part" data-part="p4">
     <h3>4) Clovis et les Mérovingiens</h3>
-    <p><b>Des barbares venus de l'Est.</b> Au début du V<sup>e</sup> siècle, les Gallo-Romains vivent en paix. Des peuples <span class="k">barbares</span> venus de l'<span class="k">Est</span> envahissent la Gaule. Les <span class="k">Francs</span> s'installent dans le nord de la Gaule, en <span class="k">Belgique</span>.</p>
-    <p><b>Clovis, roi des Francs.</b> Clovis est le petit-fils du roi franc <span class="k">Mérovée</span> (c'est pour ça qu'on dit les <b>Mérovingiens</b>). Il n'a que <span class="k">16</span> ans quand son père meurt en <span class="k">481</span> : il devient roi. C'est un guerrier courageux, rusé, mais impitoyable avec ses ennemis.</p>
-    <p>Il épouse <span class="k">Clotilde</span>, une femme <span class="k">catholique</span>. Sur ses conseils, il se fait <span class="k">baptiser</span> en 496 ou 498, à Reims, par l'évêque <b>Remi</b>. Il devient le <span class="k">premier</span> roi catholique de l'Occident chrétien.</p>
-    <p>Clovis reçoit le soutien des <span class="k">évêques</span> et de son peuple : il peut agrandir son royaume. Sa capitale est <span class="k">Paris</span>.</p>
-    <p><b>Le déclin des Mérovingiens.</b> Clovis meurt en <span class="k">511</span>. Ses <span class="k">4</span> fils se partagent le royaume, puis se font la guerre. Le royaume se divise et les rois sont de plus en plus jeunes. C'est la période des rois <span class="k">fainéants</span> : le vrai pouvoir est aux <span class="k">maires du palais</span>.</p>
-    <div class="ex"><b>Le guerrier franc</b> : la <span class="k">framée</span> = la lance · la <span class="k">francisque</span> = la hache · le <span class="k">pavois</span> = le bouclier · et aussi une épée, un casque, une blouse en fourrure.<br><i>Astuce : la <b>franc</b>isque, c'est la hache des <b>Franc</b>s.</i></div>
-    <div class="ex"><b>Les deux textes</b> : dans le <b>serment de Clovis</b>, il promet à Jésus-Christ de se faire baptiser s'il gagne la bataille. Dans sa <b>lettre</b> (481), l'évêque Remi lui conseille d'écouter les évêques et d'aider les pauvres.</div>
+    <ul>
+      <li>Les <span class="k">Francs</span>, des barbares venus de l'<span class="k">Est</span>, s'installent au nord de la Gaule (Belgique).</li>
+      <li>Clovis, petit-fils de <span class="k">Mérovée</span>, devient roi en <span class="k">481</span>, à <span class="k">16</span> ans.</li>
+      <li>Sa femme <span class="k">Clotilde</span> est catholique : il se fait <span class="k">baptiser</span> (496 ou 498) → 1<sup>er</sup> roi <b>catholique</b>.</li>
+      <li>Avec le soutien des <span class="k">évêques</span>, il agrandit son royaume. Capitale : <span class="k">Paris</span>.</li>
+      <li>Il meurt en <span class="k">511</span> : ses <b>4 fils</b> se partagent le royaume.</li>
+      <li>Puis viennent les rois <span class="k">fainéants</span> : le pouvoir est aux <span class="k">maires du palais</span>.</li>
+      <li>Armes : <b>franc</b>isque = hache des <b>Franc</b>s · framée = lance · pavois = bouclier.</li>
+    </ul>
     <button class="btn alt done-btn" data-done="p4">J'ai bien compris</button>
   </div>
 
   <div class="part" data-part="p5">
     <h3>5) Charlemagne : de roi à empereur</h3>
-    <p><b>Les débuts des Carolingiens.</b> Les maires du palais prennent peu à peu la place des rois mérovingiens. L'un d'eux, <span class="k">Charles Martel</span>, arrête l'invasion des <span class="k">Arabes</span> à Poitiers. Son fils, <span class="k">Pépin le Bref</span>, renverse le dernier roi mérovingien en <span class="k">751</span>. À sa mort, en <span class="k">768</span>, son fils <b>Charles</b> devient roi.</p>
-    <div class="warn">768 n'est pas l'année de naissance de Charlemagne : c'est l'année où il <b>devient roi</b> (sur ta frise : « début du règne »).</div>
-    <p><b>Du roi Charles à l'empereur.</b> Charles agrandit son royaume par de nombreuses <span class="k">conquêtes</span> (la <b>Saxe</b>, la <b>Bavière</b>, la <b>Lombardie</b>) et il rend les nouvelles provinces <b>chrétiennes</b>. La guerre contre les Saxons dure <span class="k">33</span> ans. On l'appelle <i>Carolus Magnus</i> : Charles le <span class="k">Grand</span>, Charlemagne.</p>
-    <div class="def">Le <span class="k">25 décembre 800</span> (le jour de Noël), Charlemagne est couronné <span class="k">empereur</span> par le <span class="k">pape</span> à <span class="k">Rome</span>, dans la basilique Saint-Pierre. Le peuple l'acclame : « À Charles, grand et pacifique empereur des Romains, vie et victoire ! »</div>
-    <p>Sa capitale est <span class="k">Aix-la-Chapelle</span> (aujourd'hui en Allemagne) : il aimait ses eaux chaudes et y fit construire son palais. Il mesurait 1,92 m et il est mort en <span class="k">814</span>.</p>
-    <div class="ex"><b>Sur la carte :</b> en rouge, le royaume en 768 ; en orange, les conquêtes de 768 à 814 ; en jaune, des peuples <b>dépendants</b> qui ne font <b>pas</b> partie de l'empire.</div>
+    <ul>
+      <li><span class="k">Charles Martel</span> arrête les <b>Arabes</b> à Poitiers.</li>
+      <li>Son fils <span class="k">Pépin le Bref</span> renverse le dernier Mérovingien en <span class="k">751</span>.</li>
+      <li>Son fils Charles devient roi en <span class="k">768</span> (pas sa naissance !).</li>
+      <li>Conquêtes : Saxe (33 ans de guerre), Bavière, Lombardie. Charlemagne = Charles le <span class="k">Grand</span>.</li>
+      <li><span class="k">25 décembre 800</span> : couronné <b>empereur</b> par le <span class="k">pape</span> à <span class="k">Rome</span>.</li>
+      <li>Capitale : <span class="k">Aix-la-Chapelle</span> (il aimait ses eaux chaudes). Mort en <span class="k">814</span>.</li>
+    </ul>
     <button class="btn alt done-btn" data-done="p5">J'ai bien compris</button>
   </div>
 
   <div class="part" data-part="p6">
-    <h3>6) Charlemagne gouverne son empire</h3>
-    <p>L'empire est immense. Pour être obéi, Charlemagne demande à ses vassaux et à tous les hommes libres de lui prêter <span class="k">serment</span> (promettre d'être fidèle).</p>
+    <h3>6) Charlemagne gouverne</h3>
     <ul>
-      <li>Les <span class="k">comtes</span> : chacun reçoit une <b>région</b> en échange de sa fidélité. Ils rendent la <span class="k">justice</span>, perçoivent les <span class="k">impôts</span> et lèvent les <span class="k">troupes</span> (l'armée).</li>
-      <li>Les <span class="k">missi dominici</span> (« les envoyés du maître ») : ils se déplacent pour transmettre les ordres de Charlemagne et <span class="k">surveillent</span> les comtes.</li>
-      <li>Les <span class="k">capitulaires</span> : les lois écrites de Charlemagne, lues devant les comtes.</li>
-      <li>Les <span class="k">écoles</span> : il en fait ouvrir dans les monastères et les évêchés, pour les garçons riches <b>et</b> pauvres (écriture, calcul, chant, grammaire).</li>
+      <li>Les hommes libres lui prêtent <span class="k">serment</span> (promettent d'être fidèles).</li>
+      <li><b>Comte</b> : <b>reste</b> dans sa région → justice, impôts, armée.</li>
+      <li><b>Missi dominici</b> : <b>voyagent</b> → transmettent ses ordres et <span class="k">surveillent</span> les comtes.</li>
+      <li>Ses lois écrites : les <span class="k">capitulaires</span>. Il ouvre des <span class="k">écoles</span>.</li>
+      <li>Roncevaux : héros <span class="k">Roland</span>, ami Olivier, traître <span class="k">Ganelon</span>, épée <span class="k">Durendal</span>.</li>
     </ul>
-    <div class="tip">Pour ne pas confondre : le <b>comte</b> <b>reste</b> dans sa région ; les <b>missi</b> <b>voyagent</b> (missi ressemble à « mission »).</div>
-    <div class="ex"><b>Eginhard</b> a écrit la <i>Vie de Charlemagne</i> au IX<sup>e</sup> siècle : Charlemagne faisait <b>très souvent</b> du cheval et de la chasse, il <b>nageait très bien</b> et il a construit un palais à Aix pour ses eaux chaudes.</div>
-    <div class="ex"><b>La bataille de Roncevaux</b> : le héros est <span class="k">Roland</span>, son compagnon <b>Olivier</b>, le traître <span class="k">Ganelon</span>, le roi Charles, et l'épée de Roland s'appelle <span class="k">Durendal</span>.</div>
-    <p>D'après ta fiche, le <b>fer à cheval</b> a été inventé à l'époque de Charlemagne. En Allemagne aussi, on le considère comme un grand empereur.</p>
     <button class="btn alt done-btn" data-done="p6">J'ai bien compris</button>
   </div>
 
   <div class="part" data-part="p7">
-    <h3>7) La fin de l'empire carolingien</h3>
-    <p>Charlemagne a été un bon <b>administrateur</b>, un grand <b>conquérant</b> et un défenseur de la religion chrétienne. Mais après sa mort, ses successeurs ne s'entendent pas.</p>
-    <div class="def">En <span class="k">843</span>, au traité de <span class="k">Verdun</span>, l'empire est partagé en <span class="k">3</span> :<br>
-      • <span class="k">Charles le Chauve</span> → la Francie occidentale (à l'ouest, comme la France)<br>
-      • <span class="k">Lothaire</span> → la Lotharingie (au milieu)<br>
-      • <span class="k">Louis le Germanique</span> → la Francie orientale (à l'est)</div>
-    <div class="tip">Astuce : <b>Lot</b>haire a la <b>Lot</b>haringie (son nom est dedans !). Louis le <b>Germanique</b> a l'est, du côté de la Germanie.</div>
-    <p>Un auteur, Florus (vers 850), est triste : l'empire est brisé en <b>trois morceaux</b>.</p>
-    <p>Aux IX<sup>e</sup> et X<sup>e</sup> siècles, l'ancien empire est envahi : les <span class="k">Vikings</span> par le Nord, les <span class="k">Sarrasins</span> par le Sud, les <span class="k">Hongrois</span> par l'Est.</p>
-    <div class="frise">
-      <div class="d">751</div><div class="e c3">Fin des Mérovingiens · Pépin le Bref roi</div>
-      <div class="d">768</div><div class="e c3">Charlemagne devient roi</div>
-      <div class="d">800</div><div class="e c3">Charlemagne couronné empereur à Rome</div>
-      <div class="d">814</div><div class="e c3">Mort de Charlemagne</div>
-      <div class="d">843</div><div class="e c3">Traité de Verdun : l'empire partagé en 3</div>
-      <div class="d"><span class="k">987</span></div><div class="e c3">Fin de la dynastie <span class="k">carolingienne</span></div>
-    </div>
+    <h3>7) La fin de l'empire</h3>
+    <ul>
+      <li><span class="k">843</span>, traité de <span class="k">Verdun</span> : l'empire est partagé en <span class="k">3</span>.</li>
+      <li>Charles le Chauve → Francie occidentale · <b>Lot</b>haire → <b>Lot</b>haringie · Louis le Germanique → Francie orientale.</li>
+      <li>Invasions : <span class="k">Vikings</span> (Nord) · <span class="k">Sarrasins</span> (Sud) · <span class="k">Hongrois</span> (Est).</li>
+      <li><span class="k">987</span> : fin des Carolingiens.</li>
+    </ul>
     <button class="btn alt done-btn" data-done="p7">J'ai bien compris</button>
   </div>
 
   <div id="partLock" class="warn hidden"></div>
-  <div id="leconFinie" class="def hidden" style="border-left-color:var(--moss);background:var(--moss-l)"><b>Bravo, toute la leçon est réussie !</b> La partie <b>avec aide</b> est ouverte. Tu peux d'abord réciter avec le <b>mode mémoire</b>.<br><button class="btn" id="goAide" style="margin-top:8px">Aller à la partie avec aide →</button></div>
+  <div id="leconFinie" class="def hidden" style="border-left-color:var(--moss);background:var(--moss-l)"><b>Bravo, toute la leçon est réussie !</b> La partie <b>avec aide</b> est ouverte.<br><button class="btn" id="goAide" style="margin-top:8px">Aller à la partie avec aide →</button></div>
 </section>
 
 <!-- ================= EXERCICES ================= -->
@@ -381,105 +357,67 @@ const SON = false; function majManque(){ return false; }
 function estPiege(q, input){ const ni = norm(input); if(!ni) return false; const bons = q.a.map(norm); return [...(q.d||[]), ...(q.no||[])].some(x => { const nx = norm(x); return nx === ni && !bons.includes(nx); }); }
 document.body.classList.add("noson");
 /* ---------- Banque de questions ---------- */
-const PARTS = {p1:"Les 5 grandes périodes", p2:"Les outils de l'historien", p3:"Les chiffres romains", p4:"Clovis et les Mérovingiens", p5:"Charlemagne : de roi à empereur", p6:"Charlemagne gouverne son empire", p7:"La fin de l'empire carolingien"};
+const PARTS = {p1:"Les 5 grandes périodes", p2:"Les outils de l'historien", p3:"Les chiffres romains", p4:"Clovis et les Mérovingiens", p5:"Charlemagne : de roi à empereur", p6:"Charlemagne gouverne", p7:"La fin de l'empire"};
 const Wd = (part,q,a,show,d,aide,x) => Object.assign({part,type:"word",q,a,show,d,aide}, x||{});
 const D = (part,q,v,show,alt) => ({part,type:"date",q,v,show,alt:alt||[]});
 const I = "indice";
 const ROM = r => [r, r+"e", r+"ème", r+"eme", r+" e", r+"e siècle", r+"ème siècle", r+" siecle"];
 const BANK = [
-  // --- p1 les périodes
+  // --- p1
   {part:"p1",type:"order",q:"Touche les 5 périodes dans l'ordre, de la plus <b>ancienne</b> à la plus <b>récente</b>.",items:["Préhistoire","Antiquité","Moyen Âge","Temps modernes","Époque contemporaine"]},
-  D("p1","Début de l'Antiquité : l'invention de l'écriture",-3000,"-3000"),
-  D("p1","Début du Moyen Âge : la chute de l'Empire romain d'Occident",476,"476"),
-  D("p1","Début des Temps modernes : Christophe Colomb découvre l'Amérique",1492,"1492"),
+  D("p1","Début du Moyen Âge : la chute de l'Empire romain",476,"476"),
+  D("p1","Début des Temps modernes : Colomb découvre l'Amérique",1492,"1492"),
   D("p1","Début de l'Époque contemporaine : la Révolution française",1789,"1789"),
-  Wd("p1","La Préhistoire se termine avec l'invention de l'…",["écriture"],"écriture",["agriculture","imprimerie"]),
   {part:"p1",type:"sort",w:2,stack:true,q:"Pour chaque trace, touche sa période.",cats:["Préhist.","Antiq.","Moyen Âge","Temps mod.","Contemp."],items:[
-    ["Le squelette de Lucy",0],["Le pont du Gard",1],["La tapisserie de Bayeux",2],["Notre-Dame de Paris",2],["La chambre de Louis XIV",3],["Une photo de classe",4]]},
-  Wd("p1","Pendant quelle période vivent Clovis et Charlemagne ?",["Moyen Âge","moyen age","le Moyen Âge"],"le Moyen Âge",["l'Antiquité","les Temps modernes"]),
+    ["Le squelette de Lucy",0],["Le pont du Gard",1],["La tapisserie de Bayeux",2],["La chambre de Louis XIV",3],["Une photo de classe",4]]},
 
-  // --- p2 les outils de l'historien
-  Wd("p2","1 siècle = combien d'années ? Écris un nombre.",["100","cent"],"100 ans",["10","1000"]),
-  Wd("p2","1 décennie = combien d'années ? Écris un nombre.",["10","dix"],"10 ans",["100","1000"]),
-  Wd("p2","1 millénaire = combien d'années ? Écris un nombre.",["1000","1 000","mille"],"1 000 ans",["100","10"]),
+  // --- p2
+  {part:"p2",type:"sort",stack:true,q:"Combien d'années ? Touche la bonne réponse.",cats:["10 ans","100 ans","1 000 ans"],items:[["1 décennie",0],["1 siècle",1],["1 millénaire",2]]},
   Wd("p2","En quel siècle est l'année <b>1492</b> ? Écris-le en chiffres romains.",ROM("XV"),"XVe siècle",["XIVe siècle","XVIe siècle"],I,{exact:true,h:"je cache 92, puis 14 + 1 = 15"}),
   Wd("p2","En quel siècle est l'année <b>481</b> ? Écris-le en chiffres romains.",ROM("V"),"Ve siècle",["IVe siècle","VIe siècle"],I,{exact:true,h:"je cache 81, puis 4 + 1 = 5"}),
-  Wd("p2","En quel siècle est l'année <b>1789</b> ? Écris-le en chiffres romains.",ROM("XVIII"),"XVIIIe siècle",["XVIIe siècle","XIXe siècle"],I,{exact:true,h:"je cache 89, puis 17 + 1 = 18"}),
-  Wd("p2","Clovis est roi de <b>481</b> à <b>511</b>. Combien d'années a-t-il régné ?",["30","trente"],"30 ans",["20","40"],I,{h:"511 − 481"}),
   Wd("p2","Charlemagne est roi de <b>768</b> à <b>814</b>. Combien d'années a-t-il régné ?",["46","quarante-six","quarante six"],"46 ans",["56","36"],I,{h:"814 − 768"}),
-  {part:"p2",type:"set",q:"Une frise a un titre, et aussi… (écris les 3 autres éléments, un par case)",groups:[["repères","dates","reperes"],["événements","evenements","événement"],["légende","couleurs","legende"]],show:"des repères (dates), des événements, une légende (couleurs)"},
-  {part:"p2",type:"sort",w:2,stack:true,q:"Source écrite, source orale ou vestige ? Touche la bonne réponse.",cats:["écrite","orale","vestige"],items:[
-    ["La lettre de l'évêque Remi",0],["Ton grand-père qui raconte son enfance",1],["Une épée trouvée dans une tombe",2],["Le livre d'Eginhard",0],["La chapelle d'Aix-la-Chapelle",2]]},
+  {part:"p2",type:"sort",w:2,stack:true,q:"Source écrite, source orale ou vestige ?",cats:["écrite","orale","vestige"],items:[
+    ["La lettre de l'évêque Remi",0],["Ton grand-père qui raconte son enfance",1],["Une épée trouvée dans une tombe",2],["La chapelle d'Aix-la-Chapelle",2]]},
   {part:"p2",type:"order",q:"Touche les 5 étapes de la démarche de l'historien, dans l'ordre.",items:["réflexion","hypothèse","recherche d'informations","sélection des informations","conclusion"]},
 
-  // --- p3 les chiffres romains
-  Wd("p3","Combien vaut la lettre <b>L</b> ?",["50","cinquante"],"50",["5","500"],I,{h:"Il Voulait eXplorer Les…"}),
-  Wd("p3","Combien vaut la lettre <b>C</b> ?",["100","cent"],"100",["50","1000"]),
-  Wd("p3","Combien vaut la lettre <b>D</b> ?",["500","cinq cents"],"500",["50","5000"]),
-  Wd("p3","Écris <b>IX</b> en chiffres.",["9","neuf"],"9",["11","4"],I,{h:"petit avant grand : 10 − 1"}),
+  // --- p3
+  {part:"p3",type:"sort",stack:true,q:"Combien vaut chaque lettre ?",cats:["50","100","500"],items:[["L",0],["C",1],["D",2]]},
   Wd("p3","Écris <b>XIV</b> en chiffres.",["14","quatorze"],"14",["16","15"]),
   Wd("p3","Écris <b>XL</b> en chiffres.",["40","quarante"],"40",["60","30"],I,{h:"petit avant grand : 50 − 10"}),
-  Wd("p3","Écris <b>LXXX</b> en chiffres.",["80","quatre-vingts","quatre vingt"],"80",["30","70"],I,{h:"50 + 10 + 10 + 10"}),
-  Wd("p3","Écris <b>4</b> en chiffres romains.",["IV"],"IV",["IIII","VI"],null,{exact:true}),
   Wd("p3","Écris <b>19</b> en chiffres romains.",["XIX"],"XIX",["XVIIII","IXX"],I,{exact:true,h:"19 = 10 + 9 = X + IX"}),
   Wd("p3","Écris <b>90</b> en chiffres romains.",["XC"],"XC",["LXXXX","CX"],I,{exact:true,h:"petit avant grand : 100 − 10"}),
-  Wd("p3","Le roi <b>Louis XIV</b> : quel est son numéro en chiffres ?",["14","quatorze"],"14",["16","19"]),
 
-  // --- p4 Clovis
-  Wd("p4","Les peuples barbares comme les Francs sont venus de l'…",["Est"],"Est",["Ouest","Sud"]),
-  Wd("p4","Les Francs s'installent dans le nord de la Gaule, en …",["Belgique"],"Belgique",["Espagne","Italie"]),
-  Wd("p4","Clovis est le petit-fils du roi franc …",["Mérovée","Merovee"],"Mérovée",["Pépin","Martel"],I),
+  // --- p4
+  Wd("p4","Clovis est le roi des …",["Francs"],"Francs",["Romains","Vikings"]),
+  Wd("p4","Clovis est le petit-fils du roi …",["Mérovée","Merovee"],"Mérovée",["Pépin","Martel"],I),
   D("p4","Clovis devient roi des Francs",481,"481"),
-  Wd("p4","Quel âge a Clovis quand il devient roi ?",["16","seize"],"16 ans",["10","25"]),
-  Wd("p4","Clovis épouse …, une femme catholique.",["Clotilde"],"Clotilde",["Lucy","Mérovée"]),
-  Wd("p4","Sur les conseils de sa femme, Clovis se fait … (écris un verbe)",["baptiser","baptisé","baptise"],"baptiser",["couronner","soigner"]),
-  Wd("p4","Clovis devient le premier roi … de l'Occident chrétien.",["catholique","chrétien"],"catholique",["romain","païen"]),
-  Wd("p4","Clovis reçoit le soutien des … et de son peuple.",["évêques","eveques","évêque"],"évêques",["Romains","Vikings"]),
+  Wd("p4","Clovis épouse …, une femme catholique.",["Clotilde"],"Clotilde",["Lucy","Geneviève"]),
+  Wd("p4","Sur ses conseils, Clovis se fait … (écris un verbe)",["baptiser","baptisé","baptise"],"baptiser",["couronner","soigner"]),
   Wd("p4","La capitale de Clovis est …",["Paris"],"Paris",["Rome","Aix-la-Chapelle"]),
   D("p4","Mort de Clovis",511,"511"),
-  Wd("p4","À la mort de Clovis, combien de fils se partagent son royaume ?",["4","quatre"],"4 fils",["2","3"]),
-  Wd("p4","Les derniers rois mérovingiens sont appelés les rois …",["fainéants","faineants","fainéant"],"fainéants",["courageux","guerriers"]),
-  Wd("p4","Le vrai pouvoir est alors détenu par les maires du …",["palais"],"palais",["village","château"]),
+  Wd("p4","Les derniers Mérovingiens sont les rois … ; le pouvoir est aux maires du palais.",["fainéants","faineants","fainéant"],"fainéants",["courageux","guerriers"]),
   {part:"p4",type:"sort",stack:true,q:"Le guerrier franc : touche le bon nom pour chaque arme.",cats:["francisque","framée","pavois"],items:[["la hache",0],["la lance",1],["le bouclier",2]]},
 
-  // --- p5 Charlemagne : de roi à empereur
-  Wd("p5","Charles Martel arrête l'invasion des …",["Arabes"],"Arabes",["Vikings","Romains"]),
-  Wd("p5","Son fils, … le Bref, renverse le dernier roi mérovingien.",["Pépin","Pepin"],"Pépin",["Charles","Louis"]),
-  D("p5","Fin de la dynastie mérovingienne",751,"751"),
+  // --- p5
+  Wd("p5","Le père de Charlemagne s'appelle … le Bref.",["Pépin","Pepin"],"Pépin",["Charles","Louis"]),
   D("p5","Charlemagne devient roi",768,"768"),
-  Wd("p5","Carolus Magnus veut dire : Charles le …",["Grand"],"Grand",["Bref","Chauve"]),
   D("p5","Charlemagne est couronné empereur (le jour de Noël)",800,"800"),
-  Wd("p5","Charlemagne est couronné empereur dans quelle ville ?",["Rome"],"Rome",["Paris","Reims"]),
-  Wd("p5","Qui pose la couronne sur la tête de Charlemagne ?",["pape","le pape"],"le pape",["l'évêque Remi","Clotilde"],I,{h:"le chef de l'Église, à Rome"}),
-  {part:"p5",type:"order",q:"Le sacre de Charlemagne : touche les 3 moments dans l'ordre.",items:["Dans la basilique Saint-Pierre, le pape s'avance vers l'assemblée.","Le pape pose la couronne sur la tête du roi.","Le peuple l'acclame : « Vie et victoire ! »"]},
-  Wd("p5","La capitale de l'empire de Charlemagne est …",["Aix-la-Chapelle","Aix la Chapelle","Aix"],"Aix-la-Chapelle",["Paris","Rome"],I,{h:"une ville aux eaux chaudes"}),
-  Wd("p5","La guerre contre les Saxons a duré combien d'années ?",["33","trente-trois","trente trois"],"33 ans",["3","13"]),
-  {part:"p5",type:"sort",w:2,stack:true,q:"Sur la carte de l'empire : vrai ou faux ?",cats:["vrai","faux"],items:[
-    ["Le royaume est plus grand en 814 qu'en 768.",0],["La capitale de l'empire est Paris.",1],["Les États en jaune font partie de l'empire.",1],["La Saxe et la Bavière ont été conquises après 768.",0]]},
+  {part:"p5",type:"sort",w:2,stack:true,q:"Le sacre de Charlemagne : touche la bonne réponse.",cats:["Rome","le pape","Aix-la-Chapelle"],items:[
+    ["Où est-il couronné ?",0],["Qui pose la couronne ?",1],["Quelle est sa capitale ?",2]]},
+  D("p5","Mort de Charlemagne",814,"814"),
 
-  // --- p6 gouverner
-  {part:"p6",type:"sort",w:2,stack:true,q:"Comte ou missi dominici ? Touche la bonne réponse.",cats:["comte","missi dominici"],items:[
-    ["Il rend la justice dans sa région.",0],["Il perçoit les impôts.",0],["Il lève les troupes.",0],["Il voyage pour surveiller les comtes.",1],["Il transmet les ordres de Charlemagne.",1]]},
-  Wd("p6","Pour être obéi, Charlemagne demande à tous les hommes libres de lui prêter …",["serment"],"serment",["argent","main-forte"]),
-  Wd("p6","Charlemagne fait ouvrir des … dans les monastères et les évêchés.",["écoles","ecoles","école"],"écoles",["prisons","châteaux"]),
+  // --- p6
+  {part:"p6",type:"sort",w:2,stack:true,q:"Comte ou missi dominici ?",cats:["comte","missi dominici"],items:[
+    ["Il rend la justice dans sa région.",0],["Il lève les troupes.",0],["Il voyage pour surveiller les comtes.",1],["Il transmet les ordres de Charlemagne.",1]]},
   Wd("p6","Les lois écrites de Charlemagne s'appellent des …",["capitulaires","capitulaire"],"capitulaires",["chapitres","comtes"],I),
-  {part:"p6",type:"sort",w:2,stack:true,q:"D'après Eginhard : vrai ou faux ?",cats:["vrai","faux"],items:[
-    ["Charlemagne faisait parfois du cheval et de la chasse.",1],["Les Francs étaient les plus forts dans ces exercices.",0],["Charlemagne ne savait pas nager.",1],["Il construit un palais à Aix pour ses eaux chaudes.",0]]},
-  Wd("p6","À Roncevaux, le héros s'appelle …",["Roland"],"Roland",["Olivier","Ganelon"]),
-  Wd("p6","Le traître s'appelle …",["Ganelon"],"Ganelon",["Olivier","Roland"],I),
-  Wd("p6","L'épée de Roland s'appelle …",["Durendal"],"Durendal",["Excalibur","Joyeuse"],I),
-  {part:"p6",type:"def",w:2,mot:"Les missi dominici",cloze:"Des [[envoyés]] de Charlemagne qui [[surveillent]] les [[comtes]].",groups:[["envoyés","envoyé","envoye"],["surveillent","surveille","surveiller","controlent","contrôlent"],["comtes","comte"]]},
+  {part:"p6",type:"sort",stack:true,q:"La bataille de Roncevaux : qui est qui ?",cats:["Roland","Ganelon","Durendal"],items:[["le héros",0],["le traître",1],["l'épée",2]]},
 
-  // --- p7 la fin de l'empire
-  D("p7","Mort de Charlemagne",814,"814"),
-  D("p7","Traité de Verdun : l'empire est partagé",843,"843"),
-  Wd("p7","Au traité de Verdun, l'empire est partagé en combien de morceaux ?",["3","trois"],"3",["2","4"]),
+  // --- p7
+  D("p7","Traité de Verdun : l'empire est partagé en 3",843,"843"),
   {part:"p7",type:"sort",stack:true,q:"Qui reçoit quel royaume en 843 ?",cats:["Charles le Chauve","Lothaire","Louis le Germanique"],items:[
     ["la Francie occidentale",0],["la Lotharingie",1],["la Francie orientale",2]]},
   {part:"p7",type:"sort",stack:true,q:"Par où arrivent les envahisseurs ?",cats:["Vikings","Sarrasins","Hongrois"],items:[["par le Nord",0],["par le Sud",1],["par l'Est",2]]},
   D("p7","Fin de la dynastie carolingienne",987,"987"),
-  {part:"p7",type:"sort",w:2,stack:true,q:"Mérovingien ou Carolingien ? Touche la bonne famille.",cats:["Mérovingiens","Carolingiens"],items:[
-    ["Clovis",0],["Charlemagne",1],["Mérovée",0],["Pépin le Bref",1],["les rois fainéants",0],["Louis le Germanique",1]]},
 ];
 BANK.forEach((q,i)=>{ q.id=i; q.w = q.w || 1; });
 const DATES = BANK.filter(q=>q.type==="date");
