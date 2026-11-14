@@ -249,7 +249,11 @@ const norm = s => (s||"").toLowerCase().replace(/œ/g,"oe").normalize("NFD").rep
 const lower = s => (s||"").toLowerCase().replace(/[^a-zà-ÿœ0-9]+/g," ").trim();
 function lev(a,b){ const m=a.length,n=b.length; if(!m) return n; if(!n) return m; let p=[...Array(n+1).keys()]; for(let i=1;i<=m;i++){ const c=[i]; for(let j=1;j<=n;j++) c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1)); p=c; } return p[n]; }
 const tol = n => n<=3?0 : n<=6?1 : 2;
-const store = { get(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } }, set(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} } };
+/* Chaque profil (enfant) a sa propre progression sur cet appareil :
+   les clés enregistrées dans le navigateur portent l'identifiant du profil actif. */
+const PROFIL = (()=>{ try{ return localStorage.getItem("atelier_enfant_actif") || ""; }catch(e){ return ""; } })();
+const cle = k => PROFIL ? k+"__"+PROFIL : k;
+const store = { get(k){ try{ return JSON.parse(localStorage.getItem(cle(k))); }catch(e){ return null; } }, set(k,v){ try{ localStorage.setItem(cle(k), JSON.stringify(v)); }catch(e){} } };
 const fmt = x => (Math.round(x*100)/100).toString().replace(".",",");
 
 /* Compare une réponse tapée à la liste des réponses acceptées.
@@ -667,7 +671,7 @@ function controleInterrompu(c){
   root.innerHTML = `<div class="intro" style="border-color:var(--red)"><b>Contrôle interrompu.</b><br>
     La page a été quittée, rechargée ou ouverte ailleurs pendant le contrôle.
     Tu avais répondu à ${faites} question${faites>1?"s":""} sur ${c.ids.length} : les autres comptent 0.</div><div class="resultZone"></div>`;
-  try{ localStorage.removeItem(KEY_C); }catch(e){}
+  try{ localStorage.removeItem(cle(KEY_C)); }catch(e){}
   finish("sans");
   document.querySelectorAll("nav button").forEach(x=>x.classList.toggle("on",x.dataset.tab==="sans"));
   ["lecon","aide","sans"].forEach(t=>$("#tab-"+t).classList.toggle("hidden", t!=="sans"));
@@ -675,7 +679,7 @@ function controleInterrompu(c){
 window.addEventListener("beforeunload", e => { if(LOCKED){ e.preventDefault(); e.returnValue = ""; } });
 window.addEventListener("storage", e => {
   // Le contrôle a été arrêté depuis un autre onglet : celui-ci s'arrête aussi
-  if(e.key===KEY_C && e.newValue===null && LOCKED){
+  if(e.key===cle(KEY_C) && e.newValue===null && LOCKED){
     LOCKED = false;
     alert("Le contrôle a été arrêté : la page a été ouverte ailleurs.");
     location.reload();
@@ -701,7 +705,7 @@ function finish(mode){
   const sur20 = Math.round(pts/max*20*2)/2;
   const ok = pct>=80;
   const wrong = S.ids.filter(id=>S.res[id] < BANK[id].w);
-  if(mode==="sans"){ lock(false); try{ localStorage.removeItem(KEY_C); }catch(e){} }
+  if(mode==="sans"){ lock(false); try{ localStorage.removeItem(cle(KEY_C)); }catch(e){} }
   if(!S.retry){
     const prev = store.get(M.key) || {};
     store.set(M.key, {last:{sur20,pct,date:new Date().toLocaleDateString("fr-FR")}, best: (!prev.best || pct>prev.best.pct) ? {sur20,pct} : prev.best});
