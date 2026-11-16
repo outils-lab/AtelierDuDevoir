@@ -451,7 +451,7 @@ function startMode(mode, onlyIds){
     intro.innerHTML = `<b>Exercices SANS aide</b> · ${ids.length} questions${onlyIds?" (seulement tes erreurs)":""}<br>
       Pas de choix proposé : <b>tu écris tout toi-même</b>, comme le jour du contrôle. Tu vois la correction après chaque réponse ; à la fin, tu refais les questions ratées.<br>
       • Mot juste = 1 point. Mot presque juste (une petite faute d'orthographe) = ½ point.<br>
-      <b>Objectif : 17 / 20 pour être prête</b> (et gagner 3 vies pour la salle d'arcade, une seule fois pour cette fiche).`;
+      <b>Objectif : 16 / 20 (80 %) pour être prête</b> (et gagner 3 vies pour la salle d'arcade, une seule fois pour cette fiche).`;
   }
   root.appendChild(intro);
   const pr = el("div",{class:"prog"},"<i></i>"); root.appendChild(pr);
@@ -720,7 +720,7 @@ function updateProgress(mode){
   if(doneN===total) finish(mode);
 }
 
-const PRET = 17;   // note sans aide pour « tu es prêt » (et 3 vies dans la salle d'arcade)
+const PRET = 16;   // note sans aide pour « tu es prêt » (et 3 vies dans la salle d'arcade)
 function blocDe(q){ return q.part; }
 function texteQ(q){ const d=document.createElement("div"); d.innerHTML = q.type==="def" ? "Écrire : "+q.mot : q.q; return d.textContent; }
 /* Correction du contrôle : seulement les blocs de la leçon où il y a eu des erreurs */

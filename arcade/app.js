@@ -130,7 +130,7 @@ function importerErreurs(lignes){
   if(n) sauver();
 }
 
-/* Passage secret : contrôle « sans aide » réussi avec au moins 17/20 = 3 vies.
+/* Passage secret : contrôle « sans aide » réussi avec au moins 80 % (16/20) = 3 vies.
    Une seule fois par fiche (P001, P002…), pour les contrôles faits depuis le 10/11/2026.
    Les vies sont ajoutées à la première visite de la salle après le contrôle. */
 var SECRET_DEPUIS = new Date('2026-11-10T00:00:00+01:00').getTime();
@@ -142,7 +142,7 @@ function bonusPassageSecret(lignes){
     if(!/^P\d{3}$/.test(c) || !(l.total > 0) || D.secret[c]) return;
     if(new Date(l.fait_le).getTime() < SECRET_DEPUIS) return;
     var sur20 = Math.round(l.score / l.total * 40) / 2;
-    if(sur20 >= 17){ D.secret[c] = 1; gain += 3; fiches.push(c); }
+    if(sur20 >= 16){ D.secret[c] = 1; gain += 3; fiches.push(c); }
   });
   if(gain){ quota().v += gain; S.bonusSecret = gain; sauver(); }
 }
