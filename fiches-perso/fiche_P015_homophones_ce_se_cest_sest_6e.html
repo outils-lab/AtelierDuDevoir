@@ -1,0 +1,1027 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="../favicon.ico" sizes="any">
+<title>ce, se, c'est, s'est, ces, ses : ne plus se tromper — Le passage secret</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6efe3; --paper:#fffaf2; --ink:#2b2118; --muted:#7a6a58; --line:#e3d5bf;
+  --ochre:#7b3fa0; --ochre-l:#f1e6f8; --char:#33204a; --moss:#3f7d4e; --moss-l:#e5f3e8;
+  --red:#b3392c; --red-l:#fbe6e3; --gold:#c9961f; --gold-l:#fdf3d8; --blue:#2f6aa8; --blue-l:#e6eff9;
+}
+*{box-sizing:border-box}
+:root{color-scheme:light}
+.retour{display:inline-block;color:#dcc6ee;text-decoration:none;font-weight:800;font-size:15px;padding:0 0 8px}
+#atelier-progression-box{margin-top:14px}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Nunito,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:17px;line-height:1.5}
+header{background:var(--char);color:#fff;padding:14px 16px 0}
+header .top{max-width:860px;margin:0 auto}
+header small{color:#dcc6ee;letter-spacing:.05em;text-transform:uppercase;font-size:12px}
+header h1{margin:2px 0 10px;font-size:24px}
+nav{max-width:860px;margin:0 auto;display:flex;gap:6px;overflow-x:auto}
+nav button{flex:1;min-width:110px;border:0;border-radius:10px 10px 0 0;padding:10px 8px;font:inherit;font-weight:700;font-size:15px;cursor:pointer;background:#55396f;color:#f1e6f8}
+nav button.on{background:var(--bg);color:var(--char)}
+main{max-width:860px;margin:0 auto;padding:16px 16px 140px}
+h2{font-size:21px;margin:22px 0 8px;color:var(--char)}
+.part{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:14px 0}
+.part h3{margin:0 0 8px;font-size:18px;color:var(--ochre)}
+.part ul{margin:6px 0;padding-left:20px}
+.part li{margin:3px 0}
+.def{background:var(--ochre-l);border-left:5px solid var(--ochre);border-radius:8px;padding:8px 10px;margin:8px 0}
+.warn{background:var(--red-l);border-left:5px solid var(--red);border-radius:8px;padding:8px 10px;margin:8px 0}
+.tip{background:var(--gold-l);border-left:5px solid var(--gold);border-radius:8px;padding:8px 10px;margin:8px 0}
+.k{font-weight:700;color:var(--char)}
+body.mem .k{color:transparent;background:#e9dcc6;border-radius:4px;cursor:pointer;user-select:none}
+body.mem .k.show{color:var(--moss);background:var(--moss-l)}
+.memctl{position:sticky;top:0;z-index:5;background:var(--bg);padding:8px 0;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.btn{border:0;border-radius:10px;padding:10px 14px;font:inherit;font-weight:700;cursor:pointer;background:var(--char);color:#fff}
+.btn.alt{background:#fff;color:var(--char);border:2px solid var(--char)}
+.btn.ok{background:var(--moss)}
+.btn:disabled{opacity:.45;cursor:default}
+.done-btn{margin-top:8px}
+.done-btn.on{background:var(--moss)}
+/* frise */
+.frise{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;align-items:center;margin-top:6px}
+.frise .d{font-weight:800;font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+.frise .e{padding:4px 8px;border-radius:6px}
+.frise .pa{background:var(--ochre-l)}
+.frise .ne{background:var(--moss-l)}
+.frise .sep{grid-column:1/-1;font-weight:800;font-size:13px;letter-spacing:.06em;text-transform:uppercase;margin-top:6px}
+/* exercices */
+.intro{background:var(--paper);border:2px solid var(--char);border-radius:14px;padding:12px 14px}
+.prog{height:10px;background:#e7dbc8;border-radius:6px;overflow:hidden;margin:10px 0}
+.prog i{display:block;height:100%;background:var(--ochre);width:0;transition:width .3s}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin:10px 0}
+.card .n{font-size:12px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.card .q{font-weight:600;margin:4px 0 8px}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opt{border:2px solid var(--line);background:#fff;border-radius:10px;padding:8px 12px;font:inherit;cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--ochre)}
+.opt.good{border-color:var(--moss);background:var(--moss-l)}
+.opt.bad{border-color:var(--red);background:var(--red-l)}
+.bar{display:flex;margin:6px 0;font-weight:800;font-size:15px;max-width:460px}
+.bar span{border:2px solid #222;padding:7px 4px;text-align:center;margin-right:-2px;white-space:nowrap;overflow:hidden}
+.bar .t{background:#dfe9f5}.bar .a{background:var(--ochre-l)}.bar .b{background:var(--moss-l)}
+.bar .q{background:#fff;border-style:dashed;color:var(--red)}
+.bar .vide{border:none;background:none}
+.barlbl{font-size:13px;color:var(--muted);font-weight:700;margin-top:8px}
+.opt.sel{border-color:var(--char);background:#efe3d0}
+.revoir{background:#fff;border:2px solid var(--red);border-radius:14px;padding:12px 14px;margin:14px 0;text-align:left}
+.revoir h3{margin-top:0;color:var(--red)}
+.revoir .part{border:1px dashed var(--line);border-radius:10px;padding:8px 10px;margin:8px 0;background:var(--paper)}
+.revoir .ques{margin:4px 0 8px;padding-left:18px}
+input[type=text],textarea{font:inherit;padding:8px 10px;border:2px solid var(--line);border-radius:10px;background:#fff;width:100%;max-width:340px}
+textarea{max-width:100%;min-height:70px;resize:vertical}
+input.blank{width:auto;min-width:90px;max-width:170px;padding:3px 6px;margin:2px 2px;display:inline-block}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.hint{font-size:14px;color:var(--blue);background:var(--blue-l);border-radius:6px;padding:2px 8px;display:inline-block;margin-bottom:6px}
+.fb{margin-top:8px;border-radius:8px;padding:7px 10px;font-size:15px}
+.fb.ok{background:var(--moss-l);color:#1f5131}
+.fb.mid{background:var(--gold-l);color:#6b4e08}
+.fb.ko{background:var(--red-l);color:#7d241a}
+.seq{min-height:38px;border:2px dashed var(--line);border-radius:10px;padding:6px;margin:8px 0;display:flex;flex-wrap:wrap;gap:6px}
+.seq span{background:var(--char);color:#fff;border-radius:8px;padding:4px 10px}
+.sort{display:grid;grid-template-columns:1fr auto auto;gap:6px 8px;align-items:center}
+.sort .opt{padding:5px 10px;font-size:14px}
+.result{border-radius:14px;padding:16px;margin:18px 0;text-align:center}
+.result.ok{background:var(--moss-l);border:2px solid var(--moss)}
+.result.ko{background:var(--red-l);border:2px solid var(--red)}
+.result .big{font-size:40px;font-weight:900}
+.notes{position:fixed;left:0;right:0;bottom:0;background:var(--char);color:#fff;z-index:20;box-shadow:0 -4px 14px rgba(0,0,0,.2)}
+.notes .in{max-width:860px;margin:0 auto;padding:8px 16px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.notes .box{background:#4a3266;border-radius:10px;padding:6px 10px}
+.notes .lab{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:#e8c9a6}
+.notes .val{font-size:18px;font-weight:800}
+.notes .ver{font-size:13px}
+.notes .ver.ok{color:#9fe0ae}.notes .ver.ko{color:#ffb4a8}
+.hidden{display:none}
+body.lock nav, body.lock .retour, body.lock #tab-lecon, body.lock #tab-aide{display:none!important}
+#lockBar{max-width:860px;margin:0 auto;padding:10px 0 12px;font-weight:800;color:#ffd9b0}
+.gate ul{margin:6px 0 10px;padding-left:20px}
+.gate .row{margin-top:8px}
+@media (max-width:520px){
+  html,body{font-size:16px}
+  .notes .val{font-size:16px}
+  .sort{grid-template-columns:1fr auto}
+  .sort .lbl{grid-column:1/-1;margin-top:4px}
+}
+.svgbox{overflow-x:auto;margin:6px 0}.svgbox svg{max-width:100%;height:auto}
+.verif{background:#fff;border:2px dashed var(--ochre);border-radius:12px;padding:10px 12px;margin:12px 0 4px}
+.verif-t{font-weight:800;color:var(--ochre);margin-bottom:4px}
+.qcm-v{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.btn-v{font:inherit;font-weight:700;text-align:left;background:#fff;border:2px solid #e2d6c3;border-radius:12px;padding:11px 14px;cursor:pointer;color:inherit}
+.btn-v:hover{border-color:var(--ochre);background:#fffaf2}
+.vq{padding:6px 0;border-top:1px dotted var(--line)}
+.vq:first-of-type{border-top:0}
+nav button.locked{opacity:.55}
+nav button.locked::before{content:"🔒 "}
+.gatebox{background:#fff;border:2px solid var(--ochre);border-radius:14px;padding:16px;margin:12px 0}
+.gatebox h3{margin-top:0}
+.steps3{display:flex;gap:6px;margin:4px 0 6px;font-size:14px;font-weight:800}
+.steps3 span{flex:1;text-align:center;border-radius:8px;padding:3px;background:#eee;color:#777}
+.steps3 span.ok{background:var(--moss-l);color:#1f5131}
+.steps3 span.cur{background:var(--gold-l);color:#6b4e08}
+.ex{background:#fff;border:1px dashed var(--line);border-radius:10px;padding:8px 10px;margin:8px 0}
+
+.frise.f4{grid-template-columns:auto 1fr auto 1fr}
+.say{border:0;background:none;cursor:pointer;font-size:16px;padding:0 3px;line-height:1;vertical-align:middle}
+body.noson .say, body.noson .ecoute{display:none}
+.ecoute{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:2px 0 8px}
+.ecoute a{font-size:13px;color:var(--muted)}
+.txt{background:#fff;border:2px solid var(--char);border-radius:12px;padding:10px 14px;margin:8px 0 12px;line-height:1.7}
+.txt h4{margin:0 0 4px;font-size:18px;color:var(--char)}
+.txt .num{font-weight:900;color:var(--ochre)}
+.poem{font-style:italic;line-height:1.6}
+.fr{color:var(--muted);font-size:15px}
+.sort.cx{grid-template-columns:auto repeat(var(--n),minmax(44px,auto));justify-content:start}
+.sort.cx .lbl{font-weight:800;text-align:right;padding-right:6px}
+.sort.cx.stack{grid-template-columns:repeat(var(--n),minmax(64px,auto))}
+.sort.cx.stack .lbl{grid-column:1/-1;text-align:left;margin-top:6px}
+@media (max-width:520px){
+  .sort:not(.cx){grid-template-columns:1fr 1fr}
+  .sort.cx{grid-template-columns:auto repeat(var(--n),1fr)}
+  .sort.cx .lbl{grid-column:auto;margin-top:0}
+  .sort.cx.stack{grid-template-columns:repeat(var(--n),1fr)}
+  .sort.cx.stack .lbl{grid-column:1/-1;margin-top:6px}
+  .sort.cx.stack .opt{padding:6px 2px}
+}
+.tbl{border-collapse:collapse;width:100%;margin:8px 0;font-size:15px;background:#fff}
+.tbl th,.tbl td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+.tbl th{background:var(--ochre);color:#fff}
+.trou{display:inline-block;min-width:44px;text-align:center;border-bottom:3px solid var(--ochre);color:var(--ochre);font-weight:900}
+</style>
+</head>
+<body>
+<header>
+  <div class="top">
+    <a class="retour" href="../passage-secret.html">← Retour au passage secret</a><br>
+    <small>🗝️ Passage secret · Raphaël · 6e · Français · homophones</small>
+    <h1>ce, se, c'est, s'est, ces, ses : ne plus se tromper</h1>
+  </div>
+  <nav>
+    <button data-tab="lecon" class="on">1 · La leçon</button>
+    <button data-tab="aide">2 · Avec aide</button>
+    <button data-tab="sans">3 · Sans aide</button>
+  </nav>
+  <div id="lockBar" class="hidden">🔒 Contrôle en cours : la leçon et l'aide sont verrouillées jusqu'à la dernière question.</div>
+</header>
+
+<main>
+<section id="tab-lecon">
+  <div class="memctl">
+    <button class="btn" id="memBtn">Mode mémoire : cacher les mots-clés</button>
+    <span id="memInfo" class="hidden" style="font-size:14px;color:var(--muted)">Dis le mot à voix haute, puis touche la case pour vérifier.</span>
+  </div>
+  <div class="tip"><b>Les 6 jumeaux qui font le même bruit [se] :</b> <b>ce · se · c'est · s'est · ces · ses</b>. À la fin, il y a des <b>dictées</b> : la voix du téléphone te lit une phrase, tu l'écris.</div>
+  <div class="gatebox" style="margin-top:0"><b>Les règles du parcours :</b>
+    <ol style="margin:6px 0 0">
+      <li><b>La leçon</b> : à la fin de chaque bloc, 3 questions à réussir d'affilée. <b>Une seule erreur = tu recommences à la question 1</b> du bloc (avec de nouvelles questions).</li>
+      <li><b>Avec aide</b> : s'ouvre quand les 6 blocs de la leçon sont réussis. Il y a 3 dictées d'une phrase.</li>
+      <li><b>Sans aide</b> : s'ouvre quand tu as au moins <b>16 / 20</b> dans la partie avec aide. Il y a 3 autres dictées.</li>
+    </ol></div>
+
+  <div class="part" data-part="p1">
+    <h3>1) Le grand secret : regarde le mot d'après</h3>
+    <p>Ces 6 mots se prononcent pareil. Pour choisir, ne réfléchis pas au son : <b>regarde le mot qui vient juste après</b>.</p>
+    <div class="def">
+      • Juste après, il y a un <span class="k">nom</span> (gants, robot, poissons) → <b>ce</b>, <b>ces</b> ou <b>ses</b>.<br>
+      • Juste après, il y a un <span class="k">verbe</span> (lave, coupe, cache) → <b>se</b>.<br>
+      • Tu peux dire « <span class="k">cela est</span> » → <b>c'est</b>.<br>
+      • Tu peux dire « je <span class="k">me suis</span> » → <b>s'est</b>.
+    </div>
+    <table class="tbl">
+      <tr><th>Le mot</th><th>Je le déguise en…</th><th>Exemple</th></tr>
+      <tr><td><b>ses</b></td><td><span class="k">mes</span></td><td>il range <b>ses</b> outils → <i>mes</i> outils ✔</td></tr>
+      <tr><td><b>ces</b></td><td>ces …-<span class="k">là</span></td><td><b>ces</b> poissons → ces poissons-<i>là</i> ✔</td></tr>
+      <tr><td><b>ce</b></td><td>ce …-là</td><td><b>ce</b> robot → ce robot-<i>là</i> ✔</td></tr>
+      <tr><td><b>se</b></td><td><span class="k">me</span></td><td>il <b>se</b> lave → je <i>me</i> lave ✔</td></tr>
+      <tr><td><b>c'est</b></td><td>cela est</td><td><b>c'est</b> beau → <i>cela est</i> beau ✔</td></tr>
+      <tr><td><b>s'est</b></td><td>me suis</td><td>il <b>s'est</b> coupé → je <i>me suis</i> coupé ✔</td></tr>
+    </table>
+    <button class="btn alt done-btn" data-done="p1">J'ai bien compris</button>
+  </div>
+
+  <div class="part" data-part="p2">
+    <h3>2) ses ou ces ? (devant un nom au pluriel)</h3>
+    <div class="def"><b>ses</b> = ce qui est <span class="k">à lui</span> ou à elle. Déguisement : <b>mes</b>.<br>
+      <i>Le chirurgien enfile <b>ses</b> gants.</i> → il enfile <i>mes</i> gants ✔ (les gants sont à lui)</div>
+    <div class="def"><b>ces</b> = je <span class="k">montre</span> quelque chose. Déguisement : <b>ces …-là</b>.<br>
+      <i>Regarde <b>ces</b> truites !</i> → regarde ces truites-<i>là</i> ✔ (je les montre du doigt)</div>
+    <div class="warn"><b>Ton erreur de dictée :</b> « cet homme doit cacher quelque chose dans <s>c'est</s> poches ».<br>
+      Juste après, il y a <b>poches</b> : c'est un <b>nom</b>, donc pas c'est. On dit « dans <i>mes</i> poches » → <b>ses</b> poches ✔</div>
+    <button class="btn alt done-btn" data-done="p2">J'ai bien compris</button>
+  </div>
+
+  <div class="part" data-part="p3">
+    <h3>3) ce ou se ?</h3>
+    <div class="def"><b>ce</b> est devant un <span class="k">nom</span> (masculin, singulier) : il montre. Déguisement : <b>ce …-là</b>.<br>
+      <i><b>Ce</b> brochet est énorme.</i> → ce brochet-<i>là</i> ✔</div>
+    <div class="def"><b>se</b> est devant un <span class="k">verbe</span> : on fait l'action sur <b>soi-même</b>. Déguisement : <b>me</b> (avec « je »).<br>
+      <i>Le chirurgien <b>se</b> lave les mains.</i> → je <i>me</i> lave les mains ✔</div>
+    <div class="tip"><b>Astuce :</b> on ne dit jamais « je <i>me</i> robot » ni « ce lave ». Si « me » marche, c'est <b>se</b>.</div>
+    <button class="btn alt done-btn" data-done="p3">J'ai bien compris</button>
+  </div>
+
+  <div class="part" data-part="p4">
+    <h3>4) c'est ou s'est ?</h3>
+    <div class="def"><b>c'est</b> = <span class="k">cela est</span> (ou ça est). On l'utilise pour présenter ou donner son avis.<br>
+      <i><b>C'est</b> un gros poisson !</i> → <i>cela est</i> un gros poisson ✔<br>
+      Au passé, il devient <b>c'était</b>.</div>
+    <div class="def"><b>s'est</b> = se + est. Juste après, il y a un <span class="k">participe passé</span> (coupé, réveillée, bloqué…). Déguisement : <b>je me suis</b>.<br>
+      <i>Le robot <b>s'est</b> bloqué.</i> → je <i>me suis</i> bloqué ✔<br>
+      <i>La patiente <b>s'est</b> réveillée après l'opération.</i> → je <i>me suis</i> réveillée ✔</div>
+    <button class="btn alt done-btn" data-done="p4">J'ai bien compris</button>
+  </div>
+
+  <div class="part" data-part="p5">
+    <h3>5) c' ou s' devant une voyelle</h3>
+    <div class="def"><b>c'</b> = <span class="k">cela</span>. <i><b>C'</b>était une belle journée.</i> → <i>cela</i> était ✔</div>
+    <div class="def"><b>s'</b> = <b>se</b> devant un verbe qui commence par une voyelle. Déguisement : <b>je m'</b>.<br>
+      <i>Il <b>s'</b>appelle Raphaël.</i> → je <i>m'</i>appelle ✔ · <i>Le capot <b>s'</b>ouvre.</i></div>
+    <div class="tip"><b>Bonus :</b> dans « <b>s'il</b> te plaît », s' veut dire <b>si</b> (si il).</div>
+    <button class="btn alt done-btn" data-done="p5">J'ai bien compris</button>
+  </div>
+
+  <div class="part" data-part="p6">
+    <h3>6) La méthode du détective (pour les dictées)</h3>
+    <div class="def">Quand tu entends [se], pose-toi les questions <b>dans l'ordre</b> :<br>
+      <b>1.</b> Après, il y a un <span class="k">nom</span> ? → « mes » marche : <b>ses</b> · « …-là » au pluriel : <b>ces</b> · « …-là » au singulier : <b>ce</b><br>
+      <b>2.</b> Après, il y a un <span class="k">verbe</span> ? → « je me » marche : <b>se</b><br>
+      <b>3.</b> « <span class="k">cela est</span> » marche ? → <b>c'est</b><br>
+      <b>4.</b> « je <span class="k">me suis</span> » marche ? → <b>s'est</b></div>
+    <div class="tip"><b>Relis toujours ta dictée à la fin</b>, en cherchant seulement ces petits mots, un par un.</div>
+    <button class="btn alt done-btn" data-done="p6">J'ai bien compris</button>
+  </div>
+
+  <div id="partLock" class="warn hidden"></div>
+  <div id="leconFinie" class="def hidden" style="border-left-color:var(--moss);background:var(--moss-l)"><b>Bravo, toute la leçon est réussie !</b> La partie <b>avec aide</b> est ouverte. Tu peux d'abord réciter avec le <b>mode mémoire</b>.<br><button class="btn" id="goAide" style="margin-top:8px">Aller à la partie avec aide →</button></div>
+</section>
+
+<!-- ================= EXERCICES ================= -->
+<section id="tab-aide" class="hidden"></section>
+<section id="tab-sans" class="hidden"></section>
+</main>
+
+<div class="notes">
+  <div class="in">
+    <div class="box"><div class="lab">Note avec aide</div><div class="val" id="nAide">—</div><div class="ver" id="vAide">Pas encore faite</div></div>
+    <div class="box"><div class="lab">Note sans aide</div><div class="val" id="nSans">—</div><div class="ver" id="vSans">Pas encore faite</div></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
+<script>
+var FICHE_CODE = "P015";
+/* ---------- Outils ---------- */
+const $ = (s, r=document) => r.querySelector(s);
+const el = (tag, attrs={}, html="") => { const e=document.createElement(tag); for(const k in attrs){ if(k==="class") e.className=attrs[k]; else e.setAttribute(k,attrs[k]); } if(html) e.innerHTML=html; return e; };
+const shuffle = a => { a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; };
+const norm = s => (s||"").toLowerCase().replace(/œ/g,"oe").normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9]+/g," ").trim();
+const lower = s => (s||"").toLowerCase().replace(/[^a-zà-ÿœ0-9]+/g," ").trim();
+function lev(a,b){ const m=a.length,n=b.length; if(!m) return n; if(!n) return m; let p=[...Array(n+1).keys()]; for(let i=1;i<=m;i++){ const c=[i]; for(let j=1;j<=n;j++) c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1)); p=c; } return p[n]; }
+const tol = n => n<=3?0 : n<=6?1 : 2;
+/* Chaque profil (enfant) a sa propre progression sur cet appareil :
+   les clés enregistrées dans le navigateur portent l'identifiant du profil actif. */
+const PROFIL = (()=>{ try{ return localStorage.getItem("atelier_enfant_actif") || ""; }catch(e){ return ""; } })();
+const cle = k => PROFIL ? k+"__"+PROFIL : k;
+const store = { get(k){ try{ return JSON.parse(localStorage.getItem(cle(k))); }catch(e){ return null; } }, set(k,v){ try{ localStorage.setItem(cle(k), JSON.stringify(v)); }catch(e){} } };
+const fmt = x => (Math.round(x*100)/100).toString().replace(".",",");
+
+/* Compare une réponse tapée à la liste des réponses acceptées.
+   Retour : "exact" | "accent" | "fuzzy" | "no" */
+function matchWord(input, answers){
+  const ni = norm(input), li = lower(input), toks = ni.split(" ");
+  if(!ni) return "no";
+  let best = "no";
+  for(const a of answers){
+    const na = norm(a), la = lower(a);
+    if(li===la || (" "+li+" ").includes(" "+la+" ")) return "exact";
+    if(ni===na || (" "+ni+" ").includes(" "+na+" ")) best = "accent";
+    else if(best==="no"){
+      const t = tol(na.length);
+      const dg = s => (s.match(/\d+[a-z]*/g)||[]).join(" ");
+      if(t>0 && dg(ni)===dg(na) && (lev(ni,na)<=t || (!na.includes(" ") && toks.some(x => lev(x,na)<=t)))) best = "fuzzy";
+    }
+  }
+  return best;
+}
+/* Cherche un mot-clé (avec variantes) dans un texte libre */
+function hasKey(text, alts){
+  const nt = " "+norm(text)+" ", toks = norm(text).split(" ");
+  for(const a of alts){
+    const na = norm(a);
+    if(nt.includes(" "+na+" ")) return true;
+    if(na.includes(" ")) continue;
+    const t = tol(na.length);
+    if(toks.some(x => (t>0 && lev(x,na)<=t) || (na.length>=5 && x.startsWith(na)))) return true;
+  }
+  return false;
+}
+/* Lit une date tapée : renvoie {val, neg} */
+function parseDate(s){
+  const raw = (s||"").toLowerCase();
+  const neg = /-|−|av|avant/.test(raw);
+  const c = raw.replace(/\s/g,"");
+  const m = c.match(/\d+([.,]\d+)?/);
+  if(!m) return null;
+  let v = parseFloat(m[0].replace(",","."));
+  if(/million/.test(raw)) v *= 1e6;
+  return {val:v, neg};
+}
+
+
+/* ---------- Son : la voix du téléphone lit la dictée en français ---------- */
+const SON = ("speechSynthesis" in window) && typeof SpeechSynthesisUtterance !== "undefined";
+if(SON){ try{ speechSynthesis.getVoices(); }catch(e){} } else document.body.classList.add("noson");
+function parler(t, lent){
+  if(!SON) return;
+  try{
+    const u = new SpeechSynthesisUtterance(t); u.lang = "fr-FR"; u.rate = lent ? 0.55 : 0.85;
+    const vs = speechSynthesis.getVoices();
+    const v = vs.find(x=>/fr[-_]FR/i.test(x.lang)) || vs.find(x=>/^fr/i.test(x.lang));
+    if(v) u.voice = v;
+    speechSynthesis.cancel(); speechSynthesis.speak(u);
+  }catch(e){}
+}
+document.addEventListener("click", e => { const b = e.target.closest("[data-say]"); if(b){ e.preventDefault(); parler(b.dataset.say, !!b.dataset.lent); } });
+/* Majuscule oubliée sur un jour ou un mois */
+const MAJ = []; const MAJ_OLD = ["monday","tuesday","wednesday","thursday","friday","saturday","sunday","january","february","march","april","may","june","july","august","september","october","november","december"];
+function majManque(input){
+  return (input||"").replace(/[^A-Za-z]+/g," ").split(" ").some(w => w && MAJ.includes(w.toLowerCase()) && w[0] !== w[0].toUpperCase());
+}
+/* Réponse tapée = un piège connu (ex. Tuesday au lieu de Thursday) : 0 point, jamais « presque » */
+function estPiege(q, input){
+  const ni = norm(input); if(!ni) return false;
+  const bons = q.a.map(norm);
+  return [...(q.d||[]), ...(q.no||[])].some(x => { const nx = norm(x); return nx === ni && !bons.includes(nx); });
+}
+
+/* ---------- Banque de questions ---------- */
+const PARTS = {p1:"Le mot d'après", p2:"ses ou ces ?", p3:"ce ou se ?", p4:"c'est ou s'est ?", p5:"c' ou s' devant une voyelle", p6:"La méthode du détective", dic:"🎧 Les dictées"};
+const FAM = ["ce","se","c'est","s'est","ces","ses","cet","cette","c'","s'"];
+const I = "indice";
+/* Une phrase à trous : l'enfant ÉCRIT le petit mot. Les autres jumeaux sont des pièges (0 point, jamais « presque »). */
+const H = (part, q, ans, h) => ({part, type:"word", q:q.replace("___",'<span class="trou">?</span>')+"<br><small>Écris le mot qui remplace <b>?</b></small>",
+  a:[ans], show:ans, d:FAM.filter(x=>x!==ans.toLowerCase()), aide:I, h});
+const Wd = (part,q,a,show,d,aide,x) => Object.assign({part,type:"word",q,a,show,d,aide}, x||{});
+const BANK = [
+  // --- p2 ses / ces
+  H("p2","Avant d'opérer, le chirurgien frotte ___ mains avec du savon.","ses","essaie « je frotte mes mains »"),
+  H("p2","Regarde ___ truites-là dans l'épuisette : elles sont énormes !","ces","je les montre du doigt"),
+  H("p2","Cet homme doit cacher quelque chose dans ___ poches.","ses","essaie « dans mes poches »"),
+  H("p2","Tu vois ___ vis-là ? Il faut les enlever pour ouvrir le robot.","ces","je les montre du doigt"),
+  H("p2","Raphaël range ___ propres hameçons dans sa boîte.","ses","essaie « je range mes propres hameçons »"),
+  // --- p3 ce / se
+  H("p3","Le robot aspirateur ___ cogne contre le mur.","se","après, il y a un verbe : essaie « je me cogne »"),
+  H("p3","___ brochet est le plus gros de la rivière.","Ce","après, il y a un nom : essaie « ce brochet-là »"),
+  H("p3","Avant d'opérer, le chirurgien ___ lave les mains.","se","après, il y a un verbe : essaie « je me lave »"),
+  H("p3","Papa répare ___ vieux moulinet.","ce","après, il y a un nom : essaie « ce moulinet-là »"),
+  // --- p4 c'est / s'est
+  H("p4","___ un gros poisson !","C'est","essaie « cela est un gros poisson »"),
+  H("p4","Le robot ___ bloqué sous le lit.","s'est","essaie « je me suis bloqué »"),
+  H("p4","La patiente ___ réveillée après l'opération.","s'est","essaie « je me suis réveillée »"),
+  H("p4","Regarde, ___ mon frère qui a gagné !","c'est","essaie « cela est mon frère »"),
+  H("p4","Mon frère ___ piqué le doigt avec l'hameçon.","s'est","essaie « je me suis piqué »"),
+  // --- p5 c' / s'
+  H("p5","___ était une belle journée de pêche.","C'","essaie « cela était »"),
+  H("p5","Le capot du robot ___ ouvre avec un tournevis.","s'","essaie « je m'ouvre » : c'est se devant un verbe"),
+  // --- p6 méthode
+  Wd("p6","Pour vérifier <b>ses</b>, je le remplace par quel mot ? Écris un mot.",["mes"],"mes",["ces-là"],I,{h:"le mot qui veut dire « à moi »"}),
+  Wd("p6","Pour vérifier <b>c'est</b>, je le remplace par quels mots ? Écris 2 mots.",["cela est","ca est","ça est"],"cela est",["me suis"],I,{h:"c… e…"}),
+  Wd("p6","Pour vérifier <b>s'est</b>, je dis « je … … ». Écris les 2 mots qui manquent.",["me suis"],"me suis",["cela est"],I,{h:"m… s…"}),
+  {part:"p6",type:"sort",w:3,stack:true,q:"Touche le bon mot pour chaque phrase.",cats:["ce","se","c'est","s'est","ces","ses"],items:[
+    ["Il ___ promène au bord de l'eau.",1],["___ trop drôle !",2],["Elle ___ trompée de route.",3],
+    ["J'adore ___ jeux-là.",4],["Il range ___ propres affaires.",5],["Tu as vu ___ robot ?",0]]},
+  // --- dictées : 3 avec aide, 3 autres sans aide
+  {part:"dic",lecon:"p6",only:"aide",type:"dictee",w:2,say:"Ce matin, le chirurgien se lave les mains.",keys:["ce","se"]},
+  {part:"dic",lecon:"p6",only:"aide",type:"dictee",w:2,say:"C'est le robot qui s'est bloqué sous le lit.",keys:["c'est","s'est"]},
+  {part:"dic",lecon:"p6",only:"aide",type:"dictee",w:2,say:"Regarde ces cannes-là : c'est un cadeau !",keys:["ces","c'est"]},
+  {part:"dic",lecon:"p6",only:"sans",type:"dictee",w:2,say:"Il s'est coupé avec ses propres ciseaux.",keys:["s'est","ses"]},
+  {part:"dic",lecon:"p6",only:"sans",type:"dictee",w:2,say:"C'est ce poisson qui se cache sous les rochers.",keys:["c'est","ce","se"]},
+  {part:"dic",lecon:"p6",only:"sans",type:"dictee",w:2,say:"Le pêcheur s'est énervé : ces poissons-là sont trop malins !",keys:["s'est","ces"]},
+];
+const AUDIO_OK = SON;
+BANK.forEach((q,i)=>{ q.id=i; q.w = q.w || 1; });
+const DATES = [];
+const PARTS_INTRO = {};
+
+/* ---------- Rendu des exercices ---------- */
+const MODES = {
+  aide: {key:"p015_note_aide", box:"#tab-aide", label:"avec aide", code:FICHE_CODE+"-aide"},
+  sans: {key:"p015_note_sans", box:"#tab-sans", label:"sans aide", code:FICHE_CODE}
+};
+let STATE = {};
+
+function startMode(mode, onlyIds){
+  const M = MODES[mode], root = $(M.box);
+  const ids = onlyIds || BANK.filter(q=>!q.only || q.only===mode).map(q=>q.id);
+  STATE[mode] = {ids, res:{}, retry:!!onlyIds};
+  root.innerHTML = "";
+  if(mode==="sans") root.classList.add("encours");
+  const intro = el("div",{class:"intro"});
+  if(mode==="aide"){
+    intro.innerHTML = `<b>Exercices AVEC aide</b> · ${ids.length} questions${onlyIds?" (seulement tes erreurs)":""}<br>
+      <b>Tu écris</b> le bon petit mot, avec un <span class="hint">indice</span> (le test à faire). À la fin : <b>3 dictées</b> d'une phrase, avec une aide.
+      <b>Il faut au moins 16 / 20 (80 %) sur la partie complète pour ouvrir la partie sans aide.</b>`;
+  } else {
+    intro.innerHTML = `<b>Exercices SANS aide</b> · ${ids.length} questions${onlyIds?" (seulement tes erreurs)":""}<br>
+      Pas d'indice : <b>tu écris tout toi-même</b>, comme le jour de la dictée. À la fin : <b>3 nouvelles dictées</b>, sans aide. Tu vois la correction après chaque réponse ; à la fin, tu refais les questions ratées.<br>
+      • Mot juste = 1 point. Mot presque juste (une petite faute d'orthographe) = ½ point.<br>
+      <b>Objectif : 16 / 20 (80 %) pour être prêt</b> (et gagner 3 vies pour la salle d'arcade, une seule fois pour cette fiche).`;
+  }
+  root.appendChild(intro);
+  const pr = el("div",{class:"prog"},"<i></i>"); root.appendChild(pr);
+  const cnt = el("div",{class:"cnt",style:"font-size:14px;color:var(--muted)"}); root.appendChild(cnt);
+  let lastPart = null, n = 0;
+  for(const id of ids){
+    const q = BANK[id];
+    if(q.part!==lastPart){ root.appendChild(el("h2",{},PARTS[q.part])); if(PARTS_INTRO[q.part]) root.appendChild(el("div",{},PARTS_INTRO[q.part])); lastPart=q.part; }
+    n++;
+    root.appendChild(renderCard(q, mode, n));
+  }
+  root.appendChild(el("div",{class:"resultZone"}));
+  updateProgress(mode);
+}
+
+function renderCard(q, mode, n){
+  const c = el("div",{class:"card","data-id":q.id});
+  c.appendChild(el("div",{class:"n"},`Question ${n}${q.w>1?` · ${fmt(q.w)} points`:""}`));
+  const body = el("div");
+  c.appendChild(body);
+  const fb = el("div",{class:"fb hidden"});
+  const done = (pts, msg) => { pts = Math.max(0, Math.min(q.w, pts)); STATE[mode].res[q.id]=pts; fb.className="fb "+(pts>=q.w?"ok":pts>0?"mid":"ko"); fb.innerHTML=msg; fb.classList.remove("hidden"); updateProgress(mode); };
+
+  if(q.type==="word" || q.type==="date"){
+    body.appendChild(el("div",{class:"q"}, q.type==="date" ? `Quelle est la date ? <b>${q.q}</b>` : q.q));
+    if(q.say){
+      const ec = el("div",{class:"ecoute"});
+      ec.appendChild(el("button",{class:"btn alt",type:"button","data-say":q.say},"🔊 Écouter"));
+      const lien = el("a",{href:"#"},"Pas de son ? Voir la phrase");
+      lien.onclick = e => { e.preventDefault(); lien.replaceWith(el("span",{class:"hint"},q.say)); };
+      ec.appendChild(lien); body.appendChild(ec);
+    }
+    const useQcm = mode==="aide" && (q.type==="date" || (q.d && q.aide!=="indice"));
+    if(useQcm){
+      let opts;
+      if(q.type==="date"){
+        const big = Math.abs(q.v)>=1e6;
+        const pool = shuffle(DATES.filter(x=>x.show!==q.show && (Math.abs(x.v)>=1e6)===big)).slice(0,2).map(x=>x.show);
+        opts = shuffle([q.show, ...pool]);
+      } else opts = shuffle([q.show, ...q.d]);
+      const box = el("div",{class:"opts"});
+      opts.forEach(o=>{
+        const b = el("button",{class:"opt"}, o);
+        b.onclick = () => {
+          box.querySelectorAll("button").forEach(x=>{ x.disabled=true; if(x.textContent===q.show) x.classList.add("good"); });
+          if(o===q.show) done(1,"Bravo !");
+          else { b.classList.add("bad"); done(0,`Non. La bonne réponse : <b>${q.show}</b>`); }
+        };
+        box.appendChild(b);
+      });
+      body.appendChild(box);
+    } else {
+      if(mode==="aide"){
+        const letters = q.show.replace(/[^A-Za-zÀ-ÿœ]/g,"").length;
+        body.appendChild(el("div",{class:"hint"}, q.h ? "Indice : "+q.h : `Indice : commence par « ${q.show[0]} », ${letters} lettres`));
+      }
+      const row = el("div",{class:"row"});
+      const inp = el("input",{type:"text",autocomplete:"off",autocapitalize:"off",spellcheck:"false",placeholder: q.type==="date"?"ex : -12 000":"écris ta réponse"});
+      const b = el("button",{class:"btn"},"Valider");
+      const go = () => {
+        if(!inp.value.trim()) return;
+        inp.disabled=true; b.disabled=true;
+        if(q.type==="date"){
+          const p = parseDate(inp.value), targets=[q.v,...q.alt].map(Math.abs);
+          if(p && targets.some(t=>Math.abs(p.val-t)<0.5)){
+            if(p.neg) done(1,`Bravo ! <b>${q.show}</b>`);
+            else done(0.5,`Le nombre est juste mais il manque le signe <b>-</b> : <b>${q.show}</b> (avant J.-C.). ½ point.`);
+          } else done(0,`Non. La bonne date : <b>${q.show}</b>`);
+        } else {
+          const r = estPiege(q, inp.value) ? "no" : matchWord(inp.value, q.a);
+          if((r==="exact"||r==="accent") && majManque(inp.value)) done(0.5,`Le mot est juste, mais il manque la <b>MAJUSCULE</b> : en anglais, les jours et les mois prennent toujours une majuscule → <b>${q.show}</b>. ½ point.`);
+          else if(r==="exact") done(1, q.multi ? `Bravo ! <b>${q.show}</b>` : "Bravo !");
+          else if(r==="accent") done(1,`Juste ! <b>${q.show}</b>`);
+          else if(r==="fuzzy") done(0.5,`Presque : il y a une petite erreur (une lettre ou un petit mot). Il faut écrire <b>${q.show}</b>. ½ point.`);
+          else done(0,`Non. La bonne réponse : <b>${q.show}</b>`);
+        }
+      };
+      b.onclick=go; inp.onkeydown=e=>{ if(e.key==="Enter") go(); };
+      row.append(inp,b); body.appendChild(row);
+    }
+  }
+
+  else if(q.type==="set"){
+    body.appendChild(el("div",{class:"q"},q.q));
+    if(mode==="aide") body.appendChild(el("div",{class:"hint"},"Indices : "+q.groups.map(g=>`« ${g[0][0].toUpperCase()}… » (${g[0].length} lettres)`).join(" · ")));
+    const row = el("div",{class:"row"});
+    const ins = q.groups.map(()=>{ const i=el("input",{type:"text",autocomplete:"off",autocapitalize:"off",spellcheck:"false",style:"max-width:170px"}); row.appendChild(i); return i; });
+    const b = el("button",{class:"btn"},"Valider"); row.appendChild(b);
+    b.onclick = () => {
+      if(ins.some(i=>!i.value.trim())) return;
+      ins.forEach(i=>i.disabled=true); b.disabled=true;
+      const used = new Set(); let pts=0, typo=false;
+      ins.forEach(i=>{
+        for(let g=0; g<q.groups.length; g++){
+          if(used.has(g)) continue;
+          const r = matchWord(i.value, q.groups[g]);
+          if(r!=="no"){ used.add(g); if(r==="fuzzy" || majManque(i.value)){ pts+=0.5; typo=true; } else pts+=1; break; }
+        }
+      });
+      const sc = pts/q.groups.length;
+      done(sc, sc>=1 ? "Bravo, tout est juste !" : `${fmt(pts)} sur ${q.groups.length}${typo?" (faute d'orthographe ou majuscule oubliée)":""}. Il fallait : <b>${q.show}</b>`);
+    };
+    body.appendChild(row);
+  }
+
+  else if(q.type==="order"){
+    body.appendChild(el("div",{class:"q"},q.q));
+    const seq = el("div",{class:"seq"}); const box = el("div",{class:"opts"});
+    const picked = [];
+    const v = el("button",{class:"btn"},"Valider"); v.disabled=true;
+    const clr = el("button",{class:"btn alt"},"Effacer");
+    shuffle(q.items).forEach(it=>{
+      const b = el("button",{class:"opt"},it);
+      b.onclick=()=>{ picked.push(it); b.disabled=true; b.classList.add("sel"); seq.appendChild(el("span",{},`${picked.length}. ${it}`)); v.disabled = picked.length<q.items.length; };
+      box.appendChild(b);
+    });
+    clr.onclick=()=>{ picked.length=0; seq.innerHTML=""; box.querySelectorAll("button").forEach(b=>{b.disabled=false;b.classList.remove("sel");}); v.disabled=true; };
+    v.onclick=()=>{
+      v.disabled=true; clr.disabled=true; box.querySelectorAll("button").forEach(b=>b.disabled=true);
+      const ok = picked.every((x,i)=>x===q.items[i]);
+      done(ok?q.w:0, ok?"Bravo, l'ordre est parfait !":`Non. Le bon ordre : <b>${q.items.join(" → ")}</b>`);
+    };
+    const row = el("div",{class:"row",style:"margin-top:8px"}); row.append(v,clr);
+    body.append(box, seq, row);
+  }
+
+  else if(q.type==="sort"){
+    body.appendChild(el("div",{class:"q"},q.q));
+    const grid = el("div",{class:"sort"+(q.cats.length>2?" cx":"")+(q.stack?" stack":""),style:"--n:"+q.cats.length}); const choice = {};
+    const v = el("button",{class:"btn",style:"margin-top:10px"},"Valider"); v.disabled=true;
+    q.items.forEach(([txt],i)=>{
+      grid.appendChild(el("div",{class:"lbl"},txt));
+      q.cats.forEach((cat,ci)=>{
+        const b = el("button",{class:"opt","data-r":i,"data-c":ci},cat);
+        b.onclick=()=>{ choice[i]=ci; grid.querySelectorAll(`[data-r="${i}"]`).forEach(x=>x.classList.toggle("sel", x===b)); v.disabled = Object.keys(choice).length<q.items.length; };
+        grid.appendChild(b);
+      });
+    });
+    v.onclick=()=>{
+      v.disabled=true; let good=0;
+      grid.querySelectorAll("button").forEach(b=>{
+        b.disabled=true; const r=+b.dataset.r, c=+b.dataset.c;
+        if(c===q.items[r][1]) b.classList.add("good");
+        if(choice[r]===c && c!==q.items[r][1]) b.classList.add("bad");
+      });
+      q.items.forEach(([,c],i)=>{ if(choice[i]===c) good++; });
+      const pts = Math.round(q.w*good/q.items.length*4)/4;
+      done(pts, `${good} lignes justes sur ${q.items.length} → ${fmt(pts)} / ${q.w} points.`);
+    };
+    body.append(grid, v);
+  }
+
+  else if(q.type==="def"){
+    body.appendChild(el("div",{class:"q"},`Définition : <b>${q.mot}</b>`));
+    const keys = [...q.cloze.matchAll(/\[\[(.+?)\]\]/g)].map(m=>m[1]);
+    const model = q.cloze.replace(/\[\[(.+?)\]\]/g,"<b>$1</b>");
+    if(mode==="aide"){
+      body.appendChild(el("div",{class:"hint"},"Complète les mots-clés : la première lettre est donnée."));
+      const p = el("div",{style:"line-height:2.2"});
+      const ins = [];
+      q.cloze.split(/(\[\[.+?\]\])/).forEach(part=>{
+        const m = part.match(/^\[\[(.+)\]\]$/);
+        if(m){ const w=m[1]; const i=el("input",{type:"text",class:"blank",autocomplete:"off",autocapitalize:"off",spellcheck:"false",placeholder:w[0]+"…"+" ("+w.length+")"}); ins.push([i,w]); p.appendChild(i); }
+        else p.appendChild(document.createTextNode(part));
+      });
+      const b = el("button",{class:"btn",style:"margin-top:6px"},"Valider");
+      b.onclick=()=>{
+        if(ins.some(([i])=>!i.value.trim())) return;
+        b.disabled=true; let got=0;
+        ins.forEach(([i,w])=>{ i.disabled=true; const r=matchWord(i.value,[w]); if(r==="exact"||r==="accent"){got+=1;i.style.borderColor="var(--moss)";} else if(r==="fuzzy"){got+=0.5;i.style.borderColor="var(--gold)";} else i.style.borderColor="var(--red)"; });
+        const pts = Math.round(q.w*got/ins.length*4)/4;
+        done(pts, `${fmt(got)} mot(s) juste(s) sur ${ins.length} → ${fmt(pts)} / ${q.w} points.<br>Définition complète : ${model}`);
+      };
+      body.append(p,b);
+    } else {
+      const ta = el("textarea",{placeholder:"Écris la définition complète, comme dans ta leçon.",autocapitalize:"off",spellcheck:"false"});
+      const b = el("button",{class:"btn",style:"margin-top:6px"},"Valider");
+      b.onclick=()=>{
+        if(ta.value.trim().length<3) return;
+        ta.disabled=true; b.disabled=true;
+        const miss=[]; let got=0;
+        q.groups.forEach((g,i)=>{ if(hasKey(ta.value,g)) got++; else miss.push(keys[i]||g[0]); });
+        const pts = Math.round(q.w*got/q.groups.length*4)/4;
+        done(pts, `${got} mot(s)-clé(s) sur ${q.groups.length} → ${fmt(pts)} / ${q.w} points.`
+          + (miss.length?`<br>Mots-clés oubliés : <b>${miss.join(", ")}</b>`:"<br>Tous les mots-clés y sont, bravo !")
+          + `<br>Définition de la leçon : ${model}`);
+      };
+      body.append(ta,b);
+    }
+  }
+  else if(q.type==="dictee"){
+    body.appendChild(el("div",{class:"q"},"🎧 <b>Dictée</b> : écoute la phrase, puis écris-la <b>en entier</b>, avec la majuscule et le point."));
+    const ec = el("div",{class:"ecoute"});
+    ec.appendChild(el("button",{class:"btn",type:"button","data-say":q.say},"🔊 Écouter"));
+    ec.appendChild(el("button",{class:"btn alt",type:"button","data-say":q.say,"data-lent":"1"},"🐢 Plus lentement"));
+    const lien = el("a",{href:"#"},"Pas de son ? Un adulte lit la phrase");
+    lien.onclick = e => { e.preventDefault();
+      if(!confirm("Pour l'adulte : la phrase va s'afficher. Lis-la à voix haute, puis touche « Cacher ».")) return;
+      const sp = el("span",{class:"hint"},q.say+" · "); const h = el("a",{href:"#"},"Cacher");
+      h.onclick = ev => { ev.preventDefault(); sp.replaceWith(lien); }; sp.appendChild(h); lien.replaceWith(sp); };
+    ec.appendChild(lien); body.appendChild(ec);
+    if(mode==="aide") body.appendChild(el("div",{class:"hint"},`Aide : cette phrase contient <b>${q.keys.length} mots pièges</b> (ce, se, c'est, s'est, ces, ses). Pour chacun, regarde le mot d'après et fais le test.`));
+    const ta = el("textarea",{placeholder:"Écris la phrase ici",autocapitalize:"sentences",autocomplete:"off",spellcheck:"false"});
+    const b = el("button",{class:"btn",style:"margin-top:6px"},"Valider");
+    b.onclick = () => {
+      if(ta.value.trim().length<5) return;
+      ta.disabled=true; b.disabled=true;
+      const got = pieges(ta.value); let good = 0; const lignes = [];
+      q.keys.forEach((k,i)=>{ const g = got[i]; if(g===k){ good++; lignes.push(`✔ <b>${k}</b>`); } else lignes.push(`✘ tu as écrit <b>${g||"rien"}</b> au lieu de <b>${k}</b>`); });
+      if(got.length>q.keys.length) lignes.push(`✘ tu as écrit un mot piège en trop : <b>${got.slice(q.keys.length).join(", ")}</b>`);
+      const pts = Math.round(q.w*good/q.keys.length*4)/4;
+      const modele = q.say.split(/(\s+)/).map(w => PIEGES.includes(pieges(w)[0]) ? `<b style="color:var(--ochre)">${w}</b>` : w).join("");
+      const parfait = propre(ta.value)===propre(q.say);
+      done(pts, `Mots pièges justes : ${good} / ${q.keys.length} → ${fmt(pts)} / ${q.w} points.<br>${lignes.join("<br>")}<br>La phrase : ${modele}`
+        + (parfait ? "<br>🎯 Phrase parfaite, sans aucune faute !" : "<br><small>Compare aussi le reste de ta phrase (accents, majuscule, point) : ici seuls les mots pièges comptent, mais en classe tout compte.</small>"));
+    };
+    body.append(ta,b);
+  }
+  c.appendChild(fb);
+  return c;
+}
+/* Dictée : repère dans l'ordre les mots de la famille [se] écrits par l'enfant */
+const PIEGES = ["ce","se","c'est","s'est","ces","ses","cet","cette","c'","s'","cest","sest","sait","sais","cé","sé","c'était","s'était"];
+function pieges(t){
+  return (t||"").toLowerCase().replace(/[’`´]/g,"'").split(/[^a-zà-ÿœ']+/).filter(Boolean)
+    .map(w => w.replace(/^'+|'+$/g,"")).filter(w => PIEGES.includes(w));
+}
+const propre = t => (t||"").replace(/[’`´]/g,"'").replace(/\s+/g," ").replace(/\s+([!?:;.,])/g,"$1").trim();
+
+/* ---------- Contrôle sans aide verrouillé ----------
+   Pendant le contrôle : plus d'accès à la leçon, ni à l'aide, ni au retour.
+   Quitter, recharger ou ouvrir la page ailleurs arrête le contrôle :
+   les questions non faites comptent 0. */
+const KEY_C = "p015_controle_en_cours";
+let LOCKED = false;
+function lock(on){
+  LOCKED = on;
+  document.body.classList.toggle("lock", on);
+  $("#lockBar").classList.toggle("hidden", !on);
+}
+function gateSans(){
+  const root = $("#tab-sans");
+  root.innerHTML = "";
+  const g = el("div",{class:"intro gate"});
+  g.innerHTML = `<div style="font-size:22px;font-weight:900">🔒 Le contrôle sans aide</div>
+    <p>C'est comme le vrai contrôle en classe. <b>Dès que tu commences :</b></p>
+    <ul>
+      <li>la <b>leçon</b> et les <b>exercices avec aide</b> sont <b>verrouillés</b> jusqu'à la dernière question ;</li>
+      <li>tu écris tout toi-même, sans choix proposé ;</li>
+      <li>si tu quittes ou recharges la page, le contrôle s'arrête et <b>les questions non faites comptent 0</b>.</li>
+    </ul>
+    <p>Commence seulement si tu connais ta leçon par cœur.</p>`;
+  const row = el("div",{class:"row"});
+  const go = el("button",{class:"btn"},"Commencer le contrôle");
+  go.onclick = () => startControle();
+  const back = el("button",{class:"btn alt"},"Pas encore, je révise");
+  back.onclick = () => $('nav button[data-tab="lecon"]').click();
+  row.append(go, back); g.appendChild(row);
+  root.appendChild(g);
+}
+function startControle(onlyIds){
+  startMode("sans", onlyIds);
+  lock(true);
+  store.set(KEY_C, {ids:STATE.sans.ids, res:{}, retry:STATE.sans.retry});
+  window.scrollTo({top:0});
+}
+/* Page rechargée ou ouverte ailleurs pendant un contrôle : il est arrêté et noté tel quel */
+function controleInterrompu(c){
+  const root = $("#tab-sans");
+  const faites = Object.keys(c.res||{}).length;
+  STATE.sans = {ids:c.ids, res:Object.assign({}, c.res||{}), retry:!!c.retry, interrompu:true};
+  c.ids.forEach(id=>{ if(STATE.sans.res[id]===undefined) STATE.sans.res[id]=0; });
+  root.innerHTML = `<div class="intro" style="border-color:var(--red)"><b>Contrôle interrompu.</b><br>
+    La page a été quittée, rechargée ou ouverte ailleurs pendant le contrôle.
+    Tu avais répondu à ${faites} question${faites>1?"s":""} sur ${c.ids.length} : les autres comptent 0.</div><div class="resultZone"></div>`;
+  try{ localStorage.removeItem(cle(KEY_C)); }catch(e){}
+  finish("sans");
+  document.querySelectorAll("nav button").forEach(x=>x.classList.toggle("on",x.dataset.tab==="sans"));
+  ["lecon","aide","sans"].forEach(t=>$("#tab-"+t).classList.toggle("hidden", t!=="sans"));
+}
+window.addEventListener("beforeunload", e => { if(LOCKED){ e.preventDefault(); e.returnValue = ""; } });
+window.addEventListener("storage", e => {
+  // Le contrôle a été arrêté depuis un autre onglet : celui-ci s'arrête aussi
+  if(e.key===cle(KEY_C) && e.newValue===null && LOCKED){
+    LOCKED = false;
+    alert("Le contrôle a été arrêté : la page a été ouverte ailleurs.");
+    location.reload();
+  }
+});
+
+function updateProgress(mode){
+  const S = STATE[mode], root = $(MODES[mode].box);
+  if(mode==="sans" && LOCKED) store.set(KEY_C, {ids:S.ids, res:S.res, retry:S.retry});
+  const doneN = Object.keys(S.res).length, total = S.ids.length;
+  root.querySelector(".prog i").style.width = (100*doneN/total)+"%";
+  const pts = Object.values(S.res).reduce((a,b)=>a+b,0);
+  const maxSoFar = Object.keys(S.res).reduce((a,id)=>a+BANK[id].w,0);
+  root.querySelector(".cnt").textContent = `Questions faites : ${doneN} / ${total}` + (doneN?` · points : ${fmt(pts)} / ${fmt(maxSoFar)}`:"");
+  if(doneN===total) finish(mode);
+}
+
+const PRET = 16;   // note sans aide pour « tu es prêt » (et 3 vies dans la salle d'arcade)
+function blocDe(q){ return q.lecon || q.part; }
+function texteQ(q){ if(q.type==="dictee") return "Dictée : « "+q.say+" »"; const d=document.createElement("div"); d.innerHTML = q.type==="def" ? "Écrire : "+q.mot : q.q; return d.textContent; }
+/* Correction du contrôle : seulement les blocs de la leçon où il y a eu des erreurs */
+function correction(wrong){
+  const z = el("div",{class:"revoir"});
+  z.appendChild(el("h3",{},`📖 À refaire : ${wrong.length} question${wrong.length>1?"s":""} ratée${wrong.length>1?"s":""}`));
+  z.appendChild(el("p",{},"Relis les parties de la leçon où tu t'es trompé, puis refais seulement ces questions. <b>Ça ne te donne pas de point en plus</b> : c'est pour comprendre tes erreurs."));
+  ORDER.forEach(pid=>{
+    const qs = wrong.filter(id=>blocDe(BANK[id])===pid);
+    if(!qs.length) return;
+    const src = document.querySelector(`#tab-lecon [data-part="${pid}"]`);
+    const c = src.cloneNode(true);
+    c.classList.remove("hidden");
+    c.querySelectorAll(".verif,[data-done]").forEach(x=>x.remove());
+    c.querySelectorAll(".k").forEach(k=>k.classList.add("show"));
+    const t = el("div",{style:"font-weight:800;margin-top:10px"},`Tu t'es trompé ici (${qs.length}) :`);
+    const ul = el("ul",{class:"ques"}); qs.forEach(id=>ul.appendChild(el("li",{},texteQ(BANK[id]))));
+    z.append(t, ul, c);
+  });
+  const b = el("button",{class:"btn"},`J'ai relu : je refais mes ${wrong.length} question${wrong.length>1?"s":""} ratée${wrong.length>1?"s":""}`);
+  b.onclick = () => startControle(wrong);
+  z.appendChild(b);
+  return z;
+}
+function finish(mode){
+  const S = STATE[mode], M = MODES[mode], root = $(M.box);
+  const max = S.ids.reduce((a,id)=>a+BANK[id].w,0);
+  const pts = Object.values(S.res).reduce((a,b)=>a+b,0);
+  const pct = Math.round(100*pts/max);
+  const sur20 = Math.round(pts/max*20*2)/2;
+  const ok = mode==="sans" ? sur20>=PRET : pct>=80;
+  const wrong = S.ids.filter(id=>S.res[id] < BANK[id].w);
+  if(mode==="sans"){ lock(false); root.classList.remove("encours"); try{ localStorage.removeItem(cle(KEY_C)); }catch(e){} }
+  if(!S.retry){
+    const prev = store.get(M.key) || {};
+    store.set(M.key, {last:{sur20,pct,date:new Date().toLocaleDateString("fr-FR")}, best: (!prev.best || pct>prev.best.pct) ? {sur20,pct} : prev.best});
+    showNotes();
+  }
+  const z = root.querySelector(".resultZone");
+  z.innerHTML = "";
+  const r = el("div",{class:"result "+(ok?"ok":"ko")});
+  let titre, texte;
+  if(S.retry){
+    titre = wrong.length ? "Encore à revoir" : "Erreurs corrigées ✓";
+    texte = (wrong.length ? `Il reste ${wrong.length} question${wrong.length>1?"s":""} à revoir : relis encore la leçon.` : "Bravo, tu as compris tes erreurs !")
+      + (mode==="sans" ? " Ta note du contrôle ne change pas. Pour l'améliorer, refais le contrôle en entier (<b>Tout recommencer</b>)." : "");
+  } else if(mode==="sans"){
+    if(sur20>=PRET){ titre = "Tu es prêt pour ton contrôle ! ✓";
+      texte = "Excellent travail ! 🎮 <b>3 vies</b> t'attendent dans la salle d'arcade (une seule fois pour cette fiche). Elles s'ajoutent quand tu ouvres la salle d'arcade, et sont valables jusqu'à minuit ce jour-là."; }
+    else if(sur20>=16){ titre = "Presque prêt";
+      texte = `Il faut ${PRET} / 20 pour être prêt. Regarde ta correction ci-dessous, puis refais le contrôle en entier un peu plus tard.`; }
+    else { titre = "À retravailler";
+      texte = `Il faut ${PRET} / 20 pour être prêt. Regarde ta correction, relis la leçon en mode mémoire, puis refais le contrôle en entier un autre moment.`; }
+  } else {
+    titre = ok ? "Acquis ✓" : "À retravailler";
+    texte = ok ? "Bien joué ! Tu as au moins 16 / 20 : la partie <b>sans aide</b> est ouverte. C'est elle qui ressemble au contrôle."
+      : "Moins de 16 / 20 : la partie sans aide reste fermée. Relis la leçon en mode mémoire, entraîne-toi sur tes erreurs, puis clique sur <b>Tout recommencer</b> : il faut 16 / 20 sur une partie complète.";
+  }
+  r.innerHTML = `<div>${S.retry?"Correction de tes erreurs (sans note)":"Ta note "+M.label}</div>
+    ${S.retry ? `<div class="big">${S.ids.length-wrong.length} / ${S.ids.length}</div><div>questions réussies</div>` : `<div class="big">${fmt(sur20)} / 20</div>
+    <div><b>${pct} %</b> de bonnes réponses (${fmt(pts)} / ${fmt(max)} points)</div>`}
+    <p style="font-size:19px;font-weight:800">${titre}</p>
+    <p>${texte}</p>`;
+  const row = el("div",{class:"row",style:"justify-content:center"});
+  const relance = ids => { if(mode==="sans") startControle(ids); else { startMode(mode, ids); window.scrollTo({top:0}); } };
+  if(wrong.length && mode==="aide"){ const b=el("button",{class:"btn"},`Refaire mes ${wrong.length} erreur${wrong.length>1?"s":""}`); b.onclick=()=>relance(wrong); row.appendChild(b); }
+  const b2 = el("button",{class:"btn alt"},mode==="sans"?"Tout recommencer (nouveau contrôle noté)":"Tout recommencer"); b2.onclick=()=>relance(); row.appendChild(b2);
+  r.appendChild(row);
+  z.appendChild(r);
+  if(mode==="sans" && wrong.length) z.appendChild(correction(wrong));
+  if(!S.retry && typeof enregistrerProgression==="function"){
+    // Score enregistré en pourcentage (sur 100) : les demi-points restent des nombres entiers
+    const bc = el("div",{class:"bilan-card"}); r.appendChild(bc);
+    Promise.resolve(enregistrerProgression(M.code, pct, 100)).then(()=>{
+      const box=document.getElementById("atelier-progression-box");
+      if(box && box.parentNode!==bc) bc.appendChild(box);
+      chargerNotesCompte();
+    });
+  }
+}
+
+/* Meilleures notes enregistrées sur le compte (tous appareils confondus) */
+const REMOTE = {};
+async function chargerNotesCompte(){
+  try{
+    if(typeof supabase==="undefined") return;
+    const sb = supabase.createClient("https://rwqsvrmjjoihuhmvbwuu.supabase.co","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ3cXN2cm1qam9paHVobXZid3V1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQzNjQxNTMsImV4cCI6MjA5OTk0MDE1M30.VtdOnI169-erf48NpxLPCC0th6kHqBcsBuCauOx52HI");
+    const s = await sb.auth.getSession(); if(!s.data.session) return;
+    let id = null; try{ id = localStorage.getItem("atelier_enfant_actif"); }catch(e){}
+    if(!id) return;
+    const r = await sb.from("progression").select("fiche_code,score,total").eq("enfant_id",id).in("fiche_code",[MODES.aide.code, MODES.sans.code]);
+    if(r.error || !r.data) return;
+    r.data.forEach(l=>{ const p = l.total>0 ? Math.round(l.score/l.total*100) : 0; REMOTE[l.fiche_code] = Math.max(REMOTE[l.fiche_code]||0, p); });
+    showNotes();
+  }catch(e){}
+}
+function showNotes(){
+  try{ paintTabs(); }catch(e){}
+  [["aide","#nAide","#vAide"],["sans","#nSans","#vSans"]].forEach(([m,n,v])=>{
+    const d = store.get(MODES[m].key);
+    const rb = REMOTE[MODES[m].code];
+    if(!d || !d.last){
+      if(rb!=null){ $(n).textContent=`${fmt(Math.round(rb/5*2)/2)} / 20 · ${rb} %`; const okr = m==="sans" ? Math.round(rb/5*2)/2>=PRET : rb>=80; $(v).textContent=(okr?(m==="sans"?"Prêt ✓":"Acquis ✓"):"À retravailler")+" · meilleure note du compte"; $(v).className="ver "+(okr?"ok":"ko"); }
+      else { $(n).textContent="—"; $(v).textContent="Pas encore faite"; $(v).className="ver"; }
+      return;
+    }
+    if(rb!=null && (!d.best || rb>d.best.pct)) d.best = {pct:rb};
+    $(n).textContent = `${fmt(d.last.sur20)} / 20 · ${d.last.pct} %`;
+    const ok = m==="sans" ? d.last.sur20>=PRET : d.last.pct>=80;
+    $(v).textContent = (m==="sans" ? (ok?"Prêt ✓":d.last.sur20>=16?"Presque prêt":"À retravailler") : (ok?"Acquis ✓":"À retravailler")) + ` · le ${d.last.date}` + (d.best && d.best.pct>d.last.pct ? ` · record ${d.best.pct} %` : "");
+    $(v).className = "ver "+(ok?"ok":"ko");
+  });
+}
+
+/* ---------- Onglets verrouillés ----------
+   Avec aide : seulement quand les 6 blocs de la leçon sont réussis.
+   Sans aide : seulement avec au moins 16/20 (80 %) dans la partie avec aide. */
+const SEUIL = 80;
+const leconOk = () => ORDER.every(id=>doneStore[id]);
+function meilleureAide(){
+  const d = store.get(MODES.aide.key) || {};
+  const loc = Math.max(d.best ? d.best.pct : 0, d.last ? d.last.pct : 0);
+  return Math.max(loc, REMOTE[MODES.aide.code]||0);
+}
+const aideOk = () => meilleureAide() >= SEUIL;
+function paintTabs(){
+  $('nav button[data-tab="aide"]').classList.toggle("locked", !leconOk());
+  $('nav button[data-tab="sans"]').classList.toggle("locked", !aideOk());
+}
+function verrou(tab){
+  const root = $("#tab-"+tab);
+  const g = el("div",{class:"gatebox"});
+  if(tab==="aide"){
+    const faits = ORDER.filter(id=>doneStore[id]).length;
+    g.innerHTML = `<h3>🔒 La partie avec aide est fermée</h3>
+      <p>Elle s'ouvrira quand tu auras réussi <b>les 6 blocs de la leçon</b> (3 bonnes réponses d'affilée à chaque bloc).</p>
+      <p>Pour l'instant : <b>${faits} bloc${faits>1?"s":""} sur 6</b> réussi${faits>1?"s":""}.</p>`;
+  } else {
+    const p = meilleureAide();
+    g.innerHTML = `<h3>🔒 La partie sans aide est fermée</h3>
+      <p>Elle s'ouvrira quand tu auras au moins <b>16 / 20</b> (80 %) dans la partie <b>avec aide</b>.</p>
+      <p>${p ? `Ta meilleure note avec aide : <b>${fmt(Math.round(p/5*2)/2)} / 20</b> (${p} %).` : "Tu n'as pas encore fini la partie avec aide."}
+      ${leconOk() ? "" : "<br>Et avant ça, il faut finir la leçon."}</p>`;
+  }
+  const row = el("div",{class:"row"});
+  const go = el("button",{class:"btn"}, tab==="aide" || !leconOk() ? "Retour à la leçon" : "Aller à la partie avec aide");
+  go.onclick = () => $(`nav button[data-tab="${tab==="aide" || !leconOk() ? "lecon" : "aide"}"]`).click();
+  row.appendChild(go); g.appendChild(row);
+  root.innerHTML = ""; root.appendChild(g);
+}
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{
+  document.querySelectorAll("nav button").forEach(x=>x.classList.toggle("on",x===b));
+  ["lecon","aide","sans"].forEach(t=>$("#tab-"+t).classList.toggle("hidden", t!==b.dataset.tab));
+  if(LOCKED) return;
+  const t = b.dataset.tab;
+  if(t==="aide"){
+    if(!leconOk()){ STATE.aide = null; verrou("aide"); }
+    else if(!STATE.aide) startMode("aide");
+  }
+  if(t==="sans"){
+    if(!aideOk()){ STATE.sans = null; verrou("sans"); }
+    else if(!STATE.sans) gateSans();
+  }
+  window.scrollTo({top:0});
+});
+$("#goAide").onclick = () => $('nav button[data-tab="aide"]').click();
+$("#memBtn").onclick=()=>{
+  const on = document.body.classList.toggle("mem");
+  document.querySelectorAll(".k").forEach(k=>k.classList.remove("show"));
+  $("#memBtn").textContent = on ? "Montrer tous les mots-clés" : "Mode mémoire : cacher les mots-clés";
+  $("#memInfo").classList.toggle("hidden", !on);
+};
+document.querySelectorAll(".k").forEach(k=>k.onclick=()=>{ if(document.body.classList.contains("mem")) k.classList.add("show"); });
+/* ---------- 3 questions de vérification par bloc ----------
+   Le bloc suivant reste caché tant que les 3 réponses ne sont pas justes.
+   Le bloc au-dessus reste visible : l'enfant peut relire pour répondre. */
+const CHECKS = {
+  p1: [["Pour choisir entre ces 6 mots, je regarde…",["le mot qui vient juste après","le premier mot de la phrase","la longueur de la phrase"]],
+       ["Juste après, il y a un nom (gants, robot…). Je choisis entre…",["ce, ces, ses","se, s'est","c'est, s'est"]],
+       ["Juste après, il y a un verbe (lave, cache…). J'écris…",["se","ses","ces"]],
+       ["Je peux dire « cela est ». J'écris…",["c'est","s'est","ses"]],
+       ["Je peux dire « je me suis ». J'écris…",["s'est","c'est","ces"]],
+       ["Le déguisement de « ses », c'est…",["mes","cela est","me"]]],
+  p2: [["« ses » veut dire…",["à lui ou à elle","je montre","cela est"]],
+       ["« ces » veut dire…",["je montre","à lui ou à elle","cela est"]],
+       ["Le chirurgien enfile … gants (ses gants à lui).",["ses","ces","c'est"]],
+       ["Regarde … truites-là !",["ces","ses","s'est"]],
+       ["Il cache quelque chose dans … poches (ses poches à lui).",["ses","c'est","ces"]],
+       ["« dans c'est poches » est faux car après il y a…",["un nom","un verbe","un point"]]],
+  p3: [["« ce » est suivi…",["d'un nom","d'un verbe","de « suis »"]],
+       ["« se » est suivi…",["d'un verbe","d'un nom","d'un adjectif"]],
+       ["Le chirurgien … lave les mains (je me lave).",["se","ce","ses"]],
+       ["… brochet est énorme (ce brochet-là).",["Ce","Se","C'est"]],
+       ["Le déguisement de « se », c'est…",["me","mes","cela est"]],
+       ["Le robot … cogne contre le mur.",["se","ce","ces"]]],
+  p4: [["« c'est » veut dire…",["cela est","je me suis","à lui"]],
+       ["Après « s'est », il y a souvent…",["un participe passé (coupé, bloqué…)","un nom (robot, gants…)","un point d'exclamation"]],
+       ["… un gros poisson ! (cela est)",["C'est","S'est","Ses"]],
+       ["Le robot … bloqué (je me suis bloqué).",["s'est","c'est","ses"]],
+       ["Au passé, « c'est » devient…",["c'était","s'était","ses"]],
+       ["La patiente … réveillée.",["s'est","c'est","ces"]]],
+  p5: [["« c' » devant une voyelle veut dire…",["cela","se","si"]],
+       ["Il … appelle Raphaël (je m'appelle).",["s'","c'","ses"]],
+       ["… était une belle journée (cela était).",["C'","S'","Ces"]],
+       ["Dans « s'il te plaît », s' veut dire…",["si","se","cela"]],
+       ["Le capot … ouvre.",["s'","c'","ce"]],
+       ["« s' » devant un verbe, c'est le mot…",["se","ces","c'est"]]],
+  p6: [["J'entends [se] et le mot d'après est « outils ». C'est un…",["nom","verbe","participe passé"]],
+       ["Il range … outils (mes outils marche).",["ses","ces","s'est"]],
+       ["J'entends [se] puis « cache » (un verbe). J'écris…",["se","ses","ce"]],
+       ["« Cela est » marche. J'écris…",["c'est","s'est","ses"]],
+       ["À la fin d'une dictée, je relis…",["en cherchant ces petits mots un par un","seulement le titre","jamais"]],
+       ["« je me suis » marche. J'écris…",["s'est","c'est","se"]]]
+};
+const ORDER = ["p1","p2","p3","p4","p5","p6"];
+const doneStore = store.get("p015_compris") || {};
+function paintParts(){
+  let open = true;
+  ORDER.forEach(id=>{
+    const part = document.querySelector(`[data-part="${id}"]`);
+    part.classList.toggle("hidden", !open);
+    if(!doneStore[id]) open = false;
+  });
+  const lockMsg = $("#partLock");
+  const next = ORDER.find(id=>!doneStore[id]);
+  lockMsg.classList.toggle("hidden", !next || next===ORDER[ORDER.length-1] && false);
+  lockMsg.innerHTML = next ? `🔒 La suite de la leçon (et la partie avec aide) s'ouvrira quand tu auras réussi les 3 questions d'affilée du bloc « ${document.querySelector(`[data-part="${next}"] h3`).textContent} », puis cliqué sur « J'ai bien compris ».` : "";
+  if(!next) lockMsg.classList.add("hidden");
+  $("#leconFinie").classList.toggle("hidden", !!next);
+}
+/* Règle : 3 questions tirées au hasard dans le bloc, à faire dans l'ordre.
+   Une seule erreur => on recommence à la question 1 (nouveau tirage). */
+ORDER.forEach(id=>{
+  const part = document.querySelector(`[data-part="${id}"]`);
+  const btn = part.querySelector("[data-done]");
+  const box = el("div",{class:"verif"});
+  part.insertBefore(box, btn);
+  let tirage = [], step = 0, msg = "";
+  const paintBtn = () => {
+    const all = step>=3;
+    btn.disabled = !all && !doneStore[id];
+    btn.classList.toggle("on", !!doneStore[id]);
+    btn.textContent = doneStore[id] ? "Compris ✓" : all ? "J'ai bien compris" : "J'ai bien compris (réussis d'abord les 3 questions)";
+  };
+  const nouveauTirage = () => { tirage = shuffle(CHECKS[id].map((_,k)=>k)).slice(0,3); step = 0; };
+  const render = () => {
+    box.innerHTML = "";
+    box.appendChild(el("div",{class:"verif-t"},"✏️ Je vérifie que j'ai compris : 3 questions à réussir d'affilée (je peux relire le bloc au-dessus)."));
+    if(doneStore[id]){ box.appendChild(el("div",{class:"fb ok"},"Bloc réussi ✓")); paintBtn(); return; }
+    const st = el("div",{class:"steps3"});
+    [0,1,2].forEach(k=>st.appendChild(el("span",{class: k<step?"ok":(k===step?"cur":"")}, (k<step?"✓ ":"")+"Question "+(k+1))));
+    box.appendChild(st);
+    if(msg){ box.appendChild(el("div",{class:"fb ko"},msg)); }
+    if(step>=3){ box.appendChild(el("div",{class:"fb ok"},"Les 3 réponses sont justes ! Clique sur « J'ai bien compris »."));
+      paintBtn(); return; }
+    const [q,opts] = CHECKS[id][tirage[step]];   // opts[0] = la bonne réponse
+    const c = el("div",{class:"vq"});
+    c.appendChild(el("div",{class:"q"},`Question ${step+1} sur 3 : ${q}`));
+    const row = el("div",{class:"qcm-v"});
+    shuffle(opts.slice()).forEach(o=>{
+      const b = el("button",{class:"btn-v"},o);
+      b.onclick = () => {
+        if(o === opts[0]){ step++; msg=""; render(); }
+        else { msg = "❌ Ce n'est pas la bonne réponse. <b>Tu recommences à la question 1.</b> Relis bien le bloc au-dessus avant de répondre."; nouveauTirage(); render(); }
+        paintBtn();
+      };
+      row.appendChild(b);
+    });
+    c.append(row); box.appendChild(c);
+    paintBtn();
+  };
+  nouveauTirage(); render();
+  btn.onclick = () => {
+    if(btn.disabled || doneStore[id]) return;
+    doneStore[id] = true; store.set("p015_compris",doneStore); render(); paintParts(); paintTabs();
+    const n = ORDER[ORDER.indexOf(id)+1];
+    if(n) setTimeout(()=>document.querySelector(`[data-part="${n}"]`).scrollIntoView({behavior:"smooth",block:"start"}),100);
+  };
+});
+paintParts();
+paintTabs();
+showNotes();
+chargerNotesCompte();
+{ const c = store.get(KEY_C); if(c && c.ids) controleInterrompu(c); }
+</script>
+<script src="../atelier-clavier.js"></script>
+</body>
+</html>
