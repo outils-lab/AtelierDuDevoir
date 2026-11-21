@@ -465,7 +465,7 @@ function startMode(mode, onlyIds){
       • Mot juste = 1 point. Mot presque juste (une faute d'orthographe) = ½ point.<br>
       • <b>Majuscule oubliée</b> sur un jour ou un mois (monday, april…) = ½ point seulement.<br>
       • 🔊 Quand il y a un bouton « Écouter », monte le son et écoute autant de fois que tu veux.<br>
-      <b>Objectif : 16 / 20 (80 %) pour être prêt</b> (et gagner 3 vies pour la salle d'arcade, une seule fois pour cette fiche).`;
+      <b>Objectif : 15 / 20 (75 %) pour être prêt</b> (et gagner 3 vies pour la salle d'arcade, une seule fois pour cette fiche).`;
   }
   root.appendChild(intro);
   const pr = el("div",{class:"prog"},"<i></i>"); root.appendChild(pr);
@@ -732,7 +732,7 @@ function updateProgress(mode){
   if(doneN===total) finish(mode);
 }
 
-const PRET = 16;   // note sans aide pour « tu es prêt » (et 3 vies dans la salle d'arcade)
+const PRET = 15;   // note sans aide pour « tu es prêt » (et 3 vies dans la salle d'arcade)
 function blocDe(q){ return q.part; }
 function texteQ(q){ const d=document.createElement("div"); d.innerHTML = q.type==="def" ? "Écrire : "+q.mot : q.q; return d.textContent; }
 /* Correction du contrôle : seulement les blocs de la leçon où il y a eu des erreurs */
@@ -782,7 +782,7 @@ function finish(mode){
   } else if(mode==="sans"){
     if(sur20>=PRET){ titre = "Tu es prêt pour ton contrôle ! ✓";
       texte = "Excellent travail ! 🎮 <b>3 vies</b> t'attendent dans la salle d'arcade (une seule fois pour cette fiche). Elles s'ajoutent quand tu ouvres la salle d'arcade, et sont valables jusqu'à minuit ce jour-là."; }
-    else if(sur20>=16){ titre = "Presque prêt";
+    else if(sur20>=PRET-2){ titre = "Presque prêt";
       texte = `Il faut ${PRET} / 20 pour être prêt. Regarde ta correction ci-dessous, puis refais le contrôle en entier un peu plus tard.`; }
     else { titre = "À retravailler";
       texte = `Il faut ${PRET} / 20 pour être prêt. Regarde ta correction, relis la leçon en mode mémoire, puis refais le contrôle en entier un autre moment.`; }
@@ -842,7 +842,7 @@ function showNotes(){
     if(rb!=null && (!d.best || rb>d.best.pct)) d.best = {pct:rb};
     $(n).textContent = `${fmt(d.last.sur20)} / 20 · ${d.last.pct} %`;
     const ok = m==="sans" ? d.last.sur20>=PRET : d.last.pct>=80;
-    $(v).textContent = (m==="sans" ? (ok?"Prêt ✓":d.last.sur20>=16?"Presque prêt":"À retravailler") : (ok?"Acquis ✓":"À retravailler")) + ` · le ${d.last.date}` + (d.best && d.best.pct>d.last.pct ? ` · record ${d.best.pct} %` : "");
+    $(v).textContent = (m==="sans" ? (ok?"Prêt ✓":d.last.sur20>=PRET-2?"Presque prêt":"À retravailler") : (ok?"Acquis ✓":"À retravailler")) + ` · le ${d.last.date}` + (d.best && d.best.pct>d.last.pct ? ` · record ${d.best.pct} %` : "");
     $(v).className = "ver "+(ok?"ok":"ko");
   });
 }

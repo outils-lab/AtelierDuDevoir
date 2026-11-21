@@ -348,7 +348,7 @@ function check(sid){
   updateBar();
 }
 function statut(pct){
-  return pct>=80?{t:'Acquis ✅',c:'yes'}:pct>=60?{t:'À retravailler 📚',c:'no'}:{t:'À refaire 🔁',c:'no'};
+  return pct>=75?{t:'Acquis ✅',c:'yes'}:pct>=60?{t:'À retravailler 📚',c:'no'}:{t:'À refaire 🔁',c:'no'};
 }
 function updateBar(){
   let tot=0,sc=0,done=0,note=0;const ids=Object.keys(state);
