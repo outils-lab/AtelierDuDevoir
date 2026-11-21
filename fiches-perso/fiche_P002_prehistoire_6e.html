@@ -431,14 +431,14 @@ function startMode(mode, onlyIds){
   if(mode==="aide"){
     intro.innerHTML = `<b>Exercices AVEC aide</b> · ${ids.length} questions${onlyIds?" (seulement tes erreurs)":""}<br>
       Parfois tu choisis parmi 3 réponses, parfois tu écris le mot avec un <span class="hint">indice</span>.
-      Pour les définitions, tu complètes les mots-clés manquants.<br><b>Objectif : 80 % minimum.</b> Ensuite, passe à la version sans aide.`;
+      Pour les définitions, tu complètes les mots-clés manquants.<br><b>Objectif : 75 % minimum.</b> Ensuite, passe à la version sans aide.`;
   } else {
     intro.innerHTML = `<b>Exercices SANS aide</b> · ${ids.length} questions${onlyIds?" (seulement tes erreurs)":""}<br>
       Pas de choix proposé : <b>tu écris tout toi-même</b>, comme le jour du contrôle. Un chirurgien n'a pas d'antisèche au bloc : il connaît chaque nom par cœur.<br>
       • Mot juste = 1 point. Mot presque juste (une faute d'orthographe) = ½ point.<br>
       • Dates : n'oublie pas le signe <b>-</b> (avant J.-C.), sinon ½ point.<br>
       • Définitions : écris-les en entier. Elles sont corrigées avec les <b>mots-clés</b> de ta leçon. Chaque mot-clé oublié fait perdre des points.<br>
-      <b>Objectif : 80 % minimum.</b>`;
+      <b>Objectif : 75 % minimum.</b>`;
   }
   root.appendChild(intro);
   const pr = el("div",{class:"prog"},"<i></i>"); root.appendChild(pr);
@@ -703,7 +703,7 @@ function finish(mode){
   const pts = Object.values(S.res).reduce((a,b)=>a+b,0);
   const pct = Math.round(100*pts/max);
   const sur20 = Math.round(pts/max*20*2)/2;
-  const ok = mode==="sans" ? sur20>=15 : pct>=80;
+  const ok = mode==="sans" ? sur20>=15 : pct>=75;
   const wrong = S.ids.filter(id=>S.res[id] < BANK[id].w);
   if(mode==="sans"){ lock(false); try{ localStorage.removeItem(cle(KEY_C)); }catch(e){} }
   if(!S.retry){
@@ -720,7 +720,7 @@ function finish(mode){
     <p style="font-size:19px;font-weight:800">${ok ? "Acquis ✓" : "À retravailler"}</p>
     <p>${ok
       ? (mode==="aide" ? "Bien joué ! Maintenant, passe à la version <b>sans aide</b> : c'est elle qui compte pour le contrôle." : "Excellent : tu sais ta leçon. Pour finir, refais la fiche papier.")
-      : "Moins de 80 % : relis la leçon en mode mémoire, puis refais <b>seulement tes erreurs</b>, jusqu'à ne plus en faire."}</p>`;
+      : "Moins de 75 % : relis la leçon en mode mémoire, puis refais <b>seulement tes erreurs</b>, jusqu'à ne plus en faire."}</p>`;
   const row = el("div",{class:"row",style:"justify-content:center"});
   const relance = ids => { if(mode==="sans") startControle(ids); else { startMode(mode, ids); window.scrollTo({top:0}); } };
   if(wrong.length){ const b=el("button",{class:"btn"},`Refaire mes ${wrong.length} erreur${wrong.length>1?"s":""}`); b.onclick=()=>relance(wrong); row.appendChild(b); }
@@ -758,13 +758,13 @@ function showNotes(){
     const d = store.get(MODES[m].key);
     const rb = REMOTE[MODES[m].code];
     if(!d || !d.last){
-      if(rb!=null){ $(n).textContent=`${fmt(Math.round(rb/5*2)/2)} / 20 · ${rb} %`; $(v).textContent=((m==="sans"?rb>=75:rb>=80)?"Acquis ✓":"À retravailler")+" · meilleure note du compte"; $(v).className="ver "+((m==="sans"?rb>=75:rb>=80)?"ok":"ko"); }
+      if(rb!=null){ $(n).textContent=`${fmt(Math.round(rb/5*2)/2)} / 20 · ${rb} %`; $(v).textContent=((m==="sans"?rb>=75:rb>=75)?"Acquis ✓":"À retravailler")+" · meilleure note du compte"; $(v).className="ver "+((m==="sans"?rb>=75:rb>=75)?"ok":"ko"); }
       else { $(n).textContent="—"; $(v).textContent="Pas encore faite"; $(v).className="ver"; }
       return;
     }
     if(rb!=null && (!d.best || rb>d.best.pct)) d.best = {pct:rb};
     $(n).textContent = `${fmt(d.last.sur20)} / 20 · ${d.last.pct} %`;
-    const ok = m==="sans" ? d.last.sur20>=15 : d.last.pct>=80;
+    const ok = m==="sans" ? d.last.sur20>=15 : d.last.pct>=75;
     $(v).textContent = (ok?"Acquis ✓":"À retravailler") + ` · le ${d.last.date}` + (d.best && d.best.pct>d.last.pct ? ` · record ${d.best.pct} %` : "");
     $(v).className = "ver "+(ok?"ok":"ko");
   });

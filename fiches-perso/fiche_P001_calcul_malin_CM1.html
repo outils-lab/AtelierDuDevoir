@@ -360,15 +360,15 @@ function updateBar(){
   win.style.display='block';
   if(mode==='aide'){
     const p=Math.round(sc/tot*100);
-    win.className='win '+(p>=80?'yes':'no');
-    win.innerHTML=p>=80?`🌟 <b>Super entraînement !</b> (${p} %)<br>Tu es prête pour le mode <b>Sans aide</b> : c'est lui qui donne ta note. 🎯`:`💪 ${p} % — corrige les cases rouges, puis entraîne-toi encore avant le mode <b>Sans aide</b>.`;
+    win.className='win '+(p>=75?'yes':'no');
+    win.innerHTML=p>=75?`🌟 <b>Super entraînement !</b> (${p} %)<br>Tu es prête pour le mode <b>Sans aide</b> : c'est lui qui donne ta note. 🎯`:`💪 ${p} % — corrige les cases rouges, puis entraîne-toi encore avant le mode <b>Sans aide</b>.`;
     return;
   }
   if(serie.corrige){win.className='win no';win.innerHTML='👀 Corrigé affiché : cette série n\'est pas notée.<br>Clique sur <b>🔄 Nouvelle série</b> pour une série notée.';return;}
   const p=Math.round(note/tot*100),st=statut(p);
   win.className='win '+st.c;
-  win.innerHTML=(p>=80?'🔓 <b>Passage secret débloqué !</b><br>':'')+`Ta note : <b>${note} / ${tot}</b> (${p} %) — <b>${st.t}</b>`
-    +(p<80?`<br>Corrige les cases rouges pour comprendre tes erreurs, puis clique sur <b>🔄 Nouvelle série</b> pour retenter ta chance.`:'')
+  win.innerHTML=(p>=75?'🔓 <b>Passage secret débloqué !</b><br>':'')+`Ta note : <b>${note} / ${tot}</b> (${p} %) — <b>${st.t}</b>`
+    +(p<75?`<br>Corrige les cases rouges pour comprendre tes erreurs, puis clique sur <b>🔄 Nouvelle série</b> pour retenter ta chance.`:'')
     ;
   if(!serie.enregistree&&!serie.corrige){
     serie.enregistree=true;
