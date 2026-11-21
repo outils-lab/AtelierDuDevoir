@@ -1,0 +1,1089 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="../favicon.ico" sizes="any">
+<title>La population du monde — Le passage secret</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6efe3; --paper:#fffaf2; --ink:#2b2118; --muted:#7a6a58; --line:#e3d5bf;
+  --ochre:#1f7a6d; --ochre-l:#e2f3f0; --char:#173b36; --moss:#3f7d4e; --moss-l:#e5f3e8;
+  --red:#b3392c; --red-l:#fbe6e3; --gold:#c9961f; --gold-l:#fdf3d8; --blue:#2f6aa8; --blue-l:#e6eff9;
+}
+*{box-sizing:border-box}
+:root{color-scheme:light}
+.retour{display:inline-block;color:#bfe3dc;text-decoration:none;font-weight:800;font-size:15px;padding:0 0 8px}
+#atelier-progression-box{margin-top:14px}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Nunito,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:17px;line-height:1.5}
+header{background:var(--char);color:#fff;padding:14px 16px 0}
+header .top{max-width:860px;margin:0 auto}
+header small{color:#bfe3dc;letter-spacing:.05em;text-transform:uppercase;font-size:12px}
+header h1{margin:2px 0 10px;font-size:24px}
+nav{max-width:860px;margin:0 auto;display:flex;gap:6px;overflow-x:auto}
+nav button{flex:1;min-width:110px;border:0;border-radius:10px 10px 0 0;padding:10px 8px;font:inherit;font-weight:700;font-size:15px;cursor:pointer;background:#2c5f57;color:#e2f3f0}
+nav button.on{background:var(--bg);color:var(--char)}
+main{max-width:860px;margin:0 auto;padding:16px 16px 140px}
+h2{font-size:21px;margin:22px 0 8px;color:var(--char)}
+.part{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:14px 0}
+.part h3{margin:0 0 8px;font-size:18px;color:var(--ochre)}
+.part ul{margin:6px 0;padding-left:20px}
+.part li{margin:3px 0}
+.def{background:var(--ochre-l);border-left:5px solid var(--ochre);border-radius:8px;padding:8px 10px;margin:8px 0}
+.warn{background:var(--red-l);border-left:5px solid var(--red);border-radius:8px;padding:8px 10px;margin:8px 0}
+.tip{background:var(--gold-l);border-left:5px solid var(--gold);border-radius:8px;padding:8px 10px;margin:8px 0}
+.k{font-weight:700;color:var(--char)}
+body.mem .k{color:transparent;background:#e9dcc6;border-radius:4px;cursor:pointer;user-select:none}
+body.mem .k.show{color:var(--moss);background:var(--moss-l)}
+.memctl{position:sticky;top:0;z-index:5;background:var(--bg);padding:8px 0;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.btn{border:0;border-radius:10px;padding:10px 14px;font:inherit;font-weight:700;cursor:pointer;background:var(--char);color:#fff}
+.btn.alt{background:#fff;color:var(--char);border:2px solid var(--char)}
+.btn.ok{background:var(--moss)}
+.btn:disabled{opacity:.45;cursor:default}
+.done-btn{margin-top:8px}
+.done-btn.on{background:var(--moss)}
+/* frise */
+.frise{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;align-items:center;margin-top:6px}
+.frise .d{font-weight:800;font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+.frise .e{padding:4px 8px;border-radius:6px}
+.frise .pa{background:var(--ochre-l)}
+.frise .ne{background:var(--moss-l)}
+.frise .sep{grid-column:1/-1;font-weight:800;font-size:13px;letter-spacing:.06em;text-transform:uppercase;margin-top:6px}
+/* exercices */
+.intro{background:var(--paper);border:2px solid var(--char);border-radius:14px;padding:12px 14px}
+.prog{height:10px;background:#e7dbc8;border-radius:6px;overflow:hidden;margin:10px 0}
+.prog i{display:block;height:100%;background:var(--ochre);width:0;transition:width .3s}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin:10px 0}
+.card .n{font-size:12px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.card .q{font-weight:600;margin:4px 0 8px}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opt{border:2px solid var(--line);background:#fff;border-radius:10px;padding:8px 12px;font:inherit;cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--ochre)}
+.opt.good{border-color:var(--moss);background:var(--moss-l)}
+.opt.bad{border-color:var(--red);background:var(--red-l)}
+.bar{display:flex;margin:6px 0;font-weight:800;font-size:15px;max-width:460px}
+.bar span{border:2px solid #222;padding:7px 4px;text-align:center;margin-right:-2px;white-space:nowrap;overflow:hidden}
+.bar .t{background:#dfe9f5}.bar .a{background:var(--ochre-l)}.bar .b{background:var(--moss-l)}
+.bar .q{background:#fff;border-style:dashed;color:var(--red)}
+.bar .vide{border:none;background:none}
+.barlbl{font-size:13px;color:var(--muted);font-weight:700;margin-top:8px}
+.opt.sel{border-color:var(--char);background:#efe3d0}
+.revoir{background:#fff;border:2px solid var(--red);border-radius:14px;padding:12px 14px;margin:14px 0;text-align:left}
+.revoir h3{margin-top:0;color:var(--red)}
+.revoir .part{border:1px dashed var(--line);border-radius:10px;padding:8px 10px;margin:8px 0;background:var(--paper)}
+.revoir .ques{margin:4px 0 8px;padding-left:18px}
+input[type=text],textarea{font:inherit;padding:8px 10px;border:2px solid var(--line);border-radius:10px;background:#fff;width:100%;max-width:340px}
+textarea{max-width:100%;min-height:70px;resize:vertical}
+input.blank{width:auto;min-width:90px;max-width:170px;padding:3px 6px;margin:2px 2px;display:inline-block}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.hint{font-size:14px;color:var(--blue);background:var(--blue-l);border-radius:6px;padding:2px 8px;display:inline-block;margin-bottom:6px}
+.fb{margin-top:8px;border-radius:8px;padding:7px 10px;font-size:15px}
+.fb.ok{background:var(--moss-l);color:#1f5131}
+.fb.mid{background:var(--gold-l);color:#6b4e08}
+.fb.ko{background:var(--red-l);color:#7d241a}
+.seq{min-height:38px;border:2px dashed var(--line);border-radius:10px;padding:6px;margin:8px 0;display:flex;flex-wrap:wrap;gap:6px}
+.seq span{background:var(--char);color:#fff;border-radius:8px;padding:4px 10px}
+.sort{display:grid;grid-template-columns:1fr auto auto;gap:6px 8px;align-items:center}
+.sort .opt{padding:5px 10px;font-size:14px}
+.result{border-radius:14px;padding:16px;margin:18px 0;text-align:center}
+.result.ok{background:var(--moss-l);border:2px solid var(--moss)}
+.result.ko{background:var(--red-l);border:2px solid var(--red)}
+.result .big{font-size:40px;font-weight:900}
+.notes{position:fixed;left:0;right:0;bottom:0;background:var(--char);color:#fff;z-index:20;box-shadow:0 -4px 14px rgba(0,0,0,.2)}
+.notes .in{max-width:860px;margin:0 auto;padding:8px 16px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.notes .box{background:#24524b;border-radius:10px;padding:6px 10px}
+.notes .lab{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:#e8c9a6}
+.notes .val{font-size:18px;font-weight:800}
+.notes .ver{font-size:13px}
+.notes .ver.ok{color:#9fe0ae}.notes .ver.ko{color:#ffb4a8}
+.hidden{display:none}
+body.lock nav, body.lock .retour, body.lock #tab-lecon, body.lock #tab-aide{display:none!important}
+#lockBar{max-width:860px;margin:0 auto;padding:10px 0 12px;font-weight:800;color:#ffd9b0}
+.gate ul{margin:6px 0 10px;padding-left:20px}
+.gate .row{margin-top:8px}
+@media (max-width:520px){
+  html,body{font-size:16px}
+  .notes .val{font-size:16px}
+  .sort{grid-template-columns:1fr auto}
+  .sort .lbl{grid-column:1/-1;margin-top:4px}
+}
+.svgbox{overflow-x:auto;margin:6px 0}.svgbox svg{max-width:100%;height:auto}
+.verif{background:#fff;border:2px dashed var(--ochre);border-radius:12px;padding:10px 12px;margin:12px 0 4px}
+.verif-t{font-weight:800;color:var(--ochre);margin-bottom:4px}
+.qcm-v{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.btn-v{font:inherit;font-weight:700;text-align:left;background:#fff;border:2px solid #e2d6c3;border-radius:12px;padding:11px 14px;cursor:pointer;color:inherit}
+.btn-v:hover{border-color:var(--ochre);background:#fffaf2}
+.vq{padding:6px 0;border-top:1px dotted var(--line)}
+.vq:first-of-type{border-top:0}
+nav button.locked{opacity:.55}
+nav button.locked::before{content:"🔒 "}
+.gatebox{background:#fff;border:2px solid var(--ochre);border-radius:14px;padding:16px;margin:12px 0}
+.gatebox h3{margin-top:0}
+.steps3{display:flex;gap:6px;margin:4px 0 6px;font-size:14px;font-weight:800}
+.steps3 span{flex:1;text-align:center;border-radius:8px;padding:3px;background:#eee;color:#777}
+.steps3 span.ok{background:var(--moss-l);color:#1f5131}
+.steps3 span.cur{background:var(--gold-l);color:#6b4e08}
+.ex{background:#fff;border:1px dashed var(--line);border-radius:10px;padding:8px 10px;margin:8px 0}
+
+.frise.f4{grid-template-columns:auto 1fr auto 1fr}
+.say{border:0;background:none;cursor:pointer;font-size:16px;padding:0 3px;line-height:1;vertical-align:middle}
+body.noson .say, body.noson .ecoute{display:none}
+.ecoute{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:2px 0 8px}
+.ecoute a{font-size:13px;color:var(--muted)}
+.txt{background:#fff;border:2px solid var(--char);border-radius:12px;padding:10px 14px;margin:8px 0 12px;line-height:1.7}
+.txt h4{margin:0 0 4px;font-size:18px;color:var(--char)}
+.txt .num{font-weight:900;color:var(--ochre)}
+.poem{font-style:italic;line-height:1.6}
+.fr{color:var(--muted);font-size:15px}
+.sort.cx{grid-template-columns:auto repeat(var(--n),minmax(44px,auto));justify-content:start}
+.sort.cx .lbl{font-weight:800;text-align:right;padding-right:6px}
+.sort.cx.stack{grid-template-columns:repeat(var(--n),minmax(64px,auto))}
+.sort.cx.stack .lbl{grid-column:1/-1;text-align:left;margin-top:6px}
+@media (max-width:520px){
+  .sort:not(.cx){grid-template-columns:1fr 1fr}
+  .sort.cx{grid-template-columns:auto repeat(var(--n),1fr)}
+  .sort.cx .lbl{grid-column:auto;margin-top:0}
+  .sort.cx.stack{grid-template-columns:repeat(var(--n),1fr)}
+  .sort.cx.stack .lbl{grid-column:1/-1;margin-top:6px}
+  .sort.cx.stack .opt{padding:6px 2px}
+}
+.tbl{border-collapse:collapse;width:100%;margin:8px 0;font-size:15px;background:#fff}
+.tbl th,.tbl td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+.tbl th{background:var(--ochre);color:#fff}
+.trou{display:inline-block;min-width:44px;text-align:center;border-bottom:3px solid var(--ochre);color:var(--ochre);font-weight:900}
+</style>
+</head>
+<body>
+<header>
+  <div class="top">
+    <a class="retour" href="../passage-secret.html">← Retour au passage secret</a><br>
+    <small>🗝️ Passage secret · Raphaël · 6e · Géographie, chapitre 1</small>
+    <h1>La population du monde</h1>
+  </div>
+  <nav>
+    <button data-tab="lecon" class="on">1 · La leçon</button>
+    <button data-tab="aide">2 · Avec aide</button>
+    <button data-tab="sans">3 · Sans aide</button>
+  </nav>
+  <div id="lockBar" class="hidden">🔒 Contrôle en cours : la leçon et l'aide sont verrouillées jusqu'à la dernière question.</div>
+</header>
+
+<main>
+<section id="tab-lecon">
+  <div class="memctl">
+    <button class="btn" id="memBtn">Mode mémoire : cacher les mots-clés</button>
+    <span id="memInfo" class="hidden" style="font-size:14px;color:var(--muted)">Dis le mot à voix haute, puis touche la case pour vérifier.</span>
+  </div>
+  <div class="tip"><b>Ce que ton prof attend (vu sur ton contrôle de Préhistoire) :</b>
+    <ul style="margin:6px 0 0;padding-left:20px">
+      <li>« <b>Qu'est-ce que… ?</b> » ou « <b>Définis…</b> » → la définition <b>en entier</b>, mot pour mot. Sur la Préhistoire, il manquait la fin (« … jusqu'à l'invention de l'écriture ») : points perdus.</li>
+      <li>« <b>Pourquoi… ?</b> » → une <b>raison de la leçon</b> + sa conséquence : « <b>car</b> … <b>donc</b> … ».</li>
+      <li>« <b>D'après la carte / le graphique</b> » → cite des <b>noms</b> et des <b>chiffres</b> précis.</li>
+      <li>« <b>Rédige un texte</b> » → 1 phrase pour commencer, 4 ou 5 idées avec les <b>mots-clés</b>, 1 phrase pour finir.</li>
+    </ul></div>
+  <div class="gatebox" style="margin-top:0"><b>Les règles du parcours :</b>
+    <ol style="margin:6px 0 0">
+      <li><b>La leçon</b> : à la fin de chaque bloc, 3 questions à réussir d'affilée. <b>Une seule erreur = tu recommences à la question 1</b> du bloc (avec de nouvelles questions).</li>
+      <li><b>Avec aide</b> : s'ouvre quand les 6 blocs de la leçon sont réussis.</li>
+      <li><b>Sans aide</b> : s'ouvre quand tu as au moins <b>15 / 20</b> dans la partie avec aide.</li>
+    </ol></div>
+
+  <div class="part" data-part="p1">
+    <h3>1) Combien sommes-nous ?</h3>
+    <p>Aujourd'hui, la population mondiale atteint environ <span class="k">8 milliards</span> d'habitants. Elle est <span class="k">très inégalement</span> répartie sur la Terre.</p>
+    <div class="def"><b>Recensement</b> : l'<span class="k">opération</span> qui consiste à <span class="k">compter</span> la population.</div>
+    <div class="def"><b>État civil</b> : en France, l'<span class="k">inscription</span> des <span class="k">naissances</span>, des <span class="k">mariages</span> et des <span class="k">décès</span> dans chaque <span class="k">commune</span>.</div>
+    <button class="btn alt done-btn" data-done="p1">J'ai bien compris</button>
+  </div>
+
+  <div class="part" data-part="p2">
+    <h3>2) La densité</h3>
+    <div class="def"><b>Densité</b> : le <span class="k">nombre d'habitants</span> en <span class="k">moyenne</span> par <span class="k">km²</span>.</div>
+    <div class="def"><b>Densité = <span class="k">population</span> ÷ <span class="k">superficie</span></b></div>
+    <p><b>Exemple de la France</b> (métropolitaine) : 66 millions d'habitants, 551 000 km².<br>
+      66 000 000 ÷ 551 000 = 66 000 ÷ 551 ≈ <span class="k">119</span> hab/km².
+      <br><small>Astuce : on barre 3 zéros en haut et 3 zéros en bas, le résultat ne change pas.</small></p>
+    <table class="tbl">
+      <tr><th>Pays</th><th>Densité</th><th>On dit…</th></tr>
+      <tr><td>Bangladesh</td><td>1 100 hab/km²</td><td>densité <span class="k">forte</span></td></tr>
+      <tr><td>France</td><td>123 hab/km²</td><td>densité <span class="k">moyenne</span></td></tr>
+      <tr><td>Mongolie</td><td>2 hab/km²</td><td>densité <span class="k">faible</span></td></tr>
+    </table>
+    <button class="btn alt done-btn" data-done="p2">J'ai bien compris</button>
+  </div>
+
+  <div class="part" data-part="p3">
+    <h3>3) Foyers de population et déserts humains</h3>
+    <div class="def"><b>Foyer de population</b> : une région du monde <span class="k">concentrant</span> un <span class="k">très grand nombre</span> d'habitants (densité <span class="k">élevée</span>).</div>
+    <div class="def"><b>Désert humain</b> : une région du monde <span class="k">presque vide</span> d'habitants en raison de fortes <span class="k">contraintes naturelles</span>.</div>
+    <p>La population mondiale se concentre dans les foyers. <b>Les 3 plus importants :</b></p>
+    <table class="tbl">
+      <tr><th>Foyer</th><th>Pays</th><th>Habitants</th></tr>
+      <tr><td><span class="k">Asie de l'Est</span></td><td>Chine, Japon, Corée…</td><td><span class="k">2,3</span> milliards</td></tr>
+      <tr><td><span class="k">Asie du Sud</span></td><td>Inde, Pakistan, Bangladesh…</td><td><span class="k">1,8</span> milliard</td></tr>
+      <tr><td><span class="k">Europe</span></td><td></td><td><span class="k">740</span> millions</td></tr>
+    </table>
+    <p>Ces 3 foyers rassemblent <span class="k">64 %</span> des êtres humains.</p>
+    <p><b>Sur ta carte, d'autres foyers :</b> la côte Est des <span class="k">États-Unis</span> (140 millions), le <span class="k">golfe de Guinée</span> en Afrique (260 millions), le <span class="k">Sud-Est du Brésil</span> (120 millions).<br>
+    <b>Les déserts humains :</b> le nord du <span class="k">Canada</span>, le <span class="k">Groenland</span>, la <span class="k">Sibérie</span>, le <span class="k">Sahara</span>, l'<span class="k">Amazonie</span>, l'<span class="k">Himalaya</span>, le centre de l'<span class="k">Australie</span>, l'<span class="k">Antarctique</span>.</p>
+    <button class="btn alt done-btn" data-done="p3">J'ai bien compris</button>
+  </div>
+
+  <div class="part" data-part="p4">
+    <h3>4) Pourquoi la population est-elle répartie ainsi ?</h3>
+    <div class="def"><b>Contrainte naturelle</b> : un <span class="k">obstacle naturel</span> à l'<span class="k">installation humaine</span> (aridité, altitude, forêt dense, froid polaire).</div>
+    <div class="def"><b>Aridité</b> : le <span class="k">manque d'eau</span>.</div>
+    <table class="tbl">
+      <tr><th>Contrainte</th><th>Exemple de désert humain</th></tr>
+      <tr><td><span class="k">aridité</span></td><td>Sahara, centre de l'Australie</td></tr>
+      <tr><td><span class="k">altitude</span></td><td>Himalaya</td></tr>
+      <tr><td><span class="k">forêt dense</span></td><td>Amazonie</td></tr>
+      <tr><td><span class="k">froid polaire</span></td><td>Groenland, Sibérie, nord du Canada, Antarctique</td></tr>
+    </table>
+    <ul>
+      <li>Le <span class="k">littoral</span> (le bord de mer) est très peuplé <b>car</b> c'est un endroit très <span class="k">favorable</span> aux activités humaines.</li>
+      <li>Les bords des <span class="k">fleuves</span> et des <span class="k">rivières</span> ont des densités de population élevées.</li>
+    </ul>
+    <button class="btn alt done-btn" data-done="p4">J'ai bien compris</button>
+  </div>
+
+  <div class="part" data-part="p5">
+    <h3>5) L'Asie et la mousson</h3>
+    <p>L'Asie est, de très loin, le continent le plus peuplé : <span class="k">60 %</span> de la population mondiale. Pourquoi ?</p>
+    <div class="def"><b>Mousson</b> : <span class="k">vent</span> qui souffle sur l'Asie du <span class="k">Sud</span> et de l'<span class="k">Est</span> pendant l'<span class="k">été</span>, provoquant de <span class="k">fortes pluies</span> et des <span class="k">inondations</span>.</div>
+    <p><b>La boucle du riz</b> (elle tourne en rond) :</p>
+    <ol>
+      <li>La <span class="k">mousson</span> apporte des pluies très fortes</li>
+      <li>→ production du <span class="k">riz</span> dans des <span class="k">rizières inondées</span></li>
+      <li>→ <span class="k">plusieurs récoltes</span> par an</li>
+      <li>→ <span class="k">population très nombreuse</span></li>
+      <li>→ <span class="k">main-d'œuvre nombreuse</span> pour cultiver… et la boucle recommence.</li>
+    </ol>
+    <button class="btn alt done-btn" data-done="p5">J'ai bien compris</button>
+  </div>
+
+  <div class="part" data-part="p6">
+    <h3>6) Comment évolue la population du monde ?</h3>
+    <div class="svgbox"><svg viewBox="0 0 340 222" width="340" height="222" xmlns="http://www.w3.org/2000/svg" font-family="Nunito,sans-serif" role="img" aria-label="Évolution de la population mondiale de 1800 à 2050"><line x1="40" y1="190" x2="324" y2="190" stroke="#e3d5bf"/><text x="35" y="194" font-size="10" text-anchor="end" fill="#7a6a58">0</text><line x1="40" y1="158" x2="324" y2="158" stroke="#e3d5bf"/><text x="35" y="162" font-size="10" text-anchor="end" fill="#7a6a58">2</text><line x1="40" y1="126" x2="324" y2="126" stroke="#e3d5bf"/><text x="35" y="130" font-size="10" text-anchor="end" fill="#7a6a58">4</text><line x1="40" y1="94" x2="324" y2="94" stroke="#e3d5bf"/><text x="35" y="98" font-size="10" text-anchor="end" fill="#7a6a58">6</text><line x1="40" y1="62" x2="324" y2="62" stroke="#e3d5bf"/><text x="35" y="66" font-size="10" text-anchor="end" fill="#7a6a58">8</text><line x1="40" y1="30" x2="324" y2="30" stroke="#e3d5bf"/><text x="35" y="34" font-size="10" text-anchor="end" fill="#7a6a58">10</text><line x1="40.0" y1="190" x2="40.0" y2="194" stroke="#2b2118"/><text x="40.0" y="205" font-size="9.5" text-anchor="middle" fill="#2b2118">1800</text><line x1="96.8" y1="190" x2="96.8" y2="194" stroke="#2b2118"/><text x="96.8" y="205" font-size="9.5" text-anchor="middle" fill="#2b2118">1850</text><line x1="153.6" y1="190" x2="153.6" y2="194" stroke="#2b2118"/><text x="153.6" y="205" font-size="9.5" text-anchor="middle" fill="#2b2118">1900</text><line x1="237.7" y1="190" x2="237.7" y2="194" stroke="#2b2118"/><text x="237.7" y="205" font-size="9.5" text-anchor="middle" fill="#2b2118">1974</text><line x1="267.2" y1="190" x2="267.2" y2="194" stroke="#2b2118"/><text x="267.2" y="205" font-size="9.5" text-anchor="middle" fill="#2b2118">2000</text><line x1="296.7" y1="190" x2="296.7" y2="194" stroke="#2b2118"/><text x="296.7" y="205" font-size="9.5" text-anchor="middle" fill="#2b2118">2026</text><line x1="324.0" y1="190" x2="324.0" y2="194" stroke="#2b2118"/><text x="324.0" y="205" font-size="9.5" text-anchor="middle" fill="#2b2118">2050</text><line x1="40" y1="190" x2="324" y2="190" stroke="#2b2118" stroke-width="1.5"/><line x1="40" y1="190" x2="40" y2="20" stroke="#2b2118" stroke-width="1.5"/><polyline fill="none" stroke="#1f7a6d" stroke-width="2" stroke-linejoin="round" points="40.0,174.0 96.8,170.8 153.6,161.2 237.7,126.0 267.2,94.0 296.7,62.0"/><line x1="296.7" y1="62.0" x2="324.0" y2="38.0" stroke="#1f7a6d" stroke-width="2" stroke-dasharray="4 3"/><circle cx="40.0" cy="174.0" r="4" fill="#1f7a6d" stroke="#fffaf2" stroke-width="2"/><text x="47.0" y="168.0" font-size="11" font-weight="800" text-anchor="start" fill="#2b2118">1</text><circle cx="96.8" cy="170.8" r="4" fill="#1f7a6d" stroke="#fffaf2" stroke-width="2"/><text x="96.8" y="162.8" font-size="11" font-weight="800" text-anchor="middle" fill="#2b2118">1,2</text><circle cx="153.6" cy="161.2" r="4" fill="#1f7a6d" stroke="#fffaf2" stroke-width="2"/><text x="153.6" y="153.2" font-size="11" font-weight="800" text-anchor="middle" fill="#2b2118">1,8</text><circle cx="237.7" cy="126.0" r="4" fill="#1f7a6d" stroke="#fffaf2" stroke-width="2"/><text x="237.7" y="118.0" font-size="11" font-weight="800" text-anchor="middle" fill="#2b2118">4</text><circle cx="267.2" cy="94.0" r="4" fill="#1f7a6d" stroke="#fffaf2" stroke-width="2"/><text x="261.2" y="86.0" font-size="11" font-weight="800" text-anchor="end" fill="#2b2118">6</text><circle cx="296.7" cy="62.0" r="4" fill="#1f7a6d" stroke="#fffaf2" stroke-width="2"/><text x="290.7" y="54.0" font-size="11" font-weight="800" text-anchor="end" fill="#2b2118">8</text><circle cx="324.0" cy="38.0" r="4" fill="#1f7a6d" stroke="#fffaf2" stroke-width="2"/><text x="318.0" y="30.0" font-size="11" font-weight="800" text-anchor="end" fill="#2b2118">9,5</text><text x="44" y="14" font-size="10" fill="#2b2118">Population mondiale (en milliards)</text><text x="324" y="218" font-size="10" text-anchor="end" fill="#2b2118">années</text></svg></div>
+    <div style="font-size:13px;color:var(--muted)">D'après le graphique de ton cahier. Le pointillé est une <b>prévision</b>.</div>
+    <table class="tbl">
+      <tr><th>Année</th><td>1800</td><td>1850</td><td>1900</td><td>1974</td><td>2000</td><td>2026</td><td>2050</td></tr>
+      <tr><th>Milliards</th><td><span class="k">1</span></td><td><span class="k">1,2</span></td><td><span class="k">1,8</span></td><td><span class="k">4</span></td><td><span class="k">6</span></td><td><span class="k">8</span></td><td><span class="k">9,5</span></td></tr>
+    </table>
+    <p>Depuis 1800, la population mondiale ne cesse d'<span class="k">augmenter</span>, et de plus en plus vite : elle a été multipliée par <span class="k">8</span>.</p>
+    <button class="btn alt done-btn" data-done="p6">J'ai bien compris</button>
+  </div>
+
+  <div id="partLock" class="warn hidden"></div>
+  <div id="leconFinie" class="def hidden" style="border-left-color:var(--moss);background:var(--moss-l)"><b>Bravo, toute la leçon est réussie !</b> La partie <b>avec aide</b> est ouverte. Tu peux d'abord réciter avec le <b>mode mémoire</b>.<br><button class="btn" id="goAide" style="margin-top:8px">Aller à la partie avec aide →</button></div>
+</section>
+
+
+<!-- ================= EXERCICES ================= -->
+<section id="tab-aide" class="hidden"></section>
+<section id="tab-sans" class="hidden"></section>
+</main>
+
+<div class="notes">
+  <div class="in">
+    <div class="box"><div class="lab">Note avec aide</div><div class="val" id="nAide">—</div><div class="ver" id="vAide">Pas encore faite</div></div>
+    <div class="box"><div class="lab">Note sans aide</div><div class="val" id="nSans">—</div><div class="ver" id="vSans">Pas encore faite</div></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../atelier-progression.js"></script>
+<script>
+var FICHE_CODE = "P017";
+/* ---------- Outils ---------- */
+const $ = (s, r=document) => r.querySelector(s);
+const el = (tag, attrs={}, html="") => { const e=document.createElement(tag); for(const k in attrs){ if(k==="class") e.className=attrs[k]; else e.setAttribute(k,attrs[k]); } if(html) e.innerHTML=html; return e; };
+const shuffle = a => { a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; };
+const norm = s => (s||"").toLowerCase().replace(/œ/g,"oe").normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9]+/g," ").trim();
+const lower = s => (s||"").toLowerCase().replace(/[^a-zà-ÿœ0-9]+/g," ").trim();
+function lev(a,b){ const m=a.length,n=b.length; if(!m) return n; if(!n) return m; let p=[...Array(n+1).keys()]; for(let i=1;i<=m;i++){ const c=[i]; for(let j=1;j<=n;j++) c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1)); p=c; } return p[n]; }
+const tol = n => n<=3?0 : n<=6?1 : 2;
+/* Chaque profil (enfant) a sa propre progression sur cet appareil :
+   les clés enregistrées dans le navigateur portent l'identifiant du profil actif. */
+const PROFIL = (()=>{ try{ return localStorage.getItem("atelier_enfant_actif") || ""; }catch(e){ return ""; } })();
+const cle = k => PROFIL ? k+"__"+PROFIL : k;
+const store = { get(k){ try{ return JSON.parse(localStorage.getItem(cle(k))); }catch(e){ return null; } }, set(k,v){ try{ localStorage.setItem(cle(k), JSON.stringify(v)); }catch(e){} } };
+const fmt = x => (Math.round(x*100)/100).toString().replace(".",",");
+
+/* Compare une réponse tapée à la liste des réponses acceptées.
+   Retour : "exact" | "accent" | "fuzzy" | "no" */
+function matchWord(input, answers){
+  const ni = norm(input), li = lower(input), toks = ni.split(" ");
+  if(!ni) return "no";
+  let best = "no";
+  for(const a of answers){
+    const na = norm(a), la = lower(a);
+    if(li===la || (" "+li+" ").includes(" "+la+" ")) return "exact";
+    if(ni===na || (" "+ni+" ").includes(" "+na+" ")) best = "accent";
+    else if(best==="no"){
+      const t = tol(na.length);
+      const dg = s => (s.match(/\d+[a-z]*/g)||[]).join(" ");
+      if(t>0 && dg(ni)===dg(na) && (lev(ni,na)<=t || (!na.includes(" ") && toks.some(x => lev(x,na)<=t)))) best = "fuzzy";
+    }
+  }
+  return best;
+}
+/* Cherche un mot-clé (avec variantes) dans un texte libre */
+function hasKey(text, alts){
+  const nt = " "+norm(text)+" ", toks = norm(text).split(" ");
+  for(const a of alts){
+    const na = norm(a);
+    if(nt.includes(" "+na+" ")) return true;
+    if(na.includes(" ")) continue;
+    const t = tol(na.length);
+    if(toks.some(x => (t>0 && lev(x,na)<=t) || (na.length>=5 && x.startsWith(na)))) return true;
+  }
+  return false;
+}
+/* Lit une date tapée : renvoie {val, neg} */
+function parseDate(s){
+  const raw = (s||"").toLowerCase();
+  const neg = /-|−|av|avant/.test(raw);
+  const c = raw.replace(/\s/g,"");
+  const m = c.match(/\d+([.,]\d+)?/);
+  if(!m) return null;
+  let v = parseFloat(m[0].replace(",","."));
+  if(/million/.test(raw)) v *= 1e6;
+  return {val:v, neg};
+}
+
+
+/* ---------- Son : la voix du téléphone lit la dictée en français ---------- */
+const SON = ("speechSynthesis" in window) && typeof SpeechSynthesisUtterance !== "undefined";
+if(SON){ try{ speechSynthesis.getVoices(); }catch(e){} } else document.body.classList.add("noson");
+function parler(t, lent){
+  if(!SON) return;
+  try{
+    const u = new SpeechSynthesisUtterance(t); u.lang = "fr-FR"; u.rate = lent ? 0.55 : 0.85;
+    const vs = speechSynthesis.getVoices();
+    const v = vs.find(x=>/fr[-_]FR/i.test(x.lang)) || vs.find(x=>/^fr/i.test(x.lang));
+    if(v) u.voice = v;
+    speechSynthesis.cancel(); speechSynthesis.speak(u);
+  }catch(e){}
+}
+document.addEventListener("click", e => { const b = e.target.closest("[data-say]"); if(b){ e.preventDefault(); parler(b.dataset.say, !!b.dataset.lent); } });
+/* Majuscule oubliée sur un jour ou un mois */
+const MAJ = []; const MAJ_OLD = ["monday","tuesday","wednesday","thursday","friday","saturday","sunday","january","february","march","april","may","june","july","august","september","october","november","december"];
+function majManque(input){
+  return (input||"").replace(/[^A-Za-z]+/g," ").split(" ").some(w => w && MAJ.includes(w.toLowerCase()) && w[0] !== w[0].toUpperCase());
+}
+/* Réponse tapée = un piège connu (ex. Tuesday au lieu de Thursday) : 0 point, jamais « presque » */
+function estPiege(q, input){
+  const ni = norm(input); if(!ni) return false;
+  const bons = q.a.map(norm);
+  return [...(q.d||[]), ...(q.no||[])].some(x => { const nx = norm(x); return nx === ni && !bons.includes(nx); });
+}
+
+/* ---------- Banque de questions ---------- */
+const PARTS = {d1:"Les chiffres et la densité", d2:"Foyers de population et déserts humains (la carte)", d3:"Pourquoi la population est-elle répartie ainsi ?", d4:"L'évolution de la population (le graphique)", d5:"Les définitions par cœur", d6:"Je rédige comme au contrôle"};
+const I = "indice";
+const Wd = (part,q,a,show,d,aide,x) => Object.assign({part,type:"word",q,a,show,d,aide}, x||{});
+const BANK = [
+  // --- chiffres et densité
+  Wd("d1","Aujourd'hui, la population mondiale atteint environ combien de milliards d'habitants ? Écris un nombre.",["8","huit"],"8 milliards",["4 milliards","80 milliards"],0,{lecon:"p1"}),
+  Wd("d1","La population mondiale est très … répartie sur la Terre. Écris un mot.",["inégalement"],"inégalement",["également","bien"],I,{h:"le contraire de « également » : in…",lecon:"p1"}),
+  Wd("d1","Complète la formule : densité = population ÷ … (écris un mot)",["superficie","surface"],"superficie",["habitants","pays"],I,{h:"s… (la taille du pays en km²)",lecon:"p2"}),
+  Wd("d1","Calcule la densité de la France : 66 000 000 habitants ÷ 551 000 km². Écris le nombre entier (sans virgule).",["119","120"],"119 hab/km²",["1 190 hab/km²","12 hab/km²"],I,{h:"barre 3 zéros en haut et en bas : 66 000 ÷ 551 ≈ 1…",lecon:"p2"}),
+  {part:"d1",type:"sort",w:1.5,q:"Touche le bon type de densité pour chaque pays.",cats:["forte","moyenne","faible"],items:[["Bangladesh : 1 100 hab/km²",0],["France : 123 hab/km²",1],["Mongolie : 2 hab/km²",2]],lecon:"p2"},
+  // --- foyers et déserts
+  {part:"d2",type:"set",q:"Écris les 3 foyers de population les plus importants (un par case).",groups:[["Asie de l'Est","Asie de l Est","Asie Est","Asie orientale"],["Asie du Sud","Asie Sud"],["Europe"]],show:"Asie de l'Est, Asie du Sud, Europe",lecon:"p3"},
+  Wd("d2","Le foyer d'Asie de l'Est compte combien de milliards d'habitants ? Écris un nombre.",["2,3"],"2,3 milliards",["1,8 milliard","8 milliards"],0,{lecon:"p3"}),
+  Wd("d2","Le foyer d'Asie du Sud compte combien de milliards d'habitants ? Écris un nombre.",["1,8"],"1,8 milliard",["2,3 milliards","1,2 milliard"],0,{lecon:"p3"}),
+  Wd("d2","L'Europe compte combien de millions d'habitants ? Écris un nombre.",["740"],"740 millions",["140 millions","260 millions"],0,{lecon:"p3"}),
+  Wd("d2","Ces 3 grands foyers rassemblent quel pourcentage des êtres humains ? Écris un nombre.",["64"],"64 %",["60 %","50 %"],0,{lecon:"p3"}),
+  Wd("d2","Écris le nom d'un pays du foyer d'Asie de l'Est.",["Chine","Japon","Corée","Coree"],"Chine (ou Japon, Corée)",["Inde","Pakistan"],I,{h:"C… (le pays le plus peuplé de ce foyer)",lecon:"p3"}),
+  Wd("d2","Écris le nom d'un pays du foyer d'Asie du Sud.",["Inde","Pakistan","Bangladesh"],"Inde (ou Pakistan, Bangladesh)",["Chine","Japon"],I,{h:"I… (4 lettres)",lecon:"p3"}),
+  Wd("d2","D'après la carte, le golfe de Guinée (en Afrique) compte combien de millions d'habitants ? Écris un nombre.",["260"],"260 millions",["120 millions","140 millions"],0,{lecon:"p3"}),
+  {part:"d2",type:"sort",w:3,stack:true,q:"Foyer de population ou désert humain ? Touche la bonne case pour chaque région.",cats:["foyer de population","désert humain"],items:[
+    ["Europe",0],["Sahara",1],["Asie de l'Est",0],["Amazonie",1],["Golfe de Guinée",0],["Sibérie",1],
+    ["Côte Est des États-Unis",0],["Groenland",1],["Sud-Est du Brésil",0],["Himalaya",1],["Asie du Sud",0],["Antarctique",1]],lecon:"p3"},
+  // --- pourquoi
+  {part:"d3",type:"sort",w:2,stack:true,q:"Quelle contrainte naturelle vide chaque désert humain ? Touche la bonne case.",cats:["aridité","altitude","forêt dense","froid polaire"],items:[
+    ["Sahara",0],["Himalaya",1],["Amazonie",2],["Groenland",3],["Centre de l'Australie",0],["Sibérie",3],["Antarctique",3],["Nord du Canada",3]],lecon:"p4"},
+  Wd("d3","Comment appelle-t-on le bord de mer ? Écris un mot.",["littoral"],"le littoral",["relief","rivage"],I,{h:"l… (8 lettres)",lecon:"p4"}),
+  Wd("d3","Le littoral est très peuplé car c'est un endroit très … aux activités humaines. Écris un mot.",["favorable","favorables"],"favorable",["hostile","dangereux"],I,{h:"f… (le contraire de défavorable)",lecon:"p4"}),
+  Wd("d3","Les bords des … et des rivières ont des densités de population élevées. Écris un mot.",["fleuves","fleuve"],"fleuves",["montagnes","déserts"],I,{h:"f… (le Nil, la Loire en sont)",lecon:"p4"}),
+  Wd("d3","L'Asie rassemble quel pourcentage de la population mondiale ? Écris un nombre.",["60"],"60 %",["64 %","30 %"],0,{lecon:"p5"}),
+  {part:"d3",type:"order",q:"La boucle du riz : touche les 5 étapes dans l'ordre, en commençant par la mousson.",items:["La mousson apporte des pluies très fortes","Production du riz dans des rizières inondées","Plusieurs récoltes par an","Population très nombreuse","Main-d'œuvre nombreuse"],lecon:"p5"},
+  {part:"d3",type:"def",w:2,mot:"Pourquoi l'Asie est-elle très peuplée ?",titre:"<b>Pourquoi l'Asie est-elle le continent le plus peuplé ?</b> Réponds en 2 ou 3 phrases courtes, avec les mots de la boucle du riz.",
+    cloze:"Grâce à la [[mousson]], les [[pluies]] sont très fortes. On cultive le [[riz]] dans des rizières inondées, avec plusieurs [[récoltes]] par an. Cela nourrit une population très [[nombreuse]].",
+    groups:[["mousson"],["pluies","pluie"],["riz"],["récoltes","récolte","recolter"],["nombreuse","nombreux","beaucoup"]],lecon:"p5"},
+  // --- graphique
+  Wd("d4","Combien de milliards d'habitants en 1800 ? Écris un nombre.",["1","un"],"1 milliard",["4 milliards","8 milliards"],0,{lecon:"p6"}),
+  Wd("d4","Combien de milliards d'habitants en 1900 ? Écris un nombre.",["1,8"],"1,8 milliard",["1,2 milliard","4 milliards"],0,{lecon:"p6"}),
+  Wd("d4","Combien de milliards d'habitants en 1974 ? Écris un nombre.",["4","quatre"],"4 milliards",["6 milliards","1,8 milliard"],0,{lecon:"p6"}),
+  Wd("d4","Combien de milliards d'habitants en 2000 ? Écris un nombre.",["6","six"],"6 milliards",["8 milliards","4 milliards"],0,{lecon:"p6"}),
+  Wd("d4","Combien de milliards d'habitants prévus en 2050 ? Écris un nombre.",["9,5"],"9,5 milliards",["8 milliards","11 milliards"],0,{lecon:"p6"}),
+  Wd("d4","Depuis 1800, la population mondiale ne cesse d'… (écris un verbe à l'infinitif)",["augmenter","augmente","croitre"],"augmenter",["diminuer","stagner"],I,{h:"a… (elle monte sur le graphique)",lecon:"p6"}),
+  // --- définitions
+  {part:"d5",type:"def",w:1.5,mot:"Le recensement",cloze:"L'[[opération]] qui consiste à [[compter]] la [[population]].",groups:[["opération"],["compter","compte"],["population","habitants"]],lecon:"p1"},
+  {part:"d5",type:"def",w:1.5,mot:"L'état civil",cloze:"En France, l'[[inscription]] des [[naissances]], des [[mariages]] et des [[décès]] dans chaque [[commune]].",groups:[["inscription","inscrire","enregistrement"],["naissances","naissance"],["mariages","mariage"],["décès","morts"],["commune","mairie"]],lecon:"p1"},
+  {part:"d5",type:"def",w:1.5,mot:"La densité",cloze:"Le [[nombre]] d'[[habitants]] en [[moyenne]] par [[kilomètre]] carré (km²).",groups:[["nombre"],["habitants","habitant"],["moyenne"],["kilomètre","kilometres","km²","km2","km 2"]],lecon:"p2"},
+  {part:"d5",type:"def",w:1.5,mot:"Un foyer de population",cloze:"Une [[région]] du monde [[concentrant]] un très grand [[nombre]] d'habitants (densité [[élevée]]).",groups:[["région","zone"],["concentrant","concentre","rassemble"],["grand nombre","beaucoup","nombreux"],["élevée","forte"]],lecon:"p3"},
+  {part:"d5",type:"def",w:1.5,mot:"Un désert humain",cloze:"Une [[région]] du monde presque [[vide]] d'habitants en raison de fortes [[contraintes]] [[naturelles]].",groups:[["région","zone"],["vide","peu","personne"],["contraintes","contrainte"],["naturelles","naturelle"]],lecon:"p3"},
+  {part:"d5",type:"def",w:1.5,mot:"Une contrainte naturelle",cloze:"Un [[obstacle]] naturel à l'[[installation]] humaine (aridité, altitude, forêt dense, froid polaire).",groups:[["obstacle","difficulté"],["installation","installer","s installer","vivre"],["aridité","altitude","forêt","froid"]],lecon:"p4"},
+  {part:"d5",type:"def",w:1.5,mot:"L'aridité",cloze:"Le [[manque]] d'[[eau]].",groups:[["manque","pas"],["eau"]],lecon:"p4"},
+  {part:"d5",type:"def",w:1.5,mot:"La mousson",cloze:"[[Vent]] qui souffle sur l'[[Asie]] du Sud et de l'Est pendant l'[[été]], provoquant de fortes [[pluies]] et des [[inondations]].",groups:[["vent"],["asie"],["été","ete"],["pluies","pluie"],["inondations","inondation"]],lecon:"p5"},
+  // --- rédaction
+  {part:"d6",type:"def",w:4,mot:"Rédaction : la répartition de la population",titre:"<b>Rédige 5 ou 6 phrases courtes :</b> explique pourquoi la population mondiale est inégalement répartie. Utilise le plus possible de mots-clés de la leçon et cite des exemples de la carte.",
+    cloze:"La population mondiale (environ 8 [[milliards]] d'habitants) est très inégalement répartie. Elle se concentre dans les [[foyers]] de population : l'[[Asie]] de l'Est, l'Asie du Sud et l'[[Europe]]. Les [[déserts]] humains sont presque vides à cause de fortes [[contraintes]] naturelles : l'[[aridité]] (Sahara), l'altitude (Himalaya), la forêt dense (Amazonie) ou le [[froid]] polaire. Les hommes préfèrent le [[littoral]] et les bords des [[fleuves]]. En Asie, la [[mousson]] permet plusieurs récoltes de riz par an.",
+    groups:[["milliards","milliard"],["foyers","foyer"],["asie"],["europe"],["déserts","désert"],["contraintes","contrainte"],["aridité","sahara","manque d eau"],["froid","altitude","himalaya","forêt","amazonie"],["littoral","bord de mer"],["fleuves","fleuve","rivières"],["mousson","riz"]],lecon:"p4"},
+];
+const AUDIO_OK = SON;
+BANK.forEach((q,i)=>{ q.id=i; q.w = q.w || 1; });
+const DATES = [];
+const PARTS_INTRO = {};
+
+/* ---------- Rendu des exercices ---------- */
+const MODES = {
+  aide: {key:"p017_note_aide", box:"#tab-aide", label:"avec aide", code:FICHE_CODE+"-aide"},
+  sans: {key:"p017_note_sans", box:"#tab-sans", label:"sans aide", code:FICHE_CODE}
+};
+let STATE = {};
+
+function startMode(mode, onlyIds){
+  const M = MODES[mode], root = $(M.box);
+  const ids = onlyIds || BANK.filter(q=>!q.only || q.only===mode).map(q=>q.id);
+  STATE[mode] = {ids, res:{}, retry:!!onlyIds};
+  root.innerHTML = "";
+  if(mode==="sans") root.classList.add("encours");
+  const intro = el("div",{class:"intro"});
+  if(mode==="aide"){
+    intro.innerHTML = `<b>Exercices AVEC aide</b> · ${ids.length} questions${onlyIds?" (seulement tes erreurs)":""}<br>
+      Parfois tu choisis parmi 3 réponses, mais surtout <b>tu écris</b> : des mots, des nombres, les définitions et une petite rédaction, avec des <span class="hint">indices</span>.
+      <b>Il faut au moins 15 / 20 (75 %) sur la partie complète pour ouvrir la partie sans aide.</b>`;
+  } else {
+    intro.innerHTML = `<b>Exercices SANS aide</b> · ${ids.length} questions${onlyIds?" (seulement tes erreurs)":""}<br>
+      Pas d'indice : <b>tu écris tout toi-même</b>, comme le jour du contrôle. Tu vois la correction après chaque réponse ; à la fin, tu refais les questions ratées.<br>
+      • Réponse juste = 1 point. Presque juste (une petite faute d'orthographe) = ½ point. Définitions et rédaction : corrigées avec les <b>mots-clés</b> de la leçon, comme ton prof.<br>
+      <b>Objectif : 15 / 20 (75 %) pour être prêt</b> (et gagner 3 vies pour la salle d'arcade, une seule fois pour cette fiche).`;
+  }
+  root.appendChild(intro);
+  const pr = el("div",{class:"prog"},"<i></i>"); root.appendChild(pr);
+  const cnt = el("div",{class:"cnt",style:"font-size:14px;color:var(--muted)"}); root.appendChild(cnt);
+  let lastPart = null, n = 0;
+  for(const id of ids){
+    const q = BANK[id];
+    if(q.part!==lastPart){ root.appendChild(el("h2",{},PARTS[q.part])); if(PARTS_INTRO[q.part]) root.appendChild(el("div",{},PARTS_INTRO[q.part])); lastPart=q.part; }
+    n++;
+    root.appendChild(renderCard(q, mode, n));
+  }
+  root.appendChild(el("div",{class:"resultZone"}));
+  updateProgress(mode);
+}
+
+function renderCard(q, mode, n){
+  const c = el("div",{class:"card","data-id":q.id});
+  c.appendChild(el("div",{class:"n"},`Question ${n}${q.w>1?` · ${fmt(q.w)} points`:""}`));
+  const body = el("div");
+  c.appendChild(body);
+  const fb = el("div",{class:"fb hidden"});
+  const done = (pts, msg) => { pts = Math.max(0, Math.min(q.w, pts)); STATE[mode].res[q.id]=pts; fb.className="fb "+(pts>=q.w?"ok":pts>0?"mid":"ko"); fb.innerHTML=msg; fb.classList.remove("hidden"); updateProgress(mode); };
+
+  if(q.type==="word" || q.type==="date"){
+    body.appendChild(el("div",{class:"q"}, q.type==="date" ? `Quelle est la date ? <b>${q.q}</b>` : q.q));
+    if(q.say){
+      const ec = el("div",{class:"ecoute"});
+      ec.appendChild(el("button",{class:"btn alt",type:"button","data-say":q.say},"🔊 Écouter"));
+      const lien = el("a",{href:"#"},"Pas de son ? Voir la phrase");
+      lien.onclick = e => { e.preventDefault(); lien.replaceWith(el("span",{class:"hint"},q.say)); };
+      ec.appendChild(lien); body.appendChild(ec);
+    }
+    const useQcm = mode==="aide" && (q.type==="date" || (q.d && q.aide!=="indice"));
+    if(useQcm){
+      let opts;
+      if(q.type==="date"){
+        const big = Math.abs(q.v)>=1e6;
+        const pool = shuffle(DATES.filter(x=>x.show!==q.show && (Math.abs(x.v)>=1e6)===big)).slice(0,2).map(x=>x.show);
+        opts = shuffle([q.show, ...pool]);
+      } else opts = shuffle([q.show, ...q.d]);
+      const box = el("div",{class:"opts"});
+      opts.forEach(o=>{
+        const b = el("button",{class:"opt"}, o);
+        b.onclick = () => {
+          box.querySelectorAll("button").forEach(x=>{ x.disabled=true; if(x.textContent===q.show) x.classList.add("good"); });
+          if(o===q.show) done(1,"Bravo !");
+          else { b.classList.add("bad"); done(0,`Non. La bonne réponse : <b>${q.show}</b>`); }
+        };
+        box.appendChild(b);
+      });
+      body.appendChild(box);
+    } else {
+      if(mode==="aide"){
+        const letters = q.show.replace(/[^A-Za-zÀ-ÿœ]/g,"").length;
+        body.appendChild(el("div",{class:"hint"}, q.h ? "Indice : "+q.h : `Indice : commence par « ${q.show[0]} », ${letters} lettres`));
+      }
+      const row = el("div",{class:"row"});
+      const inp = el("input",{type:"text",autocomplete:"off",autocapitalize:"off",spellcheck:"false",placeholder: q.type==="date"?"ex : -12 000":"écris ta réponse"});
+      const b = el("button",{class:"btn"},"Valider");
+      const go = () => {
+        if(!inp.value.trim()) return;
+        inp.disabled=true; b.disabled=true;
+        if(q.type==="date"){
+          const p = parseDate(inp.value), targets=[q.v,...q.alt].map(Math.abs);
+          if(p && targets.some(t=>Math.abs(p.val-t)<0.5)){
+            if(p.neg) done(1,`Bravo ! <b>${q.show}</b>`);
+            else done(0.5,`Le nombre est juste mais il manque le signe <b>-</b> : <b>${q.show}</b> (avant J.-C.). ½ point.`);
+          } else done(0,`Non. La bonne date : <b>${q.show}</b>`);
+        } else {
+          const r = estPiege(q, inp.value) ? "no" : matchWord(inp.value, q.a);
+          if((r==="exact"||r==="accent") && majManque(inp.value)) done(0.5,`Le mot est juste, mais il manque la <b>MAJUSCULE</b> : en anglais, les jours et les mois prennent toujours une majuscule → <b>${q.show}</b>. ½ point.`);
+          else if(r==="exact") done(1, q.multi ? `Bravo ! <b>${q.show}</b>` : "Bravo !");
+          else if(r==="accent") done(1,`Juste ! <b>${q.show}</b>`);
+          else if(r==="fuzzy") done(0.5,`Presque : il y a une petite erreur (une lettre ou un petit mot). Il faut écrire <b>${q.show}</b>. ½ point.`);
+          else done(0,`Non. La bonne réponse : <b>${q.show}</b>`);
+        }
+      };
+      b.onclick=go; inp.onkeydown=e=>{ if(e.key==="Enter") go(); };
+      row.append(inp,b); body.appendChild(row);
+    }
+  }
+
+  else if(q.type==="set"){
+    body.appendChild(el("div",{class:"q"},q.q));
+    if(mode==="aide") body.appendChild(el("div",{class:"hint"},"Indices : "+q.groups.map(g=>`« ${g[0][0].toUpperCase()}… » (${g[0].length} lettres)`).join(" · ")));
+    const row = el("div",{class:"row"});
+    const ins = q.groups.map(()=>{ const i=el("input",{type:"text",autocomplete:"off",autocapitalize:"off",spellcheck:"false",style:"max-width:170px"}); row.appendChild(i); return i; });
+    const b = el("button",{class:"btn"},"Valider"); row.appendChild(b);
+    b.onclick = () => {
+      if(ins.some(i=>!i.value.trim())) return;
+      ins.forEach(i=>i.disabled=true); b.disabled=true;
+      const used = new Set(); let pts=0, typo=false;
+      ins.forEach(i=>{
+        for(let g=0; g<q.groups.length; g++){
+          if(used.has(g)) continue;
+          const r = matchWord(i.value, q.groups[g]);
+          if(r!=="no"){ used.add(g); if(r==="fuzzy" || majManque(i.value)){ pts+=0.5; typo=true; } else pts+=1; break; }
+        }
+      });
+      const sc = pts/q.groups.length;
+      done(sc, sc>=1 ? "Bravo, tout est juste !" : `${fmt(pts)} sur ${q.groups.length}${typo?" (faute d'orthographe ou majuscule oubliée)":""}. Il fallait : <b>${q.show}</b>`);
+    };
+    body.appendChild(row);
+  }
+
+  else if(q.type==="order"){
+    body.appendChild(el("div",{class:"q"},q.q));
+    const seq = el("div",{class:"seq"}); const box = el("div",{class:"opts"});
+    const picked = [];
+    const v = el("button",{class:"btn"},"Valider"); v.disabled=true;
+    const clr = el("button",{class:"btn alt"},"Effacer");
+    shuffle(q.items).forEach(it=>{
+      const b = el("button",{class:"opt"},it);
+      b.onclick=()=>{ picked.push(it); b.disabled=true; b.classList.add("sel"); seq.appendChild(el("span",{},`${picked.length}. ${it}`)); v.disabled = picked.length<q.items.length; };
+      box.appendChild(b);
+    });
+    clr.onclick=()=>{ picked.length=0; seq.innerHTML=""; box.querySelectorAll("button").forEach(b=>{b.disabled=false;b.classList.remove("sel");}); v.disabled=true; };
+    v.onclick=()=>{
+      v.disabled=true; clr.disabled=true; box.querySelectorAll("button").forEach(b=>b.disabled=true);
+      const ok = picked.every((x,i)=>x===q.items[i]);
+      done(ok?q.w:0, ok?"Bravo, l'ordre est parfait !":`Non. Le bon ordre : <b>${q.items.join(" → ")}</b>`);
+    };
+    const row = el("div",{class:"row",style:"margin-top:8px"}); row.append(v,clr);
+    body.append(box, seq, row);
+  }
+
+  else if(q.type==="sort"){
+    body.appendChild(el("div",{class:"q"},q.q));
+    const grid = el("div",{class:"sort"+(q.cats.length>2?" cx":"")+(q.stack?" stack":""),style:"--n:"+q.cats.length}); const choice = {};
+    const v = el("button",{class:"btn",style:"margin-top:10px"},"Valider"); v.disabled=true;
+    q.items.forEach(([txt],i)=>{
+      grid.appendChild(el("div",{class:"lbl"},txt));
+      q.cats.forEach((cat,ci)=>{
+        const b = el("button",{class:"opt","data-r":i,"data-c":ci},cat);
+        b.onclick=()=>{ choice[i]=ci; grid.querySelectorAll(`[data-r="${i}"]`).forEach(x=>x.classList.toggle("sel", x===b)); v.disabled = Object.keys(choice).length<q.items.length; };
+        grid.appendChild(b);
+      });
+    });
+    v.onclick=()=>{
+      v.disabled=true; let good=0;
+      grid.querySelectorAll("button").forEach(b=>{
+        b.disabled=true; const r=+b.dataset.r, c=+b.dataset.c;
+        if(c===q.items[r][1]) b.classList.add("good");
+        if(choice[r]===c && c!==q.items[r][1]) b.classList.add("bad");
+      });
+      q.items.forEach(([,c],i)=>{ if(choice[i]===c) good++; });
+      const pts = Math.round(q.w*good/q.items.length*4)/4;
+      done(pts, `${good} lignes justes sur ${q.items.length} → ${fmt(pts)} / ${q.w} points.`);
+    };
+    body.append(grid, v);
+  }
+
+  else if(q.type==="def"){
+    body.appendChild(el("div",{class:"q"}, q.titre || `Définition : <b>${q.mot}</b>`));
+    const keys = [...q.cloze.matchAll(/\[\[(.+?)\]\]/g)].map(m=>m[1]);
+    const model = q.cloze.replace(/\[\[(.+?)\]\]/g,"<b>$1</b>");
+    if(mode==="aide"){
+      body.appendChild(el("div",{class:"hint"},"Complète les mots-clés : la première lettre est donnée."));
+      const p = el("div",{style:"line-height:2.2"});
+      const ins = [];
+      q.cloze.split(/(\[\[.+?\]\])/).forEach(part=>{
+        const m = part.match(/^\[\[(.+)\]\]$/);
+        if(m){ const w=m[1]; const i=el("input",{type:"text",class:"blank",autocomplete:"off",autocapitalize:"off",spellcheck:"false",placeholder:w[0]+"…"+" ("+w.length+")"}); ins.push([i,w]); p.appendChild(i); }
+        else p.appendChild(document.createTextNode(part));
+      });
+      const b = el("button",{class:"btn",style:"margin-top:6px"},"Valider");
+      b.onclick=()=>{
+        if(ins.some(([i])=>!i.value.trim())) return;
+        b.disabled=true; let got=0;
+        ins.forEach(([i,w])=>{ i.disabled=true; const r=matchWord(i.value,[w]); if(r==="exact"||r==="accent"){got+=1;i.style.borderColor="var(--moss)";} else if(r==="fuzzy"){got+=0.5;i.style.borderColor="var(--gold)";} else i.style.borderColor="var(--red)"; });
+        const pts = Math.round(q.w*got/ins.length*4)/4;
+        done(pts, `${fmt(got)} mot(s) juste(s) sur ${ins.length} → ${fmt(pts)} / ${q.w} points.<br>${q.titre?"Réponse modèle":"Définition complète"} : ${model}`);
+      };
+      body.append(p,b);
+    } else {
+      const ta = el("textarea",{placeholder: q.titre ? "Écris ta réponse : des phrases courtes, avec les mots-clés de la leçon." : "Écris la définition complète, comme dans ta leçon.",autocapitalize:"off",spellcheck:"false"});
+      const b = el("button",{class:"btn",style:"margin-top:6px"},"Valider");
+      b.onclick=()=>{
+        if(ta.value.trim().length<3) return;
+        ta.disabled=true; b.disabled=true;
+        const miss=[]; let got=0;
+        q.groups.forEach((g,i)=>{ if(hasKey(ta.value,g)) got++; else miss.push(keys[i]||g[0]); });
+        const pts = Math.round(q.w*got/q.groups.length*4)/4;
+        done(pts, `${got} mot(s)-clé(s) sur ${q.groups.length} → ${fmt(pts)} / ${q.w} points.`
+          + (miss.length?`<br>Mots-clés oubliés : <b>${miss.join(", ")}</b>`:"<br>Tous les mots-clés y sont, bravo !")
+          + `<br>${q.titre?"Réponse modèle":"Définition de la leçon"} : ${model}`);
+      };
+      body.append(ta,b);
+    }
+  }
+  else if(q.type==="phrase"){
+    body.appendChild(el("div",{class:"q"},q.q));
+    if(mode==="aide" && q.h) body.appendChild(el("div",{class:"hint"},"Indice : "+q.h));
+    const ta = el("textarea",{placeholder:"Écris la phrase en entier, avec la majuscule et le signe de la fin",autocapitalize:"sentences",autocomplete:"off",spellcheck:"false",style:"min-height:56px"});
+    const b = el("button",{class:"btn",style:"margin-top:6px"},"Valider");
+    const sansNe = t => (" "+t+" ").replace(/ (ne|n) /g," ").trim();
+    const negs = t => (" "+t+" ").split(" ").filter(w=>["pas","plus","jamais","rien","personne","guere","que","qu"].includes(w)).join(" ");
+    b.onclick = () => {
+      const v = ta.value.trim(); if(v.length<3) return;
+      ta.disabled=true; b.disabled=true;
+      const n = norm(v), goods = q.a.map(norm);
+      let pts, msg;
+      if(goods.includes(n)){
+        pts = 1; msg = "Bravo !";
+        if(!q.a.some(a=>lower(a)===lower(v))) msg = `Juste ! Attention aux accents : <b>${q.show}</b>`;
+      } else if(!/(^| )(ne|n)( |$)/.test(n) && goods.some(g=>sansNe(g)===n)){
+        pts = 0; msg = `Tu as oublié le <b>« ne »</b> : à l'écrit, il est obligatoire. Il fallait : <b>${q.show}</b>`;
+      } else if(/ pas (un|une|des) /.test(" "+n+" ") && goods.some(g=>/ pas d(e)? /.test(" "+g+" "))){
+        pts = 0; msg = `Après <b>pas</b>, « un, une, des » deviennent <b>de</b> (ou d'). Il fallait : <b>${q.show}</b>`;
+      } else if(q.part==="p6" && goods.some(g=>negs(g)!==negs(n)) && goods.every(g=>negs(g)!==negs(n)) && goods.some(g=>negs(g))){
+        pts = 0; msg = `Ce n'est pas la bonne négation. Il fallait : <b>${q.show}</b>`;
+      } else if(n.length>5 && Math.min(...goods.map(g=>lev(n,g)))<=3){
+        pts = 0.5; msg = `Presque : il y a une petite erreur. Il fallait : <b>${q.show}</b> (½ point)`;
+      } else { pts = 0; msg = `Non. Il fallait : <b>${q.show}</b>`; }
+      if(pts>0 && q.sign && !v.replace(/\s+$/,"").endsWith(q.sign)){
+        pts -= 0.5; msg = (pts>0 ? "Presque : la phrase est juste, mais " : "") + `il manque le <b>point d'interrogation</b> à la fin : ½ point en moins.` + (pts>0?"":` Il fallait : <b>${q.show}</b>`);
+      }
+      done(pts, msg);
+    };
+    body.append(ta,b);
+  }
+  else if(q.type==="dictee"){
+    body.appendChild(el("div",{class:"q"},"🎧 <b>Dictée</b> : écoute la phrase, puis écris-la <b>en entier</b>, avec la majuscule et le point."));
+    const ec = el("div",{class:"ecoute"});
+    ec.appendChild(el("button",{class:"btn",type:"button","data-say":q.say},"🔊 Écouter"));
+    ec.appendChild(el("button",{class:"btn alt",type:"button","data-say":q.say,"data-lent":"1"},"🐢 Plus lentement"));
+    const lien = el("a",{href:"#"},"Pas de son ? Un adulte lit la phrase");
+    lien.onclick = e => { e.preventDefault();
+      if(!confirm("Pour l'adulte : la phrase va s'afficher. Lis-la à voix haute, puis touche « Cacher ».")) return;
+      const sp = el("span",{class:"hint"},q.say+" · "); const h = el("a",{href:"#"},"Cacher");
+      h.onclick = ev => { ev.preventDefault(); sp.replaceWith(lien); }; sp.appendChild(h); lien.replaceWith(sp); };
+    ec.appendChild(lien); body.appendChild(ec);
+    if(mode==="aide") body.appendChild(el("div",{class:"hint"},`Aide : cette phrase contient <b>${q.keys.length} mots pièges</b> (ce, se, c'est, s'est, ces, ses). Pour chacun, regarde le mot d'après et fais le test.`));
+    const ta = el("textarea",{placeholder:"Écris la phrase ici",autocapitalize:"sentences",autocomplete:"off",spellcheck:"false"});
+    const b = el("button",{class:"btn",style:"margin-top:6px"},"Valider");
+    b.onclick = () => {
+      if(ta.value.trim().length<5) return;
+      ta.disabled=true; b.disabled=true;
+      const got = pieges(ta.value); let good = 0; const lignes = [];
+      q.keys.forEach((k,i)=>{ const g = got[i]; if(g===k){ good++; lignes.push(`✔ <b>${k}</b>`); } else lignes.push(`✘ tu as écrit <b>${g||"rien"}</b> au lieu de <b>${k}</b>`); });
+      if(got.length>q.keys.length) lignes.push(`✘ tu as écrit un mot piège en trop : <b>${got.slice(q.keys.length).join(", ")}</b>`);
+      const pts = Math.round(q.w*good/q.keys.length*4)/4;
+      const modele = q.say.split(/(\s+)/).map(w => PIEGES.includes(pieges(w)[0]) ? `<b style="color:var(--ochre)">${w}</b>` : w).join("");
+      const parfait = propre(ta.value)===propre(q.say);
+      done(pts, `Mots pièges justes : ${good} / ${q.keys.length} → ${fmt(pts)} / ${q.w} points.<br>${lignes.join("<br>")}<br>La phrase : ${modele}`
+        + (parfait ? "<br>🎯 Phrase parfaite, sans aucune faute !" : "<br><small>Compare aussi le reste de ta phrase (accents, majuscule, point) : ici seuls les mots pièges comptent, mais en classe tout compte.</small>"));
+    };
+    body.append(ta,b);
+  }
+  c.appendChild(fb);
+  return c;
+}
+/* Dictée : repère dans l'ordre les mots de la famille [se] écrits par l'enfant */
+const PIEGES = ["ce","se","c'est","s'est","ces","ses","cet","cette","c'","s'","cest","sest","sait","sais","cé","sé","c'était","s'était"];
+function pieges(t){
+  return (t||"").toLowerCase().replace(/[’`´]/g,"'").split(/[^a-zà-ÿœ']+/).filter(Boolean)
+    .map(w => w.replace(/^'+|'+$/g,"")).filter(w => PIEGES.includes(w));
+}
+const propre = t => (t||"").replace(/[’`´]/g,"'").replace(/\s+/g," ").replace(/\s+([!?:;.,])/g,"$1").trim();
+
+/* ---------- Contrôle sans aide verrouillé ----------
+   Pendant le contrôle : plus d'accès à la leçon, ni à l'aide, ni au retour.
+   Quitter, recharger ou ouvrir la page ailleurs arrête le contrôle :
+   les questions non faites comptent 0. */
+const KEY_C = "p017_controle_en_cours";
+let LOCKED = false;
+function lock(on){
+  LOCKED = on;
+  document.body.classList.toggle("lock", on);
+  $("#lockBar").classList.toggle("hidden", !on);
+}
+function gateSans(){
+  const root = $("#tab-sans");
+  root.innerHTML = "";
+  const g = el("div",{class:"intro gate"});
+  g.innerHTML = `<div style="font-size:22px;font-weight:900">🔒 Le contrôle sans aide</div>
+    <p>C'est comme le vrai contrôle en classe. <b>Dès que tu commences :</b></p>
+    <ul>
+      <li>la <b>leçon</b> et les <b>exercices avec aide</b> sont <b>verrouillés</b> jusqu'à la dernière question ;</li>
+      <li>tu écris tout toi-même, sans choix proposé ;</li>
+      <li>si tu quittes ou recharges la page, le contrôle s'arrête et <b>les questions non faites comptent 0</b>.</li>
+    </ul>
+    <p>Commence seulement si tu connais ta leçon par cœur.</p>`;
+  const row = el("div",{class:"row"});
+  const go = el("button",{class:"btn"},"Commencer le contrôle");
+  go.onclick = () => startControle();
+  const back = el("button",{class:"btn alt"},"Pas encore, je révise");
+  back.onclick = () => $('nav button[data-tab="lecon"]').click();
+  row.append(go, back); g.appendChild(row);
+  root.appendChild(g);
+}
+function startControle(onlyIds){
+  startMode("sans", onlyIds);
+  lock(true);
+  store.set(KEY_C, {ids:STATE.sans.ids, res:{}, retry:STATE.sans.retry});
+  window.scrollTo({top:0});
+}
+/* Page rechargée ou ouverte ailleurs pendant un contrôle : il est arrêté et noté tel quel */
+function controleInterrompu(c){
+  const root = $("#tab-sans");
+  const faites = Object.keys(c.res||{}).length;
+  STATE.sans = {ids:c.ids, res:Object.assign({}, c.res||{}), retry:!!c.retry, interrompu:true};
+  c.ids.forEach(id=>{ if(STATE.sans.res[id]===undefined) STATE.sans.res[id]=0; });
+  root.innerHTML = `<div class="intro" style="border-color:var(--red)"><b>Contrôle interrompu.</b><br>
+    La page a été quittée, rechargée ou ouverte ailleurs pendant le contrôle.
+    Tu avais répondu à ${faites} question${faites>1?"s":""} sur ${c.ids.length} : les autres comptent 0.</div><div class="resultZone"></div>`;
+  try{ localStorage.removeItem(cle(KEY_C)); }catch(e){}
+  finish("sans");
+  document.querySelectorAll("nav button").forEach(x=>x.classList.toggle("on",x.dataset.tab==="sans"));
+  ["lecon","aide","sans"].forEach(t=>$("#tab-"+t).classList.toggle("hidden", t!=="sans"));
+}
+window.addEventListener("beforeunload", e => { if(LOCKED){ e.preventDefault(); e.returnValue = ""; } });
+window.addEventListener("storage", e => {
+  // Le contrôle a été arrêté depuis un autre onglet : celui-ci s'arrête aussi
+  if(e.key===cle(KEY_C) && e.newValue===null && LOCKED){
+    LOCKED = false;
+    alert("Le contrôle a été arrêté : la page a été ouverte ailleurs.");
+    location.reload();
+  }
+});
+
+function updateProgress(mode){
+  const S = STATE[mode], root = $(MODES[mode].box);
+  if(mode==="sans" && LOCKED) store.set(KEY_C, {ids:S.ids, res:S.res, retry:S.retry});
+  const doneN = Object.keys(S.res).length, total = S.ids.length;
+  root.querySelector(".prog i").style.width = (100*doneN/total)+"%";
+  const pts = Object.values(S.res).reduce((a,b)=>a+b,0);
+  const maxSoFar = Object.keys(S.res).reduce((a,id)=>a+BANK[id].w,0);
+  root.querySelector(".cnt").textContent = `Questions faites : ${doneN} / ${total}` + (doneN?` · points : ${fmt(pts)} / ${fmt(maxSoFar)}`:"");
+  if(doneN===total) finish(mode);
+}
+
+const PRET = 15;   // note sans aide pour « tu es prêt » (et 3 vies dans la salle d'arcade)
+function blocDe(q){ return q.lecon || q.part; }
+function texteQ(q){ if(q.type==="dictee") return "Dictée : « "+q.say+" »"; const d=document.createElement("div"); d.innerHTML = q.type==="def" ? "Écrire : "+q.mot : q.q; return d.textContent; }
+/* Correction du contrôle : seulement les blocs de la leçon où il y a eu des erreurs */
+function correction(wrong){
+  const z = el("div",{class:"revoir"});
+  z.appendChild(el("h3",{},`📖 À refaire : ${wrong.length} question${wrong.length>1?"s":""} ratée${wrong.length>1?"s":""}`));
+  z.appendChild(el("p",{},"Relis les parties de la leçon où tu t'es trompé, puis refais seulement ces questions. <b>Ça ne te donne pas de point en plus</b> : c'est pour comprendre tes erreurs."));
+  ORDER.forEach(pid=>{
+    const qs = wrong.filter(id=>blocDe(BANK[id])===pid);
+    if(!qs.length) return;
+    const src = document.querySelector(`#tab-lecon [data-part="${pid}"]`);
+    const c = src.cloneNode(true);
+    c.classList.remove("hidden");
+    c.querySelectorAll(".verif,[data-done]").forEach(x=>x.remove());
+    c.querySelectorAll(".k").forEach(k=>k.classList.add("show"));
+    const t = el("div",{style:"font-weight:800;margin-top:10px"},`Tu t'es trompé ici (${qs.length}) :`);
+    const ul = el("ul",{class:"ques"}); qs.forEach(id=>ul.appendChild(el("li",{},texteQ(BANK[id]))));
+    z.append(t, ul, c);
+  });
+  const b = el("button",{class:"btn"},`J'ai relu : je refais mes ${wrong.length} question${wrong.length>1?"s":""} ratée${wrong.length>1?"s":""}`);
+  b.onclick = () => startControle(wrong);
+  z.appendChild(b);
+  return z;
+}
+function finish(mode){
+  const S = STATE[mode], M = MODES[mode], root = $(M.box);
+  const max = S.ids.reduce((a,id)=>a+BANK[id].w,0);
+  const pts = Object.values(S.res).reduce((a,b)=>a+b,0);
+  const pct = Math.round(100*pts/max);
+  const sur20 = Math.round(pts/max*20*2)/2;
+  const ok = mode==="sans" ? sur20>=PRET : pct>=75;
+  const wrong = S.ids.filter(id=>S.res[id] < BANK[id].w);
+  if(mode==="sans"){ lock(false); root.classList.remove("encours"); try{ localStorage.removeItem(cle(KEY_C)); }catch(e){} }
+  if(!S.retry){
+    const prev = store.get(M.key) || {};
+    store.set(M.key, {last:{sur20,pct,date:new Date().toLocaleDateString("fr-FR")}, best: (!prev.best || pct>prev.best.pct) ? {sur20,pct} : prev.best});
+    showNotes();
+  }
+  const z = root.querySelector(".resultZone");
+  z.innerHTML = "";
+  const r = el("div",{class:"result "+(ok?"ok":"ko")});
+  let titre, texte;
+  if(S.retry){
+    titre = wrong.length ? "Encore à revoir" : "Erreurs corrigées ✓";
+    texte = (wrong.length ? `Il reste ${wrong.length} question${wrong.length>1?"s":""} à revoir : relis encore la leçon.` : "Bravo, tu as compris tes erreurs !")
+      + (mode==="sans" ? " Ta note du contrôle ne change pas. Pour l'améliorer, refais le contrôle en entier (<b>Tout recommencer</b>)." : "");
+  } else if(mode==="sans"){
+    if(sur20>=PRET){ titre = "Tu es prêt pour ton contrôle ! ✓";
+      texte = "Excellent travail ! 🎮 <b>3 vies</b> t'attendent dans la salle d'arcade (une seule fois pour cette fiche). Elles s'ajoutent quand tu ouvres la salle d'arcade, et sont valables jusqu'à minuit ce jour-là."; }
+    else if(sur20>=PRET-2){ titre = "Presque prêt";
+      texte = `Il faut ${PRET} / 20 pour être prêt. Regarde ta correction ci-dessous, puis refais le contrôle en entier un peu plus tard.`; }
+    else { titre = "À retravailler";
+      texte = `Il faut ${PRET} / 20 pour être prêt. Regarde ta correction, relis la leçon en mode mémoire, puis refais le contrôle en entier un autre moment.`; }
+  } else {
+    titre = ok ? "Acquis ✓" : "À retravailler";
+    texte = ok ? "Bien joué ! Tu as au moins 15 / 20 : la partie <b>sans aide</b> est ouverte. C'est elle qui ressemble au contrôle."
+      : "Moins de 15 / 20 : la partie sans aide reste fermée. Relis la leçon en mode mémoire, entraîne-toi sur tes erreurs, puis clique sur <b>Tout recommencer</b> : il faut 15 / 20 sur une partie complète.";
+  }
+  r.innerHTML = `<div>${S.retry?"Correction de tes erreurs (sans note)":"Ta note "+M.label}</div>
+    ${S.retry ? `<div class="big">${S.ids.length-wrong.length} / ${S.ids.length}</div><div>questions réussies</div>` : `<div class="big">${fmt(sur20)} / 20</div>
+    <div><b>${pct} %</b> de bonnes réponses (${fmt(pts)} / ${fmt(max)} points)</div>`}
+    <p style="font-size:19px;font-weight:800">${titre}</p>
+    <p>${texte}</p>`;
+  const row = el("div",{class:"row",style:"justify-content:center"});
+  const relance = ids => { if(mode==="sans") startControle(ids); else { startMode(mode, ids); window.scrollTo({top:0}); } };
+  if(wrong.length && mode==="aide"){ const b=el("button",{class:"btn"},`Refaire mes ${wrong.length} erreur${wrong.length>1?"s":""}`); b.onclick=()=>relance(wrong); row.appendChild(b); }
+  const b2 = el("button",{class:"btn alt"},mode==="sans"?"Tout recommencer (nouveau contrôle noté)":"Tout recommencer"); b2.onclick=()=>relance(); row.appendChild(b2);
+  r.appendChild(row);
+  z.appendChild(r);
+  if(mode==="sans" && wrong.length) z.appendChild(correction(wrong));
+  if(!S.retry && typeof enregistrerProgression==="function"){
+    // Score enregistré en pourcentage (sur 100) : les demi-points restent des nombres entiers
+    const bc = el("div",{class:"bilan-card"}); r.appendChild(bc);
+    Promise.resolve(enregistrerProgression(M.code, pct, 100)).then(()=>{
+      const box=document.getElementById("atelier-progression-box");
+      if(box && box.parentNode!==bc) bc.appendChild(box);
+      chargerNotesCompte();
+    });
+  }
+}
+
+/* Meilleures notes enregistrées sur le compte (tous appareils confondus) */
+const REMOTE = {};
+async function chargerNotesCompte(){
+  try{
+    if(typeof supabase==="undefined") return;
+    const sb = supabase.createClient("https://rwqsvrmjjoihuhmvbwuu.supabase.co","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ3cXN2cm1qam9paHVobXZid3V1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQzNjQxNTMsImV4cCI6MjA5OTk0MDE1M30.VtdOnI169-erf48NpxLPCC0th6kHqBcsBuCauOx52HI");
+    const s = await sb.auth.getSession(); if(!s.data.session) return;
+    let id = null; try{ id = localStorage.getItem("atelier_enfant_actif"); }catch(e){}
+    if(!id) return;
+    const r = await sb.from("progression").select("fiche_code,score,total").eq("enfant_id",id).in("fiche_code",[MODES.aide.code, MODES.sans.code]);
+    if(r.error || !r.data) return;
+    r.data.forEach(l=>{ const p = l.total>0 ? Math.round(l.score/l.total*100) : 0; REMOTE[l.fiche_code] = Math.max(REMOTE[l.fiche_code]||0, p); });
+    showNotes();
+  }catch(e){}
+}
+function showNotes(){
+  try{ paintTabs(); }catch(e){}
+  [["aide","#nAide","#vAide"],["sans","#nSans","#vSans"]].forEach(([m,n,v])=>{
+    const d = store.get(MODES[m].key);
+    const rb = REMOTE[MODES[m].code];
+    if(!d || !d.last){
+      if(rb!=null){ $(n).textContent=`${fmt(Math.round(rb/5*2)/2)} / 20 · ${rb} %`; const okr = m==="sans" ? Math.round(rb/5*2)/2>=PRET : rb>=75; $(v).textContent=(okr?(m==="sans"?"Prêt ✓":"Acquis ✓"):"À retravailler")+" · meilleure note du compte"; $(v).className="ver "+(okr?"ok":"ko"); }
+      else { $(n).textContent="—"; $(v).textContent="Pas encore faite"; $(v).className="ver"; }
+      return;
+    }
+    if(rb!=null && (!d.best || rb>d.best.pct)) d.best = {pct:rb};
+    $(n).textContent = `${fmt(d.last.sur20)} / 20 · ${d.last.pct} %`;
+    const ok = m==="sans" ? d.last.sur20>=PRET : d.last.pct>=75;
+    $(v).textContent = (m==="sans" ? (ok?"Prêt ✓":d.last.sur20>=PRET-2?"Presque prêt":"À retravailler") : (ok?"Acquis ✓":"À retravailler")) + ` · le ${d.last.date}` + (d.best && d.best.pct>d.last.pct ? ` · record ${d.best.pct} %` : "");
+    $(v).className = "ver "+(ok?"ok":"ko");
+  });
+}
+
+/* ---------- Onglets verrouillés ----------
+   Avec aide : seulement quand les 6 blocs de la leçon sont réussis.
+   Sans aide : seulement avec au moins 15/20 (75 %) dans la partie avec aide. */
+const SEUIL = 75;
+const leconOk = () => ORDER.every(id=>doneStore[id]);
+function meilleureAide(){
+  const d = store.get(MODES.aide.key) || {};
+  const loc = Math.max(d.best ? d.best.pct : 0, d.last ? d.last.pct : 0);
+  return Math.max(loc, REMOTE[MODES.aide.code]||0);
+}
+const aideOk = () => meilleureAide() >= SEUIL;
+function paintTabs(){
+  $('nav button[data-tab="aide"]').classList.toggle("locked", !leconOk());
+  $('nav button[data-tab="sans"]').classList.toggle("locked", !aideOk());
+}
+function verrou(tab){
+  const root = $("#tab-"+tab);
+  const g = el("div",{class:"gatebox"});
+  if(tab==="aide"){
+    const faits = ORDER.filter(id=>doneStore[id]).length;
+    g.innerHTML = `<h3>🔒 La partie avec aide est fermée</h3>
+      <p>Elle s'ouvrira quand tu auras réussi <b>les 6 blocs de la leçon</b> (3 bonnes réponses d'affilée à chaque bloc).</p>
+      <p>Pour l'instant : <b>${faits} bloc${faits>1?"s":""} sur 6</b> réussi${faits>1?"s":""}.</p>`;
+  } else {
+    const p = meilleureAide();
+    g.innerHTML = `<h3>🔒 La partie sans aide est fermée</h3>
+      <p>Elle s'ouvrira quand tu auras au moins <b>15 / 20</b> (75 %) dans la partie <b>avec aide</b>.</p>
+      <p>${p ? `Ta meilleure note avec aide : <b>${fmt(Math.round(p/5*2)/2)} / 20</b> (${p} %).` : "Tu n'as pas encore fini la partie avec aide."}
+      ${leconOk() ? "" : "<br>Et avant ça, il faut finir la leçon."}</p>`;
+  }
+  const row = el("div",{class:"row"});
+  const go = el("button",{class:"btn"}, tab==="aide" || !leconOk() ? "Retour à la leçon" : "Aller à la partie avec aide");
+  go.onclick = () => $(`nav button[data-tab="${tab==="aide" || !leconOk() ? "lecon" : "aide"}"]`).click();
+  row.appendChild(go); g.appendChild(row);
+  root.innerHTML = ""; root.appendChild(g);
+}
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{
+  document.querySelectorAll("nav button").forEach(x=>x.classList.toggle("on",x===b));
+  ["lecon","aide","sans"].forEach(t=>$("#tab-"+t).classList.toggle("hidden", t!==b.dataset.tab));
+  if(LOCKED) return;
+  const t = b.dataset.tab;
+  if(t==="aide"){
+    if(!leconOk()){ STATE.aide = null; verrou("aide"); }
+    else if(!STATE.aide) startMode("aide");
+  }
+  if(t==="sans"){
+    if(!aideOk()){ STATE.sans = null; verrou("sans"); }
+    else if(!STATE.sans) gateSans();
+  }
+  window.scrollTo({top:0});
+});
+$("#goAide").onclick = () => $('nav button[data-tab="aide"]').click();
+$("#memBtn").onclick=()=>{
+  const on = document.body.classList.toggle("mem");
+  document.querySelectorAll(".k").forEach(k=>k.classList.remove("show"));
+  $("#memBtn").textContent = on ? "Montrer tous les mots-clés" : "Mode mémoire : cacher les mots-clés";
+  $("#memInfo").classList.toggle("hidden", !on);
+};
+document.querySelectorAll(".k").forEach(k=>k.onclick=()=>{ if(document.body.classList.contains("mem")) k.classList.add("show"); });
+/* ---------- 3 questions de vérification par bloc ----------
+   Le bloc suivant reste caché tant que les 3 réponses ne sont pas justes.
+   Le bloc au-dessus reste visible : l'enfant peut relire pour répondre. */
+const CHECKS = {
+  p1: [["Aujourd'hui, la population mondiale atteint environ…",["8 milliards d'habitants","8 millions d'habitants","80 milliards d'habitants"]],
+       ["La population mondiale est répartie…",["très inégalement","de façon égale partout","seulement en Europe"]],
+       ["Le recensement, c'est…",["l'opération qui consiste à compter la population","l'inscription des mariages","le calcul de la densité"]],
+       ["L'état civil, c'est l'inscription…",["des naissances, des mariages et des décès dans chaque commune","des élèves au collège","des voitures à la préfecture"]],
+       ["Où se fait l'inscription de l'état civil en France ?",["dans chaque commune","seulement à Paris","à l'école"]],
+       ["Compter la population s'appelle…",["un recensement","l'état civil","la densité"]]],
+  p2: [["La densité, c'est…",["le nombre d'habitants en moyenne par km²","le nombre total d'habitants d'un pays","la taille d'un pays"]],
+       ["Comment calcule-t-on la densité ?",["population ÷ superficie","superficie ÷ population","population × superficie"]],
+       ["La densité de la France (66 000 000 ÷ 551 000) est d'environ…",["119 hab/km²","1 190 hab/km²","12 hab/km²"]],
+       ["Le Bangladesh (1 100 hab/km²) a une densité…",["forte","moyenne","faible"]],
+       ["La Mongolie (2 hab/km²) a une densité…",["faible","moyenne","forte"]],
+       ["La France (123 hab/km²) a une densité…",["moyenne","forte","faible"]]],
+  p3: [["Un foyer de population, c'est une région…",["qui concentre un très grand nombre d'habitants","presque vide d'habitants","couverte de forêt"]],
+       ["Un désert humain, c'est une région…",["presque vide d'habitants à cause de fortes contraintes naturelles","sans sable","avec une densité élevée"]],
+       ["Les 3 plus grands foyers de population sont…",["l'Asie de l'Est, l'Asie du Sud et l'Europe","l'Afrique, l'Amérique et l'Australie","le Sahara, la Sibérie et l'Amazonie"]],
+       ["Le foyer d'Asie de l'Est compte environ…",["2,3 milliards d'habitants","740 millions d'habitants","1,8 milliard d'habitants"]],
+       ["Ces 3 grands foyers rassemblent…",["64 % des êtres humains","10 % des êtres humains","100 % des êtres humains"]],
+       ["Lequel est un désert humain ?",["le Sahara","l'Europe","le golfe de Guinée"]]],
+  p4: [["Une contrainte naturelle, c'est…",["un obstacle naturel à l'installation humaine","une loi du pays","une ville très peuplée"]],
+       ["L'aridité, c'est…",["le manque d'eau","le froid","l'altitude"]],
+       ["Pourquoi l'Himalaya est-il presque vide ?",["à cause de l'altitude","à cause de la forêt dense","à cause du manque d'eau"]],
+       ["Pourquoi l'Amazonie est-elle presque vide ?",["à cause de la forêt dense","à cause du froid polaire","à cause de l'altitude"]],
+       ["Le littoral est très peuplé car…",["c'est un endroit très favorable aux activités humaines","il fait toujours froid","il n'y a pas d'eau"]],
+       ["Les bords des fleuves et des rivières ont une densité…",["élevée","nulle","faible"]]],
+  p5: [["L'Asie rassemble environ…",["60 % de la population mondiale","10 % de la population mondiale","90 % de la population mondiale"]],
+       ["La mousson, c'est…",["un vent d'été qui apporte de fortes pluies en Asie du Sud et de l'Est","un désert d'Asie","une ville d'Inde"]],
+       ["Grâce à la mousson, on cultive surtout…",["le riz dans des rizières inondées","le blé dans le désert","la vigne en montagne"]],
+       ["Dans la boucle du riz, après « plusieurs récoltes par an » vient…",["une population très nombreuse","la mousson","le désert"]],
+       ["Dans la boucle du riz, une population nombreuse donne…",["une main-d'œuvre nombreuse","moins de pluie","moins de riz"]],
+       ["La mousson souffle pendant…",["l'été","l'hiver","toute l'année"]]],
+  p6: [["En 1800, la population mondiale était d'environ…",["1 milliard","8 milliards","100 millions"]],
+       ["En 1974, la population mondiale était d'environ…",["4 milliards","1 milliard","8 milliards"]],
+       ["En 2026, la population mondiale est d'environ…",["8 milliards","6 milliards","4 milliards"]],
+       ["Pour 2050, on prévoit environ…",["9,5 milliards","5 milliards","20 milliards"]],
+       ["Depuis 1800, la population mondiale…",["ne cesse d'augmenter","diminue","reste pareille"]],
+       ["Sur le graphique, le pointillé après 2026 montre…",["une prévision","une erreur","une baisse"]]]
+};
+const ORDER = ["p1","p2","p3","p4","p5","p6"];
+const doneStore = store.get("p017_compris") || {};
+function paintParts(){
+  let open = true;
+  ORDER.forEach(id=>{
+    const part = document.querySelector(`[data-part="${id}"]`);
+    part.classList.toggle("hidden", !open);
+    if(!doneStore[id]) open = false;
+  });
+  const lockMsg = $("#partLock");
+  const next = ORDER.find(id=>!doneStore[id]);
+  lockMsg.classList.toggle("hidden", !next || next===ORDER[ORDER.length-1] && false);
+  lockMsg.innerHTML = next ? `🔒 La suite de la leçon (et la partie avec aide) s'ouvrira quand tu auras réussi les 3 questions d'affilée du bloc « ${document.querySelector(`[data-part="${next}"] h3`).textContent} », puis cliqué sur « J'ai bien compris ».` : "";
+  if(!next) lockMsg.classList.add("hidden");
+  $("#leconFinie").classList.toggle("hidden", !!next);
+}
+/* Règle : 3 questions tirées au hasard dans le bloc, à faire dans l'ordre.
+   Une seule erreur => on recommence à la question 1 (nouveau tirage). */
+ORDER.forEach(id=>{
+  const part = document.querySelector(`[data-part="${id}"]`);
+  const btn = part.querySelector("[data-done]");
+  const box = el("div",{class:"verif"});
+  part.insertBefore(box, btn);
+  let tirage = [], step = 0, msg = "";
+  const paintBtn = () => {
+    const all = step>=3;
+    btn.disabled = !all && !doneStore[id];
+    btn.classList.toggle("on", !!doneStore[id]);
+    btn.textContent = doneStore[id] ? "Compris ✓" : all ? "J'ai bien compris" : "J'ai bien compris (réussis d'abord les 3 questions)";
+  };
+  const nouveauTirage = () => { tirage = shuffle(CHECKS[id].map((_,k)=>k)).slice(0,3); step = 0; };
+  const render = () => {
+    box.innerHTML = "";
+    box.appendChild(el("div",{class:"verif-t"},"✏️ Je vérifie que j'ai compris : 3 questions à réussir d'affilée (je peux relire le bloc au-dessus)."));
+    if(doneStore[id]){ box.appendChild(el("div",{class:"fb ok"},"Bloc réussi ✓")); paintBtn(); return; }
+    const st = el("div",{class:"steps3"});
+    [0,1,2].forEach(k=>st.appendChild(el("span",{class: k<step?"ok":(k===step?"cur":"")}, (k<step?"✓ ":"")+"Question "+(k+1))));
+    box.appendChild(st);
+    if(msg){ box.appendChild(el("div",{class:"fb ko"},msg)); }
+    if(step>=3){ box.appendChild(el("div",{class:"fb ok"},"Les 3 réponses sont justes ! Clique sur « J'ai bien compris »."));
+      paintBtn(); return; }
+    const [q,opts] = CHECKS[id][tirage[step]];   // opts[0] = la bonne réponse
+    const c = el("div",{class:"vq"});
+    c.appendChild(el("div",{class:"q"},`Question ${step+1} sur 3 : ${q}`));
+    const row = el("div",{class:"qcm-v"});
+    shuffle(opts.slice()).forEach(o=>{
+      const b = el("button",{class:"btn-v"},o);
+      b.onclick = () => {
+        if(o === opts[0]){ step++; msg=""; render(); }
+        else { msg = "❌ Ce n'est pas la bonne réponse. <b>Tu recommences à la question 1.</b> Relis bien le bloc au-dessus avant de répondre."; nouveauTirage(); render(); }
+        paintBtn();
+      };
+      row.appendChild(b);
+    });
+    c.append(row); box.appendChild(c);
+    paintBtn();
+  };
+  nouveauTirage(); render();
+  btn.onclick = () => {
+    if(btn.disabled || doneStore[id]) return;
+    doneStore[id] = true; store.set("p017_compris",doneStore); render(); paintParts(); paintTabs();
+    const n = ORDER[ORDER.indexOf(id)+1];
+    if(n) setTimeout(()=>document.querySelector(`[data-part="${n}"]`).scrollIntoView({behavior:"smooth",block:"start"}),100);
+  };
+});
+paintParts();
+paintTabs();
+showNotes();
+chargerNotesCompte();
+{ const c = store.get(KEY_C); if(c && c.ids) controleInterrompu(c); }
+</script>
+<script src="../atelier-clavier.js"></script>
+</body>
+</html>
