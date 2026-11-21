@@ -703,7 +703,7 @@ function finish(mode){
   const pts = Object.values(S.res).reduce((a,b)=>a+b,0);
   const pct = Math.round(100*pts/max);
   const sur20 = Math.round(pts/max*20*2)/2;
-  const ok = pct>=80;
+  const ok = mode==="sans" ? sur20>=15 : pct>=80;
   const wrong = S.ids.filter(id=>S.res[id] < BANK[id].w);
   if(mode==="sans"){ lock(false); try{ localStorage.removeItem(cle(KEY_C)); }catch(e){} }
   if(!S.retry){
@@ -758,13 +758,13 @@ function showNotes(){
     const d = store.get(MODES[m].key);
     const rb = REMOTE[MODES[m].code];
     if(!d || !d.last){
-      if(rb!=null){ $(n).textContent=`${fmt(Math.round(rb/5*2)/2)} / 20 · ${rb} %`; $(v).textContent=(rb>=80?"Acquis ✓":"À retravailler")+" · meilleure note du compte"; $(v).className="ver "+(rb>=80?"ok":"ko"); }
+      if(rb!=null){ $(n).textContent=`${fmt(Math.round(rb/5*2)/2)} / 20 · ${rb} %`; $(v).textContent=((m==="sans"?rb>=75:rb>=80)?"Acquis ✓":"À retravailler")+" · meilleure note du compte"; $(v).className="ver "+((m==="sans"?rb>=75:rb>=80)?"ok":"ko"); }
       else { $(n).textContent="—"; $(v).textContent="Pas encore faite"; $(v).className="ver"; }
       return;
     }
     if(rb!=null && (!d.best || rb>d.best.pct)) d.best = {pct:rb};
     $(n).textContent = `${fmt(d.last.sur20)} / 20 · ${d.last.pct} %`;
-    const ok = d.last.pct>=80;
+    const ok = m==="sans" ? d.last.sur20>=15 : d.last.pct>=80;
     $(v).textContent = (ok?"Acquis ✓":"À retravailler") + ` · le ${d.last.date}` + (d.best && d.best.pct>d.last.pct ? ` · record ${d.best.pct} %` : "");
     $(v).className = "ver "+(ok?"ok":"ko");
   });
