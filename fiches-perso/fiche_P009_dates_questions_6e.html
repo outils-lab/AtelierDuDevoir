@@ -179,7 +179,7 @@ body.noson .say, body.noson .ecoute{display:none}
     <ol style="margin:6px 0 0">
       <li><b>La leçon</b> : à la fin de chaque bloc, 3 questions à choix (QCM, 3 réponses possibles). <b>Une seule erreur = tu recommences à la question 1</b> du bloc (avec de nouvelles questions).</li>
       <li><b>Avec aide</b> : s'ouvre quand les 4 blocs de la leçon sont réussis.</li>
-      <li><b>Sans aide</b> : s'ouvre quand tu as au moins <b>16 / 20</b> dans la partie avec aide.</li>
+      <li><b>Sans aide</b> : s'ouvre quand tu as au moins <b>15 / 20</b> dans la partie avec aide.</li>
     </ol>
     <div style="margin-top:6px">Touche <button type="button" class="say" data-say="Hello Raphael! Let's work." aria-label="Écouter">🔊</button> pour écouter la voix anglaise.</div></div>
 
@@ -409,7 +409,7 @@ function startMode(mode, onlyIds){
   if(mode==="aide"){
     intro.innerHTML = `<b>Exercices AVEC aide</b> · ${ids.length} questions${onlyIds?" (seulement tes erreurs)":""}<br>
       Parfois tu choisis parmi 3 réponses, mais le plus souvent <b>tu écris</b> avec un <span class="hint">indice</span>.
-      <b>Il faut au moins 16 / 20 (80 %) sur la partie complète pour ouvrir la partie sans aide.</b>`;
+      <b>Il faut au moins 15 / 20 (75 %) sur la partie complète pour ouvrir la partie sans aide.</b>`;
   } else {
     intro.innerHTML = `<b>Exercices SANS aide</b> · ${ids.length} questions${onlyIds?" (seulement tes erreurs)":""}<br>
       Pas de choix proposé : <b>tu écris tout toi-même</b>, comme le jour du contrôle. Tu vois la correction après chaque réponse ; à la fin, tu refais les questions ratées.<br>
@@ -714,7 +714,7 @@ function finish(mode){
   const pts = Object.values(S.res).reduce((a,b)=>a+b,0);
   const pct = Math.round(100*pts/max);
   const sur20 = Math.round(pts/max*20*2)/2;
-  const ok = mode==="sans" ? sur20>=PRET : pct>=80;
+  const ok = mode==="sans" ? sur20>=PRET : pct>=75;
   const wrong = S.ids.filter(id=>S.res[id] < BANK[id].w);
   if(mode==="sans"){ lock(false); root.classList.remove("encours"); try{ localStorage.removeItem(cle(KEY_C)); }catch(e){} }
   if(!S.retry){
@@ -739,8 +739,8 @@ function finish(mode){
       texte = `Il faut ${PRET} / 20 pour être prêt. Regarde ta correction, relis la leçon en mode mémoire, puis refais le contrôle en entier un autre moment.`; }
   } else {
     titre = ok ? "Acquis ✓" : "À retravailler";
-    texte = ok ? "Bien joué ! Tu as au moins 16 / 20 : la partie <b>sans aide</b> est ouverte. C'est elle qui ressemble au contrôle."
-      : "Moins de 16 / 20 : la partie sans aide reste fermée. Relis la leçon en mode mémoire, entraîne-toi sur tes erreurs, puis clique sur <b>Tout recommencer</b> : il faut 16 / 20 sur une partie complète.";
+    texte = ok ? "Bien joué ! Tu as au moins 15 / 20 : la partie <b>sans aide</b> est ouverte. C'est elle qui ressemble au contrôle."
+      : "Moins de 15 / 20 : la partie sans aide reste fermée. Relis la leçon en mode mémoire, entraîne-toi sur tes erreurs, puis clique sur <b>Tout recommencer</b> : il faut 15 / 20 sur une partie complète.";
   }
   r.innerHTML = `<div>${S.retry?"Correction de tes erreurs (sans note)":"Ta note "+M.label}</div>
     ${S.retry ? `<div class="big">${S.ids.length-wrong.length} / ${S.ids.length}</div><div>questions réussies</div>` : `<div class="big">${fmt(sur20)} / 20</div>
@@ -786,13 +786,13 @@ function showNotes(){
     const d = store.get(MODES[m].key);
     const rb = REMOTE[MODES[m].code];
     if(!d || !d.last){
-      if(rb!=null){ $(n).textContent=`${fmt(Math.round(rb/5*2)/2)} / 20 · ${rb} %`; const okr = m==="sans" ? Math.round(rb/5*2)/2>=PRET : rb>=80; $(v).textContent=(okr?(m==="sans"?"Prêt ✓":"Acquis ✓"):"À retravailler")+" · meilleure note du compte"; $(v).className="ver "+(okr?"ok":"ko"); }
+      if(rb!=null){ $(n).textContent=`${fmt(Math.round(rb/5*2)/2)} / 20 · ${rb} %`; const okr = m==="sans" ? Math.round(rb/5*2)/2>=PRET : rb>=75; $(v).textContent=(okr?(m==="sans"?"Prêt ✓":"Acquis ✓"):"À retravailler")+" · meilleure note du compte"; $(v).className="ver "+(okr?"ok":"ko"); }
       else { $(n).textContent="—"; $(v).textContent="Pas encore faite"; $(v).className="ver"; }
       return;
     }
     if(rb!=null && (!d.best || rb>d.best.pct)) d.best = {pct:rb};
     $(n).textContent = `${fmt(d.last.sur20)} / 20 · ${d.last.pct} %`;
-    const ok = m==="sans" ? d.last.sur20>=PRET : d.last.pct>=80;
+    const ok = m==="sans" ? d.last.sur20>=PRET : d.last.pct>=75;
     $(v).textContent = (m==="sans" ? (ok?"Prêt ✓":d.last.sur20>=PRET-2?"Presque prêt":"À retravailler") : (ok?"Acquis ✓":"À retravailler")) + ` · le ${d.last.date}` + (d.best && d.best.pct>d.last.pct ? ` · record ${d.best.pct} %` : "");
     $(v).className = "ver "+(ok?"ok":"ko");
   });
@@ -800,8 +800,8 @@ function showNotes(){
 
 /* ---------- Onglets verrouillés ----------
    Avec aide : seulement quand les 4 blocs de la leçon sont réussis.
-   Sans aide : seulement avec au moins 16/20 (80 %) dans la partie avec aide. */
-const SEUIL = 80;
+   Sans aide : seulement avec au moins 15/20 (75 %) dans la partie avec aide. */
+const SEUIL = 75;
 const leconOk = () => ORDER.every(id=>doneStore[id]);
 function meilleureAide(){
   const d = store.get(MODES.aide.key) || {};
@@ -824,7 +824,7 @@ function verrou(tab){
   } else {
     const p = meilleureAide();
     g.innerHTML = `<h3>🔒 La partie sans aide est fermée</h3>
-      <p>Elle s'ouvrira quand tu auras au moins <b>16 / 20</b> (80 %) dans la partie <b>avec aide</b>.</p>
+      <p>Elle s'ouvrira quand tu auras au moins <b>15 / 20</b> (75 %) dans la partie <b>avec aide</b>.</p>
       <p>${p ? `Ta meilleure note avec aide : <b>${fmt(Math.round(p/5*2)/2)} / 20</b> (${p} %).` : "Tu n'as pas encore fini la partie avec aide."}
       ${leconOk() ? "" : "<br>Et avant ça, il faut finir la leçon."}</p>`;
   }
